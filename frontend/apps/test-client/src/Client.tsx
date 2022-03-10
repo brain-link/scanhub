@@ -48,7 +48,6 @@ export function Client() {
       type: 'pie',
       ...((() => {
         const counts = count(allPatients, p => p.sex)
-        console.log(counts)
         return {
           labels: Array.from(counts.keys()),
           values: Array.from(counts.values()),
