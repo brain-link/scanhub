@@ -6,6 +6,9 @@
     "apps/*",
     "libs/*"
   ],
+  "scripts": {
+    "lint": "eslint ."
+  },
   "devDependencies": {
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
