@@ -1,0 +1,32 @@
+{
+  "name": "frontend",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@types/react-plotly.js": "2.5.0",
+    "@types/react-relay": "^13.0.1",
+    "@types/relay-runtime": "^13.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "@vitejs/plugin-react": "^1.0.7",
+    "eslint": "^8.10.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-react": "^7.29.3",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "fetch-graphql-schema": "^0.2.1",
+    "relay-compiler": "^13.1.1",
+    "relay-config": "^12.0.1",
+    "typescript": "^4.6.2",
+    "vite": "^2.8.0",
+    "vite-plugin-relay": "^1.0.7"
+  }
+}
