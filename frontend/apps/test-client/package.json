@@ -1,0 +1,23 @@
+{
+  "name": "test-client",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "relay": "relay-compiler",
+    "schema": "fetch-graphql-schema http://localhost:8000/graphql -o schema.graphql -r"
+  },
+  "dependencies": {
+    "plotly.js": "^2.10.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-plotly.js": "^2.5.1",
+    "react-relay": "^13.1.1",
+    "react-relay-network-modern": "6.2.1",
+    "regenerator-runtime": "^0.13.9",
+    "relay-runtime": "^13.1.1",
+    "subscriptions-transport-ws": "^0.11.0"
+  }
+}
