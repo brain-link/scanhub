@@ -1,0 +1,66 @@
+# Exposes a URL that specifies the behaviour of this scalar.
+directive @specifiedBy(
+  # The URL that specifies the behaviour of this scalar.
+  url: String!
+) on SCALAR
+
+# The `Date` scalar type represents a Date
+# value as specified by
+# [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+scalar Date
+
+# The `DateTime` scalar type represents a DateTime
+# value as specified by
+# [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+scalar DateTime
+
+type FileUploadMutation {
+  ok: Boolean
+}
+
+type Mutation {
+  uploadFile(file: Upload!): FileUploadMutation
+}
+
+type Patient {
+  id: ID!
+  sex: PatientSex!
+  birthday: Date!
+  concern: String!
+  admissionDate: DateTime!
+  status: PatientStatus!
+}
+
+# An enumeration.
+enum PatientSex {
+  NONE
+  MALE
+  FEMALE
+  DIVERSE
+}
+
+# An enumeration.
+enum PatientStatus {
+  NEW
+  RECORDING
+  DIAGNOSIS
+}
+
+type Query {
+  me: User
+  allPatients: [Patient!]!
+}
+
+type Subscription {
+  data(upto: Int!): [Patient!]
+}
+
+# Create scalar that ignores normal serialization/deserialization, since
+# that will be handled by the multipart request spec
+scalar Upload
+
+type User {
+  id: ID!
+  name: String!
+  age: Int!
+}

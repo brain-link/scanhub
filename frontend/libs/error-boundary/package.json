@@ -1,0 +1,8 @@
+{
+  "name": "error-boundary",
+  "description": "Error boundary used across all ScanHub projects.",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "private": true
+}
