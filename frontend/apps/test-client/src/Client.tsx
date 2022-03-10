@@ -1,6 +1,6 @@
 import { graphql, useLazyLoadQuery } from 'react-relay'
 import { Counter } from './Counter'
-import { ClientQuery } from './__generated__/ClientQuery.graphql'
+import type { ClientQuery } from './__generated__/ClientQuery.graphql'
 import Plot from 'react-plotly.js'
 import { useMemo } from 'react'
 
@@ -53,7 +53,7 @@ export function Client() {
           labels: Array.from(counts.keys()),
           values: Array.from(counts.values()),
         }
-      })())
+      })()),
     }],
     [allPatients]
   )

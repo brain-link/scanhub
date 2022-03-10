@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { graphql, useSubscription } from 'react-relay'
-import { CounterSubscription } from './__generated__/CounterSubscription.graphql'
+import type { CounterSubscription } from './__generated__/CounterSubscription.graphql'
 
 const subscription = graphql`
   subscription CounterSubscription($upto: Int!) {
@@ -23,7 +23,7 @@ export function Counter() {
         subscription,
         variables: { upto },
         onNext: (p) => console.log('Next.', p),
-        onCompleted: () => console.log('Completed.')
+        onCompleted: () => console.log('Completed.'),
       }),
       [upto]
     )

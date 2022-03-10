@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 
 
 export type ErrorBoundaryProps = {
@@ -19,9 +19,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
     return { error }
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
-    // console.log(error, errorInfo)
-  }
+  // componentDidCatch(error: Error, errorInfo: any) {
+  //   console.log(error, errorInfo)
+  // }
 
   render() {
     if (this.state.error !== null) {
@@ -31,6 +31,6 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
       </div>
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }

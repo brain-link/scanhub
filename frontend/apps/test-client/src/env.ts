@@ -1,5 +1,6 @@
 import 'regenerator-runtime/runtime'
-import { Environment, Observable, RecordSource, Store, SubscribeFunction } from 'relay-runtime'
+import type { SubscribeFunction } from 'relay-runtime'
+import { Environment, Observable, RecordSource, Store } from 'relay-runtime'
 import {
   RelayNetworkLayer,
   cacheMiddleware,
@@ -24,13 +25,13 @@ const subscribeFn: SubscribeFunction = (request, variables) => {
   // Important: Convert subscriptions-transport-ws observable type to Relay's
   return Observable.create(({ next, error, complete }) => {
     subscribeObservable.subscribe({ next, error, complete })
-  });
-};
+  })
+}
 
 const network = new RelayNetworkLayer(
   [
     urlMiddleware({
-      url: '/graphql'
+      url: '/graphql',
     }),
     cacheMiddleware({
       size: 100, // max 100 requests
@@ -44,6 +45,6 @@ const network = new RelayNetworkLayer(
   },
 )
 
-const source = new RecordSource();
-const store = new Store(source);
-export const environment = new Environment({ network, store });
+const source = new RecordSource()
+const store = new Store(source)
+export const environment = new Environment({ network, store })
