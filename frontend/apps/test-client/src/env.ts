@@ -10,7 +10,7 @@ import {
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 const subscriptionClient = new SubscriptionClient(
-  'ws://localhost:8000',
+  'ws://127.0.0.1:8000',
   {
     reconnect: true,
   }

@@ -12,7 +12,7 @@ pydantic = "^1.9.0"
 python = "^3.8"
 starlette-graphene3 = "^0.5.1"
 uvicorn = {extras = ["standard"], version = "^0.17.5"}
-tortoise = {extras = ["asyncpg"], version = "^0.1.1"}
+tortoise-orm = "^0.18.1"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
