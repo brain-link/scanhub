@@ -20,12 +20,13 @@ class Patient(Model):
     The Patient model
     """
     id = fields.IntField(pk=True, null=False, unique=True)
-    # sex: PatientSex = fields.IntEnumField(PatientSex, default=PatientSex.none,null=False)
+    sex: PatientSex = fields.IntEnumField(
+        PatientSex, default=PatientSex.NONE, null=False)
     birthday = fields.DateField(null=False)
     concern = fields.TextField(null=False)
     admission_date = fields.DatetimeField(auto_now_add=True, null=False)
-    # status: PatientStatus = fields.IntEnumField(
-    #     PatientStatus, default=PatientStatus.new, null=False)
+    status: PatientStatus = fields.IntEnumField(
+        PatientStatus, default=PatientStatus.NEW, null=False)
 
 
 class Procedures(Model):
