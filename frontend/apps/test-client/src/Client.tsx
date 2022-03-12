@@ -63,7 +63,7 @@ export function Client() {
           <p>Hello {me.name} ({me.id})! Current age: {me.age}.</p>
           <ul>
             {allPatients.map(patient => (
-              <li key={patient.id}>{patient.id} {patient.sex} {patient.birthday}</li>
+              <li key={patient.id}>{patient.id} {patient.sex} {patient.birthday} {patient.concern}</li>
             ))}
           </ul>
           <Counter />
