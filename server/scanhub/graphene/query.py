@@ -1,9 +1,11 @@
 import graphene
 from datetime import date
+from tortoise.contrib.pydantic import pydantic_model_creator
 from scanhub.graphene.random_date import random_date
-
 from scanhub.graphene.types import Patient, PatientSexGQL, PatientStatusGQL, User
+from scanhub.database.models import Patient as dbPatient
 
+patient_pydantic = pydantic_model_creator(dbPatient)
 
 class Query(graphene.ObjectType):
     me = graphene.Field(User)
@@ -16,20 +18,21 @@ class Query(graphene.ObjectType):
             age=18,
         )
 
-    def resolve_all_patients(root, info):
-        import random
-        return [
-            dict(
-                id=f"patient{i}",
-                sex=random.choice([
-                    PatientSexGQL.MALE,
-                    PatientSexGQL.FEMALE,
-                    PatientSexGQL.DIVERSE,
-                ]),
-                birthday=random_date(date(1950, 1, 1), date.today()),
-                concern="",
-                admission_date=date.today(),
-                status=PatientStatusGQL.NEW,
-            )
-            for i in range(50)
-        ]
+    async def resolve_all_patients(root, info):
+        # import random
+        # return [
+        #     dict(
+        #         id=f"patient{i}",
+        #         sex=random.choice([
+        #             PatientSexGQL.MALE,
+        #             PatientSexGQL.FEMALE,
+        #             PatientSexGQL.DIVERSE,
+        #         ]),
+        #         birthday=random_date(date(1950, 1, 1), date.today()),
+        #         concern="",
+        #         admission_date=date.today(),
+        #         status=PatientStatusGQL.NEW,
+        #     )
+        #     for i in range(50)
+        # ]
+        return await patient_pydantic.from_queryset(dbPatient.all())
