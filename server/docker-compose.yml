@@ -1,0 +1,32 @@
+version: "3"
+services:
+  app:
+    build: .
+    restart: always
+    env_file: .env_file
+    image: scanhub
+    command: bash -c "uvicorn scanhub.main:app --port 8000 --host 0.0.0.0 --reload"
+    depends_on:
+    - postgres
+    volumes:
+    - .:/scanhub
+    ports:
+    - 8000:8000
+    
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: brainLinkIstCool2022UndLecker
+      POSTGRES_USER: brainLink
+      POSTGRES_DB: scanhub
+      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+volumes:
+  db_data:
