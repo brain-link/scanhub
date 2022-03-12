@@ -65,9 +65,9 @@ class Site(Model):
     country = fields.CharField(max_length=1000, null=False)
     address = fields.CharField(max_length=1000, null=False)
     patients = fields.ManyToManyField(
-        "models.Patient", related_name="sites", through="Site_Patient")
+        "models.Patient", related_name="site", through="Site_Patient")
     users = fields.ManyToManyField(
-        "models.User", related_name="sites", through="Site_User")
+        "models.User", related_name="site", through="Site_User")
 
 
 class User(Model):
@@ -85,7 +85,7 @@ class User(Model):
     intro = fields.TextField(default="")
     created_at = fields.DatetimeField(auto_now_add=True)
     patients = fields.ManyToManyField(
-        "models.Patient", related_name="users", through="User_Patient")
+        "models.Patient", related_name="user", through="User_Patient")
 
     def __str__(self):
         return f"{self.pk}#{self.username}"
