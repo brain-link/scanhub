@@ -1,0 +1,27 @@
+button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+[role="button"] {
+  display: inline-flex;
+  gap: var(--spacing2);
+  align-items: center;
+  padding-inline: var(--spacing3);
+  padding-block: var(--spacing2);
+  border-radius: var(--border-radius2);
+  border: var(--border-width1) solid var(--color-text2);
+  color: var(--color-brand-dark);
+  background-color: var(--color-surface2);
+  cursor: pointer;
+  box-shadow: 0 0.1rem 0 black;
+
+  &:hover {
+    color: var(--color-brand-darker);
+    background-color: var(--color-surface3);
+  }
+
+  &:active {
+    transform: translate(0, 0.05rem);
+    box-shadow: 0 0.05rem 0 black;
+  }
+}

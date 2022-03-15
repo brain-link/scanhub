@@ -1,0 +1,29 @@
+html {
+  text-rendering: optimizeLegibility;
+  background-color: var(--color-surface1);
+  color: var(--color);
+  font-family: var(--font-family);
+  font-size: var(--font-size-medium);
+  tab-size: 4;
+}
+
+body {
+  height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--spacing3);
+}
+
+hr {
+  margin-inline: var(--spacing2);
+}

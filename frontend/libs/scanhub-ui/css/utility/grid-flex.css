@@ -1,0 +1,43 @@
+.grid,
+[role="grid"] {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-1 {
+  gap: var(--spacing1);
+}
+
+.gap-2 {
+  gap: var(--spacing2);
+}
+
+.gap-3 {
+  gap: var(--spacing3);
+}
+
+.grow {
+  flex: 1;
+  flex-basis: 0;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.justify-end {
+  justify-content: end;
+}
+
+.aspect-square {
+  aspect-ratio: 1;
+}
