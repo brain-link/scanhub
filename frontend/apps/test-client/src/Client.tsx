@@ -19,6 +19,14 @@ const query = graphql`
       admissionDate
       status
     }
+    getPatient(id: "1") {
+      id
+      sex
+      birthday
+      concern
+      admissionDate
+      status
+    }
   }
 `
 
