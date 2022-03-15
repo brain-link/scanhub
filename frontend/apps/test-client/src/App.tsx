@@ -1,20 +1,27 @@
-import './App.css'
+import 'scanhub-ui/css/index.css'
 import { RelayEnvironmentProvider } from 'react-relay'
-import { environment } from './env'
-import { Client } from './Client'
-import { Suspense } from 'react'
-import { ErrorBoundary } from 'error-boundary'
+import { ThemeProvider } from 'styled-components'
 
-function App() {
+import { environment } from './env'
+import { RouteConfig } from './components/Routes'
+import { DialogSystem, ErrorBoundary, theme } from 'scanhub-ui'
+import { HashRouter } from 'react-router-dom'
+import { Suspense } from 'react'
+
+export function App() {
   return (
     <RelayEnvironmentProvider environment={environment}>
       <ErrorBoundary>
         <Suspense fallback={<div>Loading...</div>}>
-          <Client />
+          <ThemeProvider theme={theme}>
+            <HashRouter>
+              <DialogSystem>
+                <RouteConfig />
+              </DialogSystem>
+            </HashRouter>
+          </ThemeProvider>
         </Suspense>
       </ErrorBoundary>
     </RelayEnvironmentProvider>
   )
 }
-
-export default App

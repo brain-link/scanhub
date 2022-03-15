@@ -1,0 +1,1 @@
+zip -r david/david.zip ./david -x '*.ipynb_checkpoints*' -x '*__pycache__*' -x '*dipole/data_*' -x '*logs/*' -x '*tensorboard/*' -x '*.npy' -x '*.pkl'

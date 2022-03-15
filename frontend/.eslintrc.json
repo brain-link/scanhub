@@ -50,7 +50,7 @@
       }
     ],
     "eol-last": "error",
-    "no-console": "warn",
+    "no-console": "off",
     "no-trailing-spaces": "error",
     "react-hooks/exhaustive-deps": "error",
     "react-hooks/rules-of-hooks": "error",

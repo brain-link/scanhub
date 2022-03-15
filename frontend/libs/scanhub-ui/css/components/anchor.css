@@ -1,0 +1,8 @@
+a {
+  color: var(--color-brand-dark);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-brand-darker);
+  }
+}
