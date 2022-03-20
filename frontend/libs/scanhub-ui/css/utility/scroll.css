@@ -1,0 +1,12 @@
+.scroll,
+.scroll-y {
+  overflow-y: auto;
+}
+
+.scroll-x {
+  overflow-x: auto;
+}
+
+.scroll-xy {
+  overflow: auto;
+}

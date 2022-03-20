@@ -1,0 +1,55 @@
+.grid,
+[role="grid"] {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 1), 1fr);
+}
+
+.col-2 {
+  grid-template-columns: repeat(2, auto);
+}
+
+.col-3 {
+  grid-template-columns: repeat(3, auto);
+}
+
+.col-4 {
+  grid-template-columns: repeat(4, auto);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-1 {
+  gap: var(--spacing1);
+}
+
+.gap-2 {
+  gap: var(--spacing2);
+}
+
+.gap-3 {
+  gap: var(--spacing3);
+}
+
+.grow {
+  flex: 1;
+  flex-basis: 0;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.justify-end {
+  justify-content: end;
+}
+
+.aspect-square {
+  aspect-ratio: 1;
+}

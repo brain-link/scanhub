@@ -1,0 +1,26 @@
+input[type="checkbox"] {
+  position: relative;
+
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  border-radius: var(--border-radius1);
+  border: var(--border-width1) solid var(--color-text);
+
+  &:checked {
+    background-color: var(--color-text);
+
+    &:checked::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-surface3);
+      mask-image: url("../../svg/checkmark.svg");
+      mask-position: center;
+      mask-size: cover;
+      mask-repeat: no-repeat;
+      mask-mode: luminance;
+    }
+  }
+}
