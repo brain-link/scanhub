@@ -1,4 +1,4 @@
-INSERT INTO users (username,password,last_login,email,avatar,intro,created_at)
+INSERT INTO user (username,password,last_login,email,avatar,intro,created_at)
 VALUES
   ('Delilah Snider','EVM91VWA4GB','Jan 17, 2020','dolor.dapibus.gravida@google.couk','#f99593','libero mauris, aliquam eu, accumsan sed, facilisis vitae, orci. Phasellus','May 29, 2017'),
   ('Asher Vega','VXE28HPQ8RU','Dec 9, 2020','sit@yahoo.couk','#1abc50','Aliquam auctor, velit eget laoreet posuere, enim nisl elementum purus,','Mar 22, 2017'),
@@ -50,7 +50,7 @@ VALUES
   ('Yeo Alford','PUR81SWV5MH','Feb 8, 2019','ut@outlook.com','#238e05','consectetuer mauris id sapien. Cras dolor dolor, tempus non, lacinia','Oct 18, 2017'),
   ('Conan Ramirez','QBA27YMV2QB','May 20, 2020','imperdiet@yahoo.couk','#25c1c6','Sed neque. Sed eget lacus. Mauris non dui nec urna','Aug 7, 2017'),
   ('Cullen Morales','XDG10ROM6IX','Nov 14, 2019','aliquam.erat@protonmail.ca','#49d868','metus. Vivamus euismod urna. Nullam lobortis quam a felis ullamcorper','Dec 4, 2016');
-INSERT INTO users (username,password,last_login,email,avatar,intro,created_at)
+INSERT INTO user (username,password,last_login,email,avatar,intro,created_at)
 VALUES
   ('Dale Weiss','UWL36INM4IP','Feb 1, 2019','nec.mauris@aol.ca','#bbeff7','dictum. Proin eget odio. Aliquam vulputate ullamcorper magna. Sed eu','Feb 6, 2015'),
   ('Giacomo Snow','WTJ24DIL1YL','Aug 18, 2020','donec.sollicitudin@google.net','#899bff','imperdiet ullamcorper. Duis at lacus. Quisque purus sapien, gravida non,','Nov 15, 2017'),
@@ -102,7 +102,7 @@ VALUES
   ('Yardley Rollins','JNB54BSF4QI','Apr 24, 2019','vulputate.dui.nec@protonmail.org','#8cfff7','eu erat semper rutrum. Fusce dolor quam, elementum at, egestas','Feb 9, 2015'),
   ('Mufutau Maddox','SXX27GGQ3HQ','Aug 9, 2020','donec.non@icloud.com','#8dfc83','ac mi eleifend egestas. Sed pharetra, felis eget varius ultrices,','Jun 13, 2016'),
   ('Juliet Cook','CYI20PKD3GT','Sep 12, 2020','orci.consectetuer@icloud.org','#888cea','sed, sapien. Nunc pulvinar arcu et pede. Nunc sed orci','May 22, 2017');
-  INSERT INTO sites (name,city,country,address)
+  INSERT INTO site (name,city,country,address)
 VALUES
   ('Mauris Morbi Non Corporation','Ceuta','Belgium','Ap #256-814 Nascetur Street'),
   ('Augue Ltd','Sichuan','South Korea','114-8447 Nunc Avenue'),
@@ -154,7 +154,7 @@ VALUES
   ('Nisi Magna Corp.','Częstochowa','Colombia','558-2377 Elementum Rd.'),
   ('Lorem Inc.','Quesada','China','P.O. Box 179, 9583 Donec Av.'),
   ('Etiam Industries','Qinghai','Nigeria','P.O. Box 747, 9927 Porttitor Rd.');
-INSERT INTO sites (name,city,country,address)
+INSERT INTO site (name,city,country,address)
 VALUES
   ('Sed Leo Cras Corp.','Norrköping','Germany','931-3387 Per Rd.'),
   ('Ante Corp.','Lambayeque','Ireland','Ap #265-768 Bibendum Rd.'),
@@ -206,7 +206,7 @@ VALUES
   ('Ultricies Ligula Nullam Foundation','Belfast','South Korea','Ap #234-6296 Ut, Road'),
   ('In Consequat Inc.','Caldera','Indonesia','399-2139 Tincidunt Street'),
   ('Erat Nonummy Ultricies Inc.','Sokoto','Spain','Ap #254-2875 Leo, Ave');
-  INSERT INTO devices (modality,address,created_at,site_id)
+  INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (3,'room: 1','Sep 22, 1996',24),
   (2,'room: 2','Jun 12, 2014',23),
@@ -258,7 +258,7 @@ VALUES
   (2,'room: 48','Dec 6, 2006',91),
   (1,'room: 49','Mar 28, 2003',63),
   (2,'room: 50','Jul 26, 2006',44);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (1,'room: 51','Jul 20, 2007',34),
   (1,'room: 52','Aug 25, 2014',67),
@@ -310,7 +310,7 @@ VALUES
   (3,'room: 98','Jun 2, 2002',25),
   (2,'room: 99','Sep 25, 2015',14),
   (1,'room: 100','Aug 8, 2015',66);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (3,'room: 101','Jul 23, 1993',88),
   (2,'room: 102','Oct 14, 1999',60),
@@ -362,7 +362,7 @@ VALUES
   (3,'room: 148','Feb 14, 1995',43),
   (2,'room: 149','Apr 27, 2005',45),
   (1,'room: 150','Oct 31, 2013',51);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (0,'room: 151','Jul 4, 2010',65),
   (2,'room: 152','Feb 1, 2002',50),
@@ -414,7 +414,7 @@ VALUES
   (2,'room: 198','Jan 23, 2005',23),
   (0,'room: 199','Jul 18, 2012',5),
   (1,'room: 200','Mar 14, 1989',44);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (2,'room: 201','Jun 19, 1989',96),
   (2,'room: 202','Dec 3, 2004',17),
@@ -466,7 +466,7 @@ VALUES
   (0,'room: 248','Nov 17, 1998',92),
   (3,'room: 249','May 13, 1998',7),
   (2,'room: 250','Oct 20, 1998',56);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (1,'room: 251','Jul 26, 1994',19),
   (3,'room: 252','Aug 10, 1998',79),
@@ -518,7 +518,7 @@ VALUES
   (1,'room: 298','Apr 8, 1993',96),
   (2,'room: 299','Feb 16, 2001',55),
   (3,'room: 300','Jan 31, 2005',55);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (0,'room: 301','Aug 7, 2004',3),
   (2,'room: 302','Jun 10, 1999',9),
@@ -570,7 +570,7 @@ VALUES
   (1,'room: 348','May 19, 1993',98),
   (1,'room: 349','Jun 12, 2009',4),
   (2,'room: 350','Mar 2, 2000',82);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (1,'room: 351','May 7, 2013',51),
   (0,'room: 352','May 15, 2009',65),
@@ -622,7 +622,7 @@ VALUES
   (1,'room: 398','Apr 30, 1997',6),
   (2,'room: 399','Apr 7, 1991',46),
   (1,'room: 400','Jan 6, 2017',1);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (2,'room: 401','Sep 4, 1998',5),
   (1,'room: 402','Jul 25, 2001',73),
@@ -674,7 +674,7 @@ VALUES
   (2,'room: 448','May 24, 2007',76),
   (2,'room: 449','Nov 11, 2016',15),
   (3,'room: 450','Nov 11, 2009',7);
-INSERT INTO devices (modality,address,created_at,site_id)
+INSERT INTO device (modality,address,created_at,site_id)
 VALUES
   (0,'room: 451','Jun 7, 2003',51),
   (1,'room: 452','Nov 29, 2002',72),
@@ -726,7 +726,7 @@ VALUES
   (2,'room: 498','Jul 18, 2004',57),
   (1,'room: 499','Jan 15, 1997',97),
   (2,'room: 500','Mar 9, 1990',66);
-  INSERT INTO patients (sex,birthday,concern,admission_date,status)
+  INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (0,'Sep 24, 1949','Bowel polyps ','Dec 27, 2020',1),
   (3,'Oct 5, 1921','Dysphagia (swallowing problems) ','Aug 19, 2020',1),
@@ -778,7 +778,7 @@ VALUES
   (2,'Dec 29, 1921','Bacterial vaginosis ','May 18, 2020',0),
   (1,'May 20, 1998','Pelvic organ prolapse ','Oct 9, 2020',1),
   (2,'Sep 3, 2005','Gastro-oesophageal reflux disease (GORD) ','Nov 3, 2020',1);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (3,'Apr 17, 1958',' Psoriatic arthritis ','Oct 29, 2020',1),
   (3,'Oct 20, 1951','Middle ear infection (otitis media) ','Jul 8, 2020',0),
@@ -830,7 +830,7 @@ VALUES
   (3,'May 3, 1923','Malignant brain tumour (cancerous) ','Nov 16, 2020',1),
   (2,'Oct 3, 1946','Lymphogranuloma venereum (LGV) ','Aug 14, 2020',2),
   (2,'May 19, 1993','Non-alcoholic fatty liver disease (NAFLD) ','May 15, 2020',1);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (2,'Dec 5, 2006','Irritable bowel syndrome (IBS) ','Oct 21, 2020',0),
   (3,'Jul 7, 2007','Irritable bowel syndrome (IBS) ','Mar 31, 2020',1),
@@ -882,7 +882,7 @@ VALUES
   (0,'May 7, 1968','Whooping cough ','Oct 13, 2020',0),
   (2,'Sep 4, 1991','Brain tumours ','Apr 12, 2020',2),
   (1,'May 12, 1986','Brain tumours: Teenagers and young adults ','Jul 17, 2020',1);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (1,'Sep 7, 2002','Pelvic organ prolapse ','Sep 18, 2020',1),
   (0,'Nov 17, 1942','Bacterial vaginosis ','Feb 16, 2020',2),
@@ -934,7 +934,7 @@ VALUES
   (3,'Sep 2, 1941','Head and neck cancer ','Jul 5, 2020',1),
   (0,'Jul 28, 1942','Bowel polyps ','Dec 26, 2020',2),
   (3,'Aug 26, 1932','Middle ear infection (otitis media) ','Jun 10, 2020',0);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (1,'Jul 10, 1924','Head and neck cancer ','Aug 18, 2020',2),
   (1,'Feb 25, 1999','Obsessive compulsive disorder (OCD) ','Aug 8, 2020',0),
@@ -986,7 +986,7 @@ VALUES
   (1,'Dec 27, 1977','Malignant brain tumour (cancerous) ','Dec 1, 2020',1),
   (1,'Sep 15, 1993','Lymphogranuloma venereum (LGV) ','Apr 2, 2020',1),
   (0,'Dec 4, 1936','Brain tumours ','Jan 16, 2021',2);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (2,'Mar 28, 1999','Malignant brain tumour (cancerous) ','Jan 29, 2020',0),
   (2,'Dec 25, 1996','Restless legs syndrome ','Mar 28, 2020',0),
@@ -1038,7 +1038,7 @@ VALUES
   (0,'Oct 7, 1949','Attention deficit hyperactivity disorder (ADHD)','Oct 19, 2020',2),
   (1,'Nov 6, 2013','Middle ear infection (otitis media) ','Nov 3, 2020',0),
   (2,'Oct 15, 2004','Hodgkin lymphoma: Teenagers and young adults ','Jan 13, 2021',1);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (1,'Nov 1, 1930','Hodgkin lymphoma: Teenagers and young adults ','Apr 7, 2020',1),
   (2,'Jun 8, 1994','Brain tumours ','Jan 7, 2021',1),
@@ -1090,7 +1090,7 @@ VALUES
   (0,'Oct 14, 1922','Pelvic organ prolapse ','Jan 3, 2021',2),
   (1,'Sep 18, 1973','Hodgkin lymphoma: Teenagers and young adults ','Jan 13, 2021',1),
   (0,'Jul 4, 1994','Hodgkin lymphoma: Teenagers and young adults ','Jun 28, 2020',2);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (2,'Nov 22, 1946',' Chickenpox ','Oct 23, 2020',1),
   (0,'Oct 29, 2017','Acute myeloid leukaemia: Teenagers and young adults','Nov 20, 2020',0),
@@ -1142,7 +1142,7 @@ VALUES
   (2,'Jan 7, 1938',' Chickenpox ','Dec 25, 2020',1),
   (1,'Nov 15, 1960','Brain tumours ','Mar 19, 2020',1),
   (2,'Sep 13, 1920','Diverticular disease and diverticulitis ','Apr 2, 2020',0);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (0,'Jun 25, 1976','Irritable bowel syndrome (IBS) ','May 24, 2020',1),
   (1,'Feb 27, 1923','Brain tumours: Teenagers and young adults ','Sep 17, 2020',1),
@@ -1194,7 +1194,7 @@ VALUES
   (0,'Apr 5, 1959','Head and neck cancer ','May 20, 2020',0),
   (1,'Aug 21, 1996','Restless legs syndrome ','Sep 16, 2020',2),
   (1,'Sep 29, 1953','Hodgkin lymphoma: Teenagers and young adults ','Sep 21, 2020',0);
-INSERT INTO patients (sex,birthday,concern,admission_date,status)
+INSERT INTO patient (sex,birthday,concern,admission_date,status)
 VALUES
   (3,'Mar 9, 1931','Middle ear infection (otitis media) ','May 16, 2020',0),
   (3,'Mar 7, 1926','Head and neck cancer ','Nov 8, 2020',1),
@@ -3326,7 +3326,7 @@ VALUES
   ('Feb 10, 2022 10:22:27','QPV44UGW9WL01VT467BEACSNYRFLUAZGRLJQOMUHK7358872626911962974683562433555388EHRVIOWPISXTOHVXHUBEIDGCJJERSRNWGDIKUAEMPGYTJKRRZDPYA6887642091121851535278746955277925565982331394167577437875925823255175686269','fringilla ornare placerat, orci lacus vestibulum lorem, sit amet','PGK15NQY6MK54QU174MEBUVFPUCNNWYXGXDOLFDGK2391343714148246744226362682892862ENXIMTXWPIVFNJYDMIOUMLQBCQTXIHQNFCPQHMJDPPXJBAPKITHQS5547664790404433180814878832932938533784733757122282425282126483952695388283PNX93PFZ6YR65QN136WWLPQRMGQQWRELLWGMBOZLO7468778946359827456644326413382785VSVDNRHREHHKXYDHNKGJYJNDSQUQCSCOCCNAEKPKWJBEVCBMLSSLA6762411420381817672565712334196743659772563225899464265352719722586427464854EYG88DNV7BC48SN463OXHIJKGXTRCEMKOFFOZYKUF9625847564138386223533180305663688RFILICUJAUIQBKQCRFOSAQQXMIEBZNDTLFFIVGDLFWOOSMLOCNOFN2585766453382434655098166925102488458248223642417517327834474274323686385534DMA88DVJ6OU27QI175SIVWHRVVJWGUVGYJIQLXNIG5745168358258486249878478369642956LIAMQNRMDQLRWDQTKDERMWHFRBXLGJIUTPUSHJVHRRTOLKMBJHKHV7811673726325726582746876535897446692234774675581736237958297135183478772382IGY84HVX2BM24ST654BQRDDOEIWYVIOGQEBUQZPBI6232257818183428348381375574247123KBVDOWCPHRFUTJFXHSSXXWMDKJNIGQVOAGPPBQXIFNQQKXPTEIXLI3544861525227012676097258404929345322838638492634598158428934473435236182477DHL75SNO6YF80CF276TQHFEBPCHBJANGZCFYDEXUT1758552855274349594688656493951563AGXHMAOMVEUCJDCDKFWBHFUAPLKGETBQQWJBRJREKPWLYAVRSXCYW2548983745465155179097897623154979778959665722415646367534721148517368675553',153,85),
   ('Feb 21, 2022 06:22:49','ROJ60CYV2TN86IM183EOWJEVJKSJWXNBPGWWETDJC4251154158825612651687681572353144OFWOZQPWVLGNBOTGIEKIOPBUIIWNFLUQEXTCJJEQSVBENNZHKOHJB6274613730821661632491618251293204784564155641499818441842224356837655696184','eu elit. Nulla','ZJV46OKB4XW11HU246EQYEAJJQDROKUMBNWSXPXFZ1576238461554736831232137354163963OUSSVXXHSVQBSHOCTXCNYELAAETWVEIFAKMVSJHXGWMVHEGARRJGN5305215647254756261411839256164870927472547752737277368443256828418465362718JEU36LQS1VV74UC132BXYUWWYVKAMEYQHKMFNGQYY2475256367676554946478857943563822TUGDHKDJJRDMFQNUPWREUCMDCQTDKPTCCGLDFQHPLCMSLBXCNFBPY3422765307773665556760808126108842286551847214478354442828877653839932253149LLL61PVU7PS71HT650UONKQEEIQBQXIRWBPALYVLI7882772985688253985895351417174976PBXLKWINYSSIICCMXUDWXKGSMYLFBHCQYIYFPFGJKOWETGVBFETLS7021338678123532514627051713431982245872225227214567662756831669239572272491INN02TCX7BD13RE202VKSMEPEOILNCOMTCQLRDJXH9287757758462847748985434274544976VNJQDKXVRIOPSGLJDZBSLEKNCLQLMQGYJXHMSRIPVWCGKESBIUKGO8084757857549843413742542403655747845363642955257445733433484764888735373440QPL87VED6FI03PT932HMZIHIMMWAKEJTHQUNHOZHR2224564378376565155175116628566533WGWPOCFEXEVWEHSJRVMCTIKCXHXGLSJSNIMUQMDPVUQOLFNAAOIDD2415473521536343937153606444086711482334245247466878798452727264881343554861GUS70QMR7WR36SW515BRJGRCVGFAICWGOBPJHVHNY1842795232755354526281078233765535BIOHTGOREMCJTJBTGHVFDIKBMCOUIUIAMRNNKJDKMEPYTYCJRWIBV8142202311853544638389323875113268384361428568387882833369478427628455478407',221,293),
   ('May 21, 2021 02:21:11','IRT83XRF8CN42SS220EWKODZHBOPFXDYWOCDSIOAS7365376777784296276363798225279836LCILUCAXLFJWPMCEGSUGBSQVEJWRZKRBLXMBXYGYYGQDSDUGXPDFG6264676794486788475913361889151212252634438187545855369388269613532133751678','Pellentesque habitant morbi tristique senectus','VPB17EAV3KH42HX227WJXRNXRKFMKFDSYEJTWPURS3791747454417689416289926664513974SYXEIQFEYPMNEJAERAPIRIRHGQXLCGHECLAPPGQLCEWXWEKCMBKMS6368727667260697656271572162006733482895878522435161128222762146395995422577JCF51VOB5RP34DH652VOVXIJYNGMQJTFXAOSSKQWR7733476827974635457113628724369958OVPNKVPMZEFBOPMVCFFJPEGXLCUXDNRJOHBRMNRDTFYOCDDSGITCG2802086212514465162221445519310773186422476316213296722934586362249244264758PXZ54SJB8PI24UM705RKTJLNFJCBNYQIKJDBKMLRS1767812463748448641434735851077795BWVXWNQGPRQCSQCLTFDLBWONBRPEPQXLSWRDNLPYYLKKZJEFSTGNK5909888428477615860823469311844552955543836768188776434357626575725725553917FCQ85HQG3LV83AO358GWYOJZSGESEEOACYYFBJWCM2834855634342822417586462210528806BBJCVVINQPWCVQKUOFGDQSVYBXLNKTCAFHAJWJDDNJYMDSDSOYRZZ4265564326789927653075917578695354467488762688336868346137342657657362137844WJL71MHD1XB22RB784SXPGJKUJMXTOSPJNVJOVCDP5872662887221642845359032288124514XHWFJLRJFTBZUBRNTQSJQHDRUKPFSOJZOEXRGMKBRJRMAHXDYLWZS6731324464159754834675668672744280835875952647637552728339847878229456545271UEH88NWT1DC44TP844ASKSROTTFIVGRPFHMYTVEAF5284718513581927222484679515371833TNVHVLJYURQMYOITWAFGPTZVEVELAVGIMUOLVYOCJLHRQJVGAIGSV4028840462339543424113522215324245721371674884263788234485772466664217395230',283,164);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_patient" (user_id,patient_id)
 VALUES
   (40,466),
   (11,370),
@@ -3378,7 +3378,7 @@ VALUES
   (29,388),
   (11,261),
   (84,334);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (95,424),
   (21,231),
@@ -3430,7 +3430,7 @@ VALUES
   (41,49),
   (72,428),
   (50,486);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (39,85),
   (59,71),
@@ -3482,7 +3482,7 @@ VALUES
   (29,161),
   (92,116),
   (66,386);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (43,184),
   (27,334),
@@ -3534,7 +3534,7 @@ VALUES
   (61,418),
   (45,397),
   (84,297);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (48,370),
   (3,238),
@@ -3586,7 +3586,7 @@ VALUES
   (65,69),
   (7,427),
   (40,292);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (32,358),
   (13,276),
@@ -3638,7 +3638,7 @@ VALUES
   (91,434),
   (6,349),
   (19,490);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (18,36),
   (71,329),
@@ -3690,7 +3690,7 @@ VALUES
   (59,237),
   (47,282),
   (65,54);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (12,441),
   (95,317),
@@ -3742,7 +3742,7 @@ VALUES
   (64,454),
   (3,45),
   (35,465);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (54,314),
   (13,350),
@@ -3794,7 +3794,7 @@ VALUES
   (67,300),
   (49,89),
   (5,317);
-INSERT INTO "Users_Patients" (users_id,patients_id)
+INSERT INTO "User_Patient" (user_id,patient_id)
 VALUES
   (41,324),
   (48,181),
@@ -3846,7 +3846,7 @@ VALUES
   (46,428),
   (80,420),
   (22,40);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (47,33),
   (29,95),
@@ -3898,7 +3898,7 @@ VALUES
   (99,27),
   (52,13),
   (16,15);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (94,46),
   (88,86),
@@ -3950,7 +3950,7 @@ VALUES
   (4,52),
   (94,37),
   (59,84);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (87,41),
   (46,67),
@@ -4002,7 +4002,7 @@ VALUES
   (92,84),
   (88,65),
   (98,35);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (78,99),
   (56,14),
@@ -4054,7 +4054,7 @@ VALUES
   (44,63),
   (63,50),
   (59,87);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (69,34),
   (50,4),
@@ -4106,7 +4106,7 @@ VALUES
   (91,43),
   (10,89),
   (94,88);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (9,43),
   (46,40),
@@ -4158,7 +4158,7 @@ VALUES
   (8,9),
   (6,25),
   (63,50);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (17,3),
   (45,71),
@@ -4210,7 +4210,7 @@ VALUES
   (49,98),
   (86,26),
   (58,28);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (69,69),
   (95,92),
@@ -4262,7 +4262,7 @@ VALUES
   (35,27),
   (45,95),
   (28,51);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (82,54),
   (61,51),
@@ -4314,7 +4314,7 @@ VALUES
   (46,39),
   (58,65),
   (4,35);
-INSERT INTO "Sites_Users" (sites_id,users_id)
+INSERT INTO "Site_User" (site_id,user_id)
 VALUES
   (28,7),
   (46,68),
@@ -4366,7 +4366,7 @@ VALUES
   (57,71),
   (40,68),
   (68,50);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (53,434),
   (75,365),
@@ -4418,7 +4418,7 @@ VALUES
   (97,133),
   (19,221),
   (18,448);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (65,165),
   (25,388),
@@ -4470,7 +4470,7 @@ VALUES
   (77,376),
   (43,273),
   (89,333);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (85,348),
   (65,124),
@@ -4522,7 +4522,7 @@ VALUES
   (55,406),
   (37,406),
   (14,412);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (51,88),
   (7,216),
@@ -4574,7 +4574,7 @@ VALUES
   (68,367),
   (16,468),
   (23,390);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (1,416),
   (46,36),
@@ -4626,7 +4626,7 @@ VALUES
   (91,54),
   (99,134),
   (61,499);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (56,199),
   (79,95),
@@ -4678,7 +4678,7 @@ VALUES
   (97,364),
   (5,257),
   (47,328);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (2,216),
   (40,347),
@@ -4730,7 +4730,7 @@ VALUES
   (60,335),
   (11,308),
   (42,301);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (41,172),
   (26,418),
@@ -4782,7 +4782,7 @@ VALUES
   (3,492),
   (13,308),
   (95,351);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (54,326),
   (75,40),
@@ -4834,7 +4834,7 @@ VALUES
   (25,430),
   (12,436),
   (67,438);
-INSERT INTO "Sites_Patients" (sites_id,patients_id)
+INSERT INTO "Site_Patient" (site_id,patient_id)
 VALUES
   (41,93),
   (49,227),
