@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5d38ee389bf013e44d6c90dae953cb51>>
+ * @generated SignedSource<<8ac721a830c519e3ed977b5201434a33>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,6 +26,14 @@ export type ClientQuery$data = {
     readonly admissionDate: string;
     readonly status: PatientStatus;
   }>;
+  readonly getPatient: {
+    readonly id: string;
+    readonly sex: PatientSex;
+    readonly birthday: string;
+    readonly concern: string;
+    readonly admissionDate: string;
+    readonly status: PatientStatus;
+  };
 };
 export type ClientQuery = {
   variables: ClientQuery$variables;
@@ -41,6 +49,44 @@ var v0 = {
   "storageKey": null
 },
 v1 = [
+  (v0/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "sex",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "birthday",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "concern",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "admissionDate",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "status",
+    "storageKey": null
+  }
+],
+v2 = [
   {
     "alias": null,
     "args": null,
@@ -74,45 +120,24 @@ v1 = [
     "kind": "LinkedField",
     "name": "allPatients",
     "plural": true,
-    "selections": [
-      (v0/*: any*/),
+    "selections": (v1/*: any*/),
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": [
       {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "sex",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "birthday",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "concern",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "admissionDate",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "status",
-        "storageKey": null
+        "kind": "Literal",
+        "name": "id",
+        "value": 20
       }
     ],
-    "storageKey": null
+    "concreteType": "Patient",
+    "kind": "LinkedField",
+    "name": "getPatient",
+    "plural": false,
+    "selections": (v1/*: any*/),
+    "storageKey": "getPatient(id:20)"
   }
 ];
 return {
@@ -121,7 +146,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ClientQuery",
-    "selections": (v1/*: any*/),
+    "selections": (v2/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -130,19 +155,19 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "ClientQuery",
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "1ae2403d318bf46e5ebc616e2081c654",
+    "cacheID": "1a908fd15329f8c342b74d8862f70a89",
     "id": null,
     "metadata": {},
     "name": "ClientQuery",
     "operationKind": "query",
-    "text": "query ClientQuery {\n  me {\n    id\n    name\n    age\n  }\n  allPatients {\n    id\n    sex\n    birthday\n    concern\n    admissionDate\n    status\n  }\n}\n"
+    "text": "query ClientQuery {\n  me {\n    id\n    name\n    age\n  }\n  allPatients {\n    id\n    sex\n    birthday\n    concern\n    admissionDate\n    status\n  }\n  getPatient(id: 20) {\n    id\n    sex\n    birthday\n    concern\n    admissionDate\n    status\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "bd79a533422591821d44408be03ec142";
+(node as any).hash = "e371b75f51630237f379faa433f825a5";
 
 export default node;

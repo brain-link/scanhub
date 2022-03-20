@@ -19,7 +19,7 @@ const query = graphql`
       admissionDate
       status
     }
-    getPatient(id: "1") {
+    getPatient(id: 20) {
       id
       sex
       birthday
@@ -42,7 +42,7 @@ function count<T>(list: readonly T[], what: (item: T) => string) {
 }
 
 export function Client() {
-  const { me, allPatients } = useLazyLoadQuery<ClientQuery>(query, {}, {})
+  const { me, allPatients, getPatient } = useLazyLoadQuery<ClientQuery>(query, {}, {})
   const bar: Plotly.Data[] = useMemo(
     () => [{
       x: allPatients.map((_, i) => i),
@@ -69,6 +69,7 @@ export function Client() {
       {me ?
         <>
           <p>Hello {me.name} ({me.id})! Current age: {me.age}.</p>
+          <p>Patient: { getPatient.sex } </p>
           <ul>
             {allPatients.map(patient => (
               <li key={patient.id}>{patient.id} {patient.sex} {patient.birthday} {patient.concern}</li>
