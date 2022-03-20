@@ -20,5 +20,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./libs/typings",
+    ]
   }
 }
