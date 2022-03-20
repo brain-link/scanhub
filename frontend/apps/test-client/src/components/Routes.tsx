@@ -37,6 +37,21 @@ function Docs() {
   )
 }
 
+function Devices() {
+  return (
+    <section>
+      <h1>My Devices</h1>
+      <p>
+        <ul>
+          <li>register new devices</li>
+          <li>configure existing devices</li>
+          <li>remove existing devices</li>
+        </ul>
+      </p>
+    </section>
+  )
+}
+
 function NotFound() {
   return (
     <section>
@@ -51,6 +66,7 @@ export function RouteConfig() {
     <Routes>
       <Route path='/' element={<Navigation />}>
         <Route path='docs' element={<Docs />} />
+        <Route path='devices' element={<Devices />} />
         <Route path='patients'>
           <Route index element={<Patients />} />
           <Route path=':patientId'>

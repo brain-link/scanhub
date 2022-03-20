@@ -39,6 +39,7 @@ export function Navigation() {
         </ul>
         <div className='grow' />
         <Link to='/patients'>Patients</Link>
+        <Link to='/devices'>Devices</Link>
         <Link to='/docs'>Docs v{version}</Link>
         <Clock />
         <button onClick={async () => console.log(await openDialog(logoutDialog))}>Logout</button>
