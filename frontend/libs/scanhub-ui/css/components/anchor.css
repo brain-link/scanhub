@@ -5,4 +5,8 @@ a {
   &:hover {
     color: var(--color-brand-darker);
   }
+
+  &.active {
+    font-weight: bold;
+  }
 }
