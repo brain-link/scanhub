@@ -1,4 +1,4 @@
-import { Link, Outlet, useParams } from 'react-router-dom'
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 import { range } from 'utils'
 import { getModalityComponent } from './modalities'
 
@@ -12,7 +12,7 @@ export function ProcedureSidebar() {
           <span className='fa fa-filter' />
         </button>
       </div>
-      <div className='grow flex-col gap-2 scroll-y'>
+      <div className='grow flex-col gap-2 pad-2 scroll-y'>
         {range(50).map(i => (
           <Link key={i} to={`mri-recording-${i}`}>
             <section className='flex gap-2'>
@@ -26,7 +26,9 @@ export function ProcedureSidebar() {
       </div>
       <div className='flex gap-2 justify-end'>
         <button><span className='fa fa-circle' /> REC</button>
-        <button><span className='fa fa-plus' /></button>
+        <button><span className='fa fa-plus' /> MRI</button>
+        <button><span className='fa fa-plus' /> CT</button>
+        <button><span className='fa fa-plus' /> EEG</button>
       </div>
     </section>
   )
@@ -36,12 +38,10 @@ export function ProcedureSidebar() {
 export function ProcedureMainContentSwitcher() {
   return (
     <>
-      <nav>
-        <ul>
-          <li><Link to='configure-mri'>Config</Link></li>
-          <li><Link to='dicom'>DICOM</Link></li>
-        </ul>
-      </nav>
+      <div className='flex gap-2'>
+        <NavLink to='configure-mri'>Config</NavLink>
+        <NavLink to='dicom'>DICOM</NavLink>
+      </div>
       <Outlet />
     </>
   )
@@ -50,6 +50,9 @@ export function ProcedureMainContentSwitcher() {
 export function ProcedureMainContent() {
   const { recordingId, modality } = useParams()
   const Modality = getModalityComponent(modality ?? 'configure-mri')
+  if (recordingId === undefined) {
+    throw new Error(`Error in routing, recordingId is undefined.`)
+  }
   return (
     <Modality recordingId={recordingId} />
   )

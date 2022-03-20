@@ -17,7 +17,9 @@ blockquote,
 dl,
 dd,
 ul,
-li {
+li,
+fieldset,
+menu {
   margin: 0;
   padding: 0;
 }

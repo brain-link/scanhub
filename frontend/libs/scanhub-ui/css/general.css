@@ -27,3 +27,13 @@ main {
 hr {
   margin-inline: var(--spacing2);
 }
+
+fieldset {
+  display: grid;
+  padding: var(--spacing3);
+  grid-template-columns: auto auto;
+
+  & label {
+    display: contents;
+  }
+}

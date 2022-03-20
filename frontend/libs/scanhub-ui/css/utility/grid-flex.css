@@ -1,7 +1,19 @@
 .grid,
 [role="grid"] {
   display: grid;
-  grid-auto-flow: column;
+  grid-template-columns: repeat(var(--columns, 1), 1fr);
+}
+
+.col-2 {
+  grid-template-columns: repeat(2, auto);
+}
+
+.col-3 {
+  grid-template-columns: repeat(3, auto);
+}
+
+.col-4 {
+  grid-template-columns: repeat(4, auto);
 }
 
 .flex {
