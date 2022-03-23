@@ -40,7 +40,6 @@ class Query(graphene.ObjectType):
 
     async def resolve_get_patient(root, info, id: int):
         patient = await patient_pydantic.from_queryset_single(dbPatient.get(id=id))
-        print(patient.concern)
         return dict(
             id=id,
             sex=patient.sex,
