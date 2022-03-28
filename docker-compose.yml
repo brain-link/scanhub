@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 services:
   app:
     build: 
@@ -14,7 +14,19 @@ services:
     - .:/scanhub
     ports:
     - 8000:8000
-    
+
+  # azurite:
+  #   image: mcr.microsoft.com/azure-storage/azurite
+  #   hostname: azurite
+  #   restart: always
+  #   command: "azurite --blobHost 127.0.0.1 --blobPort 10000 --queueHost 127.0.0.1 --queuePort 10001"
+  #   ports:
+  #     - "10000:10000"
+  #     - "10001:10001"
+
+  azureblobstorage:
+      image: mcr.microsoft.com/azure-blob-storage:latest
+
   postgres:
     image: postgres
     restart: always
