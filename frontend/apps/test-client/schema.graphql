@@ -49,6 +49,7 @@ enum PatientStatus {
 type Query {
   me: User
   allPatients: [Patient!]!
+  getPatient(id: Int!): Patient!
 }
 
 type Subscription {
