@@ -3,6 +3,7 @@ import { PatientTable } from './PatientTable'
 import { Navigation } from './NavBar'
 import { Procedure, ProcedureMainContent, ProcedureMainContentSwitcher } from './Procedure'
 import { version } from '../version'
+import { Suspense } from 'react'
 
 
 function Patients() {
@@ -52,7 +53,11 @@ export function RouteConfig() {
       <Route path='/' element={<Navigation />}>
         <Route path='docs' element={<Docs />} />
         <Route path='patients'>
-          <Route index element={<Patients />} />
+          <Route index element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Patients />
+            </Suspense>
+          } />
           <Route path=':patientId'>
             <Route index element={<Patient />} />
             <Route path=':procedureId' element={<Procedure />}>
