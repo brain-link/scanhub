@@ -1,0 +1,46 @@
+version: "3.4"
+services:
+  app:
+    build: 
+      context: ./server
+      dockerfile: ./Dockerfile
+    restart: always
+    env_file: ./server/.env_file
+    image: scanhub_new
+    command: bash -c "uvicorn scanhub.main:app --port 8000 --host 0.0.0.0 --reload"
+    depends_on:
+    - postgres
+    volumes:
+    - .:/scanhub
+    ports:
+    - 8000:8000
+
+  # azurite:
+  #   image: mcr.microsoft.com/azure-storage/azurite
+  #   hostname: azurite
+  #   restart: always
+  #   command: "azurite --blobHost 127.0.0.1 --blobPort 10000 --queueHost 127.0.0.1 --queuePort 10001"
+  #   ports:
+  #     - "10000:10000"
+  #     - "10001:10001"
+
+  azureblobstorage:
+      image: mcr.microsoft.com/azure-blob-storage:latest
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: brainLinkIstCool2022UndLecker
+      POSTGRES_USER: brainLink
+      POSTGRES_DB: scanhub
+      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+volumes:
+  db_data:
