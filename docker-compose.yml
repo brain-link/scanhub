@@ -31,6 +31,9 @@ services:
   # azureblobstorage:
   #     image: mcr.microsoft.com/azure-blob-storage:latest
 
+  azurefunctions:
+    image: mcr.microsoft.com/azure-functions/python
+
   postgres:
     image: postgres
     restart: always
