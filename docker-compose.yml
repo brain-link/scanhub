@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 services:
   app:
     build: 
@@ -15,17 +15,21 @@ services:
     ports:
     - 8000:8000
 
-  # azurite:
-  #   image: mcr.microsoft.com/azure-storage/azurite
-  #   hostname: azurite
-  #   restart: always
-  #   command: "azurite --blobHost 127.0.0.1 --blobPort 10000 --queueHost 127.0.0.1 --queuePort 10001"
-  #   ports:
-  #     - "10000:10000"
-  #     - "10001:10001"
+# https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite
+# https://docs.microsoft.com/en-us/samples/azure-samples/automated-testing-with-azurite/automated-testing-with-azure/
+# https://azure.microsoft.com/en-us/features/storage-explorer/#overview
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    hostname: azurite
+    restart: always
+    command: "azurite --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
 
-  azureblobstorage:
-      image: mcr.microsoft.com/azure-blob-storage:latest
+#https://docs.microsoft.com/en-us/azure/iot-edge/how-to-deploy-blob
+  # azureblobstorage:
+  #     image: mcr.microsoft.com/azure-blob-storage:latest
 
   postgres:
     image: postgres
