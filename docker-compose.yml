@@ -13,7 +13,7 @@ services:
     volumes:
     - .:/scanhub
     ports:
-    - 8000:8000
+      - 8000:8000
 
 # https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite
 # https://docs.microsoft.com/en-us/samples/azure-samples/automated-testing-with-azurite/automated-testing-with-azure/
@@ -24,15 +24,20 @@ services:
     restart: always
     command: "azurite --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001"
     ports:
-      - "10000:10000"
-      - "10001:10001"
+      - 10000:10000
+      - 10001:10001
 
 #https://docs.microsoft.com/en-us/azure/iot-edge/how-to-deploy-blob
   # azureblobstorage:
   #     image: mcr.microsoft.com/azure-blob-storage:latest
 
   azurefunctions:
-    image: mcr.microsoft.com/azure-functions/python
+    build: 
+      context: ./workflows
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 81:80
 
   postgres:
     image: postgres
