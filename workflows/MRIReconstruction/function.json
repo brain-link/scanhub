@@ -1,0 +1,12 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "mrirawblob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "mri-scanhub-container/{name}",
+      "connection": ""
+    }
+  ]
+}
