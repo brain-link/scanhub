@@ -1,12 +1,13 @@
 version: "3.9"
 services:
   app:
+    image: scanhub_new
+    restart: unless-stopped
+    container_name: ScanHub
     build: 
       context: ./server
       dockerfile: ./Dockerfile
-    restart: always
     env_file: ./server/.env_file
-    image: scanhub_new
     command: bash -c "uvicorn scanhub.main:app --port 8000 --host 0.0.0.0 --reload"
     depends_on:
     - postgres
@@ -15,37 +16,33 @@ services:
     ports:
       - 8000:8000
 
-# https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite
-# https://docs.microsoft.com/en-us/samples/azure-samples/automated-testing-with-azurite/automated-testing-with-azure/
-# https://azure.microsoft.com/en-us/features/storage-explorer/#overview
-  azurite:
+  storage:
     image: mcr.microsoft.com/azure-storage/azurite:latest
-    hostname: azurite
-    restart: always
+    restart: unless-stopped
+    container_name: Storage
     command: "azurite --loose --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001 --tableHost 0.0.0.0 --tablePort 10002"
     ports:
       - 10000:10000
       - 10001:10001
       - 10002:10002
 
-#https://docs.microsoft.com/en-us/azure/iot-edge/how-to-deploy-blob
-  # azureblobstorage:
-  #     image: mcr.microsoft.com/azure-blob-storage:latest
-
-  azurefunctions:
+  workflows:
+    restart: unless-stopped
+    container_name: Workflows
     build: 
       context: ./workflows
       dockerfile: ./Dockerfile
     environment:
-      "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;"
+      "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://storage:10000/devstoreaccount1;QueueEndpoint=http://storage:10001/devstoreaccount1;"
     ports:
       - 81:80
     depends_on:
-      - azurite
+      - storage
 
   postgres:
     image: postgres
-    restart: always
+    restart: unless-stopped
+    container_name: Database
     environment:
       POSTGRES_PASSWORD: brainLinkIstCool2022UndLecker
       POSTGRES_USER: brainLink
@@ -53,7 +50,8 @@ services:
       
   adminer:
     image: adminer
-    restart: always
+    restart: unless-stopped
+    container_name: PostgreSQLAdmin
     ports:
       - 8080:8080
 
