@@ -27,7 +27,7 @@ services:
       - 10002:10002
 
   workflows:
-    restart: unless-stopped
+    restart: always
     container_name: Workflows
     build: 
       context: ./workflows
