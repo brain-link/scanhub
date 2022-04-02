@@ -22,10 +22,11 @@ services:
     image: mcr.microsoft.com/azure-storage/azurite:latest
     hostname: azurite
     restart: always
-    command: "azurite --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001"
+    command: "azurite --loose --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001 --tableHost 0.0.0.0 --tablePort 10002"
     ports:
       - 10000:10000
       - 10001:10001
+      - 10002:10002
 
 #https://docs.microsoft.com/en-us/azure/iot-edge/how-to-deploy-blob
   # azureblobstorage:
@@ -35,9 +36,12 @@ services:
     build: 
       context: ./workflows
       dockerfile: ./Dockerfile
-    restart: always
+    environment:
+      "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;"
     ports:
       - 81:80
+    depends_on:
+      - azurite
 
   postgres:
     image: postgres
@@ -52,7 +56,6 @@ services:
     restart: always
     ports:
       - 8080:8080
-
 
 volumes:
   db_data:
