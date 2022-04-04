@@ -28,7 +28,7 @@ services:
 
   workflows:
     restart: always
-    container_name: Workflows Python
+    container_name: WorkflowsPython
     build: 
       context: ./workflows-python
       dockerfile: ./Dockerfile
