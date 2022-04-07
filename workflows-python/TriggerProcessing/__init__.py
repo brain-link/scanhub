@@ -59,6 +59,7 @@ def main(req: func.HttpRequest, msg: func.Out[func.QueueMessage]) -> func.HttpRe
 
     try:
         req_body = req.get_json()
+        sender_ID = req_body.get('senderID')
         document_list = req_body.get('documentList')
     except ValueError:
         return func.HttpResponse(
@@ -66,6 +67,9 @@ def main(req: func.HttpRequest, msg: func.Out[func.QueueMessage]) -> func.HttpRe
              status_code=400
         )
     
+    if sender:
+        logging.info(f"Received instruction from {sender_ID}.")
+
     if document_list:
         try:
             msg.set(document_list)

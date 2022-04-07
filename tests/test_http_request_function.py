@@ -27,15 +27,9 @@ from requests.structures import CaseInsensitiveDict
 
 url = "http://localhost:81/api/TriggerProcessing"
 
-# Option 1: JSON style instruction
-# headers = CaseInsensitiveDict()
-# headers["Content-Type"] = "application/json"
-# data = '{"productId": 123456, "quantity": 100}'
-
-# Option 2: Plain text style instruction
 headers = CaseInsensitiveDict()
-headers["Content-Type"] = "text/plain"
-data = '{ "documentList": ["sample_file1.txt", "sample_file2.txt", "sample_file3.txt", "sample_file4.txt", "sample_file5.txt"] }'
+headers["Content-Type"] = "application/json"
+data = '{ "senderID": 123456, "documentList": ["sample_file1.txt", "sample_file2.txt", "sample_file3.txt", "sample_file4.txt", "sample_file5.txt"] }'
 
 resp = requests.post(url, headers=headers, data=data)
 
