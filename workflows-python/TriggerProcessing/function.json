@@ -20,7 +20,7 @@
       "type": "queue",
       "direction": "out",
       "name": "msg",
-      "queueName": "processing",
+      "queueName": "processing-queue",
       "connection": ""
     }
   ]

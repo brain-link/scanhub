@@ -67,7 +67,7 @@ def main(req: func.HttpRequest, msg: func.Out[func.QueueMessage]) -> func.HttpRe
              status_code=400
         )
     
-    if sender:
+    if sender_ID:
         logging.info(f"Received instruction from {sender_ID}.")
 
     if document_list:

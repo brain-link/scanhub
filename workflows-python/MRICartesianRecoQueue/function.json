@@ -5,21 +5,7 @@
       "name": "msg",
       "type": "queueTrigger",
       "direction": "in",
-      "queueName": "mri-acquisition-queue",
-      "connection": ""
-    },
-    {
-      "name": "inputblob",
-      "type": "blob",
-      "direction": "in",
-      "path": "mri-raw/{queueTrigger}",
-      "connection": ""
-    },
-    {
-      "name": "outputblob",
-      "type": "blob",
-      "direction": "out",
-      "path": "mri-processed/{queueTrigger}",
+      "queueName": "processing-queue",
       "connection": ""
     }
   ]
