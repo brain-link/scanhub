@@ -1,12 +1,13 @@
 # https://blog.siliconvalve.com/2020/10/29/reading-and-writing-binary-files-with-python-with-azure-functions-input-and-output-bindings/
 import logging
+import os
 import azure.functions as func
 import numpy as np
 import io
 from PIL import Image
 
 from ..libraries.utils import storage_helpers
-# from ..libraries.utils import processing
+from ..libraries.utils import processing
 
 # Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
 try:
@@ -79,35 +80,39 @@ def main(msg: func.QueueMessage) -> None:
         file_name = msg.get_body().decode('utf-8')
         logging.info(f"### Processing queue item: {file_name}...")
 
-        # # Getting settings
-        # STORAGE_CONNECTION_STRING = os.getenv("QueueConnectionString")
-        # CONTAINER_NAME = os.getenv("STORAGE_CONTAINER_NAME")
-        # TABLE_NAME = os.getenv("STORAGE_TABLE_NAME")
+        # Getting settings
+        STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;" #os.getenv("STORAGE_CONNECTION_STRING")
+        CONTAINER_NAME = "testdocs" #os.getenv("STORAGE_CONTAINER_NAME")
+        TABLE_NAME = "status" #os.getenv("STORAGE_TABLE_NAME")
+
+        print(f"### STORAGE_CONNECTION_STRING: {STORAGE_CONNECTION_STRING}")
+        print(f"### CONTAINER_NAME: {CONTAINER_NAME}")
+        print(f"### TABLE_NAME: {TABLE_NAME}")
 
         # # Updating status to new
         # storage_helpers.update_status(TABLE_NAME, file_name, 'new', STORAGE_CONNECTION_STRING)
 
-        # # Getting file from storage
-        # file_path = storage_helpers.download_blob(CONTAINER_NAME, file_name, STORAGE_CONNECTION_STRING)
+        # Getting file from storage
+        file_path = storage_helpers.download_blob(CONTAINER_NAME, file_name, STORAGE_CONNECTION_STRING)
 
-        # if file_path != None:
-        #     # Processing file
-        #     processed_doc = processing.process_doc(file_path)
-        #     # Saving processed file to storage
-        #     if processed_doc != None:
-        #         # Updating status to processed
-        #         storage_helpers.update_status(TABLE_NAME, file_name, 'processed', STORAGE_CONNECTION_STRING)
-        #         new_file_name = 'processed_' + file_name
-        #         storage_helpers.upload_blob(CONTAINER_NAME, new_file_name, processed_doc, STORAGE_CONNECTION_STRING)
-        #         # Updating status to done
-        #         storage_helpers.update_status(TABLE_NAME, file_name, 'done', STORAGE_CONNECTION_STRING)
-        #         # Deleting local copy
-        #         os.remove(file_path)
-        #         logging.info(f"Done processing {file_name}.")
+        if file_path != None:
+            # Processing file
+            processed_doc = processing.process_doc(file_path)
+            # Saving processed file to storage
+            if processed_doc != None:
+                # # Updating status to processed
+                # storage_helpers.update_status(TABLE_NAME, file_name, 'processed', STORAGE_CONNECTION_STRING)
+                new_file_name = 'processed_' + file_name
+                storage_helpers.upload_blob(CONTAINER_NAME, new_file_name, processed_doc, STORAGE_CONNECTION_STRING)
+                # # Updating status to done
+                # storage_helpers.update_status(TABLE_NAME, file_name, 'done', STORAGE_CONNECTION_STRING)
+                # Deleting local copy
+                os.remove(file_path)
+                logging.info(f"Done processing {file_name}.")
         
-        # else:
-        #     logging.info(f"Did not perform any operation as there was an issue.")
-        #     # Updating status to failed
+        else:
+            logging.info(f"Did not perform any operation as there was an issue.")
+            # Updating status to failed
         #     storage_helpers.update_status(TABLE_NAME, file_name, 'failed', STORAGE_CONNECTION_STRING)
 
     except Exception as e:
