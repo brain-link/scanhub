@@ -36,20 +36,16 @@ Login information:
 | Passwort              | brainLinkIstCool2022UndLecker     |
 | Datenbank             | -                                 |
 
-Once you are logged in, select the scanhub database and click on import on the left side to upload one of the sql files.
+Once you are logged in, select the scanhub database and click on import on the left side to upload sql files.
+SQL files are located in `example_data/`. When uploading the files separately, the import order is important,
+since some tables depend on each other.
 
-- __scanhubdb.sql__ contains sites, devices, patients, procedures and recordings
-- __patients.sql__ contains patients only
+### Import Order
+
+user, patient, site &#8594; device, procedures &#8594; recordings &#8594; site_user, user_patient, site_patient
 
 <br>
 
 > __Note:__ Database tables are generated according to ```database/models.py```. Modifications of the models require a rebuild of the database containers with docker.
 
 <br>
-
----
-
-## TODOs
-
-- Add recordings to database
-- Additional database with blob storage for acquisition data

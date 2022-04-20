@@ -1,0 +1,5 @@
+1. Drop Tables
+   DROP SCHEMA public CASCADE;
+   CREATE SCHEMA public;
+2. Restart docker to create empty tables again
+3. import exampledata.sql
