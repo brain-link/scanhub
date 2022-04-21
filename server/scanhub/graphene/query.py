@@ -10,6 +10,7 @@ patient_pydantic = pydantic_model_creator(dbPatient)
 class Query(graphene.ObjectType):
     me = graphene.Field(User)
     all_patients = graphene.List(graphene.NonNull(Patient), required=True)
+    get_patient = graphene.Field(Patient, id=graphene.Int(required=True), required=True)
 
     def resolve_me(root, info):
         return dict(
@@ -36,3 +37,14 @@ class Query(graphene.ObjectType):
         #     for i in range(50)
         # ]
         return await patient_pydantic.from_queryset(dbPatient.all())
+
+    async def resolve_get_patient(root, info, id: int):
+        patient = await patient_pydantic.from_queryset_single(dbPatient.get(id=id))
+        return dict(
+            id=id,
+            sex=patient.sex,
+            birthday=patient.birthday,
+            concern=patient.concern,
+            admission_date=date.today(),
+            status=patient.status
+        )
