@@ -29,7 +29,8 @@ url = "http://localhost:81/api/TriggerProcessing"
 
 headers = CaseInsensitiveDict()
 headers["Content-Type"] = "application/json"
-data = '{ "senderID": 123456, "documentList": ["sample_file1.txt", "sample_file2.txt", "sample_file3.txt", "sample_file4.txt", "sample_file5.txt"] }'
+#data = '{ "senderID": 123456, "documentList": ["sample_file1.txt", "sample_file2.txt", "sample_file3.txt", "sample_file4.txt", "sample_file5.txt"] }'
+data = '{ "senderID": 123456, "documentList": ["sample_file1.txt"] }'
 
 resp = requests.post(url, headers=headers, data=data)
 

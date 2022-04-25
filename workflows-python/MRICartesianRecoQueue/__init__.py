@@ -81,7 +81,7 @@ def main(msg: func.QueueMessage) -> None:
         logging.info(f"### Processing queue item: {file_name}...")
 
         # Getting settings
-        STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;" #os.getenv("STORAGE_CONNECTION_STRING")
+        STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://Storage:10000/devstoreaccount1;QueueEndpoint=http://Storage:10001/devstoreaccount1;TableEndpoint=http://Storage:10002/devstoreaccount1;" #os.getenv("STORAGE_CONNECTION_STRING")
         CONTAINER_NAME = "testdocs" #os.getenv("STORAGE_CONTAINER_NAME")
         TABLE_NAME = "status" #os.getenv("STORAGE_TABLE_NAME")
 
