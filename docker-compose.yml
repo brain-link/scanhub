@@ -12,7 +12,7 @@ services:
     depends_on:
     - postgres
     volumes:
-    - .:/scanhub
+    - ./server:/scanhub
     ports:
       - 8000:8000
 
