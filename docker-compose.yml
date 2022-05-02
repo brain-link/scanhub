@@ -1,9 +1,21 @@
 version: "3"
 services:
-  app:
-    image: scanhub_new
+  # ui:
+  #   image: scanhub_ui
+  #   restart: unless-stopped
+  #   container_name: ScanHubUI
+  #   build: 
+  #     context: ./frontend
+  #     dockerfile: ./Dockerfile
+  #   volumes:
+  #   - ./frontend:/scanhub
+  #   ports:
+  #     - 3000:3000
+
+  uiserver:
+    image: scanhub_ui_server
     restart: unless-stopped
-    container_name: ScanHub
+    container_name: ScanHubUIServer
     build: 
       context: ./server
       dockerfile: ./Dockerfile
