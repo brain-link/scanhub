@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5a7bb31e401516879e2642b96425c13b>>
+ * @generated SignedSource<<e0509196750f5baf2eb33d14df10bdf9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,11 @@ export type PatientSex = "NONE" | "MALE" | "FEMALE" | "DIVERSE" | "%future added
 export type PatientStatus = "NEW" | "RECORDING" | "DIAGNOSIS" | "%future added value";
 export type PatientTableQuery$variables = {};
 export type PatientTableQuery$data = {
+  readonly me: {
+    readonly id: string;
+    readonly name: string;
+    readonly age: number;
+  } | null;
   readonly allPatients: ReadonlyArray<{
     readonly id: string;
     readonly sex: PatientSex;
@@ -28,7 +33,40 @@ export type PatientTableQuery = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v1 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "User",
+    "kind": "LinkedField",
+    "name": "me",
+    "plural": false,
+    "selections": [
+      (v0/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "name",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "age",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  },
   {
     "alias": null,
     "args": null,
@@ -37,13 +75,7 @@ var v0 = [
     "name": "allPatients",
     "plural": true,
     "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      },
+      (v0/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -89,7 +121,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "PatientTableQuery",
-    "selections": (v0/*: any*/),
+    "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -98,19 +130,19 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "PatientTableQuery",
-    "selections": (v0/*: any*/)
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "f43ef46183af19d560e781fba8b94e99",
+    "cacheID": "5e1486ccbca4918fe68323d8d9d59c5c",
     "id": null,
     "metadata": {},
     "name": "PatientTableQuery",
     "operationKind": "query",
-    "text": "query PatientTableQuery {\n  allPatients {\n    id\n    sex\n    birthday\n    concern\n    admissionDate\n    status\n  }\n}\n"
+    "text": "query PatientTableQuery {\n  me {\n    id\n    name\n    age\n  }\n  allPatients {\n    id\n    sex\n    birthday\n    concern\n    admissionDate\n    status\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "6d58e1b6fe4f2ff60e471bec73d554f0";
+(node as any).hash = "abd95bbc5a7835e90bae72c9b3fe6afa";
 
 export default node;

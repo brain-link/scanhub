@@ -1,5 +1,6 @@
 table {
   display: grid;
+  grid-auto-rows: max-content;
   grid-template-columns: repeat(var(--columns, 1), auto);
   overflow: auto;
 }
