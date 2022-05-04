@@ -138,7 +138,7 @@ function Plane({
 const clearColor: Vec4 = [0.2, 0.2, 0.2, 1]
 
 export function DICOM({
-  // recordingId,
+  recordingId,
 }: ModalityProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [dynamicRange, setDynamicRange] = useState(1)
@@ -148,6 +148,7 @@ export function DICOM({
   const [xzPlaneCenter, setXZPlaneCenter] = useState(0)
   return (
     <div>
+      <h1> { recordingId } </h1>
       <ul>
         <li>
           Dynamic range:
