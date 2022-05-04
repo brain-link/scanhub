@@ -1,5 +1,7 @@
+from cgitb import reset
 import graphene
 import uvicorn
+import json
 from fastapi import FastAPI
 from starlette_graphene3 import GraphQLApp, make_graphiql_handler
 from tortoise.contrib.fastapi import register_tortoise
@@ -20,7 +22,7 @@ schema = graphene.Schema(
 )
 
 # Graphiql IDE
-app.mount("/", GraphQLApp(schema, on_get=make_graphiql_handler()))
+app.mount("/graphql", GraphQLApp(schema, on_get=make_graphiql_handler()))
 
 # Tortoise ORM    
 register_tortoise(
