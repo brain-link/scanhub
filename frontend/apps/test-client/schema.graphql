@@ -22,6 +22,14 @@ type Device {
   site: Site
 }
 
+type FileUploadMutation {
+  ok: Boolean
+}
+
+type Mutation {
+  uploadFile(file: Upload!): FileUploadMutation
+}
+
 type Patient {
   id: ID!
   sex: PatientSex!
@@ -77,6 +85,14 @@ type Site {
   country: String!
   address: String!
 }
+
+type Subscription {
+  data(upto: Int!): [Patient!]
+}
+
+# Create scalar that ignores normal serialization/deserialization, since
+# that will be handled by the multipart request spec
+scalar Upload
 
 type User {
   id: ID!
