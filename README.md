@@ -14,6 +14,25 @@ ScanHub is a multi modal acquisition software, which allows individualizable, mo
 ScanHub is open-source and freely availably to anyone. 
 The greatest novalty of ScanHub is the cross-manufacturer and multi-modality aspect, allowing accessible cloud-based data processing in one framework. 
 
+
+Installation
+------------
+
+    docker-compose up -d --build
+
+
+Development
+-----------
+
+Add workflow framework in a different programming language with:
+
+    func init --docker
+
+Add a new workflow with:
+
+    func new
+
+
 License
 -------
 
