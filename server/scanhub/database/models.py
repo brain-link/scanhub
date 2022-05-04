@@ -4,7 +4,7 @@ from tortoise import Model, fields
 from scanhub.database.enums import PatientStatus, PatientSex, Modality
 
 
-class DeviceModel(Model):
+class Device(Model):
     """
     The Device model
     """
@@ -15,7 +15,7 @@ class DeviceModel(Model):
     created_at = fields.DatetimeField(auto_now_add=True)
 
 
-class PatientModel(Model):
+class Patient(Model):
     """
     The Patient model
     """
@@ -29,7 +29,7 @@ class PatientModel(Model):
         PatientStatus, default=PatientStatus.NEW, null=False)
 
 
-class ProceduresModel(Model):
+class Procedures(Model):
     """
     The Procedures model
     """
@@ -40,7 +40,7 @@ class ProceduresModel(Model):
         "models.Patient", related_name="procedures")
 
 
-class RecordingsModel(Model):
+class Recordings(Model):
     """
     The Recordings model
     """
@@ -55,7 +55,7 @@ class RecordingsModel(Model):
         "models.Procedures", related_name="recordings")
 
 
-class SiteModel(Model):
+class Site(Model):
     """
     The Site model
     """
@@ -70,7 +70,7 @@ class SiteModel(Model):
         "models.User", related_name="site", through="Site_User")
 
 
-class UserModel(Model):
+class User(Model):
     """
     The User model
     """
@@ -91,7 +91,7 @@ class UserModel(Model):
         return f"{self.pk}#{self.username}"
 
 
-class ConfigModel(Model):
+class Config(Model):
     label = fields.CharField(max_length=200)
     key = fields.CharField(max_length=20, unique=True,
                            description="Unique key for config")
