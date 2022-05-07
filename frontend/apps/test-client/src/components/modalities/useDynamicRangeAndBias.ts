@@ -16,11 +16,11 @@ export function useDynamicRangeAndBias(ref: React.RefObject<HTMLDivElement>) {
         return mouse({
           element,
           onUpdate: mouse => {
-            if (mouse.button.right === 'down') {
+            if (mouse.button.middle === 'down') {
               setDynamicRange(1)
               setBias(0)
             }
-            if (mouse.button.left === 'down') {
+            if (mouse.button.right === 'down') {
               setDynamicRange(prev => clamp(
                 prev + mouse.dpos[0] * dynamicRangeSensitivity,
                 0.01, 2

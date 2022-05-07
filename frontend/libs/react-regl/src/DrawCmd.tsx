@@ -18,6 +18,7 @@ export function recursiveRender(cmdEl: HTMLDrawCmd | null) {
       if (cmdEl.cmd) {
         cmdEl.cmd(cmdEl.bodyfn)
       } else {
+        // @ts-expect-error TODO fix types
         cmdEl.bodyfn()
       }
     }
