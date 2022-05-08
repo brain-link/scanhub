@@ -49,8 +49,8 @@ function Camera<T extends React.PropsWithChildren<CameraProps<P>>, P>(
     () => regl?.({
       uniforms: {
         view: regl.prop<{ view: unknown }, 'view'>('view'),
-        projection: regl.prop<{ projection: unknown }, 'projection'>('projection')
-      }
+        projection: regl.prop<{ projection: unknown }, 'projection'>('projection'),
+      },
     }),
     [regl]
   )
