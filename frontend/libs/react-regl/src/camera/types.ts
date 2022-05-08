@@ -1,6 +1,6 @@
 import type { MouseState, MouseStateChange } from '../../../input/src/types'
 import type { GLSL } from 'shaders'
-import type { Vec4 } from 'regl'
+import type { Uniform, Vec4 } from 'regl'
 
 export type CameraTransform = {
   /**
@@ -32,7 +32,7 @@ export type CameraInstance = {
    */
   glsl: GLSL
   /** Shader uniforms */
-  uniforms: Record<string, unknown>
+  uniforms: Record<string, Uniform>
   /** JS transform functions */
   transform: CameraTransform
 }

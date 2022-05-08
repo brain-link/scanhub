@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { glsl, hsl2rgb } from 'shaders'
 import { deferred } from 'utils'
 import type { Regl, Vec4, Vec3 } from 'regl'
+import { useDynamicRangeAndBias } from './useDynamicRangeAndBias'
 
 function imageFromUrl(url: string): Promise<HTMLImageElement> {
   const { promise, resolve } = deferred<HTMLImageElement>()
@@ -120,18 +121,20 @@ function Plane({
         ],
       },
       uniforms: {
-        texture: regl.prop('texture'),
-        inverseDynamicRange: regl.prop('inverseDynamicRange'),
-        bias: regl.prop('bias'),
-        up: regl.prop('up'),
-        right: regl.prop('right'),
-        center: regl.prop('center'),
+        // weird <{}...> to silence typescript
+        texture: regl.prop<{ texture: unknown }, 'texture'>('texture'),
+        inverseDynamicRange: regl.prop<{ inverseDynamicRange: unknown }, 'inverseDynamicRange'>('inverseDynamicRange'),
+        bias: regl.prop<{ bias: unknown }, 'bias'>('bias'),
+        up: regl.prop<{ up: unknown }, 'up'>('up'),
+        right: regl.prop<{ right: unknown }, 'right'>('right'),
+        center: regl.prop<{ center: unknown }, 'center'>('center'),
       },
       primitive: 'triangle strip',
       count: 4,
     }) : undefined,
     [camera?.glsl, regl, texture]
   )
+  // @ts-expect-error can't figure it out right now
   return <DrawCmd cmd={cmd} uniforms={uniforms} />
 }
 
@@ -141,8 +144,7 @@ export function DICOM({
   recordingId,
 }: ModalityProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [dynamicRange, setDynamicRange] = useState(1)
-  const [bias, setBias] = useState(0)
+  const { dynamicRange, bias } = useDynamicRangeAndBias(ref)
   const [xyPlaneCenter, setXYPlaneCenter] = useState(0)
   const [yzPlaneCenter, setYZPlaneCenter] = useState(0)
   const [xzPlaneCenter, setXZPlaneCenter] = useState(0)
@@ -150,24 +152,6 @@ export function DICOM({
     <div>
       <h1> { recordingId } </h1>
       <ul>
-        <li>
-          Dynamic range:
-          <input
-            type='range'
-            min={0.01} max={2} step={1e-4}
-            value={dynamicRange}
-            onChange={ev => setDynamicRange(ev.target.valueAsNumber)}
-          />{dynamicRange}
-        </li>
-        <li>
-          Bias:
-          <input
-            type='range'
-            min={-1} max={1} step={1e-4}
-            value={bias}
-            onChange={ev => setBias(ev.target.valueAsNumber)}
-          />{bias}
-        </li>
         <li>
           XY Plane Offset:
           <input

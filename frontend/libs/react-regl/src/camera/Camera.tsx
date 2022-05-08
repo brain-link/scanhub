@@ -46,7 +46,12 @@ function Camera<T extends React.PropsWithChildren<CameraProps<P>>, P>(
   )
 
   const uniformscmd = useMemo(
-    () => regl?.({ uniforms: { view: regl.prop('view'), projection: regl.prop('projection') } }),
+    () => regl?.({
+      uniforms: {
+        view: regl.prop<{ view: unknown }, 'view'>('view'),
+        projection: regl.prop<{ projection: unknown }, 'projection'>('projection')
+      }
+    }),
     [regl]
   )
   const cameraContext = useMemo(() => ({ type, glsl }), [glsl, type])
