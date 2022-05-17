@@ -22,7 +22,7 @@ export function PatientTable() {
       <label>
         <input type='search' />
       </label>
-      <table className='grow' style={{ ['--columns' as string]: 4 }}>
+      <table className='grow col-4'>
         <thead>
           <tr>
             <th><input type='checkbox' /></th>

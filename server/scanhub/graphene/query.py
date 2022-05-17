@@ -1,50 +1,34 @@
+import imp
 import graphene
 from datetime import date
 from tortoise.contrib.pydantic import pydantic_model_creator
 from scanhub.graphene.random_date import random_date
-from scanhub.graphene.types import Patient, PatientSexGQL, PatientStatusGQL, User
-from scanhub.database.models import Patient as dbPatient
+from scanhub.graphene.types import Patient, PatientSexGQL, PatientStatusGQL, User, Device, Procedure, Recording, Site
 
-patient_pydantic = pydantic_model_creator(dbPatient)
+from scanhub.database.models import Patient as PatientModel
+from scanhub.database.models import User as UserModel
+
+from scanhub.database.utils import ModelUtilities
+
+model_utils = ModelUtilities()
+
 
 class Query(graphene.ObjectType):
-    me = graphene.Field(User)
     all_patients = graphene.List(graphene.NonNull(Patient), required=True)
-    get_patient = graphene.Field(Patient, id=graphene.Int(required=True), required=True)
-
-    def resolve_me(root, info):
-        return dict(
-            id="username123",
-            name="Linus",
-            age=18,
-        )
+    patient = graphene.Field(Patient, id=graphene.Int(required=True), required=True)
+    recording = graphene.Field(Recording, id=graphene.Int(required=True), required=True)
+    all_user = graphene.List(graphene.NonNull(User), required=True) 
 
     async def resolve_all_patients(root, info):
-        # import random
-        # return [
-        #     dict(
-        #         id=f"patient{i}",
-        #         sex=random.choice([
-        #             PatientSexGQL.MALE,
-        #             PatientSexGQL.FEMALE,
-        #             PatientSexGQL.DIVERSE,
-        #         ]),
-        #         birthday=random_date(date(1950, 1, 1), date.today()),
-        #         concern="",
-        #         admission_date=date.today(),
-        #         status=PatientStatusGQL.NEW,
-        #     )
-        #     for i in range(50)
-        # ]
-        return await patient_pydantic.from_queryset(dbPatient.all())
+        patients = await PatientModel.all()
+        return [await model_utils.create_patient(id=patient.id) for patient in patients]
+        
+    async def resolve_patient(self, info, id: int):
+        return await model_utils.create_patient(id=id)
 
-    async def resolve_get_patient(root, info, id: int):
-        patient = await patient_pydantic.from_queryset_single(dbPatient.get(id=id))
-        return dict(
-            id=id,
-            sex=patient.sex,
-            birthday=patient.birthday,
-            concern=patient.concern,
-            admission_date=date.today(),
-            status=patient.status
-        )
+    async def resolve_recording(self, info, id: int):
+        return await model_utils.create_recording(id=id)    
+
+    async def resolve_all_user(self, info):
+        users = await UserModel.all()
+        return [await model_utils.create_user(id=user.id) for user in users]
