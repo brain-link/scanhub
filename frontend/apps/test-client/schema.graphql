@@ -14,6 +14,14 @@ scalar Date
 # [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
 scalar DateTime
 
+type Device {
+  id: ID!
+  modality: String!
+  address: String!
+  createdAt: DateTime!
+  site: Site
+}
+
 type FileUploadMutation {
   ok: Boolean
 }
@@ -46,10 +54,36 @@ enum PatientStatus {
   DIAGNOSIS
 }
 
+type Procedure {
+  id: ID!
+  date: DateTime!
+  reason: String!
+  patientId: ID!
+}
+
 type Query {
-  me: User
   allPatients: [Patient!]!
-  getPatient(id: Int!): Patient!
+  patient(id: Int!): Patient!
+  recording(id: Int!): Recording!
+  allUser: [User!]!
+}
+
+type Recording {
+  id: ID!
+  date: DateTime!
+  thumbnail: ID
+  comment: String
+  data: ID
+  device: Device
+  procedure: Procedure!
+}
+
+type Site {
+  id: ID!
+  name: String!
+  city: String!
+  country: String!
+  address: String!
 }
 
 type Subscription {
@@ -63,5 +97,5 @@ scalar Upload
 type User {
   id: ID!
   name: String!
-  age: Int!
+  patients: [Patient!]
 }
