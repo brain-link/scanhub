@@ -30,7 +30,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     with open(file_path, 'rb') as f:
         image_blob = f.read()
 
-    return func.HttpResponse(message)
+    return func.HttpResponse(image_blob)
     # path = 'static-file' # or other paths under `MyFunctionProj`
     # filename = f"{path}/{name}"
     # with open(filename, 'rb') as f:
