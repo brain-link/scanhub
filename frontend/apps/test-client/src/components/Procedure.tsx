@@ -2,6 +2,15 @@ import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 import { range } from 'utils'
 import { getModalityComponent } from './modalities'
 
+async function startRecording() {
+  await fetch(
+    'http://localhost:81/api/TriggerAcquisition?cmd=MEAS_START',
+    {
+      mode: 'no-cors',
+    }
+  )
+}
+
 export function ProcedureSidebar() {
   const { procedureId } = useParams()
   return (
@@ -25,7 +34,7 @@ export function ProcedureSidebar() {
         ))}
       </div>
       <div className='flex gap-2 justify-end'>
-        <button><span className='fa fa-circle' /> REC</button>
+        <button onClick={startRecording}><span className='fa fa-circle' /> REC</button>
         <button><span className='fa fa-plus' /> MRI</button>
         <button><span className='fa fa-plus' /> CT</button>
         <button><span className='fa fa-plus' /> EEG</button>
