@@ -1,17 +1,40 @@
 import { Link, Route, Routes, useParams } from 'react-router-dom'
 import { PatientTable } from './PatientTable'
-import { Navigation } from './NavBar'
+// import { Navigation } from './NavBar'
+import { Navigation } from './AppHeader'
 import { Procedure, ProcedureMainContent, ProcedureMainContentSwitcher } from './Procedure'
 import { version } from '../version'
 import { Suspense } from 'react'
 
+import {
+  CCard,
+  CCardBody,
+  CCardText,
+  CCardSubtitle,
+  CCardTitle,
+  CCardHeader
+} from '@coreui/react'
+
 
 function Patients() {
   return (
-    <section className='grow flex-col gap-3'>
-      <h1>Patients:</h1>
-      <PatientTable />
-    </section>
+
+    <CCard className='m-4'>
+      <CCardBody className='m-2'>
+        <CCardTitle>List of all Patients</CCardTitle>
+        <CCardSubtitle className="mb-4 text-medium-emphasis">
+          Patients
+        </CCardSubtitle>
+
+        <PatientTable />
+
+      </CCardBody>
+    </CCard>
+
+    // <section className='grow flex-col gap-3'>
+    //   <h1>Patients</h1>
+    //   <PatientTable />
+    // </section>
   )
 }
 
