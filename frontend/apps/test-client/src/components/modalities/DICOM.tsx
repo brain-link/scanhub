@@ -5,6 +5,7 @@ import { glsl, hsl2rgb } from 'shaders'
 import { deferred } from 'utils'
 import type { Regl, Vec4, Vec3 } from 'regl'
 import { useDynamicRangeAndBias } from './useDynamicRangeAndBias'
+import { CCard, CContainer, CCardSubtitle, CCardTitle, CCol, CRow } from '@coreui/react'
 
 function imageFromUrl(url: string): Promise<HTMLImageElement> {
   const { promise, resolve } = deferred<HTMLImageElement>()
@@ -150,37 +151,111 @@ export function DICOM({
   const [xzPlaneCenter, setXZPlaneCenter] = useState(0)
   return (
     <div>
-      <h1> { recordingId } </h1>
-      <ul>
-        <li>
-          XY Plane Offset:
-          <input
-            type='range'
-            min={-1} max={1} step={1e-4}
-            value={xyPlaneCenter}
-            onChange={ev => setXYPlaneCenter(ev.target.valueAsNumber)}
-          />
-        </li>
-        <li>
-          YZ Plane Offset:
-          <input
-            type='range'
-            min={-1} max={1} step={1e-4}
-            value={yzPlaneCenter}
-            onChange={ev => setYZPlaneCenter(ev.target.valueAsNumber)}
-          />
-        </li>
-        <li>
-          XZ Plane Offset:
-          <input
-            type='range'
-            min={-1} max={1} step={1e-4}
-            value={xzPlaneCenter}
-            onChange={ev => setXZPlaneCenter(ev.target.valueAsNumber)}
-          />
-        </li>
-      </ul>
-      <div ref={ref} className="grid col-2 gap-2" style={{ width: '100%', height: '900px' }}>
+      <CCardTitle> { recordingId } </CCardTitle>
+
+      <CRow className='mb-3 mt-3'>
+        <CCol md={4} className="align-middle">
+          <CCard className='align-middle p-2'>
+            <CCardSubtitle className='mb-2'>XY Plane Offset</CCardSubtitle>
+            <input
+              type='range'
+              min={-1} max={1} step={1e-4}
+              value={xyPlaneCenter}
+              onChange={ev => setXYPlaneCenter(ev.target.valueAsNumber)}
+              width="100%"
+            />
+          </CCard>
+        </CCol>
+        <CCol md={4}>
+          <CCard className='align-middle p-2'>
+            <CCardSubtitle className='mb-2'>YZ Plane Offset</CCardSubtitle>
+            <input
+              type='range'
+              min={-1} max={1} step={1e-4}
+              value={yzPlaneCenter}
+              onChange={ev => setYZPlaneCenter(ev.target.valueAsNumber)}
+            />
+          </CCard>
+        </CCol>
+        <CCol md={4}>
+          <CCard className='p-2'>
+            <CCardSubtitle className='mb-2'>XZ Plane Offset</CCardSubtitle>
+            <input
+              type='range'
+              min={-1} max={1} step={1e-4}
+              value={xzPlaneCenter}
+              onChange={ev => setXZPlaneCenter(ev.target.valueAsNumber)}
+            />
+          </CCard>
+
+        </CCol>
+      </CRow>
+      
+
+      <CContainer className='p-0'>
+        <CRow className='mb-2'>
+          <CCol md={6}>
+            <CCard style={{ height: '20rem'}}>
+              <ReglRoot>
+                <Clear color={clearColor} />
+                <Camera implementation={camera2d}>
+                  <Plane
+                    url='./mri_image.jpg'
+                    dynamicRange={dynamicRange}
+                    bias={bias}
+                  />
+                </Camera>
+              </ReglRoot>
+            </CCard>
+          </CCol>
+          <CCol md={6}>
+            <CCard style={{ height: '20rem'}}>
+              <ReglRoot>
+                <Clear color={clearColor} />
+                <Camera implementation={camera2d}>
+                  <Plane
+                    url='./mri_image.jpg'
+                    dynamicRange={dynamicRange}
+                    bias={bias}
+                  />
+                </Camera>
+              </ReglRoot>
+            </CCard>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol md={6}>
+            <CCard style={{ height: '20rem'}}>
+              <ReglRoot>
+                <Clear color={clearColor} />
+                <Camera implementation={camera2d}>
+                  <Plane
+                    url='./mri_image.jpg'
+                    dynamicRange={dynamicRange}
+                    bias={bias}
+                  />
+                </Camera>
+              </ReglRoot>
+            </CCard>
+          </CCol>
+          <CCol md={6}>
+            <CCard style={{ height: '20rem'}}>
+              <ReglRoot>
+                <Clear color={clearColor} />
+                <Camera implementation={camera2d}>
+                  <Plane
+                    url='./mri_image.jpg'
+                    dynamicRange={dynamicRange}
+                    bias={bias}
+                  />
+                </Camera>
+              </ReglRoot>
+            </CCard>
+          </CCol>
+        </CRow>
+      </CContainer>
+
+      {/* <div ref={ref} className="grid col-2 gap-2" style={{ width: '100%', height: '900px' }}>
         <ReglRoot>
           <Clear color={clearColor} />
           <Camera implementation={camera2d}>
@@ -238,7 +313,8 @@ export function DICOM({
             />
           </Camera>
         </ReglRoot>
-      </div>
+      </div> */}
+
     </div>
   )
 }
