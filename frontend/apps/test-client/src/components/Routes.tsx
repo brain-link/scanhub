@@ -1,5 +1,6 @@
 import { Link, Route, Routes, useParams } from 'react-router-dom'
 import { PatientTable } from './PatientTable'
+import { DeviceTable } from './DeviceTable'
 // import { Navigation } from './NavBar'
 import { Navigation } from './AppHeader'
 import { Procedure, ProcedureMainContent, ProcedureMainContentSwitcher } from './Procedure'
@@ -50,6 +51,22 @@ function Patient() {
   )
 }
 
+function Devices() {
+  return (
+    <CCard className='m-4'>
+      <CCardBody className='m-2'>
+        <CCardTitle>List of all Devices</CCardTitle>
+        <CCardSubtitle className="mb-4 text-medium-emphasis">
+          Devices
+        </CCardSubtitle>
+
+        <DeviceTable />
+
+      </CCardBody>
+    </CCard>
+  )
+}
+
 function Docs() {
   return (
     <section>
@@ -75,6 +92,13 @@ export function RouteConfig() {
     <Routes>
       <Route path='/' element={<Navigation />}>
         <Route path='docs' element={<Docs />} />
+        <Route path='devices'>
+          <Route index element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Devices />
+            </Suspense>
+          } />
+        </Route>
         <Route path='patients'>
           <Route index element={
             <Suspense fallback={<div>Loading...</div>}>

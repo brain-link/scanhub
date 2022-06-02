@@ -67,7 +67,7 @@ export function Navigation() {
                             <CNavLink to='/patients' component={Link}>Patients</CNavLink>
                         </CNavItem>
                         <CNavItem>
-                            <CNavLink href="#">Devices</CNavLink>
+                            <CNavLink to='/devices' component={Link}>Devices</CNavLink>
                         </CNavItem>
                     </CNavbarNav>
 
