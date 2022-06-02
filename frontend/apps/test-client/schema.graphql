@@ -66,6 +66,7 @@ type Query {
   patient(id: Int!): Patient!
   recording(id: Int!): Recording!
   allUser: [User!]!
+  allDevices: [Device!]!
 }
 
 type Recording {
