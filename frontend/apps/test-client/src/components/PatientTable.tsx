@@ -2,6 +2,9 @@ import { NavLink } from 'react-router-dom'
 import { graphql, useLazyLoadQuery } from 'react-relay'
 import type { PatientTableQuery } from './__generated__/PatientTableQuery.graphql'
 
+import { Link, useParams } from 'react-router-dom'
+import React from 'react'
+
 import {
   CTable,
   CTableBody,
@@ -13,18 +16,18 @@ import {
   CNavLink,
 } from '@coreui/react'
 
-const query = graphql`
-  query PatientTableQuery {
-    allPatients {
-      id
-      sex
-      birthday
-      concern
-      admissionDate
-      status
-    }
-  }
-`
+// const query = graphql`
+//   query PatientTableQuery {
+//     allPatients {
+//       id
+//       sex
+//       birthday
+//       concern
+//       admissionDate
+//       status
+//     }
+//   }
+// `
 
 // export function PatientTable() {
 //   const { allPatients } = useLazyLoadQuery<PatientTableQuery>(query, {}, {})
@@ -57,8 +60,36 @@ const query = graphql`
 //   )
 // }
 
+export interface Patient {
+  id: number;
+  sex: string;
+  birthday: number;
+  concern: string;
+  admission_date: number;
+  status: string;
+}
+
 export function PatientTable() {
-  const { allPatients } = useLazyLoadQuery<PatientTableQuery>(query, {}, {})
+  // const { allPatients } = useLazyLoadQuery<PatientTableQuery>(query, {}, {})
+
+  export function User() {
+    let params = useParams();
+  
+    let [loading, setLoading] = React.useState(true);
+    let [patient, setPatient] = React.useState<Patient | null>(null);
+  
+    React.useEffect(() => {
+      setLoading(true);
+      const fetchData = async () => {
+        const response = await fetch(`http://localhost:8000/patients/${params.id}`);
+        const newData = await response.json();
+        setPatient(newData);
+        setLoading(false);
+      };
+  
+      fetchData();
+    }, []);
+
   return (
     <>
       <CTable hover borderless>

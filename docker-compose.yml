@@ -20,7 +20,7 @@ services:
       context: ./server
       dockerfile: ./Dockerfile
     env_file: ./server/.env_file
-    command: bash -c "uvicorn scanhub.main:app --port 8000 --host 0.0.0.0 --reload"
+    command: bash -c "uvicorn scanhub.api:app --port 8000 --host 0.0.0.0 --reload"
     depends_on:
     - postgres
     volumes:
