@@ -1,8 +1,10 @@
-from fastapi import FastAPI, APIRouter
+# import uvicorn
+from fastapi import FastAPI, APIRouter, Request, Path
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
 from tortoise.contrib.fastapi import register_tortoise
 from scanhub.database.models import Patient
-from server.scanhub.database.models import Device
+from scanhub.database.models import Device
 
 
 app = FastAPI(
@@ -35,8 +37,8 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
-@api_router.get("/")
-async def read_root() -> dict:
+@app.get("/")
+async def root() -> dict:
     return dict(
         msg="Hello World!"
     )
@@ -51,4 +53,12 @@ async def get_devices() -> dict:
     devices = await Device.all()
     return devices
 
+@api_router.get("/patients/{patient_id}/")
+async def get_patient(patient_id: int) -> dict:
+    patient = await Patient.get(id=patient_id)
+    return patient
+
 app.include_router(api_router)
+
+# if __name__ == "__main__":
+#     uvicorn.run("api:app", host="0.0.0.0", reload=True, port=8000)

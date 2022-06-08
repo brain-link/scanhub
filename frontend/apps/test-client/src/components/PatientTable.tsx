@@ -3,7 +3,7 @@ import { graphql, useLazyLoadQuery } from 'react-relay'
 import type { PatientTableQuery } from './__generated__/PatientTableQuery.graphql'
 
 import { Link, useParams } from 'react-router-dom'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   CTable,
@@ -16,79 +16,38 @@ import {
   CNavLink,
 } from '@coreui/react'
 
-// const query = graphql`
-//   query PatientTableQuery {
-//     allPatients {
-//       id
-//       sex
-//       birthday
-//       concern
-//       admissionDate
-//       status
-//     }
-//   }
-// `
 
-// export function PatientTable() {
-//   const { allPatients } = useLazyLoadQuery<PatientTableQuery>(query, {}, {})
-//   return (
-//     <>
-//       <label>
-//         <input type='search' />
-//       </label>
-//       <table className='grow col-4'>
-//         <thead>
-//           <tr>
-//             <th><input type='checkbox' /></th>
-//             <th>ID</th>
-//             <th>Sex <span className='fa fa-arrow-down' /></th>
-//             <th>Birthday</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {allPatients.map(patient => (
-//             <tr key={patient.id}>
-//               <td><input type='checkbox' /></td>
-//               <td><Link to={patient.id}>{patient.id}</Link></td>
-//               <td>{patient.sex}</td>
-//               <td>{patient.birthday}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </>
-//   )
-// }
+export const getPatients = async () => {
 
-export interface Patient {
-  id: number;
-  sex: string;
-  birthday: number;
-  concern: string;
-  admission_date: number;
-  status: string;
-}
+  const response = await fetch("http://localhost:8000/patients/");
+
+  const data = await response.json();
+
+  if (data.patients) {
+    return data.patients;
+  }
+
+  return Promise.reject('Failed to get patients from backend');
+};
+
 
 export function PatientTable() {
-  // const { allPatients } = useLazyLoadQuery<PatientTableQuery>(query, {}, {})
 
-  export function User() {
-    let params = useParams();
-  
-    let [loading, setLoading] = React.useState(true);
-    let [patient, setPatient] = React.useState<Patient | null>(null);
-  
-    React.useEffect(() => {
-      setLoading(true);
-      const fetchData = async () => {
-        const response = await fetch(`http://localhost:8000/patients/${params.id}`);
-        const newData = await response.json();
-        setPatient(newData);
-        setLoading(false);
-      };
-  
-      fetchData();
-    }, []);
+  const [patients, setPatients] = useState([])
+
+  const get_patients = async () => {
+    try {
+      const request = await getPatients();
+      setPatients(request)
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    get_patients()
+  }, [])
 
   return (
     <>
@@ -102,7 +61,7 @@ export function PatientTable() {
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          {allPatients.map(patient => (
+          {patients.map(patient => (
             <CTableRow key={patient.id}>
               <CTableHeaderCell scope="row">
               {/* <CBadge color="light" size='sm' className='w-25'>
