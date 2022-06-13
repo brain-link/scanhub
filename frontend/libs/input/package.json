@@ -1,6 +1,0 @@
-{
-  "name": "input",
-  "version": "0.0.1",
-  "description": "Input handler utils for mouse and keyboard on an HTML element",
-  "main": "./src/index.ts"
-}

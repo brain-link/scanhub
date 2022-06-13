@@ -1,6 +1,0 @@
-{
-  "name": "shaders",
-  "version": "0.0.1",
-  "description": "Commonly used shaders",
-  "main": "./src/index.ts"
-}
