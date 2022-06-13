@@ -37,6 +37,7 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
+# TODO: Do the routing in a different routes.py file
 @app.get("/")
 async def root() -> dict:
     return dict(
@@ -47,11 +48,19 @@ async def root() -> dict:
 async def get_patients() -> dict:
     patients = await Patient.all()
     return patients
+    # return [dict(
+    #     id=patient.id,
+    #     sex=patient.sex,
+    #     birthday=patient.birthday,
+    #     concern=patient.concern,
+    #     status=patient.status
+    # ) for patient in patients]
 
 @api_router.get("/devices/")
 async def get_devices() -> dict:
     devices = await Device.all()
     return devices
+
 
 @api_router.get("/patients/{patient_id}/")
 async def get_patient(patient_id: int) -> dict:
