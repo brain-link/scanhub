@@ -131,3 +131,5 @@ dmypy.json
 yarn.lock
 node_modules/.yarn-integrity
 .vscode/settings.json
+*.parcel-cache
+*.vscode
