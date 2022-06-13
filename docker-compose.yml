@@ -6,10 +6,9 @@ services:
     image: scanhub_frontend
     build:
       context: ./frontend
-      target: development
       dockerfile: ./Dockerfile
     volumes:
-      - ./frontend:/src:/app/src
+      - ./frontend/src:/app/src
     ports:
       - 3000:3000
 
