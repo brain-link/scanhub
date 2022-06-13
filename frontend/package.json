@@ -1,38 +1,28 @@
 {
   "name": "frontend",
   "license": "MIT",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "libs/*"
-  ],
-  "scripts": {
-    "lint": "eslint ."
+  "dependencies": {
+    "@coreui/coreui": "^4.1.6",
+    "@coreui/react": "^4.2.2",
+    "@coreui/icons-react": "^2.0.1",
+    "@coreui/icons": "^2.1.0",
+    "node-sass": "^7.0.1",
+    "parcel": "^2.6.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1"
   },
   "devDependencies": {
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
-    "@types/react-plotly.js": "2.5.0",
-    "@types/react-relay": "^13.0.1",
-    "@types/relay-runtime": "^13.0.2",
-    "@types/styled-components": "^5.1.24",
-    "@typescript-eslint/eslint-plugin": "^5.14.0",
-    "@typescript-eslint/parser": "^5.14.0",
-    "@vitejs/plugin-react": "^1.0.7",
-    "autoprefixer": "10.4.2",
-    "eslint": "^8.10.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-react": "^7.29.3",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "fetch-graphql-schema": "^0.2.1",
-    "postcss-nested": "5.0.6",
-    "relay-compiler": "^13.1.1",
-    "relay-config": "^12.0.1",
-    "typescript": "^4.6.2",
-    "vite": "^2.8.0",
-    "vite-plugin-relay": "^1.0.7"
+    "@parcel/transformer-sass": "2.6.0",
+    "@parcel/transformer-typescript-tsc": "^2.6.0",
+    "process": "^0.11.10",
+    "typescript": ">=3.0.0"
   },
-  "resolutions": {
-    "styled-components": "^5.3.3"
+  "scripts": {
+    "start": "parcel src/index.html -p 3000",
+    "build": "parcel build"
   }
 }
