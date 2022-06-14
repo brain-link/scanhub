@@ -18,6 +18,15 @@ async def get_devices() -> dict:
     devices = await Device.all()
     return devices
 
+@api_router.get("/devices/{device_id}/")
+async def get_device(device_id: int) -> dict:
+    device = await Device.get(id=device_id)
+    site = await Site.get(id=device.site_id)
+    return dict(
+        device=device,
+        site=site
+    )
+
 # Patient table data
 @api_router.get("/patients/")
 async def get_patients() -> dict:
