@@ -17,15 +17,13 @@ services:
     restart: unless-stopped
     container_name: ScanHubUIBackend
     build: 
-      context: ./server
+      context: ./backend
       dockerfile: ./Dockerfile
-    env_file: ./server/.env_file
-    # command: python scanhub/api.py
     command: bash -c "uvicorn scanhub.api:app --port 8000 --host 0.0.0.0 --reload"
     depends_on:
     - postgres
     volumes:
-    - ./server:/scanhub
+    - ./backend:/scanhub
     ports:
       - 8000:8000
 

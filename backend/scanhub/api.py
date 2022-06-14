@@ -1,11 +1,10 @@
 # import uvicorn
-from fastapi import FastAPI, APIRouter, Request, Path
+from fastapi import FastAPI, APIRouter  # , Request, Path
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.requests import Request
+# from starlette.requests import Request
 from tortoise.contrib.fastapi import register_tortoise
-from scanhub.database.models import Patient
-from scanhub.database.models import Device
 
+from scanhub.models import Patient, Device
 
 app = FastAPI(
     title="ScanHub"
@@ -32,7 +31,7 @@ app.add_middleware(
 register_tortoise(
     app,
     db_url='postgres://brainLink:brainLinkIstCool2022UndLecker@postgres/scanhub',
-    modules={"models": ["scanhub.database.models"]},
+    modules={"models": ["scanhub.models"]},
     generate_schemas=True,
     add_exception_handlers=True,
 )

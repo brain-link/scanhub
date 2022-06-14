@@ -1,11 +1,11 @@
-from api import app
-# from database.models import Patient
+# from scanhub.api import app
+# # from database.models import Patient
 
-@app.get("/")
-async def root() -> dict:
-    return dict(
-        msg="Hello World!"
-    )
+# @app.get("/")
+# async def root() -> dict:
+#     return dict(
+#         msg="Hello World!"
+#     )
 
 
 # @api_router.get("/patients", status_code=200)

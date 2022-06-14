@@ -1,7 +1,6 @@
 from datetime import datetime
-
 from tortoise import Model, fields
-from scanhub.database.enums import PatientStatus, PatientSex, Modality
+from scanhub.enums import PatientStatus, PatientSex, Modality
 
 
 class Device(Model):
