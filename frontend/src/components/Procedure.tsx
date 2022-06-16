@@ -1,5 +1,15 @@
 import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 // import { getModalityComponent } from './modalities'
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
+const client = new W3CWebSocket('ws://localhost:8000/ws/1234');
+
+client.onopen = () => {
+  console.log('WebSocket Client Connected');
+};
+client.onmessage = (message) => {
+  console.log(message);
+};
 
 import {
   CCard,
@@ -13,7 +23,8 @@ import {
   CNavItem,
   CContainer,
   CWidgetStatsB,
-  CLink
+  CLink,
+  CButton,
 } from '@coreui/react'
 
 // async function startRecording() {
@@ -106,6 +117,16 @@ export function ProcedureMainContent() {
   return (
     <CContainer>
       <h1> Recording: { params.recordingId } </h1>
+      <CButton 
+        color="primary" 
+        size="lg"
+        onClick={() => {
+          var input = "Testmessage"
+          client.send(input)
+        }}
+        >
+          START SCAN
+      </CButton>
     </CContainer>
   )
 }
