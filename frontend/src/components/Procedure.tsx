@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 // import { getModalityComponent } from './modalities'
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
 const client = new W3CWebSocket('ws://localhost:8000/ws/1234');
 
