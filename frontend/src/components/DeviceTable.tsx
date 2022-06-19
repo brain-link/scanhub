@@ -8,6 +8,8 @@ import {
     CCard,
     CCardTitle,
     CCardSubtitle,
+    CSpinner,
+    CCardHeader,
     CCardBody,
     CTable,
     CTableBody,
@@ -16,6 +18,7 @@ import {
     CTableRow,
     CTableHeaderCell,
     CNavLink,
+    CContainer,
 } from '@coreui/react'
 
 export function DeviceTable() {
@@ -23,19 +26,26 @@ export function DeviceTable() {
     const { data: devices, isSuccess } = useQuery<Device[]>("devices/");
 
     if (!isSuccess) {
-        return <div> Loading... </div>;
+        // return <div> Loading... </div>;
+        return (
+            <CContainer>
+                <CSpinner variant="grow"/>
+            </CContainer>
+        )
     }
 
     return (
         <CCard className='m-4'>
+            <CCardHeader className="h5">Devices</CCardHeader>
             <CCardBody className='m-2'>
-                <CCardTitle>List of all Devices</CCardTitle>
+
+                {/* <CCardTitle>List of all Devices</CCardTitle>
                 <CCardSubtitle className="mb-4 text-medium-emphasis">
                     Devices
-                </CCardSubtitle>
+                </CCardSubtitle> */}
 
                 <CTable hover>
-                    <CTableHead color='dark'>
+                    <CTableHead color='secondary'>
                         <CTableRow>
                             <CTableHeaderCell scope="col">ID</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Modality</CTableHeaderCell>

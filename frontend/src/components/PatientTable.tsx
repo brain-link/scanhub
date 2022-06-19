@@ -6,6 +6,8 @@ import { Patient } from './Interfaces'
 import {
     CCard,
     CCardBody,
+    CContainer,
+    CSpinner,
     CCardSubtitle,
     CCardTitle,
     CTable,
@@ -16,6 +18,7 @@ import {
     CTableHeaderCell,
     CBadge,
     CNavLink,
+    CCardHeader,
 } from '@coreui/react'
 
 
@@ -40,18 +43,21 @@ export function PatientTable() {
     const { data: patients, isSuccess } = useQuery<Patient[]>("patients/");
 
     if (!isSuccess) {
-        return <div> Loading... </div>;
+        // return <div> Loading... </div>;
+        return (
+            <CContainer>
+                <CSpinner variant="grow"/>
+            </CContainer>
+        )
     }
 
     return (
         <CCard className='m-4'>
+            <CCardHeader className="h5">Patients</CCardHeader>
             <CCardBody className='m-2'>
-                <CCardTitle>List of all Patients</CCardTitle>
-                <CCardSubtitle className="mb-4 text-medium-emphasis">
-                    Patients
-                </CCardSubtitle>
+                {/* <CCardTitle className="mb-4">List of all Patients</CCardTitle> */}
                 <CTable hover>
-                    <CTableHead color='dark'>
+                    <CTableHead color='secondary'>
                         <CTableRow>
                             <CTableHeaderCell scope="col">ID</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Sex <span className='fa fa-arrow-down' /></CTableHeaderCell>
