@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { version } from '../version'
+import { version } from '../utils/version'
 
 import {
     CNavbarBrand,
