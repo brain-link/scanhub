@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "react-query": "^3.39.1",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  }
+}

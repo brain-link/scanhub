@@ -6,6 +6,17 @@ import { BrowserRouter } from "react-router-dom";
 import { Suspense } from 'react'
 import { RouteConfiguration } from './components/Routes'
 
+import { QueryClient, QueryClientProvider } from "react-query";
+import { query } from "./utils/query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryFn: query,
+    },
+  },
+});
+
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -17,4 +28,10 @@ function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>,
+);
