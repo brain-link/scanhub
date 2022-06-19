@@ -55,15 +55,24 @@ async def get_procedures(patient_id: int) -> dict:
     procedures = await Procedures.filter(patient_id=patient_id)
     return procedures
 
-@api_router.get("/patients/{patient_id}/{procedure_id}/recordings/")
-async def get_recordings(patient_id: int, procedure_id: int) -> dict:
+@api_router.get("/patients/{patient_id}/{procedure_id}/records/")
+# async def get_recordings(patient_id: int, procedure_id: int) -> dict:
+async def get_recordings(procedure_id: int) -> dict:
 
-    patient = await Patient.get(id=patient_id)
-    procedure = await Procedures.get(id=procedure_id)
-    recordings = await Recordings.filter(procedure_id=procedure_id)
+    # patient = await Patient.get(id=patient_id)
+    # procedure = await Procedures.get(id=procedure_id)
+    # recordings = await Recordings.filter(procedure_id=procedure_id)
 
-    return dict(
-        patient=patient,
-        procedure=procedure,
-        recordings=recordings
-    )
+    # return dict(
+    #     patient=patient,
+    #     procedure=procedure,
+    #     recordings=recordings
+    # )
+
+    records = await Recordings.filter(procedure_id=procedure_id)
+    return records
+
+@api_router.get("/patients/{patient_id}/{procedure_id}/recordings/{record_id}/")
+async def get_record(record_id: int) -> dict:
+    record = await Recordings.get(id=record_id)
+    return record
