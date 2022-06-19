@@ -1,6 +1,9 @@
-import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
+import { Outlet, Link, useParams } from 'react-router-dom'
 // import { getModalityComponent } from './modalities'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import { useQuery } from 'react-query';
+import { Record } from './Interfaces';
+import { format_date } from '../utils/formatter';
 
 const client = new W3CWebSocket('ws://localhost:8000/ws/1234');
 
@@ -14,6 +17,8 @@ client.onmessage = (message) => {
 import {
   CCard,
   CCol,
+  CListGroup,
+  CListGroupItem,
   CRow,
   CCardBody,
   CCardImage,
@@ -25,6 +30,7 @@ import {
   CWidgetStatsB,
   CLink,
   CButton,
+  CCardHeader,
 } from '@coreui/react'
 
 // async function startRecording() {
@@ -45,42 +51,43 @@ export function range(startStop: number, stop?: number, step?: number) {
 }
 
 export function ProcedureSidebar() {
+
   let params = useParams()
+
+  const { data: records, isSuccess } = useQuery<Record[]>(`patients/${params.patientId}/${params.procedureId}/records`)
+
+  if (!isSuccess) {
+    return <div>Loading ...</div>
+  }
+
   return (
     // <div className='grow flex-col scroll-y'>
     <>
-      { range(50).map(i => (
-
-          // <Link key={i} to={`mri-recording-${i}`}>
-          //   <section className='flex'>
-          //     <CCard className='mb-2' style={{ maxWidth: '500px' }}>
-          //       <CRow className="g-0">
-          //         <CCol md={4}>
-          //         <CCardImage component="svg" orientation="top" width="100%" height="100" role="img" aria-label="Placeholder">
-          //           <title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect>
-          //         </CCardImage>
-          //         </CCol>
-          //         <CCol md={8}>
-          //           <CCardBody>
-          //             <CCardTitle>MRI Exam {i+1}</CCardTitle>
-          //             <CCardText>Exam description</CCardText>
-          //           </CCardBody>
-          //         </CCol>
-          //       </CRow>
-          //     </CCard>
-          //   </section>
-          // </Link>
-
-        <CWidgetStatsB
-          className="mb-3"
-          progress={{ color: 'success', value: 100/(i+1) }}
-          title="MRI Examination"
-          text="Some description of the recording."
-          value={
-            <CLink to={`record-${i}`} component={ Link }> Record {i} </CLink>
+    <CCard className='grow flex-col scroll-y'>
+      <CCardHeader className="h5">Records</CCardHeader>
+      <CCardBody>
+        <CListGroup>
+          {
+            records?.map(record => (
+              // <CListGroupItem component='a' to={`record-${record.id}`}>
+              <CListGroupItem component={Link} to={`record-${record.id}`}>
+                <div className="d-flex w-100 justify-content-between">
+                  <h5 className="mb-1">Recording {record.id}</h5>
+                  <small> 
+                    {/* <Date> {format_date(record.date)} </Date>  */}
+                    { format_date(record.date) }
+                  </small>
+                </div>
+                <p className="mb-1">
+                  {record.comment}
+                </p>
+                <small>Device ID: {record.device_id}</small>
+              </CListGroupItem>
+            ))
           }
-        /> )) 
-      } 
+        </CListGroup>
+      </CCardBody>
+    </CCard>
     </>
     // </div>
   )
@@ -90,23 +97,24 @@ export function ProcedureSidebar() {
 export function ProcedureMainContentSwitcher() {
   return (
     <>
-      <CNav variant='pills' className='mb-2'>
-        <CNavItem>
-          {/* <CNavLink to='configure-mri' component={NavLink}>Config</CNavLink> */}
-          {/* <CNavLink to='' component={NavLink}>Config</CNavLink> */}
-        </CNavItem>
-        <CNavItem>
-          {/* <CNavLink to='dicom' component={NavLink}>View</CNavLink> */}
-          {/* <CNavLink to='' component={NavLink}>View</CNavLink> */}
-        </CNavItem>
-      </CNav>
-      <Outlet />
+    <CNav variant='pills'>
+      <CNavItem>
+        {/* <CNavLink to='configure-mri' component={NavLink}>Config</CNavLink> */}
+        {/* <CNavLink to='' component={NavLink}>Config</CNavLink> */}
+      </CNavItem>
+      <CNavItem>
+        {/* <CNavLink to='dicom' component={NavLink}>View</CNavLink> */}
+        {/* <CNavLink to='' component={NavLink}>View</CNavLink> */}
+      </CNavItem>
+    </CNav>
+    <Outlet />
     </>
   )
 }
 
 export function ProcedureMainContent() {
   let params = useParams()
+
   // const Modality = getModalityComponent(modality ?? 'configure-mri')
   // if (recordingId === undefined) {
   //   throw new Error(`Error in routing, recordingId is undefined.`)
@@ -115,19 +123,27 @@ export function ProcedureMainContent() {
   //   <Modality recordingId={recordingId} />
   // )
   return (
-    <CContainer>
-      <h1> Recording: { params.recordingId } </h1>
-      <CButton 
-        color="primary" 
-        size="lg"
-        onClick={() => {
-          var input = "Testmessage"
-          client.send(input)
-        }}
-        >
-          START SCAN
-      </CButton>
-    </CContainer>
+    <>
+    <CCard>
+      <CCardHeader className="h5"> Record { params.recordingId }</CCardHeader>
+      <CCardBody>
+
+        {/* MRI Viewer goes here */}
+
+        <CButton 
+          color="primary" 
+          size="lg"
+          onClick={() => {
+            var input = "Testmessage"
+            client.send(input)
+          }}
+          >
+            Start Scan
+        </CButton>
+
+      </CCardBody>
+    </CCard>
+    </>
   )
 }
 
@@ -135,20 +151,23 @@ export function Procedure() {
   let params = useParams()
   return (
     <>
-      <CRow CRow className='m-2'>
-        <h1> Patient { params.patientId } </h1> 
-        <h2> Procedure { params.procedureId } </h2>
-      </CRow>
-      <CRow className='m-2'>
-        <CCol md={3}>
-          <ProcedureSidebar />
-        </CCol>
-        <CCol md={9}>
-          <CCard className='grow'>
-            <Outlet />
-          </CCard> 
-        </CCol>
-      </CRow>
-    </>
+    <CRow className="m-2">
+      <CCol xs="auto" className="me-3 align-self-end">
+        <h2> Patient { params.patientId } </h2> 
+      </CCol>
+      <CCol xs="auto" className="align-self-end">
+        <h4> Procedure { params.procedureId } </h4>
+      </CCol>
+    </CRow>
+
+    <CRow className='m-2'>
+      <CCol md={3}>
+        <ProcedureSidebar />
+      </CCol>
+      <CCol md={9}>
+        <Outlet />
+      </CCol>
+    </CRow>
+  </>
   )
 }

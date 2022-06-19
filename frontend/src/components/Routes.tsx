@@ -5,7 +5,7 @@ import { Dashboard } from './Dashboard'
 import { PatientTable } from './PatientTable'
 import { DeviceTable } from './DeviceTable'
 import { Navigation } from './Navigation'
-import { Patient } from './Patient'
+import { PatientIndex } from './Patient'
 import { Procedure, ProcedureMainContentSwitcher, ProcedureMainContent } from "./Procedure";
 
 export function RouteConfiguration () {
@@ -20,7 +20,7 @@ export function RouteConfiguration () {
                         </Suspense>
                     } />
                     <Route path=':patientId'>
-                        <Route index element={<Patient />} />
+                        <Route index element={<PatientIndex />} />
                         <Route path=':procedureId' element={<Procedure />} >
                             <Route path=':recordingId' element={<ProcedureMainContentSwitcher />}>
                                 <Route index element={<ProcedureMainContent />} />
