@@ -133,3 +133,4 @@ node_modules/.yarn-integrity
 .vscode/settings.json
 *.parcel-cache
 *.vscode
+node_modules
