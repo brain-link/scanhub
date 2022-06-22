@@ -23,7 +23,7 @@ export interface Device {
     modality: number;
     address: string;
     site_id: number;
-    site: Site;
+    site: string;
 }
 
 export interface Procedure {
