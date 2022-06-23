@@ -55,8 +55,8 @@ def main(rawmriblob: func.InputStream, blobout: func.Out[func.InputStream]):
     # Store final composite in a memory stream
     img_byte_arr = io.BytesIO()
     # Convert composite to RGB so we can save as JPEG
-    pil_img.convert('RGB').save(img_byte_arr, format='PNG')
-    # pil_img.convert('RGB').save(img_byte_arr, format='jpg')
+    # pil_img.convert('RGB').save(img_byte_arr, format='PNG')
+    pil_img.convert('RGB').save(img_byte_arr, format='JPEG')
 
     # Set blob content from byte array in memory
     blobout.set(img_byte_arr.getvalue())
