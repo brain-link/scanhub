@@ -6,3 +6,4 @@ azure-storage-blob
 azure-cosmosdb-table
 numpy
 Pillow
+pydicom

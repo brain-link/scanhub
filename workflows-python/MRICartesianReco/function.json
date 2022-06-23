@@ -12,7 +12,7 @@
       "name": "blobout",
       "type": "blob",
       "direction": "out",
-      "path": "processed-mri/{blobname}_reco.jpg",
+      "path": "processed-mri/{blobname}_reco.dcm",
       "connection": ""
     }
   ]

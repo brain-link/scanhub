@@ -151,7 +151,30 @@ cornerstoneWebImageLoader.external.cornerstone = cornerstone;
 cornerstoneTools.external.cornerstone = cornerstone;
 cornerstoneTools.external.cornerstoneMath = cornerstoneMath;
 cornerstoneTools.external.Hammer = Hammer;
-cornerstoneTools.init();
+cornerstoneTools.init({
+  /**
+   * When cornerstone elements are enabled,
+   * should `mouse` input events be listened for?
+   */
+  mouseEnabled: true,
+  /**
+   * When cornerstone elements are enabled,
+   * should `touch` input events be listened for?
+   */
+  touchEnabled: true,
+  /**
+   * A special flag that synchronizes newly enabled cornerstone elements. When
+   * enabled, their active tools are set to reflect tools that have been
+   * activated with `setToolActive`.
+   */
+  globalToolSyncEnabled: true,
+  /**
+   * Most tools have an associated canvas or SVG cursor. Enabling this flag
+   * causes the cursor to be shown when the tool is active, bound to left
+   * click, and the user is hovering the enabledElement.
+   */
+  showSVGCursors: true,
+});
 
 export function ProcedureMainContent() {
   let params = useParams()
