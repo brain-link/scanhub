@@ -1,16 +1,10 @@
 import { Outlet, Link, useParams } from 'react-router-dom'
-// import { getModalityComponent } from './modalities'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useQuery } from 'react-query';
 import { Record } from './Interfaces';
 import { format_date } from '../utils/formatter';
 
-import * as cornerstone from "cornerstone-core";
-import * as cornerstoneMath from "cornerstone-math";
-import * as cornerstoneTools from "cornerstone-tools";
-import Hammer from "hammerjs";
-import * as cornerstoneWebImageLoader from "cornerstone-web-image-loader";
-import CVport from "react-cornerstone-viewport";
+import { MRIView } from './MRIView';
 
 const client = new W3CWebSocket('ws://localhost:8000/ws/1234');
 
@@ -28,9 +22,6 @@ import {
   CListGroupItem,
   CRow,
   CCardBody,
-  CCardImage,
-  CCardText,
-  CCardTitle,
   CNav,
   CNavItem,
   CContainer,
@@ -103,18 +94,21 @@ export function ProcedureSidebar() {
             ))
           }
         </CListGroup>
+
+ 
         <CButton 
-          color="info" 
+          color="danger" 
+          className="mt-2"
           size="lg"
           variant = "outline"
           onClick={() => {
-            // var input = "Testmessage"
-            // client.send(input)
             startRecording()
           }}
           >
-            Rec
+            Record 
         </CButton>
+
+
       </CCardBody>
     </CCard>
     </>
@@ -141,47 +135,16 @@ export function ProcedureMainContentSwitcher() {
   )
 }
 
-// let imageIds = [
-//   "dicomweb://raw.githubusercontent.com/Anush-DP/gdcmdata/master/MR-SIEMENS-DICOM-WithOverlays.dcm",
-//   "dicomweb://s3.amazonaws.com/lury/PTCTStudy/1.3.6.1.4.1.25403.52237031786.3872.20100510032220.11.dcm",
-//   "dicomweb://s3.amazonaws.com/lury/PTCTStudy/1.3.6.1.4.1.25403.52237031786.3872.20100510032220.12.dcm"
-// ];
-
-cornerstoneWebImageLoader.external.cornerstone = cornerstone;
-cornerstoneTools.external.cornerstone = cornerstone;
-cornerstoneTools.external.cornerstoneMath = cornerstoneMath;
-cornerstoneTools.external.Hammer = Hammer;
-cornerstoneTools.init();
-
 export function ProcedureMainContent() {
   let params = useParams()
 
-  // const Modality = getModalityComponent(modality ?? 'configure-mri')
-  // if (recordingId === undefined) {
-  //   throw new Error(`Error in routing, recordingId is undefined.`)
-  // }
-  // return (
-  //   <Modality recordingId={recordingId} />
-  // )
   return (
     <>
     <CCard>
       <CCardHeader className="h5"> Record { params.recordingId }</CCardHeader>
       <CCardBody>
 
-        {/* MRI Viewer goes here */}
-        {/* <CVport
-          imageIds={imageIds}
-          // tools={tools}
-          style={{ minWidth: "100%", height: "512px", flex: "1" }}
-        /> */}
-
-        <CVport
-              imageIds={[
-                "https://rawgit.com/cornerstonejs/cornerstoneWebImageLoader/master/examples/Renal_Cell_Carcinoma.jpg"
-              ]}
-              style={{ minWidth: "100%", height: "512px", flex: "1" }}
-            />
+        < MRIView />
 
       </CCardBody>
     </CCard>
