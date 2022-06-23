@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Cache and Install dependencies
 COPY package.json .
-COPY .env .
+# COPY .env .
 COPY yarn.lock .
 RUN yarn install
 

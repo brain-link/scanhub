@@ -9,6 +9,8 @@ import { RouteConfiguration } from './components/Routes'
 import { QueryClient, QueryClientProvider } from "react-query";
 import { query } from "./utils/query";
 
+// import init from "./Components/initCornerstone";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -26,6 +28,8 @@ function App() {
     </Suspense>
   );
 }
+
+// init();
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(

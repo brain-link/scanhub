@@ -7,7 +7,7 @@
       "direction": "in",
       "name": "req",
       "methods": [ "get" ],
-      "route": "result/{containername:alpha}/{filename:alpha?}"
+      "route": "result"
     },
     {
       "type": "http",
