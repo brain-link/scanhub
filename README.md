@@ -31,6 +31,15 @@ Add workflow framework in a different programming language with:
 Add a new workflow with:
 
     func new
+    
+    
+Orthanc
+-----------
+
+Default User orthanc:
+
+user: orthanc
+pw: orthanc
 
 
 License

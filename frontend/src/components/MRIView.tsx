@@ -66,8 +66,8 @@ export class MRIView extends Component {
         return (
             <CornerstoneViewport
                 imageIds={[
-                    //"wadouri:http://localhost:84/instances/622056e3-71f30a64-a1fcb13f-284f60bc-c9f67853/file"
-                    "dicomweb://raw.githubusercontent.com/Anush-DP/gdcmdata/master/MR-SIEMENS-DICOM-WithOverlays.dcm"
+                    "wadouri:http://orthanc:8042/wado?objectUID=1.2.826.0.1.3680043.2.1125.1.76974197124569143807580369710557035&requestType=WADO"
+                    //"dicomweb://raw.githubusercontent.com/Anush-DP/gdcmdata/master/MR-SIEMENS-DICOM-WithOverlays.dcm"
                     // "https://rawgit.com/cornerstonejs/cornerstoneWebImageLoader/master/examples/Renal_Cell_Carcinoma.jpg"
                 ]}
                 tools={[
