@@ -1,6 +1,13 @@
 version: "3"
 services:
 
+  proxy:
+    image: nginx
+    ports:
+      - 8043:8043
+    volumes:
+      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
+
   orthanc:
     image: jodogne/orthanc-plugins
     command: /run/secrets/  # Path to the configuration files (stored as secrets)

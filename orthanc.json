@@ -2,6 +2,11 @@
   "Name" : "${ORTHANC_NAME} in Docker Compose",
   "RemoteAccessAllowed" : true,
   "Plugins" : ["/usr/local/share/orthanc/plugins/libOrthancDicomWeb.so"],
+  "StorageDirectory": "/var/lib/orthanc/db",
+  "MaximumStorageSize": 0,
+  "MaximumPatientCount": 0,
+  "AuthenticationEnabled": false,
+  "StoreDicom": true,
   "DicomWeb" : {
     "Enable" : true,             // Whether DICOMweb support is enabled
     "Root" : "/dicom-web/",      // Root URI of the DICOMweb API (for QIDO-RS, STOW-RS and WADO-RS)
@@ -22,7 +27,7 @@
                                  // and "proto" correctly in the "Forwarded" HTTP headers.
                                  // (since release 1.8)
     "Servers" : {
-      "sample" : [ "http://localhost/dicom-web/" ]
+      "sample" : [ "http://localhost:8042/dicom-web/" ]
     }
   }
 }

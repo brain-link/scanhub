@@ -1,0 +1,13 @@
+server {
+   listen  8043  default_server;
+   location  /  {
+      proxy_pass http://orthanc:8042;
+      proxy_set_header HOST $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      rewrite /orthanc(.*) $1 break;
+      add_header 'Access-Control-Allow-Credentials' 'true';
+      add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      add_header 'Access-Control-Allow-Origin' '*';
+   }
+}
