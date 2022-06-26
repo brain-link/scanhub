@@ -72,7 +72,14 @@ async def get_recordings(procedure_id: int) -> dict:
     records = await Recordings.filter(procedure_id=procedure_id)
     return records
 
-@api_router.get("/patients/{patient_id}/{procedure_id}/recordings/{record_id}/")
+@api_router.get("/patients/{patient_id}/{procedure_id}/records/{record_id}/")
 async def get_record(record_id: int) -> dict:
     record = await Recordings.get(id=record_id)
     return record
+
+@api_router.post("/patients/{patient_id}/{procedure_id}/records/{record_id}/sequence/")
+async def set_sequence(parameter: list) -> dict:
+    # print("Hello World!")
+    for param in parameter:
+        print(param)
+    return dict()

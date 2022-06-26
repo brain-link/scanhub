@@ -19,6 +19,8 @@ const queryClient = new QueryClient({
   },
 });
 
+// queryClient.setMutationDefaults('')
+
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
