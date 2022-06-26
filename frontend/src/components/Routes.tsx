@@ -24,6 +24,7 @@ export function RouteConfiguration () {
                         <Route path=':procedureId' element={<Procedure />} >
                             <Route path=':recordingId' element={<ProcedureMainContentSwitcher />}>
                                 <Route index element={<ProcedureMainContent />} />
+                                <Route path=':content' element={<ProcedureMainContent />} />
                             </Route>
                         </Route>
                     </Route>

@@ -1,10 +1,12 @@
-import { Outlet, Link, useParams } from 'react-router-dom'
+import { Outlet, Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useQuery } from 'react-query';
 import { Record } from './Interfaces';
 import { format_date } from '../utils/formatter';
 
 import { MRIView } from './MRIView';
+import { SequenceForm } from './SequenceHandler';
 
 const client = new W3CWebSocket('ws://localhost:8000/ws/1234');
 
@@ -27,6 +29,7 @@ import {
   CContainer,
   CWidgetStatsB,
   CLink,
+  CNavLink,
   CButton,
   CCardHeader,
 } from '@coreui/react'
@@ -118,38 +121,54 @@ export function ProcedureSidebar() {
 
 
 export function ProcedureMainContentSwitcher() {
-  return (
-    <>
-    <CNav variant='pills'>
-      <CNavItem>
-        {/* <CNavLink to='configure-mri' component={NavLink}>Config</CNavLink> */}
-        {/* <CNavLink to='' component={NavLink}>Config</CNavLink> */}
-      </CNavItem>
-      <CNavItem>
-        {/* <CNavLink to='dicom' component={NavLink}>View</CNavLink> */}
-        {/* <CNavLink to='' component={NavLink}>View</CNavLink> */}
-      </CNavItem>
-    </CNav>
-    <Outlet />
-    </>
-  )
-}
 
-export function ProcedureMainContent() {
   let params = useParams()
 
+  const [activeKey, setActiveKey] = useState(1)
+
   return (
-    <>
     <CCard>
       <CCardHeader className="h5"> Record { params.recordingId }</CCardHeader>
       <CCardBody>
 
-        < MRIView />
+        <CNav variant='pills' className='mb-2'>
+          <CNavItem>
+            <CNavLink 
+              to='view-mri' 
+              component={Link} 
+              active={activeKey === 1} 
+              onClick={() => setActiveKey(1)}>
+                View
+            </CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink 
+              to='sequence' 
+              component={Link} 
+              active={activeKey === 2} 
+              onClick={() => setActiveKey(2)}>
+                Sequence
+            </CNavLink>
+          </CNavItem>
+        </CNav>
+
+        <Outlet />
 
       </CCardBody>
     </CCard>
-    </>
   )
+}
+
+export function ProcedureMainContent() {
+  const {content} = useParams()
+
+  console.log(content)
+
+  switch(content) {
+    case 'view-mri': return <MRIView />
+    case 'sequence': return <SequenceForm />
+    default: return <></>
+  }
 }
 
 export function Procedure() {
