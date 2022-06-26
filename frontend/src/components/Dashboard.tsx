@@ -1,8 +1,7 @@
 import {
     CCard,
     CCardHeader,
-    CCardBody,
-    CCardTitle
+    CCardBody
 } from "@coreui/react"
 
 
