@@ -79,19 +79,19 @@ export function Navigation() {
             <Outlet />
         </main>
 
-        <CFooter position='fixed' className='align-middle'>
-            <div>
-                <span><small>ScanHub &copy; 2022, Powered by BRAIN-LINK Medical Software Technologies</small></span>
-                <CNavbarBrand href="https://www.brain-link.de/">
-                    <img
-                        src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
-                        alt=""
-                        height="30"
-                        className="d-inline-block ms-2"
-                    />
-                </CNavbarBrand>
-            </div>
-        </CFooter>
+        {/* <CFooter position='fixed' className='align-middle'>
+        <div>
+            <span><small>ScanHub &copy; 2022, Powered by BRAIN-LINK Medical Software Technologies</small></span>
+            <CNavbarBrand href="https://www.brain-link.de/">
+                <img
+                    src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
+                    alt=""
+                    height="30"
+                    className="d-inline-block ms-2"
+                />
+            </CNavbarBrand>
+        </div>
+        </CFooter> */}
 
         </>
     )
