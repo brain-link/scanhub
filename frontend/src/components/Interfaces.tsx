@@ -43,3 +43,18 @@ export interface Record {
   comment: string;
 }
 
+export interface PlotData {
+  x: [number];
+  y: [number];
+  type: string;
+  mode: string;
+  name: string;
+  hoverinfo: string;
+  yaxis: string;
+}
+
+export interface Parameter {
+  id: string,
+  label: string,
+  value: number
+}
