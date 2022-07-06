@@ -134,3 +134,5 @@ node_modules/.yarn-integrity
 *.parcel-cache
 *.vscode
 node_modules
+orthanc-db
+
