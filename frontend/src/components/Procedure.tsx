@@ -1,7 +1,7 @@
 import { Outlet, Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Record } from './Interfaces';
 import { format_date } from '../utils/formatter';
 
@@ -26,13 +26,19 @@ import {
   CCardBody,
   CNav,
   CNavItem,
-  CContainer,
-  CWidgetStatsB,
-  CLink,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalFooter,
+  CModalTitle,
   CNavLink,
   CButton,
   CCardHeader,
+  CForm,
+  CFormFloating,
+  CFormInput,
 } from '@coreui/react'
+import axios from 'axios';
 
 // async function startRecording() {
 //   await fetch(
@@ -51,14 +57,6 @@ async function startRecording() {
       mode: 'no-cors',
     }
   )
-}
-
-export function range(startStop: number, stop?: number, step?: number) {
-  const start = stop !== undefined ? startStop : 0
-  const stop_ = stop ?? startStop
-  const step_ = step ?? 1
-  const length = Math.floor((stop_ - start) / step_)
-  return new Array(length).fill(0).map((_, i) => start + i * step_)
 }
 
 export function ProcedureSidebar() {
@@ -84,34 +82,30 @@ export function ProcedureSidebar() {
               <CListGroupItem component={Link} to={`record-${record.id}`}>
                 <div className="d-flex w-100 justify-content-between">
                   <h5 className="mb-1">Recording {record.id}</h5>
-                  <small> 
-                    {/* <Date> {format_date(record.date)} </Date>  */}
-                    { format_date(record.date) }
-                  </small>
+                  <small> { format_date(record.date) } </small>
                 </div>
-                <p className="mb-1">
-                  {record.comment}
-                </p>
+                <p className="mb-1"> {record.comment} </p>
                 <small>Device ID: {record.device_id}</small>
               </CListGroupItem>
             ))
           }
         </CListGroup>
-
- 
-        <CButton 
-          color="danger" 
-          className="mt-2"
-          size="lg"
-          variant = "outline"
-          onClick={() => {
-            startRecording()
-          }}
-          >
-            Record 
-        </CButton>
-
-
+        
+        <CRow className="mt-2">
+          <CCol>
+            <NewRecord />
+          </CCol>
+          <CCol>
+            <CButton 
+              color="danger" 
+              variant = "outline"
+              onClick={() => { startRecording() }}
+              >
+                Record 
+            </CButton>
+          </CCol>
+        </CRow>
+    
       </CCardBody>
     </CCard>
     </>
@@ -119,6 +113,64 @@ export function ProcedureSidebar() {
   )
 }
 
+export function NewRecord() {
+
+  let params = useParams()
+
+  const [data, setData] = useState<Record>({ id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "String value", data: "", comment: "String value" })
+  const [visible, setVisible] = useState(false)
+
+  const handleChange = (event) => {
+    console.log("Handling submit...")
+    setData({
+      ...data,
+      [event.target.name]: event.target.value
+    });
+  }
+
+  const mutation = useMutation(async() => {
+    return await axios.post(`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/new/`, data)
+    .catch( (error) => { console.log(error) });
+  })
+
+  return (
+    <>
+      <CButton 
+        color="primary" 
+        onClick={() => setVisible(!visible)}
+        variant="outline"
+      >
+        New Record
+      </CButton>
+      <CModal visible={visible} onClose={() => setVisible(false)}>
+        <CModalHeader>
+          <CModalTitle>Create New Record</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <CFormInput
+              id="floatingInputValue"
+              name="comment"
+              label="Comment" 
+              placeholder={ data.comment }
+              text="This is a brief comment on the record."
+              onChange={ handleChange }/>
+            <CFormInput 
+              id="floatingInputValue" 
+              name="thumbnail"
+              label="Thumbnail"
+              placeholder={ data.thumbnail } 
+              onChange={ handleChange }/>
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          {/* <CButton color="secondary" onClick={ () => setVisible(false) }>Close</CButton> */}
+          <CButton color="primary" onClick={ () => { mutation.mutate() }}>Save</CButton>
+        </CModalFooter>
+      </CModal>
+    </>
+  )
+}
 
 export function ProcedureMainContentSwitcher() {
 
