@@ -44,7 +44,7 @@ class Procedures(models.Model):
     The Procedures model
     """
     id = fields.IntField(pk=True, null=False, unique=True)
-    date = fields.DatetimeField(null=False)
+    date = fields.DatetimeField(auto_now_add=True)
     reason = fields.TextField(null=False)
     patient = fields.ForeignKeyField(
         "models.Patient", related_name="procedures")
@@ -120,3 +120,7 @@ class Config(models.Model):
     value = fields.JSONField()
     status: PatientStatus = fields.IntEnumField(
         PatientStatus, default=PatientStatus.NEW)
+
+
+class Status(BaseModel):
+    message: str
