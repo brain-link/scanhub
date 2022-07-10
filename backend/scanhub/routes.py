@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-# from scanhub.models import Patient, Device, Procedures, Site 
+from statistics import mode
+from fastapi import APIRouter, HTTPException
 from scanhub.utilities.sequence_plot import SequencePlot
 from scanhub import models
 seq_plot = SequencePlot('/scanhub/scanhub/ressources/epi_pypulseq.seq')
@@ -46,6 +46,27 @@ async def get_procedures(patient_id: int) -> dict:
     procedures = await models.Procedures.filter(patient_id=patient_id)
     return procedures
 
+@api_router.post("/patients/{patient_id}/procedures/new/")
+async def create_procedure(procedure_data: models.CreateProcedure, patient_id: int):
+    
+    print(procedure_data.dict())
+    patient = await models.Patient.get(id=patient_id)
+
+    new_procedure = await models.Procedures.create(
+        reason=procedure_data.reason,
+        patient=patient
+    )
+
+    await new_procedure.save()
+
+@api_router.delete("/patients/{patient_id}/{procedure_id}/")
+async def delete_procedure(procedure_id: int):
+    print(f"Deleting record id={procedure_id}")
+    deleted_count = await models.Procedures.filter(id=procedure_id).delete()
+    if not deleted_count:
+        raise HTTPException(status_code=404, detail=f"Procedure {procedure_id} not found")
+    return models.Status(message=f"Deleted procedure {procedure_id}")
+
 @api_router.get("/patients/{patient_id}/{procedure_id}/records/")
 async def get_recordings(procedure_id: int) -> dict:
     record_list = await models.Recordings.filter(procedure_id=procedure_id)
@@ -53,8 +74,6 @@ async def get_recordings(procedure_id: int) -> dict:
 
 @api_router.post("/patients/{patient_id}/{procedure_id}/records/new/")
 async def create_record(record_data: models.Create_Record, procedure_id: int) -> None:
-
-    print(record_data.dict())
 
     device = await models.Device.get(id=record_data.device_id)
     procedure = await models.Procedures.get(id=record_data.procedure_id)
@@ -71,6 +90,14 @@ async def create_record(record_data: models.Create_Record, procedure_id: int) ->
 async def get_record(record_id: int) -> dict:
     record = await models.Recordings.get(id=record_id)
     return record
+
+@api_router.delete("/patients/{patient_id}/{procedure_id}/records/{record_id}/")
+async def delete_record(record_id: int) -> dict:
+    print(f"Deleting record id={record_id}")
+    deleted_count = await models.Recordings.filter(id=record_id).delete()
+    if not deleted_count:
+        raise HTTPException(status_code=404, detail=f"Record {record_id} not found")
+    return models.Status(message=f"Deleted record {record_id}")
 
 @api_router.post("/patients/{patient_id}/{procedure_id}/records/{record_id}/sequence/")
 async def set_sequence(parameter: list) -> dict:

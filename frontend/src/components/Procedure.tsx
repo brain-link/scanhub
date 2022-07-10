@@ -26,6 +26,7 @@ import {
   CButton,
   CCardHeader,
   CForm,
+  CLink,
   CFormInput,
   CCloseButton,
 } from '@coreui/react'
@@ -70,16 +71,16 @@ export function ProcedureSidebar() {
           {
             records?.map(record => (
               // <CListGroupItem component='a' to={`record-${record.id}`}>
-              <CListGroupItem component={Link} to={`record-${record.id}`}>
-                <div className="d-flex w-100 justify-content-between">
-                  <h5 className="mb-1">Recording {record.id}</h5>
-                  <DeleteWarning record_id={record.id} />
-                </div>
-                <p className="mb-1"> {record.comment} </p>
-                <div className="d-flex w-100 justify-content-between">
-                  <small>Device ID: {record.device_id}</small>
-                  <small> { format_date(record.date) } </small>
-                </div>
+              <CListGroupItem component={Link} to={`r-${record.id}`}>
+                  <div className="d-flex w-100 justify-content-between">
+                    <h5 className="mb-1">Recording {record.id}</h5>
+                    <DeleteWarning record_id={record.id} />
+                  </div>
+                  <p className="mb-1"> {record.comment} </p>
+                  <div className="d-flex w-100 justify-content-between">
+                    <small>Device ID: {record.device_id}</small>
+                    <small> { format_date(record.date) } </small>
+                  </div>
               </CListGroupItem>
             ))
           }
