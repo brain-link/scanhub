@@ -35,7 +35,6 @@ import {
   CButton,
   CCardHeader,
   CForm,
-  CFormFloating,
   CFormInput,
 } from '@coreui/react'
 import axios from 'axios';
@@ -116,18 +115,18 @@ export function ProcedureSidebar() {
 export function NewRecord() {
 
   let params = useParams()
+  let procedure = parseInt(params.procedureId ? params.procedureId : "0");
 
-  const [data, setData] = useState<Record>({ id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "String value", data: "", comment: "String value" })
+  const [data, setData] = useState<Record>({ id: 0, procedure_id: procedure, device_id: 1, date: "", thumbnail: "", data: "", comment: "String value" })
   const [visible, setVisible] = useState(false)
 
   const handleChange = (event) => {
-    console.log("Handling submit...")
     setData({
       ...data,
       [event.target.name]: event.target.value
-    });
+    })
   }
-
+  
   const mutation = useMutation(async() => {
     return await axios.post(`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/new/`, data)
     .catch( (error) => { console.log(error) });
@@ -155,17 +154,17 @@ export function NewRecord() {
               placeholder={ data.comment }
               text="This is a brief comment on the record."
               onChange={ handleChange }/>
-            <CFormInput 
+            {/* <CFormInput 
               id="floatingInputValue" 
               name="thumbnail"
               label="Thumbnail"
               placeholder={ data.thumbnail } 
-              onChange={ handleChange }/>
+              onChange={ handleChange }/> */}
           </CForm>
         </CModalBody>
         <CModalFooter>
           {/* <CButton color="secondary" onClick={ () => setVisible(false) }>Close</CButton> */}
-          <CButton color="primary" onClick={ () => { mutation.mutate() }}>Save</CButton>
+          <CButton color="primary" onClick={ () => { mutation.mutate(); setVisible(false) }}>Save</CButton>
         </CModalFooter>
       </CModal>
     </>

@@ -1,10 +1,7 @@
-from matplotlib.image import thumbnail
-from numpy import rec
 from fastapi import APIRouter
-from scanhub.models import Patient, Device, Procedures, Recordings, Site, User
+# from scanhub.models import Patient, Device, Procedures, Site 
 from scanhub.utilities.sequence_plot import SequencePlot
-import datetime
-
+from scanhub import models
 seq_plot = SequencePlot('/scanhub/scanhub/ressources/epi_pypulseq.seq')
 
 # Define an api router
@@ -20,13 +17,13 @@ async def root() -> dict:
 # Device table data
 @api_router.get("/devices/")
 async def get_devices() -> dict:
-    devices = await Device.all()
+    devices = await models.Device.all()
     return devices
 
 @api_router.get("/devices/{device_id}/")
 async def get_device(device_id: int) -> dict:
-    device = await Device.get(id=device_id)
-    site = await Site.get(id=device.site_id)
+    device = await models.Device.get(id=device_id)
+    site = await models.Site.get(id=device.site_id)
     return dict(
         device=device,
         site=site
@@ -35,39 +32,44 @@ async def get_device(device_id: int) -> dict:
 # Patient table data
 @api_router.get("/patients/")
 async def get_patients() -> dict:
-    patients = await Patient.all()
+    patients = await models.Patient.all()
     return patients
 
 # Get a certain patient by id
 @api_router.get("/patients/{patient_id}/")
 async def get_patient(patient_id: int) -> dict:
-    patient = await Patient.get(id=patient_id)
+    patient = await models.Patient.get(id=patient_id)
     return patient
 
 @api_router.get("/patients/{patient_id}/procedures/")
 async def get_procedures(patient_id: int) -> dict:
-    procedures = await Procedures.filter(patient_id=patient_id)
+    procedures = await models.Procedures.filter(patient_id=patient_id)
     return procedures
 
 @api_router.get("/patients/{patient_id}/{procedure_id}/records/")
 async def get_recordings(procedure_id: int) -> dict:
-    records = await Recordings.filter(procedure_id=procedure_id)
-    return records
+    record_list = await models.Recordings.filter(procedure_id=procedure_id)
+    return record_list
 
 @api_router.post("/patients/{patient_id}/{procedure_id}/records/new/")
-async def create_record(record: dict, procedure_id: int) -> str:
+async def create_record(record_data: models.Create_Record, procedure_id: int) -> None:
 
-    # TODO: Append record to database
+    print(record_data.dict())
 
-    # new_record = await Recordings.create()
-    print(record)
-    print(f"procedure={procedure_id}")
-    
-    return "Created new record."
+    device = await models.Device.get(id=record_data.device_id)
+    procedure = await models.Procedures.get(id=record_data.procedure_id)
+
+    new_record = await models.Recordings.create(
+        comment=record_data.comment,
+        procedure=procedure,
+        device=device
+    )
+
+    await new_record.save
 
 @api_router.get("/patients/{patient_id}/{procedure_id}/records/{record_id}/")
 async def get_record(record_id: int) -> dict:
-    record = await Recordings.get(id=record_id)
+    record = await models.Recordings.get(id=record_id)
     return record
 
 @api_router.post("/patients/{patient_id}/{procedure_id}/records/{record_id}/sequence/")

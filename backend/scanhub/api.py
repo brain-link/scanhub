@@ -26,7 +26,9 @@ app.add_middleware(
 register_tortoise(
     app,
     db_url='postgres://brainLink:brainLinkIstCool2022UndLecker@postgres/scanhub',
-    modules={"models": ["scanhub.models"]},
+    modules={"models": [
+        "scanhub.models",
+        ]},
     generate_schemas=True,
     add_exception_handlers=True,
 )

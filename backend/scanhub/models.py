@@ -1,9 +1,13 @@
 from datetime import datetime
-from tortoise import Model, fields
+from lib2to3.pytree import Base
+from typing import Optional
+import pydantic
+from tortoise import models, fields
 from scanhub.enums import PatientStatus, PatientSex, Modality
+from tortoise.contrib.pydantic import pydantic_model_creator
+from pydantic import BaseModel, Extra
 
-
-class Device(Model):
+class Device(models.Model):
     """
     The Device model
     """
@@ -14,7 +18,7 @@ class Device(Model):
     created_at = fields.DatetimeField(auto_now_add=True)
 
 
-class Patient(Model):
+class Patient(models.Model):
     """
     The Patient model
     """
@@ -27,8 +31,15 @@ class Patient(Model):
     status: PatientStatus = fields.IntEnumField(
         PatientStatus, default=PatientStatus.NEW, null=False)
 
+class CreatePatient(BaseModel, extra=Extra.ignore):
+    sex: int
+    birthday: str
+    concern: str
+    admission_date: str
+    status = int
 
-class Procedures(Model):
+
+class Procedures(models.Model):
     """
     The Procedures model
     """
@@ -38,23 +49,35 @@ class Procedures(Model):
     patient = fields.ForeignKeyField(
         "models.Patient", related_name="procedures")
 
+class CreateProcedure(BaseModel, extra=Extra.ignore):
+    reason: str
+    patient_id: int
 
-class Recordings(Model):
+
+class Recordings(models.Model):
     """
     The Recordings model
     """
     id = fields.IntField(pk=True, null=False, unique=True)
-    date = fields.DatetimeField(null=False)
-    thumbnail = fields.BinaryField()
-    comment = fields.TextField(null=False)
-    data = fields.BinaryField()
+    date = fields.DatetimeField(auto_now_add=True)
+    thumbnail = fields.BinaryField(null=True)
+    comment = fields.TextField(null=True)
+    data = fields.BinaryField(null=True)
+    
     device = fields.ForeignKeyField(
         "models.Device", related_name="recordings")
     procedure = fields.ForeignKeyField(
         "models.Procedures", related_name="recordings")
 
+class Create_Record(BaseModel, extra=Extra.ignore):
+    comment: str
+    device_id: int
+    procedure_id: int
+    thumbnail: Optional[bytes] = bytes()
+    data: Optional[bytes] = bytes()
 
-class Site(Model):
+
+class Site(models.Model):
     """
     The Site model
     """
@@ -69,7 +92,7 @@ class Site(Model):
         "models.User", related_name="site", through="Site_User")
 
 
-class User(Model):
+class User(models.Model):
     """
     The User model
     """
@@ -90,7 +113,7 @@ class User(Model):
         return f"{self.pk}#{self.username}"
 
 
-class Config(Model):
+class Config(models.Model):
     label = fields.CharField(max_length=200)
     key = fields.CharField(max_length=20, unique=True,
                            description="Unique key for config")
