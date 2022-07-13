@@ -8,6 +8,7 @@ import pydicom
 from pydicom.dataset import Dataset, FileDataset
 from pydicom.uid import ExplicitVRLittleEndian
 import pydicom._storage_sopclass_uids
+from dicomweb_client.api import DICOMwebClient
 
 # Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
 try:
@@ -129,6 +130,12 @@ def main(rawmriblob: func.InputStream, blobout: func.Out[func.InputStream]):
     ds.save_as(out_byte_array) #ds.save_as(r"out.dcm")
     # Set blob content from byte array in memory
     blobout.set(out_byte_array.getvalue())
-
+    
+    client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web/servers/sample",
+    qido_url_prefix="qidors",
+    wado_url_prefix="retrieve",
+    stow_url_prefix="stow")
+    client.store_instances(datasets=[ds])
+    print("image sent")
     
     logging.info(f"----- Cartesian reconstruction successful")
