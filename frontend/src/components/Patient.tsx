@@ -92,7 +92,7 @@ export function PatientIndex() {
               <CListGroup>
                 {
                   procedures?.map(procedure => (
-                    <CListGroupItem component={Link} to={`${patient.id}/${procedure.id}`}>
+                    <CListGroupItem component={CLink} to={`${patient.id}/${procedure.id}`}>
                       <div className="d-flex w-100 justify-content-between">
                         <h5 className="mb-1">Procedure {procedure.id}</h5>
                         <DeleteWarning procedure_id={procedure.id} />
