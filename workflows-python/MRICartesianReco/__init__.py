@@ -131,10 +131,7 @@ def main(rawmriblob: func.InputStream, blobout: func.Out[func.InputStream]):
     # Set blob content from byte array in memory
     blobout.set(out_byte_array.getvalue())
     
-    client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web/servers/sample",
-    qido_url_prefix="qidors",
-    wado_url_prefix="retrieve",
-    stow_url_prefix="stow")
+    client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")
     client.store_instances(datasets=[ds])
     print("image sent")
     
