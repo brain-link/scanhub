@@ -97,6 +97,9 @@ def main(rawmriblob: func.InputStream, blobout: func.Out[func.InputStream]):
 
     ds.Modality = "MR"
     ds.SeriesInstanceUID = pydicom.uid.generate_uid()
+    ds.StudyID = pydicom.uid.generate_uid()
+    ds.SOPInstanceUID = pydicom.uid.generate_uid()
+    ds.SOPClassUID = 'RT Image Storage'
     ds.StudyInstanceUID = pydicom.uid.generate_uid()
     ds.FrameOfReferenceUID = pydicom.uid.generate_uid()
 
@@ -131,6 +134,7 @@ def main(rawmriblob: func.InputStream, blobout: func.Out[func.InputStream]):
     # Set blob content from byte array in memory
     blobout.set(out_byte_array.getvalue())
     
+    print(ds)
     client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")
     client.store_instances(datasets=[ds])
     print("image sent")
