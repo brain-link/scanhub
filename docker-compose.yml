@@ -69,5 +69,16 @@ services:
     ports:
       - 8080:8080
 
+  # pgadmin:
+  #   container_name: pgAdmin4
+  #   image: dpage/pgadmin4
+  #   restart: unless-stopped
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: info@brain-link.de
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #   ports:
+  #     - "5050:80"
+
 volumes:
   db_data:
