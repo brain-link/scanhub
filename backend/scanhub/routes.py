@@ -61,6 +61,8 @@ async def create_procedure(procedure_data: models.CreateProcedure, patient_id: i
 
     await new_procedure.save()
 
+    return new_procedure
+
 # Delete a procedure by id
 @api_router.delete("/patients/{patient_id}/{procedure_id}/")
 async def delete_procedure(procedure_id: int):

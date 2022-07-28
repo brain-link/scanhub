@@ -6,6 +6,7 @@ import { Record } from './Interfaces';
 import { format_date } from '../utils/formatter';
 import { MRIView } from './MRIView';
 import { SequenceForm } from './SequenceHandler';
+import { DeleteWarning } from './DeleteContext';
 import axios from 'axios';
 import React from 'react';
 import {
@@ -26,9 +27,7 @@ import {
   CButton,
   CCardHeader,
   CForm,
-  CLink,
-  CFormInput,
-  CCloseButton,
+  CFormInput
 } from '@coreui/react'
 
 
@@ -64,6 +63,7 @@ export function ProcedureSidebar() {
   return (
     // <div className='grow flex-col scroll-y'>
     <>
+    
     <CCard className='grow flex-col scroll-y'>
       <CCardHeader className="h5">Records</CCardHeader>
       <CCardBody>
@@ -74,7 +74,7 @@ export function ProcedureSidebar() {
               <CListGroupItem component={Link} to={`r-${record.id}`}>
                   <div className="d-flex w-100 justify-content-between">
                     <h5 className="mb-1">Recording {record.id}</h5>
-                    <DeleteWarning record_id={record.id} />
+                    <DeleteWarning contextURL={`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/${record.id}/`} />
                   </div>
                   <p className="mb-1"> {record.comment} </p>
                   <div className="d-flex w-100 justify-content-between">
@@ -105,35 +105,6 @@ export function ProcedureSidebar() {
     </CCard>
     </>
     // </div>
-  )
-}
-
-function DeleteWarning({record_id}) {
-  let params = useParams()
-  const [visible, setVisible] = useState(false)
-  const deletePost = async () => {
-    return await axios.delete(`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/${record_id}/`);
-  }
-  return (
-    <>
-      <CCloseButton onClick={ () => setVisible(!visible) }/>
-      <CModal visible={visible} onClose={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Delete Record</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>
-            You are about to delete record { record_id }, are you sure that you want to proceed?
-          </p>
-          <CButton
-            color='danger'
-            variant='outline'
-            onClick={ () => {deletePost(); setVisible(false)}  }
-          > Confirm Delete </CButton>
-        </CModalBody>
-
-      </CModal>
-    </>
   )
 }
 
