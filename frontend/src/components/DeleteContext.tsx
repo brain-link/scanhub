@@ -14,10 +14,13 @@ import axios from 'axios';
 export function DeleteWarning(contextURL) {
 
     const [visible, setVisible] = useState(false)
+
     const deletePost = async () => {
-    //   return await axios.delete(`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/${record_id}/`);
-        return await axios.delete(contextURL);
+      console.log(contextURL.contextURL);
+      // return await axios.delete(`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/${params.recordingId}/`);
+      return await axios.delete(contextURL.contextURL);
     }
+
     return (
       <>
         <CCloseButton onClick={ () => setVisible(!visible) }/>

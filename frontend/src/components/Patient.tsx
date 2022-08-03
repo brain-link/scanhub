@@ -15,12 +15,11 @@ import {
   CForm,
   CFormInput,
   CModalFooter,
-  CCardBody,
-  CLink} from '@coreui/react';
+  CCardBody
+} from '@coreui/react';
 
 import { useMutation } from 'react-query';
 import { Procedure, Patient } from './Interfaces';
-import { useState } from 'react';
 import { DeleteWarning } from './DeleteContext';
 import React from 'react';
 import axios from 'axios';
@@ -34,14 +33,19 @@ export function PatientIndex() {
   
   const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
   // Is this single procedure variable necessary?
-  const [procedure, setProcedure] = useState<Procedure>({ id: 0, patient_id: 0, reason: "", date: "" });
+  const [procedure, setProcedure] = React.useState<Procedure>({ id: 0, patient_id: 0, reason: "", date: "" });
   const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = React.useState(false);
+
+  // Define fetch function for procedures table
+  async function fetchProcedures () {
+    await axios.get(`${baseURL}patients/${params.patientId}/procedures/`)
+    .then((response) => {setProcedures(response.data)})
+  };
 
   // fetch procedures
   React.useEffect(() => {
-    axios.get(`${baseURL}patients/${params.patientId}/procedures/`)
-      .then((response) => {setProcedures(response.data)})
+    fetchProcedures();
   }, []);
 
   // fetch patient
@@ -50,17 +54,11 @@ export function PatientIndex() {
       .then((response) => {setPatient(response.data)})
   }, []);
 
-  const mutation = useMutation(async(e) => {
-    // await axios.post(`http://localhost:8000/patients/${params.patientId}/procedures/new/`, procedure)
-    await axios.post(`http://localhost:8000/patients/${params.patientId}/procedures/new/`, procedure)
+  const mutation = useMutation(async() => {
+    await axios.post(`${baseURL}patients/${params.patientId}/procedures/new/`, procedure)
     .then((response) => {
-      
       setProcedure(response.data) // required?
-
-      // Refetch all procedures and update state variable
-      axios.get(`${baseURL}patients/${params.patientId}/procedures/`)
-      .then((response) => { setProcedures(response.data) })
-
+      fetchProcedures()
     })
     .catch((err) => {
       console.log(err)
@@ -129,7 +127,7 @@ export function PatientIndex() {
             <CCardBody>
               <div className="mb-2 d-flex w-100 justify-content-start">
 
-                {/* Model to create a new procedure */}
+                {/* Modal to create a new procedure */}
 
                 <CButton 
                   color="primary" 
@@ -166,15 +164,25 @@ export function PatientIndex() {
               <CListGroup>
                 {
                   procedures?.map(procedure => (
-                    // TODO: Fix this Link-Component issue
-                    <CListGroupItem component={Link} to={`${patient.id}/${procedure.id}`}>
-                      <div className="d-flex justify-content-between">
-                        <h5 className="mb-1">Procedure {procedure.id}</h5>
-                        {/* TODO: Procedures cannot be deleted */}
-                        <DeleteWarning contextURL={`http://localhost:8000/patients/${params.patientId}/${procedure.id}/`} />
-                      </div>
-                      <small>{procedure.date}</small>
-                      <p className="mb-1">{procedure.reason}</p>
+                    // <CListGroupItem component={Link} to={`${patient.id}/${procedure.id}`}>
+                    <CListGroupItem>
+                        <CRow>
+                          <CCol md={11}>
+                            {/* TODO: Find a proper styling for link */}
+                            <Link to={`${patient.id}/${procedure.id}`} style={{ textDecoration: 'none', color: 'black'}}>
+                              <div className="d-flex justify-content-between">
+                                <h5 className="mb-1">Procedure {procedure.id}</h5>
+                              </div>
+                              <small>{procedure.date}</small>
+                              <p className="mb-1">{procedure.reason}</p>
+                            </Link>
+                          </CCol>
+                          <CCol md={1} className="d-flex flex-row-reverse">
+                            <DeleteWarning 
+                              contextURL={`http://localhost:8000/patients/${params.patientId}/${procedure.id}/`} 
+                              onClose={ fetchProcedures() }/>
+                          </CCol>
+                        </CRow>
                     </CListGroupItem>
                   ))
                 }
