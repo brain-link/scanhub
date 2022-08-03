@@ -1,7 +1,7 @@
 import { Outlet, Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { Record } from './Interfaces';
 import { format_date } from '../utils/formatter';
 import { MRIView } from './MRIView';
@@ -30,6 +30,8 @@ import {
   CFormInput
 } from '@coreui/react'
 
+const baseURL = "http://localhost:8000/";
+
 
 const client = new W3CWebSocket('ws://localhost:8000/ws/1234');
 
@@ -50,20 +52,48 @@ async function startRecording() {
   )
 }
 
-export function ProcedureSidebar() {
+export function RecordsTable() {
 
   let params = useParams()
 
-  const { data: records, isSuccess } = useQuery<Record[]>(`patients/${params.patientId}/${params.procedureId}/records`)
+  const [record, setRecord] = React.useState<Record>({ id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" });
+  const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
+  const [visible, setVisible] = React.useState(false);
+  const [activeKey, setActiveKey] = React.useState<Number | undefined>(undefined);
 
-  if (!isSuccess) {
-    return <div>Loading ...</div>
+  // Function to fetch all records
+  async function fetchRecords() {
+    await axios.get(`${baseURL}patients/${params.patientId}/${params.procedureId}/records/`)
+    .then((response) => {setRecords(response.data)})
+  }
+
+  // Fetch records
+  React.useEffect(() => {
+    fetchRecords()
+  }, []);
+
+  // Post a new record and refetch records table
+  const mutation = useMutation(async() => {
+    await axios.post(`${baseURL}patients/${params.patientId}/${params.procedureId}/records/new/`, record)
+    .then((response) => {
+      setRecord(response.data) // required?
+      fetchRecords()
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  })
+
+  if (!records) {
+    return <div> Loading ... </div>
   }
 
   return (
     // <div className='grow flex-col scroll-y'>
     <>
     
+    {/* Records table */}
+
     <CCard className='grow flex-col scroll-y'>
       <CCardHeader className="h5">Records</CCardHeader>
       <CCardBody>
@@ -71,10 +101,15 @@ export function ProcedureSidebar() {
           {
             records?.map(record => (
               // <CListGroupItem component='a' to={`record-${record.id}`}>
-              <CListGroupItem component={Link} to={`r-${record.id}`}>
+              <CListGroupItem component={Link} to={`r-${record.id}`} 
+                active={activeKey===record.id}
+                onClick={() => setActiveKey(record.id)}>
+                
                   <div className="d-flex w-100 justify-content-between">
                     <h5 className="mb-1">Recording {record.id}</h5>
-                    <DeleteWarning contextURL={`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/${record.id}/`} />
+                    <DeleteWarning 
+                      contextURL={`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/${record.id}/`}
+                      onClose={ fetchRecords() }/>
                   </div>
                   <p className="mb-1"> {record.comment} </p>
                   <div className="d-flex w-100 justify-content-between">
@@ -88,8 +123,48 @@ export function ProcedureSidebar() {
         
         <CRow className="mt-2">
           <CCol>
-            <NewRecord />
+
+            {/* Modal to create a new record */}
+
+            <CButton 
+              color="primary" 
+              onClick={() => setVisible(!visible)}
+              variant="outline"
+            >
+              New Record
+            </CButton>
+            <CModal visible={visible} onClose={() => setVisible(false)}>
+              <CModalHeader>
+                <CModalTitle>Create New Record</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <CForm>
+                  <CFormInput
+                    id="floatingInputValue"
+                    name="comment"
+                    label="Comment" 
+                    placeholder={ record.comment }
+                    text="This is a brief comment on the record."
+                    onChange={ (e) => setRecord({...record, [e.target.name]: e.target.value}) }/>
+
+                  {/* <CFormInput 
+                    id="floatingInputValue" 
+                    name="thumbnail"
+                    label="Thumbnail"
+                    placeholder={ data.thumbnail } 
+                    onChange={ handleChange }/> */}
+
+                </CForm>
+              </CModalBody>
+              <CModalFooter>
+                <CButton color="primary" onClick={ () => { mutation.mutate(); setVisible(false) }}>Save</CButton>
+              </CModalFooter>
+            </CModal>
+
           </CCol>
+
+          {/* Record button */}
+
           <CCol>
             <CButton 
               color="danger" 
@@ -105,65 +180,6 @@ export function ProcedureSidebar() {
     </CCard>
     </>
     // </div>
-  )
-}
-
-export function NewRecord() {
-
-  let params = useParams()
-  let procedure = parseInt(params.procedureId ? params.procedureId : "0");
-
-  const [data, setData] = useState<Record>({ id: 0, procedure_id: procedure, device_id: 1, date: "", thumbnail: "", data: "", comment: "String value" })
-  const [visible, setVisible] = useState(false)
-
-  const handleChange = (event) => {
-    setData({
-      ...data,
-      [event.target.name]: event.target.value
-    })
-  }
-  
-  const mutation = useMutation(async() => {
-    return await axios.post(`http://localhost:8000/patients/${params.patientId}/${params.procedureId}/records/new/`, data)
-    .catch( (error) => { console.log(error) });
-  })
-
-  return (
-    <>
-      <CButton 
-        color="primary" 
-        onClick={() => setVisible(!visible)}
-        variant="outline"
-      >
-        New Record
-      </CButton>
-      <CModal visible={visible} onClose={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Create New Record</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CForm>
-            <CFormInput
-              id="floatingInputValue"
-              name="comment"
-              label="Comment" 
-              placeholder={ data.comment }
-              text="This is a brief comment on the record."
-              onChange={ handleChange }/>
-            {/* <CFormInput 
-              id="floatingInputValue" 
-              name="thumbnail"
-              label="Thumbnail"
-              placeholder={ data.thumbnail } 
-              onChange={ handleChange }/> */}
-          </CForm>
-        </CModalBody>
-        <CModalFooter>
-          {/* <CButton color="secondary" onClick={ () => setVisible(false) }>Close</CButton> */}
-          <CButton color="primary" onClick={ () => { mutation.mutate(); setVisible(false) }}>Save</CButton>
-        </CModalFooter>
-      </CModal>
-    </>
   )
 }
 
@@ -233,7 +249,7 @@ export function Procedure() {
 
     <CRow className='m-2'>
       <CCol md={3}>
-        <ProcedureSidebar />
+        <RecordsTable />
       </CCol>
       <CCol md={9}>
         <Outlet />

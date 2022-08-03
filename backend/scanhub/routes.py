@@ -60,7 +60,6 @@ async def create_procedure(procedure_data: models.CreateProcedure, patient_id: i
     )
 
     await new_procedure.save()
-
     return new_procedure
 
 # Delete a procedure by id
@@ -84,8 +83,11 @@ async def create_record(record_data: models.Create_Record, procedure_id: int) ->
 
     # TODO: Generate DICOM file in here (maybe check for errors in record creation first)
     
-    device = await models.Device.get(id=record_data.device_id)
-    procedure = await models.Procedures.get(id=record_data.procedure_id)
+    print(record_data.dict())
+
+    # device = await models.Device.get(id=record_data.device_id)
+    device = await models.Device.get(id=1)
+    procedure = await models.Procedures.get(id=procedure_id)
 
     new_record = await models.Recordings.create(
         comment=record_data.comment,
@@ -93,7 +95,8 @@ async def create_record(record_data: models.Create_Record, procedure_id: int) ->
         device=device
     )
 
-    await new_record.save
+    await new_record.save()
+    return new_record
 
 # Get a record by id
 @api_router.get("/patients/{patient_id}/{procedure_id}/records/{record_id}/")
