@@ -15,7 +15,11 @@ import {
   CForm,
   CFormInput,
   CModalFooter,
-  CCardBody
+  CCardBody,
+  CCardTitle,
+  CCardSubtitle,
+  CCardText,
+  CPlaceholder
 } from '@coreui/react';
 
 import { useMutation } from 'react-query';
@@ -78,7 +82,12 @@ export function PatientIndex() {
 
           <CCard>
             <CCardHeader className="h5">Patient</CCardHeader>
-            <CCardBody>
+            <CCardBody className='p-3'>
+              {/* <CCardTitle className='display-6 mb-2'>Patient</CCardTitle>
+              <CRow className='justify-content-left align-items-center'>
+                <CCol xs={3}><CCardTitle>ID</CCardTitle></CCol>
+                <CCol>{patient?.id}</CCol>
+              </CRow> */}
               <CListGroup>
                 <CListGroupItem className="d-flex justify-content-between align-items-center">
                   <div>
@@ -88,19 +97,19 @@ export function PatientIndex() {
                 </CListGroupItem>
                 <CListGroupItem className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6>Birthday</h6>
+                    <h6>BIRTHDAY</h6>
                     {patient?.birthday}
                   </div>
                 </CListGroupItem>
                 <CListGroupItem className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6>Sex</h6>
+                    <h6>SEX</h6>
                     {patient?.sex}
                   </div>
                 </CListGroupItem>
                 <CListGroupItem className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6>Number of Procedures</h6>
+                    <h6>NUMBER OF PROCEDURES</h6>
                     <CBadge color="primary" shape="rounded-pill">
                       {procedures.length}
                     </CBadge>
@@ -108,7 +117,7 @@ export function PatientIndex() {
                 </CListGroupItem>
                 <CListGroupItem className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6>Concern</h6>
+                    <h6>CONCERN</h6>
                     {patient?.concern}
                   </div>
                 </CListGroupItem>

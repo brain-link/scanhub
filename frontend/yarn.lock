@@ -1086,14 +1086,16 @@
     commander "^2.15.1"
 
 "@coreui/coreui@^4.1.6":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@coreui/coreui/-/coreui-4.1.6.tgz#30302468b72da3274811f77dc77c5fd6db35d294"
-  integrity sha512-D+pXPTTWHGuNUaGTa+/KgCjGRH9vvdKKGKcYeE7PVwUwHg6xDgCS6TrPRWth76ELzayov6jiSBZ7ROzLkR/PDA==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@coreui/coreui/-/coreui-4.2.1.tgz#50e395c258a888f4ae76d4ddf82cd5656f4e554b"
+  integrity sha512-gcdinzX37nTOfMYMNkxnkeirGPB6H2NexBuekU7PZHQq1hEqor329SKRKB0g2ApcgtMlk76LkWtkwtb1H3G6Aw==
+  dependencies:
+    postcss-combine-duplicated-selectors "^10.0.3"
 
 "@coreui/icons-react@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@coreui/icons-react/-/icons-react-2.0.1.tgz#b5246abb50e8c3d853f70ab43f67a69a94dde804"
-  integrity sha512-532DYj/b+YeSXfvLLK1FoH6uBMCWdNuxzQe+zQF8NQRFT869Zt6VnbLKNwObxZLUMXwwyATbku8Dw4Cdm0eqiQ==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@coreui/icons-react/-/icons-react-2.1.0.tgz#4ea785ce1d127ff738c5b761ee2953e33f6b26b4"
+  integrity sha512-x7qhVB6IJFbGBh/An3QZHtuUISM+TBgc4x3ecrBel+wMdJm4Qpmg9Km0GFfOkP6/fNOfy2fLb2wZ2bbe5+sgQA==
 
 "@coreui/icons@^2.1.0":
   version "2.1.0"
@@ -1101,9 +1103,9 @@
   integrity sha512-3yY9J0088TSY403jwJeP5YERH3RLOvxdhOa4VIQsGOX4fuQZiyVUM+vwlzyCSpgAv9NwKPkCor+gc+JJaYf0TA==
 
 "@coreui/react@^4.2.2":
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/@coreui/react/-/react-4.2.2.tgz#3e042c17ba3eafbfbd5d9b26ffb385be3991d250"
-  integrity sha512-9omQh1nei5UOoKsCvJYztwCuOpkCquQ4dAE5lSt/3TE6ZQea1D3CmecI5T9DOlTdY28JsOzFs/PBzEdkCt0J5A==
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@coreui/react/-/react-4.3.1.tgz#f0d6f354c6bb28273a54d8d0ebf3f53cd20a2744"
+  integrity sha512-vCkxayuqfr1kFnkc+Jg/BMwJXG+MgBJ4pMbWdBuE06e6fr0WQZkWBC9dLL+e9qFWFZkJmNoYut3gZ2tUjd3mtw==
 
 "@cornerstonejs/codec-charls@^0.1.1":
   version "0.1.1"
@@ -9359,6 +9361,13 @@ postcss-colormin@^5.3.0:
     caniuse-api "^3.0.0"
     colord "^2.9.1"
     postcss-value-parser "^4.2.0"
+
+postcss-combine-duplicated-selectors@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/postcss-combine-duplicated-selectors/-/postcss-combine-duplicated-selectors-10.0.3.tgz#71e8b6783e99cd560cf08ba7b896ad0db318c11c"
+  integrity sha512-IP0BmwFloCskv7DV7xqvzDXqMHpwdczJa6ZvIW8abgHdcIHs9mCJX2ltFhu3EwA51ozp13DByng30+Ke+eIExA==
+  dependencies:
+    postcss-selector-parser "^6.0.4"
 
 postcss-convert-values@^5.1.2:
   version "5.1.2"
