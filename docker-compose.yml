@@ -2,20 +2,22 @@ version: "3"
 services:
 
   frontend:
-    container_name: ScanHubFrontend
-    image: scanhub_frontend
+    container_name: Frontend
+    image: frontend
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
+    depends_on:
+      - backend
     volumes:
       - ./frontend/src:/app/src
     ports:
       - 3000:3000
 
   backend:
-    image: scanhub_backend
+    container_name: Backend
+    image: backend
     restart: unless-stopped
-    container_name: ScanHubUIBackend
     build: 
       context: ./backend
       dockerfile: ./Dockerfile
@@ -30,7 +32,7 @@ services:
   postgres:
     image: postgres
     restart: unless-stopped
-    container_name: Database
+    container_name: Patient-Database
     environment:
       POSTGRES_PASSWORD: patient_data
       POSTGRES_USER: brainlink
@@ -39,6 +41,6 @@ services:
   adminer:
     image: adminer
     restart: unless-stopped
-    container_name: PostgreSQLAdmin
+    container_name: DB-Admin
     ports:
       - 8080:8080
