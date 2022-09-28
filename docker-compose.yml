@@ -32,8 +32,8 @@ services:
     restart: unless-stopped
     container_name: Database
     environment:
-      POSTGRES_PASSWORD: brainLinkIstCool2022UndLecker
-      POSTGRES_USER: brainLink
+      POSTGRES_PASSWORD: patient_data
+      POSTGRES_USER: brainlink
       POSTGRES_DB: scanhub
       
   adminer:

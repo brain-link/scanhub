@@ -25,7 +25,7 @@ app.add_middleware(
 # Tortoise ORM    
 register_tortoise(
     app,
-    db_url='postgres://brainLink:brainLinkIstCool2022UndLecker@postgres/scanhub',
+    db_url='postgres://brainlink:patient_data@postgres/scanhub',
     modules={"models": [
         "scanhub.models",
         ]},
