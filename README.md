@@ -10,7 +10,13 @@
 
 -----------------
   
-ScanHub is an multi-modal and cloud-based acquisition platform for medical data. It allows individualizable and modular processing of functional and anatomical medical images. Data acquisition is seamlessly merged with processing of complex data on a single platform.
+
+
+https://user-images.githubusercontent.com/42237900/193445329-93d344d1-2587-4d99-abe0-332d3c63e66d.mp4
+
+
+  
+ScanHub is a multi modal acquisition software, which allows individualizable, modular and cloud-based processing of functional and anatomical medical images. It seamlessly merges the acquisition with the processing of complex data on a single platform.
 ScanHub is open-source and freely availably to anyone. 
 The greatest novalty of ScanHub is the cross-manufacturer and multi-modality aspect, allowing accessible cloud-based data processing in one framework. 
 
