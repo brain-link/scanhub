@@ -1,4 +1,6 @@
 {
+  "private": true,
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {},
+  "workspaces": ["frontend"]
 }

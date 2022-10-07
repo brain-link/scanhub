@@ -1,11 +1,6 @@
 {
   "name": "frontend",
-  "license": "MIT",
   "version": "0.1.0",
-  "private": true,
-  "workspaces": [
-    "libs/*"
-  ],
   "types": "libs/typings/gl-matrix/index.d.ts",
   "dependencies": {
     "@coreui/coreui": "^4.1.6",
