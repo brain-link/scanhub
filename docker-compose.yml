@@ -3,6 +3,7 @@ version: "3"
 services:
   couchdb:
     image: docker.io/bitnami/couchdb:3
+    container_name: couchdb
     environment:
       - COUCHDB_PASSWORD=couchdb
     ports:
@@ -36,10 +37,14 @@ services:
  # WHISK CONTROLLER
   controller:
     image: 'openwhisk/controller:nightly'
+    container_name: controller
+
+
 
 # WHISK INVOKER
   invoker:
     image: 'openwhisk/invoker:nightly'
+    container_name: invoker
 
 
   # controller:
