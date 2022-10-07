@@ -1,5 +1,18 @@
+
 version: "3"
 services:
+  couchdb:
+    image: docker.io/bitnami/couchdb:3
+    environment:
+      - COUCHDB_PASSWORD=couchdb
+    ports:
+      - '5984:5984'
+      - '4369:4369'
+      - '9100:9100'
+    volumes:
+      - couchdb_data:/bitnami/couchdb
+
+ # KAFKA BROKER
   kafka:
     image: 'bitnami/kafka:latest'
     container_name: kafka
@@ -20,33 +33,46 @@ services:
     networks:
       - backend
 
+ # WHISK CONTROLLER
   controller:
-    restart: always
-    container_name: ControllerService
-    build: 
-      context: ./ControllerService
-      dockerfile: ./Dockerfile
-    volumes:
-    - ./ControllerService:/home/site/wwwroot
-    ports:
-      - 83:80
-    networks:
-      - backend
+    image: 'openwhisk/controller:nightly'
 
-  dicom:
-    restart: always
-    container_name: DICOMService
-    build: 
-      context: ./DICOMService
-      dockerfile: ./Dockerfile
-    volumes:
-    - ./DICOMService:/home/site/wwwroot
-    ports:
-      - 82:80
-    networks:
-      - backend
+# WHISK INVOKER
+  invoker:
+    image: 'openwhisk/invoker:nightly'
+
+
+  # controller:
+  #   restart: always
+  #   container_name: ControllerService
+  #   build: 
+  #     context: ./ControllerService
+  #     dockerfile: ./Dockerfile
+  #   volumes:
+  #   - ./ControllerService:/home/site/wwwroot
+  #   ports:
+  #     - 83:80
+  #   networks:
+  #     - backend
+
+  # dicom:
+  #   restart: always
+  #   container_name: DICOMService
+  #   build: 
+  #     context: ./DICOMService
+  #     dockerfile: ./Dockerfile
+  #   volumes:
+  #   - ./DICOMService:/home/site/wwwroot
+  #   ports:
+  #     - 82:80
+  #   networks:
+  #     - backend
 
 
 networks:
   backend:
     driver: bridge
+
+volumes:
+  couchdb_data:
+    driver: local
