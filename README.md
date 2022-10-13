@@ -2,15 +2,9 @@
   <a href="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"><img src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg" width="400" height="200" alt="ScanHub"></a>
 </p>
 
-<p align="center">
-<a href="https://github.com/brain-link/scanhub/actions" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/frontend.yml/badge.svg" alt="Github Actions">
-</a>
-</p>
-
 -----------------
   
-ScanHub is a multi modal acquisition software, which allows individualizable, modular and cloud-based processing of functional and anatomical medical images. It seamlessly merges the acquisition with the processing of complex data on a single platform.
+ScanHub is an multi-modal and cloud-based acquisition platform for medical data. It allows individualizable and modular processing of functional and anatomical medical images. Data acquisition is seamlessly merged with processing of complex data on a single platform.
 ScanHub is open-source and freely availably to anyone. 
 The greatest novalty of ScanHub is the cross-manufacturer and multi-modality aspect, allowing accessible cloud-based data processing in one framework. 
 
@@ -24,22 +18,7 @@ Installation
 Development
 -----------
 
-Add workflow framework in a different programming language with:
-
-    func init --docker
-
-Add a new workflow with:
-
-    func new
-    
-    
-Orthanc
------------
-
-Default User orthanc:
-
-user: orthanc
-pw: orthanc
+TBD
 
 
 License
