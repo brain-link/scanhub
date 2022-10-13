@@ -1,15 +1,16 @@
-import './index.scss'
-
-import React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
-import { Suspense } from 'react'
-import { RouteConfiguration } from './components/Routes'
-
 import { QueryClient, QueryClientProvider } from "react-query";
+
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
+import { RouteConfiguration } from './components/Routes'
 import { query } from "./utils/query";
 
-// import init from "./Components/initCornerstone";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,25 +20,13 @@ const queryClient = new QueryClient({
   },
 });
 
-// queryClient.setMutationDefaults('')
-
-function App() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <BrowserRouter>
-        <RouteConfiguration />
-      </BrowserRouter>
-    </Suspense>
-  );
-}
-
-// init();
-
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+          <BrowserRouter>
+            <RouteConfiguration />
+          </BrowserRouter>
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
