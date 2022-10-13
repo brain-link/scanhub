@@ -1,17 +1,19 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense } from 'react'
+import React from 'react';
 
 import { Dashboard } from './Dashboard'
 import { PatientTable } from './PatientTable'
 import { DeviceTable } from './DeviceTable'
-import { Navigation } from './Navigation'
+import { App } from './App'
 import { PatientIndex } from './Patient'
 import { Procedure, ProcedureMainContentSwitcher, ProcedureMainContent } from "./Procedure";
+import { PatientPage } from './PatientPage';
 
 export function RouteConfiguration () {
     return (
         <Routes>
-            <Route path='/' element={<Navigation />}>
+            <Route path='/' element={<App />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/patients">
                     <Route index element={
