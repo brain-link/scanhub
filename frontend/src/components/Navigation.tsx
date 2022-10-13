@@ -1,98 +1,83 @@
-import { useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
-import { version } from '../utils/version'
+import * as React from 'react';
 
-import {
-    CNavbarBrand,
-    CContainer,
-    CNavbar,
-    CCollapse,
-    CNavbarNav,
-    CNavItem,
-    CNavLink,
-    CNavbarToggler,
-    CForm,
-    CButton,
-    CFooter
-} from '@coreui/react'
+import { Link as RouterLink } from 'react-router-dom';
 
+import IconButton from '@mui/material/IconButton';
+import AppBar from '@mui/material/AppBar';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+
+function isActive(status) {
+    return !status ? "outlined" : "contained"
+}
 
 export function Navigation() {
 
-    const [visible, setVisible] = useState(false)
+    const [activeElement, setActiveElement] = React.useState(0)
+
+    const updateActiveElement = (id) => {
+        setActiveElement(activeElement !== id ? id : -1)
+    }
 
     return (
-        <>
-        <CNavbar colorScheme="light" expand="lg" className="bg-light">
+        <Box sx={{ display: 'flex', flexDirection: 'row', position: 'sticky', zIndex: 'snackbar' }}>
+            <AppBar position="fixed" color="transparent">
+                <Toolbar sx={{ gap: 1.5 }}>
 
-            <CContainer fluid className='ms-4 me-4 align-middle'>
+                    <IconButton href="https://www.brain-link.de/" sx={{ height: 40 }}>
+                        <img
+                            src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
+                            alt=""
+                            height="40"
+                            className="d-inline-block"
+                        />
+                    </IconButton>
 
-                <CNavbarBrand href="https://www.brain-link.de/" className='me-5'>
-                    <img
-                        src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"
-                        // src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
-                        alt=""
-                        height="50"
-                        className="d-inline-block align-top"
-                    />
-                </CNavbarBrand>
+                    <Typography variant="h4" sx={{ mr: 5 }}>
+                        ScanHub
+                    </Typography>    
+                    
 
-                {/* <CNavbarBrand className="me-5">
-                    ScanHub
-                </CNavbarBrand> */}
+                    <Button 
+                        component={RouterLink} 
+                        to="/" color="primary" 
+                        variant={isActive(0 === activeElement)} 
+                        onClick={0 !== activeElement ? () => updateActiveElement(0) : () => {}}
+                    >
+                        Dashboard
+                    </Button>
 
-                <CNavbarToggler
-                    aria-label="Toggle navigation"
-                    aria-expanded={visible}
-                    onClick={() => setVisible(!visible)}
-                />
+                    <Button 
+                        component={RouterLink} 
+                        to="/patients" 
+                        variant={isActive(1 === activeElement)} 
+                        onClick={1 !== activeElement ? () => updateActiveElement(1) : () => {}}
+                    >
+                        Patients
+                    </Button>
 
-                <CCollapse className="navbar-collapse d-flex justify-content-between" visible={visible}>
-                    <CNavbarNav>
-                        <CNavItem>
-                            <CNavLink to="/" active component={Link}>Dashboard</CNavLink>
-                        </CNavItem>
-                        <CNavItem>
-                            <CNavLink to='/patients' component={Link}>Patients</CNavLink>
-                        </CNavItem>
-                        <CNavItem>
-                            <CNavLink to='/devices' component={Link}>Devices</CNavLink>
-                        </CNavItem>
-                    </CNavbarNav>
+                    <Button 
+                        component={RouterLink} 
+                        to="/devices" 
+                        variant={isActive(2 === activeElement)} 
+                        onClick={2 !== activeElement ? () => updateActiveElement(2) : () => {}}
+                    >
+                        Devices
+                    </Button>
 
-                    <CNavbarNav>
-                        <CNavItem>
-                            <CNavLink href="#" disabled>V{version}</CNavLink>
-                        </CNavItem>
-                        <CForm className="container-fluid justify-content-start">
-                            <CButton type="button" color="dark" variant="outline" className="me-2">
-                                Logout
-                            </CButton>
-                        </CForm>
-                    </CNavbarNav>
-
-                </CCollapse>
-            </CContainer>
-        </CNavbar>
-
-        <main>
-            <Outlet />
-        </main>
-
-        {/* <CFooter position='fixed' className='align-middle'>
-        <div>
-            <span><small>ScanHub &copy; 2022, Powered by BRAIN-LINK Medical Software Technologies</small></span>
-            <CNavbarBrand href="https://www.brain-link.de/">
-                <img
-                    src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
-                    alt=""
-                    height="30"
-                    className="d-inline-block ms-2"
-                />
-            </CNavbarBrand>
-        </div>
-        </CFooter> */}
-
-        </>
-    )
+                    <Button 
+                        component={RouterLink} 
+                        to="/patient" 
+                        variant={isActive(3 === activeElement)} 
+                        onClick={3 !== activeElement ? () => updateActiveElement(3) : () => {}}
+                    >
+                        Patient
+                    </Button>
+                    
+                </Toolbar>
+            </AppBar>
+        </Box>
+    );
 }
