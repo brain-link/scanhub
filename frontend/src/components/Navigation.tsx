@@ -1,42 +1,64 @@
 import React from 'react';
-import IconButton from '@mui/joy/IconButton';
+import { Link as RouterLink, useLocation} from 'react-router-dom';
+
 import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
+import { useColorScheme } from '@mui/joy/styles';
+import IconButton from '@mui/joy/IconButton';
+import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
-import Button from '@mui/material/Button';
-import { Link as RouterLink } from 'react-router-dom';
+
+// Icons
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 
-function isActive(status) {
-    return !status ? "outlined" : "contained"
-}
-
-interface NavItem {
-    id: number;
-    text: string;
-    link: string;
-}
-
+// Menu elements
 const menuItems = [
-    {id: 0, text: "Dashboard", link: "/"},
+    {id: 0, text: "Home", link: "/"},
     {id: 1, text: "Patients", link: "/patients"},
     {id: 2, text: "Devices", link: "/devices"},
 ];
 
-export function Navigation() {
+function ColorSchemeToggle() {
+    const { mode, setMode } = useColorScheme();
+    const [mounted, setMounted] = React.useState(true);
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
 
-    const [activeElement, setActiveElement] = React.useState(0)
-
-    // To prevent bugs in visualization:
-    // Make button highlighting dependent on route/path
-    const updateActiveElement = (id) => {
-        setActiveElement(activeElement !== id ? id : -1)
+    if (!mounted) {
+        return <IconButton size="sm" variant="outlined" color="primary" />;
     }
 
     return (
+        <IconButton
+            id="toggle-mode"
+            variant="outlined"
+            color="primary"
+            size="sm"
+            onClick={() => {
+                if (mode === 'light') {
+                    setMode('dark');
+                } else {
+                    setMode('light');
+                }
+            }}
+        >
+            {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+        </IconButton>
+    );
+}
+
+export default function Navigation() {
+
+    const loc = useLocation();
+
+    return (
         <Box sx={{ display: 'flex', flexDirection: 'row', position: 'sticky', zIndex: 'snackbar' }}>
-            <AppBar position="fixed" color="transparent">
+            <AppBar position="fixed" color="inherit">
                 <Toolbar sx={{ gap: 1.5 }}>
 
                     <IconButton variant="plain" href="https://www.brain-link.de/" sx={{ height: 40 }}>
@@ -58,19 +80,20 @@ export function Navigation() {
                             <Button
                                 component={RouterLink}
                                 to={item.link}
-                                color='primary'
-                                variant={isActive(item.id === activeElement)}
-                                onClick={item.id !== activeElement ? () => updateActiveElement(item.id) : () => {}}
+                                color="primary"
+                                startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : <></> }
+                                disabled={ loc.pathname === item.link }
+                                variant={ loc.pathname === item.link ? 'soft' : 'plain' }
                             >
                                 {item.text}
                             </Button>
                         ))
                     }
                     </>
-                    
-                    {/* <IconButton variant="plain" component={RouterLink} to="/">
-                        <HomeRoundedIcon />
-                    </IconButton> */}
+
+                    <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
+                        <ColorSchemeToggle />
+                    </Box>
                     
                 </Toolbar>
             </AppBar>
