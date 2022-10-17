@@ -8,7 +8,7 @@ import { DeviceTable } from './DeviceTable'
 import { App } from './App'
 import { PatientIndex } from './Patient'
 import { Procedure, ProcedureMainContentSwitcher, ProcedureMainContent } from "./Procedure";
-import { PatientPage } from './PatientPage';
+import TestPage from './TestPage';
 
 export function RouteConfiguration () {
     return (
@@ -38,6 +38,10 @@ export function RouteConfiguration () {
                     </Suspense>
                     } />
                 </Route> 
+
+                {/* Testing */}
+                <Route path="/test" element={<TestPage />} />
+                
             </Route>
       </Routes>
     )
