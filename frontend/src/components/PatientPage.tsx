@@ -1,22 +1,19 @@
 import * as React from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
-import axios from 'axios';
+// import { useMutation } from 'react-query';
+// import axios from 'axios';
 // MUI
 import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 // Icons import
 import MenuIcon from '@mui/icons-material/Menu';
-import AddSharpIcon from '@mui/icons-material/AddSharp';
 // Import sub components
 import Procedures from './ProcedureComponent';
 import PatientInfo from './PatientInfo';
-// Interfaces
-import { Procedure, Patient } from './Interfaces';
 
 // Constants
 const baseURL = "http://localhost:8000/";
@@ -46,17 +43,10 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
 );
 
 export default function PatientIndex() {
+
     let params = useParams()
 
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
-
-    const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
-
-    // fetch patient
-    React.useEffect(() => {
-        axios.get(`${baseURL}patients/${params.patientId}/`)
-        .then((response) => {setPatient(response.data)})
-    }, []);
 
     return (    
         // TODO: Find better solution for minHeigh property (fully expand div in vertical direction)
@@ -81,30 +71,9 @@ export default function PatientIndex() {
             >
                 <Box sx={{ bgcolor: 'background.componentBg' }}>
 
-                    <Box>
-                        <Typography level="h5" sx={{ p:2 }}>Patient Info</Typography>
-                        <Divider />
-                        <PatientInfo url={`${baseURL}patients/${params.patientId}/`} />
-                    </Box>
-
+                    <PatientInfo url={`${baseURL}patients/${params.patientId}/`} />
                     <Divider />
-
-                    <Box>
-                        <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
-                        
-                            <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                                <Typography level="h5">Records</Typography>
-                                <Badge badgeContent={4} color="primary"/>
-                            </Box>
-
-                            <IconButton size='sm' variant='outlined'>
-                                <AddSharpIcon />
-                            </IconButton>
-                        </Box>
-                        
-                        <Divider />
-                        <Procedures />
-                    </Box>
+                    <Procedures procedureURL={`${baseURL}patients/${params.patientId}/procedures/`}/>
 
                 </Box>
                 
@@ -137,37 +106,23 @@ export default function PatientIndex() {
                             <MenuIcon />
                         </IconButton>
 
+                        {/* TODO: Insert Breadcrumbs here */}
+
                     </Box>
 
                     {/* Main Content */}
                     <Box sx={{ display: 'flex', height: '100%' }}>
                         <Box sx={{ width: '300px', bgcolor: 'background.componentBg'}}> 
 
-                            <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
-                                
-                                <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                                    <Typography level="h5">Records</Typography>
-                                    <Badge badgeContent={4} color="primary"/>
-                                </Box>
-                                
-                                <IconButton size='sm' variant='outlined'>
-                                    <AddSharpIcon />
-                                </IconButton>
-
-                            </Box>
-
-                            <Divider />
-
-                            <Procedures />
+                            <Procedures procedureURL={`${baseURL}patients/${params.patientId}/procedures/`}/>
 
                         </Box>
                         <Box sx={{ flexGrow: 1, bgcolor: '#eee' }}>
-                            {/* <Procedures /> */}
-                            <Typography sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}> View </Typography>
-                        </Box>
-                        
-                    </Box>
 
+                            <Typography sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}> View </Typography>
+                        
+                        </Box>
+                    </Box>
                 </Box>
             </Main>
         </div>

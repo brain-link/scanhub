@@ -1,6 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 
+import Divider from '@mui/material/Divider';
 import Typography from '@mui/joy/Typography';
 import Box from '@mui/joy/Box';
 
@@ -16,48 +17,52 @@ export default function PatientInfo(patientURL: any) {
     }, []);
 
     return (
-        <Box
-            sx={{
-                gap: 2,
-                p: 2,
-                display: 'grid',
-                gridTemplateColumns: 'auto 1fr',
-                '& > *:nth-child(odd)': { 
-                    color: 'text.secondary' 
-                },
-            }}
-        >
+        <Box>
+            <Typography level="h5" sx={{ p:2 }}>Patient Info</Typography>
+            <Divider />
+            <Box
+                sx={{
+                    gap: 2,
+                    p: 2,
+                    display: 'grid',
+                    gridTemplateColumns: 'auto 1fr',
+                    '& > *:nth-child(odd)': { 
+                        color: 'text.secondary' 
+                    },
+                }}
+            >
 
-            <Typography level="body2">ID</Typography>
-            <Typography level="body2" textColor="text.primary">
-                {patient?.id}
-            </Typography>
+                <Typography level="body2">ID</Typography>
+                <Typography level="body2" textColor="text.primary">
+                    {patient?.id}
+                </Typography>
 
-            <Typography level="body2">Sex</Typography>
-            <Typography level="body2" textColor="text.primary">
-                {patient?.sex}
-            </Typography>
+                <Typography level="body2">Sex</Typography>
+                <Typography level="body2" textColor="text.primary">
+                    {patient?.sex}
+                </Typography>
 
-            <Typography level="body2">Birthday</Typography>
-            <Typography level="body2" textColor="text.primary">
-                {patient?.birthday}
-            </Typography>
+                <Typography level="body2">Birthday</Typography>
+                <Typography level="body2" textColor="text.primary">
+                    {patient?.birthday}
+                </Typography>
 
-            <Typography level="body2">Admission</Typography>
-            <Typography level="body2" textColor="text.primary">
-                {patient?.admission_date}
-            </Typography>
+                <Typography level="body2">Admission</Typography>
+                <Typography level="body2" textColor="text.primary">
+                    {patient?.admission_date}
+                </Typography>
 
-            <Typography level="body2">Status</Typography>
-            <Typography level="body2" textColor="text.primary">
-                {patient?.status}
-            </Typography>
+                <Typography level="body2">Status</Typography>
+                <Typography level="body2" textColor="text.primary">
+                    {patient?.status}
+                </Typography>
 
-            <Typography level="body2">Concern</Typography>
-            <Typography level="body2" textColor="text.primary">
-                {patient?.concern}
-            </Typography>
+                <Typography level="body2">Concern</Typography>
+                <Typography level="body2" textColor="text.primary">
+                    {patient?.concern}
+                </Typography>
 
+            </Box>
         </Box>
     )
 };
