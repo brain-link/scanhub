@@ -45,7 +45,7 @@ export default function PatientTable() {
                     </TableHead>
                     <TableBody>
                         {patients?.map(patient => (
-                            <TableRow hover={true} component={RouterLink} to="/test" key={patient.id} sx={{ textDecoration: 'none' }}>
+                            <TableRow hover={true} component={RouterLink} to={`/patients/${patient.id}`} key={patient.id} sx={{ textDecoration: 'none' }}>
                                 <TableCell>{ patient.id }</TableCell>
                                 <TableCell>{ patient.sex }</TableCell>
                                 <TableCell>{ patient.birthday }</TableCell>
