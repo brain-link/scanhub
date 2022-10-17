@@ -3,25 +3,7 @@
 import { useQuery } from "react-query";
 import { Device } from './Interfaces'
 
-// import {
-//     CCard,
-//     CCardTitle,
-//     CCardSubtitle,
-//     CSpinner,
-//     CCardHeader,
-//     CCardBody,
-//     CTable,
-//     CTableBody,
-//     CTableDataCell,
-//     CTableHead,
-//     CTableRow,
-//     CTableHeaderCell,
-//     CNavLink,
-//     CContainer,
-// } from '@coreui/react'
-
 import * as React from 'react';
-// import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -34,8 +16,8 @@ import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/system/Container';
+import Box from '@mui/joy/Box'
 
-// import TablePaginationActions from './TablePagination'
 
 export function DeviceTable() {
   
@@ -63,9 +45,10 @@ export function DeviceTable() {
     // };
       
     return (
-        <Container sx={{ display: 'flex', justifyContent: 'center'}}>
-            <Paper sx={{ width: 0.8, overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: '90vh'}}>
+        <Box sx={{ flexGrow: 1, justifyContent: 'center', p: 2, pt: 0 }}>
+            <Paper sx={{ overflow: 'scroll', maxHeight: '82vh'}}>
+                
+                <TableContainer>
                     <Table stickyHeader aria-label="Device Table">
                         <TableHead>
                             <TableRow>
@@ -85,55 +68,16 @@ export function DeviceTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {/* <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={devices.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                /> */}
+            {/* <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={devices.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            /> */}
             </Paper>
-        </Container>
+        </Box>
     );
 }
-
-    // return (
-    //     <CCard className='m-4'>
-    //         <CCardHeader className="h5">Devices</CCardHeader>
-    //         <CCardBody className='m-2'>
-
-    //             {/* <CCardTitle>List of all Devices</CCardTitle>
-    //             <CCardSubtitle className="mb-4 text-medium-emphasis">
-    //                 Devices
-    //             </CCardSubtitle> */}
-
-    //             <CTable hover>
-    //                 <CTableHead color='secondary'>
-    //                     <CTableRow>
-    //                         <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-    //                         <CTableHeaderCell scope="col">Modality</CTableHeaderCell>
-    //                         <CTableHeaderCell scope="col">Address</CTableHeaderCell>
-    //                         <CTableHeaderCell scope="col">Site</CTableHeaderCell>
-    //                     </CTableRow>
-    //                 </CTableHead>
-    //                 <CTableBody>
-    //                     {
-    //                         devices?.map(device => (
-    //                             <CTableRow align="middle" key={device.id}>
-    //                                 <CTableHeaderCell scope="row">
-    //                                     <CNavLink to={`/devices/${device.id}`} component={Link}>{device.id}</CNavLink>
-    //                                 </CTableHeaderCell>
-    //                                 <CTableDataCell>{device.modality}</CTableDataCell>
-    //                                 <CTableDataCell>{device.address}</CTableDataCell>
-    //                                 <CTableDataCell>{device.site}</CTableDataCell>
-    //                             </CTableRow>
-    //                         ))
-    //                     }
-    //                 </CTableBody>
-    //             </CTable>
-    //         </CCardBody>
-    //     </CCard>
-    //     );
-    // }
