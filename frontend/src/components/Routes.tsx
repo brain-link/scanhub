@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import { Suspense } from 'react'
 import React from 'react';
 
-import { Dashboard } from './Dashboard'
-import { PatientTable } from './PatientTable'
-import { DeviceTable } from './DeviceTable'
+import Dashboard from './Dashboard'
+import DeviceTable from "./DeviceTable";
+import PatientTable from "./PatientTable";
 import { App } from './App'
 import { PatientIndex } from './Patient'
 import { Procedure, ProcedureMainContentSwitcher, ProcedureMainContent } from "./Procedure";
