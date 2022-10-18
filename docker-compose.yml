@@ -1,17 +1,16 @@
 
 version: "3"
 services:
-  couchdb:
-    image: docker.io/bitnami/couchdb:3
-    container_name: couchdb
-    environment:
-      - COUCHDB_PASSWORD=couchdb
-    ports:
-      - '5984:5984'
-      - '4369:4369'
-      - '9100:9100'
-    volumes:
-      - couchdb_data:/bitnami/couchdb
+ # Proxy - https://stackoverflow.com/questions/59050175/allow-access-to-kafka-via-nginx
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   networks:
+  #     - backend
 
  # KAFKA BROKER
   kafka:
@@ -19,6 +18,7 @@ services:
     container_name: kafka
     ports:
       - '9092:9092'
+      - '9093:9093'
       - '9094:9094'
     environment:
       - KAFKA_ENABLE_KRAFT=yes
@@ -34,50 +34,6 @@ services:
     networks:
       - backend
 
- # WHISK CONTROLLER
-  controller:
-    image: 'openwhisk/controller:nightly'
-    container_name: controller
-
-
-
-# WHISK INVOKER
-  invoker:
-    image: 'openwhisk/invoker:nightly'
-    container_name: invoker
-
-
-  # controller:
-  #   restart: always
-  #   container_name: ControllerService
-  #   build: 
-  #     context: ./ControllerService
-  #     dockerfile: ./Dockerfile
-  #   volumes:
-  #   - ./ControllerService:/home/site/wwwroot
-  #   ports:
-  #     - 83:80
-  #   networks:
-  #     - backend
-
-  # dicom:
-  #   restart: always
-  #   container_name: DICOMService
-  #   build: 
-  #     context: ./DICOMService
-  #     dockerfile: ./Dockerfile
-  #   volumes:
-  #   - ./DICOMService:/home/site/wwwroot
-  #   ports:
-  #     - 82:80
-  #   networks:
-  #     - backend
-
-
 networks:
   backend:
     driver: bridge
-
-volumes:
-  couchdb_data:
-    driver: local
