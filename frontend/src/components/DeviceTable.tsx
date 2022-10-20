@@ -11,12 +11,11 @@ import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/joy/Typography';
 import Container from '@mui/system/Container';
-import Box from '@mui/joy/Box'
 
 
 export default function DeviceTable() {
   
-    const { data: devices, isSuccess } = useQuery<Device[]>("devices/");
+    const { data: devices, isSuccess } = useQuery<Device[]>("/devices");
 
     if (!isSuccess) {
         return (
@@ -28,29 +27,29 @@ export default function DeviceTable() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1, justifyContent: 'center', p: 2 }}>
-            {/* <Paper sx={{ overflow: 'scroll', maxHeight: '82vh'}}> */}
-
-            <TableContainer component={Paper} sx={{ overflow: 'scroll', maxHeight: '90vh' }}>
-                <Table stickyHeader aria-label="Device Table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell><Typography level="h5">ID</Typography></TableCell>
-                            <TableCell><Typography level="h5">Modality</Typography></TableCell>
-                            <TableCell><Typography level="h5">Location</Typography></TableCell>
+        <TableContainer component={Paper} sx={{ m: 2, overflow: 'auto' }}>
+            <Table stickyHeader aria-label="Device Table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell><Typography level="h5">ID</Typography></TableCell>
+                        <TableCell><Typography level="h5">Modality</Typography></TableCell>
+                        <TableCell><Typography level="h5">Location</Typography></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {/* Map elements in devices to table cells */}
+                    { devices?.map(device => (
+                        <TableRow 
+                            hover={true} 
+                            key={device.id}
+                        >
+                            <TableCell>{ device.id }</TableCell>
+                            <TableCell>{ device.modality }</TableCell>
+                            <TableCell>{ device.address }</TableCell>
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {devices?.map(device => (
-                            <TableRow hover={true} key={device.id}>
-                                <TableCell>{ device.id }</TableCell>
-                                <TableCell>{ device.modality }</TableCell>
-                                <TableCell>{ device.address }</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Box>
+                    )) }
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }
