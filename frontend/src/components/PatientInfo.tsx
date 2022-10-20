@@ -1,19 +1,26 @@
 import * as React from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/joy/Typography';
 import Box from '@mui/joy/Box';
-
+import config from '../utils/config';
+import { format_date } from '../utils/formatter';
 import { Patient } from './Interfaces';
 
-export default function PatientInfo(patientURL: any) {
+export default function PatientInfo() {
 
+    const params = useParams();
     const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
+
+    async function fetchPatient() {
+        await axios.get( `${config["baseURL"]}/patients/${params.patientId}` )
+        .then((response) => { setPatient(response.data) })
+    }
 
     // fetch patient
     React.useEffect(() => {
-        axios.get(patientURL.url).then((response) => { setPatient(response.data) })
+        fetchPatient();
     }, []);
 
     return (
@@ -49,7 +56,7 @@ export default function PatientInfo(patientURL: any) {
 
                 <Typography level="body2">Admission</Typography>
                 <Typography level="body2" textColor="text.primary">
-                    {patient?.admission_date}
+                    { patient ? format_date(patient.admission_date) : "" }
                 </Typography>
 
                 <Typography level="body2">Status</Typography>
