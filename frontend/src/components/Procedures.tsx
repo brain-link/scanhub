@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link as RouterLink, useLocation, useParams } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import Box from '@mui/joy/Box';
@@ -14,27 +15,35 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import IconButton from '@mui/joy/IconButton';
 import Divider from '@mui/material/Divider';
 import Badge from '@mui/material/Badge';
+import config from '../utils/config';
+import { useQuery } from "react-query";
 
 import { Procedure } from './Interfaces';
+import { format_date } from '../utils/formatter';
 
+export default function Procedures() {
 
-export default function Procedures(context: any ) {
+    const params = useParams();
+    const [activeProcedureId, setActiveProcedureId] = React.useState<number | undefined>(undefined);
 
-    const [activeElement, setActiveElement] = React.useState(0)
+    React.useEffect(() => {
+        if (params.procedureId && Number(params.procedureId) !== activeProcedureId){
+            setActiveProcedureId(Number(params.procedureId));
+        }
+    }, [params.procedureId]);
 
-    // TODO: Procedures and records fetch, fetch in sub component!
     // Is this single procedure variable necessary?
     const [procedure, setProcedure] = React.useState<Procedure>({ id: 0, patient_id: 0, reason: "", date: "" });
     const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
 
     // Define fetch function for procedures table
     async function fetchProcedures () {
-        await axios.get(context.procedureURL).then((response) => {
+        console.log(`${config['baseURL']}/patients/${params.patientId}/procedures`)
+        await axios.get(`${config['baseURL']}/patients/${params.patientId}/procedures`).then((response) => {
             setProcedures(response.data)
-            if (response.data && response.data.length > 0) {
-                setActiveElement(response.data.at(0).id)
-            }
         })
+        // const {data, isSuccess} = useQuery<Procedure[]>(`/patients/${params.patientId}/procedures`);
+        // isSuccess ? setProcedures(data) : () => {}
     };
 
     // fetch procedures
@@ -43,7 +52,7 @@ export default function Procedures(context: any ) {
     }, []);
 
     const mutation = useMutation(async() => {
-        await axios.post(`${context.procedureURL}/new/`, procedure)
+        await axios.post(`${config['baseURL']}/patients/${params.patientId}/procedures/new`, procedure)
         .then((response) => {
             setProcedure(response.data) // required?
             fetchProcedures()
@@ -53,14 +62,12 @@ export default function Procedures(context: any ) {
         })
     })
 
-    // procedures && procedures.length > 0 ? setActiveElement(procedures[0]?.id) : () => {}
-
     return (
         <Box>
             <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
                             
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                    <Typography level="h5">Records</Typography>
+                    <Typography level="h5"> Procedures </Typography>
                     <Badge badgeContent={procedures?.length} color="primary"/>
                 </Box>
 
@@ -78,18 +85,19 @@ export default function Procedures(context: any ) {
 
                         <ListItem>
                             <ListItemButton 
-                                selected={activeElement === procedure.id}
-                                onClick={() => setActiveElement(procedure.id)}
-                                variant={activeElement === procedure.id ? "soft" : "plain"}
+                                component={RouterLink}
+                                to={`${procedure.id}`}
+                                selected={procedure.id === activeProcedureId}
+                                onClick={() => setActiveProcedureId(procedure.id)}
+                                variant={activeProcedureId === procedure.id ? "soft" : "plain"}
                             >
-
                                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                                     <ContentPasteSharpIcon />
                                 </ListItemDecorator>
                                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
                                     <Typography level="body2" textColor="text.tertiary">{procedure.id}</Typography>
                                     <Typography>{procedure.reason}</Typography>
-                                    <Typography level="body2" textColor="text.tertiary">Records: {procedure.date}</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ format_date(procedure.date) }</Typography>
                                 </Box>
                                 
                             </ListItemButton>   
