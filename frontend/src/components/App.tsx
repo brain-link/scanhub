@@ -22,7 +22,7 @@ import muiTheme from '../utils/theme';
 const joyTheme = extendJoyTheme();
 const theme = deepmerge(muiTheme, joyTheme);
 
-export function App() {
+export default function App() {
 
   return (
     <StyledEngineProvider injectFirst>
@@ -38,7 +38,7 @@ export function App() {
         />
 
         {/* <StyledEngineProvider injectFirst> */}
-
+          
           <Navigation />
 
           {/* Main content */}
@@ -48,10 +48,9 @@ export function App() {
               pt: 8,
               gap: 2,
               justifyContent: 'start',
-              display: 'flex', 
+              display: 'flex',
               flexDirection: 'row',
-              width: 1,
-              
+              maxHeight: '100vh'
           }}>
               <Outlet />
           </Box>

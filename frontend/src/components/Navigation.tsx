@@ -14,6 +14,7 @@ import Box from '@mui/joy/Box';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import { useTheme } from '@mui/material/styles';
 
 // Menu elements
 const menuItems = [
@@ -55,48 +56,47 @@ function ColorSchemeToggle() {
 export default function Navigation() {
 
     const loc = useLocation();
+    const theme = useTheme();
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', position: 'sticky', zIndex: 'snackbar' }}>
-            <AppBar position="fixed" color="inherit">
-                <Toolbar sx={{ gap: 1.5 }}>
+        <AppBar position="fixed" color='default' sx={{ zIndex: 'snackbar', maxHeight: theme.navigation.height }}>
+            <Toolbar sx={{ gap: 1.5 }}>
 
-                    <IconButton variant="plain" href="https://www.brain-link.de/" sx={{ height: 40 }}>
-                        <img
-                            src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
-                            alt=""
-                            height="40"
-                            className="d-inline-block"
-                        />
-                    </IconButton>
+                <IconButton variant="plain" href="https://www.brain-link.de/">
+                    <img
+                        src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
+                        alt=""
+                        height="40"
+                        className="d-inline-block"
+                    />
+                </IconButton>
 
-                    <Typography variant="h4" sx={{ mr: 5 }}>
-                        ScanHub
-                    </Typography> 
+                <Typography variant="h4" sx={{ mr: 5 }}>
+                    ScanHub
+                </Typography> 
 
-                    <>
-                    {
-                        menuItems?.map( item => (
-                            <Button
-                                component={RouterLink}
-                                to={item.link}
-                                color="primary"
-                                startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : <></> }
-                                disabled={ loc.pathname === item.link }
-                                variant={ loc.pathname === item.link ? 'soft' : 'plain' }
-                            >
-                                {item.text}
-                            </Button>
-                        ))
-                    }
-                    </>
+                <>
+                {
+                    menuItems?.map( item => (
+                        <Button
+                            component={RouterLink}
+                            to={item.link}
+                            color="primary"
+                            startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : <></> }
+                            disabled={ loc.pathname === item.link }
+                            variant={ loc.pathname === item.link ? 'soft' : 'plain' }
+                        >
+                            {item.text}
+                        </Button>
+                    ))
+                }
+                </>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
-                        <ColorSchemeToggle />
-                    </Box>
-                    
-                </Toolbar>
-            </AppBar>
-        </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
+                    <ColorSchemeToggle />
+                </Box>
+                
+            </Toolbar>
+        </AppBar>
     );
 }
