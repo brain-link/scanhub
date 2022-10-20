@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-// import { useMutation } from 'react-query';
-// import axios from 'axios';
+import { Outlet, useParams, Link as RouterLink, useLocation } from 'react-router-dom';
 // MUI
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/joy/Box';
@@ -11,15 +9,19 @@ import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 // Icons import
 import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp';
+import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
+import TuneSharpIcon from '@mui/icons-material/TuneSharp';
+import PreviewSharpIcon from '@mui/icons-material/PreviewSharp';
 // Import sub components
-import Procedures from './ProcedureComponent';
+import Procedures from './Procedures';
 import PatientInfo from './PatientInfo';
+import PatientPageMainView from './PatientPageMainView';
+import config from '../utils/config';
 
-// Constants
-const baseURL = "http://localhost:8000/";
-const drawerWidth = 300;
 
-const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>(
+const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
+(
     ({ theme, open }) => (
         {
             flexGrow: 1,
@@ -36,7 +38,7 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
                     easing: theme.transitions.easing.easeOut,
                     duration: theme.transitions.duration.enteringScreen,
                 }),
-                marginLeft: drawerWidth
+                marginLeft: theme.patientView.drawerWidth
             })
         }
     )
@@ -44,19 +46,25 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
 
 export default function PatientIndex() {
 
-    let params = useParams()
+    const theme = useTheme();
+    const params = useParams();
 
+    const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined);
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
 
+    // Set active tool if component is rendered
+    if (params.toolId && params.toolId.toString() !== activeTool) {
+        setActiveTool(params.toolId.toString())
+    }
+
     return (    
-        // TODO: Find better solution for minHeigh property (fully expand div in vertical direction)
-        <div id="page-container" style={{ width: '100%', position: 'relative', minHeight:'92vh' }}>
+        <div id="page-container" style={{ width: '100%', position: 'relative', height: `calc(100vh - ${theme.navigation.height})` }}>
             <Drawer
                 sx={{
-                    width: drawerWidth,
+                    width: theme.patientView.drawerWidth,
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: drawerWidth,
+                        width: theme.patientView.drawerWidth,
                     }
                 }}
                 PaperProps={{ style: { position: 'absolute' } }}
@@ -69,11 +77,11 @@ export default function PatientIndex() {
                 anchor="left"
                 open={sidePanelOpen}
             >
-                <Box sx={{ bgcolor: 'background.componentBg' }}>
+                <Box sx={{ overflow: 'auto', bgcolor: 'background.componentBg' }}>
 
-                    <PatientInfo url={`${baseURL}patients/${params.patientId}/`} />
+                    <PatientInfo />
                     <Divider />
-                    <Procedures procedureURL={`${baseURL}patients/${params.patientId}/procedures/`}/>
+                    <Procedures />
 
                 </Box>
                 
@@ -81,11 +89,12 @@ export default function PatientIndex() {
             </Drawer>
 
             <Main open={sidePanelOpen}>
-                <Box sx={{ display: 'grid', gridTemplateRows: '54px auto', gridTemplateColumns: '1fr', bgcolor: 'background.componentBg'}}>
+                <Box sx={{ display: 'grid', gridTemplateRows: `${theme.patientView.toolbarHeight} auto`, gridTemplateColumns: '1fr', bgcolor: 'background.componentBg'}}>
                     
                     {/* Toolbar */}
                     <Box sx={{ 
                         p: 1.5,
+                        gap: 1,
                         display: 'flex', 
                         flexDirection: 'row', 
                         bgcolor: 'background.componentBg',
@@ -103,25 +112,61 @@ export default function PatientIndex() {
                             color="primary"
                             onClick={() => { setSidePanelOpen(!sidePanelOpen) }}
                         >
-                            <MenuIcon />
+                            {/* <MenuIcon /> */}
+                            { sidePanelOpen ? <KeyboardArrowLeftSharpIcon /> : <KeyboardArrowRightSharpIcon/> }
                         </IconButton>
+
+                        <Box sx={{ pr: 1.5, gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%' }}>
+                            <IconButton
+                                id="toggle-mode"
+                                size="sm"
+                                variant={activeTool == config.tools.configuration ? "soft" : "outlined"}
+                                color="primary"
+                                disabled={!params.recordId}
+                                component={RouterLink}
+                                to={`${params.procedureId}/${params.recordId}/${config.tools.configuration}`}
+                                onClick={() => setActiveTool(config.tools.configuration)}
+                            >
+                                <TuneSharpIcon />
+                            </IconButton>
+                            <IconButton
+                                id="toggle-mode"
+                                size="sm"
+                                variant={activeTool == config.tools.dataview ? "soft" : "outlined"}
+                                color="primary"
+                                disabled={!params.recordId}
+                                component={RouterLink}
+                                to={`${params.procedureId}/${params.recordId}/${config.tools.dataview}`}
+                                onClick={() => setActiveTool(config.tools.dataview)}
+                            >
+                                <PreviewSharpIcon />
+                            </IconButton>
+                        </Box>
 
                         {/* TODO: Insert Breadcrumbs here */}
 
                     </Box>
 
                     {/* Main Content */}
-                    <Box sx={{ display: 'flex', height: '100%' }}>
-                        <Box sx={{ width: '300px', bgcolor: 'background.componentBg'}}> 
+                    {/* <Box sx={{ display: 'flex', height: '86vh' }}> */}
+                    <Box sx={{ display: 'flex', height: `calc(100vh - ${theme.patientView.toolbarHeight} - ${theme.navigation.height})` }}>
+                        <Box sx={{ 
+                            overflow: 'auto', 
+                            width: theme.patientView.recordsWidth, 
+                            bgcolor: 'background.componentBg',
+                            borderRight: '1px solid',
+                            borderColor: 'divider',
+                        }}> 
 
-                            <Procedures procedureURL={`${baseURL}patients/${params.patientId}/procedures/`}/>
+                            {/* Records view */}
+                            <Outlet />
 
                         </Box>
-                        <Box sx={{ flexGrow: 1, bgcolor: '#eee' }}>
 
-                            <Typography sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}> View </Typography>
+                        <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', bgcolor: 'background.componentBg' }}>
+                            <PatientPageMainView/>
+                        </Box>
                         
-                        </Box>
                     </Box>
                 </Box>
             </Main>
