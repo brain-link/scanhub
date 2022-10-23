@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { Outlet, useParams, Link as RouterLink, useLocation } from 'react-router-dom';
+import { Outlet, useParams, Link as RouterLink } from 'react-router-dom';
 // MUI
 import { styled, useTheme } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/joy/Box';
-import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 // Icons import
-import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import TuneSharpIcon from '@mui/icons-material/TuneSharp';
 import PreviewSharpIcon from '@mui/icons-material/PreviewSharp';
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 // Import sub components
 import Procedures from './Procedures';
 import PatientInfo from './PatientInfo';
@@ -48,7 +47,7 @@ export default function PatientIndex() {
 
     const theme = useTheme();
     const params = useParams();
-
+    const recordRef = React.useRef<any>(null);
     const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined);
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
 
@@ -117,8 +116,21 @@ export default function PatientIndex() {
                         </IconButton>
 
                         <Box sx={{ pr: 1.5, gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%' }}>
+
+                            {/* Delete record */}
                             <IconButton
-                                id="toggle-mode"
+                                id="delete-record"
+                                variant="outlined"
+                                size="sm"
+                                color="danger"
+                                disabled={!params.recordId}
+                                onClick={() => { null !== recordRef.current ? recordRef.current.deleteRecord() : () => {} }}
+                            >
+                                <ClearSharpIcon />
+                            </IconButton>
+                            {/* Open sequence handler */}
+                            <IconButton
+                                id="toggle-sequence"
                                 size="sm"
                                 variant={activeTool == config.tools.configuration ? "soft" : "outlined"}
                                 color="primary"
@@ -129,8 +141,9 @@ export default function PatientIndex() {
                             >
                                 <TuneSharpIcon />
                             </IconButton>
+                            {/* Open data viewer */}
                             <IconButton
-                                id="toggle-mode"
+                                id="toggle-dataview"
                                 size="sm"
                                 variant={activeTool == config.tools.dataview ? "soft" : "outlined"}
                                 color="primary"
@@ -141,6 +154,7 @@ export default function PatientIndex() {
                             >
                                 <PreviewSharpIcon />
                             </IconButton>
+                            
                         </Box>
 
                         {/* TODO: Insert Breadcrumbs here */}
@@ -148,7 +162,6 @@ export default function PatientIndex() {
                     </Box>
 
                     {/* Main Content */}
-                    {/* <Box sx={{ display: 'flex', height: '86vh' }}> */}
                     <Box sx={{ display: 'flex', height: `calc(100vh - ${theme.patientView.toolbarHeight} - ${theme.navigation.height})` }}>
                         <Box sx={{ 
                             overflow: 'auto', 
@@ -157,10 +170,7 @@ export default function PatientIndex() {
                             borderRight: '1px solid',
                             borderColor: 'divider',
                         }}> 
-
-                            {/* Records view */}
-                            <Outlet />
-
+                            <Outlet context={{ ref: recordRef }} />
                         </Box>
 
                         <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', bgcolor: 'background.componentBg' }}>
