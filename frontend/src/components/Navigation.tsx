@@ -9,11 +9,21 @@ import { useColorScheme } from '@mui/joy/styles';
 import IconButton from '@mui/joy/IconButton';
 import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
+import Avatar from '@mui/joy/Avatar';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import ListDivider from '@mui/joy/ListDivider';
 
 // Icons
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp';
+import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
+import PersonSharpIcon from '@mui/icons-material/PersonSharp';
+import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+
 import { useTheme } from '@mui/material/styles';
 
 // Menu elements
@@ -58,9 +68,17 @@ export default function Navigation() {
     const loc = useLocation();
     const theme = useTheme();
 
+    const [anchorEl, setAnchorEl] = React.useState<any>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return (
         <AppBar position="fixed" color='default' sx={{ zIndex: 'snackbar', maxHeight: theme.navigation.height }}>
-            <Toolbar sx={{ gap: 1.5 }}>
+            <Toolbar sx={{ gap: 2 }}>
 
                 <IconButton variant="plain" href="https://www.brain-link.de/">
                     <img
@@ -82,7 +100,7 @@ export default function Navigation() {
                             component={RouterLink}
                             to={item.link}
                             color="primary"
-                            startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : <></> }
+                            startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : null }
                             disabled={ loc.pathname === item.link }
                             variant={ loc.pathname === item.link ? 'soft' : 'plain' }
                         >
@@ -95,6 +113,41 @@ export default function Navigation() {
                 <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
                     <ColorSchemeToggle />
                 </Box>
+
+                {/* User menu */}
+                <IconButton variant='plain' onClick={(event) => {setAnchorEl(event.currentTarget)}}>
+                    <Avatar variant='soft' color="primary" />
+                </IconButton>
+                
+                <Menu
+                    id="positioned-demo-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="positioned-demo-button"
+                    placement="bottom-end"
+                    sx={{ zIndex: 'tooltip' }}
+                >
+                    <MenuItem onClick={handleClose}>
+                        <ListItemDecorator>
+                            <PersonSharpIcon />
+                        </ListItemDecorator>{' '}
+                            Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                        <ListItemDecorator>
+                            <AdminPanelSettingsSharpIcon />
+                        </ListItemDecorator>{' '}
+                            Settings
+                    </MenuItem>
+                    <ListDivider />
+                    <MenuItem disabled onClick={handleClose}>
+                        <ListItemDecorator>
+                            <LogoutSharpIcon />
+                        </ListItemDecorator>{' '}
+                            Logout
+                    </MenuItem>
+                </Menu>
                 
             </Toolbar>
         </AppBar>
