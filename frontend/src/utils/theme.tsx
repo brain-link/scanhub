@@ -1,7 +1,7 @@
 import * as React from 'react';
 import colors from '@mui/joy/colors';
 import { deepmerge } from '@mui/utils';
-import { createTheme, experimental_extendTheme as extendMuiTheme } from '@mui/material/styles';
+import { createTheme, experimental_extendTheme as extendMuiTheme, Theme as MuiTheme } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -22,6 +22,10 @@ declare module '@mui/material/styles' {
             recordsWidth?: string;
         },
     }
+}
+
+declare module '@emotion/react' {
+    export interface Theme extends MuiTheme {}
 }
 
 const muiTheme = extendMuiTheme({

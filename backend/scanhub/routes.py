@@ -7,12 +7,6 @@ seq_plot = SequencePlot('/scanhub/scanhub/ressources/epi_pypulseq.seq')
 # Define an api router
 api_router = APIRouter()
 
-@api_router.get("/")
-async def root() -> dict:
-    return dict(
-        msg="Hello World!"
-    )
-
 # Device table data
 @api_router.get("/devices/")
 async def get_devices() -> dict:

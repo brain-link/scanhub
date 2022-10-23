@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 // Theming
 import { GlobalStyles } from '@mui/system';
 import { deepmerge } from '@mui/utils';
-import CssBaseline from '@mui/joy/CssBaseline';
+// import CssBaseline from '@mui/joy/CssBaseline';
 import {
   extendTheme as extendJoyTheme,
   StyledEngineProvider,
@@ -27,7 +27,7 @@ export default function App() {
   return (
     <StyledEngineProvider injectFirst>
       <CssVarsProvider theme={theme}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <GlobalStyles<Theme>
           styles={(theme) => ({
             body: {
