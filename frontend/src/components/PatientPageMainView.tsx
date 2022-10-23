@@ -12,10 +12,13 @@ export default function PatientPageMainView() {
 
     switch(params.toolId) {
         case config.tools.dataview: 
-            return <MRIView />
+            return (
+                <Box sx={{ display: 'flex', width: '100%', height: '100%', bgcolor: '#000', alignItems: 'center' }}>
+                    <MRIView />
+                </Box>
+            )
         case config.tools.configuration: 
             return <SequenceForm />
-            // return <Typography level='h5'> Sequence Configuration </Typography>
         default: 
             return <></>
     }
