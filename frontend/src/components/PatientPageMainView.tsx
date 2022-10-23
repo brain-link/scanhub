@@ -4,6 +4,7 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import config from '../utils/config';
 import { MRIView } from './MRIView';
+import { SequenceForm } from './SequenceHandler';
 
 export default function PatientPageMainView() {
 
@@ -13,8 +14,8 @@ export default function PatientPageMainView() {
         case config.tools.dataview: 
             return <MRIView />
         case config.tools.configuration: 
-            // return <SequenceForm />
-            return <Typography level='h5'> Sequence Configuration </Typography>
+            return <SequenceForm />
+            // return <Typography level='h5'> Sequence Configuration </Typography>
         default: 
             return <></>
     }
