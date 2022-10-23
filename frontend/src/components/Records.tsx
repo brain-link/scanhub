@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useOutletContext } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import Box from '@mui/joy/Box';
+import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
+import TextField from '@mui/joy/TextField';
 import List from '@mui/joy/List';
 import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
@@ -16,37 +18,39 @@ import Divider from '@mui/material/Divider';
 import Badge from '@mui/material/Badge';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
-import Sheet from '@mui/joy/Sheet';
+import ModalDialog from '@mui/joy/ModalDialog';
+import Stack from '@mui/joy/Stack';
 import config from '../utils/config';
 import { Record } from './Interfaces';
 import { format_date } from '../utils/formatter';
 
 export default function Records() {
 
+    const { ref } = useOutletContext<{ ref: any }>();
+
     const params = useParams();
     const [activeRecordId, setActiveRecordId] = React.useState<number | undefined>(undefined);
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
+    const [record, setRecord] = React.useState<Record>( // store intermediate state in record creation
+        { id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" }
+    );
 
     // Set active procedure if component is rendered
     if (params.recordId && Number(params.recordId) !== activeRecordId) {
         setActiveRecordId(Number(params.recordId))
     }
 
-    const [dialogOpen, setDialogOpen] = React.useState(false)
-
-    // Is this single procedure variable necessary?
-    const [record, setRecord] = React.useState<Record>({ id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" });
-    const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
-
+    // Fetch a list of all records and assign them to records
     async function fetchRecords() {
-        console.log(`${config["baseURL"]}/patients/${params.patientId}/${params.procedureId}/records`)
         await axios.get(`${config["baseURL"]}/patients/${params.patientId}/${params.procedureId}/records`)
         .then((response) => {setRecords(response.data)})
     }
-
+    
     // Trigger fetch records, listens to params.procedureId and record
     React.useEffect(() => {
         fetchRecords()
-    }, [params.procedureId, record]);
+    }, [params.procedureId, record, params.recordId]);
 
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
@@ -59,6 +63,14 @@ export default function Records() {
             console.log(err)
         })
     })
+
+    // Use imperative handle to define a delete record function, which can be called from parent by ref
+    React.useImperativeHandle(ref, () => ({
+        async deleteRecord() {
+            await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}/records/${params.recordId}/`)
+            .then(() => { fetchRecords(); })
+        }
+    }))
 
     return (
         <Box>
@@ -73,17 +85,23 @@ export default function Records() {
                     <AddSharpIcon onClick={() => setDialogOpen(true)}/>
                 </IconButton>
 
-                {/* Model */}
-                <Modal
+                <Modal 
                     keepMounted
                     open={dialogOpen}
                     color='neutral'
                     onClose={() => setDialogOpen(false)}
                     sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                 >
-                    <Sheet
-                        variant="outlined"
-                        sx={{ width: '50vh', height: '50vh', borderRadius: 'md', p: 3 }}
+                    <ModalDialog
+                        aria-labelledby="basic-modal-dialog-title"
+                        aria-describedby="basic-modal-dialog-description"
+                        sx={{
+                            width: '50vh', 
+                            // height: '50vh',
+                            borderRadius: 'md',
+                            p: 5,
+                            // boxShadow: 'lg',
+                        }}
                     >
                         <ModalClose
                             sx={{
@@ -93,15 +111,42 @@ export default function Records() {
                                 bgcolor: 'background.body',
                             }}
                         />
-                        <Typography level="h4" textColor="inherit">
-                            Add New Record
+                        <Typography
+                            id="basic-modal-dialog-title"
+                            component="h2"
+                            level="inherit"
+                            fontSize="1.25em"
+                            mb="0.25em"
+                        >
+                            Create new record
                         </Typography>
-                        <Typography id="modal-desc" textColor="text.tertiary">
-                            Parameters...
-                        </Typography>
-                    </Sheet>
+                        
+                        <form
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                mutation.mutate();
+                                setDialogOpen(false);
+                            }}
+                        >
+                            <Stack spacing={2}>
+                                <TextField 
+                                    label="Comment" 
+                                    name='comment'
+                                    onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
+                                    autoFocus 
+                                    required 
+                                />
+                                <TextField 
+                                    label="Device ID" 
+                                    name='device_id'
+                                    onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
+                                    required 
+                                />
+                                <Button type="submit">Submit</Button>
+                            </Stack>
+                        </form>
+                    </ModalDialog>
                 </Modal>
-
 
             </Box>
                 
@@ -139,3 +184,4 @@ export default function Records() {
         </Box>
     );  
 }
+// )

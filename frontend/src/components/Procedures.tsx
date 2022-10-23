@@ -9,14 +9,21 @@ import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
+// import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ContentPasteSharpIcon from '@mui/icons-material/ContentPasteSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import IconButton from '@mui/joy/IconButton';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/joy/Button';
+import TextField from '@mui/joy/TextField';
 import Badge from '@mui/material/Badge';
 import config from '../utils/config';
+import Stack from '@mui/joy/Stack';
 import { useQuery } from "react-query";
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import ModalDialog from '@mui/joy/ModalDialog';
 
 import { Procedure } from './Interfaces';
 import { format_date } from '../utils/formatter';
@@ -25,6 +32,11 @@ export default function Procedures() {
 
     const params = useParams();
     const [activeProcedureId, setActiveProcedureId] = React.useState<number | undefined>(undefined);
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
+    const [procedure, setProcedure] = React.useState<Procedure>(
+        { id: 0, patient_id: 0, reason: "", date: "" }
+    );
 
     React.useEffect(() => {
         if (params.procedureId && Number(params.procedureId) !== activeProcedureId){
@@ -32,34 +44,29 @@ export default function Procedures() {
         }
     }, [params.procedureId]);
 
-    // Is this single procedure variable necessary?
-    const [procedure, setProcedure] = React.useState<Procedure>({ id: 0, patient_id: 0, reason: "", date: "" });
-    const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
-
     // Define fetch function for procedures table
     async function fetchProcedures () {
-        console.log(`${config['baseURL']}/patients/${params.patientId}/procedures`)
-        await axios.get(`${config['baseURL']}/patients/${params.patientId}/procedures`).then((response) => {
-            setProcedures(response.data)
-        })
-        // const {data, isSuccess} = useQuery<Procedure[]>(`/patients/${params.patientId}/procedures`);
-        // isSuccess ? setProcedures(data) : () => {}
+        await axios.get(`${config['baseURL']}/patients/${params.patientId}/procedures`)
+        .then((response) => { setProcedures(response.data) })
     };
+
+    async function deleteProcedure() {
+        await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}`)
+        .then(() => { fetchProcedures(); })
+    }
 
     // fetch procedures
     React.useEffect(() => {
         fetchProcedures();
-    }, []);
+    }, [params.procedureId]);
 
     const mutation = useMutation(async() => {
         await axios.post(`${config['baseURL']}/patients/${params.patientId}/procedures/new`, procedure)
         .then((response) => {
-            setProcedure(response.data) // required?
+            setProcedure(response.data)
             fetchProcedures()
         })
-        .catch((err) => {
-            console.log(err)
-        })
+        .catch((err) => { console.log(err) })
     })
 
     return (
@@ -71,9 +78,80 @@ export default function Procedures() {
                     <Badge badgeContent={procedures?.length} color="primary"/>
                 </Box>
 
-                <IconButton size='sm' variant='outlined'>
-                    <AddSharpIcon />
-                </IconButton>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                    <IconButton
+                        id="delete-record"
+                        variant="outlined"
+                        size="sm"
+                        color="danger"
+                        disabled={!params.procedureId}
+                        onClick={() => { deleteProcedure(); }}
+                    >
+                        <ClearSharpIcon />
+                    </IconButton>
+                    <IconButton size='sm' variant='outlined'>
+                        <AddSharpIcon onClick={() => setDialogOpen(true)}/>
+                    </IconButton>
+                </Box>
+            
+
+                <Modal 
+                    keepMounted
+                    open={dialogOpen}
+                    color='neutral'
+                    onClose={() => setDialogOpen(false)}
+                    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <ModalDialog
+                        aria-labelledby="basic-modal-dialog-title"
+                        aria-describedby="basic-modal-dialog-description"
+                        sx={{ width: '50vh', borderRadius: 'md', p: 5 }}
+                    >
+                        <ModalClose
+                            sx={{
+                                top: '10px',
+                                right: '10px',
+                                borderRadius: '50%',
+                                bgcolor: 'background.body',
+                            }}
+                        />
+                        <Typography
+                            id="basic-modal-dialog-title"
+                            component="h2"
+                            level="inherit"
+                            fontSize="1.25em"
+                            mb="0.25em"
+                        >
+                            Create new procedure
+                        </Typography>
+                        
+                        <form
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                mutation.mutate();
+                                setDialogOpen(false);
+                            }}
+                        >
+                            <Stack spacing={2}>
+                                <TextField 
+                                    label="Patient concern" 
+                                    name='reason'
+                                    onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
+                                    autoFocus 
+                                    required 
+                                />
+                                <TextField 
+                                    label="Date" 
+                                    name='date'
+                                    onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
+                                    required 
+                                />
+                                <Button type="submit">Submit</Button>
+                            </Stack>
+                        </form>
+                    </ModalDialog>
+                </Modal>
+
 
             </Box>
                 

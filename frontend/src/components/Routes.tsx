@@ -19,7 +19,6 @@ export function RouteConfiguration () {
                     <Route path=':patientId' element={<PatientIndex/>} >
                         <Route path=':procedureId' element={<Records/>}>
                             <Route path=':recordId' element={<PatientPageMainView/>}>
-                                {/* <Route path='/view'/> */}
                                 <Route path=':toolId'/>
                             </Route>
                         </Route>
