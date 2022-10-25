@@ -11,14 +11,19 @@ import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
 import FilterCenterFocusSharpIcon from '@mui/icons-material/FilterCenterFocusSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import IconButton from '@mui/joy/IconButton';
+// import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Badge from '@mui/material/Badge';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
+import EditSharpIcon from '@mui/icons-material/EditSharp';
 import Stack from '@mui/joy/Stack';
 import config from '../utils/config';
 import { Record } from './Interfaces';
@@ -29,12 +34,25 @@ export default function Records() {
     const { ref } = useOutletContext<{ ref: any }>();
 
     const params = useParams();
-    const [activeRecordId, setActiveRecordId] = React.useState<number | undefined>(undefined);
-    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [activeRecordId, setActiveRecordId] = React.useState<number | null>(null);
+    const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [contextOpen, setContextOpen] = React.useState<number | null>(null);
     const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
     const [record, setRecord] = React.useState<Record>( // store intermediate state in record creation
         { id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" }
     );
+
+    const handleContextClose = () => {
+        setAnchorEl(null);
+        setContextOpen(null);
+    }
+
+    const handleContextOpen = (e, recordId) => {
+        e.preventDefault();
+        setAnchorEl(e.currentTarget);
+        setContextOpen(recordId);
+    }
 
     // Set active procedure if component is rendered
     if (params.recordId && Number(params.recordId) !== activeRecordId) {
@@ -71,6 +89,11 @@ export default function Records() {
             .then(() => { fetchRecords(); })
         }
     }))
+
+    async function deleteRecordId(recordId) {
+        await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}/records/${recordId}/`)
+        .then(() => { fetchRecords(); })
+    }
 
     return (
         <Box>
@@ -152,17 +175,19 @@ export default function Records() {
                 
             <Divider />
 
-            <List sx={{ pt: 0 }}>
+            <List size="sm" sx={{ pt: 0 }}>
                 {records?.map((record, index) => (
                     <React.Fragment key={index}>
 
                         <ListItem>
                             <ListItemButton 
+                                id="record-item"
                                 component={RouterLink}
                                 to={`${record.id}`}
                                 selected={record.id === activeRecordId}
                                 onClick={() => setActiveRecordId(record.id)}
-                                variant={record.id === activeRecordId ? "soft" : "plain"}
+                                variant={(record.id === activeRecordId || record.id === contextOpen) ? "soft" : "plain" }
+                                onContextMenu={(e) => handleContextOpen(e, record.id)}
                             >
                                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                                     <FilterCenterFocusSharpIcon />
@@ -173,14 +198,40 @@ export default function Records() {
                                     <Typography level="body2" textColor="text.tertiary">{ format_date(record.date) }</Typography>
                                     <Typography level="body2" textColor="text.tertiary"> Device ID: { record.device_id }</Typography>
                                 </Box>
+
+                                <Menu   
+                                    id="record-context"
+                                    anchorEl={anchorEl}
+                                    open={record.id === contextOpen}
+                                    onClose={() => handleContextClose()}
+                                    sx={{ zIndex: 'snackbar' }}
+                                    placement='auto'
+                                >
+                                    <MenuItem key="edit-record" variant='plain' disabled>
+                                        <ListItemDecorator>
+                                            <EditSharpIcon />
+                                        </ListItemDecorator>{' '}
+                                            Edit record
+                                    </MenuItem>
+                                    <ListDivider />
+                                    <MenuItem key="delete-record" color='danger' onClick={() => { deleteRecordId(record.id); }}>
+                                        <ListItemDecorator>
+                                            <ClearSharpIcon />
+                                        </ListItemDecorator>{' '}
+                                            Delete record
+                                    </MenuItem>
+
+                                </Menu>
                                 
-                            </ListItemButton>   
+                            </ListItemButton>  
+
                         </ListItem>
 
                         <ListDivider sx={{ m: 0 }} />
                     </React.Fragment>
                 ))}
             </List>
+
         </Box>
     );  
 }

@@ -70,12 +70,7 @@ export default function Navigation() {
 
     const [anchorEl, setAnchorEl] = React.useState<any>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
     return (
         <AppBar position="fixed" color='default' sx={{ zIndex: 'snackbar', maxHeight: theme.navigation.height }}>
             <Toolbar sx={{ gap: 2 }}>
@@ -115,7 +110,7 @@ export default function Navigation() {
                 </Box>
 
                 {/* User menu */}
-                <IconButton variant='plain' onClick={(event) => {setAnchorEl(event.currentTarget)}}>
+                <IconButton variant='plain' onClick={(event) => { setAnchorEl(event.currentTarget)}}>
                     <Avatar variant='soft' color="primary" />
                 </IconButton>
                 
@@ -123,25 +118,25 @@ export default function Navigation() {
                     id="positioned-demo-menu"
                     anchorEl={anchorEl}
                     open={open}
-                    onClose={handleClose}
+                    onClose={() => {setAnchorEl(null)}}
                     aria-labelledby="positioned-demo-button"
                     placement="bottom-end"
                     sx={{ zIndex: 'tooltip' }}
                 >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={() => {setAnchorEl(null)}}>
                         <ListItemDecorator>
                             <PersonSharpIcon />
                         </ListItemDecorator>{' '}
                             Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={() => {setAnchorEl(null)}}>
                         <ListItemDecorator>
                             <AdminPanelSettingsSharpIcon />
                         </ListItemDecorator>{' '}
                             Settings
                     </MenuItem>
                     <ListDivider />
-                    <MenuItem disabled onClick={handleClose}>
+                    <MenuItem disabled onClick={() => {setAnchorEl(null)}}>
                         <ListItemDecorator>
                             <LogoutSharpIcon />
                         </ListItemDecorator>{' '}

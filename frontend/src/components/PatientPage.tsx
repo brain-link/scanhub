@@ -118,7 +118,7 @@ export default function PatientIndex() {
                         <Box sx={{ pr: 1.5, gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%' }}>
 
                             {/* Delete record */}
-                            <IconButton
+                            {/* <IconButton
                                 id="delete-record"
                                 variant="outlined"
                                 size="sm"
@@ -127,7 +127,7 @@ export default function PatientIndex() {
                                 onClick={() => { null !== recordRef.current ? recordRef.current.deleteRecord() : () => {} }}
                             >
                                 <ClearSharpIcon />
-                            </IconButton>
+                            </IconButton> */}
                             {/* Open sequence handler */}
                             <IconButton
                                 id="toggle-sequence"

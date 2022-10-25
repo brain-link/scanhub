@@ -9,10 +9,12 @@ import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-// import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
+import EditSharpIcon from '@mui/icons-material/EditSharp';
 import ContentPasteSharpIcon from '@mui/icons-material/ContentPasteSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
-import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import IconButton from '@mui/joy/IconButton';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/joy/Button';
@@ -33,10 +35,23 @@ export default function Procedures() {
     const params = useParams();
     const [activeProcedureId, setActiveProcedureId] = React.useState<number | undefined>(undefined);
     const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [contextOpen, setContextOpen] = React.useState<number | null>(null);
     const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
     const [procedure, setProcedure] = React.useState<Procedure>(
         { id: 0, patient_id: 0, reason: "", date: "" }
     );
+
+    const handleContextClose = () => {
+        setAnchorEl(null);
+        setContextOpen(null);
+    }
+
+    const handleContextOpen = (e, procedureId) => {
+        e.preventDefault();
+        setAnchorEl(e.currentTarget);
+        setContextOpen(procedureId);
+    }
 
     React.useEffect(() => {
         if (params.procedureId && Number(params.procedureId) !== activeProcedureId){
@@ -50,8 +65,8 @@ export default function Procedures() {
         .then((response) => { setProcedures(response.data) })
     };
 
-    async function deleteProcedure() {
-        await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}`)
+    async function deleteProcedure(procedureId) {
+        await axios.delete(`${config.baseURL}/patients/${params.patientId}/${procedureId}`)
         .then(() => { fetchProcedures(); })
     }
 
@@ -79,7 +94,7 @@ export default function Procedures() {
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 1 }}>
-                    <IconButton
+                    {/* <IconButton
                         id="delete-record"
                         variant="outlined"
                         size="sm"
@@ -88,7 +103,7 @@ export default function Procedures() {
                         onClick={() => { deleteProcedure(); }}
                     >
                         <ClearSharpIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton size='sm' variant='outlined'>
                         <AddSharpIcon onClick={() => setDialogOpen(true)}/>
                     </IconButton>
@@ -163,11 +178,13 @@ export default function Procedures() {
 
                         <ListItem>
                             <ListItemButton 
+                                id="procedure-item"
                                 component={RouterLink}
                                 to={`${procedure.id}`}
                                 selected={procedure.id === activeProcedureId}
                                 onClick={() => setActiveProcedureId(procedure.id)}
-                                variant={activeProcedureId === procedure.id ? "soft" : "plain"}
+                                variant={(procedure.id === activeProcedureId || procedure.id === contextOpen)? "soft" : "plain"}
+                                onContextMenu={(e) => handleContextOpen(e, procedure.id)}
                             >
                                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                                     <ContentPasteSharpIcon />
@@ -177,6 +194,30 @@ export default function Procedures() {
                                     <Typography>{procedure.reason}</Typography>
                                     <Typography level="body2" textColor="text.tertiary">{ format_date(procedure.date) }</Typography>
                                 </Box>
+
+                                <Menu   
+                                    id="procedure-context"
+                                    anchorEl={anchorEl}
+                                    open={procedure.id === contextOpen}
+                                    onClose={() => handleContextClose()}
+                                    sx={{ zIndex: 'snackbar' }}
+                                    placement='auto'
+                                >
+                                    <MenuItem key="edit-procedure" variant='plain' disabled>
+                                        <ListItemDecorator>
+                                            <EditSharpIcon />
+                                        </ListItemDecorator>{' '}
+                                            Edit procedure
+                                    </MenuItem>
+                                    <ListDivider />
+                                    <MenuItem key="delete-procedure" color='danger' onClick={() => { deleteProcedure(procedure.id); }}>
+                                        <ListItemDecorator>
+                                            <ClearSharpIcon />
+                                        </ListItemDecorator>{' '}
+                                            Delete procedure
+                                    </MenuItem>
+
+                                </Menu>
                                 
                             </ListItemButton>   
                         </ListItem>

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Outlet, useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Box from '@mui/joy/Box';
-import Typography from '@mui/joy/Typography';
 import config from '../utils/config';
 import { MRIView } from './MRIView';
 import { SequenceForm } from './SequenceHandler';
