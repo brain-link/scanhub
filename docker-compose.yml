@@ -10,19 +10,21 @@ services:
     ports:
       - 8001:8000
     environment:
-      - DATABASE_URI=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev
+      - DATABASE_URI=postgresql://reco_db_username:reco_db_password@reco_db/reco_db_dev
       - DEVICE_SERVICE_HOST_URL=http://device-controller-service:8000/api/v1/devices/
     depends_on:
-      - movie_db
+      - reco_db
 
-  movie_db:
+  reco_db:
     image: postgres:12.1-alpine
     volumes:
-      - postgres_data_movie:/var/lib/postgresql/data/
+      - postgres_data_reco:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=movie_db_username
-      - POSTGRES_PASSWORD=movie_db_password
-      - POSTGRES_DB=movie_db_dev
+      - POSTGRES_USER=reco_db_username
+      - POSTGRES_PASSWORD=reco_db_password
+      - POSTGRES_DB=reco_db_dev
+    ports:
+      - "5432:5432"
 
   device-controller-service:
     build: ./services/device-controller-service
@@ -45,7 +47,7 @@ services:
       - POSTGRES_PASSWORD=device_db_password
       - POSTGRES_DB=device_db_dev
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   nginx:
     image: nginx:latest
@@ -266,6 +268,6 @@ services:
 
 
 volumes:
-  postgres_data_movie:
+  postgres_data_reco:
   postgres_data_device:
   pgadmin-data:
