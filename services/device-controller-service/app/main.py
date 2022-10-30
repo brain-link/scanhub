@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api.casts import casts
+from app.api.devices import devices
 from app.api.db import metadata, database, engine
 
 metadata.create_all(engine)
@@ -14,4 +14,4 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-app.include_router(casts, prefix='/api/v1/devices', tags=['devices'])
+app.include_router(devices, prefix='/api/v1/devices', tags=['devices'])

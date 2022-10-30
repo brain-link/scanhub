@@ -32,18 +32,20 @@ services:
     ports:
       - 8002:8000
     environment:
-      - DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev
+      - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
     depends_on:
-      - cast_db
+      - device_db
 
-  cast_db:
+  device_db:
     image: postgres:12.1-alpine
     volumes:
-      - postgres_data_cast:/var/lib/postgresql/data/
+      - postgres_data_device:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=cast_db_username
-      - POSTGRES_PASSWORD=cast_db_password
-      - POSTGRES_DB=cast_db_dev
+      - POSTGRES_USER=device_db_username
+      - POSTGRES_PASSWORD=device_db_password
+      - POSTGRES_DB=device_db_dev
+    ports:
+      - "5432:5432"
 
   nginx:
     image: nginx:latest
@@ -55,6 +57,16 @@ services:
       - device-controller-service
       - reco-service
 
+  ## Postgres Admin Tool
+  pgadmin:
+    container_name: pgAdmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
 
 #   device-controller-service:
 #     container_name: device-controller-service
@@ -64,7 +76,6 @@ services:
 #       - ./services/device-controller/:/app/
 #     ports:
 #       - 8002:8000
-
 
 # ## reverse proxy
 #   nginx-proxy:
@@ -256,4 +267,5 @@ services:
 
 volumes:
   postgres_data_movie:
-  postgres_data_cast:
+  postgres_data_device:
+  pgadmin-data:
