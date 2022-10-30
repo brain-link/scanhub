@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-class CastIn(BaseModel):
+class DeviceIn(BaseModel):
     name: str
     nationality: Optional[str] = None
 
 
-class CastOut(CastIn):
+class DeviceOut(DeviceIn):
     id: int
 
 
-class CastUpdate(CastIn):
+class DeviceUpdate(DeviceIn):
     name: Optional[str] = None

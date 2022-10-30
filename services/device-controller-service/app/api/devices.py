@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 
-from app.api.models import CastOut, CastIn, CastUpdate
+from app.api.models import DeviceOut, DeviceIn, DeviceUpdate
 from app.api import db_manager
 
 devices = APIRouter()
 
-@devices.post('/', response_model=CastOut, status_code=201)
-async def create_device(payload: CastIn):
+@devices.post('/', response_model=DeviceOut, status_code=201)
+async def create_device(payload: DeviceIn):
     device_id = await db_manager.add_device(payload)
 
     response = {
@@ -17,7 +17,7 @@ async def create_device(payload: CastIn):
 
     return response
 
-@devices.get('/{id}/', response_model=CastOut)
+@devices.get('/{id}/', response_model=DeviceOut)
 async def get_device(id: int):
     device = await db_manager.get_device(id)
     if not device:

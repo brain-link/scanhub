@@ -1,8 +1,8 @@
-from app.api.models import CastIn, CastOut, CastUpdate
+from app.api.models import DeviceIn, DeviceOut, DeviceUpdate
 from app.api.db import devices, database
 
 
-async def add_device(payload: CastIn):
+async def add_device(payload: DeviceIn):
     query = devices.insert().values(**payload.dict())
 
     return await database.execute(query=query)

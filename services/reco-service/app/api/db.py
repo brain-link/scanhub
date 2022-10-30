@@ -17,7 +17,7 @@ movies = Table(
     Column('name', String(50)),
     Column('plot', String(250)),
     Column('genres', ARRAY(String)),
-    Column('casts_id', ARRAY(Integer))
+    Column('devices_id', ARRAY(Integer))
 )
 
 database = Database(DATABASE_URI)
