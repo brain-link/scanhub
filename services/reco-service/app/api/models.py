@@ -1,18 +1,18 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-class MovieIn(BaseModel):
+class RecoIn(BaseModel):
     name: str
     plot: str
     genres: List[str]
     devices_id: List[int]
 
 
-class MovieOut(MovieIn):
+class RecoOut(RecoIn):
     id: int
 
 
-class MovieUpdate(MovieIn):
+class RecoUpdate(RecoIn):
     name: Optional[str] = None
     plot: Optional[str] = None
     genres: Optional[List[str]] = None

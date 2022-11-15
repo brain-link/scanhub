@@ -1,14 +1,14 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
 
-from app.api.models import MovieOut, MovieIn, MovieUpdate
+from app.api.models import RecoOut, RecoIn, RecoUpdate
 from app.api import db_manager
 from app.api.service import is_device_present
 
 recos = APIRouter()
 
-@recos.post('/', response_model=MovieOut, status_code=201)
-async def create_reco(payload: MovieIn):
+@recos.post('/', response_model=RecoOut, status_code=201)
+async def create_reco(payload: RecoIn):
     for device_id in payload.devices_id:
         if not is_device_present(device_id):
             raise HTTPException(status_code=404, detail=f"Device with given id:{device_id} not found")
@@ -21,19 +21,19 @@ async def create_reco(payload: MovieIn):
 
     return response
 
-@recos.get('/', response_model=List[MovieOut])
+@recos.get('/', response_model=List[RecoOut])
 async def get_recos():
     return await db_manager.get_all_recos()
 
-@recos.get('/{id}/', response_model=MovieOut)
+@recos.get('/{id}/', response_model=RecoOut)
 async def get_reco(id: int):
     reco = await db_manager.get_reco(id)
     if not reco:
         raise HTTPException(status_code=404, detail="Movie not found")
     return reco
 
-@recos.put('/{id}/', response_model=MovieOut)
-async def update_reco(id: int, payload: MovieUpdate):
+@recos.put('/{id}/', response_model=RecoOut)
+async def update_reco(id: int, payload: RecoUpdate):
     reco = await db_manager.get_reco(id)
     if not reco:
         raise HTTPException(status_code=404, detail="Movie not found")
@@ -45,7 +45,7 @@ async def update_reco(id: int, payload: MovieUpdate):
             if not is_device_present(device_id):
                 raise HTTPException(status_code=404, detail=f"Device with given id:{device_id} not found")
 
-    reco_in_db = MovieIn(**reco)
+    reco_in_db = RecoIn(**reco)
 
     updated_reco = reco_in_db.copy(update=update_data)
 
