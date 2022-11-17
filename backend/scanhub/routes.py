@@ -29,6 +29,18 @@ async def get_patients() -> dict:
     patients = await models.Patient.all()
     return patients
 
+# Create a new patient
+@api_router.post("/patients/new")
+async def create_patient(patient_data: models.CreatePatient):
+    print(patient_data.dict())
+    new_patient = await models.Patient.create(
+        sex=patient_data.sex,
+        birthday=patient_data.birthday,
+        concern=patient_data.concern,
+    )
+    await new_patient.save()
+    return new_patient
+
 # Get a patient by id
 @api_router.get("/patients/{patient_id}/")
 async def get_patient(patient_id: int) -> dict:
@@ -77,7 +89,7 @@ async def create_record(record_data: models.Create_Record, procedure_id: int) ->
 
     # TODO: Generate DICOM file in here (maybe check for errors in record creation first)
     
-    print(record_data.dict())
+    # print(record_data.dict())
 
     # device = await models.Device.get(id=record_data.device_id)
     device = await models.Device.get(id=1)
@@ -85,6 +97,7 @@ async def create_record(record_data: models.Create_Record, procedure_id: int) ->
 
     new_record = await models.Recordings.create(
         comment=record_data.comment,
+        data=record_data.data,
         procedure=procedure,
         device=device
     )

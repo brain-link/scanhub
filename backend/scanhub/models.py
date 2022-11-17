@@ -25,7 +25,7 @@ class Patient(models.Model):
     id = fields.IntField(pk=True, null=False, unique=True)
     sex: PatientSex = fields.IntEnumField(
         PatientSex, default=PatientSex.NONE, null=False)
-    birthday = fields.DateField(null=False)
+    birthday = fields.TextField(null=False) # fields.DateField(null=False)
     concern = fields.TextField(null=False)
     admission_date = fields.DatetimeField(auto_now_add=True, null=False)
     status: PatientStatus = fields.IntEnumField(
@@ -35,8 +35,6 @@ class CreatePatient(BaseModel, extra=Extra.ignore):
     sex: int
     birthday: str
     concern: str
-    admission_date: str
-    status = int
 
 
 class Procedures(models.Model):
