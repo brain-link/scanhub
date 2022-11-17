@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/joy/Box';
 import config from '../utils/config';
-import { MRIView } from './MRIView';
+import MRIView from './MRIView';
 import { SequenceForm } from './SequenceHandler';
 
 export default function PatientPageMainView() {
@@ -17,7 +17,11 @@ export default function PatientPageMainView() {
                 </Box>
             )
         case config.tools.configuration: 
-            return <SequenceForm />
+            return (
+                <Box sx={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                    <SequenceForm />
+                </Box>
+            )
         default: 
             return <></>
     }

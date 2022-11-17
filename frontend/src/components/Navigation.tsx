@@ -98,6 +98,7 @@ export default function Navigation() {
                             startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : null }
                             disabled={ loc.pathname === item.link }
                             variant={ loc.pathname === item.link ? 'soft' : 'plain' }
+                            key={item.id}
                         >
                             {item.text}
                         </Button>
@@ -123,20 +124,20 @@ export default function Navigation() {
                     placement="bottom-end"
                     sx={{ zIndex: 'tooltip' }}
                 >
-                    <MenuItem onClick={() => {setAnchorEl(null)}}>
+                    <MenuItem key='profile' onClick={() => {setAnchorEl(null)}}>
                         <ListItemDecorator>
                             <PersonSharpIcon />
                         </ListItemDecorator>{' '}
                             Profile
                     </MenuItem>
-                    <MenuItem onClick={() => {setAnchorEl(null)}}>
+                    <MenuItem key='settings' onClick={() => {setAnchorEl(null)}}>
                         <ListItemDecorator>
                             <AdminPanelSettingsSharpIcon />
                         </ListItemDecorator>{' '}
                             Settings
                     </MenuItem>
                     <ListDivider />
-                    <MenuItem disabled onClick={() => {setAnchorEl(null)}}>
+                    <MenuItem key='logout' disabled onClick={() => {setAnchorEl(null)}}>
                         <ListItemDecorator>
                             <LogoutSharpIcon />
                         </ListItemDecorator>{' '}

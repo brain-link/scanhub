@@ -56,7 +56,9 @@ export function SequenceForm() {
                 data={plotData} 
                 layout={{
                     margin: { l: 50, r: 50, t: 10, b: 50 },
-                    autosize: true,
+                    autosize: false,
+                    width: 1000,
+                    height: 700,
                     xaxis: {
                         ticks: 'outside',
                         title: "Time [ms]",
