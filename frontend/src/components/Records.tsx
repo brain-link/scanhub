@@ -153,15 +153,22 @@ export default function Records() {
                         >
                             <Stack spacing={2}>
                                 <TextField 
-                                    label="Comment" 
+                                    label='Comment' 
                                     name='comment'
                                     onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
                                     autoFocus 
                                     required 
                                 />
                                 <TextField 
-                                    label="Device ID" 
+                                    label='Device ID'
                                     name='device_id'
+                                    onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
+                                    required 
+                                />
+                                <TextField 
+                                    label='Data'
+                                    name='data'
+                                    placeholder='Enter http link to DICOM file...'
                                     onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
                                     required 
                                 />
