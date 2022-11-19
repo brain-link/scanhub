@@ -4,8 +4,12 @@ const config = {
         configuration: 'config',
         dataview: 'view'
     },
-    // dicomSample: "https://www.dicomlibrary.com?requestType=WADO&studyUID=1.2.826.0.1.3680043.8.1055.1.20111103111148288.98361414.79379639&manage=02ef8f31ea86a45cfce6eb297c274598&token=8f71f81452d6b32ccfbd30431299809c",
-    dicomSample: "dicomweb://raw.githubusercontent.com/Anush-DP/gdcmdata/master/MR-SIEMENS-DICOM-WithOverlays.dcm",
+    // dicomSample: "dicomweb://raw.githubusercontent.com/Anush-DP/gdcmdata/master/MR-SIEMENS-DICOM-WithOverlays.dcm",
+    // dicomSample1: "dicomweb:https://marketing.webassets.siemens-healthineers.com/1800000000016144/8de2b3a4af48/IMA08_1800000000016144.IMA",
+    // dicomSample2: "dicomweb:https://marketing.webassets.siemens-healthineers.com/1800000000034108/3320b98db24a/IMA01_1800000000034108.IMA",
+    // dicomSample: "wadouri:http://localhost:8043/wado?objectUID=1.2.826.0.1.3680043.2.1125.1.43099495893956056717571214082434568&requestType=WADO&contentType=application%2Fdicom",
+    dicomSample: "dicomweb:http://localhost:8042/wado?objectUID=1.3.12.2.1107.5.2.30.10003.30000008070707384689000000409&requestType=WADO&contentType=application%2Fdicom",
 };
 
 export default config;
+

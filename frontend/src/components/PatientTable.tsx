@@ -1,4 +1,4 @@
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Patient } from './Interfaces'
 import { useMutation } from "react-query";
 import axios from 'axios';
@@ -46,14 +46,14 @@ export default function PatientTable() {
         fetchPatients()
         // patients?.sort((a, b) => {return b.id - a.id})
         console.log("fetched patients...")
-    }, [!dialogOpen]);
+    }, []);
 
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
         await axios.post(`${config["baseURL"]}/patients/new`, patient)
         .then((response) => {
-            // setPatient(response.data)
-            console.log(response.data)
+            setPatient(response.data);
+            fetchPatients();
         })
         .catch((err) => { console.log(err) })
     })

@@ -24,6 +24,7 @@ export interface Device {
     address: string;
     site_id: number;
     site: string;
+    created_at: string;
 }
 
 export interface Procedure {
