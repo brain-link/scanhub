@@ -1,16 +1,18 @@
-import React, { Component } from 'react'
+import * as React from 'react';
 
 import CornerstoneViewport from "react-cornerstone-viewport"
 import * as cornerstone from "cornerstone-core";
 import * as cornerstoneMath from "cornerstone-math";
 import * as cornerstoneTools from "cornerstone-tools";
 import Hammer from "hammerjs";
+import axios from 'axios';
 
 import dicomParser from "dicom-parser";
 import cornerstoneWADOImageLoader from "cornerstone-wado-image-loader";
 // import * as cornerstoneWebImageLoader from "cornerstone-web-image-loader";
 
 import config from '../utils/config';
+import { useParams } from 'react-router-dom';
 
 cornerstoneTools.external.cornerstone = cornerstone;
 cornerstoneTools.external.Hammer = Hammer;
@@ -61,43 +63,56 @@ cornerstoneWADOImageLoader.webWorkerManager.initialize({
   }
 });
 
-// export function MRIView() {
-export class MRIView extends Component {
-    render() {
-        return (
-            <CornerstoneViewport
-                imageIds={[
-                    // "wadouri:http://localhost:8043/wado?objectUID=1.2.826.0.1.3680043.2.1125.1.43099495893956056717571214082434568&requestType=WADO&contentType=application%2Fdicom"
-                    // "dicomweb://raw.githubusercontent.com/Anush-DP/gdcmdata/master/MR-SIEMENS-DICOM-WithOverlays.dcm"
-                    // "https://rawgit.com/cornerstonejs/cornerstoneWebImageLoader/master/examples/Renal_Cell_Carcinoma.jpg"
-                    config.dicomSample
-                ]}
-                tools={[
-                    // Mouse
-                    {
-                        name: 'Wwwc',
-                        mode: 'active',
-                        modeOptions: { mouseButtonMask: 1 },
-                    },
-                    {
-                        name: 'Zoom',
-                        mode: 'active',
-                        modeOptions: { mouseButtonMask: 2 },
-                    },
-                    {
-                        name: 'Pan',
-                        mode: 'active',
-                        modeOptions: { mouseButtonMask: 4 },
-                    },
-                    // Scroll
-                    { name: 'StackScrollMouseWheel', mode: 'active' },
-                    // Touch
-                    { name: 'PanMultiTouch', mode: 'active' },
-                    { name: 'ZoomTouchPinch', mode: 'active' },
-                    { name: 'StackScrollMultiTouch', mode: 'active' },
-                ]}
-                style={{ minWidth: "100%", height: "100%", flex: "1" }}
-            />
-        )
+export function MRIView() {
+
+    const params = useParams();
+    const [dataUrl, setDataUrl] = React.useState<String | null>(null);
+
+    async function get_record_data() {
+        await axios.get(`${config.baseURL}/records/${params.recordId}`)
+        .then((response) => {
+            setDataUrl(response.data.data ? response.data.data.toString() : null)
+        })
     }
+    
+    React.useEffect(() => {
+        get_record_data();
+    }, [])
+        
+    return (
+        <CornerstoneViewport
+            imageIds={[
+                // config.dicomSample1,
+                // config.dicomSample2
+                `dicomweb:${dataUrl}`
+            ]}
+            tools={[
+                // Mouse
+                {
+                    name: 'Wwwc',
+                    mode: 'active',
+                    modeOptions: { mouseButtonMask: 1 },
+                },
+                {
+                    name: 'Zoom',
+                    mode: 'active',
+                    modeOptions: { mouseButtonMask: 2 },
+                },
+                {
+                    name: 'Pan',
+                    mode: 'active',
+                    modeOptions: { mouseButtonMask: 4 },
+                },
+                // Scroll
+                { name: 'StackScrollMouseWheel', mode: 'active' },
+                // Touch
+                { name: 'PanMultiTouch', mode: 'active' },
+                { name: 'ZoomTouchPinch', mode: 'active' },
+                { name: 'StackScrollMultiTouch', mode: 'active' },
+            ]}
+            style={{ minWidth: "100%", height: "100%", flex: "1" }}
+        />
+    )
 }
+
+export default MRIView;

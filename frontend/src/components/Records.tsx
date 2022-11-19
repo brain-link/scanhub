@@ -6,11 +6,13 @@ import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
 import TextField from '@mui/joy/TextField';
+import Link from '@mui/material/Link';
 import List from '@mui/joy/List';
 import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import FormHelperText from '@mui/joy/FormHelperText';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import FilterCenterFocusSharpIcon from '@mui/icons-material/FilterCenterFocusSharp';
@@ -24,6 +26,8 @@ import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack';
 import config from '../utils/config';
 import { Record } from './Interfaces';
@@ -39,6 +43,7 @@ export default function Records() {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
     const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
+    const [devices, setDevices] = React.useState<Devices[] | undefined>(undefined);
     const [record, setRecord] = React.useState<Record>( // store intermediate state in record creation
         { id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" }
     );
@@ -61,18 +66,25 @@ export default function Records() {
 
     // Fetch a list of all records and assign them to records
     async function fetchRecords() {
-        await axios.get(`${config["baseURL"]}/patients/${params.patientId}/${params.procedureId}/records`)
+        await axios.get(`${config["baseURL"]}/records/${params.procedureId}`)
         .then((response) => {setRecords(response.data)})
+    }
+
+    async function fetchDevices() {
+        await axios.get(`${config.baseURL}/devices`)
+        .then((response) => {setDevices(response.data)})
     }
     
     // Trigger fetch records, listens to params.procedureId and record
     React.useEffect(() => {
-        fetchRecords()
-    }, [params.procedureId, record, params.recordId]);
+        fetchRecords();
+        fetchDevices();
+    }, [params.procedureId, params.recordId]);
 
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
-        await axios.post(`${config["baseURL"]}/patients/${params.patientId}/${params.procedureId}/records/new/`, record)
+        console.log("Post record...")
+        await axios.post(`${config["baseURL"]}/patients/${params.patientId}/${params.procedureId}/records/new`, record)
         .then((response) => {
             setRecord(response.data)
             fetchRecords()
@@ -165,13 +177,37 @@ export default function Records() {
                                     onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
                                     required 
                                 />
+                                <FormHelperText>The device ID must exist</FormHelperText>
+                                <Select 
+                                    placeholder='Select device...'
+                                    onChange={(e) => {console.log((e?.target as HTMLInputElement).value)}}
+                                >
+                                    {
+                                        // To be fixed: value is always 0?
+                                        devices?.map((device, index) => (
+                                            <Option value={index}>
+                                                {device.address}
+                                            </Option>
+                                        ))
+                                    }
+                                </Select>
                                 <TextField 
                                     label='Data'
                                     name='data'
-                                    placeholder='Enter http link to DICOM file...'
+                                    placeholder='https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
                                     onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
                                     required 
                                 />
+                                <FormHelperText>
+                                    Enter a DICOM URL
+                                </FormHelperText>
+                                <Link
+                                    href="https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm"
+                                    underline='hover'
+                                >
+                                    Example DICOM URL, click to download
+                                </Link>
+                                
                                 <Button type="submit">Submit</Button>
                             </Stack>
                         </form>
