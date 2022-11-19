@@ -8,10 +8,32 @@ seq_plot = SequencePlot('/scanhub/scanhub/ressources/epi_pypulseq.seq')
 api_router = APIRouter()
 
 # Device table data
-@api_router.get("/devices/")
+@api_router.get("/devices")
 async def get_devices() -> dict:
     devices = await models.Device.all()
     return devices
+
+@api_router.post("/devices/new")
+async def create_device():
+    sites = await models.Site.all()
+    if len(sites) == 0:
+        site = await models.Site.create(
+            name="BrainLink",
+            city="Berlin",
+            country="Germany",
+            address="Berliner Str."
+        )
+        await site.save()
+    else:
+        site = sites[0]
+    device = await models.Device.create(
+        site=site,
+        modality=0,
+        address="0.0.0.1"
+    )
+    await device.save()
+    return device
+
 
 # Get a device by id
 @api_router.get("/devices/{device_id}/")
@@ -78,23 +100,19 @@ async def delete_procedure(procedure_id: int):
     return models.Status(message=f"Deleted procedure {procedure_id}")
 
 # Get a list of records by procedure id
-@api_router.get("/patients/{patient_id}/{procedure_id}/records/")
+@api_router.get("/records/{procedure_id}")
 async def get_recordings(procedure_id: int) -> dict:
     record_list = await models.Recordings.filter(procedure_id=procedure_id)
     return record_list
 
 # Create a new record
-@api_router.post("/patients/{patient_id}/{procedure_id}/records/new/")
+@api_router.post("/patients/{patient_id}/{procedure_id}/records/new")
 async def create_record(record_data: models.Create_Record, procedure_id: int) -> None:
 
-    # TODO: Generate DICOM file in here (maybe check for errors in record creation first)
-    
-    # print(record_data.dict())
-
-    # device = await models.Device.get(id=record_data.device_id)
-    device = await models.Device.get(id=1)
+    device = await models.Device.get(id=record_data.device_id)
     procedure = await models.Procedures.get(id=procedure_id)
 
+    print("creating record...")
     new_record = await models.Recordings.create(
         comment=record_data.comment,
         data=record_data.data,
@@ -106,7 +124,7 @@ async def create_record(record_data: models.Create_Record, procedure_id: int) ->
     return new_record
 
 # Get a record by id
-@api_router.get("/patients/{patient_id}/{procedure_id}/records/{record_id}/")
+@api_router.get("/records/{record_id}/")
 async def get_record(record_id: int) -> dict:
     record = await models.Recordings.get(id=record_id)
     return record

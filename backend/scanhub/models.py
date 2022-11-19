@@ -17,6 +17,9 @@ class Device(models.Model):
     site = fields.ForeignKeyField("models.Site", related_name="device")
     created_at = fields.DatetimeField(auto_now_add=True)
 
+class CreateDevice(BaseModel, extra=Extra.ignore):
+    modality: Optional[int] = 0
+    address: Optional[str] = "0.0.0.1"
 
 class Patient(models.Model):
     """
@@ -60,7 +63,7 @@ class Recordings(models.Model):
     date = fields.DatetimeField(auto_now_add=True)
     thumbnail = fields.BinaryField(null=True)
     comment = fields.TextField(null=True)
-    data = fields.BinaryField(null=True)
+    data = fields.TextField(null=True)  # fields.BinaryField(null=True)
     
     device = fields.ForeignKeyField(
         "models.Device", related_name="recordings")
@@ -71,9 +74,8 @@ class Create_Record(BaseModel, extra=Extra.ignore):
     comment: str
     device_id: int
     procedure_id: int
+    data: str   # Optional[bytes] = bytes() # Optional[str] = ""
     thumbnail: Optional[bytes] = bytes()
-    data: Optional[bytes] = bytes()
-
 
 class Site(models.Model):
     """
@@ -89,6 +91,11 @@ class Site(models.Model):
     users = fields.ManyToManyField(
         "models.User", related_name="site", through="Site_User")
 
+class CreateSite(BaseModel, extra=Extra.ignore):
+    name: str
+    city: str
+    country: str
+    address: str
 
 class User(models.Model):
     """
