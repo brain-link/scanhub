@@ -1,4 +1,4 @@
-from statistics import mode
+import random
 from fastapi import APIRouter, HTTPException
 from scanhub.utilities.sequence_plot import SequencePlot
 from scanhub import models
@@ -26,10 +26,13 @@ async def create_device():
         await site.save()
     else:
         site = sites[0]
+
+    address = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
+
     device = await models.Device.create(
         site=site,
-        modality=0,
-        address="0.0.0.1"
+        modality=random.randint(0, 3),
+        address=address
     )
     await device.save()
     return device

@@ -13,8 +13,10 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import FormHelperText from '@mui/joy/FormHelperText';
+import FormLabel from '@mui/joy/FormLabel';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
+import MenuItemSelect from '@mui/material/MenuItem';
 import FilterCenterFocusSharpIcon from '@mui/icons-material/FilterCenterFocusSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import IconButton from '@mui/joy/IconButton';
@@ -27,10 +29,11 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import Select from '@mui/joy/Select';
+// import Select from '@mui/material/Select';
 import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack';
 import config from '../utils/config';
-import { Record } from './Interfaces';
+import { Record, Device } from './Interfaces';
 import { format_date } from '../utils/formatter';
 
 export default function Records() {
@@ -43,7 +46,7 @@ export default function Records() {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
     const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
-    const [devices, setDevices] = React.useState<Devices[] | undefined>(undefined);
+    const [devices, setDevices] = React.useState<Device[] | undefined>(undefined);
     const [record, setRecord] = React.useState<Record>( // store intermediate state in record creation
         { id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" }
     );
@@ -88,6 +91,7 @@ export default function Records() {
         .then((response) => {
             setRecord(response.data)
             fetchRecords()
+            console.log(response.data)
         })
         .catch((err) => {
             console.log(err)
@@ -131,7 +135,7 @@ export default function Records() {
                         aria-labelledby="basic-modal-dialog-title"
                         aria-describedby="basic-modal-dialog-description"
                         sx={{
-                            width: '50vh', 
+                            width: '50vw', 
                             // height: '50vh',
                             borderRadius: 'md',
                             p: 5,
@@ -171,26 +175,8 @@ export default function Records() {
                                     autoFocus 
                                     required 
                                 />
-                                <TextField 
-                                    label='Device ID'
-                                    name='device_id'
-                                    onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
-                                    required 
-                                />
-                                <FormHelperText>The device ID must exist</FormHelperText>
-                                <Select 
-                                    placeholder='Select device...'
-                                    onChange={(e) => {console.log((e?.target as HTMLInputElement).value)}}
-                                >
-                                    {
-                                        // To be fixed: value is always 0?
-                                        devices?.map((device, index) => (
-                                            <Option value={index}>
-                                                {device.address}
-                                            </Option>
-                                        ))
-                                    }
-                                </Select>
+
+                                {/* Data Input */}
                                 <TextField 
                                     label='Data'
                                     name='data'
@@ -199,7 +185,7 @@ export default function Records() {
                                     required 
                                 />
                                 <FormHelperText>
-                                    Enter a DICOM URL
+                                    Enter a DICOM URL (placeholder)
                                 </FormHelperText>
                                 <Link
                                     href="https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm"
@@ -207,8 +193,29 @@ export default function Records() {
                                 >
                                     Example DICOM URL, click to download
                                 </Link>
+
+                                {/* Device Selection */}
+                                <FormLabel htmlFor="select-button" id='select-label'>Select Device</FormLabel>
+                                <Select
+                                    placeholder='Select device...'
+                                    onChange={(event, value) => { record.device_id = Number(value)}}
+                                    componentsProps={{
+                                        button: {
+                                          id: 'select-device-button',
+                                          'aria-labelledby': 'select-label select-button'
+                                        }
+                                    }}
+                                >
+                                    {
+                                        devices?.map((device, index) => (
+                                            <Option key={device.id} value={device.id}>
+                                                {device.address}
+                                            </Option>
+                                        ))
+                                    }
+                                </Select>
                                 
-                                <Button type="submit">Submit</Button>
+                                <Button sx={{width: 100}} type="submit">Submit</Button>
                             </Stack>
                         </form>
                     </ModalDialog>
@@ -278,4 +285,3 @@ export default function Records() {
         </Box>
     );  
 }
-// )
