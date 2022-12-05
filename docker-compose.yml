@@ -8,6 +8,7 @@ services:
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/reco-service/:/app/
+      - data_lake:/app/data_lake/
     ports:
       - 8001:8000
     environment:
@@ -34,6 +35,7 @@ services:
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/device-controller-service/:/app/
+      - data_lake:/app/data_lake/
     ports:
       - 8002:8000
     environment:
@@ -273,6 +275,7 @@ services:
 
 
 volumes:
+  data_lake:
   postgres_data_reco:
   postgres_data_device:
   pgadmin-data:
