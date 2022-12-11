@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, File, UploadFile
 from typing import List
+import os
 
 from app.api.models import DeviceOut, DeviceIn, DeviceUpdate
 from app.api import db_manager
@@ -23,3 +24,18 @@ async def get_device(id: int):
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     return device
+
+@devices.post('/{device_id}/result/{result_id}/')
+async def upload_result(device_id: str, result_id: str, file: UploadFile = File(...)):
+    try:
+        contents = file.file.read()
+        filename = f'/app/data_lake/{device_id}/{result_id}/{file.filename}'
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, 'wb') as f:
+            f.write(contents)
+    except Exception as ex:
+        return {"message": "There was an error uploading the file" + str(ex)}
+        raise HTTPException(status_code = 500, detail = "")
+    finally:
+        file.file.close()
+    return {"message": f"Successfully uploaded {file.filename}"}
