@@ -38,4 +38,5 @@ async def upload_result(device_id: str, result_id: str, file: UploadFile = File(
         raise HTTPException(status_code = 500, detail = "")
     finally:
         file.file.close()
+    #TODO: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}

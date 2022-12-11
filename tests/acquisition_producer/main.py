@@ -5,8 +5,10 @@ from time import sleep
 
 from AcquisitionEvent import AcquisitionEvent
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-                         value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8'))
+try:
+    producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8'))
+except Exception as ex:
+    print(ex)
 
 count = 0
 
