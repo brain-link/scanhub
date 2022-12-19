@@ -17,4 +17,4 @@ while True:
     print("Sending: " + acquisitionEvent.instruction)
     producer.send('acquisitionEvent', acquisitionEvent)
     count = count + 1
-    sleep(5)
+    sleep(10)
