@@ -4,3 +4,4 @@ numpy
 Pillow
 pydicom
 dicomweb-client
+scanhub==0.0.4

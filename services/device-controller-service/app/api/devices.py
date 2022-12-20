@@ -9,11 +9,7 @@ from kafka import KafkaProducer
 from app.api.models import DeviceOut, DeviceIn, DeviceUpdate
 from app.api import db_manager
 
-class RecoJob(BaseModel):
-    reco_id: StrictStr
-    device_id: StrictStr
-    result_id: StrictStr
-    input:  StrictStr
+from scanhub import RecoJob
 
 
 mri_reco_producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],

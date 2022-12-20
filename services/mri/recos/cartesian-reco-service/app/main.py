@@ -17,6 +17,9 @@ from pydicom.uid import ExplicitVRLittleEndian
 import pydicom._storage_sopclass_uids
 from dicomweb_client.api import DICOMwebClient
 
+from scanhub import RecoJob
+
+
 # Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
 try:
     import mkl_fft as m
@@ -41,13 +44,6 @@ def np_ifft(kspace: np.ndarray, out: np.ndarray):
         out (np.ndarray): Array to store values
     """
     np.absolute(fftshift(ifft2(ifftshift(kspace))), out=out)
-
-
-class RecoJob(BaseModel):
-    reco_id: StrictStr
-    device_id: StrictStr
-    result_id: StrictStr
-    input:  StrictStr
 
 
 print('> Start Reco Worker <', flush=True)
