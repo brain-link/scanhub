@@ -1,7 +1,15 @@
 version: "3"
 services:
-  ## Microservices
+  ## MRI Recos
+  cartesian-reco-service:
+    container_name: service-cartesian-reco
+    build: ./services/mri/recos/cartesian-reco-service
+    depends_on:
+      - reco-service
+    volumes:
+      - data_lake:/app/data_lake/
 
+  ## Microservices
   reco-service:
     container_name: service-reco
     build: ./services/reco-service
@@ -16,6 +24,7 @@ services:
       - DEVICE_SERVICE_HOST_URL=http://device-controller-service:8000/api/v1/devices/
     depends_on:
       - reco_db
+      - broker
 
   reco_db:
     container_name: db-reco
@@ -42,6 +51,7 @@ services:
       - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
     depends_on:
       - device_db
+      - broker
 
   device_db:
     container_name: db-device

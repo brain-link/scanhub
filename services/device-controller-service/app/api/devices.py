@@ -11,6 +11,8 @@ from app.api import db_manager
 
 class RecoJob(BaseModel):
     reco_id: StrictStr
+    device_id: StrictStr
+    result_id: StrictStr
     input:  StrictStr
 
 
@@ -56,7 +58,7 @@ async def upload_result(device_id: str, result_id: str, file: UploadFile = File(
         file.file.close()
 
         
-    reco_job = RecoJob(reco_id="cartesian", input=filename)
+    reco_job = RecoJob(reco_id="cartesian", device_id=device_id, result_id=result_id, input=filename)
 
     mri_reco_producer.send('mri_reco', reco_job)
 
