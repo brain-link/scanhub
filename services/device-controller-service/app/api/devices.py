@@ -53,6 +53,8 @@ async def upload_result(device_id: str, result_id: str, file: UploadFile = File(
     finally:
         file.file.close()
 
+
+    #TODO: switch based on the preselected reco
         
     reco_job = RecoJob(reco_id="cartesian", device_id=device_id, result_id=result_id, input=filename)
 
