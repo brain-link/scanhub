@@ -103,13 +103,13 @@ async def delete_procedure(procedure_id: int):
     return models.Status(message=f"Deleted procedure {procedure_id}")
 
 # Get a list of records by procedure id
-@api_router.get("/records/{procedure_id}")
+@api_router.get("/{procedure_id}/records")
 async def get_recordings(procedure_id: int) -> dict:
     record_list = await models.Recordings.filter(procedure_id=procedure_id)
     return record_list
 
 # Create a new record
-@api_router.post("/patients/{patient_id}/{procedure_id}/records/new")
+@api_router.post("/{procedure_id}/records/new")
 async def create_record(record_data: models.Create_Record, procedure_id: int) -> None:
 
     device = await models.Device.get(id=record_data.device_id)

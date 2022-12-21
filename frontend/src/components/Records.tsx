@@ -69,7 +69,7 @@ export default function Records() {
 
     // Fetch a list of all records and assign them to records
     async function fetchRecords() {
-        await axios.get(`${config["baseURL"]}/records/${params.procedureId}`)
+        await axios.get(`${config["baseURL"]}/${params.procedureId}/records`)
         .then((response) => {setRecords(response.data)})
     }
 
@@ -87,7 +87,7 @@ export default function Records() {
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
         console.log("Post record...")
-        await axios.post(`${config["baseURL"]}/patients/${params.patientId}/${params.procedureId}/records/new`, record)
+        await axios.post(`${config["baseURL"]}/${params.procedureId}/records/new`, record)
         .then((response) => {
             setRecord(response.data)
             fetchRecords()

@@ -10,7 +10,8 @@ import axios from 'axios';
 import dicomParser from "dicom-parser";
 import cornerstoneWADOImageLoader from "cornerstone-wado-image-loader";
 // import * as cornerstoneWebImageLoader from "cornerstone-web-image-loader";
-
+import Container from '@mui/joy/Container';
+import CircularProgress from '@mui/joy/CircularProgress';
 import config from '../utils/config';
 import { useParams } from 'react-router-dom';
 
@@ -71,13 +72,25 @@ export function MRIView() {
     async function get_record_data() {
         await axios.get(`${config.baseURL}/records/${params.recordId}`)
         .then((response) => {
+            console.log("Response from record fetch in MRIView: ", response.data.data.toString())
             setDataUrl(response.data.data ? response.data.data.toString() : null)
         })
+        .catch((err) => {console.log(err)})
     }
     
     React.useEffect(() => {
         get_record_data();
+        console.log(dataUrl);
     }, [])
+
+    if (!dataUrl) {
+        <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+            {/* <Typography>Loading patients...</Typography> */}
+            {/* <LinearProgress /> */}
+            <CircularProgress />
+        </Container>
+    }
+    
         
     return (
         <CornerstoneViewport
