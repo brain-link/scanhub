@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, File, UploadFile
+from fastapi.responses import FileResponse
+
 from typing import List
 import os
 
@@ -12,7 +14,13 @@ from app.api import db_manager
 from scanhub import RecoJob
 
 
-mri_reco_producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
+
+class AcquisitionEvent:
+    def __init__(self, instruction : str):
+        self.instruction = instruction
+
+
+producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
                          value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8'))
 
 
@@ -60,7 +68,22 @@ async def upload_result(device_id: str, result_id: str, file: UploadFile = File(
 
     #TODO: On successful upload message kafka the correct topic to do reco
 
-    mri_reco_producer.send('mri_cartesian_reco', reco_job)
+    producer.send('mri_cartesian_reco', reco_job)
 
     #TODO: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
+
+#TODO: frontend neesds to call a generic endpoint to trigger the acquisition
+#@devices.post('/control/{device_id}/{record_id}/{command}')
+@devices.post('/control/{command}/')
+async def acquistion_control(command: str):
+    acquisitionEvent = AcquisitionEvent(command)
+    producer.send('acquisitionEvent', acquisitionEvent)
+    return {"message": f"Triggered {command}"}
+
+@devices.get('/result/{device_id}/result/{result_id}/')
+async def download_result(device_id: str, result_id: str):
+    file_name = f'cartesian.dcm'
+    file_path = f'/app/data_lake/{device_id}/{result_id}/{file_name}'
+    
+    return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
