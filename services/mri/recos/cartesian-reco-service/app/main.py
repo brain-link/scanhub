@@ -20,7 +20,7 @@ consumer_task = None
 consumer = None
 
 # env variables
-KAFKA_TOPIC = 'mri_reco'#os.getenv('KAFKA_TOPIC')
+KAFKA_TOPIC = os.getenv('KAFKA_TOPIC_SUBSCRIPTION')
 KAFKA_CONSUMER_GROUP_PREFIX = os.getenv('KAFKA_CONSUMER_GROUP_PREFIX', 'group')
 KAFKA_BOOTSTRAP_SERVERS = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'kafka-broker:9093')
 

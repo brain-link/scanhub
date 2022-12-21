@@ -56,7 +56,9 @@ async def upload_result(device_id: str, result_id: str, file: UploadFile = File(
         
     reco_job = RecoJob(reco_id="cartesian", device_id=device_id, result_id=result_id, input=filename)
 
-    mri_reco_producer.send('mri_reco', reco_job)
+    #TODO: On successful upload message kafka the correct topic to do reco
+
+    mri_reco_producer.send('mri_cartesian_reco', reco_job)
 
     #TODO: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
