@@ -1,144 +1,108 @@
-from kafka import KafkaConsumer
+from random import randint
+from typing import Set, Any
+from fastapi import FastAPI
+from kafka import TopicPartition
+
+import aiokafka
+import asyncio
 import json
-
-import sys
-
-from pydantic import BaseModel, StrictStr
-
-
 import logging
-import numpy as np
-import io
-from PIL import Image
+import os
 
-import pydicom
-from pydicom.dataset import Dataset, FileDataset
-from pydicom.uid import ExplicitVRLittleEndian
-import pydicom._storage_sopclass_uids
-from dicomweb_client.api import DICOMwebClient
-
-from scanhub import RecoJob
+from .worker import init, run
 
 
-# Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
-try:
-    import mkl_fft as m
+# instantiate the API
+app = FastAPI()
 
-    fft2 = m.fft2
-    ifft2 = m.ifft2
-except (ModuleNotFoundError, ImportError):
-    fft2 = np.fft.fft2
-    ifft2 = np.fft.ifft2
-finally:
-    fftshift = np.fft.fftshift
-    ifftshift = np.fft.ifftshift
+# global variables
+consumer_task = None
+consumer = None
 
-def np_ifft(kspace: np.ndarray, out: np.ndarray):
-    """Performs inverse FFT function (kspace to [magnitude] image)
+# env variables
+KAFKA_TOPIC = 'mri_reco'#os.getenv('KAFKA_TOPIC')
+KAFKA_CONSUMER_GROUP_PREFIX = os.getenv('KAFKA_CONSUMER_GROUP_PREFIX', 'group')
+KAFKA_BOOTSTRAP_SERVERS = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'kafka-broker:9093')
 
-    Performs iFFT on the input data and updates the display variables for
-    the image domain (magnitude) image and the kspace as well.
-
-    Parameters:
-        kspace (np.ndarray): Complex kspace ndarray
-        out (np.ndarray): Array to store values
-    """
-    np.absolute(fftshift(ifft2(ifftshift(kspace))), out=out)
+# initialize logger
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+log = logging.getLogger(__name__)
 
 
-print('> Start Reco Worker <', flush=True)
-consumer = KafkaConsumer('mri_reco',
-                        value_deserializer=lambda x: json.loads(x.decode('utf-8')),
-                        bootstrap_servers=['kafka-broker:9093'])
-
-for message in consumer:
-    reco_job = RecoJob(**(message.value))
-    print(reco_job.input, flush=True)
-
-    app_filename = f'/app/data_lake/{reco_job.input}'
-
-    kspacedata = np.load(app_filename)
-
-    print("K-Space")
-    print(kspacedata.shape)
-    print(kspacedata[0][0])
-
-    img = np.zeros_like(kspacedata, dtype=np.float32)
-
-    np_ifft(kspacedata, img)
+@app.on_event("startup")
+async def startup_event():
+    log.info('Initializing API ...')
+    await initialize()
+    await consume()
 
 
-    ################################################################
-    # Store DICOM
-    ################################################################
-
-    img16 = img.astype(np.float16)
-
-    print("Setting file meta information...")
-    # Populate required values for file meta information
-
-    meta = pydicom.Dataset()
-    meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
-    meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
-    meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian  
-
-    ds = Dataset()
-    ds.file_meta = meta
-
-    ds.is_little_endian = True
-    ds.is_implicit_VR = False
-
-    ds.SOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
-    ds.PatientName = "Max^Mustermann"
-    ds.PatientID = "123456"
-
-    ds.Modality = "MR"
-    ds.SeriesInstanceUID = pydicom.uid.generate_uid()
-    ds.StudyID = pydicom.uid.generate_uid()
-    ds.SOPInstanceUID = pydicom.uid.generate_uid()
-    ds.SOPClassUID = 'RT Image Storage'
-    ds.StudyInstanceUID = pydicom.uid.generate_uid()
-    ds.FrameOfReferenceUID = pydicom.uid.generate_uid()
-
-    ds.BitsStored = 16
-    ds.BitsAllocated = 16
-    ds.SamplesPerPixel = 1
-    ds.HighBit = 15
-
-    ds.ImagesInAcquisition = "1"
-
-    ds.Rows = img16.shape[0]
-    ds.Columns = img16.shape[1]
-    ds.InstanceNumber = 1
-
-    ds.ImagePositionPatient = r"0\0\1"
-    ds.ImageOrientationPatient = r"1\0\0\0\-1\0"
-    ds.ImageType = r"ORIGINAL\PRIMARY\AXIAL"
-
-    ds.RescaleIntercept = "0"
-    ds.RescaleSlope = "1"
-    ds.PixelSpacing = r"1\1"
-    ds.PhotometricInterpretation = "MONOCHROME2"
-    ds.PixelRepresentation = 1
-
-    pydicom.dataset.validate_file_meta(ds.file_meta, enforce_standard=True)
-
-    print("Setting pixel data...")
-    ds.PixelData = img16.tobytes()
-
-    # Save as DICOM
-    print("Saving file...")
-    print(ds)
-    # Option 1: save to disk
-
-    filename = f'{reco_job.device_id}/{reco_job.result_id}/{reco_job.reco_id}.dcm'
-
-    ds.save_as(f'/app/data_lake/{filename}')
-
-    # Option 2: save to orthanc
-    # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")
-    # client.store_instances(datasets=[ds])
-    print("File saved.",flush=True)
+@app.on_event("shutdown")
+async def shutdown_event():
+    log.info('Shutting down API')
+    consumer_task.cancel()
+    await consumer.stop()
 
 
-print('> Stop Reco Worker <')
+@app.get("/")
+async def root():
+    return {"message": "Cartesian Reco Service"}
+
+
+async def initialize():
+    loop = asyncio.get_event_loop()
+    global consumer
+    group_id = f'{KAFKA_CONSUMER_GROUP_PREFIX}-{randint(0, 10000)}'
+    log.debug(f'Initializing KafkaConsumer for topic {KAFKA_TOPIC}, group_id {group_id}'
+              f' and using bootstrap servers {KAFKA_BOOTSTRAP_SERVERS}')
+    consumer = aiokafka.AIOKafkaConsumer(KAFKA_TOPIC, loop=loop,
+                                         bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+                                         group_id=group_id,
+                                         value_deserializer=lambda x: json.loads(x.decode('utf-8')))
+    # get cluster layout and join group
+    await consumer.start()
+
+    partitions: Set[TopicPartition] = consumer.assignment()
+    nr_partitions = len(partitions)
+    if nr_partitions != 1:
+        log.warning(f'Found {nr_partitions} partitions for topic {KAFKA_TOPIC}. Expecting '
+                    f'only one, remaining partitions will be ignored!')
+    for tp in partitions:
+
+        # get the log_end_offset
+        end_offset_dict = await consumer.end_offsets([tp])
+        end_offset = end_offset_dict[tp]
+
+        if end_offset == 0:
+            log.warning(f'Topic ({KAFKA_TOPIC}) has no messages (log_end_offset: '
+                        f'{end_offset}), skipping initialization ...')
+            return
+
+        log.debug(f'Found log_end_offset: {end_offset} seeking to {end_offset-1}')
+        consumer.seek(tp, end_offset-1)
+        msg = await consumer.getone()
+        log.info(f'Initializing API with data from msg: {msg}')
+
+        # run worker initialization
+        init(msg)
+        return
+
+
+async def consume():
+    global consumer_task
+    consumer_task = asyncio.create_task(send_consumer_message(consumer))
+
+
+async def send_consumer_message(consumer):
+    try:
+        # consume messages
+        async for msg in consumer:
+            # x = json.loads(msg.value)
+            log.info(f"Consumed msg: {msg}")
+
+            # run worker
+            run(msg)
+    finally:
+        # will leave consumer group; perform autocommit if enabled
+        log.warning('Stopping consumer')
+        await consumer.stop()

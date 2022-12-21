@@ -1,7 +1,12 @@
-kafka-python==2.0.2
+aiokafka
+asyncio
+kafka-python
 pydantic
+scanhub==0.0.4
+fastapi
+uvicorn==0.11.2
+# Reco dependencies
 numpy
 Pillow
 pydicom
 dicomweb-client
-scanhub==0.0.4
