@@ -16,6 +16,12 @@ import IconButton from '@mui/joy/IconButton';
 import axios from 'axios';
 import config from '../utils/config';
 
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Box from '@mui/joy/Box';
+
 import { format_date } from '../utils/formatter';
 
 
@@ -23,6 +29,12 @@ export default function DeviceTable() {
   
     // const { data: devices, isSuccess } = useQuery<Device[]>("/devices");
     const [devices, setDevices] = React.useState<Device[] | undefined>(undefined);
+    const [expanded, setExpanded] = React.useState<number | false>(false);
+
+    const handleExpandChange =
+      (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+        setExpanded(isExpanded ? panel : false);
+      };
 
     async function fetchDevices() {
         await axios.get(`${config["baseURL"]}/devices`)
@@ -50,38 +62,75 @@ export default function DeviceTable() {
     }
 
     return (
-        <TableContainer component={Paper} sx={{ m: 2, overflow: 'auto' }}>
-            <Table stickyHeader aria-label="Device Table">
-
-                <TableHead>
-                    <TableRow>
-                        <TableCell><Typography level="h5">ID</Typography></TableCell>
-                        <TableCell><Typography level="h5">Modality</Typography></TableCell>
-                        <TableCell><Typography level="h5">Location</Typography></TableCell>
-                        <TableCell><Typography level="h5">Created at</Typography></TableCell>
-                        <TableCell>
-                            <IconButton size='sm' variant='outlined'>
-                                <AddSharpIcon onClick={() => mutation.mutate()}/>
-                            </IconButton>
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-
-                <TableBody>
-                    {/* Map elements in devices to table cells */}
-                    { devices?.map(device => (
-                        <TableRow 
-                            hover={true} 
-                            key={device.id}
+        <div style={{ width: '100%' }}>
+            <Box sx={{ m: 2, display: 'flex', flexDirection: 'row-reverse'}}>
+                <IconButton size='sm' variant='outlined'>
+                    <AddSharpIcon onClick={() => mutation.mutate()}/>
+                </IconButton>
+            </Box>
+            <Box sx={{ m: 2 }}>
+                { 
+                    devices?.map( device => (
+                        <Accordion 
+                            expanded={expanded === device.id} 
+                            onChange={handleExpandChange(device.id)}
                         >
-                            <TableCell>{ device.id }</TableCell>
-                            <TableCell>{ device.modality }</TableCell>
-                            <TableCell>{ device.address }</TableCell>
-                            <TableCell>{ format_date(device.created_at) }</TableCell>
-                        </TableRow>
-                    )) }
-                </TableBody>
-            </Table>
-        </TableContainer>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
+                            >
+                                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                                    Device ID: {device.id}
+                                </Typography>
+                                <Typography sx={{ color: 'text.secondary' }}>
+                                    Modality: {device.modality}
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography> Created at: {device.created_at} </Typography>
+                                <Typography> Address: {device.address} </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                    ))
+                
+                }
+                
+            </Box>
+        </div>
+
+        // <TableContainer component={Paper} sx={{ m: 2, overflow: 'auto' }}>
+        //     <Table stickyHeader aria-label="Device Table">
+
+        //         <TableHead>
+        //             <TableRow>
+        //                 <TableCell><Typography level="h5">ID</Typography></TableCell>
+        //                 <TableCell><Typography level="h5">Modality</Typography></TableCell>
+        //                 <TableCell><Typography level="h5">Location</Typography></TableCell>
+        //                 <TableCell><Typography level="h5">Created at</Typography></TableCell>
+        //                 <TableCell>
+        //                     <IconButton size='sm' variant='outlined'>
+        //                         <AddSharpIcon onClick={() => mutation.mutate()}/>
+        //                     </IconButton>
+        //                 </TableCell>
+        //             </TableRow>
+        //         </TableHead>
+
+        //         <TableBody>
+        //             {/* Map elements in devices to table cells */}
+        //             { devices?.map(device => (
+        //                 <TableRow 
+        //                     hover={true} 
+        //                     key={device.id}
+        //                 >
+        //                     <TableCell>{ device.id }</TableCell>
+        //                     <TableCell>{ device.modality }</TableCell>
+        //                     <TableCell>{ device.address }</TableCell>
+        //                     <TableCell>{ format_date(device.created_at) }</TableCell>
+        //                 </TableRow>
+        //             )) }
+        //         </TableBody>
+        //     </Table>
+        // </TableContainer>
     );
 }
