@@ -4,7 +4,7 @@ from app.api.db import metadata, database, engine
 
 metadata.create_all(engine)
 
-app = FastAPI(openapi_url="/api/v1/recos/openapi.json", docs_url="/api/v1/recos/docs")
+app = FastAPI(openapi_url="/api/v1/mri/recos/openapi.json", docs_url="/api/v1/mri/recos/docs")
 
 @app.on_event("startup")
 async def startup():
@@ -15,4 +15,4 @@ async def shutdown():
     await database.disconnect()
 
 
-app.include_router(recos, prefix='/api/v1/recos', tags=['recos'])
+app.include_router(recos, prefix='/api/v1/mri/recos', tags=['recos'])

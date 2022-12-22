@@ -1,6 +1,7 @@
 version: "3"
 services:
-  ## MRI Recos
+  ## MRI Services
+  ## MRI Reconstruction Services
   cartesian-reco-service:
     container_name: service-cartesian-reco
     build: ./services/mri/recos/cartesian-reco-service
@@ -11,6 +12,35 @@ services:
       - broker
     volumes:
       - data_lake:/app/data_lake/
+
+  reco-manager:
+    container_name: reco-manager
+    build: ./services/mri/reco-manager
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./services/mri/reco-manager/:/app/
+      - data_lake:/app/data_lake/
+    ports:
+      - 8003:8000
+    environment:
+      - DATABASE_URI=postgresql://reco_db_username:reco_db_password@reco_db/reco_db_dev
+      - DEVICE_SERVICE_HOST_URL=http://reco-manager:8000/api/v1/mri/recos/
+    depends_on:
+      - reco_db
+      - broker
+
+  reco_db:
+    container_name: db-reco
+    image: postgres:12.1-alpine
+    volumes:
+      - postgres_data_reco:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=reco_db_username
+      - POSTGRES_PASSWORD=reco_db_password
+      - POSTGRES_DB=reco_db_dev
+    ports:
+      - "5434:5432"
+
 
   ## Microservices
   workflow-manager:
@@ -40,35 +70,6 @@ services:
     ports:
       - "5432:5432"
 
-
-
-  # reco-service:
-  #   container_name: service-reco
-  #   build: ./services/reco-service
-  #   command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-  #   volumes:
-  #     - ./services/reco-service/:/app/
-  #     - data_lake:/app/data_lake/
-  #   ports:
-  #     - 8001:8000
-  #   environment:
-  #     - DATABASE_URI=postgresql://reco_db_username:reco_db_password@reco_db/reco_db_dev
-  #     - DEVICE_SERVICE_HOST_URL=http://device-controller-service:8000/api/v1/devices/
-  #   depends_on:
-  #     - reco_db
-  #     - broker
-
-  # reco_db:
-  #   container_name: db-reco
-  #   image: postgres:12.1-alpine
-  #   volumes:
-  #     - postgres_data_reco:/var/lib/postgresql/data/
-  #   environment:
-  #     - POSTGRES_USER=reco_db_username
-  #     - POSTGRES_PASSWORD=reco_db_password
-  #     - POSTGRES_DB=reco_db_dev
-  #   ports:
-  #     - "5432:5432"
 
   # device-controller-service:
   #   container_name: service-device-controller
@@ -120,25 +121,6 @@ services:
     ports:
       - "5050:80"
 
-#   device-controller-service:
-#     container_name: device-controller-service
-#     build: ./services/device-controller
-#     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-#     volumes:
-#       - ./services/device-controller/:/app/
-#     ports:
-#       - 8002:8000
-
-# ## reverse proxy
-#   nginx-proxy:
-#     image: nginx:latest
-#     container_name: nginx-proxy
-#     ports:
-#       - "8080:8080"
-#     volumes:
-#       - ./infrastructure/nginx_config.conf:/etc/nginx/conf.d/default.conf
-#     depends_on:
-#       - device-controller-service
 
 ## Kafka Services
   zookeeper:
