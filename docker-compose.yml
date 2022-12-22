@@ -13,31 +13,31 @@ services:
     volumes:
       - data_lake:/app/data_lake/
 
-  reco-manager:
-    container_name: reco-manager
-    build: ./services/mri/reco-manager
+  sequence-manager:
+    container_name: sequence-manager
+    build: ./services/mri/sequence-manager
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
-      - ./services/mri/reco-manager/:/app/
+      - ./services/mri/sequence-manager/:/app/
       - data_lake:/app/data_lake/
     ports:
       - 8003:8000
     environment:
-      - DATABASE_URI=postgresql://reco_db_username:reco_db_password@reco_db/reco_db_dev
-      - DEVICE_SERVICE_HOST_URL=http://reco-manager:8000/api/v1/mri/recos/
+      - DATABASE_URI=postgresql://sequence_db_username:sequence_db_password@sequence_db/sequence_db_dev
+      - DEVICE_SERVICE_HOST_URL=http://sequence-manager:8000/api/v1/mri/sequences/
     depends_on:
-      - reco_db
+      - sequence_db
       - broker
 
-  reco_db:
-    container_name: db-reco
+  sequence_db:
+    container_name: db-sequence
     image: postgres:12.1-alpine
     volumes:
-      - postgres_data_reco:/var/lib/postgresql/data/
+      - postgres_data_sequence:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=reco_db_username
-      - POSTGRES_PASSWORD=reco_db_password
-      - POSTGRES_DB=reco_db_dev
+      - POSTGRES_USER=sequence_db_username
+      - POSTGRES_PASSWORD=sequence_db_password
+      - POSTGRES_DB=sequence_db_dev
     ports:
       - "5434:5432"
 
@@ -108,7 +108,7 @@ services:
     depends_on:
       - workflow-manager
       - device-manager
-      - reco-manager
+      - sequence-manager
 
   ## Postgres Admin Tool
   pgadmin:
@@ -300,7 +300,7 @@ services:
 
 volumes:
   data_lake:
-  postgres_data_reco:
+  postgres_data_sequence:
   postgres_data_device:
   postgres_data_workflow:
   pgadmin-data:

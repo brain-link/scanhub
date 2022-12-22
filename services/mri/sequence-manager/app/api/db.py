@@ -10,8 +10,8 @@ DATABASE_URI = os.getenv('DATABASE_URI')
 engine = create_engine(DATABASE_URI)
 metadata = MetaData()
 
-recos = Table(
-    'recos',
+sequences = Table(
+    'sequences',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String(50)),

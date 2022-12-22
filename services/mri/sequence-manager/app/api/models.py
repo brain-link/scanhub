@@ -1,18 +1,18 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-class RecoIn(BaseModel):
+class SequenceIn(BaseModel):
     name: str
     plot: str
     genres: List[str]
     devices_id: List[int]
 
 
-class RecoOut(RecoIn):
+class SequenceOut(SequenceIn):
     id: int
 
 
-class RecoUpdate(RecoIn):
+class SequenceUpdate(SequenceIn):
     name: Optional[str] = None
     plot: Optional[str] = None
     genres: Optional[List[str]] = None
