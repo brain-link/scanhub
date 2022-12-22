@@ -8,65 +8,94 @@ services:
     environment:
       - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
     depends_on:
-      - reco-service
+      - broker
     volumes:
       - data_lake:/app/data_lake/
 
   ## Microservices
-  reco-service:
-    container_name: service-reco
-    build: ./services/reco-service
+  workflow-manager:
+    container_name: workflow-manager
+    build: ./services/workflow-manager
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
-      - ./services/reco-service/:/app/
+      - ./services/workflow-manager/:/app/
       - data_lake:/app/data_lake/
     ports:
       - 8001:8000
     environment:
-      - DATABASE_URI=postgresql://reco_db_username:reco_db_password@reco_db/reco_db_dev
-      - DEVICE_SERVICE_HOST_URL=http://device-controller-service:8000/api/v1/devices/
+      - DATABASE_URI=postgresql://workflow_db_username:workflow_db_password@workflow_db/workflow_db_dev
     depends_on:
-      - reco_db
+      - workflow_db
       - broker
 
-  reco_db:
-    container_name: db-reco
+  workflow_db:
+    container_name: db-workflow
     image: postgres:12.1-alpine
     volumes:
-      - postgres_data_reco:/var/lib/postgresql/data/
+      - postgres_data_workflow:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=reco_db_username
-      - POSTGRES_PASSWORD=reco_db_password
-      - POSTGRES_DB=reco_db_dev
+      - POSTGRES_USER=workflow_db_username
+      - POSTGRES_PASSWORD=workflow_db_password
+      - POSTGRES_DB=workflow_db_dev
     ports:
       - "5432:5432"
 
-  device-controller-service:
-    container_name: service-device-controller
-    build: ./services/device-controller-service
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./services/device-controller-service/:/app/
-      - data_lake:/app/data_lake/
-    ports:
-      - 8002:8000
-    environment:
-      - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
-    depends_on:
-      - device_db
-      - broker
 
-  device_db:
-    container_name: db-device
-    image: postgres:12.1-alpine
-    volumes:
-      - postgres_data_device:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=device_db_username
-      - POSTGRES_PASSWORD=device_db_password
-      - POSTGRES_DB=device_db_dev
-    ports:
-      - "5433:5432"
+
+  # reco-service:
+  #   container_name: service-reco
+  #   build: ./services/reco-service
+  #   command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+  #   volumes:
+  #     - ./services/reco-service/:/app/
+  #     - data_lake:/app/data_lake/
+  #   ports:
+  #     - 8001:8000
+  #   environment:
+  #     - DATABASE_URI=postgresql://reco_db_username:reco_db_password@reco_db/reco_db_dev
+  #     - DEVICE_SERVICE_HOST_URL=http://device-controller-service:8000/api/v1/devices/
+  #   depends_on:
+  #     - reco_db
+  #     - broker
+
+  # reco_db:
+  #   container_name: db-reco
+  #   image: postgres:12.1-alpine
+  #   volumes:
+  #     - postgres_data_reco:/var/lib/postgresql/data/
+  #   environment:
+  #     - POSTGRES_USER=reco_db_username
+  #     - POSTGRES_PASSWORD=reco_db_password
+  #     - POSTGRES_DB=reco_db_dev
+  #   ports:
+  #     - "5432:5432"
+
+  # device-controller-service:
+  #   container_name: service-device-controller
+  #   build: ./services/device-controller-service
+  #   command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+  #   volumes:
+  #     - ./services/device-controller-service/:/app/
+  #     - data_lake:/app/data_lake/
+  #   ports:
+  #     - 8002:8000
+  #   environment:
+  #     - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
+  #   depends_on:
+  #     - device_db
+  #     - broker
+
+  # device_db:
+  #   container_name: db-device
+  #   image: postgres:12.1-alpine
+  #   volumes:
+  #     - postgres_data_device:/var/lib/postgresql/data/
+  #   environment:
+  #     - POSTGRES_USER=device_db_username
+  #     - POSTGRES_PASSWORD=device_db_password
+  #     - POSTGRES_DB=device_db_dev
+  #   ports:
+  #     - "5433:5432"
 
   nginx:
     container_name: api-management
@@ -76,8 +105,9 @@ services:
     volumes:
       - ./infrastructure/nginx_config.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - device-controller-service
-      - reco-service
+      - workflow-manager
+      # - device-controller-service
+      # - reco-service
 
   ## Postgres Admin Tool
   pgadmin:
@@ -291,4 +321,5 @@ volumes:
   data_lake:
   postgres_data_reco:
   postgres_data_device:
+  postgres_data_workflow:
   pgadmin-data:

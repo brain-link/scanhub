@@ -139,4 +139,4 @@ def cartesian_reco(message: Any) -> None:
     # client.store_instances(datasets=[ds])
     log.info("File saved.")
 
-
+    # TBD Call topic from a stack or fixed topic
