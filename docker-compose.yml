@@ -1,83 +1,306 @@
-
 version: "3"
 services:
-  couchdb:
-    image: docker.io/bitnami/couchdb:3
-    container_name: couchdb
+  ## MRI Services
+  ## MRI Reconstruction Services
+  cartesian-reco-service:
+    container_name: service-cartesian-reco
+    build: ./services/mri/recos/cartesian-reco-service
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     environment:
-      - COUCHDB_PASSWORD=couchdb
-    ports:
-      - '5984:5984'
-      - '4369:4369'
-      - '9100:9100'
+      - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
+    depends_on:
+      - broker
     volumes:
-      - couchdb_data:/bitnami/couchdb
+      - data_lake:/app/data_lake/
 
- # KAFKA BROKER
-  kafka:
-    image: 'bitnami/kafka:latest'
-    container_name: kafka
+  sequence-manager:
+    container_name: sequence-manager
+    build: ./services/mri/sequence-manager
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./services/mri/sequence-manager/:/app/
+      - data_lake:/app/data_lake/
     ports:
-      - '9092:9092'
-      - '9094:9094'
+      - 8003:8000
     environment:
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
-      # - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-      - KAFKA_BROKER_ID=1
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    networks:
-      - backend
+      - DATABASE_URI=postgresql://sequence_db_username:sequence_db_password@sequence_db/sequence_db_dev
+      - DEVICE_SERVICE_HOST_URL=http://sequence-manager:8000/api/v1/mri/sequences/
+    depends_on:
+      - sequence_db
+      - broker
 
- # WHISK CONTROLLER
-  controller:
-    image: 'openwhisk/controller:nightly'
-    container_name: controller
-
-
-
-# WHISK INVOKER
-  invoker:
-    image: 'openwhisk/invoker:nightly'
-    container_name: invoker
+  sequence_db:
+    container_name: db-sequence
+    image: postgres:12.1-alpine
+    volumes:
+      - postgres_data_sequence:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=sequence_db_username
+      - POSTGRES_PASSWORD=sequence_db_password
+      - POSTGRES_DB=sequence_db_dev
+    ports:
+      - "5434:5432"
 
 
-  # controller:
-  #   restart: always
-  #   container_name: ControllerService
-  #   build: 
-  #     context: ./ControllerService
-  #     dockerfile: ./Dockerfile
-  #   volumes:
-  #   - ./ControllerService:/home/site/wwwroot
+  ## Microservices
+  workflow-manager:
+    container_name: workflow-manager
+    build: ./services/workflow-manager
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./services/workflow-manager/:/app/
+      - data_lake:/app/data_lake/
+    ports:
+      - 8001:8000
+    environment:
+      - DATABASE_URI=postgresql://workflow_db_username:workflow_db_password@workflow_db/workflow_db_dev
+    depends_on:
+      - workflow_db
+      - broker
+
+  workflow_db:
+    container_name: db-workflow
+    image: postgres:12.1-alpine
+    volumes:
+      - postgres_data_workflow:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=workflow_db_username
+      - POSTGRES_PASSWORD=workflow_db_password
+      - POSTGRES_DB=workflow_db_dev
+    ports:
+      - "5432:5432"
+
+  device-manager:
+    container_name: device-manager
+    build: ./services/device-manager
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./services/device-manager/:/app/
+      - data_lake:/app/data_lake/
+    ports:
+      - 8002:8000
+    environment:
+      - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
+    depends_on:
+      - device_db
+      - broker
+
+  device_db:
+    container_name: db-device
+    image: postgres:12.1-alpine
+    volumes:
+      - postgres_data_device:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=device_db_username
+      - POSTGRES_PASSWORD=device_db_password
+      - POSTGRES_DB=device_db_dev
+    ports:
+      - "5433:5432"
+
+  ## API Gateway
+  nginx:
+    container_name: api-gateway
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./infrastructure/nginx_config.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - workflow-manager
+      - device-manager
+      - sequence-manager
+
+  ## Postgres Admin Tool
+  pgadmin:
+    container_name: pg-admin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+
+## Kafka Services
+  zookeeper:
+    container_name: kafka-zookeeper
+    image: confluentinc/cp-zookeeper:7.2.1
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    container_name: kafka-broker
+    image: confluentinc/cp-server:7.2.1
+    hostname: broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_CONTAINER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092,PLAINTEXT_CONTAINER://kafka-broker:9093
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+
+  schema-registry:
+    container_name: kafka-schema-registry
+    image: confluentinc/cp-schema-registry:7.2.1
+    hostname: schema-registry
+    depends_on:
+      - broker
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+
+  connect:
+    container_name: kafka-connect
+    image: cnfldemos/cp-server-connect-datagen:0.6.0-7.2.1
+    hostname: connect
+    depends_on:
+      - broker
+      - schema-registry
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # CLASSPATH required due to CC-2422
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-7.2.1.jar
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+
+  control-center:
+    container_name: kafka-control-center
+    image: confluentinc/cp-enterprise-control-center:7.2.1
+    hostname: control-center
+    depends_on:
+      - broker
+      - schema-registry
+      - connect
+      # - ksqldb-server
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'connect:8083'
+      # CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server:8088"
+      # CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL: "http://localhost:8088"
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+      PORT: 9021
+
+  # ksqldb-server:
+  #   image: confluentinc/cp-ksqldb-server:7.2.1
+  #   hostname: ksqldb-server
+  #   container_name: ksqldb-server
+  #   depends_on:
+  #     - broker
+  #     - connect
   #   ports:
-  #     - 83:80
-  #   networks:
-  #     - backend
+  #     - "8088:8088"
+  #   environment:
+  #     KSQL_CONFIG_DIR: "/etc/ksql"
+  #     KSQL_BOOTSTRAP_SERVERS: "broker:29092"
+  #     KSQL_HOST_NAME: ksqldb-server
+  #     KSQL_LISTENERS: "http://0.0.0.0:8088"
+  #     KSQL_CACHE_MAX_BYTES_BUFFERING: 0
+  #     KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+  #     KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+  #     KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+  #     KSQL_KSQL_CONNECT_URL: "http://connect:8083"
+  #     KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
+  #     KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
+  #     KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
-  # dicom:
-  #   restart: always
-  #   container_name: DICOMService
-  #   build: 
-  #     context: ./DICOMService
-  #     dockerfile: ./Dockerfile
-  #   volumes:
-  #   - ./DICOMService:/home/site/wwwroot
-  #   ports:
-  #     - 82:80
-  #   networks:
-  #     - backend
+  # ksqldb-cli:
+  #   image: confluentinc/cp-ksqldb-cli:7.2.1
+  #   container_name: ksqldb-cli
+  #   depends_on:
+  #     - broker
+  #     - connect
+  #     - ksqldb-server
+  #   entrypoint: /bin/sh
+  #   tty: true
 
+  # ksql-datagen:
+  #   image: confluentinc/ksqldb-examples:7.2.1
+  #   hostname: ksql-datagen
+  #   container_name: ksql-datagen
+  #   depends_on:
+  #     - ksqldb-server
+  #     - broker
+  #     - schema-registry
+  #     - connect
+  #   command: "bash -c 'echo Waiting for Kafka to be ready... && \
+  #                      cub kafka-ready -b broker:29092 1 40 && \
+  #                      echo Waiting for Confluent Schema Registry to be ready... && \
+  #                      cub sr-ready schema-registry 8081 40 && \
+  #                      echo Waiting a few seconds for topic creation to finish... && \
+  #                      sleep 11 && \
+  #                      tail -f /dev/null'"
+  #   environment:
+  #     KSQL_CONFIG_DIR: "/etc/ksql"
+  #     STREAMS_BOOTSTRAP_SERVERS: broker:29092
+  #     STREAMS_SCHEMA_REGISTRY_HOST: schema-registry
+  #     STREAMS_SCHEMA_REGISTRY_PORT: 8081
 
-networks:
-  backend:
-    driver: bridge
+  rest-proxy:
+    container_name: kafka-rest-proxy
+    image: confluentinc/cp-kafka-rest:7.2.1
+    depends_on:
+      - broker
+      - schema-registry
+    ports:
+      - 8082:8082
+    hostname: rest-proxy
+    environment:
+      KAFKA_REST_HOST_NAME: rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
 
 volumes:
-  couchdb_data:
-    driver: local
+  data_lake:
+  postgres_data_sequence:
+  postgres_data_device:
+  postgres_data_workflow:
+  pgadmin-data:
