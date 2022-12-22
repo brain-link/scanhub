@@ -43,4 +43,4 @@ services:
     restart: unless-stopped
     container_name: DB-Admin
     ports:
-      - 8080:8080
+      - 8070:8070

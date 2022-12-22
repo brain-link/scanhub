@@ -9,7 +9,8 @@ WORKDIR /app
 COPY package.json .
 # COPY .env .
 COPY yarn.lock .
-RUN yarn install
+RUN yarn install --network-timeout 1000000
+
 
 # Copy app files
 COPY . .

@@ -63,9 +63,18 @@ export default function Records() {
     }
 
     // Set active procedure if component is rendered
-    if (params.recordId && Number(params.recordId) !== activeRecordId) {
-        setActiveRecordId(Number(params.recordId))
+    function updateActive() {
+        if (params.recordId === undefined) {
+            setActiveRecordId(null)
+        }
+        else if (Number(params.recordId) !== activeRecordId) {
+            setActiveRecordId(Number(params.recordId))
+        } 
     }
+
+
+
+
 
     // Fetch a list of all records and assign them to records
     async function fetchRecords() {
@@ -82,6 +91,7 @@ export default function Records() {
     React.useEffect(() => {
         fetchRecords();
         fetchDevices();
+        updateActive();
     }, [params.procedureId, params.recordId]);
 
     // Post a new record and refetch records table

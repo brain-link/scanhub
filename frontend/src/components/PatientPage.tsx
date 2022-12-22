@@ -11,7 +11,7 @@ import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightS
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import TuneSharpIcon from '@mui/icons-material/TuneSharp';
 import PreviewSharpIcon from '@mui/icons-material/PreviewSharp';
-import ClearSharpIcon from '@mui/icons-material/ClearSharp';
+import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 // Import sub components
 import Procedures from './Procedures';
 import PatientInfo from './PatientInfo';
@@ -117,17 +117,18 @@ export default function PatientIndex() {
 
                         <Box sx={{ pr: 1.5, gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%' }}>
 
-                            {/* Delete record */}
-                            {/* <IconButton
-                                id="delete-record"
-                                variant="outlined"
+                            {/* Start Record */}
+                            <IconButton
+                                id="toggle-sequence"
                                 size="sm"
+                                variant="outlined"
                                 color="danger"
                                 disabled={!params.recordId}
-                                onClick={() => { null !== recordRef.current ? recordRef.current.deleteRecord() : () => {} }}
+                                component={RouterLink}
+                                to={`http://localhost:8080/api/v1/workflow/control/MEAS_START/`}
                             >
-                                <ClearSharpIcon />
-                            </IconButton> */}
+                                <PlayArrowSharpIcon />
+                            </IconButton>
                             {/* Open sequence handler */}
                             <IconButton
                                 id="toggle-sequence"
