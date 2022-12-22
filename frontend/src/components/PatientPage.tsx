@@ -17,6 +17,7 @@ import Procedures from './Procedures';
 import PatientInfo from './PatientInfo';
 import PatientPageMainView from './PatientPageMainView';
 import config from '../utils/config';
+import axios from 'axios';
 
 
 const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
@@ -121,11 +122,10 @@ export default function PatientIndex() {
                             <IconButton
                                 id="toggle-sequence"
                                 size="sm"
-                                variant="outlined"
                                 color="danger"
+                                variant="outlined"
                                 disabled={!params.recordId}
-                                component={RouterLink}
-                                to={`http://localhost:8080/api/v1/workflow/control/MEAS_START/`}
+                                onClick={() => {axios.post('http://localhost:8080/api/v1/workflow/control/MEAS_START/')}}
                             >
                                 <PlayArrowSharpIcon />
                             </IconButton>
