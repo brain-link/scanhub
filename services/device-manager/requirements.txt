@@ -5,4 +5,4 @@ SQLAlchemy==1.3.13
 uvicorn==0.11.2
 python-multipart
 kafka-python
-scanhub==0.0.4
+scanhub==0.0.4.dev1

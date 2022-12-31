@@ -4,6 +4,8 @@ from fastapi.responses import FileResponse
 from typing import List
 import os
 
+import uuid
+
 import json
 from pydantic import BaseModel, StrictStr
 from kafka import KafkaProducer
@@ -11,13 +13,7 @@ from kafka import KafkaProducer
 from app.api.models import WorkflowOut, WorkflowIn, WorkflowUpdate
 from app.api import db_manager
 
-from scanhub import RecoJob
-
-
-
-class AcquisitionEvent:
-    def __init__(self, instruction : str):
-        self.instruction = instruction
+from scanhub import RecoJob, AcquisitionEvent, AcquisitionCommand
 
 
 producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
@@ -73,13 +69,21 @@ async def upload_result(device_id: str, result_id: str, file: UploadFile = File(
     #TODO: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
 
+#EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
 #TODO: frontend neesds to call a generic endpoint to trigger the acquisition
 #@workflow.post('/control/{device_id}/{record_id}/{command}')
 @workflow.post('/control/{command}/')
 async def acquistion_control(command: str):
-    acquisitionEvent = AcquisitionEvent(command)
-    producer.send('acquisitionEvent', acquisitionEvent)
-    return {"message": f"Triggered {command}"}
+    try:
+        acquisition_command = AcquisitionCommand[command]
+    except KeyError:
+        print('KeyError: acquisition command not found')
+
+    record_id = uuid.uuid4() #DEBUG: this should be the record_id from the frontend
+
+    acquisition_event = AcquisitionEvent(device_id='device_id', record_id=record_id, instruction=acquisition_command,input_sequence='input_sequence')
+    producer.send('acquisitionEvent', acquisition_event)
+    return {"message": f"Triggered {acquisition_event}"}
 
 @workflow.get('/result/{device_id}/result/{result_id}/')
 async def download_result(device_id: str, result_id: str):
