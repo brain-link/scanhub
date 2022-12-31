@@ -130,7 +130,7 @@ def cartesian_reco(message: Any) -> None:
     log.info(ds)
     # Option 1: save to disk
 
-    filename = f'{reco_job.device_id}/{reco_job.result_id}/{reco_job.reco_id}.dcm'
+    filename = f'{reco_job.device_id}/{reco_job.record_id}/{reco_job.reco_id}.dcm'
 
     ds.save_as(f'/app/data_lake/{filename}')
 
