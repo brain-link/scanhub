@@ -79,12 +79,14 @@ async def acquistion_control(command: str):
     except KeyError:
         print('KeyError: acquisition command not found')
 
+    device_id = 'mri_simulator' #DEBUG: this should be the device_id from the frontend
     record_id = uuid.uuid4() #DEBUG: this should be the record_id from the frontend
+    input_sequence = 'input_sequence' #DEBUG: this should be the input_sequence from the frontend
 
-    acquisition_event = AcquisitionEvent(   device_id='device_id',
+    acquisition_event = AcquisitionEvent(   device_id=device_id,
                                             record_id=record_id,
                                             command_id=acquisition_command,
-                                            input_sequence='input_sequence')
+                                            input_sequence=input_sequence)
     producer.send('acquisitionEvent', acquisition_event)
     return {"message": f"Triggered {acquisition_event}"}
 
