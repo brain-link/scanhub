@@ -2,7 +2,7 @@ aiokafka
 asyncio
 kafka-python
 pydantic
-scanhub==0.0.4.dev1
+scanhub==0.0.4.dev2
 fastapi
 uvicorn
 # Reco dependencies
