@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import CornerstoneViewport from 'react-cornerstone-viewport';
+import './ConerstoneInit';
 // import get from 'lodash.get';
 
-type MyProps = {
-  studyUid: string;
-  seriesUid: string;
+import axios from 'axios';
+import config from '../../utils/config';
+
+type ViewerProps = {
+  recordId: string;
 };
 
-class DicomViewer extends Component<MyProps> {
+class DicomViewer extends Component<ViewerProps> {
   state = {
     tools: [
       // Mouse
@@ -35,39 +38,59 @@ class DicomViewer extends Component<MyProps> {
     ],
     imageIds: [],
     ready: false,
+    recordId: "",
   };
 
   static getDerivedStateFromProps(props: any, state: any) {
-    return (state.seriesUid = props.seriesUid);
+    return (state.recordId = props.recordId)
   }
 
-  find() {
-    // const query = `${Config.hostname}:${Config.port}/${Config.qido}/studies/${this.props.studyUid}/series/${this.props.seriesUid}/instances`;
-    // const imageQuery = `wadouri:${Config.hostname}:${Config.port}/${Config.wadouri}?studyUID=${this.props.studyUid}&seriesUID=${this.props.seriesUid}&objectUID=`;
-    // fetch(query)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (data) {
-    //       const res = data.map((row: any, index: any) => imageQuery + get(row, '00080018.Value[0]', ''));
-    //       this.setState({ imageIds: res, ready: true });
-    //     }
-    //   });
+  async find() {
+
+    if (this.state.recordId !== undefined){
+      await axios.get(`${config.baseURL}/records/${this.state.recordId}`)
+      .then((response) => {
+        if (response.data.data) {
+          const res = "dicomweb:" + response.data.data
+
+          // Set state with console log in callback
+          // this.setState({ imageIds: [res], ready: true }, () => {console.log(this.state)});
+          this.setState({ imageIds: [res], ready: true });  
+        }
+      })
+    }
   }
 
   componentDidMount() {
+    
     this.find();
   }
+
   componentDidUpdate(prevProps: any) {
-    if (prevProps.seriesUid !== this.props.seriesUid) {
+    if (prevProps.recordId !== this.props.recordId) {
       this.find();
     }
   }
 
   render() {
     if (this.state.ready) {
-      return <CornerstoneViewport tools={this.state.tools} imageIds={this.state.imageIds} style={{ minWidth: '100%', height: '512px', flex: '1' }} />;
+
+      console.log(this.state)
+
+      return (
+        <CornerstoneViewport 
+          tools={this.state.tools} 
+          imageIds={this.state.imageIds} 
+          style={{ minWidth: '100%', height: '100%', flex: '1' }} 
+        />
+      )
     } else {
-      return null;
+      // TODO: Return circular loader here...
+      return (
+        <div>
+          Loading...
+        </div>
+      );
     }
   }
 }

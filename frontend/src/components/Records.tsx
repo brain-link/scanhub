@@ -29,7 +29,6 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import Select from '@mui/joy/Select';
-// import Select from '@mui/material/Select';
 import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack';
 import config from '../utils/config';
@@ -208,13 +207,7 @@ export default function Records() {
                                 <FormLabel htmlFor="select-button" id='select-label'>Select Device</FormLabel>
                                 <Select
                                     placeholder='Select device...'
-                                    onChange={(event, value) => { record.device_id = Number(value)}}
-                                    componentsProps={{
-                                        button: {
-                                          id: 'select-device-button',
-                                          'aria-labelledby': 'select-label select-button'
-                                        }
-                                    }}
+                                    onChange={(event, value) => { record.device_id = Number(value) }}
                                 >
                                     {
                                         devices?.map((device, index) => (

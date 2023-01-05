@@ -46,4 +46,5 @@ var config = {
     },
   },
 };
+
 cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
