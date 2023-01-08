@@ -1,7 +1,6 @@
-asyncpg
 databases[postgresql]
 fastapi
-SQLAlchemy
+sqlalchemy
 uvicorn
 httpx
 psycopg2-binary

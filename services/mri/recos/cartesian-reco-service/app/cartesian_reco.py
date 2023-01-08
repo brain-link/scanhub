@@ -1,18 +1,13 @@
 from scanhub import RecoJob
 
-from pydantic import BaseModel, StrictStr
-
 import logging
 
 from typing import Set, Any
 import numpy as np
-from PIL import Image
 
 import pydicom
-from pydicom.dataset import Dataset, FileDataset
-from pydicom.uid import ExplicitVRLittleEndian
+from pydicom.dataset import Dataset
 import pydicom._storage_sopclass_uids
-from dicomweb_client.api import DICOMwebClient
 
 from scanhub import RecoJob
 
