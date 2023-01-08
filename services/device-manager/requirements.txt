@@ -1,9 +1,7 @@
-asyncpg
-databases[postgresql]
 fastapi
-SQLAlchemy
 uvicorn
-python-multipart
 kafka-python
 scanhub==0.0.4.dev3
+sqlalchemy
+databases[postgresql]
 psycopg2-binary
