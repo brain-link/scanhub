@@ -76,7 +76,7 @@ services:
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/device-manager/app/:/app/
-      # - data_lake:/app/data_lake/
+      - data_lake:/app/data_lake/
     ports:
       - 8002:8000
     # environment:
