@@ -31,7 +31,7 @@ services:
 
   sequence_db:
     container_name: db-sequence
-    image: postgres:12.1-alpine
+    image: postgres:12.13-bullseye
     volumes:
       - postgres_data_sequence:/var/lib/postgresql/data/
     environment:
@@ -60,7 +60,7 @@ services:
 
   workflow_db:
     container_name: db-workflow
-    image: postgres:12.1-alpine
+    image: postgres:12.13-bullseye
     volumes:
       - postgres_data_workflow:/var/lib/postgresql/data/
     environment:
@@ -87,7 +87,7 @@ services:
 
   device_db:
     container_name: db-device
-    image: postgres:12.1-alpine
+    image: postgres:12.13-bullseye
     volumes:
       - postgres_data_device:/var/lib/postgresql/data/
     environment:
