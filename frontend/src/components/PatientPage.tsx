@@ -125,7 +125,7 @@ export default function PatientIndex() {
                                 color="danger"
                                 variant="outlined"
                                 disabled={!params.recordId}
-                                onClick={() => {axios.post('http://localhost:8080/api/v1/workflow/control/MEAS_START/')}}
+                                onClick={() => {axios.post('http://localhost:8080/api/v1/workflow/control/start/')}}
                             >
                                 <PlayArrowSharpIcon />
                             </IconButton>
