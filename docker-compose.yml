@@ -37,10 +37,14 @@ services:
       POSTGRES_PASSWORD: patient_data
       POSTGRES_USER: brainlink
       POSTGRES_DB: scanhub
-      
-  adminer:
-    image: adminer
-    restart: unless-stopped
-    container_name: DB-Admin
+
+  ## Postgres Admin Tool
+  fepgadmin:
+    container_name: fepg-admin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: info@brain-link.de
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - 8070:8070
+      - "8070:80"
