@@ -15,7 +15,6 @@ from app.api import db_manager
 
 from scanhub import RecoJob, AcquisitionEvent, AcquisitionCommand
 
-
 producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
                          value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8'))
 
@@ -90,7 +89,7 @@ async def acquistion_control(command: str):
     producer.send('acquisitionEvent', acquisition_event)
     return {"message": f"Triggered {acquisition_event}"}
 
-@workflow.get('/result/{device_id}/result/{record_id}/')
+@workflow.get('/dcm_result/{device_id}/{record_id}/')
 async def download_result(device_id: str, record_id: str):
     file_name = f'cartesian.dcm'
     file_path = f'/app/data_lake/{device_id}/{record_id}/{file_name}'

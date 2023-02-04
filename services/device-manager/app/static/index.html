@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FastAPI Websocket Chat</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #main {
+            margin-top: 4rem;
+        }
+        #chatbox {
+            overflow-y: scroll;
+            height: 40rem;
+        }
+        .thin-alert {
+            padding: .25rem 1.25rem;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div id="main" class="row">
+            <div class="col-md-9">
+                <h4>Chat</h4>
+                <div id="chatbox">
+                    <div id="messages"></div>
+                </div>
+                <form>
+                    <div class="form-group row">
+                        <label for="chat-input" class="col-sm-1 col-form-label">Message</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="chat-input" placeholder="Enter message...">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary" disabled="disabled">Send</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <h4>Connected Devices</h4>
+                <ul id="devices"></ul>
+            </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    /** Add a device to the list of connected devices.*/
+    function addToDevicesList(deviceId, isYou) {
+        const newDeviceLi = $('<li id="devices-list-' + deviceId + '"></li>');
+        newDeviceLi.append(deviceId);
+        if(isYou) {
+            newDeviceLi.append($('<em> (you)</em>'));
+        }
+        $('#devices').append(newDeviceLi);
+    }
+
+    /** Clear the devices list. */
+    function clearDevicesList() {
+        $('#devices').empty();
+    }
+
+    /** Add a device to the list of connected devices and print an alert.*/
+    function addDevice(deviceId) {
+        console.log('Adding device to connected devices list:', deviceId);
+        addToDevicesList(deviceId);
+        addSystemMessage($('<span>Device <strong>' + deviceId + '</strong> joined the pool</span>'));
+    }
+
+    /** Remove a device from the list of connected devices and print an alert.*/
+    function removeDevice(deviceId) {
+        console.log('Removing device from connected devices list:', deviceId);
+        $('li#devices-list-' + deviceId).remove();
+        addSystemMessage($('<span>Device <strong>' + deviceId + '</strong> left the pool</span>'));
+    }
+
+    /** Add a new chat message from a named device. */
+    function addChatMessage(deviceId, msg) {
+        const newMessage = $('<div class="alert thin-alert" role="alert"></div>');
+        const deviceSays = $('<strong>' + deviceId + ':  </strong>');
+        if(deviceId === myDeviceId) {
+            newMessage.addClass('alert-secondary');
+        } else {
+            newMessage.addClass('alert-info');
+        }
+        newMessage.append(deviceSays);
+        newMessage.append(msg);
+        $('#messages').append(newMessage);
+    }
+
+    /** Add a new system message (e.g. device joined/left) to the chat. */
+    function addSystemMessage(msg) {
+        const newMessage = $('<div class="alert thin-alert alert-success" role="alert"></div>');
+        newMessage.append(msg);
+        $('#messages').append(newMessage);
+    }
+
+    /** Add a new error message to the chat. */
+    function addErrorMessage(msg) {
+        const newMessage = $('<div class="alert thin-alert alert-danger" role="alert"></div>');
+        newMessage.append(msg);
+        $('#messages').append(newMessage);
+    }
+
+    /** Handle an incoming message from the websocket connection. */
+    function onWebsocketMessage(message) {
+        console.log('Got message from websocket:', message);
+        const payload = JSON.parse(message.data);
+        switch(payload.type) {
+            case 'MESSAGE':
+                if(payload.data.device_id === 'server') {
+                    addSystemMessage(payload.data.msg);
+                } else {
+                    addChatMessage(payload.data.device_id, payload.data.msg);
+                }
+                return;
+            case 'USER_JOIN':
+                addDevice(payload.data);
+                return;
+            case 'USER_LEAVE':
+                removeDevice(payload.data);
+                return;
+            case 'POOL_JOIN':
+                myDeviceId = payload.data.device_id;
+                addToDevicesList(myDeviceId, true);
+                return;
+            case 'POOL_REMOVE':
+                addErrorMessage(payload.data.msg);
+                clearDevicesList();
+                return;
+            case 'ERROR':
+                addErrorMessage(payload.data.msg);
+                return;
+            default:
+                throw new TypeError('Unknown message type: ' + payload.type);
+                return;
+        }
+    }
+
+
+    function onClickFactory(websocket) {
+        return function (event) {
+            event.preventDefault();
+
+            const $messageInput = $('#chat-input');
+            const message = $messageInput.val();
+            $messageInput.val('');
+            if (!message) {
+                return
+            }
+
+            websocket.send(message);
+        }
+    }
+
+    /** Join up the 'submit' button to the websocket interface. */
+    function onWebsocketOpen(websocket) {
+        console.log('Opening WebSocket connection');
+        return function () {
+            $('button[type="submit"]')
+                .on('click', onClickFactory(websocket))
+                .removeAttr('disabled');
+        }
+    }
+
+    /** Print websocket errors into the chat box using addErrorMessage. */
+    function onWebsocketError(err) {
+        console.error('Websocket error: ', err);
+        addErrorMessage('Error:' + err, 'error');
+        onWebsocketClose();
+    }
+
+    /** Disable the 'submit' button when the websocket connection closes. */
+    function onWebsocketClose() {
+        console.log('Closing WebSocket connection');
+        $('button[type="submit"]')
+            .off('click')
+            .attr('disabled', 'disabled');
+    }
+
+    /** On page load, open a websocket connection, and fetch the list of active devices. */ 
+    $(function() {
+        function reqListener () {
+            const deviceData = JSON.parse(this.responseText);
+            console.log('Received device list:', deviceData);
+            deviceData.devices.forEach(addToDevicesList);
+            $(function() {
+                let myDeviceId = null;
+                websocket = new WebSocket('ws://127.0.0.1:8000/ws');
+                websocket.onopen = onWebsocketOpen(websocket);
+                websocket.onerror = onWebsocketError;
+                websocket.onclose = onWebsocketClose;
+                websocket.onmessage = onWebsocketMessage;
+            });
+        }
+        const oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("GET", "http://localhost:8000/devices");
+        oReq.send();
+    });
+
+    </script>
+  </body>
+</html>
