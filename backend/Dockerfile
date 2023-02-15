@@ -1,17 +1,15 @@
-FROM python:3.8-slim-buster
+FROM python:3.10-slim-bullseye
 
-RUN pip install --upgrade pip
-RUN pip3 install poetry
+# RUN pip install --upgrade pip
+RUN pip install poetry
 
 ENV POETRY_VIRTUALENVS_CREATE false
 
-WORKDIR /tmp
+WORKDIR /app
 
-ADD pyproject.toml .
-ADD poetry.lock .
-
+COPY pyproject.toml poetry.lock ./
 COPY scanhub/ressources /ressources
 
-RUN poetry install
+RUN poetry install && rm -rf /root/.cache/pip
 
 WORKDIR /scanhub
