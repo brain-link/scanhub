@@ -38,7 +38,14 @@ services:
       POSTGRES_USER: brainlink
       POSTGRES_DB: scanhub
 
-  ## Postgres Admin Tool
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    container_name: DB-Admin
+    ports:
+      - 8070:8070
+
+  # Postgres Admin Tool
   fepgadmin:
     container_name: fepg-admin
     image: dpage/pgadmin4
@@ -47,4 +54,4 @@ services:
       PGADMIN_DEFAULT_EMAIL: info@brain-link.de
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8070:80"
+      - "8071:8071"
