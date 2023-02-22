@@ -5,7 +5,8 @@ import axios from 'axios';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
-import TextField from '@mui/joy/TextField';
+import Input from '@mui/joy/Input';
+import FormLabel from '@mui/joy/FormLabel';
 import Link from '@mui/material/Link';
 import List from '@mui/joy/List';
 import ListDivider from '@mui/joy/ListDivider';
@@ -13,7 +14,6 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import FormHelperText from '@mui/joy/FormHelperText';
-import FormLabel from '@mui/joy/FormLabel';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import MenuItemSelect from '@mui/material/MenuItem';
@@ -177,8 +177,8 @@ export default function Records() {
                             }}
                         >
                             <Stack spacing={2}>
-                                <TextField 
-                                    label='Comment' 
+                                <FormLabel>Comment</FormLabel>
+                                <Input 
                                     name='comment'
                                     onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
                                     autoFocus 
@@ -186,8 +186,8 @@ export default function Records() {
                                 />
 
                                 {/* Data Input */}
-                                <TextField 
-                                    label='Data'
+                                <FormLabel>Data</FormLabel>
+                                <Input 
                                     name='data'
                                     placeholder='https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
                                     onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
