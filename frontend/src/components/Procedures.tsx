@@ -18,7 +18,8 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import IconButton from '@mui/joy/IconButton';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/joy/Button';
-import TextField from '@mui/joy/TextField';
+import Input from '@mui/joy/Input';
+import FormLabel from '@mui/joy/FormLabel';
 import Badge from '@mui/material/Badge';
 import config from '../utils/config';
 import Stack from '@mui/joy/Stack';
@@ -148,15 +149,15 @@ export default function Procedures() {
                             }}
                         >
                             <Stack spacing={2}>
-                                <TextField 
-                                    label="Patient concern" 
+                                <FormLabel>Patient Concern</FormLabel>
+                                <Input 
                                     name='reason'
                                     onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
                                     autoFocus 
                                     required 
                                 />
-                                <TextField 
-                                    label="Date" 
+                                <FormLabel>Date</FormLabel>
+                                <Input 
                                     name='date'
                                     onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
                                     required 

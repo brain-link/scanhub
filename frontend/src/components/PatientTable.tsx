@@ -20,7 +20,8 @@ import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 import Stack from '@mui/joy/Stack';
-import TextField from '@mui/joy/TextField';
+import Input from '@mui/joy/Input';
+import FormLabel from '@mui/joy/FormLabel';
 import Button from '@mui/joy/Button';
 
 import config from '../utils/config';
@@ -113,21 +114,21 @@ export default function PatientTable() {
                         }}
                     >
                         <Stack spacing={2}>
-                            <TextField 
-                                label='Sex' 
+                            <FormLabel>Sex</FormLabel>
+                            <Input 
                                 name='sex'
                                 onChange={(e) => setPatient({...patient, [e.target.name]: e.target.value})} 
                                 autoFocus 
                                 required 
                             />
-                            <TextField 
-                                label='Concern'
+                            <FormLabel>Concern</FormLabel>
+                            <Input
                                 name='concern'
                                 onChange={(e) => setPatient({...patient, [e.target.name]: e.target.value})} 
                                 required 
                             />
-                            <TextField 
-                                label='Date of birth'
+                            <FormLabel>Date of birth</FormLabel>
+                            <Input 
                                 name='birthday'
                                 onChange={(e) => setPatient({...patient, [e.target.name]: e.target.value})} 
                                 required 
