@@ -58,15 +58,26 @@ services:
       - workflow_db
       - broker
 
-  workflow_db:
-    container_name: db-workflow
+  # workflow_db:
+  #   container_name: db-workflow
+  #   image: postgres:12.13-bullseye
+  #   volumes:
+  #     - postgres_data_workflow:/var/lib/postgresql/data/
+  #   environment:
+  #     - POSTGRES_USER=workflow_db_username
+  #     - POSTGRES_PASSWORD=workflow_db_password
+  #     - POSTGRES_DB=workflow_db_dev
+  #   ports:
+  #     - "5432:5432"
+
+  sh_db:
+    container_name: sh-db
     image: postgres:12.13-bullseye
-    volumes:
-      - postgres_data_workflow:/var/lib/postgresql/data/
+    restart: unless-stopped
     environment:
-      - POSTGRES_USER=workflow_db_username
-      - POSTGRES_PASSWORD=workflow_db_password
-      - POSTGRES_DB=workflow_db_dev
+      POSTGRES_PASSWORD: data
+      POSTGRES_USER: brainlink
+      POSTGRES_DB: data
     ports:
       - "5432:5432"
 
@@ -159,21 +170,21 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-  # control-center:
-  #   container_name: kafka-control-center
-  #   image: confluentinc/cp-enterprise-control-center:7.3.1
-  #   hostname: control-center
-  #   depends_on:
-  #     - broker
-  #   ports:
-  #     - "9021:9021"
-  #   environment:
-  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
-  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
-  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
-  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
-  #     CONFLUENT_METRICS_TOPIC_REPLICATION: 1
-  #     PORT: 9021
+  control-center:
+    container_name: kafka-control-center
+    image: confluentinc/cp-enterprise-control-center:7.3.1
+    hostname: control-center
+    depends_on:
+      - broker
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+      PORT: 9021
 
 
 volumes:
