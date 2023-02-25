@@ -25,3 +25,7 @@ class Record(BaseModel):
 class Procedure(BaseModel):
     id: str
     records: List[Record]
+
+class Status(BaseModel):
+    id: str
+    status: str
