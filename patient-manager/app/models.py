@@ -3,7 +3,7 @@ from lib2to3.pytree import Base
 from typing import Optional
 import pydantic
 from tortoise import models, fields
-from scanhub.enums import PatientStatus, PatientSex, Modality
+from app.enums import PatientStatus, PatientSex, Modality
 from tortoise.contrib.pydantic import pydantic_model_creator
 from pydantic import BaseModel, Extra
 

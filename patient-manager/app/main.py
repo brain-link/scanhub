@@ -2,8 +2,8 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
-from scanhub.routes import api_router
-from scanhub.connection_manager import ConnectionManager
+from app.routes import api_router
+from app.connection_manager import ConnectionManager
 
 
 # Define the app
@@ -25,9 +25,9 @@ app.add_middleware(
 # Tortoise ORM    
 register_tortoise(
     app,
-    db_url='postgres://brainlink:patient_data@postgres/scanhub',
+    db_url='postgres://brainlink:data@patients_db/patients-data',
     modules={"models": [
-        "scanhub.models",
+        "app.models",
         ]},
     generate_schemas=True,
     add_exception_handlers=True,

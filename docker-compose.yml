@@ -2,66 +2,52 @@ version: "3"
 services:
 
   frontend:
-    container_name: Frontend
+    container_name: frontend
     image: frontend
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
     depends_on:
-      - backend
+      - patient-manager
     volumes:
       - ./frontend/src:/app/src
     ports:
       - 3000:3000
 
-  backend:
-    container_name: Backend
-    image: backend
+  patient-manager:
+    container_name: sh-patient-manager
+    image: sh-patient-manager
     restart: unless-stopped
-    build: 
-      context: ./backend
-      dockerfile: ./Dockerfile
-    command: bash -c "uvicorn scanhub.api:app --port 8000 --host 0.0.0.0 --reload"
+    build: ./patient-manager
+    command: bash -c "uvicorn app.main:app --port 8000 --host 0.0.0.0 --reload"
     depends_on:
-    - postgres
+    - patients_db
     volumes:
-    - ./backend:/scanhub
+    - ./patient-manager:/app/
     ports:
       - 8000:8000
 
-  postgres:
-    image: postgres
+  patients_db:
+    container_name: sh-db-patients
+    image: postgres:12.13-bullseye
     restart: unless-stopped
-    container_name: Patient-Database
     environment:
-      POSTGRES_PASSWORD: patient_data
+      POSTGRES_PASSWORD: data
       POSTGRES_USER: brainlink
-      POSTGRES_DB: scanhub
-
-  adminer:
-    image: adminer
-    restart: unless-stopped
-    container_name: DB-Admin
+      POSTGRES_DB: patients-data
     ports:
-      - 8060:8060
-    # Change default adminer port
-    command:
-      - 'php'
-      - '-S'
-      - '[::]:8060'
-      - '-t'
-      - '/var/www/html'
-    # entrypoint:
-    #   - 'entrypoint.sh'
-    #   - 'docker-php-entrypoint'
+      - "5432:5432"
 
-  # Postgres Admin Tool
-  # fepgadmin:
-  #   container_name: fepg-admin
-  #   image: dpage/pgadmin4
+  # adminer:
+  #   image: adminer
   #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: info@brain-link.de
-  #     PGADMIN_DEFAULT_PASSWORD: admin
   #   ports:
-  #     - "8071:8071"
+  #     - 8060:8060
+  #   # Change default adminer port
+  #   command:
+  #     - 'php'
+  #     - '-S'
+  #     - '[::]:8060'
+  #     - '-t'
+  #     - '/var/www/html'
+

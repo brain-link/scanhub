@@ -1,8 +1,8 @@
 import random
 from fastapi import APIRouter, HTTPException
-from scanhub.utilities.sequence_plot import SequencePlot
-from scanhub import models
-seq_plot = SequencePlot('/scanhub/scanhub/ressources/epi_pypulseq.seq')
+from app.utilities.sequence_plot import SequencePlot
+from app import models
+seq_plot = SequencePlot('/ressources/epi_pypulseq.seq')
 
 # Define an api router
 api_router = APIRouter()

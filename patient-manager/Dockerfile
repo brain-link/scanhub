@@ -8,8 +8,9 @@ ENV POETRY_VIRTUALENVS_CREATE false
 WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
-COPY scanhub/ressources /ressources
+COPY app/ressources /ressources
 
 RUN poetry install && rm -rf /root/.cache/pip
 
-WORKDIR /scanhub
+# WORKDIR /patient-manager
+COPY . /app
