@@ -1,9 +1,4 @@
-from enum import Enum, IntEnum
-
-
-class ProductType(IntEnum):
-    ARTICLE = 1
-    PAGE = 2
+from enum import IntEnum
 
 
 class PatientStatus(IntEnum):
@@ -20,13 +15,8 @@ class PatientSex(IntEnum):
 
 
 class Modality(IntEnum):
-    MRI = 0
-    ECG = 1
-    EEG = 2
-    ABC = 3
-
-
-class Action(str, Enum):
-    CREATE = "create"
-    DELETE = "delete"
-    EDIT = "edit"
+    NONE = 0
+    MRI = 1
+    ECG = 2
+    EEG = 3
+    CT = 4
