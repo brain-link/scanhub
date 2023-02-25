@@ -14,13 +14,13 @@
 # async def shutdown():
 #     await database.disconnect()
 
-# app.include_router(devices, prefix='/api/v1/devices', tags=['devices'])
+
 
 import logging
 from enum import Enum
 from typing import Any, List
 
-from fastapi import Body, FastAPI, HTTPException
+from fastapi import APIRouter, Body, FastAPI, HTTPException
 from pydantic import BaseModel
 from starlette.endpoints import WebSocketEndpoint
 from starlette.middleware.cors import CORSMiddleware
@@ -34,6 +34,8 @@ from pool import DeviceInfo, Pool
 
 # app = FastAPI()  # pylint: disable=invalid-name
 app = FastAPI(openapi_url="/api/v1/devices/openapi.json", docs_url="/api/v1/devices/docs")
+# router = APIRouter()
+# app.include_router(router, prefix='/api/v1/devices')
 
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_headers=["*"], allow_methods=["*"]
@@ -163,7 +165,7 @@ async def thunder(request: Request, distance: ThunderDistance = Body(...)):
         await pool.broadcast_message("server", "You feel a faint tremor")
 
 
-@app.websocket_route("/ws", name="ws")
+@app.websocket_route("/api/v1/devices/ws", name="ws")
 class PoolLive(WebSocketEndpoint):
     """Live connection to the global :class:`~.Pool` instance, via WebSocket.
     """
