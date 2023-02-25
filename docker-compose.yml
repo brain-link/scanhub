@@ -1,6 +1,15 @@
 version: "3"
 services:
   ## MRI Services
+  mri_scancontrol:
+    container_name: mri-scancontrol
+    build: ./services/mri/scancontrol
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - data_lake:/app/data_lake/
+    ports:
+      - 8004:8000
+
   ## MRI Reconstruction Services
   cartesian-reco-service:
     container_name: service-cartesian-reco
@@ -40,7 +49,6 @@ services:
       - POSTGRES_DB=sequence_db_dev
     ports:
       - "5434:5432"
-
 
   ## Microservices
   workflow-manager:
@@ -108,6 +116,21 @@ services:
   #   ports:
   #     - "5433:5432"
 
+  exam-manager:
+    container_name: exam-manager
+    build: ./services/exam-manager
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./services/exam-manager/app/:/app/
+      - data_lake:/app/data_lake/
+    ports:
+      - 8005:8000
+    # environment:
+    #   - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
+    # depends_on:
+    #  - device_db
+    #  - broker
+
   ## API Gateway
   nginx:
     container_name: api-gateway
@@ -120,17 +143,18 @@ services:
       - workflow-manager
       - device-manager
       - sequence-manager
+      - mri_scancontrol
 
-  ## Postgres Admin Tool
-  # pgadmin:
-  #   container_name: pg-admin
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   ports:
-  #     - "5050:80"
+  # Postgres Admin Tool
+  pgadmin:
+    container_name: pg-admin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
 
 ## Kafka Services
   zookeeper:

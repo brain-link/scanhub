@@ -1,0 +1,7 @@
+databases[postgresql]
+fastapi
+sqlalchemy
+uvicorn
+scanhub==0.0.4.dev3
+psycopg2-binary
+python-multipart

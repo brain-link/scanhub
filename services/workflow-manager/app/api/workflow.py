@@ -39,10 +39,10 @@ async def get_workflow(id: int):
         raise HTTPException(status_code=404, detail="Device not found")
     return workflow
    
-@workflow.post('/{device_id}/result/{record_id}/')
-async def upload_result(device_id: str, record_id: str, file: UploadFile = File(...)):
+@workflow.post('/upload/{record_id}/')
+async def upload_result(record_id: str, file: UploadFile = File(...)):
 
-    filename = f'{device_id}/{record_id}/{file.filename}'
+    filename = f'records/{file.filename}'
 
     try:
         contents = file.file.read()
@@ -59,7 +59,7 @@ async def upload_result(device_id: str, record_id: str, file: UploadFile = File(
 
     #TODO: switch based on the preselected reco
         
-    reco_job = RecoJob(reco_id="cartesian", device_id=device_id, record_id=record_id, input=filename)
+    reco_job = RecoJob(reco_id="cartesian", device_id="TB removed", record_id=record_id, input=filename)
 
     #TODO: On successful upload message kafka the correct topic to do reco
 
@@ -89,9 +89,9 @@ async def acquistion_control(command: str):
     producer.send('acquisitionEvent', acquisition_event)
     return {"message": f"Triggered {acquisition_event}"}
 
-@workflow.get('/dcm_result/{device_id}/{record_id}/')
-async def download_result(device_id: str, record_id: str):
+@workflow.get('/download/{record_id}/')
+async def download(record_id: str):
     file_name = f'cartesian.dcm'
-    file_path = f'/app/data_lake/{device_id}/{record_id}/{file_name}'
+    file_path = f'/app/data_lake/records/{record_id}/{file_name}'
     
     return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
