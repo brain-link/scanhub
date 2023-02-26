@@ -6,9 +6,9 @@ class ExamIn(BaseModel):
     nationality: Optional[str] = None
 
 
-class WorkflowOut(WorkflowIn):
+class ExamOut(ExamIn):
     id: int
 
 
-class WorkflowUpdate(WorkflowIn):
+class ExamUpdate(ExamIn):
     name: Optional[str] = None

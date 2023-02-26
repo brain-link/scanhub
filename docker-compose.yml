@@ -8,7 +8,7 @@ services:
     volumes:
       - data_lake:/app/data_lake/
     ports:
-      - 8004:8000
+      - 8005:8000
 
   ## MRI Reconstruction Services
   cartesian-reco-service:
@@ -38,6 +38,7 @@ services:
       - sequence_db
       - broker
 
+  ## MRI Database
   sequence_db:
     container_name: db-sequence
     image: postgres:12.13-bullseye
@@ -48,7 +49,7 @@ services:
       - POSTGRES_PASSWORD=sequence_db_password
       - POSTGRES_DB=sequence_db_dev
     ports:
-      - "5434:5432"
+      - "5433:5432"
 
   ## Microservices
   workflow-manager:
@@ -61,33 +62,10 @@ services:
     ports:
       - 8001:8000
     environment:
-      - DATABASE_URI=postgresql://workflow_db_username:workflow_db_password@workflow_db/workflow_db_dev
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub_db/sh_db
     depends_on:
-      - workflow_db
+      - scanhub_db
       - broker
-
-  # workflow_db:
-  #   container_name: db-workflow
-  #   image: postgres:12.13-bullseye
-  #   volumes:
-  #     - postgres_data_workflow:/var/lib/postgresql/data/
-  #   environment:
-  #     - POSTGRES_USER=workflow_db_username
-  #     - POSTGRES_PASSWORD=workflow_db_password
-  #     - POSTGRES_DB=workflow_db_dev
-  #   ports:
-  #     - "5432:5432"
-
-  sh_db:
-    container_name: sh-db
-    image: postgres:12.13-bullseye
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: data
-      POSTGRES_USER: brainlink
-      POSTGRES_DB: data
-    ports:
-      - "5432:5432"
 
   device-manager:
     container_name: device-manager
@@ -98,23 +76,10 @@ services:
       - data_lake:/app/data_lake/
     ports:
       - 8002:8000
-    # environment:
-    #   - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
+    environment:
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub_db/sh_db
     depends_on:
-      # - device_db
-      - broker
-
-  # device_db:
-  #   container_name: db-device
-  #   image: postgres:12.13-bullseye
-  #   volumes:
-  #     - postgres_data_device:/var/lib/postgresql/data/
-  #   environment:
-  #     - POSTGRES_USER=device_db_username
-  #     - POSTGRES_PASSWORD=device_db_password
-  #     - POSTGRES_DB=device_db_dev
-  #   ports:
-  #     - "5433:5432"
+      - scanhub_db
 
   exam-manager:
     container_name: exam-manager
@@ -124,12 +89,23 @@ services:
       - ./services/exam-manager/app/:/app/
       - data_lake:/app/data_lake/
     ports:
-      - 8005:8000
-    # environment:
-    #   - DATABASE_URI=postgresql://device_db_username:device_db_password@device_db/device_db_dev
-    # depends_on:
-    #  - device_db
-    #  - broker
+      - 8004:8000
+    environment:
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub_db/sh_db
+    depends_on:
+      - scanhub_db
+
+  ## Databases
+  scanhub_db:
+    container_name: db-scanhub
+    image: postgres:12.13-bullseye
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: brainlink
+      POSTGRES_PASSWORD: 9ArU5*Sr
+      POSTGRES_DB: sh_db
+    ports:
+      - "5432:5432"
 
   ## API Gateway
   nginx:

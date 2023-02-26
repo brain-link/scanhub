@@ -1,5 +1,5 @@
-from app.api.models import ExamIn, ExamOut, ExamUpdate
-from app.api.db import exam, database
+from api.models import ExamIn, ExamOut, ExamUpdate
+from api.db import exam, database
 
 
 async def add_exam(payload: ExamIn):

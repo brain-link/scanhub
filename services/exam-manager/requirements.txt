@@ -2,6 +2,7 @@ databases[postgresql]
 fastapi
 sqlalchemy
 uvicorn
+kafka-python
 scanhub==0.0.4.dev3
 psycopg2-binary
 python-multipart
