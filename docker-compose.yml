@@ -49,7 +49,7 @@ services:
       - POSTGRES_PASSWORD=sequence_db_password
       - POSTGRES_DB=sequence_db_dev
     ports:
-      - "5433:5432"
+      - "5434:5432"
 
   ## Microservices
   workflow-manager:
@@ -105,7 +105,7 @@ services:
       POSTGRES_PASSWORD: 9ArU5*Sr
       POSTGRES_DB: sh_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   ## API Gateway
   nginx:
