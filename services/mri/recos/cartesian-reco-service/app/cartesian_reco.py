@@ -125,9 +125,9 @@ def cartesian_reco(message: Any) -> None:
     log.info(ds)
     # Option 1: save to disk
 
-    filename = f'{reco_job.device_id}/{reco_job.record_id}/{reco_job.reco_id}.dcm'
+    file_name = f'{reco_job.reco_id}.dcm'
 
-    ds.save_as(f'/app/data_lake/{filename}')
+    ds.save_as(f'/app/data_lake/records/{reco_job.record_id}/{file_name}')
 
     # Option 2: save to orthanc
     # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")

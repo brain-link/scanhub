@@ -10,8 +10,8 @@ import json
 from pydantic import BaseModel, StrictStr
 from kafka import KafkaProducer
 
-from app.api.models import WorkflowOut, WorkflowIn, WorkflowUpdate
-from app.api import db_manager
+from api.models import WorkflowOut, WorkflowIn, WorkflowUpdate
+from api import db_manager
 
 from scanhub import RecoJob, AcquisitionEvent, AcquisitionCommand
 
@@ -42,7 +42,7 @@ async def get_workflow(id: int):
 @workflow.post('/upload/{record_id}/')
 async def upload_result(record_id: str, file: UploadFile = File(...)):
 
-    filename = f'records/{file.filename}'
+    filename = f'records/{record_id}/{file.filename}'
 
     try:
         contents = file.file.read()

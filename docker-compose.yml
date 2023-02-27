@@ -14,20 +14,21 @@ services:
   cartesian-reco-service:
     container_name: service-cartesian-reco
     build: ./services/mri/recos/cartesian-reco-service
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     environment:
       - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
     depends_on:
       - broker
     volumes:
+      - ./services/mri/recos/cartesian-reco-service/app/:/app/
       - data_lake:/app/data_lake/
 
   sequence-manager:
     container_name: sequence-manager
     build: ./services/mri/sequence-manager
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
-      - ./services/mri/sequence-manager/:/app/
+      - ./services/mri/sequence-manager/app/:/app/
       - data_lake:/app/data_lake/
     ports:
       - 8003:8000
@@ -55,9 +56,9 @@ services:
   workflow-manager:
     container_name: workflow-manager
     build: ./services/workflow-manager
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
-      - ./services/workflow-manager/:/app/
+      - ./services/workflow-manager/app/:/app/
       - data_lake:/app/data_lake/
     ports:
       - 8001:8000

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.api.workflow import workflow
-from app.api.db import metadata, database, engine
+from api.workflow import workflow
+from api.db import metadata, database, engine
 
 metadata.create_all(engine)
 

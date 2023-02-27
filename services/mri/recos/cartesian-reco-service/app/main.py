@@ -9,7 +9,7 @@ import json
 import logging
 import os
 
-from .worker import init, run
+from worker import init, run
 
 
 # instantiate the API

@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
 
-from app.api.models import SequenceOut, SequenceIn, SequenceUpdate
-from app.api import db_manager
-from app.api.service import is_device_present
+from api.models import SequenceOut, SequenceIn, SequenceUpdate
+from api import db_manager
+from api.service import is_device_present
 
 sequences = APIRouter()
 

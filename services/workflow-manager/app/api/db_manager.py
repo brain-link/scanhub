@@ -1,5 +1,5 @@
-from app.api.models import WorkflowIn, WorkflowOut, WorkflowUpdate
-from app.api.db import workflow, database
+from api.models import WorkflowIn, WorkflowOut, WorkflowUpdate
+from api.db import workflow, database
 
 
 async def add_workflow(payload: WorkflowIn):
