@@ -21,6 +21,22 @@ producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
 
 workflow = APIRouter()
 
+### NEW API
+
+@workflow.get('/list/', response_model=List[WorkflowOut])
+async def get_workflow_list():
+    return await db_manager.get_all_workflows()
+
+@workflow.get('/{id}/', response_model=WorkflowOut)
+async def get_workflow(id: int):
+    workflow = await db_manager.get_workflow(id)
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Device not found")
+    return workflow
+
+
+### OLD API
+
 @workflow.post('/', response_model=WorkflowOut, status_code=201)
 async def create_workflow(payload: WorkflowIn):
     workflow_id = await db_manager.add_workflow(payload)
@@ -32,13 +48,6 @@ async def create_workflow(payload: WorkflowIn):
 
     return response
 
-@workflow.get('/{id}/', response_model=WorkflowOut)
-async def get_workflow(id: int):
-    workflow = await db_manager.get_workflow(id)
-    if not workflow:
-        raise HTTPException(status_code=404, detail="Device not found")
-    return workflow
-   
 @workflow.post('/upload/{record_id}/')
 async def upload_result(record_id: str, file: UploadFile = File(...)):
 

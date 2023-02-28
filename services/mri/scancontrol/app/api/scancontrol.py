@@ -1,8 +1,8 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
 
-from app.api.models import RecordIDList, Procedure, Record, Status
-from app.api.service import is_device_present
+from api.models import RecordIDList, Procedure, Record, Status
+from api.service import is_device_present
 
 import uuid
 
