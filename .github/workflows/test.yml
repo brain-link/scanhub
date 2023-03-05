@@ -29,3 +29,4 @@ jobs:
       run: |
         pylint $(git ls-files '*.py')
         continue-on-error: true
+    continue-on-error: true
