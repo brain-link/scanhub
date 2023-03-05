@@ -69,6 +69,8 @@ services:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       - sequence-database
+      - scanhub-database
+      - workflow-manager
 
   exam-manager:
     container_name: exam-manager
@@ -83,7 +85,7 @@ services:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       - sequence-database
-      - workflow-manager
+      - scanhub-database
       - device-manager
 
   #*************************************************************************************

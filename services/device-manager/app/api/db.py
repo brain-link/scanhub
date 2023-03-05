@@ -1,18 +1,21 @@
 import os
 
-from sqlalchemy import Column, Integer, MetaData, DateTime, String, Table, create_engine, func
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, MetaData, DateTime, String, create_engine, func
+# from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.automap import automap_base
 
 from databases import Database
 
-DATABASE_URI = os.getenv('DATABASE_URI')
+# Load baase 
+Base = automap_base()
+engine = create_engine(os.getenv('DATABASE_URI'), echo=True)
+Base.prepare(autoload_with=engine)
 
-engine = create_engine(DATABASE_URI, echo=True)
 metadata = MetaData()
 
 # Generate declarative base class
-Base = declarative_base()
+# Base = declarative_base()
 
 # Device database model
 class Device(Base):
@@ -33,6 +36,6 @@ class Device(Base):
     site = Column(String(50), nullable=True)
     ip_address = Column(String(50), nullable=False)
 
-# Base.metadata.tables["device"].create(bind=engine)
+
 Base.metadata.create_all(engine)
 database = Database(DATABASE_URI)

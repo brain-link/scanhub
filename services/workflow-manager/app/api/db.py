@@ -1,7 +1,7 @@
 import os
 
-from sqlalchemy import Column, Integer, MetaData, String, DateTime, Table, create_engine, func
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, MetaData, String, DateTime, create_engine, func
+# from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 from databases import Database
@@ -35,7 +35,6 @@ class Workflow(Base):
     kafka_topic = Column(String(50), nullable=False)
 
 
-# Base.metadata.tables["workflow"].create(bind=engine)
 Base.metadata.create_all(engine)
 database = Database(DATABASE_URI)
 
