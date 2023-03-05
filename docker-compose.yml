@@ -54,6 +54,7 @@ services:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       - sequence-database
+      - scanhub-database
       - broker
 
   device-manager:
@@ -68,9 +69,10 @@ services:
     environment:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
-      - sequence-database
-      - scanhub-database
-      - workflow-manager
+      sequence-database:
+        condition: service_started
+      init-scanhub-database:
+        condition: service_completed_successfully
 
   exam-manager:
     container_name: exam-manager
@@ -84,13 +86,28 @@ services:
     environment:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
-      - sequence-database
-      - scanhub-database
-      - device-manager
+      sequence-database:
+        condition: service_started
+      init-scanhub-database:
+        condition: service_completed_successfully
 
   #*************************************************************************************
   # Databases
   #*************************************************************************************
+
+  # TODO: Delete container after execution of script
+  init-scanhub-database:
+    container_name: init-sh-db
+    build: ./database
+    restart: "no"
+    volumes:
+      - ./database/:/usr/app/src/
+    environment:
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+    depends_on:
+      scanhub-database:
+        condition: service_healthy
+  
   # Scanhub Database
   scanhub-database:
     container_name: db-scanhub
@@ -102,6 +119,12 @@ services:
       POSTGRES_USER: brainlink
       POSTGRES_PASSWORD: 9ArU5*Sr
       POSTGRES_DB: sh_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s 
     ports:
       - "5433:5432"
 
@@ -116,6 +139,12 @@ services:
       POSTGRES_USER: brainlink
       POSTGRES_PASSWORD: 9ArU5*Sq
       POSTGRES_DB: seq_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s 
     ports:
       - "5434:5432"
 
