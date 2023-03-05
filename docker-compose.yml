@@ -70,8 +70,10 @@ services:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       sequence-database:
-        condition: service_started
+        # performs health check on sequence db
+        condition: service_healthy
       init-scanhub-database:
+        # container requires successful init-db container which creates db
         condition: service_completed_successfully
 
   exam-manager:
@@ -87,8 +89,10 @@ services:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       sequence-database:
-        condition: service_started
-      init-scanhub-database:
+        # performs health check on sequence db
+        condition: service_healthy
+      init-scanhub-database:  
+        # container requires successful init-db container which creates db
         condition: service_completed_successfully
 
   #*************************************************************************************
@@ -119,7 +123,8 @@ services:
       POSTGRES_USER: brainlink
       POSTGRES_PASSWORD: 9ArU5*Sr
       POSTGRES_DB: sh_db
-    healthcheck:
+    healthcheck:  
+      # init-db container is started, after health check passed
       test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
       interval: 10s
       timeout: 5s
