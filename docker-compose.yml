@@ -1,6 +1,6 @@
 version: "3"
 services:
-  ## MRI Services
+  # MRI Services
   mri_scancontrol:
     container_name: mri-scancontrol
     build: ./services/mri/scancontrol
@@ -11,7 +11,7 @@ services:
     ports:
       - 8005:8000
 
-  ## MRI Reconstruction Services
+  # MRI Reconstruction Services
   cartesian-reco-service:
     container_name: service-cartesian-reco
     build: ./services/mri/recos/cartesian-reco-service
@@ -34,24 +34,11 @@ services:
     ports:
       - 8003:8000
     environment:
-      - DATABASE_URI=postgresql://sequence_db_username:sequence_db_password@sequence_db/sequence_db_dev
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sq@sequence-database/seq_db
       - DEVICE_SERVICE_HOST_URL=http://sequence-manager:8000/api/v1/mri/sequences/
     depends_on:
-      - sequence_db
+      - sequence-database
       - broker
-
-  ## MRI Database
-  sequence_db:
-    container_name: db-sequence
-    image: postgres:12.13-bullseye
-    volumes:
-      - postgres_data_sequence:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=sequence_db_username
-      - POSTGRES_PASSWORD=sequence_db_password
-      - POSTGRES_DB=sequence_db_dev
-    ports:
-      - "5434:5432"
 
   ## Microservices
   workflow-manager:
@@ -64,9 +51,9 @@ services:
     ports:
       - 8001:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub_db/sh_db
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
-      - scanhub_db
+      - sequence-database
       - broker
 
   device-manager:
@@ -79,9 +66,9 @@ services:
     ports:
       - 8002:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub_db/sh_db
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
-      - scanhub_db
+      - sequence-database
 
   exam-manager:
     container_name: exam-manager
@@ -93,21 +80,42 @@ services:
     ports:
       - 8004:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub_db/sh_db
+      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
-      - scanhub_db
+      - sequence-database
+      - workflow-manager
+      - device-manager
 
-  ## Databases
-  scanhub_db:
+  #*************************************************************************************
+  # Databases
+  #*************************************************************************************
+  # Scanhub Database
+  scanhub-database:
     container_name: db-scanhub
     image: postgres:12.13-bullseye
-    restart: unless-stopped
+    restart: always # unless-stopped
+    volumes:
+      - postgres_data_scanhub:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: brainlink
       POSTGRES_PASSWORD: 9ArU5*Sr
       POSTGRES_DB: sh_db
     ports:
       - "5433:5432"
+
+  # MRI Database
+  sequence-database:
+    container_name: db-sequence
+    image: postgres:12.13-bullseye
+    restart: always # unless-stopped
+    volumes:
+      - postgres_data_sequence:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: brainlink
+      POSTGRES_PASSWORD: 9ArU5*Sq
+      POSTGRES_DB: seq_db
+    ports:
+      - "5434:5432"
 
   ## API Gateway
   nginx:
@@ -124,15 +132,15 @@ services:
       - mri_scancontrol
 
   # Postgres Admin Tool
-  pgadmin:
-    container_name: pg-admin
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
+  # pgadmin:
+  #   container_name: pg-admin
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   ports:
+  #     - "5050:80"
 
 ## Kafka Services
   zookeeper:
@@ -192,6 +200,5 @@ services:
 volumes:
   data_lake:
   postgres_data_sequence:
-  postgres_data_device:
-  postgres_data_workflow:
+  postgres_data_scanhub:
   pgadmin-data:
