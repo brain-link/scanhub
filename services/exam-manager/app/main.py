@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from api.exam import exam
-from api.db import metadata, database, engine
-
-metadata.create_all(engine)
+from api.db import database
 
 app = FastAPI(openapi_url="/api/v1/exam/openapi.json", docs_url="/api/v1/exam/docs")
 

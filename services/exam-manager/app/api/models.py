@@ -12,3 +12,4 @@ class ExamOut(ExamIn):
 
 class ExamUpdate(ExamIn):
     name: Optional[str] = None
+

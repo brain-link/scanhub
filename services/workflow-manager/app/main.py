@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from api.workflow import workflow
-from api.db import metadata, database, engine
+from api.db import database
 
-metadata.create_all(engine)
 
 app = FastAPI(openapi_url="/api/v1/workflow/openapi.json", docs_url="/api/v1/workflow/docs")
 
