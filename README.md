@@ -26,30 +26,14 @@ Installation
 Development
 -----------
 
-Add workflow framework in a different programming language with:
-
-    func init --docker
-
-Add a new workflow with:
-
-    func new
-    
-    
-Orthanc
------------
-
-Default User orthanc:
-
-user: orthanc
-pw: orthanc
-
+see Wiki: 
 
 License
 -------
 
 ScanHub is **BSD-licenced** (3 clause):
 
-    Copyright (c) 2021-2022, authors of ScanHub. All rights reserved.
+    Copyright (c) 2021-2023, authors of ScanHub. All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
