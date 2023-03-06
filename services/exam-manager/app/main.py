@@ -1,9 +1,8 @@
 from fastapi import FastAPI
-from api.workflow import workflow
+from api.exam import exam
 from api.db import database
 
-
-app = FastAPI(openapi_url="/api/v1/workflow/openapi.json", docs_url="/api/v1/workflow/docs")
+app = FastAPI(openapi_url="/api/v1/exam/openapi.json", docs_url="/api/v1/exam/docs")
 
 @app.on_event("startup")
 async def startup():
@@ -13,4 +12,4 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-app.include_router(workflow, prefix='/api/v1/workflow', tags=['workflow'])
+app.include_router(exam, prefix='/api/v1/exam', tags=['exam'])

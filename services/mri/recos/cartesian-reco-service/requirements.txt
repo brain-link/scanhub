@@ -1,12 +1,8 @@
 aiokafka
 asyncio
-kafka-python
-pydantic
-scanhub==0.0.4
-fastapi==0.88.0
-uvicorn==0.11.2
+scanhub==0.0.4.dev3
+fastapi
+uvicorn
 # Reco dependencies
 numpy
-Pillow
 pydicom
-dicomweb-client

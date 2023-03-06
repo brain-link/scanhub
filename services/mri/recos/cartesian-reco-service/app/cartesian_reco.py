@@ -1,18 +1,13 @@
 from scanhub import RecoJob
 
-from pydantic import BaseModel, StrictStr
-
 import logging
 
 from typing import Set, Any
 import numpy as np
-from PIL import Image
 
 import pydicom
-from pydicom.dataset import Dataset, FileDataset
-from pydicom.uid import ExplicitVRLittleEndian
+from pydicom.dataset import Dataset
 import pydicom._storage_sopclass_uids
-from dicomweb_client.api import DICOMwebClient
 
 from scanhub import RecoJob
 
@@ -130,9 +125,9 @@ def cartesian_reco(message: Any) -> None:
     log.info(ds)
     # Option 1: save to disk
 
-    filename = f'{reco_job.device_id}/{reco_job.result_id}/{reco_job.reco_id}.dcm'
+    file_name = f'{reco_job.reco_id}.dcm'
 
-    ds.save_as(f'/app/data_lake/{filename}')
+    ds.save_as(f'/app/data_lake/records/{reco_job.record_id}/{file_name}')
 
     # Option 2: save to orthanc
     # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")

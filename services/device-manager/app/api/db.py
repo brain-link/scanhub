@@ -1,27 +1,23 @@
 import os
 
-from sqlalchemy import (Column, Integer, MetaData, String, Table,
-                        create_engine, ARRAY)
+from sqlalchemy import create_engine
+from sqlalchemy.ext.automap import automap_base
 
 from databases import Database
 
 DATABASE_URI = os.getenv('DATABASE_URI')
 
-engine = create_engine(DATABASE_URI)
-metadata = MetaData()
+engine = create_engine(DATABASE_URI, echo=True)
 
-devices = Table(
-    'devices',
-    metadata,
-    Column('id', Integer, primary_key=True),
-    Column('name', String(50)),
-    Column('host', String(50)),
-    Column('manufacturer', String(50)),
-    Column('model', String(50)),
-    Column('type', String(50)),
-    Column('serial_number', String(50)),
-    Column('kafka_topic', String(50)),
-    Column('status', String(50)),
-)
+Base = automap_base()
 
+# reflect the tables
+Base.prepare(autoload_with=engine)
+
+# get device table
+try:
+    device = Base.classes.device
+except ArithmeticError as err:
+    print("Table does not exist: ", err)
+    
 database = Database(DATABASE_URI)
