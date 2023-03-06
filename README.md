@@ -26,7 +26,7 @@ Installation
 Development
 -----------
 
-see Wiki: 
+see [Wiki](https://github.com/brain-link/scanhub/wiki)
 
 License
 -------
