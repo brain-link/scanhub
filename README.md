@@ -2,10 +2,16 @@
   <a href="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"><img src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg" width="400" height="200" alt="ScanHub"></a>
 </p>
 
-[![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
-[![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
-[![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
-[![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://https://docker.com/)
+
+
+<p align="center">
+<a href="https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml" target="_blank">
+    <img src="https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml/badge.svg" alt="Github Actions">
+</a>
+<a href="https://github.com/brain-link/scanhub-ui/actions/workflows/test.yml" target="_blank">
+    <img src="https://github.com/brain-link/scanhub-ui/actions/workflows/test.yml/badge.svg" alt="Github Actions">
+</a>
+</p>
 
 -----------------
   
