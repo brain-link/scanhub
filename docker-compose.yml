@@ -87,6 +87,7 @@ services:
       - 8004:8000
     environment:
       - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DATABASE_URI_ASYNCPG=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       sequence-database:
         # performs health check on sequence db
@@ -115,7 +116,7 @@ services:
   # Scanhub Database
   scanhub-database:
     container_name: db-scanhub
-    image: postgres:12.13-bullseye
+    image: postgres:15.2-bullseye
     restart: always # unless-stopped
     volumes:
       - postgres_data_scanhub:/var/lib/postgresql/data/
@@ -136,7 +137,7 @@ services:
   # MRI Database
   sequence-database:
     container_name: db-sequence
-    image: postgres:12.13-bullseye
+    image: postgres:15.2-bullseye
     restart: always # unless-stopped
     volumes:
       - postgres_data_sequence:/var/lib/postgresql/data/
