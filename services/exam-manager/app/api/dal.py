@@ -2,11 +2,10 @@
 
 from api.models import BaseExam, ExamOut, get_exam_out
 from api.models import ProcedureIn, ProcedureOut, get_procedure_out
-from api.db import Exam, Procedure, Record, async_session
+from api.db import Exam, Procedure, async_session
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from pprint import pprint
-from sqlalchemy.dialects.postgresql import UUID
 
 
 async def add_exam(payload: BaseExam) -> ExamOut:
@@ -15,35 +14,20 @@ async def add_exam(payload: BaseExam) -> ExamOut:
         session.add(new_exam)
         await session.commit()
         await session.refresh(new_exam)
-    print("***** NEW UUID: ", new_exam.id)
+    print("***** NEW EXAM *****")
+    pprint(new_exam.__dict__)
     return await get_exam_out(new_exam)
 
 async def get_exam(id: str) -> ExamOut:
     async with async_session() as session:
         exam = await session.get(Exam, id)
-        # await session.refresh(exam, "procedures")
+    return await get_exam_out(exam)
 
-        # print(exam.procedures)
-        # exam = await session.execute(select(Exam).where(Exam.id == id).options(selectinload(Exam.procedures)))
-        # await exam.options(selectinload(Exam.procedures))
-        # exam = await result.options(selectinload(Exam.procedures))
-        # exam = await session.execute(select(Exam).get(id).options(selectinload(Exam.procedures)))
-        
-        # stmt = select(Exam).where(Exam.id == id)
-        # stmt = stmt.options(selectinload(Exam.procedures))
-        # exam = await session.scalar(stmt)
-
-        pprint(exam.__dict__)
-
-        # exam_out = await get_exam_out(exam)
-        # pprint(exam_out)
-        # return exam_out
-
-async def get_exams(patient_id: str) -> ExamOut:
+async def get_all_exams(patient_id: str) -> ExamOut:
     async with async_session() as session:
         result = await session.execute(select(Exam).where(Exam.patient_id == patient_id))
         exams = result.scalars().all()
-        return [await get_exam_out(exam) for exam in exams]
+    return [await get_exam_out(exam) for exam in exams]
 
 # async def delete_exam(id: int):
 #     query = exam.delete(exam.c.id==id).where()
@@ -55,10 +39,9 @@ async def get_exams(patient_id: str) -> ExamOut:
 
 
 async def add_procedure(payload: ProcedureIn) -> ProcedureOut:
-    exam_id = payload.exam_id
     new_procedure = Procedure(**payload.dict())
+    print("***** NEW PROCEDURE", new_procedure.__dict__)
     async with async_session() as session:
-        new_procedure.exam = await session.get(Exam, exam_id)
         session.add(new_procedure)
         await session.commit()
         await session.refresh(new_procedure)
@@ -72,7 +55,8 @@ async def get_procedure(id: str) -> ProcedureOut:
     async with async_session() as session:
         procedure = await session.get(Procedure, id)
         await session.refresh(Procedure, "exam")
-        print("****** TEST: ", procedure.exam)
+        print("***** PROCEDURE RESPONSE *****")
+        pprint(procedure.__dict__)
         return await get_procedure_out(procedure)
     
 async def get_procedures(exam_id: str) -> list[ProcedureOut]:
