@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
-from api.exam import exam
 
-# from api.db import Exam, Procedure, Record
-# from sqlalchemy import inspect
+from api.exam import exam
+from api.db import init_db
 
 
 def custom_client_uid(route: APIRoute):
@@ -17,11 +16,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    pass
-    # map_exam, map_procedure, map_record = inspect(Exam), inspect(Procedure), inspect(Record)
-    # print(f"***** INSPECT *****\n")
-    # print(f"Columns:\n{map_exam.columns}\n{map_procedure.columns}\n{map_record.columns}")
-    # print(f"Relationships:\n{map_exam.relationships}\n{map_procedure.relationships}\n{map_record.relationships}")
+    init_db()
 
 @app.on_event("shutdown")
 async def shutdown():
