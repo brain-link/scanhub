@@ -18,18 +18,16 @@ producer = KafkaProducer(
 
 workflow = APIRouter()
 
-### NEW API
 
 @workflow.post('/{id}/', response_model=WorkflowOut, status_code=201, tags=["workflow"])
 async def create_workflow(payload: BaseWorkflow):
-    print("******* CREATE WORKFLOW: ", payload.dict())
     workflow = await dal.add_workflow(payload)
     if not workflow:
         raise HTTPException(status_code=404, detail="Could not create workflow")
     return workflow
 
 @workflow.get('/workflows/', response_model=list[WorkflowOut], tags=["workflow"])
-async def get_exams() -> list[WorkflowOut]:
+async def get_workflow_list() -> list[WorkflowOut]:
     workflows = await dal.get_all_workflows()
     if not workflows:
         raise HTTPException(status_code=404, detail="Workflows not found")
@@ -42,7 +40,7 @@ async def get_workflow(id: int):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return workflow
 
-@workflow.delete('/{id}/', response_model=None, tags=["workflow"])
+@workflow.delete('/{id}/', response_model={}, status_code=204, tags=["workflow"])
 async def delete_workflow(id: int):
     if not await dal.delete_workflow(id):
         raise HTTPException(status_code=404, detail="Workflow not found")

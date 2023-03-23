@@ -52,5 +52,103 @@ async def update_workflow(id: int, payload: BaseWorkflow) -> WorkflowOut:
         workflow.update(payload.dict())
         await session.commit()
         await session.refresh(workflow)
+
+        # # Chat gpt suggestion:
+        # stmt = update(Workflow).where(Workflow.id == id)
+        # stmt.values(**payload.dict()) 
+        # workflow = await session.execute(stmt)
+        # await session.commit()
         
     return await get_workflow_out(workflow)
+
+
+
+
+# Chat GPT example:
+
+# from fastapi import FastAPI, HTTPException
+# from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+# from sqlalchemy.orm import sessionmaker, selectinload
+# from sqlalchemy.sql.expression import update, delete
+# from sqlalchemy.exc import IntegrityError
+# from pydantic import BaseModel
+# from typing import Optional
+
+# app = FastAPI()
+
+# DATABASE_URL = "postgresql+asyncpg://user:password@host:port/dbname"
+
+# engine = create_async_engine(DATABASE_URL, echo=True)
+# async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+
+# class UserCreate(BaseModel):
+#     name: str
+#     email: str
+
+
+# class UserUpdate(BaseModel):
+#     name: Optional[str] = None
+#     email: Optional[str] = None
+
+
+# class User(BaseModel):
+#     id: int
+#     name: str
+#     email: str
+
+
+# @app.post("/users")
+# async def create_user(user_create: UserCreate):
+#     async with async_session() as session:
+#         try:
+#             user = User(name=user_create.name, email=user_create.email)
+#             session.add(user)
+#             await session.commit()
+#             await session.refresh(user)
+#             return user
+        
+#         except IntegrityError:
+#             raise HTTPException(status_code=400, detail="Email already exists")
+
+
+# @app.get("/users/{user_id}")
+# async def get_user(user_id: int):
+#     async with async_session() as session:
+#         result = await session.execute(select(User).where(User.id == user_id))
+#         user = result.scalar()
+#         if not user:
+#             raise HTTPException(status_code=404, detail="User not found")
+#         return user
+
+
+# @app.put("/users/{user_id}")
+# async def update_user(user_id: int, user_update: UserUpdate):
+#     async with async_session() as session:
+#         try:
+#             stmt = update(User).where(User.id == user_id)
+#             if user_update.name:
+#                 stmt = stmt.values(name=user_update.name)
+#             if user_update.email:
+#                 stmt = stmt.values(email=user_update.email)
+
+#             result = await session.execute(stmt)
+#             await session.commit()
+
+#             if result.rowcount == 0:
+#                 raise HTTPException(status_code=404, detail="User not found")
+            
+#             return {"message": "User updated successfully"}
+        
+#         except IntegrityError:
+#             raise HTTPException(status_code=400, detail="Email already exists")
+
+
+# @app.delete("/users/{user_id}")
+# async def delete_user(user_id: int):
+#     async with async_session() as session:
+#         result = await session.execute(delete(User).where(User.id == user_id))
+#         await session.commit()
+#         if result.rowcount == 0:
+#             raise HTTPException(status_code=404, detail="User not found")
+#         return {"message": "User deleted successfully"}
