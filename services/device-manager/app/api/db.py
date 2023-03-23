@@ -32,7 +32,7 @@ class Device(Base):
     ip_address: Mapped[str] = mapped_column(nullable=False)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now())
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
 
 
 # Create async engine and session, echo=True generates console output
