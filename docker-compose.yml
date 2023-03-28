@@ -40,7 +40,7 @@ services:
       - sequence-database
       - broker
 
-  ## Microservices
+  # Microservices
   workflow-manager:
     container_name: workflow-manager
     build: ./services/workflow-manager
@@ -51,11 +51,15 @@ services:
     ports:
       - 8001:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
-      - sequence-database
-      - scanhub-database
-      - broker
+      sequence-database:
+        condition: service_healthy
+      scanhub-database:
+        condition: service_healthy
+      broker:
+        condition: service_started
 
   device-manager:
     container_name: device-manager
@@ -67,14 +71,13 @@ services:
     ports:
       - 8002:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       sequence-database:
-        # performs health check on sequence db
         condition: service_healthy
-      init-scanhub-database:
-        # container requires successful init-db container which creates db
-        condition: service_completed_successfully
+      scanhub-database:
+        condition: service_healthy
 
   exam-manager:
     container_name: exam-manager
@@ -86,32 +89,21 @@ services:
     ports:
       - 8004:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      - DATABASE_URI_ASYNCPG=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     depends_on:
       sequence-database:
-        # performs health check on sequence db
         condition: service_healthy
-      init-scanhub-database:  
-        # container requires successful init-db container which creates db
-        condition: service_completed_successfully
+      scanhub-database:
+        condition: service_healthy
+      device-manager:
+        condition: service_started
+      workflow-manager:
+        condition: service_started
 
   #*************************************************************************************
   # Databases
   #*************************************************************************************
-
-  # TODO: Delete container after execution of script
-  init-scanhub-database:
-    container_name: init-sh-db
-    build: ./database
-    restart: "no"
-    volumes:
-      - ./database/:/usr/app/src/
-    environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-    depends_on:
-      scanhub-database:
-        condition: service_healthy
   
   # Scanhub Database
   scanhub-database:
@@ -126,7 +118,7 @@ services:
       POSTGRES_DB: sh_db
     healthcheck:  
       # init-db container is started, after health check passed
-      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -146,7 +138,7 @@ services:
       POSTGRES_PASSWORD: 9ArU5*Sq
       POSTGRES_DB: seq_db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -163,21 +155,11 @@ services:
     volumes:
       - ./infrastructure/nginx_config.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - workflow-manager
+      # - workflow-manager
       - device-manager
-      - sequence-manager
-      - mri_scancontrol
-
-  # Postgres Admin Tool
-  # pgadmin:
-  #   container_name: pg-admin
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: christoph.dinh@brain-link.de
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   ports:
-  #     - "5050:80"
+      # - sequence-manager
+      # - mri_scancontrol
+      - exam-manager
 
 ## Kafka Services
   zookeeper:
@@ -217,25 +199,24 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-  control-center:
-    container_name: kafka-control-center
-    image: confluentinc/cp-enterprise-control-center:7.3.1
-    hostname: control-center
-    depends_on:
-      - broker
-    ports:
-      - "9021:9021"
-    environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
-      CONTROL_CENTER_REPLICATION_FACTOR: 1
-      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
-      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
-      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
-      PORT: 9021
+  # control-center:
+  #   container_name: kafka-control-center
+  #   image: confluentinc/cp-enterprise-control-center:7.3.1
+  #   hostname: control-center
+  #   depends_on:
+  #     - broker
+  #   ports:
+  #     - "9021:9021"
+  #   environment:
+  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
+  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+  #     CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+  #     PORT: 9021
 
 
 volumes:
   data_lake:
   postgres_data_sequence:
   postgres_data_scanhub:
-  pgadmin-data:
