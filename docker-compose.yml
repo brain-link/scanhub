@@ -41,6 +41,8 @@ services:
       - broker
 
   # Microservices
+  # Workflow manager, device manager and exam manager create data tables in postgres DB
+  # (!) TODO: Fix dependencies, table creation in workflow and exam manager require a restart of the service
   workflow-manager:
     container_name: workflow-manager
     build: ./services/workflow-manager
