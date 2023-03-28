@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from typing import List
 from pprint import pprint
 
-from api.models import BaseExam, BaseProcedure, BaseRecord  # pydantic models
+from api.models import BaseExam, ProcedureIn, RecordIn  # pydantic models
 from api.db import Exam, Procedure, Record, async_session   # database orm models
 
 
@@ -103,7 +103,7 @@ async def update_exam(id: int, payload: BaseExam) -> Exam:
 # PROCEDURES
 # **************************************************
 
-async def add_procedure(payload: BaseProcedure) -> Procedure:
+async def add_procedure(payload: ProcedureIn) -> Procedure:
     """Add a new procedure to the database
 
     Arguments:
@@ -171,7 +171,7 @@ async def delete_procedure(id: int) -> bool:
             return False
         
     
-async def update_procedure(id: int, payload: BaseProcedure) -> Procedure:
+async def update_procedure(id: int, payload: ProcedureIn) -> Procedure:
     """Update an existing procedure in database
 
     Arguments:
@@ -193,7 +193,7 @@ async def update_procedure(id: int, payload: BaseProcedure) -> Procedure:
 # RECORDS
 # **************************************************
 
-async def add_record(payload: BaseRecord) -> Record:
+async def add_record(payload: RecordIn) -> Record:
     """Add a new record to the database
 
     Arguments:
@@ -258,7 +258,7 @@ async def delete_record(id: int) -> bool:
             return False
 
 
-async def update_record(id: int, payload: BaseRecord) -> Record:
+async def update_record(id: int, payload: RecordIn) -> Record:
     """Update an existing record in database
 
     Arguments:

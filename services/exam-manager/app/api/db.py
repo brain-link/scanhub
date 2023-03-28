@@ -1,16 +1,11 @@
 import os
-import asyncio
-
-from sqlalchemy import create_engine, func, ForeignKey, MetaData
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.ext.asyncio import async_sessionmaker
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
 import datetime
 from typing import List
-from sqlalchemy.orm import relationship
+
+from sqlalchemy import create_engine, func
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
+
 
 
 # Create base for exam, record and procedure table
