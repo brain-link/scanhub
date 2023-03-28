@@ -5,7 +5,7 @@ import json
 
 from kafka import KafkaProducer
 
-from api.models import BaseWorkflow, WorkflowOut
+from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
 from api import dal
 
 # from scanhub import RecoJob, AcquisitionEvent, AcquisitionCommand
@@ -24,21 +24,21 @@ async def create_workflow(payload: BaseWorkflow):
     workflow = await dal.add_workflow(payload)
     if not workflow:
         raise HTTPException(status_code=404, detail="Could not create workflow")
-    return workflow
+    return await get_workflow_out(workflow)
 
 @workflow.get('/workflows/', response_model=list[WorkflowOut], tags=["workflow"])
 async def get_workflow_list() -> list[WorkflowOut]:
     workflows = await dal.get_all_workflows()
     if not workflows:
         raise HTTPException(status_code=404, detail="Workflows not found")
-    return workflows
+    return [await get_workflow_out(workflow) for workflow in workflows]
 
 @workflow.get('/{id}/', response_model=WorkflowOut, tags=["workflow"])
 async def get_workflow(id: int):
     workflow = await dal.get_workflow(id)
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
-    return workflow
+    return await get_workflow_out(workflow)
 
 @workflow.delete('/{id}/', response_model={}, status_code=204, tags=["workflow"])
 async def delete_workflow(id: int):
@@ -50,7 +50,7 @@ async def update_workflow(id: int, payload: BaseWorkflow):
     workflow = await dal.update_workflow(id, payload)
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
-    return workflow
+    return await get_workflow_out(workflow)
 
 
 
