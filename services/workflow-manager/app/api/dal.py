@@ -13,7 +13,7 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
     """Add a new workflow to the database
 
     Arguments:
-        payload {BaseWorkflow} -- Pydantic base model to create a new db entry
+        payload {BaseWorkflow} -- Pydantic base model to create a new database entry
 
     Returns:
         Workflow -- Database orm model
@@ -33,7 +33,7 @@ async def get_workflow(id: int) -> Workflow:
     """Fetch a workflow from database
 
     Arguments:
-        id {int} -- Identifier of workflow
+        id {int} -- ID of workflow
 
     Returns:
         Workflow -- Database orm model
@@ -52,15 +52,14 @@ async def get_all_workflows() -> List[Workflow]:
     async with async_session() as session:
         result = await session.execute(select(Workflow))
         workflows = result.scalars().all()
-    # return [await get_workflow_out(workflow) for workflow in workflows]
     return workflows
 
 
 async def delete_workflow(id: int) -> bool:
-    """Delete a workflow by identifier
+    """Delete a workflow by ID
 
     Arguments:
-        id {int} -- Identifier of workflow to be deleted
+        id {int} -- ID of workflow to be deleted
 
     Returns:
         bool -- Success of delete event
@@ -80,7 +79,7 @@ async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow:
     """Update an existing workflow in database
 
     Arguments:
-        id {int} -- Identifier of workflow
+        id {int} -- ID of workflow
         payload {BaseWorkflow} -- Pydantic base model, data to be updated
 
     Returns:
