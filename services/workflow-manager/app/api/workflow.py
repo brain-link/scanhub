@@ -1,8 +1,7 @@
-from fastapi import APIRouter, HTTPException, File, UploadFile
-from fastapi.responses import FileResponse
-
 import json
 
+from fastapi import APIRouter, HTTPException, File, UploadFile
+from fastapi.responses import FileResponse
 from kafka import KafkaProducer
 
 from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
@@ -16,6 +15,13 @@ producer = KafkaProducer(
 )
 
 
+# Http status codes
+# 200 = Ok: GET, PUT
+# 201 = Created: POST
+# 204 = No Content: Delete
+# 404 = Not found
+
+
 workflow = APIRouter()
 
 
@@ -27,20 +33,20 @@ async def create_workflow(payload: BaseWorkflow):
     return await get_workflow_out(workflow)
 
 
-@workflow.get('/workflows/', response_model=list[WorkflowOut], tags=["workflow"])
-async def get_workflow_list() -> list[WorkflowOut]:
-    workflows = await dal.get_all_workflows()
-    if not workflows:
-        raise HTTPException(status_code=404, detail="Workflows not found")
-    return [await get_workflow_out(workflow) for workflow in workflows]
-
-
-@workflow.get('/{id}/', response_model=WorkflowOut, tags=["workflow"])
+@workflow.get('/{id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def get_workflow(id: int):
     workflow = await dal.get_workflow(id)
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(workflow)
+
+
+@workflow.get('/workflows/', response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
+async def get_workflow_list() -> list[WorkflowOut]:
+    workflows = await dal.get_all_workflows()
+    if not workflows:
+        raise HTTPException(status_code=404, detail="Workflows not found")
+    return [await get_workflow_out(workflow) for workflow in workflows]
 
 
 @workflow.delete('/{id}/', response_model={}, status_code=204, tags=["workflow"])
@@ -49,7 +55,7 @@ async def delete_workflow(id: int):
         raise HTTPException(status_code=404, detail="Workflow not found")
     
 
-@workflow.put('/{id}/', response_model=WorkflowOut, tags=["workflow"])
+@workflow.put('/{id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def update_workflow(id: int, payload: BaseWorkflow):
     workflow = await dal.update_workflow(id, payload)
     if not workflow:
