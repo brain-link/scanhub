@@ -2,10 +2,10 @@ import os
 import datetime
 from typing import List
 
-from sqlalchemy import create_engine, func
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy import create_engine, func, ForeignKey
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 
 # Create base for exam, record and procedure table

@@ -24,8 +24,8 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
         await session.commit()
         await session.refresh(new_workflow)
     # Debugging
-    # print("***** NEW WORKFLOW *****")
-    # pprint(new_workflow.__dict__)
+    print("***** NEW WORKFLOW *****")
+    pprint(new_workflow.__dict__)
     return new_workflow
 
 
@@ -87,7 +87,10 @@ async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow:
     """
     async with async_session() as session:
         workflow = await session.get(Workflow, id)
-        workflow.update(payload.dict())
-        await session.commit()
-        await session.refresh(workflow)
-    return workflow
+        if workflow:
+            workflow.update(payload.dict())
+            await session.commit()
+            await session.refresh(workflow)
+            return workflow
+        else:
+            return None

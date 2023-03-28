@@ -86,7 +86,10 @@ async def update_device(id: int, payload: BaseDevice) -> Device:
     """
     async with async_session() as session:
         device = await session.get(Device, id)
-        device.update(payload.dict())
-        await session.commit()
-        await session.refresh(device)
-    return device
+        if device:
+            device.update(payload.dict())
+            await session.commit()
+            await session.refresh(device)
+            return device
+        else:
+            return None
