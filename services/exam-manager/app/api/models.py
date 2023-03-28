@@ -43,7 +43,8 @@ class BaseProcedure(BaseModel):
     status: str
 
 class BaseRecord(BaseModel):
-    sequence_id: int
+    status: str
+    comment: Optional[str] = None
 
 
 #***********************************************
@@ -54,10 +55,10 @@ class ProcedureIn(BaseProcedure):
     exam_id: int
 
 class RecordIn(BaseRecord):
-    procedure_id: int
+    sequence_id: int
     workflow_id: Optional[int] = None
     device_id: int
-
+    procedure_id: int
 
 
 #***********************************************
@@ -79,8 +80,9 @@ class RecordOut(BaseRecord):
     is_acquired: bool
     datetime_created: datetime
     datetime_updated: datetime | None
-    device: DeviceOut
-    workflow: WorkflowOut
+    device: Optional[DeviceOut] = None
+    workflow: Optional[WorkflowOut] = None
+    # TODO: return sequence object
 
 class ProcedureOut(BaseProcedure):
     id: int
@@ -127,20 +129,25 @@ async def get_device_out(data: Device) -> DeviceOut:
         ip_address=data.ip_address,
     )
 
-async def get_record_out(data: Record) -> RecordOut:
+async def get_record_out(data: Record, device: Device = None, workflow: Workflow = None) -> RecordOut:
     return RecordOut(
         id=data.id,
-        sequence_id=data.sequence_id,
+        status=data.status,
+        comment=data.comment,
         is_acquired=data.is_acquired,
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
-        device=get_device_out(data.device),
-        workflow=get_workflow_out(data.workflow) if data.workflow else None,
+        # TODO: How/where to fetch device and workflow? 
+        device=await get_device_out(device) if device else None,
+        workflow=await get_workflow_out(workflow) if workflow else None,
+        # sequence=...
     )
 
 async def get_procedure_out(data: Procedure) -> ProcedureOut:
+
     # Create records of the procedure
-    records = [get_record_out(record) for record in data.records] if hasattr(data, "records") else []
+    records = [await get_record_out(record) for record in data.records]
+
     return ProcedureOut(
         id=data.id,
         name=data.name,
@@ -152,8 +159,10 @@ async def get_procedure_out(data: Procedure) -> ProcedureOut:
     )
 
 async def get_exam_out(data: Exam) -> ExamOut:
+
     # Create procedures of the exam
     exam_procedures = [await get_procedure_out(procedure) for procedure in data.procedures]
+
     return ExamOut(
         id=data.id,
         patient_id=data.patient_id,

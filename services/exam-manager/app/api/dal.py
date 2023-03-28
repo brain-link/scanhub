@@ -93,10 +93,13 @@ async def update_exam(id: int, payload: BaseExam) -> Exam:
     """
     async with async_session() as session:
         exam = await session.get(Exam, id)
+    if exam:
         exam.update(payload.dict())
         await session.commit()
         await session.refresh(exam)
-    return exam
+        return exam
+    else:
+        return None
 
 
 # **************************************************
@@ -183,10 +186,13 @@ async def update_procedure(id: int, payload: ProcedureIn) -> Procedure:
     """
     async with async_session() as session:
         procedure = await session.get(Procedure, id)
-        procedure.update(payload.dict())
-        await session.commit()
-        await session.refresh(procedure)
-    return procedure
+        if procedure:
+            procedure.update(payload.dict())
+            await session.commit()
+            await session.refresh(procedure)
+            return procedure
+        else:
+            return None
 
 
 # **************************************************
@@ -270,7 +276,11 @@ async def update_record(id: int, payload: RecordIn) -> Record:
     """
     async with async_session() as session:
         record = await session.get(Record, id)
-        record.update(payload.dict())
-        await session.commit()
-        await session.refresh(record)
-    return record
+        if record:
+            record.update(payload.dict())
+            await session.commit()
+            await session.refresh(record)
+            return record
+        else:
+            return None
+    

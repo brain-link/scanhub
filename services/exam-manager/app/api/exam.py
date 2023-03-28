@@ -16,12 +16,12 @@ exam = APIRouter()
 
 
 # **************************************************
-# RECORDS
+# Exams
 # **************************************************
 
 @exam.post('/exam/', response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam(payload: BaseExam):
-    exam = dal.add_exam(payload)
+    exam = await dal.add_exam(payload)
     if not exam:
         raise HTTPException(status_code=404, detail="Could not create exam")
     return await get_exam_out(exam)
@@ -63,7 +63,7 @@ async def update_workflow(id: int, payload: BaseExam):
 
 @exam.post('/procedure/', response_model=ProcedureOut, status_code=201, tags=["procedures"])
 async def create_procedure(payload: ProcedureIn):
-    procedure = dal.add_procedure(payload)
+    procedure = await dal.add_procedure(payload)
     if not procedure:
         raise HTTPException(status_code=404, detail="Could not create procedure")
     return await get_procedure_out(procedure)
@@ -79,10 +79,10 @@ async def get_procedure(id: int):
 
 @exam.get('/procedures/{exam_id}/', response_model=list[ProcedureOut], status_code=200, tags=["procedures"])
 async def get_procedure_list(exam_id: int):
-    procedures = await dal.get_procedures(exam_id)
+    procedures = await dal.get_all_procedures(exam_id)
     if not procedures:
         raise HTTPException(status_code=404, detail="Procedures not found")
-    return [await get_exam_out(procedure) for procedure in procedures]
+    return [await get_procedure_out(procedure) for procedure in procedures]
 
 
 @exam.delete('/procedure/{id}', response_model={}, status_code=204, tags=["procedures"])
@@ -91,9 +91,9 @@ async def delete_procedure(id: int):
         raise HTTPException(status_code=404, detail="Procedure not found")
 
 
-@exam.por('/procedure/{id}', response_model=ProcedureOut, status_code=200, tags=["procedures"])
+@exam.put('/procedure/{id}', response_model=ProcedureOut, status_code=200, tags=["procedures"])
 async def update_procedure(id: int, payload: ProcedureIn):
-    procedure = await dal.update_procedure(payload)
+    procedure = await dal.update_procedure(id, payload)
     if not procedure:
         raise HTTPException(status_code=404, detail="Procedure not found")
     return await get_procedure_out(procedure)
@@ -129,7 +129,7 @@ async def get_record_list(procedure_id: int):
 
 @exam.delete('/record/{id}/', response_model={}, status_code=204, tags=["records"])
 async def delete_record(id: int):
-    if not dal.delete_record(id):
+    if not await dal.delete_record(id):
         raise HTTPException(status_code=404, detail="Record not found")
     
 
