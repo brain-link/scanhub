@@ -44,6 +44,14 @@ class Exam(Base):
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
 
+    def update(self, data: dict):
+        """Update attributes of orm model
+
+        Arguments:
+            data {dict} -- Entries to be updated
+        """
+        for key, value in data.items():
+            setattr(self, key, value)
 
 class Procedure(Base):
     """
@@ -62,6 +70,15 @@ class Procedure(Base):
     status: Mapped[str] = mapped_column(nullable=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+    
+    def update(self, data: dict):
+        """Update attributes of orm model
+
+        Arguments:
+            data {dict} -- Entries to be updated
+        """
+        for key, value in data.items():
+            setattr(self, key, value)
 
 
 class Record(Base):
@@ -77,8 +94,6 @@ class Record(Base):
     procedure_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
     device_id: Mapped[int] = mapped_column(nullable=False)
-    # device_id: Mapped[int] = mapped_column(ForeignKey("device.id"))
-    # device: Mapped["Device"] = relationship()
     sequence_id: Mapped[int] = mapped_column(nullable=False)
     # Fields
     status: Mapped[str] = mapped_column(nullable=False)
@@ -86,6 +101,15 @@ class Record(Base):
     is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+
+    def update(self, data: dict):
+        """Update attributes of orm model
+
+        Arguments:
+            data {dict} -- Entries to be updated
+        """
+        for key, value in data.items():
+            setattr(self, key, value)
 
 
 # Create automap base
@@ -101,5 +125,10 @@ except AttributeError as e:
 
 
 # Create async engine and session, echo=True generates console output
-async_engine = create_async_engine(os.getenv('DB_URI_ASYNC'), future=True, echo=False)
+async_engine = create_async_engine(
+    os.getenv('DB_URI_ASYNC'), 
+    future=True, 
+    echo=False,
+    isolation_level="AUTOCOMMIT"
+)
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)
