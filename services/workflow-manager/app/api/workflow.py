@@ -26,12 +26,14 @@ async def create_workflow(payload: BaseWorkflow):
         raise HTTPException(status_code=404, detail="Could not create workflow")
     return await get_workflow_out(workflow)
 
+
 @workflow.get('/workflows/', response_model=list[WorkflowOut], tags=["workflow"])
 async def get_workflow_list() -> list[WorkflowOut]:
     workflows = await dal.get_all_workflows()
     if not workflows:
         raise HTTPException(status_code=404, detail="Workflows not found")
     return [await get_workflow_out(workflow) for workflow in workflows]
+
 
 @workflow.get('/{id}/', response_model=WorkflowOut, tags=["workflow"])
 async def get_workflow(id: int):
@@ -40,10 +42,12 @@ async def get_workflow(id: int):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(workflow)
 
+
 @workflow.delete('/{id}/', response_model={}, status_code=204, tags=["workflow"])
 async def delete_workflow(id: int):
     if not await dal.delete_workflow(id):
         raise HTTPException(status_code=404, detail="Workflow not found")
+    
 
 @workflow.put('/{id}/', response_model=WorkflowOut, tags=["workflow"])
 async def update_workflow(id: int, payload: BaseWorkflow):

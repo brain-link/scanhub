@@ -74,7 +74,7 @@ class Record(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
-    exam_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
+    procedure_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
     device_id: Mapped[int] = mapped_column(nullable=False)
     # device_id: Mapped[int] = mapped_column(ForeignKey("device.id"))

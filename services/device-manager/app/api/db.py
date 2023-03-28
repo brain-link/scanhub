@@ -34,7 +34,21 @@ class Device(Base):
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
 
+    def update(self, data: dict):
+        """Update attributes of orm model
+
+        Arguments:
+            data {dict} -- Entries to be updated
+        """
+        for key, value in data.items():
+            setattr(self, key, value)
+
 
 # Create async engine and session, echo=True generates console output
-async_engine = create_async_engine(os.getenv('DB_URI_ASYNC'), future=True)  #, echo=True)
+async_engine = create_async_engine(
+    os.getenv('DB_URI_ASYNC'), 
+    future=True, 
+    echo=False,
+    isolation_level="AUTOCOMMIT"    
+)
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)

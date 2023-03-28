@@ -37,6 +37,11 @@ class Workflow(Base):
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
 
     def update(self, data: dict):
+        """Update attributes of orm model
+
+        Arguments:
+            data {dict} -- Entries to be updated
+        """
         for key, value in data.items():
             setattr(self, key, value)
 

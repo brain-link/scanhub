@@ -1,10 +1,10 @@
-# data access layer (DAL)
+# Data Access Layer (DAL)
 
 from sqlalchemy.future import select
 from typing import List
 from pprint import pprint
 
-from api.models import BaseWorkflow, WorkflowOut
+from api.models import BaseWorkflow
 from api.db import Workflow, async_session
 
 
@@ -13,10 +13,10 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
     """Add a new workflow to the database
 
     Arguments:
-        payload {BaseWorkflow} -- Pydantic base model to create a new workflow
+        payload {BaseWorkflow} -- Pydantic base model to create a new db entry
 
     Returns:
-        WorkflowOut -- Database orm model
+        Workflow -- Database orm model
     """
     new_workflow = Workflow(**payload.dict())
     async with async_session() as session:
@@ -81,7 +81,7 @@ async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow:
 
     Arguments:
         id {int} -- Identifier of workflow
-        payload {BaseWorkflow} -- Pydantic base model
+        payload {BaseWorkflow} -- Pydantic base model, data to be updated
 
     Returns:
         Workflow -- Updated database orm model
