@@ -1,11 +1,11 @@
-from pydantic import BaseModel
 from typing import List, Optional
-from api.db import Exam, Procedure  #, Record, Device, Workflow
 from datetime import datetime
-import uuid
-import pprint
+from pydantic import BaseModel
 
-# TODO: Definition of models in scanhub-tools, otherwise redundant model definition
+from api.db import Exam, Procedure, Record, Device, Workflow
+
+# TODO: Define model id's as uuid's
+
 
 #***********************************************
 #   Base Models
@@ -65,17 +65,17 @@ class RecordIn(BaseRecord):
 #***********************************************
 
 class DeviceOut(BaseDevice):
-    id: str
+    id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
 class WorkflowOut(BaseWorkflow):
-    id: str
+    id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
 class RecordOut(BaseRecord):
-    id: str
+    id: int
     is_acquired: bool
     datetime_created: datetime
     datetime_updated: datetime | None
@@ -83,65 +83,66 @@ class RecordOut(BaseRecord):
     workflow: WorkflowOut
 
 class ProcedureOut(BaseProcedure):
-    id: str
+    id: int
     datetime_created: datetime
     datetime_updated: datetime | None
     records: List[RecordOut]
 
 class ExamOut(BaseExam):
-    id: str
+    id: int
     datetime_created: datetime
     datetime_updated: datetime | None
     procedures: List[ProcedureOut]
 
+
+
 #***********************************************
-#   Transformer: SQLAlchemy-ORM to Pydantic
+#   Helper: SQLAlchemy-ORM to Pydantic
 #***********************************************
 
-# async def get_workflow_out(data: Workflow) -> WorkflowOut:
-#     return WorkflowOut(
-#         id=str(data.id),
-#         datetime_created=data.datetime_created,
-#         datetime_updated=data.datetime_updated,
-#         host=data.host,
-#         name=data.name,
-#         manufacturer=data.manufacturer,
-#         modality=data.modality,
-#         type=data.type,
-#         status=data.status,
-#         kafka_topic=data.kafka_topic,
-#     )
+async def get_workflow_out(data: Workflow) -> WorkflowOut:
+    return WorkflowOut(
+        id=data.id,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
+        host=data.host,
+        name=data.name,
+        manufacturer=data.manufacturer,
+        modality=data.modality,
+        type=data.type,
+        status=data.status,
+        kafka_topic=data.kafka_topic,
+    )
 
-# async def get_device_out(data: Device) -> DeviceOut:
-#     return DeviceOut(
-#         id=str(data.id),
-#         datetime_created=data.datetime_created,
-#         datetime_updated=data.datetime_updated,
-#         name=data.name,
-#         manufacturer=data.manufacturer,
-#         modality=data.modality,
-#         status=data.status,
-#         site=data.site,
-#         ip_address=data.ip_address,
-#     )
+async def get_device_out(data: Device) -> DeviceOut:
+    return DeviceOut(
+        id=data.id,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
+        name=data.name,
+        manufacturer=data.manufacturer,
+        modality=data.modality,
+        status=data.status,
+        site=data.site,
+        ip_address=data.ip_address,
+    )
 
-# async def get_record_out(data: Exam) -> RecordOut:
-
-#     return RecordOut(
-#         id=str(data.id),
-#         sequence_id=data.sequence_id,
-#         is_acquired=data.is_acquired,
-#         datetime_created=data.datetime_created,
-#         datetime_updated=data.datetime_updated,
-#         device=get_device_out(data.device),
-#         workflow=get_workflow_out(data.workflow) if hasattr(data, "workflow") else None,
-#     )
+async def get_record_out(data: Record) -> RecordOut:
+    return RecordOut(
+        id=data.id,
+        sequence_id=data.sequence_id,
+        is_acquired=data.is_acquired,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
+        device=get_device_out(data.device),
+        workflow=get_workflow_out(data.workflow) if data.workflow else None,
+    )
 
 async def get_procedure_out(data: Procedure) -> ProcedureOut:
-    # records = [get_record_out(record) for record in data.records] if hasattr(data, "records") else []
-    records = []
+    # Create records of the procedure
+    records = [get_record_out(record) for record in data.records] if hasattr(data, "records") else []
     return ProcedureOut(
-        id=str(data.id),
+        id=data.id,
         name=data.name,
         status=data.status,
         modality=data.modality,
@@ -151,18 +152,10 @@ async def get_procedure_out(data: Procedure) -> ProcedureOut:
     )
 
 async def get_exam_out(data: Exam) -> ExamOut:
-
-    # exam_procedures = []
-    # for procedure in data.procedures:
-    #     procedure_out = await get_procedure_out(procedure)
-    #     exam_procedures.append(procedure_out)
-
-    exam_procedures = [
-        await get_procedure_out(procedure) for procedure in data.procedures
-    ]
-    
+    # Create procedures of the exam
+    exam_procedures = [await get_procedure_out(procedure) for procedure in data.procedures]
     return ExamOut(
-        id=str(data.id),
+        id=data.id,
         patient_id=data.patient_id,
         name=data.name,
         country=data.country,
