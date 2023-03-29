@@ -1,5 +1,6 @@
 """Module providingFunction simulating a device with scancontrol."""
 import os
+import logging
 
 from fastapi import FastAPI
 from pydantic import BaseModel  # pylint: disable=no-name-in-module
@@ -15,27 +16,34 @@ class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     record_id: str
 
 
+logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
 
 @app.post("/start-scan")
 async def root(scan_request: ScanRequest):
     """Endpoint to trigger a scan."""
-    sequence = open(f"{RECORDS_PATH}{scan_request.record_id}/sequence",
-                    "r", encoding='UTF-8')
-    print(sequence.read())
-    sequence.close()
+    sequence = ""
+    with open(f"{RECORDS_PATH}{scan_request.record_id}/sequence",
+              "r", encoding='UTF-8') as sequence_file:
+        sequence = sequence_file.read()
+    logging.debug("Loaded sequence: %s", sequence)
+    pre_scan()
+    start_scan()
+    post_scan()
     return {"message": f"""Scanrequest {scan_request.record_id} received.
       Scan is scheduled."""}
 
 
 def simulate_scan():
     """simulates a scan"""
+    # TODO: This is just for debug purposes
     return
 
 
 def start_scan():
     """do something to start the scan"""
+    simulate_scan()
     return
 
 
@@ -74,4 +82,5 @@ def upload_image(record_id):
 
 def submit_status(record_id, percentage):
     """submit status to acq_control"""
+    # TODO: Call endpoint on acq control
     return
