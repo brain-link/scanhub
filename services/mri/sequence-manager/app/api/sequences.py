@@ -1,11 +1,37 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
 
-from app.api.models import SequenceOut, SequenceIn, SequenceUpdate
-from app.api import db_manager
-from app.api.service import is_device_present
+from api.models import SequenceOut, SequenceIn, SequenceUpdate
+from api import db_manager
+from api.service import is_device_present
 
 sequences = APIRouter()
+
+### NEW API
+
+@sequences.get('/list', response_model=List[SequenceOut])
+async def get_sequence_list():
+    return await db_manager.get_all_sequences()
+
+@sequences.get('/{id}/', response_model=SequenceOut)
+async def get_sequence(id: int):
+    sequence = await db_manager.get_sequence(id)
+    if not sequence:
+        raise HTTPException(status_code=404, detail="Sequence not found")
+    return sequence
+
+@sequences.get('/compile')#, response_model=.seq)
+async def compile_sequence():
+    #TBD: compile the sequence
+    return
+
+@sequences.upload('/upload')
+async def upload_sequence():
+    #TBD: upload the sequence
+    return
+
+
+### OLD API
 
 @sequences.post('/', response_model=SequenceOut, status_code=201)
 async def create_sequence(payload: SequenceIn):
@@ -24,13 +50,6 @@ async def create_sequence(payload: SequenceIn):
 @sequences.get('/', response_model=List[SequenceOut])
 async def get_sequences():
     return await db_manager.get_all_sequences()
-
-@sequences.get('/{id}/', response_model=SequenceOut)
-async def get_sequence(id: int):
-    sequence = await db_manager.get_sequence(id)
-    if not sequence:
-        raise HTTPException(status_code=404, detail="Movie not found")
-    return sequence
 
 @sequences.put('/{id}/', response_model=SequenceOut)
 async def update_sequence(id: int, payload: SequenceUpdate):

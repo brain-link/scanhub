@@ -3,8 +3,11 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/brain-link/scanhub/actions" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/frontend.yml/badge.svg" alt="Github Actions">
+<a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
+    <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Github Actions">
+</a>
+<a href="https://github.com/brain-link/scanhub/actions/workflows/test.yml" target="_blank">
+    <img src="https://github.com/brain-link/scanhub/actions/workflows/test.yml/badge.svg" alt="Github Actions">
 </a>
 </p>
 
@@ -24,30 +27,14 @@ Installation
 Development
 -----------
 
-Add workflow framework in a different programming language with:
-
-    func init --docker
-
-Add a new workflow with:
-
-    func new
-    
-    
-Orthanc
------------
-
-Default User orthanc:
-
-user: orthanc
-pw: orthanc
-
+see [Wiki](https://github.com/brain-link/scanhub/wiki)
 
 License
 -------
 
 ScanHub is **BSD-licenced** (3 clause):
 
-    Copyright (c) 2021-2022, authors of ScanHub. All rights reserved.
+    Copyright (c) 2021-2023, authors of ScanHub. All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:

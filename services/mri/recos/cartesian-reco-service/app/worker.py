@@ -2,7 +2,7 @@ from typing import Set, Any
 
 import logging
 
-from .cartesian_reco import cartesian_reco
+from cartesian_reco import cartesian_reco
 
 
 # initialize logger

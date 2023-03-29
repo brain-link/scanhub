@@ -14,9 +14,11 @@ Base = automap_base()
 # reflect the tables
 Base.prepare(autoload_with=engine)
 
-# get workflow table
+# get exam, procedure and record table
 try:
-    workflow = Base.classes.workflow
+    exam = Base.classes.exam
+    procedure = Base.classes.procedure
+    record = Base.classes.record
 except ArithmeticError as err:
     print("Table does not exist: ", err)
 

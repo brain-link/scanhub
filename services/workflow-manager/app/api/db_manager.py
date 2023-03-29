@@ -1,12 +1,19 @@
-from app.api.models import WorkflowIn, WorkflowOut, WorkflowUpdate
-from app.api.db import workflow, database
+from api.models import WorkflowIn, WorkflowOut, WorkflowUpdate
+# from api.db import workflow, database
 
 
 async def add_workflow(payload: WorkflowIn):
-    query = workflow.insert().values(**payload.dict())
+    # query = workflow.insert().values(**payload.dict())
 
-    return await database.execute(query=query)
+    # return await database.execute(query=query)
+    pass
 
 async def get_workflow(id):
-    query = workflow.select(workflow.c.id==id)
-    return await database.fetch_one(query=query)
+    # query = workflow.select(workflow.c.id==id)
+    # return await database.fetch_one(query=query)
+    pass
+
+async def get_all_workflows():
+    # query = workflow.select()
+    # return await database.fetch_all(query=query)
+    pass

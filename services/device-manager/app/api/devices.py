@@ -8,11 +8,10 @@ import json
 from pydantic import BaseModel, StrictStr
 from kafka import KafkaProducer
 
-from app.api.models import DeviceOut, DeviceIn, DeviceUpdate
-from app.api import db_manager
+from api.models import DeviceOut, DeviceIn, DeviceUpdate
+from api import db_manager
 
 from scanhub import RecoJob
-
 
 
 class AcquisitionEvent:
@@ -26,20 +25,32 @@ producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
 
 devices = APIRouter()
 
-@devices.post('/', response_model=DeviceOut, status_code=201)
-async def create_device(payload: DeviceIn):
-    device_id = await db_manager.add_device(payload)
+### NEW API
 
-    response = {
-        'id': device_id,
-        **payload.dict()
-    }
+@devices.get('/list')#, response_model=TBD)
+async def get_device_list():
+    # devices = await db_manager.get_device_list()
+    # return devices
+    return
 
-    return response
-
-@devices.get('/{id}/', response_model=DeviceOut)
+@devices.get('/{id}', response_model=DeviceOut)
 async def get_device(id: int):
     device = await db_manager.get_device(id)
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     return device
+
+
+### OLD API
+
+# @devices.post('/', response_model=DeviceOut, status_code=201)
+# async def create_device(payload: DeviceIn):
+#     device_id = await db_manager.add_device(payload)
+
+#     response = {
+#         'id': device_id,
+#         **payload.dict()
+#     }
+
+#     return response
+

@@ -1,5 +1,5 @@
-from app.api.models import SequenceIn, SequenceOut, SequenceUpdate
-from app.api.db import sequences, database
+from api.models import SequenceIn, SequenceOut, SequenceUpdate
+from api.db import sequences, database
 
 
 async def add_sequence(payload: SequenceIn):

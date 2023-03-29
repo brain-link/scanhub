@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.api.sequences import sequences
-from app.api.db import metadata, database, engine
+from api.sequences import sequences
+from api.db import metadata, database, engine
 
 metadata.create_all(engine)
 
