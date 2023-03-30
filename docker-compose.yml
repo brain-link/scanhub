@@ -15,39 +15,41 @@ services:
       - 3000:3000
 
   patient-manager:
-    container_name: sh-patient-manager
+    container_name: patient-manager
     image: sh-patient-manager
     restart: unless-stopped
     build: ./patient-manager
-    command: bash -c "uvicorn app.main:app --port 8000 --host 0.0.0.0 --reload"
-    depends_on:
-    - patients_db
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
-    - ./patient-manager:/app/
+    - ./patient-manager/app:/app/
     ports:
       - 8000:8000
-
-  patients_db:
-    container_name: sh-db-patients
-    image: postgres:12.13-bullseye
-    restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: data
+      - DB_URI=postgresql://brainlink:data@patient-database/patients-data
+      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
+    depends_on:
+      patient-database:
+        condition: service_healthy
+
+  patient-database:
+    container_name: db-patients
+    image: postgres:15.2-bullseye
+    restart: always
+    volumes:
+      - postgres_data_patient:/var/lib/postgresql/data/
+    environment:
       POSTGRES_USER: brainlink
       POSTGRES_DB: patients-data
+      POSTGRES_PASSWORD: data
     ports:
       - "5432:5432"
+    healthcheck:  
+      # init-db container is started, after health check passed
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s 
 
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8060:8060
-  #   # Change default adminer port
-  #   command:
-  #     - 'php'
-  #     - '-S'
-  #     - '[::]:8060'
-  #     - '-t'
-  #     - '/var/www/html'
-
+volumes:
+  postgres_data_patient:
