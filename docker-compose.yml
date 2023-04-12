@@ -19,11 +19,11 @@ services:
     image: sh-patient-manager
     restart: unless-stopped
     build: ./patient-manager
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8100
     volumes:
     - ./patient-manager/app:/app/
     ports:
-      - 8000:8000
+      - 8100:8100
     environment:
       - DB_URI=postgresql://brainlink:data@patient-database/patients-data
       - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
