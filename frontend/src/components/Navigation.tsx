@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link as RouterLink, useLocation} from 'react-router-dom';
 
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+// import AppBar from '@mui/material/AppBar';
+// import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { useColorScheme } from '@mui/joy/styles';
@@ -24,7 +24,7 @@ import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import PersonSharpIcon from '@mui/icons-material/PersonSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 
-import { useTheme } from '@mui/material/styles';
+import { navigation } from '../utils/size_vars';
 
 // Menu elements
 const menuItems = [
@@ -66,86 +66,101 @@ function ColorSchemeToggle() {
 export default function Navigation() {
 
     const loc = useLocation();
-    const theme = useTheme();
-
     const [anchorEl, setAnchorEl] = React.useState<any>(null);
     const open = Boolean(anchorEl);
 
     return (
-        <AppBar position="fixed" color='default' sx={{ zIndex: 'snackbar', maxHeight: theme.navigation.height }}>
-            <Toolbar sx={{ gap: 2 }}>
 
-                <IconButton variant="plain" href="https://www.brain-link.de/">
-                    <img
-                        src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
-                        alt=""
-                        height="40"
-                        className="d-inline-block"
-                    />
-                </IconButton>
+        <Box
+            component="header"
+            className="Header"
+            sx={{
+                p: 2,
+                gap: 2,
+                bgcolor: 'background.surface',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gridColumn: '1 / -1',
+                borderBottom: '1px solid',
+                borderColor: 'divider',
+                position: 'sticky',
+                top: 0,
+                zIndex: 'snackbar',
+            }}
+        >
 
-                <Typography variant="h4" sx={{ mr: 5 }}>
-                    ScanHub
-                </Typography> 
+            <IconButton variant="plain" href="https://www.brain-link.de/">
+                <img
+                    src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
+                    alt=""
+                    height="40"
+                    className="d-inline-block"
+                />
+            </IconButton>
 
-                <>
-                {
-                    menuItems?.map( item => (
-                        <Button
-                            component={RouterLink}
-                            to={item.link}
-                            color="primary"
-                            startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : null }
-                            disabled={ loc.pathname === item.link }
-                            variant={ loc.pathname === item.link ? 'soft' : 'plain' }
-                            key={item.id}
-                        >
-                            {item.text}
-                        </Button>
-                    ))
-                }
-                </>
+            <Typography variant="h4" sx={{ mr: 5 }}>
+                ScanHub
+            </Typography> 
 
-                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
-                    <ColorSchemeToggle />
-                </Box>
+            <>
+            {
+                menuItems?.map( item => (
+                    <Button
+                        component={RouterLink}
+                        to={item.link}
+                        color="primary"
+                        startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : null }
+                        disabled={ loc.pathname === item.link }
+                        variant={ loc.pathname === item.link ? 'soft' : 'plain' }
+                        key={item.id}
+                    >
+                        {item.text}
+                    </Button>
+                ))
+            }
+            </>
 
-                {/* User menu */}
-                <IconButton variant='plain' onClick={(event) => { setAnchorEl(event.currentTarget)}}>
-                    <Avatar variant='soft' color="primary" />
-                </IconButton>
-                
-                <Menu
-                    id="positioned-demo-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={() => {setAnchorEl(null)}}
-                    aria-labelledby="positioned-demo-button"
-                    placement="bottom-end"
-                    sx={{ zIndex: 'tooltip' }}
-                >
-                    <MenuItem key='profile' onClick={() => {setAnchorEl(null)}}>
-                        <ListItemDecorator>
-                            <PersonSharpIcon />
-                        </ListItemDecorator>{' '}
-                            Profile
-                    </MenuItem>
-                    <MenuItem key='settings' onClick={() => {setAnchorEl(null)}}>
-                        <ListItemDecorator>
-                            <AdminPanelSettingsSharpIcon />
-                        </ListItemDecorator>{' '}
-                            Settings
-                    </MenuItem>
-                    <ListDivider />
-                    <MenuItem key='logout' disabled onClick={() => {setAnchorEl(null)}}>
-                        <ListItemDecorator>
-                            <LogoutSharpIcon />
-                        </ListItemDecorator>{' '}
-                            Logout
-                    </MenuItem>
-                </Menu>
-                
-            </Toolbar>
-        </AppBar>
+            <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
+                <ColorSchemeToggle />
+            </Box>
+
+            {/* User menu */}
+            <IconButton variant='plain' onClick={(event) => { setAnchorEl(event.currentTarget)}}>
+                <Avatar variant='soft' color="primary" />
+            </IconButton>
+        
+            <Menu
+                id="positioned-demo-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={() => {setAnchorEl(null)}}
+                aria-labelledby="positioned-demo-button"
+                placement="bottom-end"
+                sx={{ zIndex: 'tooltip' }}
+            >
+                <MenuItem key='profile' onClick={() => {setAnchorEl(null)}}>
+                    <ListItemDecorator>
+                        <PersonSharpIcon />
+                    </ListItemDecorator>{' '}
+                        Profile
+                </MenuItem>
+                <MenuItem key='settings' onClick={() => {setAnchorEl(null)}}>
+                    <ListItemDecorator>
+                        <AdminPanelSettingsSharpIcon />
+                    </ListItemDecorator>{' '}
+                        Settings
+                </MenuItem>
+                <ListDivider />
+                <MenuItem key='logout' disabled onClick={() => {setAnchorEl(null)}}>
+                    <ListItemDecorator>
+                        <LogoutSharpIcon />
+                    </ListItemDecorator>{' '}
+                        Logout
+                </MenuItem>
+            </Menu>
+
+        </Box>
     );
 }
