@@ -1,23 +1,39 @@
 import React from "react";
-import Container from '@mui/material/Container';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia'
+import Container from '@mui/system/Container';
+import Typography from '@mui/joy/Typography';
+import CircularProgress from '@mui/joy/CircularProgress';
+import Card from '@mui/joy/Card';
+import CardContent from "@mui/joy/CardContent";
 import IconButton from '@mui/joy/IconButton';
 import Box from '@mui/joy/Box';
-import Typography from "@mui/joy/Typography";
+
+import useHealthCheck from "../client/healthcheck";
+import baseUrls from "../client/urls";
 
 // import DeviceTable from "./DeviceTable";
 // import PatientTable from "./PatientTable";
 
 export default function Dashboard() {
+
+    const isReady = useHealthCheck(baseUrls.examService)
+
+    if (!isReady) {
+        return (
+            <Box sx={{ width: '100vw', justifyContent: 'center' }}>
+                <CircularProgress />
+                <Typography>Connecting to ScanHub...</Typography>
+            </Box>
+        )
+    }
+
     return (
-        <Container maxWidth={false} sx={{ p: 5, display: 'flex', justifyContent: 'center'}}>
-            <Card sx={{ maxWidth: 600, p: 10}}>
-                <CardMedia
+        <Box sx={{ p: 5, display: 'flex', width: '100vw', justifyContent: 'center'}}>
+            <Card sx={{ width: 400, height: 300, m: 10 }}>
+                
+                <CardContent
                     component="img"
-                    width="200"
                     src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"
-                    sx={{ m: 2 }}
+                    sx={{ m: 2, justifyContent: 'center', height: '100' }}
                 />
 
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 5, gap: 1}}>
@@ -35,31 +51,6 @@ export default function Dashboard() {
                 </Box>
                         
             </Card>       
-        </Container>
-
-        // <Box sx={{ display: 'flex', flexGrow: 1, alignContent: 'flex-start', minHeight: '92vh', bgcolor: 'background.componentBg' }}>
-
-        //     <Box sx={{ width: '40%', borderRight: '1px solid', borderColor: 'divider' }}>
-        //         <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
-        //             <Typography level="h5"> Devices </Typography>
-        //             <IconButton size='sm' variant='outlined'>
-        //                 <AddSharpIcon />
-        //             </IconButton>
-        //         </Box>
-        //         <DeviceTable />
-        //     </Box>
-
-        //     <Box sx={{ flexGrow: 1 }}>
-        //         <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
-        //             <Typography level="h5"> Patients </Typography>
-        //             <IconButton size='sm' variant='outlined'>
-        //                 <AddSharpIcon />
-        //             </IconButton>
-        //         </Box>
-        //         <PatientTable />
-        //     </Box>
-
-        // </Box>
-             
+        </Box>             
     );
 }
