@@ -21,26 +21,49 @@ import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import FormLabel from '@mui/joy/FormLabel';
 import Badge from '@mui/material/Badge';
-import config from '../utils/config';
+import config from '../../utils/config';
 import Stack from '@mui/joy/Stack';
 import { useQuery } from "react-query";
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 
-import { Procedure } from './Interfaces';
-import { format_date } from '../utils/formatter';
+// import { Procedure } from './Interfaces';
+// import { format_date } from '../utils/formatter';
+import { Exam } from '../../client/interfaces';
+import client from '../../client/queries';
 
-export default function Procedures() {
+
+function ExamList() {
 
     const params = useParams();
-    const [activeProcedureId, setActiveProcedureId] = React.useState<number | undefined>(undefined);
+    const [activeExamId, setActiveExamId] = React.useState<number | undefined>(undefined);
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
-    const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
-    const [procedure, setProcedure] = React.useState<Procedure>(
-        { id: 0, patient_id: 0, reason: "", date: "" }
+
+    // const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
+    // const [procedure, setProcedure] = React.useState<Procedure>({ 
+    //     id: 0, name: "", modality: "", status: "", datetime_created: new Date(), datetime_updated: new Date()
+    // });
+
+    const [exam, setExam] = React.useState<Exam>({
+        id: 0, 
+        patient_id: Number(params.patientId),
+        name: '',
+        procedures: [],
+        country: '',
+        site: '',
+        address: '',
+        creator: '', 
+        status: '', 
+        datetime_created: new Date(), 
+        datetime_updated: new Date(),
+    })
+
+    const { data: exams, isLoading: examsLoading, isError: examsError } = useQuery<Exam[], Error>(
+        ['exams', params.patientId], 
+        () => client.exams.getAll(Number(params.patientId))
     );
 
     const handleContextClose = () => {
@@ -48,41 +71,47 @@ export default function Procedures() {
         setContextOpen(null);
     }
 
-    const handleContextOpen = (e, procedureId) => {
+    const handleContextOpen = (e, examId) => {
         e.preventDefault();
         setAnchorEl(e.currentTarget);
-        setContextOpen(procedureId);
+        setContextOpen(examId);
     }
 
     React.useEffect(() => {
-        if (params.procedureId && Number(params.procedureId) !== activeProcedureId){
-            setActiveProcedureId(Number(params.procedureId));
+        if (params.examId && Number(params.examId) !== activeExamId){
+            setActiveExamId(Number(params.examId));
         }
-    }, [params.procedureId]);
+    }, [params.examId]);
 
     // Define fetch function for procedures table
-    async function fetchProcedures () {
-        await axios.get(`${config['baseURL']}/patients/${params.patientId}/procedures`)
-        .then((response) => { setProcedures(response.data) })
-    };
+    // async function fetchProcedures () {
+    //     // await axios.get(`${config['baseURL']}/patients/${params.patientId}/procedures`)
+    //     // .then((response) => { setProcedures(response.data) })
+    //     await client.procedures.getAll().then((data) => {setProcedures(data)})
+    // };
 
-    async function deleteProcedure(procedureId) {
-        await axios.delete(`${config.baseURL}/patients/${params.patientId}/${procedureId}`)
-        .then(() => { fetchProcedures(); })
+    async function deleteExam(examId) {
+        // await axios.delete(`${config.baseURL}/patients/${params.patientId}/${procedureId}`)
+        // .then(() => { fetchProcedures(); })
+        console.log("Exam selected for deletion: ", examId)
+        // await client.exams.delete(examId)
     }
 
     // fetch procedures
-    React.useEffect(() => {
-        fetchProcedures();
-    }, [params.procedureId]);
+    // React.useEffect(() => {
+    //     fetchProcedures();
+    // }, [params.procedureId]);
 
     const mutation = useMutation(async() => {
-        await axios.post(`${config['baseURL']}/patients/${params.patientId}/procedures/new`, procedure)
-        .then((response) => {
-            setProcedure(response.data)
-            fetchProcedures()
-        })
-        .catch((err) => { console.log(err) })
+        // await axios.post(`${config['baseURL']}/patients/${params.patientId}/procedures/new`, procedure)
+        // .then((response) => {
+        //     setProcedure(response.data)
+        //     fetchProcedures()
+        // })
+        // .catch((err) => { console.log(err) })
+
+        await client.exams.create(exam).then()
+        .catch((err) => { console.log(err) }) 
     })
 
     return (
@@ -90,8 +119,8 @@ export default function Procedures() {
             <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
                             
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                    <Typography level="h5"> Procedures </Typography>
-                    <Badge badgeContent={procedures?.length} color="primary"/>
+                    <Typography level="h5"> Exams </Typography>
+                    <Badge badgeContent={exams?.length} color="primary"/>
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 1 }}>
@@ -138,7 +167,7 @@ export default function Procedures() {
                             fontSize="1.25em"
                             mb="0.25em"
                         >
-                            Create new procedure
+                            Create new exam
                         </Typography>
                         
                         <form
@@ -149,17 +178,46 @@ export default function Procedures() {
                             }}
                         >
                             <Stack spacing={2}>
-                                <FormLabel>Patient Concern</FormLabel>
+                                <FormLabel>Name</FormLabel>
                                 <Input 
-                                    name='reason'
-                                    onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
+                                    name='name'
+                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
                                     autoFocus 
                                     required 
                                 />
-                                <FormLabel>Date</FormLabel>
+                                <FormLabel>Site</FormLabel>
                                 <Input 
-                                    name='date'
-                                    onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
+                                    name='site'
+                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
+                                    autoFocus 
+                                    required 
+                                />
+                                <FormLabel>Address</FormLabel>
+                                <Input 
+                                    name='address'
+                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
+                                    autoFocus 
+                                    required 
+                                />
+                                <FormLabel>Country</FormLabel>
+                                <Input 
+                                    name='country'
+                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
+                                    autoFocus 
+                                    required 
+                                />
+                                <FormLabel>Creator</FormLabel>
+                                <Input 
+                                    name='creator'
+                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
+                                    autoFocus 
+                                    required 
+                                />
+                                <FormLabel>Status</FormLabel>
+                                <Input 
+                                    name='status'
+                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
+                                    autoFocus 
                                     required 
                                 />
                                 <Button type="submit">Submit</Button>
@@ -174,48 +232,49 @@ export default function Procedures() {
             <Divider />
 
             <List sx={{ pt: 0 }}>
-                {procedures?.map((procedure, index) => (
+                {exams?.map((exam, index) => (
                     <React.Fragment key={index}>
 
                         <ListItem>
                             <ListItemButton 
-                                id="procedure-item"
+                                id="exam-item"
                                 component={RouterLink}
-                                to={`${procedure.id}`}
-                                selected={procedure.id === activeProcedureId}
-                                onClick={() => setActiveProcedureId(procedure.id)}
-                                variant={(procedure.id === activeProcedureId || procedure.id === contextOpen)? "soft" : "plain"}
-                                onContextMenu={(e) => handleContextOpen(e, procedure.id)}
+                                to={`${exam.id}`}
+                                selected={exam.id === activeExamId}
+                                onClick={() => setActiveExamId(exam.id)}
+                                variant={(exam.id === activeExamId || exam.id === contextOpen)? "soft" : "plain"}
+                                onContextMenu={(e) => handleContextOpen(e, exam.id)}
                             >
                                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                                     <ContentPasteSharpIcon />
                                 </ListItemDecorator>
                                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
-                                    <Typography level="body2" textColor="text.tertiary">{procedure.id}</Typography>
-                                    <Typography>{procedure.reason}</Typography>
-                                    <Typography level="body2" textColor="text.tertiary">{ format_date(procedure.date) }</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{exam.name}</Typography>
+                                    <Typography>{exam.status}</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ exam.datetime_created.toLocaleString() }</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ exam.datetime_updated ? exam.datetime_updated.toLocaleString() : "" }</Typography>
                                 </Box>
 
                                 <Menu   
-                                    id="procedure-context"
+                                    id="exam-context"
                                     anchorEl={anchorEl}
-                                    open={procedure.id === contextOpen}
+                                    open={exam.id === contextOpen}
                                     onClose={() => handleContextClose()}
                                     sx={{ zIndex: 'snackbar' }}
                                     placement='auto'
                                 >
-                                    <MenuItem key="edit-procedure" variant='plain' disabled>
+                                    <MenuItem key="edit-exam" variant='plain' disabled>
                                         <ListItemDecorator>
                                             <EditSharpIcon />
                                         </ListItemDecorator>{' '}
-                                            Edit procedure
+                                            Edit exam
                                     </MenuItem>
                                     <ListDivider />
-                                    <MenuItem key="delete-procedure" color='danger' onClick={() => { deleteProcedure(procedure.id); }}>
+                                    <MenuItem key="delete-exam" color='danger' onClick={() => { deleteExam(exam.id); }}>
                                         <ListItemDecorator>
                                             <ClearSharpIcon />
                                         </ListItemDecorator>{' '}
-                                            Delete procedure
+                                            Delete exam
                                     </MenuItem>
 
                                 </Menu>
@@ -230,3 +289,5 @@ export default function Procedures() {
         </Box>
     );  
 }
+
+export default ExamList;

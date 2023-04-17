@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link as RouterLink, useParams, useOutletContext } from 'react-router-dom';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
@@ -31,23 +31,23 @@ import EditSharpIcon from '@mui/icons-material/EditSharp';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack';
-import config from '../utils/config';
-import { Record, Device } from './Interfaces';
-import { format_date } from '../utils/formatter';
+import config from '../../utils/config';
+import client from '../../client/queries';
+import { Procedure, Device } from '../../client/interfaces'; 
 
-export default function Records() {
+function ProceduresList() {
 
     const { ref } = useOutletContext<{ ref: any }>();
 
     const params = useParams();
-    const [activeRecordId, setActiveRecordId] = React.useState<number | null>(null);
+    const [activeProcedureId, setActiveProcedureId] = React.useState<number | null>(null);
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
-    const [records, setRecords] = React.useState<Record[] | undefined >(undefined);
-    const [devices, setDevices] = React.useState<Device[] | undefined>(undefined);
-    const [record, setRecord] = React.useState<Record>( // store intermediate state in record creation
-        { id: 0, procedure_id: 0, device_id: 0, date: "", thumbnail: "", data: "", comment: "" }
+    // const [procedures, setProcedures] = React.useState<Procedure[] | undefined >(undefined);
+    // const [devices, setDevices] = React.useState<Device[] | undefined>(undefined);
+    const [procedure, setProcedure] = React.useState<Procedure>( // store intermediate state in record creation
+        { id: 0, name: "", modality: "", status: "", records: [], datetime_created: new Date(), datetime_updated: new Date()}
     );
 
     const handleContextClose = () => {
@@ -64,60 +64,71 @@ export default function Records() {
     // Set active procedure if component is rendered
     function updateActive() {
         if (params.recordId === undefined) {
-            setActiveRecordId(null)
+            setActiveProcedureId(null)
         }
-        else if (Number(params.recordId) !== activeRecordId) {
-            setActiveRecordId(Number(params.recordId))
+        else if (Number(params.recordId) !== activeProcedureId) {
+            setActiveProcedureId(Number(params.procedureId))
         } 
     }
 
+    const { data: procedures, isLoading: proceduresLoading, isError: proceduresError } = useQuery<Procedure[], Error>(
+        ['procedures', params.examId], 
+        () => client.procedures.getAll(Number(params.examId))
+    );
 
+    // Move this part to Record
+    // const { data: devices, isLoading: devicesLoading, isError: devicesError } = useQuery<Device[], Error>(
+    //     ['devices'], 
+    //     () => client.devices.getAll()
+    // );
 
 
 
     // Fetch a list of all records and assign them to records
-    async function fetchRecords() {
-        await axios.get(`${config["baseURL"]}/${params.procedureId}/records`)
-        .then((response) => {setRecords(response.data)})
-    }
+    // async function fetchRecords() {
+    //     await axios.get(`${config["baseURL"]}/${params.procedureId}/records`)
+    //     .then((response) => {setProcedures(response.data)})
+    // }
 
-    async function fetchDevices() {
-        await axios.get(`${config.baseURL}/devices`)
-        .then((response) => {setDevices(response.data)})
-    }
+    // async function fetchDevices() {
+    //     await axios.get(`${config.baseURL}/devices`)
+    //     .then((response) => {setDevices(response.data)})
+    // }
     
     // Trigger fetch records, listens to params.procedureId and record
-    React.useEffect(() => {
-        fetchRecords();
-        fetchDevices();
-        updateActive();
-    }, [params.procedureId, params.recordId]);
+    // React.useEffect(() => {
+    //     fetchRecords();
+    //     fetchDevices();
+    //     updateActive();
+    // }, [params.procedureId, params.recordId]);
 
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
-        console.log("Post record...")
-        await axios.post(`${config["baseURL"]}/${params.procedureId}/records/new`, record)
-        .then((response) => {
-            setRecord(response.data)
-            fetchRecords()
-            console.log(response.data)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+        console.log("Posting procedure...")
+        // await axios.post(`${config["baseURL"]}/${params.procedureId}/records/new`, record)
+        // .then((response) => {
+        //     setRecord(response.data)
+        //     fetchRecords()
+        //     console.log(response.data)
+        // })
+        // .catch((err) => {
+        //     console.log(err)
+        // })
     })
 
     // Use imperative handle to define a delete record function, which can be called from parent by ref
     React.useImperativeHandle(ref, () => ({
-        async deleteRecord() {
-            await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}/records/${params.recordId}/`)
-            .then(() => { fetchRecords(); })
+        async deleteProcedure() {
+            // await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}/records/${params.recordId}/`)
+            await client.procedures.delete(Number(params.procedureId))
+            // .then(() => { fetchRecords(); })
         }
     }))
 
-    async function deleteRecordId(recordId) {
-        await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}/records/${recordId}/`)
-        .then(() => { fetchRecords(); })
+    async function deleteProcedureById(procedureId: number) {
+        // await axios.delete(`${config.baseURL}/patients/${params.patientId}/${params.procedureId}/records/${recordId}/`)
+        // .then(() => { fetchRecords(); })
+        await client.procedures.delete(procedureId)
     }
 
     return (
@@ -125,8 +136,8 @@ export default function Records() {
             <Box sx={{ p: 2, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
                             
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                    <Typography level="h5"> Records </Typography>
-                    <Badge badgeContent={records?.length} color="primary"/>
+                    <Typography level="h5"> Procedures </Typography>
+                    <Badge badgeContent={procedures?.length} color="primary"/>
                 </Box>
 
                 <IconButton size='sm' variant='outlined'>
@@ -177,20 +188,20 @@ export default function Records() {
                             }}
                         >
                             <Stack spacing={2}>
-                                <FormLabel>Comment</FormLabel>
+                                <FormLabel>Name</FormLabel>
                                 <Input 
-                                    name='comment'
-                                    onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
+                                    name='name'
+                                    onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
                                     autoFocus 
                                     required 
                                 />
 
                                 {/* Data Input */}
-                                <FormLabel>Data</FormLabel>
+                                <FormLabel>Status</FormLabel>
                                 <Input 
-                                    name='data'
-                                    placeholder='https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
-                                    onChange={(e) => setRecord({...record, [e.target.name]: e.target.value})} 
+                                    name='status'
+                                    // placeholder='https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
+                                    onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
                                     required 
                                 />
                                 <FormHelperText>
@@ -203,8 +214,8 @@ export default function Records() {
                                     Example DICOM URL, click to download
                                 </Link>
 
-                                {/* Device Selection */}
-                                <FormLabel htmlFor="select-button" id='select-label'>Select Device</FormLabel>
+                                {/* Device Selection, TODO: Move to Record component... */}
+                                {/* <FormLabel htmlFor="select-button" id='select-label'>Select Device</FormLabel>
                                 <Select
                                     placeholder='Select device...'
                                     onChange={(event, value) => { record.device_id = Number(value) }}
@@ -216,7 +227,7 @@ export default function Records() {
                                             </Option>
                                         ))
                                     }
-                                </Select>
+                                </Select> */}
                                 
                                 <Button sx={{width: 100}} type="submit">Submit</Button>
                             </Stack>
@@ -229,33 +240,33 @@ export default function Records() {
             <Divider />
 
             <List size="sm" sx={{ pt: 0 }}>
-                {records?.map((record, index) => (
+                {procedures?.map((procedure, index) => (
                     <React.Fragment key={index}>
 
                         <ListItem>
                             <ListItemButton 
                                 id="record-item"
                                 component={RouterLink}
-                                to={`${record.id}`}
-                                selected={record.id === activeRecordId}
-                                onClick={() => setActiveRecordId(record.id)}
-                                variant={(record.id === activeRecordId || record.id === contextOpen) ? "soft" : "plain" }
-                                onContextMenu={(e) => handleContextOpen(e, record.id)}
+                                to={`${procedure.id}`}
+                                selected={procedure.id === activeProcedureId}
+                                onClick={() => setActiveProcedureId(procedure.id)}
+                                variant={(procedure.id === activeProcedureId || procedure.id === contextOpen) ? "soft" : "plain" }
+                                onContextMenu={(e) => handleContextOpen(e, procedure.id)}
                             >
                                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                                     <FilterCenterFocusSharpIcon />
                                 </ListItemDecorator>
                                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
-                                    <Typography level="body2" textColor="text.tertiary">{record.id}</Typography>
-                                    <Typography>{record.comment}</Typography>
-                                    <Typography level="body2" textColor="text.tertiary">{ format_date(record.date) }</Typography>
-                                    <Typography level="body2" textColor="text.tertiary"> Device ID: { record.device_id }</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{procedure.id}</Typography>
+                                    <Typography>{procedure.name}</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ procedure.datetime_created.toLocaleString() }</Typography>
+                                    <Typography level="body2" textColor="text.tertiary"> Modality: { procedure.modality }</Typography>
                                 </Box>
 
                                 <Menu   
                                     id="record-context"
                                     anchorEl={anchorEl}
-                                    open={record.id === contextOpen}
+                                    open={procedure.id === contextOpen}
                                     onClose={() => handleContextClose()}
                                     sx={{ zIndex: 'snackbar' }}
                                     placement='auto'
@@ -267,7 +278,7 @@ export default function Records() {
                                             Edit record
                                     </MenuItem>
                                     <ListDivider />
-                                    <MenuItem key="delete-record" color='danger' onClick={() => { deleteRecordId(record.id); }}>
+                                    <MenuItem key="delete-record" color='danger' onClick={() => { deleteProcedureById(procedure.id); }}>
                                         <ListItemDecorator>
                                             <ClearSharpIcon />
                                         </ListItemDecorator>{' '}
@@ -288,3 +299,5 @@ export default function Records() {
         </Box>
     );  
 }
+
+export default ProceduresList;

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Outlet, useParams, Link as RouterLink } from 'react-router-dom';
+import { useQueryClient, useQuery } from 'react-query';
 // MUI
 import { styled, useTheme } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
@@ -13,11 +14,15 @@ import TuneSharpIcon from '@mui/icons-material/TuneSharp';
 import PreviewSharpIcon from '@mui/icons-material/PreviewSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 // Import sub components
-import Procedures from './Procedures';
+import Exams from './Exams';
 import PatientInfo from './PatientInfo';
 import PatientPageMainView from './PatientPageMainView';
-import config from '../utils/config';
-import axios from 'axios';
+import config from '../../utils/config';
+
+import { Patient } from '../../client/interfaces';
+import client from '../../client/queries';
+
+import { patientView, navigation } from '../../utils/size_vars';
 
 
 const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
@@ -38,15 +43,16 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
                     easing: theme.transitions.easing.easeOut,
                     duration: theme.transitions.duration.enteringScreen,
                 }),
-                marginLeft: theme.patientView.drawerWidth
+                marginLeft: patientView.drawerWidth     //theme.patientView.drawerWidth
             })
         }
     )
 );
 
-export default function PatientIndex() {
+function PatientIndex() {
 
-    const theme = useTheme();
+    // const theme = useTheme();
+    // const queryClient = useQueryClient();
     const params = useParams();
     const recordRef = React.useRef<any>(null);
     const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined);
@@ -57,14 +63,32 @@ export default function PatientIndex() {
         setActiveTool(params.toolId.toString())
     }
 
+    // const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
+
+    // async function fetchPatient() {
+    //     await client.patients.get(Number(params.patientId)).then((data) => {setPatient(data)})
+    // }
+
+    // // fetch patient
+    // React.useEffect(() => {
+    //     fetchPatient();
+    // }, []);
+
+    // useQuery for caching the fetched data
+    const { data: patient, isLoading: patientLoading, isError: patientError } = useQuery<Patient, Error>(
+        ['patient', params.patientId], 
+        () => client.patients.get(Number(params.patientId))
+    );
+
+
     return (    
-        <div id="page-container" style={{ width: '100%', position: 'relative', height: `calc(100vh - ${theme.navigation.height})` }}>
+        <div id="page-container" style={{ width: '100%', position: 'relative', height: `calc(100vh - ${navigation.height})` }}>
             <Drawer
                 sx={{
-                    width: theme.patientView.drawerWidth,
+                    width: patientView.drawerWidth,
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: theme.patientView.drawerWidth,
+                        width: patientView.drawerWidth,
                     }
                 }}
                 PaperProps={{ style: { position: 'absolute' } }}
@@ -79,9 +103,10 @@ export default function PatientIndex() {
             >
                 <Box sx={{ overflow: 'auto', bgcolor: 'background.componentBg' }}>
 
-                    <PatientInfo />
+                    {/* Conditional rendering: Only rendered if patient exists */}
+                    { patient && <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError}/> }
                     <Divider />
-                    <Procedures />
+                    <Exams />
 
                 </Box>
                 
@@ -89,7 +114,7 @@ export default function PatientIndex() {
             </Drawer>
 
             <Main open={sidePanelOpen}>
-                <Box sx={{ display: 'grid', gridTemplateRows: `${theme.patientView.toolbarHeight} auto`, gridTemplateColumns: '1fr', bgcolor: 'background.componentBg'}}>
+                <Box sx={{ display: 'grid', gridTemplateRows: `${patientView.toolbarHeight} auto`, gridTemplateColumns: '1fr', bgcolor: 'background.componentBg'}}>
                     
                     {/* Toolbar */}
                     <Box sx={{ 
@@ -125,7 +150,7 @@ export default function PatientIndex() {
                                 color="danger"
                                 variant="outlined"
                                 disabled={!params.recordId}
-                                onClick={() => {axios.post('http://localhost:8080/api/v1/workflow/control/start/')}}
+                                // onClick={() => {axios.post('http://localhost:8080/api/v1/workflow/control/start/')}}
                             >
                                 <PlayArrowSharpIcon />
                             </IconButton>
@@ -163,10 +188,10 @@ export default function PatientIndex() {
                     </Box>
 
                     {/* Main Content */}
-                    <Box sx={{ display: 'flex', height: `calc(100vh - ${theme.patientView.toolbarHeight} - ${theme.navigation.height})` }}>
+                    <Box sx={{ display: 'flex', height: `calc(100vh - ${patientView.toolbarHeight} - ${navigation.height})` }}>
                         <Box sx={{ 
                             overflow: 'auto', 
-                            width: theme.patientView.recordsWidth, 
+                            width: patientView.recordsWidth, 
                             bgcolor: 'background.componentBg',
                             borderRight: '1px solid',
                             borderColor: 'divider',
@@ -184,3 +209,5 @@ export default function PatientIndex() {
         </div>
     );      
 }
+
+export default PatientIndex;

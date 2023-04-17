@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/joy/Box';
-import config from '../utils/config';
-// import MRIView from './MRIView';
-import MRIView from './viewer/DicomViewer';
-import { SequenceForm } from './SequenceHandler';
+import config from '../../utils/config';
+import MRIView from '../viewer/DicomViewer';
+import { SequenceForm } from '../SequenceHandler';
 
 
 export default function PatientPageMainView() {
