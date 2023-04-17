@@ -153,6 +153,7 @@ export default function PatientTable() {
             >
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Sex</th>
                         <th>Birthday</th>
@@ -173,6 +174,7 @@ export default function PatientTable() {
                             <td>{ patient.id }</td>
                             <td>{ patient.name }</td>
                             <td>{ patient.sex }</td>
+                            <td>{ patient.birth_date }</td>
                             <td>{ patient.issuer }</td>
                             <td>{ patient.status }</td>
                             <td>{ patient.comment }</td>
