@@ -1,3 +1,5 @@
+// TODO: Could add constructors for interfaces, requires the definition of a class and a constructor() within
+
 export interface Patient {
     id: number;
     sex: string;
@@ -50,21 +52,21 @@ export interface Procedure {
     name: string;
     modality: string;
     status: string;
-    // records: [Record];
+    records: [Record] | [];
     datetime_created: Date;
     datetime_updated?: Date | null;
 }
 
 export interface Exam {
     id: number;
-    patient_id: string;
+    patient_id: number;
     name: string;
-    procedures: [Procedure];
-    country?: string | null;
-    site?: string | null;
-    address?: string | null;
+    procedures: [Procedure] | [];
+    country: string | null;
+    site: string | null;
+    address: string | null;
     creator: string;
     status: string;
     datetime_created: Date;
-    datetime_updated?: Date | null;
+    datetime_updated: Date | null;
 }

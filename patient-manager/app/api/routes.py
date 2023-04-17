@@ -12,7 +12,7 @@ from api import dal
 patient = APIRouter()
 
 
-@patient.post("/{id}/", response_model=PatientOut, status_code=201, tags=["patients"])
+@patient.post("/", response_model=PatientOut, status_code=201, tags=["patients"])
 async def create_patient(payload: BasePatient):
     patient = await dal.add_patient(payload)
     if not patient:

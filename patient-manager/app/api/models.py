@@ -5,6 +5,10 @@ from api.db import Patient
 
 
 class BasePatient(BaseModel):
+    
+    class Config:
+        extra = Extra.ignore
+
     sex: str
     name: str
     birth_date: str

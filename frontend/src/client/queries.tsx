@@ -9,27 +9,39 @@ import { Record } from './interfaces';
 
 import baseUrls from './urls';
 
+// const patientApi = axios.create({baseURL: baseUrls.patientService})
+// const deviceApi = axios.create({baseURL: baseUrls.deviceService})
+// const workflowApi = axios.create({baseURL: baseUrls.workflowService})
+// const examApi = axios.create({baseURL: baseUrls.examService, headers: {
+//     "Content-type": "application/json"
+// }})
+
 // Patient query client
 const patients = {
 
     create: async (data: Patient): Promise<Patient> => {
         const response = await axios.post<Patient>(`${baseUrls.patientService}/`, data);
+        // const response = await patientApi.post('/', data);
         return response.data;
     },
     getAll: async(): Promise<Patient[]> => {
         const response = await axios.get<Patient[]>(`${baseUrls.patientService}/patients`);
+        // const response = await axios.get(`/patients`);
         return response.data;
     },
     get: async (id: number): Promise<Patient> => {
         const response = await axios.get<Patient>(`${baseUrls.patientService}/${id}/`);
+        // const response = await patientApi.get(`/${id}`);
         return response.data;
     }, 
     update: async (id: number, data: Partial<Patient>): Promise<Patient> => {
         const response = await axios.patch<Patient>(`${baseUrls.patientService}/${id}/`, data);
+        // const response = await patientApi.patch(`/${id}`, data);
         return response.data;
     },
     delete: async (id: number): Promise<void> => {
         await axios.delete(`${baseUrls.patientService}/${id}/`);
+        // await patientApi.delete(`/${id}`);
     },
 }
 
@@ -108,9 +120,8 @@ const procedures = {
         const response = await axios.post<Procedure>(`${baseUrls.examService}/procedure/`, data);
         return response.data;
     },
-    getAll: async(): Promise<Procedure[]> => {
-        console.log("PROCEDURE QUERY: ", `${baseUrls.examService}/procedures/`)
-        const response = await axios.get<Procedure[]>(`${baseUrls.examService}/procedures/`);
+    getAll: async(exam_id: number): Promise<Procedure[]> => {
+        const response = await axios.get<Procedure[]>(`${baseUrls.examService}/procedures/${exam_id}/`);
         return response.data;
     },
     get: async(id: number): Promise<Procedure> => {
@@ -132,8 +143,9 @@ const exams = {
         const response = await axios.post<Exam>(`${baseUrls.examService}/exam/`, data);
         return response.data;
     },
-    getAll: async(): Promise<Exam[]> => {
-        const response = await axios.get<Exam[]>(`${baseUrls.examService}/exams/`);
+    getAll: async(patientId: number): Promise<Exam[]> => {
+        const response = await axios.get<Exam[]>(`${baseUrls.examService}/exams/${patientId}/`);
+        // const response = await examApi.get<Exam[]>(`/exams/${patientId}`)
         return response.data;
     },
     get: async(id: number): Promise<Exam> => {
