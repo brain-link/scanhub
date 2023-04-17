@@ -29,7 +29,7 @@ class BaseWorkflow(BaseModel):
     kafka_topic: str
 
 class BaseExam(BaseModel):
-    patient_id: str
+    patient_id: int
     name: str
     country: Optional[str] = None
     site: Optional[str] = None

@@ -28,7 +28,7 @@ class Exam(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     # Relations and references
     procedures: Mapped[List["Procedure"]] = relationship(lazy="selectin")
-    patient_id: Mapped[str] = mapped_column(nullable=False)
+    patient_id: Mapped[int] = mapped_column(nullable=False)
     # Fields
     name: Mapped[str] = mapped_column(nullable=False)
     country: Mapped[str] = mapped_column(nullable=True)

@@ -47,7 +47,7 @@ async def get_exam(id: int) -> Exam:
     return exam
 
 
-async def get_all_exams(patient_id: str) -> List[Exam]:
+async def get_all_exams(patient_id: int) -> List[Exam]:
     """Fetch all exams which belong to a patient
 
     Arguments:

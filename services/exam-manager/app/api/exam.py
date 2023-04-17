@@ -31,7 +31,7 @@ async def create_exam(payload: BaseExam):
     return await get_exam_out(exam)
 
 
-@router.get('/exam/{id}', response_model=ExamOut, status_code=200, tags=["exams"])
+@router.get('/exam/{id}/', response_model=ExamOut, status_code=200, tags=["exams"])
 async def get_exam(id: int):
     exam = await dal.get_exam(id)
     if not exam:
@@ -39,8 +39,9 @@ async def get_exam(id: int):
     return await get_exam_out(exam)
 
 
-@router.get('/exams/{patientID}', response_model=list[ExamOut], status_code=200, tags=["exams"])
-async def get_exam_list(patient_id: str):
+@router.get('/exams/{patient_id}/', response_model=list[ExamOut], status_code=200, tags=["exams"])
+async def get_exam_list(patient_id: int):
+    print("GET ALL EXAMS: ", patient_id)
     exams = await dal.get_all_exams(patient_id)
     if not exams:
         raise HTTPException(status_code=404, detail="Exams not found")
