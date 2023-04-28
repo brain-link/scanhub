@@ -16,11 +16,12 @@ import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 // Import sub components
 import Exams from './Exams';
 import PatientInfo from './PatientInfo';
-import PatientPageMainView from './PatientPageMainView';
+// import PatientPageMainView from './PatientPageMainView';
+import ExamViewController from './ExamViewController';
 import config from '../../utils/config';
 
 import { Patient } from '../../client/interfaces';
-import client from '../../client/queries';
+import { PatientApiService } from '../../client/queries';
 
 import { patientView, navigation } from '../../utils/size_vars';
 
@@ -51,6 +52,10 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
 
 function PatientIndex() {
 
+    // pass patient as argument ?
+
+    const patientClient = new PatientApiService()
+
     // const theme = useTheme();
     // const queryClient = useQueryClient();
     const params = useParams();
@@ -59,8 +64,8 @@ function PatientIndex() {
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
 
     // Set active tool if component is rendered
-    if (params.toolId && params.toolId.toString() !== activeTool) {
-        setActiveTool(params.toolId.toString())
+    if (params.examViewId && params.examViewId.toString() !== activeTool) {
+        setActiveTool(params.examViewId.toString())
     }
 
     // const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
@@ -77,7 +82,7 @@ function PatientIndex() {
     // useQuery for caching the fetched data
     const { data: patient, isLoading: patientLoading, isError: patientError } = useQuery<Patient, Error>(
         ['patient', params.patientId], 
-        () => client.patients.get(Number(params.patientId))
+        () => patientClient.get(Number(params.patientId))
     );
 
 
@@ -149,7 +154,7 @@ function PatientIndex() {
                                 size="sm"
                                 color="danger"
                                 variant="outlined"
-                                disabled={!params.recordId}
+                                disabled={!params.procedureId}
                                 // onClick={() => {axios.post('http://localhost:8080/api/v1/workflow/control/start/')}}
                             >
                                 <PlayArrowSharpIcon />
@@ -160,10 +165,10 @@ function PatientIndex() {
                                 size="sm"
                                 variant={activeTool == config.tools.configuration ? "soft" : "outlined"}
                                 color="primary"
-                                disabled={!params.recordId}
+                                disabled={!params.procedureId}
                                 component={RouterLink}
-                                to={`${params.procedureId}/${params.recordId}/${config.tools.configuration}`}
-                                onClick={() => setActiveTool(config.tools.configuration)}
+                                to={`${params.procedureId}/${params.procedureId}/${config.tools.configuration}`}
+                                onClick={() => setActiveTool('sequence-view')}
                             >
                                 <TuneSharpIcon />
                             </IconButton>
@@ -173,10 +178,10 @@ function PatientIndex() {
                                 size="sm"
                                 variant={activeTool == config.tools.dataview ? "soft" : "outlined"}
                                 color="primary"
-                                disabled={!params.recordId}
+                                disabled={!params.procedureId}
                                 component={RouterLink}
-                                to={`${params.procedureId}/${params.recordId}/${config.tools.dataview}`}
-                                onClick={() => setActiveTool(config.tools.dataview)}
+                                to={`${params.procedureId}/${params.procedureId}/${config.tools.dataview}`}
+                                onClick={() => setActiveTool('dicom-view')}
                             >
                                 <PreviewSharpIcon />
                             </IconButton>
@@ -196,11 +201,11 @@ function PatientIndex() {
                             borderRight: '1px solid',
                             borderColor: 'divider',
                         }}> 
-                            <Outlet context={{ ref: recordRef }} />
+                            {/* <Outlet context={{ ref: recordRef }} /> */}
                         </Box>
 
                         <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'center', bgcolor: 'background.componentBg' }}>
-                            <PatientPageMainView/>
+                            <ExamViewController/>
                         </Box>
                         
                     </Box>

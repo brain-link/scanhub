@@ -19,8 +19,8 @@ export default function Dashboard() {
 
     if (!isReady) {
         return (
-            <Box sx={{ width: '100vw', justifyContent: 'center' }}>
-                <CircularProgress />
+            <Box sx={{ m: 10, gap: 2, display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center' }}>
+                <CircularProgress size="md" value={1} variant="soft" />
                 <Typography>Connecting to ScanHub...</Typography>
             </Box>
         )
