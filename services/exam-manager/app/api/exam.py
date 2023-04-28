@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException
 
 from api.models import BaseExam, ExamOut, get_exam_out
 from api.models import ProcedureOut, ProcedureIn, get_procedure_out
+from api.models import JobOut, JobIn, get_job_out
 from api.models import RecordOut, RecordIn, get_record_out
 from api import dal
 
@@ -23,7 +24,7 @@ async def readiness():
 # Exams
 # **************************************************
 
-@router.post('/exam/', response_model=ExamOut, status_code=201, tags=["exams"])
+@router.post('/', response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam(payload: BaseExam):
     exam = await dal.add_exam(payload)
     if not exam:
@@ -31,7 +32,7 @@ async def create_exam(payload: BaseExam):
     return await get_exam_out(exam)
 
 
-@router.get('/exam/{id}/', response_model=ExamOut, status_code=200, tags=["exams"])
+@router.get('/{id}/', response_model=ExamOut, status_code=200, tags=["exams"])
 async def get_exam(id: int):
     exam = await dal.get_exam(id)
     if not exam:
@@ -39,22 +40,24 @@ async def get_exam(id: int):
     return await get_exam_out(exam)
 
 
-@router.get('/exams/{patient_id}/', response_model=list[ExamOut], status_code=200, tags=["exams"])
+@router.get('/all/{patient_id}/', response_model=list[ExamOut], status_code=200, tags=["exams"])
 async def get_exam_list(patient_id: int):
     print("GET ALL EXAMS: ", patient_id)
     exams = await dal.get_all_exams(patient_id)
     if not exams:
-        raise HTTPException(status_code=404, detail="Exams not found")
-    return [await get_exam_out(exam) for exam in exams]
+        return []
+        # raise HTTPException(status_code=404, detail="Exams not found")
+    else:
+        return [await get_exam_out(exam) for exam in exams]
 
 
-@router.delete('/exam/{id}/', response_model={}, status_code=204, tags=["exams"])
+@router.delete('/{id}/', response_model={}, status_code=204, tags=["exams"])
 async def delete_workflow(id: int):
     if not await dal.delete_exam(id):
         raise HTTPException(status_code=404, detail="Exam not found")
     
 
-@router.put('/exam/{id}/', response_model=ExamOut, status_code=200, tags=["exams"])
+@router.put('/{id}/', response_model=ExamOut, status_code=200, tags=["exams"])
 async def update_workflow(id: int, payload: BaseExam):
     exam = await dal.update_exam(id, payload)
     if not exam:
@@ -74,7 +77,7 @@ async def create_procedure(payload: ProcedureIn):
     return await get_procedure_out(procedure)
 
 
-@router.get('/procedure/{id}/', response_model=ProcedureOut, status_code=200, tags=["procedures"])
+@router.get('/procedure/{id}', response_model=ProcedureOut, status_code=200, tags=["procedures"])
 async def get_procedure(id: int):
     procedure = await dal.get_procedure(id)
     if not procedure:
@@ -82,12 +85,14 @@ async def get_procedure(id: int):
     return await get_procedure_out(procedure)
 
 
-@router.get('/procedures/{exam_id}/', response_model=list[ProcedureOut], status_code=200, tags=["procedures"])
+@router.get('/procedure/all/{exam_id}/', response_model=list[ProcedureOut], status_code=200, tags=["procedures"])
 async def get_procedure_list(exam_id: int):
     procedures = await dal.get_all_procedures(exam_id)
     if not procedures:
-        raise HTTPException(status_code=404, detail="Procedures not found")
-    return [await get_procedure_out(procedure) for procedure in procedures]
+        return []
+        # raise HTTPException(status_code=404, detail="Procedures not found")
+    else:
+        return [await get_procedure_out(procedure) for procedure in procedures]
 
 
 @router.delete('/procedure/{id}', response_model={}, status_code=204, tags=["procedures"])
@@ -103,6 +108,51 @@ async def update_procedure(id: int, payload: ProcedureIn):
         raise HTTPException(status_code=404, detail="Procedure not found")
     return await get_procedure_out(procedure)
 
+
+# **************************************************
+# Jobs
+# **************************************************
+
+@router.post('/job/{id}', response_model=JobOut, status_code=201, tags=["jobs"])
+async def create_job(payload: JobIn):
+    job = await dal.add_job(payload)
+    if not job:
+        raise HTTPException(status_code=404, detail="Could not create job")
+    # TODO: Query device, workflow if not None
+    return await get_job_out(job)
+
+
+@router.get('/job/{id}', response_model=JobOut, status_code=200, tags=["jobs"])
+async def get_job(id: int):
+    job = await dal.get_job(id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return await get_job_out(job)
+
+
+@router.get('/job/all/{procedure_id}', response_model=list[JobOut], status_code=200, tags=["jobs"])
+async def get_job_list(procedure_id: int):
+    jobs = await dal.get_all_jobs(procedure_id)
+    if not jobs:
+        return []
+        # raise HTTPException(status_code=404, detail="Jobs not found")
+    else:
+        return [await get_job_out(job) for job in jobs]
+
+
+@router.delete('/job/{id}', response_model={}, status_code=204, tags=["jobs"])
+async def delete_job(id: int):
+    if not await dal.delete_job(id):
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+
+@router.put('/job/{id}', response_model=JobOut, status_code=200, tags=["jobs"])
+async def update_job(id: int, payload: JobIn):
+    job = await dal.update_job(id, payload)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return await get_job_out(job)
+ 
 
 # **************************************************
 # Records
@@ -124,24 +174,17 @@ async def get_record(id: int):
     return await get_record_out(record)
 
 
-@router.get('/records/{procedure_id}/', response_model=list[RecordOut], status_code=200, tags=["records"])
-async def get_record_list(procedure_id: int):
-    records = await dal.get_all_records(procedure_id)
+@router.get('/record/all/{job_id}/', response_model=list[RecordOut], status_code=200, tags=["records"])
+async def get_record_list(job_id: int):
+    records = await dal.get_all_records(job_id)
     if not records:
-        raise HTTPException(status_code=404, detail="Records not found")
-    return [await get_record_out(record) for record in records]
+        return []
+        # raise HTTPException(status_code=404, detail="Records not found")
+    else:
+        return [await get_record_out(record) for record in records]
 
 
 @router.delete('/record/{id}/', response_model={}, status_code=204, tags=["records"])
 async def delete_record(_id: int):
     if not await dal.delete_record(_id):
         raise HTTPException(status_code=404, detail="Record not found")
-    
-
-@router.put('/record/{id}/', response_model=RecordOut, status_code=200, tags=["records"])
-async def update_record(id: int, payload: RecordIn):
-    record = await dal.update_record(id, payload)
-    if not record:
-        raise HTTPException(status_code=404, detail="Record not found")
-    return await get_record_out(record)
- 

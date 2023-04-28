@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
-from api.db import Exam, Procedure, Record, Device, Workflow
+from api.db import Exam, Procedure, Job, Record, Device, Workflow
 
 # TODO: Define model id's as uuid's
 
 
-#***********************************************
-#   Base Models
-#***********************************************
+# ***********************************************
+# Base Models
+# ***********************************************
 
 class BaseDevice(BaseModel):
     name: str
@@ -18,6 +18,7 @@ class BaseDevice(BaseModel):
     status: str
     site: Optional[str] = None
     ip_address: str
+
 
 class BaseWorkflow(BaseModel):
     host: str
@@ -28,7 +29,12 @@ class BaseWorkflow(BaseModel):
     status: str
     kafka_topic: str
 
+
 class BaseExam(BaseModel):
+
+    class Config:
+        extra = Extra.ignore
+
     patient_id: int
     name: str
     country: Optional[str] = None
@@ -37,58 +43,90 @@ class BaseExam(BaseModel):
     creator: str
     status: str
 
+
 class BaseProcedure(BaseModel):
+
+    class Config:
+        extra = Extra.ignore
+
     name: str
-    modality: str
     status: str
 
+
+class BaseJob(BaseModel):
+
+    class Config:
+        extra = Extra.ignore
+
+    type: str
+    comment: Optional[str] = None
+    sequence_id: str
+
+
 class BaseRecord(BaseModel):
-    status: str
+
+    class Config:
+        extra = Extra.ignore
+
+    data_path: Optional[str] = None
     comment: Optional[str] = None
 
 
-#***********************************************
-#   Insert Models
-#***********************************************
+# ***********************************************
+# Insert Models
+# ***********************************************
 
 class ProcedureIn(BaseProcedure):
     exam_id: int
 
+
 class RecordIn(BaseRecord):
-    sequence_id: int
+    job_id: int
+
+
+class JobIn(BaseJob):
     workflow_id: Optional[int] = None
     device_id: int
     procedure_id: int
 
 
-#***********************************************
-#   Output Models
-#***********************************************
+# ***********************************************
+# Output Models
+# ***********************************************
 
 class DeviceOut(BaseDevice):
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
+
 class WorkflowOut(BaseWorkflow):
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
+
 class RecordOut(BaseRecord):
     id: int
-    is_acquired: bool
     datetime_created: datetime
-    datetime_updated: datetime | None
+
+
+class JobOut(BaseJob):
+    id: int
+    is_acquired: bool
     device: Optional[DeviceOut] = None
     workflow: Optional[WorkflowOut] = None
-    # TODO: return sequence object
+    records: List[RecordOut]
+    datetime_created: datetime
+    datetime_updated: Optional[datetime] = None
+
 
 class ProcedureOut(BaseProcedure):
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
-    records: List[RecordOut]
+    jobs: List[JobOut]
+
 
 class ExamOut(BaseExam):
     id: int
@@ -97,10 +135,9 @@ class ExamOut(BaseExam):
     procedures: List[ProcedureOut]
 
 
-
-#***********************************************
-#   Helper: SQLAlchemy-ORM to Pydantic
-#***********************************************
+# ***********************************************
+# Helper: SQLAlchemy-ORM to Pydantic
+# ***********************************************
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
     return WorkflowOut(
@@ -116,6 +153,7 @@ async def get_workflow_out(data: Workflow) -> WorkflowOut:
         kafka_topic=data.kafka_topic,
     )
 
+
 async def get_device_out(data: Device) -> DeviceOut:
     return DeviceOut(
         id=data.id,
@@ -129,34 +167,50 @@ async def get_device_out(data: Device) -> DeviceOut:
         ip_address=data.ip_address,
     )
 
-async def get_record_out(data: Record, device: Device = None, workflow: Workflow = None) -> RecordOut:
+
+async def get_record_out(data: Record) -> RecordOut:
     return RecordOut(
         id=data.id,
-        status=data.status,
+        job_id=data.job_id,
+        data_path=data.data_path,
         comment=data.comment,
+        datetime_created=data.datetime_created
+    )
+
+
+async def get_job_out(data: Job, device: Device = None, workflow: Workflow = None) -> JobOut:
+
+    records = [await get_record_out(record) for record in data.records]
+
+    return JobOut(
+        id=data.id,
+        type=data.type,
+        comment=data.comment,
+        sequence_id=data.sequence_id,
         is_acquired=data.is_acquired,
-        datetime_created=data.datetime_created,
-        datetime_updated=data.datetime_updated,
-        # TODO: How/where to fetch device and workflow? 
         device=await get_device_out(device) if device else None,
         workflow=await get_workflow_out(workflow) if workflow else None,
-        # sequence=...
+        records=records,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
     )
+
 
 async def get_procedure_out(data: Procedure) -> ProcedureOut:
 
     # Create records of the procedure
-    records = [await get_record_out(record) for record in data.records]
+    # records = [await get_record_out(record) for record in data.records]
+    jobs = [await get_job_out(job) for job in data.jobs]
 
     return ProcedureOut(
         id=data.id,
         name=data.name,
         status=data.status,
-        modality=data.modality,
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
-        records=records
+        jobs=jobs,
     )
+
 
 async def get_exam_out(data: Exam) -> ExamOut:
 

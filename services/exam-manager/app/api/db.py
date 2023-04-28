@@ -48,6 +48,7 @@ class Exam(Base):
         for key, value in data.items():
             setattr(self, key, value)
 
+
 class Procedure(Base):
     """
     Procedure ORM model
@@ -58,10 +59,9 @@ class Procedure(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     # Relations and references
     exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
-    records: Mapped[List["Record"]] = relationship(lazy="selectin")
+    jobs: Mapped[List["Job"]] = relationship(lazy="selectin")
     # Fields
     name: Mapped[str] = mapped_column(nullable=False)
-    modality: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
@@ -76,11 +76,11 @@ class Procedure(Base):
             setattr(self, key, value)
 
 
-class Record(Base):
+class Job(Base):
     """
-    Record ORM model
+    Job ORM model
     """
-    __tablename__ = 'record'
+    __tablename__ = 'job'
     __table_args__ = {'extend_existing': True} 
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -88,10 +88,11 @@ class Record(Base):
     # Relations and references
     procedure_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
-    device_id: Mapped[int] = mapped_column(nullable=False)
-    sequence_id: Mapped[int] = mapped_column(nullable=False)
+    device_id: Mapped[int] = mapped_column(nullable=True)
+    sequence_id: Mapped[str] = mapped_column(nullable=False)
+    records: Mapped[List["Record"]] = relationship(lazy="selectin")
     # Fields
-    status: Mapped[str] = mapped_column(nullable=False)
+    type: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
     is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
@@ -105,6 +106,22 @@ class Record(Base):
         """
         for key, value in data.items():
             setattr(self, key, value)
+
+
+class Record(Base):
+    """
+    Record ORM model, TODO: May be obsolete
+    """
+    __tablename__ = 'record'
+    __table_args__ = {'extend_existing': True} 
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # Relations and references
+    job_id: Mapped[int] = mapped_column(ForeignKey("job.id"))
+    data_path: Mapped[str] = mapped_column(nullable=True)
+    # Fields
+    comment: Mapped[str] = mapped_column(nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
 
 
 # Create automap base
@@ -121,8 +138,8 @@ except AttributeError as e:
 
 # Create async engine and session, echo=True generates console output
 async_engine = create_async_engine(
-    os.getenv('DB_URI_ASYNC'), 
-    future=True, 
+    os.getenv('DB_URI_ASYNC'),
+    future=True,
     echo=False,
     isolation_level="AUTOCOMMIT"
 )

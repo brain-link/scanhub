@@ -4,9 +4,8 @@ from sqlalchemy.future import select
 from typing import List
 from pprint import pprint
 
-from api.models import BaseExam, ProcedureIn, RecordIn  # pydantic models
-from api.db import Exam, Procedure, Record, async_session   # database orm models
-
+from api.models import BaseExam, ProcedureIn, JobIn, RecordIn  # pydantic models
+from api.db import Exam, Procedure, Job, Record, async_session   # database orm models
 
 
 # **************************************************
@@ -196,6 +195,99 @@ async def update_procedure(id: int, payload: ProcedureIn) -> Procedure:
 
 
 # **************************************************
+# Jobs
+# **************************************************
+
+async def add_job(payload: JobIn) -> Job:
+    """Add a new job to the database
+
+    Arguments:
+        payload {JobIn} -- Pydantic model to create a new database entry
+
+    Returns:
+        Job -- Database orm model
+    """
+    new_job = Job(**payload.dict())
+    async with async_session() as session:
+        session.add(new_job)
+        await session.commit()
+        await session.refresh(new_job)
+    # Debugging
+    print("***** NEW JOB *****")
+    pprint(new_job.__dict__)
+    return new_job
+
+
+async def get_job(id: int) -> Job:
+    """Fetch a job from database
+
+    Arguments:
+        id {int} -- ID of job
+
+    Returns:
+        Job -- Database orm model
+    """
+    async with async_session() as session:
+        job = await session.get(Job, id)
+    return job
+
+
+async def get_all_jobs(procedure_id: int) -> list[Job]:
+    """Fetch all jobs of a record
+
+    Arguments:
+        id {int} -- ID of job
+
+    Returns:
+        Job -- Database orm model
+    """
+    async with async_session() as session:
+        result = await session.execute(select(Job).where(Job.procedure_id == procedure_id))
+        jobs = result.scalars().all()
+    return jobs
+
+
+async def delete_job(id: int) -> bool:
+    """Delete a job by ID
+
+    Arguments:
+        id {int} -- ID of job to be deleted
+
+    Returns:
+        bool -- Success of delete event
+    """
+    async with async_session() as session:
+        job = await session.get(Job, id)
+        if job:
+            await session.delete(job)
+            await session.commit()
+            return True
+        else: 
+            return False
+
+
+async def update_job(id: int, payload: JobIn) -> Job:
+    """Update an existing job in database
+
+    Arguments:
+        id {int} -- ID of job
+        payload {JobIn} -- Pydantic base model, data to be updated
+
+    Returns:
+        Job -- Updated database orm model
+    """
+    async with async_session() as session:
+        job = await session.get(Job, id)
+        if job:
+            job.update(payload.dict())
+            await session.commit()
+            await session.refresh(job)
+            return job
+        else:
+            return None
+
+
+# **************************************************
 # RECORDS
 # **************************************************
 
@@ -203,7 +295,7 @@ async def add_record(payload: RecordIn) -> Record:
     """Add a new record to the database
 
     Arguments:
-        payload {BaseRecord} -- Pydantic base model to create a new database entry
+        payload {RecordIn} -- Pydantic model to create a new database entry
 
     Returns:
         Record -- Database orm model
@@ -229,18 +321,21 @@ async def get_record(id: int) -> Record:
         Record -- Database orm model
     """
     async with async_session() as session:
-        workflow = await session.get(Record, id)
-    return workflow
+        record = await session.get(Record, id)
+    return record
 
 
-async def get_all_records(procedure_id: int) -> List[Record]:
-    """Fetch all exams which belong to a procedure
+async def get_all_records(job_id: int) -> list[Record]:
+    """Fetch all records of a job
+
+    Arguments:
+        id {int} -- ID of record
 
     Returns:
-        List[Procedure] -- List of database orm models
+        Record -- Database orm model
     """
     async with async_session() as session:
-        result = await session.execute(select(Record).where(Record.procedure_id == procedure_id))
+        result = await session.execute(select(Record).where(Record.job_id == job_id))
         records = result.scalars().all()
     return records
 
@@ -260,27 +355,5 @@ async def delete_record(id: int) -> bool:
             await session.delete(record)
             await session.commit()
             return True
-        else: 
-            return False
-
-
-async def update_record(id: int, payload: RecordIn) -> Record:
-    """Update an existing record in database
-
-    Arguments:
-        id {int} -- ID of record
-        payload {BaseRecord} -- Pydantic base model, data to be updated
-
-    Returns:
-        Record -- Updated database orm model
-    """
-    async with async_session() as session:
-        record = await session.get(Record, id)
-        if record:
-            record.update(payload.dict())
-            await session.commit()
-            await session.refresh(record)
-            return record
         else:
-            return None
-    
+            return False
