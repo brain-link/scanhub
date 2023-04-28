@@ -23,7 +23,7 @@ from typing import Any, List
 from fastapi import APIRouter, Body, FastAPI, HTTPException, status
 from pydantic import BaseModel
 from starlette.endpoints import WebSocketEndpoint
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import FileResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
@@ -40,7 +40,12 @@ app = FastAPI(openapi_url="/api/v1/devices/openapi.json", docs_url="/api/v1/devi
 # app.include_router(router, prefix='/api/v1/devices')
 
 app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_headers=["*"], allow_methods=["*"]
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
 )
 app.debug = True
 
