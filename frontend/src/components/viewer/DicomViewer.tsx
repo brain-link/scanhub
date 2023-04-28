@@ -7,7 +7,7 @@ import axios from 'axios';
 import config from '../../utils/config';
 
 type ViewerProps = {
-  recordId: string;
+  procedureId: string;
 };
 
 class DicomViewer extends Component<ViewerProps> {
@@ -38,17 +38,17 @@ class DicomViewer extends Component<ViewerProps> {
     ],
     imageIds: [],
     ready: false,
-    recordId: "",
+    procedureId: "",
   };
 
   static getDerivedStateFromProps(props: any, state: any) {
-    return (state.recordId = props.recordId)
+    return (state.procedureId = props.procedureId)
   }
 
   async find() {
 
-    if (this.state.recordId !== undefined){
-      await axios.get(`${config.baseURL}/records/${this.state.recordId}`)
+    if (this.state.procedureId !== undefined){
+      await axios.get(`${config.baseURL}/records/${this.state.procedureId}`)
       .then((response) => {
         if (response.data.data) {
           const res = "dicomweb:" + response.data.data
@@ -67,7 +67,7 @@ class DicomViewer extends Component<ViewerProps> {
   }
 
   componentDidUpdate(prevProps: any) {
-    if (prevProps.recordId !== this.props.recordId) {
+    if (prevProps.procedureId !== this.props.procedureId) {
       this.find();
     }
   }

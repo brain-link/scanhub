@@ -70,7 +70,7 @@ export function MRIView() {
     const [dataUrl, setDataUrl] = React.useState<String | null>(null);
 
     async function get_record_data() {
-        await axios.get(`${config.baseURL}/records/${params.recordId}`)
+        await axios.get(`${config.baseURL}/records/${params.procedureId}`)
         .then((response) => {
             console.log("Response from record fetch in MRIView: ", response.data.data.toString())
             setDataUrl(response.data.data ? response.data.data.toString() : null)

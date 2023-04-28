@@ -23,18 +23,30 @@ import FormLabel from '@mui/joy/FormLabel';
 import Badge from '@mui/material/Badge';
 import config from '../../utils/config';
 import Stack from '@mui/joy/Stack';
+import Grid from '@mui/joy/Grid';
 import { useQuery } from "react-query";
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 
-// import { Procedure } from './Interfaces';
-// import { format_date } from '../utils/formatter';
 import { Exam } from '../../client/interfaces';
-import client from '../../client/queries';
+// import client from '../../client/queries';
+import { ExamApiService } from '../../client/queries';
+
+
+// Patient form items, order is row wise
+const createExamFormContent = [
+    {key: 'name', label: 'Exam Name', placeholder: 'Knee complaints'},
+    {key: 'site', label: 'Site', placeholder: 'Berlin'},
+    {key: 'address', label: 'Site Address', placeholder: ''},
+    {key: 'creator', label: 'Name of Exam Creater', placeholder: 'Last name, first name'},
+    {key: 'status', label: 'Status', placeholder: 'Exam created'},
+]
 
 
 function ExamList() {
+
+    const examClient = new ExamApiService();
 
     const params = useParams();
     const [activeExamId, setActiveExamId] = React.useState<number | undefined>(undefined);
@@ -42,17 +54,12 @@ function ExamList() {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
 
-    // const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
-    // const [procedure, setProcedure] = React.useState<Procedure>({ 
-    //     id: 0, name: "", modality: "", status: "", datetime_created: new Date(), datetime_updated: new Date()
-    // });
-
     const [exam, setExam] = React.useState<Exam>({
         id: 0, 
         patient_id: Number(params.patientId),
         name: '',
         procedures: [],
-        country: '',
+        country: 'D',
         site: '',
         address: '',
         creator: '', 
@@ -61,10 +68,10 @@ function ExamList() {
         datetime_updated: new Date(),
     })
 
-    const { data: exams, isLoading: examsLoading, isError: examsError } = useQuery<Exam[], Error>(
-        ['exams', params.patientId], 
-        () => client.exams.getAll(Number(params.patientId))
-    );
+    const { data: exams, refetch, isLoading: examsLoading, isError: examsError } = useQuery<Exam[], Error>({
+        queryKey: ['exam', params.patientId],
+        queryFn: () => examClient.getAll(Number(params.patientId))
+    });
 
     const handleContextClose = () => {
         setAnchorEl(null);
@@ -77,40 +84,27 @@ function ExamList() {
         setContextOpen(examId);
     }
 
-    React.useEffect(() => {
-        if (params.examId && Number(params.examId) !== activeExamId){
-            setActiveExamId(Number(params.examId));
-        }
-    }, [params.examId]);
-
-    // Define fetch function for procedures table
-    // async function fetchProcedures () {
-    //     // await axios.get(`${config['baseURL']}/patients/${params.patientId}/procedures`)
-    //     // .then((response) => { setProcedures(response.data) })
-    //     await client.procedures.getAll().then((data) => {setProcedures(data)})
-    // };
-
-    async function deleteExam(examId) {
-        // await axios.delete(`${config.baseURL}/patients/${params.patientId}/${procedureId}`)
-        // .then(() => { fetchProcedures(); })
-        console.log("Exam selected for deletion: ", examId)
-        // await client.exams.delete(examId)
-    }
-
-    // fetch procedures
     // React.useEffect(() => {
-    //     fetchProcedures();
-    // }, [params.procedureId]);
+    //     if (params.examId && Number(params.examId) !== activeExamId){
+    //         setActiveExamId(Number(params.examId));
+    //     }
+    // }, [params.examId]);
 
-    const mutation = useMutation(async() => {
-        // await axios.post(`${config['baseURL']}/patients/${params.patientId}/procedures/new`, procedure)
-        // .then((response) => {
-        //     setProcedure(response.data)
-        //     fetchProcedures()
-        // })
-        // .catch((err) => { console.log(err) })
 
-        await client.exams.create(exam).then()
+    // async function deleteExam(examId) {
+    //     // await axios.delete(`${config.baseURL}/patients/${params.patientId}/${procedureId}`)
+    //     // .then(() => { fetchProcedures(); })
+    //     console.log("Exam selected for deletion: ", examId)
+    //     await client.exams.delete(examId)
+    // }
+
+    const deleteExamById = useMutation( async (id: number) => {
+        await examClient.delete(id)
+        .then(() => { refetch(); })
+    })
+
+    const createExam = useMutation(async() => {
+        await examClient.create(exam).then( (response) => { exams?.push(response) } )
         .catch((err) => { console.log(err) }) 
     })
 
@@ -150,7 +144,7 @@ function ExamList() {
                     <ModalDialog
                         aria-labelledby="basic-modal-dialog-title"
                         aria-describedby="basic-modal-dialog-description"
-                        sx={{ width: '50vh', borderRadius: 'md', p: 5 }}
+                        sx={{ width: '50vw', borderRadius: 'md', p: 5 }}
                     >
                         <ModalClose
                             sx={{
@@ -173,55 +167,30 @@ function ExamList() {
                         <form
                             onSubmit={(event) => {
                                 event.preventDefault();
-                                mutation.mutate();
+                                createExam.mutate();
                                 setDialogOpen(false);
                             }}
                         >
-                            <Stack spacing={2}>
-                                <FormLabel>Name</FormLabel>
-                                <Input 
-                                    name='name'
-                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
-                                    autoFocus 
-                                    required 
-                                />
-                                <FormLabel>Site</FormLabel>
-                                <Input 
-                                    name='site'
-                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
-                                    autoFocus 
-                                    required 
-                                />
-                                <FormLabel>Address</FormLabel>
-                                <Input 
-                                    name='address'
-                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
-                                    autoFocus 
-                                    required 
-                                />
-                                <FormLabel>Country</FormLabel>
-                                <Input 
-                                    name='country'
-                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
-                                    autoFocus 
-                                    required 
-                                />
-                                <FormLabel>Creator</FormLabel>
-                                <Input 
-                                    name='creator'
-                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
-                                    autoFocus 
-                                    required 
-                                />
-                                <FormLabel>Status</FormLabel>
-                                <Input 
-                                    name='status'
-                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
-                                    autoFocus 
-                                    required 
-                                />
-                                <Button type="submit">Submit</Button>
+                            <Stack spacing={5}>
+                                <Grid container rowSpacing={1.5} columnSpacing={5}>
+                                    {
+                                        createExamFormContent.map((item, index) => (
+                                            <Grid key={ index } md={6}
+                                            >
+                                                <FormLabel>{ item.label }</FormLabel>
+                                                <Input 
+                                                    name={ item.key }
+                                                    onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
+                                                    placeholder={ item.placeholder }
+                                                    required 
+                                                />
+                                            </Grid>
+                                        ))
+                                    }
+                                </Grid>
+                                <Button size='sm' type="submit" sx={{ maxWidth: 100 }}>Submit</Button>
                             </Stack>
+
                         </form>
                     </ModalDialog>
                 </Modal>
@@ -249,10 +218,11 @@ function ExamList() {
                                     <ContentPasteSharpIcon />
                                 </ListItemDecorator>
                                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
-                                    <Typography level="body2" textColor="text.tertiary">{exam.name}</Typography>
-                                    <Typography>{exam.status}</Typography>
-                                    <Typography level="body2" textColor="text.tertiary">{ exam.datetime_created.toLocaleString() }</Typography>
-                                    <Typography level="body2" textColor="text.tertiary">{ exam.datetime_updated ? exam.datetime_updated.toLocaleString() : "" }</Typography>
+                                    <Typography>{exam.name}</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ `Issuer: ${exam.creator}, ${exam.site}`}</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{exam.status}</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(exam.datetime_created).toDateString()}` }</Typography>
+                                    <Typography level="body2" textColor="text.tertiary">{ `Updated: ${exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}` }</Typography>
                                 </Box>
 
                                 <Menu   
@@ -270,7 +240,7 @@ function ExamList() {
                                             Edit exam
                                     </MenuItem>
                                     <ListDivider />
-                                    <MenuItem key="delete-exam" color='danger' onClick={() => { deleteExam(exam.id); }}>
+                                    <MenuItem key="delete-exam" color='danger' onClick={() => { deleteExamById.mutate(exam.id); }}>
                                         <ListItemDecorator>
                                             <ClearSharpIcon />
                                         </ListItemDecorator>{' '}

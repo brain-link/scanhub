@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "react-query";
+import { useQuery } from "react-query";
 import * as React from 'react';
 
 import Typography from '@mui/joy/Typography';
@@ -18,7 +19,8 @@ import Button from '@mui/joy/Button';
 import Table from '@mui/joy/Table';
 import Box from '@mui/joy/Box';
 
-import client from '../client/queries';
+// import client from '../client/queries';
+import { PatientApiService } from '../client/queries';
 import { Patient } from '../client/interfaces';
 
 
@@ -35,38 +37,58 @@ const createPatientFormContent = [
 
 export default function PatientTable() {
 
+    const patientClient = new PatientApiService();
+
     // Create raw patient
     const [patient, setPatient] = React.useState<Patient>({
-        id: 0, sex: "", name: "", issuer: "", status: "", comment: "", 
-        birth_date: "", datetime_created: new Date(), datetime_updated: new Date()
+        id: 0, 
+        sex: "", 
+        name: "", 
+        issuer: "", 
+        status: "", 
+        comment: "", 
+        birth_date: "", 
+        datetime_created: new Date(), 
+        datetime_updated: new Date()
     });
-    const [patients, setPatients] = React.useState<Patient[]>([]);
+    // const [patients, setPatients] = React.useState<Patient[]>([]);
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
 
     const navigate = useNavigate();
 
-    async function fetchPatients() {
-        await client.patients.getAll().then((data) => { setPatients(data) })
-    }
+    // async function fetchPatients() {
+    //     await patientClient.getAll().then((data) => { setPatients(data) })
+    // }
 
-    // Fetch all patients
-    React.useEffect(() => {
-        fetchPatients();
-    }, []);
+    // // Fetch all patients
+    // React.useEffect(() => {
+    //     fetchPatients();
+    // }, []);
+
+    const { data: patients, refetch, isLoading, isError } = useQuery<Patient[], Error>({
+        queryKey: ['patients'],
+        queryFn: () => patientClient.getAll()
+    });
 
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
-        await client.patients.create(patient).then( (response) => { patients?.push(response) })
-        .catch((err) => { console.log(err) })
+        await patientClient.create(patient)
+        .then( (response) => {
+            patients?.push(response) 
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     })
 
-    if (!patients) {
+    if (isLoading || isError) {
         return (
             <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
                 <Typography>Loading patients...</Typography>
                 <LinearProgress variant="plain" />
             </Container>
-    )}
+        )
+    }
 
     return (
         <Box sx={{ m: 5 }}>
@@ -132,7 +154,7 @@ export default function PatientTable() {
                                     ))
                                 }
                             </Grid>
-                            <Button type="submit">Submit</Button>
+                            <Button size='sm' type="submit" sx={{ maxWidth: 100 }}>Submit</Button>
                         </Stack>
                     </form>
                 </ModalDialog>

@@ -5,9 +5,10 @@ import Dashboard from './Dashboard'
 import DeviceTable from "./DeviceTable";
 import PatientTable from "./PatientTable";
 import App from './App'
-import PatientIndex from './exam-mainview/PatientPage'
+import PatientIndex from './exam-mainview/PatientIndex'
 import Procedures from "./exam-mainview/procedures";
-import PatientPageMainView from "./exam-mainview/PatientPageMainView";
+
+import ExamViewController from "./exam-mainview/ExamViewController";
 
 export function RouteConfiguration () {
     return (
@@ -18,8 +19,8 @@ export function RouteConfiguration () {
                     <Route index element={<PatientTable />} />
                     <Route path=':patientId' element={<PatientIndex/>} >
                         <Route path=':examId' element={<Procedures/>}>
-                            <Route path=':recordId' element={<PatientPageMainView/>}>
-                                <Route path=':toolId'/>
+                            <Route path=':procedureId' element={<ExamViewController/>}>
+                                <Route path=':examViewId'/>
                             </Route>
                         </Route>
                     </Route>
