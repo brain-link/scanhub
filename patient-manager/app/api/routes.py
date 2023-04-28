@@ -19,6 +19,7 @@ async def create_patient(payload: BasePatient):
         raise HTTPException(status_code=404, detail="Could not create patient")
     return await get_patient_out(patient)
 
+
 @patient.get("/{id}/", response_model=PatientOut, status_code=200, tags=["patients"])
 async def get_patient(id: int):
     patient = await dal.get_patient(id)
@@ -26,18 +27,23 @@ async def get_patient(id: int):
         raise HTTPException(status_code=404, detail="Patient not found")
     return await get_patient_out(patient)
 
-@patient.get('/patients', response_model=list[PatientOut], status_code=200, tags=["patients"])
+
+@patient.get('/', response_model=list[PatientOut], status_code=200, tags=["patients"])
 async def get_patient_list():
     patients = await dal.get_all_patients()
     if not patients:
-        raise HTTPException(status_code=404, detail="Patients not found")
-    return [await get_patient_out(patient) for patient in patients]
+        return []
+        # raise HTTPException(status_code=404, detail="Patients not found")
+    else:
+        return [await get_patient_out(patient) for patient in patients]
+
 
 @patient.delete("/{id}/", response_model={}, status_code=204, tags=["patients"])
 async def delete_patient(id: int):
     if not await dal.delete_patient(id):
         raise HTTPException(status_code=404, detail="Patient not found")
-    
+
+
 @patient.put("/{id}/", response_model=PatientOut, status_code=200, tags=["patients"])
 async def update_patient(id: int, payload: BasePatient):
     patient = await dal.update_patient(id, payload)
