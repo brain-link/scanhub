@@ -39,20 +39,30 @@ export interface Device {
 
 export interface Record {
     id: number;
+    data_path?: string | null;
+    comment?: string | null;
+    datetime_created: Date;
+}
+
+export interface Job {
+    id: number;
+    type: string;
+    comment?: string | null;
+    is_acquired: boolean;
+    sequence_id: string;
     device?: Device | null;
     workflow?: Workflow | null;
-    status: string;
-    comment?: string | null;
+    records?: [Record] | [];
     datetime_created: Date;
     datetime_updated?: Date | null;
 }
 
 export interface Procedure {
     id: number;
+    exam_id: number;
     name: string;
-    modality: string;
     status: string;
-    records: [Record] | [];
+    jobs: [Job] | [];
     datetime_created: Date;
     datetime_updated?: Date | null;
 }
