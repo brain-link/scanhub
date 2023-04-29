@@ -1,10 +1,10 @@
-import { Patient } from './interfaces';
-import { Device } from './interfaces';
-import { Workflow } from './interfaces';
-import { Exam } from './interfaces';
-import { Procedure } from './interfaces';
-import { Job } from './interfaces';
-import { Record } from './interfaces';
+import { Patient } from '../interfaces/data.interface';
+import { Device } from '../interfaces/data.interface';
+import { Workflow } from '../interfaces/data.interface';
+import { Exam } from '../interfaces/data.interface';
+import { Procedure } from '../interfaces/data.interface';
+import { Job } from '../interfaces/data.interface';
+import { Record } from '../interfaces/data.interface';
 
 import baseUrls from './urls';
 
