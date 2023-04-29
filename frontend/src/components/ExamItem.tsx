@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from "react-query";
 
 // Mui joy components
@@ -25,7 +26,8 @@ import { ExamApiService } from '../client/queries';
 
 function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) {
 
-    const params = useParams()
+    const params = useParams();
+    const navigate = useNavigate();
 
     const examClient = new ExamApiService();
 
@@ -46,7 +48,13 @@ function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) 
 
     const deleteExamById = useMutation( async (id: number) => {
         await examClient.delete(id)
-        .then(() => { onDelete(); })
+        .then(() => {
+            if (Number(params.examId) === id) {
+                // Reset router path if this exam id is in the path
+                navigate(`/patients/${params.patientId}`)
+            }
+            onDelete();
+        })
     })
 
     // Debug content of exam.procedure
@@ -58,7 +66,8 @@ function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) 
                 id="exam-item"
                 component={ RouterLink }
                 // If examId exists in parameters, we redirect to this exam id, otherwise exam id is appended
-                to={ params.examId ? `../${exam.id}` : String(exam.id) }
+                // to={ params.examId ? `../${exam.id}` : String(exam.id)
+                to={ `/patients/${params.patientId}/${exam.id}` }
                 relative='path'
                 selected={ isSelected } 
                 variant={(isSelected || exam.id === contextOpen)? "soft" : "plain"}
@@ -95,10 +104,10 @@ function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) 
                     onClose={() => handleContextClose()}
                     sx={{ zIndex: 'snackbar' }}
                 >
-                    <MenuItem key='edit' onClick={() => { deleteExamById.mutate(exam.id) }}>
+                    <MenuItem key='edit' onClick={() => { console.log('To be implemented...') }}>
                         Edit
                     </MenuItem>
-                    <MenuItem key='delete' onClick={() => { console.log('Edit exam item') }}>
+                    <MenuItem key='delete' onClick={() => { deleteExamById.mutate(exam.id) }}>
                         Delete
                     </MenuItem>
                 </Menu>

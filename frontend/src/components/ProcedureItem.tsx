@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 
 // Mui joy components
@@ -25,6 +26,7 @@ import { ProcedureApiService } from '../client/queries';
 function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentProps<Procedure>) {
 
     const params = useParams();
+    const navigate = useNavigate();
 
     const procedureClient = new ProcedureApiService();
 
@@ -46,7 +48,13 @@ function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentPro
 
     const deleteProcedureById = useMutation(async (id: number) => {
         await procedureClient.delete(id)
-        .then(() => { onDelete(); })
+        .then(() => {
+            if (Number(params.examId) === id) {
+                // Reset router path if this exam id is in the path
+                navigate(`/patients/${params.patientId}/${params.examId}`)
+            }
+            onDelete(); 
+        })
     })
 
 
@@ -56,7 +64,7 @@ function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentPro
                 id="procedure-item"
                 component={ RouterLink }
                 // If procedureId exists, we redirect to this procedure id, otherwise procedure id is appended
-                to={ params.procedureId ? `../${procedure.id}` : String(procedure.id) }
+                to={ `/patients/${params.patientId}/${params.examId}/${procedure.id}` }
                 selected={ isSelected }
                 variant={( isSelected || procedure.id === contextOpen) ? "soft" : "plain" }
             >
@@ -89,10 +97,10 @@ function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentPro
                     onClose={() => handleContextClose()}
                     sx={{ zIndex: 'snackbar' }}
                 >
-                    <MenuItem key='edit' onClick={() => { deleteProcedureById.mutate(procedure.id) }}>
+                    <MenuItem key='edit' onClick={() => { console.log('To be implemented...') }}>
                         Edit
                     </MenuItem>
-                    <MenuItem key='delete' onClick={() => { console.log('Edit procedure item') }}>
+                    <MenuItem key='delete' onClick={() => { deleteProcedureById.mutate(procedure.id) }}>
                         Delete
                     </MenuItem>
                 </Menu>
