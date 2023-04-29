@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useMutation } from "react-query";
+import { useMutation } from 'react-query';
 
 // Mui joy components
 import Box from '@mui/joy/Box';
@@ -13,99 +13,93 @@ import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import IconButton from '@mui/joy/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-// import ContentPasteSharpIcon from '@mui/icons-material/ContentPasteSharp';
-import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp';
+// import FilterCenterFocusSharpIcon from '@mui/icons-material/FilterCenterFocusSharp';
+import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
 
 // Interfaces and api service
-import { Exam } from '../interfaces/data.interface';
+import { Procedure } from '../interfaces/data.interface'; 
 import { ItemComponentProps } from '../interfaces/components.interface';
-import { ExamApiService } from '../client/queries';
+import { ProcedureApiService } from '../client/queries';
 
 
+function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentProps<Procedure>) {
 
-function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) {
+    const params = useParams();
 
-    const params = useParams()
-
-    const examClient = new ExamApiService();
+    const procedureClient = new ProcedureApiService();
 
     // Context: Delete and edit options, anchor for context location
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
 
     const handleContextClose = () => {
         setAnchorEl(null);
         setContextOpen(null);
     }
 
-    const handleContextOpen = (e, examId) => {
+    const handleContextOpen = (e, procedureId) => {
         e.preventDefault();
         setAnchorEl(e.currentTarget);
-        setContextOpen(examId);
+        setContextOpen(procedureId);
     }
 
-    const deleteExamById = useMutation( async (id: number) => {
-        await examClient.delete(id)
+    const deleteProcedureById = useMutation(async (id: number) => {
+        await procedureClient.delete(id)
         .then(() => { onDelete(); })
     })
 
-    // Debug content of exam.procedure
-    // React.useEffect( () => console.log(exam.procedures), [exam]);
 
     return (
         <ListItem>
             <ListItemButton 
-                id="exam-item"
+                id="procedure-item"
                 component={ RouterLink }
-                // If examId exists in parameters, we redirect to this exam id, otherwise exam id is appended
-                to={ params.examId ? `../${exam.id}` : String(exam.id) }
-                relative='path'
-                selected={ isSelected } 
-                variant={(isSelected || exam.id === contextOpen)? "soft" : "plain"}
+                // If procedureId exists, we redirect to this procedure id, otherwise procedure id is appended
+                to={ params.procedureId ? `../${procedure.id}` : String(procedure.id) }
+                selected={ isSelected }
+                variant={( isSelected || procedure.id === contextOpen) ? "soft" : "plain" }
             >
                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
-                    <SnippetFolderSharpIcon />
+                    <DescriptionSharpIcon />
                 </ListItemDecorator>
 
                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Typography>{exam.name}</Typography>
+                        <Typography>{procedure.name}</Typography>
                         <IconButton 
                             variant='plain' 
                             sx={{ "--IconButton-size": "25px" }}
-                            onClick={ (e) => handleContextOpen(e, exam.id) }
+                            onClick={ (e) => handleContextOpen(e, procedure.id) }
                         >
                             <MoreHorizIcon />
                         </IconButton>
                     </Box>
 
-                    <Typography level="body2" textColor="text.tertiary">{ `Issuer: ${exam.creator}, ${exam.site}`}</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{exam.status}</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(exam.datetime_created).toDateString()}` }</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{ `Updated: ${exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}` }</Typography>
-                
+                    <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(procedure.datetime_created).toDateString()}` }</Typography>
+                    <Typography level="body2" textColor="text.tertiary">{ `Updated: ${procedure.datetime_updated ? new Date(procedure.datetime_updated).toDateString() : '-'}` }</Typography>
                 </Box>
 
                 <Menu   
                     id='context-menu'
                     variant='plain'
                     anchorEl={anchorEl}
-                    open={exam.id === contextOpen}
+                    open={procedure.id === contextOpen}
                     onClose={() => handleContextClose()}
                     sx={{ zIndex: 'snackbar' }}
                 >
-                    <MenuItem key='edit' onClick={() => { deleteExamById.mutate(exam.id) }}>
+                    <MenuItem key='edit' onClick={() => { deleteProcedureById.mutate(procedure.id) }}>
                         Edit
                     </MenuItem>
-                    <MenuItem key='delete' onClick={() => { console.log('Edit exam item') }}>
+                    <MenuItem key='delete' onClick={() => { console.log('Edit procedure item') }}>
                         Delete
                     </MenuItem>
                 </Menu>
                 
-            </ListItemButton>   
+            </ListItemButton>  
         </ListItem>
-    )
-};
+    );  
+}
 
-export default ExamItem;
+export default ProcedureItem;
