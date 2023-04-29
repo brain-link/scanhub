@@ -2,66 +2,54 @@ version: "3"
 services:
 
   frontend:
-    container_name: Frontend
+    container_name: frontend
     image: frontend
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
     depends_on:
-      - backend
+      - patient-manager
     volumes:
       - ./frontend/src:/app/src
     ports:
       - 3000:3000
 
-  backend:
-    container_name: Backend
-    image: backend
+  patient-manager:
+    container_name: patient-manager
+    image: sh-patient-manager
     restart: unless-stopped
-    build: 
-      context: ./backend
-      dockerfile: ./Dockerfile
-    command: bash -c "uvicorn scanhub.api:app --port 8000 --host 0.0.0.0 --reload"
-    depends_on:
-    - postgres
+    build: ./patient-manager
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8100
     volumes:
-    - ./backend:/scanhub
+    - ./patient-manager/app:/app/
     ports:
-      - 8000:8000
-
-  postgres:
-    image: postgres
-    restart: unless-stopped
-    container_name: Patient-Database
+      - 8100:8100
     environment:
-      POSTGRES_PASSWORD: patient_data
+      - DB_URI=postgresql://brainlink:data@patient-database/patients-data
+      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
+    depends_on:
+      patient-database:
+        condition: service_healthy
+
+  patient-database:
+    container_name: db-patients
+    image: postgres:15.2-bullseye
+    restart: always
+    volumes:
+      - postgres_data_patient:/var/lib/postgresql/data/
+    environment:
       POSTGRES_USER: brainlink
-      POSTGRES_DB: scanhub
-
-  adminer:
-    image: adminer
-    restart: unless-stopped
-    container_name: DB-Admin
+      POSTGRES_DB: patients-data
+      POSTGRES_PASSWORD: data
     ports:
-      - 8060:8060
-    # Change default adminer port
-    command:
-      - 'php'
-      - '-S'
-      - '[::]:8060'
-      - '-t'
-      - '/var/www/html'
-    # entrypoint:
-    #   - 'entrypoint.sh'
-    #   - 'docker-php-entrypoint'
+      - "5432:5432"
+    healthcheck:  
+      # init-db container is started, after health check passed
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s 
 
-  # Postgres Admin Tool
-  # fepgadmin:
-  #   container_name: fepg-admin
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: info@brain-link.de
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   ports:
-  #     - "8071:8071"
+volumes:
+  postgres_data_patient:

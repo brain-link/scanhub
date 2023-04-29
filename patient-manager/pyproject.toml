@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "scanhub-server"
+version = "0.1.0"
+description = "ScanHub server"
+authors = []
+
+[tool.poetry.dependencies]
+fastapi = "^0.75.0"
+graphene = "^3.0"
+graphene-file-upload = "^1.3.0"
+pydantic = "^1.9.0"
+python = ">=3.8,<3.11"
+starlette-graphene3 = "^0.5.1"
+uvicorn = {extras = ["standard"], version = "^0.17.5"}
+tortoise-orm = "^0.18.1"
+asyncpg = "^0.25.0"
+numpy = "^1.23.0"
+plotly = "^5.9.0"
+scipy = "^1.8.1"
+pypulseq = "^1.3.1"
+async-sqlalchemy = "^1.0.0"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.6.0"
+coverage = {extras = ["toml"], version = "^6.3.2"}
+isort = "^5.10.1"
+mypy = "^0.931"
+pytest = "^7.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

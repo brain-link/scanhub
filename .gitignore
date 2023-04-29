@@ -136,3 +136,4 @@ node_modules/.yarn-integrity
 node_modules
 orthanc-db
 
+.examples
