@@ -8,7 +8,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import { RouteConfiguration } from './components/Routes'
+import { RouteConfiguration } from './Routes'
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root")!);
