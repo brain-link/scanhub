@@ -4,7 +4,7 @@ import './ConerstoneInit';
 // import get from 'lodash.get';
 
 import axios from 'axios';
-import config from '../../utils/config';
+import config from '../../../utils/config';
 
 type ViewerProps = {
   procedureId: string;

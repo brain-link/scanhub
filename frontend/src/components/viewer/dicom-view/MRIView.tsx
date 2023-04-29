@@ -12,7 +12,7 @@ import cornerstoneWADOImageLoader from "cornerstone-wado-image-loader";
 // import * as cornerstoneWebImageLoader from "cornerstone-web-image-loader";
 import Container from '@mui/joy/Container';
 import CircularProgress from '@mui/joy/CircularProgress';
-import config from '../utils/config';
+import config from '../../../utils/config';
 import { useParams } from 'react-router-dom';
 
 cornerstoneTools.external.cornerstone = cornerstone;
