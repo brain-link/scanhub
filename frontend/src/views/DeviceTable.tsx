@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useMutation } from "react-query";
-import { Device } from './Interfaces'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,7 +21,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/joy/Box';
 
-import { format_date } from '../utils/formatter';
+import { Device } from '../interfaces/data.interface';
 
 
 export default function DeviceTable() {
@@ -88,8 +87,8 @@ export default function DeviceTable() {
                                 </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography> Created at: {device.created_at} </Typography>
-                                <Typography> Address: {device.address} </Typography>
+                                <Typography> Created at: { new Date(device.datetime_created).toDateString() } </Typography>
+                                <Typography> Address: { device.datetime_updated ? new Date(device.datetime_updated).toDateString() : '-' } </Typography>
                             </AccordionDetails>
                         </Accordion>
                     ))

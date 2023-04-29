@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
 import { useMutation } from "react-query";
 import { useQuery } from "react-query";
 import * as React from 'react';
@@ -55,15 +54,6 @@ export default function PatientTable() {
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
 
     const navigate = useNavigate();
-
-    // async function fetchPatients() {
-    //     await patientClient.getAll().then((data) => { setPatients(data) })
-    // }
-
-    // // Fetch all patients
-    // React.useEffect(() => {
-    //     fetchPatients();
-    // }, []);
 
     const { data: patients, refetch, isLoading, isError } = useQuery<Patient[], Error>({
         queryKey: ['patients'],

@@ -21,13 +21,16 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import ExamViewController from '../components/ExamViewController';
+import ExamViewController from '../components/job_view/ViewController';
 import ExamCreateModal from '../components/ExamCreateModal';
 import ProcedureCreateModal from '../components/ProcedureCreateModal';
+import JobViewController from '../components/job_view/ViewController';
 
 // Import interfaces, api services and global variables
-import { Patient, Procedure } from '../interfaces/data.interface';
+import { Patient } from '../interfaces/data.interface';
 import { Exam } from '../interfaces/data.interface';
+import { Procedure } from '../interfaces/data.interface';
+import { Job } from '../interfaces/data.interface';
 import { PatientApiService } from '../client/queries';
 import { ExamApiService } from '../client/queries';
 import { patientView, navigation } from '../utils/size_vars';
@@ -74,6 +77,7 @@ function PatientIndex() {
     const [newProcedureDialogOpen, setNewProcedureDialogOpen] = React.useState(false);
 
     const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
+    const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined);
 
     // Set active tool if component is rendered
     if (params.examViewId && params.examViewId.toString() !== activeTool) {
@@ -104,6 +108,19 @@ function PatientIndex() {
             }
         }
     }, [exams, params.examId])
+
+    // This useEffect hook is executed when either exams or params.procedureId change
+    React.useEffect( () => {
+        if (params.procedureId && procedures) {
+            // Get the selected exam
+            const procedure = procedures.filter( (procedure) => procedure.id === Number(params.procedureId))[0];
+            // Set procedures if exam exists
+            if (procedure) {
+                console.log("Set jobs: ", procedure.jobs)
+                setJobs(procedure.jobs);
+            }
+        }
+    }, [exams, params.procedureId])
 
 
     return (    
@@ -248,7 +265,12 @@ function PatientIndex() {
 
                 {/* job view controller */}
                 <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-                    Job view controller
+                    <JobViewController
+                        // Implementation of new interface may be required
+                        data={ jobs ? jobs : [] }
+                        onDelete={ refetchExams }
+                        isSelected={ params.procedureId ? true : false }
+                    />
                 </Box>
 
             </Main>
