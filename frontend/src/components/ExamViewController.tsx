@@ -4,7 +4,7 @@ import Box from '@mui/joy/Box';
 
 
 import MRIView from '../viewer/DicomViewer';
-import { SequenceForm } from '../SequenceHandler';
+import { SequenceForm } from '../viewer/SequenceViewer';
 import JobList from './JobList';
 
 

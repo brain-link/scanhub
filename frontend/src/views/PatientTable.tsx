@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from "react-query";
 import { useQuery } from "react-query";
 import * as React from 'react';
@@ -21,8 +22,7 @@ import Box from '@mui/joy/Box';
 
 // import client from '../client/queries';
 import { PatientApiService } from '../client/queries';
-import { Patient } from '../client/interfaces';
-
+import { Patient } from '../interfaces/data.interface';
 
 // Patient form items, order is row wise
 const createPatientFormContent = [

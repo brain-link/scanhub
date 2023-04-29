@@ -32,8 +32,8 @@ import EditSharpIcon from '@mui/icons-material/EditSharp';
 import Stack from '@mui/joy/Stack';
 import Grid from '@mui/joy/Grid';
 // import client from '../../client/queries';
-import { ProcedureApiService } from '../../client/queries';
-import { Procedure } from '../../client/interfaces'; 
+import { ProcedureApiService } from '../client/queries';
+import { Procedure } from '../interfaces/data.interfaces'; 
 
 const createProcedureForm = [
     {key: 'name', label: 'Procedure Name', placeholder: 'MRI examination'},
@@ -43,7 +43,7 @@ const createProcedureForm = [
 function ProceduresList() {
 
     const procedureClient = new ProcedureApiService();
-    const { ref } = useOutletContext<{ ref: any }>();
+    // const { ref } = useOutletContext<{ ref: any }>();
 
     const params = useParams();
 
@@ -101,7 +101,7 @@ function ProceduresList() {
     })
 
     // Use imperative handle to define a delete record function, which can be called from parent by ref
-    React.useImperativeHandle(ref, () => { deleteProcedureById.mutate(Number(params.procedureId)) })
+    // React.useImperativeHandle(ref, () => { deleteProcedureById.mutate(Number(params.procedureId)) })
 
 
     return (
@@ -193,7 +193,7 @@ function ProceduresList() {
 
                         <ListItem>
                             <ListItemButton 
-                                id="record-item"
+                                id="procedure-item"
                                 component={RouterLink}
                                 to={`${procedure.id}`}
                                 selected={procedure.id === activeProcedureId}
@@ -211,21 +211,21 @@ function ProceduresList() {
                                 </Box>
 
                                 <Menu   
-                                    id="record-context"
+                                    id="procedure-context"
                                     anchorEl={anchorEl}
                                     open={procedure.id === contextOpen}
                                     onClose={() => handleContextClose()}
                                     sx={{ zIndex: 'snackbar' }}
                                     placement='auto'
                                 >
-                                    <MenuItem key="edit-record" variant='plain' disabled>
+                                    <MenuItem key="edit-procedure" variant='plain' disabled>
                                         <ListItemDecorator>
                                             <EditSharpIcon />
                                         </ListItemDecorator>{' '}
                                             Edit procedure
                                     </MenuItem>
                                     <ListDivider />
-                                    <MenuItem key="delete-record" color='danger' onClick={() => { deleteProcedureById.mutate(procedure.id) }}>
+                                    <MenuItem key="delete-procedure" color='danger' onClick={() => { deleteProcedureById.mutate(procedure.id) }}>
                                         <ListItemDecorator>
                                             <ClearSharpIcon />
                                         </ListItemDecorator>{' '}

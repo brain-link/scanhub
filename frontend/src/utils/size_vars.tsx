@@ -5,7 +5,8 @@ export const navigation = {
 }
 
 export const patientView = {
-    toolbarHeight: '54px',
     drawerWidth: '300px',
-    recordsWidth: '300px',
+    procedureListWidth: '300px',
+    iconButtonSize: '30px',
+    iconButtonVariant: 'soft',
 }

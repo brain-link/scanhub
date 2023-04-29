@@ -6,7 +6,7 @@ import CssBaseline from '@mui/joy/CssBaseline';
 import { GlobalStyles } from '@mui/system';
 import { CssVarsProvider } from '@mui/joy/styles';
 
-import Navigation from './Navigation';
+import Navigation from '../components/Navigation';
 import theme from '../utils/theme';
 
 

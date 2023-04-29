@@ -21,7 +21,7 @@ import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import FormLabel from '@mui/joy/FormLabel';
 import Badge from '@mui/material/Badge';
-import config from '../../utils/config';
+import config from '../utils/config';
 import Stack from '@mui/joy/Stack';
 import Grid from '@mui/joy/Grid';
 import { useQuery } from "react-query";
@@ -29,9 +29,9 @@ import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 
-import { Exam } from '../../client/interfaces';
+import { Exam } from '../interfaces/data.interface';
 // import client from '../../client/queries';
-import { ExamApiService } from '../../client/queries';
+import { ExamApiService } from '../client/queries';
 
 
 // Patient form items, order is row wise

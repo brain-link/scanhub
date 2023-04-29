@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 // import { CFormInput, CInputGroup, CCol, CInputGroupText, CButton, CRow } from "@coreui/react"
 import Plot from 'react-plotly.js';
 import { PlotData, Parameter } from "./Interfaces"
-import config from '../utils/config';
+import config from '../../utils/config';
 
 
 // This should be returned from backend via sequence id
