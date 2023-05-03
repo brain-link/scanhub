@@ -1,6 +1,6 @@
-databases[postgresql]
 fastapi
-sqlalchemy
+asyncpg
+sqlalchemy[asyncio]
 uvicorn
 kafka-python
 scanhub==0.0.4.dev3
