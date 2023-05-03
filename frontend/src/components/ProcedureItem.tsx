@@ -19,11 +19,11 @@ import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
 
 // Interfaces and api service
 import { Procedure } from '../interfaces/data.interface'; 
-import { ItemComponentProps } from '../interfaces/components.interface';
+import { ComponentProps } from '../interfaces/components.interface';
 import { ProcedureApiService } from '../client/queries';
 
 
-function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentProps<Procedure>) {
+function ProcedureItem({data: procedure, refetchParentData, isSelected}: ComponentProps<Procedure>) {
 
     const params = useParams();
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ function ProcedureItem({data: procedure, onDelete, isSelected}: ItemComponentPro
                 // Reset router path if this exam id is in the path
                 navigate(`/patients/${params.patientId}/${params.examId}`)
             }
-            onDelete(); 
+            refetchParentData(); 
         })
     })
 

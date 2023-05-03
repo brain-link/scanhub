@@ -38,8 +38,8 @@ function ProceduresList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps
         status: "",
         jobs: [],
         datetime_created: new Date(),
-        datetime_updated: new Date()}
-    );
+        datetime_updated: new Date(),
+    });
 
     // Post a new record and refetch records table
     const createProcedure = useMutation(async() => {

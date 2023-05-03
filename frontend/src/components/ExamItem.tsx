@@ -19,12 +19,12 @@ import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp';
 
 // Interfaces and api service
 import { Exam } from '../interfaces/data.interface';
-import { ItemComponentProps } from '../interfaces/components.interface';
+import { ComponentProps } from '../interfaces/components.interface';
 import { ExamApiService } from '../client/queries';
 
 
 
-function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) {
+function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Exam>) {
 
     const params = useParams();
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ function ExamItem({data: exam, onDelete, isSelected}: ItemComponentProps<Exam>) 
                 // Reset router path if this exam id is in the path
                 navigate(`/patients/${params.patientId}`)
             }
-            onDelete();
+            refetchParentData();
         })
     })
 

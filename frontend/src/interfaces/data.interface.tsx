@@ -46,12 +46,13 @@ export interface Record {
 
 export interface Job {
     id: number;
+    procedure_id: number;
     type: string;
     comment?: string | null;
-    is_acquired: boolean;
+    is_acquired?: boolean;
     sequence_id: string;
-    device?: Device | null;
-    workflow?: Workflow | null;
+    device_id: Number;
+    workflow_id?: Number | null;
     records?: [Record] | [];
     datetime_created: Date;
     datetime_updated?: Date | null;
