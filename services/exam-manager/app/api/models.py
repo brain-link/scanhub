@@ -61,6 +61,8 @@ class BaseJob(BaseModel):
     type: str
     comment: Optional[str] = None
     sequence_id: str
+    workflow_id: Optional[int] = None
+    device_id: int
 
 
 class BaseRecord(BaseModel):
@@ -85,8 +87,6 @@ class RecordIn(BaseRecord):
 
 
 class JobIn(BaseJob):
-    workflow_id: Optional[int] = None
-    device_id: int
     procedure_id: int
 
 
@@ -186,8 +186,10 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
         id=data.id,
         type=data.type,
         comment=data.comment,
-        sequence_id=data.sequence_id,
         is_acquired=data.is_acquired,
+        sequence_id=data.sequence_id,
+        device_id=data.device_id,
+        workflow_id=data.workflow_id,
         device=await get_device_out(device) if device else None,
         workflow=await get_workflow_out(workflow) if workflow else None,
         records=records,
