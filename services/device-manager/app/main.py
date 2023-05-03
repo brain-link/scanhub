@@ -35,7 +35,10 @@ from api.db import init_db
 
 
 # app = FastAPI()  # pylint: disable=invalid-name
-app = FastAPI(openapi_url="/api/v1/devices/openapi.json", docs_url="/api/v1/devices/docs")
+app = FastAPI(
+    openapi_url="/api/v1/device/openapi.json",
+    docs_url="/api/v1/device/docs"
+)
 # router = APIRouter()
 # app.include_router(router, prefix='/api/v1/devices')
 

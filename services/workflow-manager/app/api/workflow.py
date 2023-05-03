@@ -22,10 +22,14 @@ producer = KafkaProducer(
 # 404 = Not found
 
 
-workflow = APIRouter()
+router = APIRouter()
+
+@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+async def readiness():
+    return {'status': 'ok'}
 
 
-@workflow.post('/{id}', response_model=WorkflowOut, status_code=201, tags=["workflow"])
+@router.post('/{id}', response_model=WorkflowOut, status_code=201, tags=["workflow"])
 async def create_workflow(payload: BaseWorkflow):
     workflow = await dal.add_workflow(payload)
     if not workflow:
@@ -33,7 +37,7 @@ async def create_workflow(payload: BaseWorkflow):
     return await get_workflow_out(workflow)
 
 
-@workflow.get('/{id}', response_model=WorkflowOut, status_code=200, tags=["workflow"])
+@router.get('/{id}', response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def get_workflow(id: int):
     workflow = await dal.get_workflow(id)
     if not workflow:
@@ -41,21 +45,23 @@ async def get_workflow(id: int):
     return await get_workflow_out(workflow)
 
 
-@workflow.get('/workflows', response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
+@router.get('/', response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
 async def get_workflow_list():
     workflows = await dal.get_all_workflows()
     if not workflows:
-        raise HTTPException(status_code=404, detail="Workflows not found")
-    return [await get_workflow_out(workflow) for workflow in workflows]
+        # raise HTTPException(status_code=404, detail="Workflows not found")
+        return []
+    else:
+        return [await get_workflow_out(workflow) for workflow in workflows]
 
 
-@workflow.delete('/{id}/', response_model={}, status_code=204, tags=["workflow"])
+@router.delete('/{id}', response_model={}, status_code=204, tags=["workflow"])
 async def delete_workflow(id: int):
     if not await dal.delete_workflow(id):
         raise HTTPException(status_code=404, detail="Workflow not found")
     
 
-@workflow.put('/{id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
+@router.put('/{id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def update_workflow(id: int, payload: BaseWorkflow):
     workflow = await dal.update_workflow(id, payload)
     if not workflow:
