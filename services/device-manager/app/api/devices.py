@@ -25,10 +25,14 @@ producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
                          value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8'))
 
 
-devices = APIRouter()
+router = APIRouter()
+
+@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+async def readiness():
+    return {'status': 'ok'}
 
 
-@devices.post('/{id}/', response_model=DeviceOut, status_code=201, tags=["devices"])
+@router.post('/{id}', response_model=DeviceOut, status_code=201, tags=["devices"])
 async def create_device(payload: BaseDevice):
     device = await dal.add_device(payload)
     if not device:
@@ -36,7 +40,7 @@ async def create_device(payload: BaseDevice):
     return await get_device_out(device)
     
 
-@devices.get('/{id}/', response_model=DeviceOut, status_code=200, tags=["devices"])
+@router.get('/{id}', response_model=DeviceOut, status_code=200, tags=["devices"])
 async def get_device(id: int):
     device = await dal.get_device(id)
     if not device:
@@ -44,7 +48,7 @@ async def get_device(id: int):
     return await get_device_out(device)
 
 
-@devices.get('/devices/', response_model=list[DeviceOut], status_code=200, tags=["devices"])
+@router.get('/', response_model=list[DeviceOut], status_code=200, tags=["devices"])
 async def get_devices() -> list[DeviceOut]:
     devices = await dal.get_all_devices()
     if not devices:
@@ -52,13 +56,13 @@ async def get_devices() -> list[DeviceOut]:
     return [await get_device_out(device) for device in devices]
 
 
-@devices.delete('/{id}/', response_model={}, status_code=204, tags=["devices"])
+@router.delete('/{id}', response_model={}, status_code=204, tags=["devices"])
 async def delete_device(id: int):
     if not await dal.delete_device(id):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-@devices.put('/{id}/', response_model=DeviceOut, status_code=200, tags=["devices"])
+@router.put('/{id}', response_model=DeviceOut, status_code=200, tags=["devices"])
 async def update_device(id: int, payload: BaseDevice):
     device = await dal.update_device(id, payload)
     if not device:
