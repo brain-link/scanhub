@@ -103,7 +103,7 @@ function PatientIndex() {
             const exam = exams.filter( (exam) => exam.id === Number(params.examId))[0];
             // Set procedures if exam exists
             if (exam) {
-                console.log("Set procedures: ", exam.procedures)
+                // console.log("Set procedures: ", exam.procedures)
                 setProcedures(exam.procedures);
             }
         }
@@ -116,11 +116,11 @@ function PatientIndex() {
             const procedure = procedures.filter( (procedure) => procedure.id === Number(params.procedureId))[0];
             // Set procedures if exam exists
             if (procedure) {
-                console.log("Set jobs: ", procedure.jobs)
+                // console.log("Set jobs: ", procedure.jobs)
                 setJobs(procedure.jobs);
             }
         }
-    }, [exams, params.procedureId])
+    }, [procedures, params.procedureId])
 
 
     return (    
@@ -186,7 +186,7 @@ function PatientIndex() {
                                 <React.Fragment key={index}>
                                     <ExamItem 
                                         data={ exam } 
-                                        onDelete={ refetchExams } 
+                                        refetchParentData={ refetchExams } 
                                         isSelected={ exam.id === Number(params.examId) }
                                     />
                                     <ListDivider sx={{ m: 0 }} />
@@ -252,7 +252,7 @@ function PatientIndex() {
                                 <React.Fragment key={index}>
                                     <ProcedureItem 
                                         data={ procedure } 
-                                        onDelete={ () => { refetchExams(); } } 
+                                        refetchParentData={ refetchExams } 
                                         isSelected={ procedure.id === Number(params.procedureId) }
                                     />
                                     <ListDivider sx={{ m: 0 }} />
@@ -268,7 +268,7 @@ function PatientIndex() {
                     <JobViewController
                         // Implementation of new interface may be required
                         data={ jobs ? jobs : [] }
-                        onDelete={ refetchExams }
+                        refetchParentData={ refetchExams }
                         isSelected={ params.procedureId ? true : false }
                     />
                 </Box>
