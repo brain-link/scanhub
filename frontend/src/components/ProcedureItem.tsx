@@ -20,15 +20,13 @@ import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
 // Interfaces and api service
 import { Procedure } from '../interfaces/data.interface'; 
 import { ComponentProps } from '../interfaces/components.interface';
-import { ProcedureApiService } from '../client/queries';
+import client from '../client/queries';
 
 
 function ProcedureItem({data: procedure, refetchParentData, isSelected}: ComponentProps<Procedure>) {
 
     const params = useParams();
     const navigate = useNavigate();
-
-    const procedureClient = new ProcedureApiService();
 
     // Context: Delete and edit options, anchor for context location
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
@@ -46,13 +44,10 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
         setContextOpen(procedureId);
     }
 
-    const deleteProcedureById = useMutation(async (id: number) => {
-        await procedureClient.delete(id)
+    const deleteThisProcedure = useMutation(async () => {
+        await client.procedureService.delete(procedure.id)
         .then(() => {
-            if (Number(params.examId) === id) {
-                // Reset router path if this exam id is in the path
-                navigate(`/patients/${params.patientId}/${params.examId}`)
-            }
+            navigate(`/patients/${params.patientId}/${params.examId}`);
             refetchParentData(); 
         })
     })
@@ -65,6 +60,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                 component={ RouterLink }
                 // If procedureId exists, we redirect to this procedure id, otherwise procedure id is appended
                 to={ `/patients/${params.patientId}/${params.examId}/${procedure.id}` }
+                // selected={ procedure.id === Number(params.procedureId) }
                 selected={ isSelected }
                 variant={( isSelected || procedure.id === contextOpen) ? "soft" : "plain" }
             >
@@ -100,7 +96,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                     <MenuItem key='edit' onClick={() => { console.log('To be implemented...') }}>
                         Edit
                     </MenuItem>
-                    <MenuItem key='delete' onClick={() => { deleteProcedureById.mutate(procedure.id) }}>
+                    <MenuItem key='delete' onClick={() => { deleteThisProcedure.mutate() }}>
                         Delete
                     </MenuItem>
                 </Menu>

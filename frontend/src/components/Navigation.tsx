@@ -30,7 +30,7 @@ import { navigation } from '../utils/size_vars';
 const menuItems = [
     {id: 0, text: "Home", link: "/"},
     {id: 1, text: "Patients", link: "/patients"},
-    {id: 2, text: "Devices", link: "/devices"},
+    // {id: 2, text: "Devices", link: "/devices"},
 ];
 
 function ColorSchemeToggle() {
@@ -75,6 +75,7 @@ export default function Navigation() {
             component="header"
             className="Header"
             sx={{
+                height: navigation.height,
                 p: 2,
                 gap: 2,
                 bgcolor: 'background.surface',
@@ -110,6 +111,7 @@ export default function Navigation() {
                     <Button
                         component={RouterLink}
                         to={item.link}
+                        size="sm"
                         color="primary"
                         startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : null }
                         disabled={ loc.pathname === item.link }
@@ -133,8 +135,9 @@ export default function Navigation() {
         
             <Menu
                 id="positioned-demo-menu"
-                anchorEl={anchorEl}
-                open={open}
+                anchorEl={ anchorEl }
+                open={ open }
+                size="sm"
                 onClose={() => {setAnchorEl(null)}}
                 aria-labelledby="positioned-demo-button"
                 placement="bottom-end"

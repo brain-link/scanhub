@@ -31,8 +31,7 @@ import { Patient } from '../interfaces/data.interface';
 import { Exam } from '../interfaces/data.interface';
 import { Procedure } from '../interfaces/data.interface';
 import { Job } from '../interfaces/data.interface';
-import { PatientApiService } from '../client/queries';
-import { ExamApiService } from '../client/queries';
+import client from '../client/queries';
 import { patientView, navigation } from '../utils/size_vars';
 
 
@@ -63,10 +62,6 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
 
 function PatientIndex() {
 
-    // Api services
-    const patientClient = new PatientApiService();
-    const examClient = new ExamApiService();
-
     const params = useParams();
 
     const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined);
@@ -87,13 +82,13 @@ function PatientIndex() {
     // useQuery for caching the fetched data
     const { data: patient, refetch: refetchPatient, isLoading: patientLoading, isError: patientError } = useQuery<Patient, Error>({
         queryKey: ['patient', params.patientId], 
-        queryFn: () => patientClient.get(Number(params.patientId))
+        queryFn: () => client.patientService.get(Number(params.patientId))
     });
     
     // Query all exams of the patient
     const { data: exams, refetch: refetchExams, isLoading: examsLoading, isError: examsError } = useQuery<Exam[], Error>({
         queryKey: ['exam', params.patientId],
-        queryFn: () => examClient.getAll(Number(params.patientId))
+        queryFn: () => client.examService.getAll(Number(params.patientId))
     });
 
     // This useEffect hook is executed when either exams or params.examId change
@@ -124,7 +119,14 @@ function PatientIndex() {
 
 
     return (    
-        <div id="page-container" style={{ width: '100%', position: 'relative', height: `calc(100vh - ${navigation.height})` }}>
+        <div 
+            id="page-container" 
+            style={{ 
+                width: '100%', 
+                position: 'relative', 
+                height: `calc(100vh - ${navigation.height})`
+            }}
+        >
             <Drawer
                 sx={{
                     width: patientView.drawerWidth,

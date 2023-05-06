@@ -20,7 +20,7 @@ import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp';
 // Interfaces and api service
 import { Exam } from '../interfaces/data.interface';
 import { ComponentProps } from '../interfaces/components.interface';
-import { ExamApiService } from '../client/queries';
+import client from '../client/queries';
 
 
 
@@ -28,8 +28,6 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
 
     const params = useParams();
     const navigate = useNavigate();
-
-    const examClient = new ExamApiService();
 
     // Context: Delete and edit options, anchor for context location
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
@@ -47,7 +45,7 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
     }
 
     const deleteExamById = useMutation( async (id: number) => {
-        await examClient.delete(id)
+        await client.examService.delete(id)
         .then(() => {
             if (Number(params.examId) === id) {
                 // Reset router path if this exam id is in the path

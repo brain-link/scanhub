@@ -14,7 +14,7 @@ import Stack from '@mui/joy/Stack';
 import Grid from '@mui/joy/Grid';
 
 // Import procedure api service and interfaces 
-import { ProcedureApiService } from '../client/queries';
+import client from '../client/queries';
 import { Procedure } from '../interfaces/data.interface';
 import { CreateModalProps } from '../interfaces/components.interface';
 
@@ -27,8 +27,6 @@ const createProcedureForm = [
 
 function ProceduresList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
 
-    const procedureClient = new ProcedureApiService();
-
     const params = useParams();
 
     const [procedure, setProcedure] = React.useState<Procedure>({
@@ -38,12 +36,11 @@ function ProceduresList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps
         status: "",
         jobs: [],
         datetime_created: new Date(),
-        datetime_updated: new Date(),
     });
 
     // Post a new record and refetch records table
     const createProcedure = useMutation(async() => {
-        await procedureClient.create(procedure)
+        await client.procedureService.create(procedure)
         .then( () => { onCreated() } )
         .catch((err) => { console.log("Error during procedure creation: ", err) }) 
     })

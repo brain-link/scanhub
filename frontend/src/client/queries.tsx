@@ -11,37 +11,37 @@ import baseUrls from './urls';
 import { ApiService } from './abstract-query-client';
 
 
-export class PatientApiService extends ApiService<Patient> {
+class PatientApiService extends ApiService<Patient> {
     constructor() {
       super(baseUrls.patientService);
     }
 }
 
-export class DeviceApiService extends ApiService<Device> {
+class DeviceApiService extends ApiService<Device> {
     constructor() {
       super(baseUrls.deviceService);
     }
 }
 
-export class WorkflowApiService extends ApiService<Workflow> {
+class WorkflowApiService extends ApiService<Workflow> {
     constructor() {
       super(baseUrls.workflowService);
     }
 }
 
-export class ExamApiService extends ApiService<Exam> {
+class ExamApiService extends ApiService<Exam> {
     constructor() {
       super(baseUrls.examService);
     }
 }
 
-export class ProcedureApiService extends ApiService<Procedure> {
+class ProcedureApiService extends ApiService<Procedure> {
     constructor() {
       super(baseUrls.procedureService);
     }
 }
   
-export class JobApiService extends ApiService<Job> {
+class JobApiService extends ApiService<Job> {
     constructor() {
       super(baseUrls.jobService);
     }

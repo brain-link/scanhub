@@ -20,7 +20,7 @@ import Table from '@mui/joy/Table';
 import Box from '@mui/joy/Box';
 
 // import client from '../client/queries';
-import { PatientApiService } from '../client/queries';
+import client from '../client/queries';
 import { Patient } from '../interfaces/data.interface';
 
 // Patient form items, order is row wise
@@ -35,8 +35,6 @@ const createPatientFormContent = [
 
 
 export default function PatientTable() {
-
-    const patientClient = new PatientApiService();
 
     // Create raw patient
     const [patient, setPatient] = React.useState<Patient>({
@@ -57,12 +55,12 @@ export default function PatientTable() {
 
     const { data: patients, refetch, isLoading, isError } = useQuery<Patient[], Error>({
         queryKey: ['patients'],
-        queryFn: () => patientClient.getAll()
+        queryFn: () => client.patientService.getAll()
     });
 
     // Post a new record and refetch records table
     const mutation = useMutation(async() => {
-        await patientClient.create(patient)
+        await client.patientService.create(patient)
         .then( (response) => {
             patients?.push(response) 
         })

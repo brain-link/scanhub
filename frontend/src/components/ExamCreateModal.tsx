@@ -14,7 +14,7 @@ import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 
 // Import api service and interfaces
-import { ExamApiService } from '../client/queries';
+import client from '../client/queries';
 import { Exam } from '../interfaces/data.interface';
 import { CreateModalProps } from '../interfaces/components.interface';
 
@@ -30,8 +30,6 @@ const createExamFormContent = [
 
 
 function ExamList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
-
-    const examClient = new ExamApiService();
 
     const params = useParams();
 
@@ -50,7 +48,7 @@ function ExamList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
     })
 
     const createExam = useMutation( async() => {
-        await examClient.create(exam)
+        await client.examService.create(exam)
         .then( () => { onCreated() })
         .catch((err) => { console.log("Error during exam creation: ", err) }) 
     })

@@ -9,6 +9,8 @@ import Stack from '@mui/joy/Stack';
 import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
 import Divider from '@mui/joy/Divider';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
@@ -24,28 +26,40 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { Job } from '../../interfaces/data.interface'; 
 import { JobComponentProps } from '../../interfaces/components.interface';
-import { JobApiService } from '../../client/queries';
+import client from '../../client/queries';
 
 
 
 function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProps) {
 
-    const params = useParams();
-    const jobClient = new JobApiService();
-
-    const updateJob = useMutation( async (jobUpdate: Job) => {
-        await jobClient.update(job.id, jobUpdate)
-        .then( () => { refetchParentData() } )
-        .catch( (err) => { console.log("Error on job update: ", err) })
-    })
-
+    // Context: Delete and edit options, anchor for context location
+    const [contextOpen, setContextOpen] = React.useState<boolean>(false);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    
     // TODO: Use update function to update job, deep clone by newJob = { ...job }
     // What is the fastest way? Update db on every change or create a deep copy, work on deep copy (update values here)
     // and modify db only when focus changed to different component?
 
+    const updateJob = useMutation( async (jobUpdate: Job) => {
+        await client.jobService.update(job.id, jobUpdate)
+        .then( () => { refetchParentData() } )
+        .catch( (err) => { console.log("Error on job update: ", err) })
+    })
+
+
+    const deleteThisJob = useMutation(async () => {
+        await client.jobService.delete(job.id)
+        .then(() => { 
+            setContextOpen(false); 
+            refetchParentData(); 
+        })
+    })
+
     // TODO: Add controls
 
     // TODO: Implementation of sequence upload
+
+    // TODO: Use devices and workflows in selectors 
 
     return (
         <Card
@@ -56,7 +70,7 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
             <CardOverflow sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                 <PendingActionsSharpIcon/>
             </CardOverflow>
-            <Divider />
+
             <CardContent sx={{ px: 2, gap: 1 }}>
 
                 {/* Card header */}
@@ -80,7 +94,7 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
                             variant='plain' 
                             color='neutral'
                             sx={{ "--IconButton-size": "40px" }}
-                            onClick={ () => {} }
+                            onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
                         >
                             <MoreHorizIcon/>
                         </IconButton>
@@ -104,6 +118,21 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
                         </IconButton>
                     </Stack>
                     
+                    <Menu   
+                        id='context-menu'
+                        variant='plain'
+                        anchorEl={anchorEl}
+                        open={ contextOpen }
+                        onClose={() => { setAnchorEl(null); setContextOpen(false); }}
+                        sx={{ zIndex: 'snackbar' }}
+                    >
+                        <MenuItem key='edit' onClick={() => { console.log('To be implemented...') }}>
+                            Edit
+                        </MenuItem>
+                        <MenuItem key='delete' onClick={() => { deleteThisJob.mutate() }}>
+                            Delete
+                        </MenuItem>
+                    </Menu>
 
                 </Box>
             
@@ -133,10 +162,10 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
                 </Stack>
 
             </CardContent>
-            <Divider />
+
             <CardOverflow
                 variant="soft"
-                color={ job.is_acquired ? "success" :  "info" }
+                color={ job.is_acquired ? "success" :  "primary" }
                 sx={{
                     px: 0.2,
                     writingMode: 'vertical-rl',

@@ -1,7 +1,8 @@
 import React from "react";
 import Container from '@mui/system/Container';
 import Typography from '@mui/joy/Typography';
-import CircularProgress from '@mui/joy/CircularProgress';
+// import CircularProgress from '@mui/joy/CircularProgress';
+import LinearProgress from '@mui/joy/LinearProgress';
 import Card from '@mui/joy/Card';
 import CardContent from "@mui/joy/CardContent";
 import IconButton from '@mui/joy/IconButton';
@@ -20,7 +21,8 @@ export default function Dashboard() {
     if (!isReady) {
         return (
             <Box sx={{ m: 10, gap: 2, display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center' }}>
-                <CircularProgress size="md" value={1} variant="soft" />
+                {/* <CircularProgress size="md" value={10} variant="soft" /> */}
+                <LinearProgress determinate={false} size="sm" value={20} sx={{ width: '100px'}} />
                 <Typography>Connecting to ScanHub...</Typography>
             </Box>
         )

@@ -16,9 +16,7 @@ import { SequenceForm } from '../viewer/sequence-view/SequenceViewer';
 import { Job } from '../../interfaces/data.interface';
 import { ComponentProps } from '../../interfaces/components.interface';
 
-import { DeviceApiService } from '../../client/queries';
-import { WorkflowApiService } from '../../client/queries';
-import { JobApiService } from '../../client/queries';
+import client from '../../client/queries';
 
 import { Device } from '../../interfaces/data.interface';
 import { Workflow } from '../../interfaces/data.interface';
@@ -27,10 +25,6 @@ import { Workflow } from '../../interfaces/data.interface';
 function JobViewController({data: jobs, refetchParentData, isSelected}: ComponentProps<Job[]>) {
 
     const params = useParams();
-
-    const jobClient = new JobApiService();
-    const deviceClient = new DeviceApiService();
-    const workflowClient = new WorkflowApiService();
 
     const [newJob, setNewJob] = React.useState<Job>({
         id: 0,
@@ -50,14 +44,14 @@ function JobViewController({data: jobs, refetchParentData, isSelected}: Componen
 
     const { data: workflows, isLoading: workflowLoading, isError: workflowError } = useQuery<Workflow[], Error>({
         queryKey: ['workflows'],
-        queryFn: () => workflowClient.getAll()
+        queryFn: () => client.workflowService.getAll()
     });
 
     const createJob = useMutation( async () => {
         // Add a new empty job, editable in job-item component
         // setNewJob({...newJob, ["procedure_id"]: Number(params.procedureId)});
         console.log("New job: ", newJob)
-        await jobClient.create(newJob)
+        await client.jobService.create(newJob)
         .then(() => { refetchParentData() })
         .catch((err) => { console.log("Error during job creation: ", err) })
     })
