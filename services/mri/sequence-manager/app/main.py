@@ -10,7 +10,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Instantiate FastAPI app
-app = FastAPI()
+app = FastAPI(
+    openapi_url="/api/v1/mri/sequences/openapi.json",
+    docs_url="/api/v1/mri/sequences/docs"
+)
 
 # Exception handler
 @app.exception_handler(Exception)
