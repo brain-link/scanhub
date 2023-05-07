@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
-from app.main import app
-from app.database.models import MRISequence
+from main import app
+from database.models import MRISequence
 
 client = TestClient(app)
 

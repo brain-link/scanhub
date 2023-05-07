@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from app.database.mongodb import db, connect_to_mongo, close_mongo_connection
+from database.mongodb import db, connect_to_mongo, close_mongo_connection
 
 def get_database() -> AsyncIOMotorDatabase:
     """

@@ -11,9 +11,9 @@ from fastapi import (
 from fastapi.responses import FileResponse
 from typing import List, Union
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from app.dependencies import get_database
-from app.database.models import MRISequence, MRISequenceCreate
-from app.services import (
+from dependencies import get_database
+from database.models import MRISequence, MRISequenceCreate
+from services import (
     create_mri_sequence,
     get_mri_sequences,
     get_mri_sequence_by_id,

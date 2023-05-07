@@ -2,8 +2,8 @@ import logging
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from app.endpoints import mri_sequence_endpoints, health
-from app.database.mongodb import connect_to_mongo, close_mongo_connection
+from endpoints import mri_sequence_endpoints, health
+from database.mongodb import connect_to_mongo, close_mongo_connection
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

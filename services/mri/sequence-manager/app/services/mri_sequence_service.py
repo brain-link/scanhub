@@ -1,6 +1,6 @@
 from typing import List, Tuple, Any
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from app.database.models import MRISequence
+from database.models import MRISequence
 import datetime
 from bson import ObjectId
 
