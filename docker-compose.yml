@@ -34,8 +34,12 @@ services:
     ports:
       - 8003:8000
     environment:
-      - DATABASE_URI=postgresql://brainlink:9ArU5*Sq@sequence-database/seq_db
-      - DEVICE_SERVICE_HOST_URL=http://sequence-manager:8000/api/v1/mri/sequences/
+      - MONGODB_USER=root
+      - MONGODB_PASSWORD=example
+      - MONGODB_HOST=sequence-database
+      - MONGODB_PORT=27017
+      - MONGODB_DB=mri_sequences_db
+      - MONGODB_COLLECTION_NAME=mri_sequences
     depends_on:
       - sequence-database
       - broker
@@ -131,22 +135,18 @@ services:
   # MRI Database
   sequence-database:
     container_name: db-sequence
-    image: postgres:15.2-bullseye
+    image: mongo
     restart: always # unless-stopped
     volumes:
-      - postgres_data_sequence:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_USER: brainlink
-      POSTGRES_PASSWORD: 9ArU5*Sq
-      POSTGRES_DB: seq_db
+      - mongodb_data_sequence:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 5s 
+      start_period: 5s
     ports:
-      - "5434:5432"
+      - "27017:27017"
 
   ## API Gateway
   nginx:
@@ -220,5 +220,5 @@ services:
 
 volumes:
   data_lake:
-  postgres_data_sequence:
+  mongodb_data_sequence:
   postgres_data_scanhub:
