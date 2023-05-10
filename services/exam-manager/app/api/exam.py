@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 
 from api.models import BaseExam, ExamOut, get_exam_out
 from api.models import ProcedureOut, ProcedureIn, get_procedure_out
-from api.models import JobOut, JobIn, get_job_out
+from api.models import JobOut, BaseJob, get_job_out
 from api.models import RecordOut, RecordIn, get_record_out
 from api import dal
 
@@ -114,7 +114,7 @@ async def update_procedure(id: int, payload: ProcedureIn):
 # **************************************************
 
 @router.post('/job', response_model=JobOut, status_code=201, tags=["jobs"])
-async def create_job(payload: JobIn):
+async def create_job(payload: BaseJob):
     job = await dal.add_job(payload)
     if not job:
         raise HTTPException(status_code=404, detail="Could not create job")
@@ -147,7 +147,8 @@ async def delete_job(id: int):
     
 
 @router.put('/job/{id}', response_model=JobOut, status_code=200, tags=["jobs"])
-async def update_job(id: int, payload: JobIn):
+async def update_job(id: int, payload: BaseJob):
+    print("Updating job...")
     job = await dal.update_job(id, payload)
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")

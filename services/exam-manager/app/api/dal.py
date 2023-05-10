@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from typing import List
 from pprint import pprint
 
-from api.models import BaseExam, ProcedureIn, JobIn, RecordIn  # pydantic models
+from api.models import BaseExam, ProcedureIn, BaseJob, RecordIn  # pydantic models
 from api.db import Exam, Procedure, Job, Record, async_session   # database orm models
 
 
@@ -198,11 +198,11 @@ async def update_procedure(id: int, payload: ProcedureIn) -> Procedure:
 # Jobs
 # **************************************************
 
-async def add_job(payload: JobIn) -> Job:
+async def add_job(payload: BaseJob) -> Job:
     """Add a new job to the database
 
     Arguments:
-        payload {JobIn} -- Pydantic model to create a new database entry
+        payload {BaseJob} -- Pydantic model to create a new database entry
 
     Returns:
         Job -- Database orm model
@@ -266,12 +266,12 @@ async def delete_job(id: int) -> bool:
             return False
 
 
-async def update_job(id: int, payload: JobIn) -> Job:
+async def update_job(id: int, payload: BaseJob) -> Job:
     """Update an existing job in database
 
     Arguments:
         id {int} -- ID of job
-        payload {JobIn} -- Pydantic base model, data to be updated
+        payload {BaseJob} -- Pydantic base model, data to be updated
 
     Returns:
         Job -- Updated database orm model
