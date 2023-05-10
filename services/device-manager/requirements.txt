@@ -3,6 +3,7 @@ uvicorn
 websockets
 kafka-python
 scanhub==0.0.4.dev3
-sqlalchemy
+asyncpg
+sqlalchemy[asyncio]
 databases[postgresql]
 psycopg2-binary

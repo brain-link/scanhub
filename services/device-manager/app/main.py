@@ -20,10 +20,10 @@ import logging
 from enum import Enum
 from typing import Any, List
 
-from fastapi import APIRouter, Body, FastAPI, HTTPException
+from fastapi import APIRouter, Body, FastAPI, HTTPException, status
 from pydantic import BaseModel
 from starlette.endpoints import WebSocketEndpoint
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import FileResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
@@ -31,14 +31,24 @@ from starlette.websockets import WebSocket
 
 from pool import DeviceInfo, Pool
 
+from api.db import init_db
+
 
 # app = FastAPI()  # pylint: disable=invalid-name
-app = FastAPI(openapi_url="/api/v1/devices/openapi.json", docs_url="/api/v1/devices/docs")
+app = FastAPI(
+    openapi_url="/api/v1/device/openapi.json",
+    docs_url="/api/v1/device/docs"
+)
 # router = APIRouter()
 # app.include_router(router, prefix='/api/v1/devices')
 
 app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_headers=["*"], allow_methods=["*"]
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
 )
 app.debug = True
 
@@ -67,6 +77,7 @@ class PoolEventMiddleware:  # pylint: disable=too-few-public-methods
         await self._app(scope, receive, send)
 
 
+
 app.add_middleware(PoolEventMiddleware)
 
 
@@ -75,6 +86,15 @@ def home():
     """Serve static index page.
     """
     return FileResponse("static/index.html")
+
+@app.on_event("startup")
+async def startup():
+    # await create_db()
+    init_db()
+
+# @app.get('/healthcheck', status_code=status.HTTP_200_OK)
+# def perform_healthcheck():
+#     return {'healthcheck': 'healthy'}
 
 
 class DeviceListResponse(BaseModel):
