@@ -52,7 +52,13 @@ async def get_mri_sequences(db: AsyncIOMotorDatabase) -> List[MRISequence]:
         The list of MRI sequences.
     """
     cursor = db.collection.find()
-    return [MRISequence(**sequence) async for sequence in cursor]
+    sequences = []
+
+    async for sequence in cursor:
+        sequence["_id"] = str(sequence["_id"])
+        sequences.append(MRISequence(**sequence))
+
+    return sequences
 
 async def get_mri_sequence_by_id(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> MRISequence:
     """
