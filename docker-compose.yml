@@ -35,7 +35,7 @@ services:
       - 8003:8000
     environment:
       - MONGODB_USER=root
-      - MONGODB_PASSWORD=9ArU5*Sr
+      - MONGODB_PASSWORD=example
       - MONGODB_HOST=sequence-database
       - MONGODB_PORT=27017
       - MONGODB_DB=mri_sequences_db
@@ -139,9 +139,9 @@ services:
     restart: always # unless-stopped
     volumes:
       - mongodb_data_sequence:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 9ArU5*Sr
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: 9ArU5*Sr
     healthcheck:
       test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s

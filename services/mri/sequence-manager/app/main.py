@@ -22,7 +22,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content={"detail": str(exc)})
 
 # Include routers for endpoints
-app.include_router(mri_sequence_endpoints.router, prefix="/mri-sequences", tags=["MRI Sequences"])
+app.include_router(mri_sequence_endpoints.router, prefix="/api/v1/mri/sequences", tags=["MRI Sequences"])
 app.include_router(health.router)
 
 @app.on_event("startup")
