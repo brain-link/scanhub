@@ -1,6 +1,8 @@
 *.pyc
 /services/mri/reco-service/.vscode
 orthanc-db
+>>>>>>> c7d4cf9198c5a9f72e1d82c18627c58b0bb554f6
+*settings.json
 scanhub-database.session.sql
 .examples
 .DS_Store

@@ -85,6 +85,15 @@ services:
       scanhub-database:
         condition: service_healthy
 
+  acquisition-control:
+    container_name: acquisition-control
+    build: ./services/acquisition-control
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./services/acquisition-control/app/:/app/
+    ports:
+      - 8111:8000
+
   exam-manager:
     container_name: exam-manager
     build: ./services/exam-manager
