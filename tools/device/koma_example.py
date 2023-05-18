@@ -13,11 +13,8 @@ app = FastAPI()
 
 class Mri(Device):
     """implementation of connector between mri device and acqcontrol"""
-
     @staticmethod
     def start_scan(scan_request, records_path):
-        scan_request.record_id = 1 # TODO: remove, test purposes
-
         seq_file = f"{records_path}{scan_request.record_id}\\sequence"
         sequence = ""
         with open(seq_file, "r", encoding='UTF-8') as sequence_file:

@@ -159,7 +159,7 @@ async def update_job(id: int, payload: BaseJob):
 # Records
 # **************************************************
 
-@router.post('/record/{id}', response_model=RecordOut, status_code=201, tags=["records"])
+@router.post('/record', response_model=RecordOut, status_code=201, tags=["records"])
 async def create_record(payload: RecordIn):
     record = await dal.add_record(payload)
     if not record:

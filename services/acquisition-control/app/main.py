@@ -1,7 +1,7 @@
 """Acquisition control. Receives control cmd from ui and controls scans on devices"""
 #  python -m uvicorn acquisitioncontrol:app --reload
 import logging
-import uuid
+import json
 import requests
 
 
@@ -9,6 +9,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field  # pylint: disable=no-name-in-module
 
 DEVICE_URI = "host.docker.internal:8001"
+SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
+EXAM_MANAGER_URI = "host.docker.internal:8004"
 
 # TODO: Move to scanhub-tools
 class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
@@ -52,10 +54,28 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.post("/api/v1/mri/acquisitioncontrol/start-scan")
 async def start_scan(scan_job: ScanJob):
+    # TODO: Dont ignore device_id, check returns, ... 
+
     """Receives a job. Create a record id, trigger scan with it and returns it"""
-    record_id = str(uuid.uuid4())
+    # get sequence
+    res = requests.get(
+        f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{scan_job.sequence_id}", timeout=60)
+    sequence_json = res.json()
+
+    # create record
+    # TODO: data_path, comment ?
+    res = requests.post(f"http://{EXAM_MANAGER_URI}/api/v1/exam/record",
+                        json={"data_path": "path",
+                              "comment": "blub",
+                              "job_id": scan_job.job_id}, timeout=60)
+    record_id = res.json()["id"]
+
+    # start scan and forward sequence, workflow, record_id
     logging.debug("Received job: %s, Generated record id: %s", scan_job.job_id, record_id)
-    res = requests.post(f"http://{DEVICE_URI}/start-scan", json={"record_id": record_id}, timeout=60)
+    print(sequence_json)
+    res = requests.post(f"http://{DEVICE_URI}/start-scan",
+                        json={"record_id": record_id,
+                              "sequence": json.dumps(sequence_json)}, timeout=60)
     print(res)
     return {"record_id": record_id}
 
