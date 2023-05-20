@@ -1,14 +1,14 @@
-""" Exam manager main file. """
-from fastapi import FastAPI
-from fastapi.routing import APIRoute
-from fastapi.middleware.cors import CORSMiddleware
+"""Exam manager main file."""
 
-from api.exam import router
 from api.db import init_db
+from api.exam import router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRoute
 
 
 def custom_client_uid(route: APIRoute):
-    """Generate custom client uid
+    """Generate custom client uid.
 
     Arguments:
         route -- Api route
@@ -17,6 +17,7 @@ def custom_client_uid(route: APIRoute):
         Route string
     """
     return f"{route.tags[0]}-{route.name}"
+
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
@@ -34,16 +35,28 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+
 @app.on_event("startup")
 async def startup():
-    """Startup function to initialize DB
-    """
+    """Startup function to initialize DB."""
     init_db()
+
 
 @app.on_event("shutdown")
 async def shutdown():
-    """Shutdown function
-    """
+    """Shutdown function."""
     return
+
+
+@app.get('/health/readiness', response_model={}, status_code=200)
+async def readiness() -> dict:
+    """Readiness health endpoint.
+
+    Returns
+    -------
+        Status dictionary
+    """
+    return {'status': 'ok'}
+
 
 app.include_router(router, prefix='/api/v1/exam', tags=['exam'])
