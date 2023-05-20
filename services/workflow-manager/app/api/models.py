@@ -1,11 +1,14 @@
-from pydantic import BaseModel
+"""Workflow object pydantic models."""
 from datetime import datetime
 from typing import Optional
 
 from api.db import Workflow
+from pydantic import BaseModel
 
 
 class BaseWorkflow(BaseModel):
+    """Workflow pydantic base model."""
+
     host: str
     name: str
     author: Optional[str] = None
@@ -16,12 +19,26 @@ class BaseWorkflow(BaseModel):
 
 
 class WorkflowOut(BaseWorkflow):
-    id: int # uuid
+    """Workflow pydantic output model."""
+
+    # TODO: Use uuid as id instead of id
+    id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
+    """Workflow pydantic output model helper function.
+
+    Parameters
+    ----------
+    data
+        Database ORM model
+
+    Returns
+    -------
+        Pydantic output model
+    """
     return WorkflowOut(
         id=data.id,
         host=data.host,

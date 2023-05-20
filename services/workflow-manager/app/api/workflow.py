@@ -1,19 +1,10 @@
+"""Workflow manager endpoints."""
 import json
 
-from fastapi import APIRouter, HTTPException, File, UploadFile
-from fastapi.responses import FileResponse
-from kafka import KafkaProducer
-
-from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
 from api import dal
-
-# from scanhub import RecoJob, AcquisitionEvent, AcquisitionCommand
-
-producer = KafkaProducer(
-    bootstrap_servers=['kafka-broker:9093'],
-    value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8')
-)
-
+from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
+from fastapi import APIRouter, HTTPException
+from kafka import KafkaProducer
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -21,32 +12,70 @@ producer = KafkaProducer(
 # 204 = No Content: Delete
 # 404 = Not found
 
+producer = KafkaProducer(
+    bootstrap_servers=['kafka-broker:9093'],
+    value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8')
+)
 
 router = APIRouter()
 
-@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
-async def readiness():
-    return {'status': 'ok'}
 
+@router.post('/', response_model=WorkflowOut, status_code=201, tags=["workflow"])
+async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
+    """Create new workflow endpoint.
 
-@router.post('/{id}', response_model=WorkflowOut, status_code=201, tags=["workflow"])
-async def create_workflow(payload: BaseWorkflow):
+    Parameters
+    ----------
+    payload
+        Workflow pydantic base model
+
+    Returns
+    -------
+        Workflow pydantic output model
+
+    Raises
+    ------
+    HTTPException
+        404: Creation unsuccessful
+    """
     workflow = await dal.add_workflow(payload)
     if not workflow:
         raise HTTPException(status_code=404, detail="Could not create workflow")
     return await get_workflow_out(workflow)
 
 
-@router.get('/{id}', response_model=WorkflowOut, status_code=200, tags=["workflow"])
-async def get_workflow(id: int):
-    workflow = await dal.get_workflow(id)
+@router.get('/{workflow_id}', response_model=WorkflowOut, status_code=200, tags=["workflow"])
+async def get_workflow(workflow_id: int) -> WorkflowOut:
+    """Get workflow endpoint.
+
+    Parameters
+    ----------
+    workflow_id
+        Id of the workflow object to be returned
+
+    Returns
+    -------
+        Workflow pydantic output model
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    workflow = await dal.get_workflow(workflow_id)
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(workflow)
 
 
 @router.get('/', response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
-async def get_workflow_list():
+async def get_workflow_list() -> list[WorkflowOut]:
+    """Get all workflows endpoint.
+
+    Returns
+    -------
+        List of workflow pydantic output models, might be empty
+    """
     workflows = await dal.get_all_workflows()
     if not workflows:
         # raise HTTPException(status_code=404, detail="Workflows not found")
@@ -55,25 +84,52 @@ async def get_workflow_list():
         return [await get_workflow_out(workflow) for workflow in workflows]
 
 
-@router.delete('/{id}', response_model={}, status_code=204, tags=["workflow"])
-async def delete_workflow(id: int):
-    if not await dal.delete_workflow(id):
-        raise HTTPException(status_code=404, detail="Workflow not found")
-    
+@router.delete('/{workflow_id}', response_model={}, status_code=204, tags=["workflow"])
+async def delete_workflow(workflow_id: int) -> None:
+    """Delete workflow endpoint.
 
-@router.put('/{id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
-async def update_workflow(id: int, payload: BaseWorkflow):
-    workflow = await dal.update_workflow(id, payload)
+    Parameters
+    ----------
+    workflow_id
+        Id of workflow to be deleted
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    if not await dal.delete_workflow(workflow_id):
+        raise HTTPException(status_code=404, detail="Workflow not found")
+
+
+@router.put('/{workflow_id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
+async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOut:
+    """Update existing workflow endpoint.
+
+    Parameters
+    ----------
+    workflow_id
+        Id of the workflow to be updated
+    payload
+        Data to be updated, workflow pydantic base model
+
+    Returns
+    -------
+        Workflow pydantic output model.
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    workflow = await dal.update_workflow(workflow_id, payload)
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(workflow)
 
 
-
-
-
-
-### OLD API
+# OLD API
+# TODO: Do we still need this?
 
 # @workflow.post('/', response_model=WorkflowOut, status_code=201)
 # async def create_workflow(payload: WorkflowIn):
@@ -105,7 +161,7 @@ async def update_workflow(id: int, payload: BaseWorkflow):
 
 
 #     #TODO: switch based on the preselected reco
-        
+
 #     reco_job = RecoJob(reco_id="cartesian", device_id="TB removed", record_id=record_id, input=filename)
 
 #     #TODO: On successful upload message kafka the correct topic to do reco
@@ -140,5 +196,5 @@ async def update_workflow(id: int, payload: BaseWorkflow):
 # async def download(record_id: str):
 #     file_name = f'cartesian.dcm'
 #     file_path = f'/app/data_lake/records/{record_id}/{file_name}'
-    
+
 #     return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
