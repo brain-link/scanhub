@@ -1,25 +1,31 @@
-import os
+"""Definition of device database ORM models."""
 import datetime
+import os
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column
-
+from sqlalchemy.orm import Mapped, declarative_base, mapped_column
+from sqlalchemy.orm.decl_api import DeclarativeMeta
 
 # Create base for device
-Base = declarative_base()
-engine = create_engine(os.getenv('DB_URI'), echo=False)
+Base: DeclarativeMeta = declarative_base()
+
+db_uri = os.getenv('DB_URI')
+if db_uri:
+    engine = create_engine(db_uri, echo=False)
+else:
+    raise RuntimeError("Database URI not defined.")
 
 
 def init_db() -> None:
+    """Create database helper function."""
     # Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
 
 class Device(Base):
-    """
-    Device ORM model
-    """
+    """Device ORM model."""
+
     __tablename__ = 'device'
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -35,7 +41,7 @@ class Device(Base):
     datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
 
     def update(self, data: dict):
-        """Update attributes of orm model
+        """Update attributes of orm model.
 
         Arguments:
             data {dict} -- Entries to be updated
@@ -44,11 +50,16 @@ class Device(Base):
             setattr(self, key, value)
 
 
-# Create async engine and session, echo=True generates console output
-async_engine = create_async_engine(
-    os.getenv('DB_URI_ASYNC'), 
-    future=True, 
-    echo=False,
-    isolation_level="AUTOCOMMIT"    
-)
+db_uri_async = os.getenv('DB_URI_ASYNC')
+if db_uri_async:
+    # Create async engine and session, echo=True generates console output
+    async_engine = create_async_engine(
+        db_uri_async,
+        future=True,
+        echo=False,
+        isolation_level="AUTOCOMMIT"
+    )
+else:
+    raise RuntimeError("Database URI not defined.")
+
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)

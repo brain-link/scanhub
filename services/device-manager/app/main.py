@@ -1,44 +1,26 @@
-# from fastapi import FastAPI
-# from app.api.devices import devices
-# from app.api.db import metadata, database, engine
-
-# metadata.create_all(engine)
-
-# app = FastAPI(openapi_url="/api/v1/devices/openapi.json", docs_url="/api/v1/devices/docs")
-
-# @app.on_event("startup")
-# async def startup():
-#     await database.connect()
-
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await database.disconnect()
-
-
+"""Device manager main."""
 
 import logging
 from enum import Enum
 from typing import Any, List
 
-from fastapi import APIRouter, Body, FastAPI, HTTPException, status
+from api.db import init_db
+from fastapi import Body, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pool import DeviceInfo, Pool
 from pydantic import BaseModel
 from starlette.endpoints import WebSocketEndpoint
-from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import FileResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
 from starlette.websockets import WebSocket
 
-from pool import DeviceInfo, Pool
 
-from api.db import init_db
-
-
-# app = FastAPI()  # pylint: disable=invalid-name
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",
     docs_url="/api/v1/device/docs"
 )
+
 # router = APIRouter()
 # app.include_router(router, prefix='/api/v1/devices')
 
@@ -56,8 +38,7 @@ log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
 class PoolEventMiddleware:  # pylint: disable=too-few-public-methods
-    """Middleware for providing a global :class:`~.Pool` instance to both HTTP
-    and WebSocket scopes.
+    """Middleware for providing a global :class:`~.Pool` instance to both HTTP and WebSocket scopes.
 
     Although it might seem odd to load the broadcast interface like this (as
     opposed to, e.g. providing a global) this both mimics the pattern
@@ -68,14 +49,15 @@ class PoolEventMiddleware:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, app: ASGIApp):
+        """Device pool event middleware constructor."""
         self._app = app
         self._pool = Pool()
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send):
+        """Device pool call."""
         if scope["type"] in ("lifespan", "http", "websocket"):
             scope["pool"] = self._pool
         await self._app(scope, receive, send)
-
 
 
 app.add_middleware(PoolEventMiddleware)
@@ -83,31 +65,36 @@ app.add_middleware(PoolEventMiddleware)
 
 @app.get("/")
 def home():
-    """Serve static index page.
-    """
+    """Serve static index page."""
     return FileResponse("static/index.html")
+
 
 @app.on_event("startup")
 async def startup():
-    # await create_db()
+    """Inititalize database on startup."""
     init_db()
 
-# @app.get('/healthcheck', status_code=status.HTTP_200_OK)
-# def perform_healthcheck():
-#     return {'healthcheck': 'healthy'}
+
+@app.get('/health/readiness', response_model={}, status_code=200)
+async def readiness() -> dict:
+    """Readiness health endpoint.
+
+    Returns
+    -------
+        Status dictionary
+    """
+    return {'status': 'ok'}
 
 
 class DeviceListResponse(BaseModel):
-    """Response model for /list_devices endpoint.
-    """
+    """Response model for /list_devices endpoint."""
 
     devices: List[str]
 
 
 @app.get("/devices", response_model=DeviceListResponse)
 async def list_devices(request: Request):
-    """List all devices connected to the pool.
-    """
+    """List all devices connected to the pool."""
     pool: Pool | None = request.get("pool")
     if pool is None:
         raise HTTPException(500, detail="Global `Pool` instance unavailable!")
@@ -115,11 +102,12 @@ async def list_devices(request: Request):
 
 
 class DeviceInfoResponse(DeviceInfo):
-    """Response model for /devices/:device_id endpoint.
-    """
+    """Response model for /devices/:device_id endpoint."""
+
 
 @app.get("/devices/{device_id}", response_model=DeviceInfoResponse)
 async def get_device_info(request: Request, device_id: str):
+    """Get device info."""
     pool: Pool | None = request.get("pool")
     if pool is None:
         raise HTTPException(500, detail="Global `Pool` instance unavailable!")
@@ -131,8 +119,7 @@ async def get_device_info(request: Request, device_id: str):
 
 @app.post("/devices/{device_id}/remove", response_model=DeviceListResponse)
 async def remove_device(request: Request, device_id: str):
-    """List all devices connected to the pool.
-    """
+    """List all devices connected to the pool."""
     pool: Pool | None = request.get("pool")
     if pool is None:
         raise HTTPException(500, detail="Global `Pool` instance unavailable!")
@@ -144,8 +131,7 @@ async def remove_device(request: Request, device_id: str):
 
 @app.post("/send/{device_id}/{message}")
 async def send_to_device(request: Request, device_id: str, message: str):
-    """List all devices connected to the pool.
-    """
+    """List all devices connected to the pool."""
     pool: Pool | None = request.get("pool")
     if pool is None:
         raise HTTPException(500, detail="Global `Pool` instance unavailable!")
@@ -156,8 +142,7 @@ async def send_to_device(request: Request, device_id: str, message: str):
 
 
 class Distance(str, Enum):
-    """Distance classes for the /thunder endpoint.
-    """
+    """Distance classes for the /thunder endpoint."""
 
     Near = "near"
     Far = "far"
@@ -165,15 +150,14 @@ class Distance(str, Enum):
 
 
 class ThunderDistance(BaseModel):
-    """Indicator of distance for /thunder endpoint.
-    """
+    """Indicator of distance for /thunder endpoint."""
 
     category: Distance
 
+
 @app.post("/thunder")
 async def thunder(request: Request, distance: ThunderDistance = Body(...)):
-    """Broadcast an ambient message to all chat pool devices.
-    """
+    """Broadcast an ambient message to all chat pool devices."""
     pool: Pool | None = request.get("pool")
     if pool is None:
         raise HTTPException(500, detail="Global `Pool` instance unavailable!")
@@ -187,22 +171,21 @@ async def thunder(request: Request, distance: ThunderDistance = Body(...)):
 
 @app.websocket_route("/api/v1/devices/ws", name="ws")
 class PoolLive(WebSocketEndpoint):
-    """Live connection to the global :class:`~.Pool` instance, via WebSocket.
-    """
+    """Live connection to the global :class:`~.Pool` instance, via WebSocket."""
+
     encoding: str = "text"
     session_name: str = ""
     count: int = 0
 
     def __init__(self, *args, **kwargs):
+        """Pool live connection constructor."""
         super().__init__(*args, **kwargs)
         self.pool: Pool | None = None
         self.device_id: str | None = None
 
     @classmethod
     def get_next_device_id(cls):
-        """Returns monotonically increasing numbered devicenames in the form
-            'device_[number]'
-        """
+        """Returns monotonically increasing numbered devicenames in the form 'device_[number]'."""
         device_id: str = f"device_{cls.count}"
         cls.count += 1
         return device_id
@@ -217,7 +200,7 @@ class PoolLive(WebSocketEndpoint):
         log.info("Connecting new device...")
         pool: Pool | None = self.scope.get("pool")
         if pool is None:
-            raise RuntimeError(f"Global `Pool` instance unavailable!")
+            raise RuntimeError("Global `Pool` instance unavailable!")
         self.pool = pool
         self.device_id = self.get_next_device_id()
         await websocket.accept()
@@ -228,24 +211,28 @@ class PoolLive(WebSocketEndpoint):
         self.pool.add_device(self.device_id, websocket)
 
     async def on_disconnect(self, _websocket: WebSocket, _close_code: int):
-        """Disconnect the device, removing them from the :class:`~.Pool`, and
+        """Disconnect the device.
+
+        Removing them from the :class:`~.Pool`, and
         notifying the other devices of their departure.
         """
         if self.device_id is None:
             raise RuntimeError(
                 "PoolLive.on_disconnect() called without a valid device_id"
             )
-        self.pool.remove_device(self.device_id)
-        await self.pool.broadcast_device_left(self.device_id)
+        if self.pool:
+            self.pool.remove_device(self.device_id)
+            await self.pool.broadcast_device_left(self.device_id)
+        else:
+            raise RuntimeError("No device pool.")
 
     async def on_receive(self, _websocket: WebSocket, msg: Any):
-        """Handle incoming message: `msg` is forwarded straight to `broadcast_message`.
+        """Handle incoming message.
+
+        `msg` is forwarded straight to `broadcast_message`.
         """
         if self.device_id is None:
             raise RuntimeError("PoolLive.on_receive() called without a valid device_id")
         if not isinstance(msg, str):
             raise ValueError(f"PoolLive.on_receive() passed unhandleable data: {msg}")
         await self.pool.broadcast_message(self.device_id, msg)
-
-
-
