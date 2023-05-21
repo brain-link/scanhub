@@ -4,11 +4,13 @@ import logging
 from enum import Enum
 from typing import Any, List
 
-from api.db import init_db
+from api.db import engine, init_db
+from api.devices import router
 from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pool import DeviceInfo, Pool
 from pydantic import BaseModel
+from sqlalchemy import inspect
 from starlette.endpoints import WebSocketEndpoint
 from starlette.requests import Request
 from starlette.responses import FileResponse
@@ -18,11 +20,8 @@ from starlette.websockets import WebSocket
 
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",
-    docs_url="/api/v1/device/docs"
+    docs_url="/api/v1/device/docs",
 )
-
-# router = APIRouter()
-# app.include_router(router, prefix='/api/v1/devices')
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"],
 )
-app.debug = True
+# app.debug = True
 
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -75,15 +74,30 @@ async def startup():
     init_db()
 
 
-@app.get('/health/readiness', response_model={}, status_code=200)
+@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
+    Inspects sqlalchemy engine and check if workflow table exists.
+
     Returns
     -------
-        Status dictionary
+        Status docstring
+
+    Raises
+    ------
+    HTTPException
+        500: Workflow table not found
     """
+    ins = inspect(engine)
+    print(f"Found tables: {ins.get_table_names()}")
+    if 'device' not in ins.get_table_names():
+        raise HTTPException(status_code=500, detail="Could not find device table, table not created.")
+    print("Healthcheck: Endpoint is ready.")
     return {'status': 'ok'}
+
+
+app.include_router(router, prefix='/api/v1/device')
 
 
 class DeviceListResponse(BaseModel):
