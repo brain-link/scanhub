@@ -22,12 +22,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def home():
-    """Serve static index page."""
-    return FileResponse("static/index.html")
-
-
 @app.on_event("startup")
 async def startup():
     """Inititalize database on startup."""
