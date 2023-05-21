@@ -31,10 +31,10 @@ Installation
     docker-compose up -d --build
 
 
-Development
+Documentation
 -----------
 
-See our [Wiki](https://github.com/brain-link/scanhub/wiki) to get insight into the structure of ScanHub.
+See our [Wiki](https://github.com/brain-link/scanhub/wiki) to get insight into the structure of ScanHub, documentation of microservices and more.
 
 
 About
