@@ -50,7 +50,7 @@ Structural Overview
 
 The repository structures in two major components: the patient manager and the user interface. The patient-manager is suppose to emulate a simplified clinical patient management system. This part of the software might be replaced during setup in a (clinical) research facility. To provide a clean separation between data and patient, the patient manager is location here and is not part of the ScanHub backbone.
 
-The frontend contains a src dirctory which is structured as follows.
+The frontend contains a `src/` directory which is structured as follows.
 
 * views: All "main" views filling the whole browser window. This components are only included in the router file.
   * dashboard
@@ -76,8 +76,8 @@ ScanHub-UI implements the following routes using the react-router-dom package (s
 * patients
   * /patient-id/exam-id/procedure-id
 * devices
-* workflows
-* dashboard
+* _workflows_
+* dashboard/home
 
 Database queries are performed using axios and an abstract-query-client implementation. The query clients can be found in the client directory.
 
