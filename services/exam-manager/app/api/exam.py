@@ -7,6 +7,8 @@ from api.models import JobOut, BaseJob, get_job_out
 from api.models import RecordOut, RecordIn, get_record_out
 from api import dal
 
+from api.dal import get_all_records
+
 # Http status codes
 # 200 = Ok: GET, PUT
 # 201 = Created: POST
@@ -177,7 +179,7 @@ async def get_record(id: int):
 
 @router.get('/record/all/{job_id}', response_model=list[RecordOut], status_code=200, tags=["records"])
 async def get_record_list(job_id: int):
-    records = await dal.get_all_records(job_id)
+    records = await get_all_records(job_id)
     if not records:
         return []
         # raise HTTPException(status_code=404, detail="Records not found")
