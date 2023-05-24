@@ -3,13 +3,15 @@
 from abc import ABC, abstractmethod
 import logging
 from fastapi import APIRouter, BackgroundTasks
-from pydantic import BaseModel  # pylint: disable=no-name-in-module
+import os
+from pydantic import BaseModel, Json  # pylint: disable=no-name-in-module
 import requests
 
 # TODO: Move to scanhub-tools
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive"""
     record_id: str
+    sequence: Json
 
 # router = InferringRouter()
 
@@ -53,6 +55,11 @@ class Device(ABC):
         """Endpoint to trigger a scan."""
         # TODO: multiple device handling
         # TODO: verify that device is not busy. (scheduling, queue, ...)
+        seq_file = f"{self.records_path}{scan_request.record_id}\\sequence"
+        os.makedirs(os.path.dirname(seq_file), exist_ok=True)
+        sequence = scan_request.sequence["file"]
+        with open(seq_file, "w", encoding='UTF-8') as sequence_file:
+            sequence_file.write(sequence)
         background_tasks.add_task(self.scan_process, scan_request)
         return {"message": f"""Scanrequest {scan_request.record_id} received.
         Scan is scheduled."""}

@@ -5,3 +5,4 @@ orthanc-db
 scanhub-database.session.sql
 .examples
 .DS_Store
+services/workflow-manager/app/__pycache__

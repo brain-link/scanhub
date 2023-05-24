@@ -1,11 +1,15 @@
-from pydantic import BaseModel
-from typing import Optional
+"""Pydantic models of device."""
+
 from datetime import datetime
+from typing import Optional
 
 from api.db import Device
+from pydantic import BaseModel
 
 
 class BaseDevice(BaseModel):
+    """Device pydantic base model."""
+
     name: str
     manufacturer: str
     modality: str
@@ -13,13 +17,27 @@ class BaseDevice(BaseModel):
     site: Optional[str] = None
     ip_address: str
 
+
 class DeviceOut(BaseDevice):
+    """Device pydantic output model."""
+
     id: int
     datetime_created: datetime
     datetime_updated: Optional[datetime] = None
 
 
 async def get_device_out(data: Device) -> DeviceOut:
+    """Get pydantic device output model helper function.
+
+    Parameters
+    ----------
+    data
+        Database model
+
+    Returns
+    -------
+        Pydantic output model
+    """
     return DeviceOut(
         id=data.id,
         name=data.name,

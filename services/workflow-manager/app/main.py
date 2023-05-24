@@ -1,18 +1,15 @@
-from fastapi import FastAPI
-from fastapi.routing import APIRoute
-from fastapi.middleware.cors import CORSMiddleware
+"""Workflow manager main."""
 
+from api.db import engine, init_db
 from api.workflow import router
-from api.db import init_db
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import inspect
 
-
-def custom_client_uid(route: APIRoute):
-    return f"{route.tags[0]}-{route.name}"
 
 app = FastAPI(
-    openapi_url="/api/v1/workflow/openapi.json", 
+    openapi_url="/api/v1/workflow/openapi.json",
     docs_url="/api/v1/workflow/docs",
-    generate_unique_id_function=custom_client_uid,
 )
 
 app.add_middleware(
@@ -27,10 +24,37 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup() -> None:
+    """Call database initialization of startup."""
     init_db()
 
+
 @app.on_event("shutdown")
-async def shutdown():
+async def shutdown() -> None:
+    """Skeleton for shutdown routine."""
     pass
 
-app.include_router(router, prefix='/api/v1/workflow', tags=['workflow'])
+
+@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+async def readiness() -> dict:
+    """Readiness health endpoint.
+
+    Inspects sqlalchemy engine and check if workflow table exists.
+
+    Returns
+    -------
+        Status docstring
+
+    Raises
+    ------
+    HTTPException
+        500: Workflow table does not exist
+    """
+    ins = inspect(engine)
+    print(f"Found tables: {ins.get_table_names()}")
+    if 'workflow' not in ins.get_table_names():
+        raise HTTPException(status_code=500, detail="Could not find workflow table, table not created.")
+    print("Healthcheck: Endpoint is ready.")
+    return {'status': 'ok'}
+
+
+app.include_router(router, prefix='/api/v1/workflow')

@@ -1,16 +1,15 @@
-# Data Access Layer (DAL)
+"""Workflow data access layer."""
 
-from sqlalchemy.future import select
-from typing import List
 from pprint import pprint
+from typing import Sequence
 
-from api.models import BaseWorkflow
 from api.db import Workflow, async_session
-
+from api.models import BaseWorkflow
+from sqlalchemy.future import select
 
 
 async def add_workflow(payload: BaseWorkflow) -> Workflow:
-    """Add a new workflow to the database
+    """Add a new workflow to the database.
 
     Arguments:
         payload {BaseWorkflow} -- Pydantic base model to create a new database entry
@@ -30,7 +29,7 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
 
 
 async def get_workflow(id: int) -> Workflow:
-    """Fetch a workflow from database
+    """Fetch a workflow from database.
 
     Arguments:
         id {int} -- ID of workflow
@@ -43,8 +42,8 @@ async def get_workflow(id: int) -> Workflow:
     return workflow
 
 
-async def get_all_workflows() -> List[Workflow]:
-    """Get a list of all existing workflows
+async def get_all_workflows() -> Sequence[Workflow]:
+    """Get a list of all existing workflows.
 
     Returns:
         List[Workflow] -- List of database orm models
@@ -56,7 +55,7 @@ async def get_all_workflows() -> List[Workflow]:
 
 
 async def delete_workflow(id: int) -> bool:
-    """Delete a workflow by ID
+    """Delete a workflow by ID.
 
     Arguments:
         id {int} -- ID of workflow to be deleted
@@ -70,13 +69,13 @@ async def delete_workflow(id: int) -> bool:
             await session.delete(workflow)
             await session.commit()
             return True
-        else: 
+        else:
             return False
         # TODO: What to return here?
 
 
-async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow:
-    """Update an existing workflow in database
+async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow | None:
+    """Update an existing workflow in database.
 
     Arguments:
         id {int} -- ID of workflow

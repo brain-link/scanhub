@@ -1,17 +1,20 @@
-from typing import List, Optional
+"""Definitions of pydantic models and helper functions."""
+
 from datetime import datetime
+from typing import List, Optional
+
+from api.db import Device, Exam, Job, Procedure, Record, Workflow
 from pydantic import BaseModel, Extra
 
-from api.db import Exam, Procedure, Job, Record, Device, Workflow
-
-# TODO: Define model id's as uuid's
-
-
-# ***********************************************
-# Base Models
-# ***********************************************
 
 class BaseDevice(BaseModel):
+    """Device base model."""
+
+    class Config:
+        """Base class configuration."""
+
+        extra = Extra.ignore
+
     name: str
     manufacturer: str
     modality: str
@@ -21,6 +24,13 @@ class BaseDevice(BaseModel):
 
 
 class BaseWorkflow(BaseModel):
+    """Workflow base model."""
+
+    class Config:
+        """Base class configuration."""
+
+        extra = Extra.ignore
+
     host: str
     name: str
     manufacturer: str
@@ -31,8 +41,11 @@ class BaseWorkflow(BaseModel):
 
 
 class BaseExam(BaseModel):
+    """Exam base model."""
 
     class Config:
+        """Base class configuration."""
+
         extra = Extra.ignore
 
     patient_id: int
@@ -45,8 +58,11 @@ class BaseExam(BaseModel):
 
 
 class BaseProcedure(BaseModel):
+    """Procedure base model."""
 
     class Config:
+        """Base class configuration."""
+
         extra = Extra.ignore
 
     name: str
@@ -54,8 +70,11 @@ class BaseProcedure(BaseModel):
 
 
 class BaseJob(BaseModel):
+    """Job base model."""
 
     class Config:
+        """Base class configuration."""
+
         extra = Extra.ignore
 
     type: str
@@ -67,47 +86,55 @@ class BaseJob(BaseModel):
 
 
 class BaseRecord(BaseModel):
+    """Record base model."""
 
     class Config:
+        """Base class configuration."""
+
         extra = Extra.ignore
 
     data_path: Optional[str] = None
     comment: Optional[str] = None
 
 
-# ***********************************************
-# Insert Models
-# ***********************************************
-
 class ProcedureIn(BaseProcedure):
+    """Procedure input model."""
+
     exam_id: int
 
 
 class RecordIn(BaseRecord):
+    """Record input model."""
+
     job_id: int
 
-# ***********************************************
-# Output Models
-# ***********************************************
 
 class DeviceOut(BaseDevice):
+    """Devicee output model."""
+
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
 
 class WorkflowOut(BaseWorkflow):
+    """Workflow output model."""
+
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
 
 class RecordOut(BaseRecord):
+    """Record output model."""
+
     id: int
     datetime_created: datetime
 
 
 class JobOut(BaseJob):
+    """Job output model."""
+
     id: int
     is_acquired: bool
     device: Optional[DeviceOut] = None
@@ -118,6 +145,8 @@ class JobOut(BaseJob):
 
 
 class ProcedureOut(BaseProcedure):
+    """Procedure output model."""
+
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
@@ -125,17 +154,26 @@ class ProcedureOut(BaseProcedure):
 
 
 class ExamOut(BaseExam):
+    """Exam output model."""
+
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
     procedures: List[ProcedureOut]
 
 
-# ***********************************************
-# Helper: SQLAlchemy-ORM to Pydantic
-# ***********************************************
-
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
+    """Workflow output helper function.
+
+    Parameters
+    ----------
+    data
+        Workflow database model
+
+    Returns
+    -------
+        Workflow pydantic output model
+    """
     return WorkflowOut(
         id=data.id,
         datetime_created=data.datetime_created,
@@ -151,6 +189,17 @@ async def get_workflow_out(data: Workflow) -> WorkflowOut:
 
 
 async def get_device_out(data: Device) -> DeviceOut:
+    """Device output helper function.
+
+    Parameters
+    ----------
+    data
+        Device database model
+
+    Returns
+    -------
+        Device pydantic output model
+    """
     return DeviceOut(
         id=data.id,
         datetime_created=data.datetime_created,
@@ -165,9 +214,19 @@ async def get_device_out(data: Device) -> DeviceOut:
 
 
 async def get_record_out(data: Record) -> RecordOut:
+    """Record output helper function.
+
+    Parameters
+    ----------
+    data
+        Record database model
+
+    Returns
+    -------
+        Record pydantic output model
+    """
     return RecordOut(
         id=data.id,
-        job_id=data.job_id,
         data_path=data.data_path,
         comment=data.comment,
         datetime_created=data.datetime_created
@@ -175,7 +234,22 @@ async def get_record_out(data: Record) -> RecordOut:
 
 
 async def get_job_out(data: Job, device: Device = None, workflow: Workflow = None) -> JobOut:
+    """Job output helper function.
 
+    Parameters
+    ----------
+    data
+        Job database model
+    device, optional
+        Device database model, by default None
+    workflow, optional
+        Workflow database model, by default None
+
+    Returns
+    -------
+        Job pydantic output model
+    """
+    # Create records of the job
     records = [await get_record_out(record) for record in data.records]
 
     return JobOut(
@@ -196,9 +270,18 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
 
 
 async def get_procedure_out(data: Procedure) -> ProcedureOut:
+    """Procedure output helper function.
 
-    # Create records of the procedure
-    # records = [await get_record_out(record) for record in data.records]
+    Parameters
+    ----------
+    data
+        Procedure database model
+
+    Returns
+    -------
+        Procedure pydantic output model
+    """
+    # Create jobs of the procedure
     jobs = [await get_job_out(job) for job in data.jobs]
 
     return ProcedureOut(
@@ -212,7 +295,17 @@ async def get_procedure_out(data: Procedure) -> ProcedureOut:
 
 
 async def get_exam_out(data: Exam) -> ExamOut:
+    """Exam output helper function.
 
+    Parameters
+    ----------
+    data
+        Exam database model
+
+    Returns
+    -------
+        Exam pydantic output model
+    """
     # Create procedures of the exam
     exam_procedures = [await get_procedure_out(procedure) for procedure in data.procedures]
 
