@@ -1,5 +1,6 @@
 """Exam api endpoints."""
 from api import dal
+from api.dal import get_all_records
 from api.models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn,
                         ProcedureOut, RecordIn, RecordOut, get_exam_out,
                         get_job_out, get_procedure_out, get_record_out)
@@ -416,7 +417,7 @@ async def record_get_all(job_id: int) -> list[RecordOut]:
     -------
         List of record pydantic output model
     """
-    records = await dal.get_all_records(job_id)
+    records = await get_all_records(job_id)
     if not records:
         # Don't raise exception here, list might be empty.
         return []
