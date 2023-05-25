@@ -10,7 +10,7 @@ on:
 
 jobs:
   job:
-    name: 'build'
+    name: 'build-frontend'
     runs-on: ubuntu-latest
 
     defaults:
