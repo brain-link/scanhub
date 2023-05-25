@@ -142,8 +142,8 @@ MappedBase.prepare(autoload_with=engine, reflect=True)
 try:
     Device = MappedBase.classes.device
     Workflow = MappedBase.classes.workflow
-except AttributeError as e:
-    raise AttributeError("Could not find device and/or workflow table(s).")
+except AttributeError as error:
+    raise AttributeError("Could not find device and/or workflow table(s).") from error
 
 
 db_uri_async = os.getenv('DB_URI_ASYNC')

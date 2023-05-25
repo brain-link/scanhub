@@ -66,13 +66,11 @@ async def exam_delete(exam_id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        exam: (Exam | None) = await session.get(Exam, exam_id)
-        if exam:
+        if (exam := await session.get(Exam, exam_id)):
             await session.delete(exam)
             await session.commit()
             return True
-        else:
-            return False
+        return False
 
 
 async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
@@ -86,13 +84,11 @@ async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
         Workflow -- Updated database orm model
     """
     async with async_session() as session:
-        exam: (Exam | None) = await session.get(Exam, exam_id)
-    if exam:
-        exam.update(payload.dict())
-        await session.commit()
-        await session.refresh(exam)
-        return exam
-    else:
+        if (exam := await session.get(Exam, exam_id)):
+            exam.update(payload.dict())
+            await session.commit()
+            await session.refresh(exam)
+            return exam
         return None
 
 
@@ -155,13 +151,11 @@ async def procedure_delete(procedure_id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        procedure: (Procedure | None) = await session.get(Procedure, procedure_id)
-        if procedure:
+        if (procedure := await session.get(Procedure, procedure_id)):
             await session.delete(procedure)
             await session.commit()
             return True
-        else:
-            return False
+        return False
 
 
 async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedure | None):
@@ -175,14 +169,12 @@ async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedur
         Procedure -- Updated database orm model
     """
     async with async_session() as session:
-        procedure: (Procedure | None) = await session.get(Procedure, procedure_id)
-        if procedure:
+        if (procedure := await session.get(Procedure, procedure_id)):
             procedure.update(payload.dict())
             await session.commit()
             await session.refresh(procedure)
             return procedure
-        else:
-            return None
+        return None
 
 
 # **************************************************
@@ -248,13 +240,11 @@ async def delete_job(job_id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        job: (Job | None) = await session.get(Job, job_id)
-        if job:
+        if (job := await session.get(Job, job_id)):
             await session.delete(job)
             await session.commit()
             return True
-        else:
-            return False
+        return False
 
 
 async def update_job(job_id: int, payload: BaseJob) -> (Job | None):
@@ -268,14 +258,12 @@ async def update_job(job_id: int, payload: BaseJob) -> (Job | None):
         Job -- Updated database orm model
     """
     async with async_session() as session:
-        job: (Job | None) = await session.get(Job, job_id)
-        if job:
+        if (job := await session.get(Job, job_id)):
             job.update(payload.dict())
             await session.commit()
             await session.refresh(job)
             return job
-        else:
-            return None
+        return None
 
 
 # **************************************************
@@ -341,10 +329,8 @@ async def delete_record(record_id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        record: (Record | None) = await session.get(Record, record_id)
-        if record:
+        if (record := await session.get(Record, record_id)):
             await session.delete(record)
             await session.commit()
             return True
-        else:
-            return False
+        return False

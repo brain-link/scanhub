@@ -1,7 +1,6 @@
 """Definitions of pydantic models and helper functions."""
 
 from datetime import datetime
-from typing import List, Optional
 
 from api.db import Device, Exam, Job, Procedure, Record, Workflow
 from pydantic import BaseModel, Extra
@@ -19,7 +18,7 @@ class BaseDevice(BaseModel):
     manufacturer: str
     modality: str
     status: str
-    site: Optional[str] = None
+    site: str | None
     ip_address: str
 
 
@@ -50,9 +49,9 @@ class BaseExam(BaseModel):
 
     patient_id: int
     name: str
-    country: Optional[str] = None
-    site: Optional[str] = None
-    address: Optional[str] = None
+    country: str | None
+    site: str | None
+    address: str | None
     creator: str
     status: str
 
@@ -78,10 +77,10 @@ class BaseJob(BaseModel):
         extra = Extra.ignore
 
     type: str
-    comment: Optional[str] = None
+    comment: str | None
     procedure_id: int
     sequence_id: str
-    workflow_id: Optional[int] = None
+    workflow_id: int | None
     device_id: int
 
 
@@ -93,8 +92,8 @@ class BaseRecord(BaseModel):
 
         extra = Extra.ignore
 
-    data_path: Optional[str] = None
-    comment: Optional[str] = None
+    data_path: str | None
+    comment: str | None
 
 
 class ProcedureIn(BaseProcedure):
@@ -137,11 +136,11 @@ class JobOut(BaseJob):
 
     id: int
     is_acquired: bool
-    device: Optional[DeviceOut] = None
-    workflow: Optional[WorkflowOut] = None
-    records: List[RecordOut]
+    device: DeviceOut | None
+    workflow: WorkflowOut | None
+    records: list[RecordOut]
     datetime_created: datetime
-    datetime_updated: Optional[datetime] = None
+    datetime_updated: datetime | None
 
 
 class ProcedureOut(BaseProcedure):
@@ -150,7 +149,7 @@ class ProcedureOut(BaseProcedure):
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
-    jobs: List[JobOut]
+    jobs: list[JobOut]
 
 
 class ExamOut(BaseExam):
@@ -159,7 +158,7 @@ class ExamOut(BaseExam):
     id: int
     datetime_created: datetime
     datetime_updated: datetime | None
-    procedures: List[ProcedureOut]
+    procedures: list[ProcedureOut]
 
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
