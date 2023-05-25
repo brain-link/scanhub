@@ -35,12 +35,16 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
     // Context: Delete and edit options, anchor for context location
     const [contextOpen, setContextOpen] = React.useState<boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+    const [jobUpdate, setJobUpdate] = React.useState<Job>(job);
     
     // TODO: Use update function to update job, deep clone by newJob = { ...job }
     // What is the fastest way? Update db on every change or create a deep copy, work on deep copy (update values here)
     // and modify db only when focus changed to different component?
 
-    const updateJob = useMutation( async (jobUpdate: Job) => {
+    const updateJob = useMutation( async () => {
+        console.log("JOB UPDATE", jobUpdate)
+        console.log("Procedure id: ", job.procedure_id)
         await client.jobService.update(job.id, jobUpdate)
         .then( () => { refetchParentData() } )
         .catch( (err) => { console.log("Error on job update: ", err) })
@@ -76,16 +80,15 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
                 {/* Card header */}
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
-                    <FormControl
-                        onChange={ () => {} }
-                    >
-                        <Input 
-                            type="string"
-                            variant="plain"
-                            value={ job.type === "" ? "Enter type..." : job.type }
-                            disabled={ job.is_acquired }
-                        />
-                    </FormControl>
+                    <Input 
+                        type="string"
+                        variant="plain"
+                        name="type"
+                        defaultValue={ job.type === "" ? "Enter type..." : job.type }
+                        disabled={ job.is_acquired }
+                        onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
+                        onBlur={ () => updateJob.mutate() }
+                    />
                     
                     {/* Job interactions */}
                     <Stack direction='row'>
@@ -136,17 +139,25 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
 
                 </Box>
             
-                
-                <FormControl
-                    onChange={ () => {} }
-                >
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
                     <Input 
                         type="string"
                         variant="plain"
-                        value={ !job.comment || job.comment === "" ? "Enter comment..." : job.comment }
+                        name="comment"
+                        defaultValue={ !job.comment || job.comment === "" ? "Enter comment..." : job.comment }
                         disabled={ job.is_acquired }
+                        onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
+                        onBlur={ () => updateJob.mutate() }
                     />
-                </FormControl>
+
+                    <Stack>
+                        <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
+                        <Typography level="body2" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
+                    </Stack>
+
+                </Box>
+                
 
                 {/* Configuration: Device, Workflow, Sequence */}
                 <Stack direction='row' spacing={2}>

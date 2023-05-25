@@ -1,4 +1,5 @@
-## Developing
+# Development within Patient-Manager
+
 ```
 virtualenv .env --python=python3.8
 . .env/bin/activate
@@ -6,27 +7,33 @@ pip install poetry
 poetry install
 ```
 
-## Running the server
+Install packages for linting:
+```
+poetry install --with lint
+```
+Replace `lint` by `test` if you need to install test dependencies only.
+
+Install packages for linting and testing:
+```
+poetry install --with lint --with test
+```
+
+# Running the server
+
 ```
 uvicorn scanhub.main:app --reload --port 8000
 ```
 
----
 
-## Docker
+# Database
 
-Building the docker images
-```
-docker-compose up -d --build
-```
+The postgres database, which is created within the patient-manager, can be reached by the following address.
 
-## Database
-
-Use adminer to add data to the postgres database.
 ```
 http://localhost:8080
 ```
-Login information:
+
+Login information for the database: To be updated...
 
 |                       |                                   |
 | :---                  |                              ---: |
@@ -35,17 +42,3 @@ Login information:
 | Benuter               | brainLink                         |
 | Passwort              | brainLinkIstCool2022UndLecker     |
 | Datenbank             | -                                 |
-
-Once you are logged in, select the scanhub database and click on import on the left side to upload sql files.
-SQL files are located in `example_data/`. When uploading the files separately, the import order is important,
-since some tables depend on each other.
-
-### Import Order
-
-user, patient, site &#8594; device, procedures &#8594; recordings &#8594; site_user, user_patient, site_patient
-
-<br>
-
-> __Note:__ Database tables are generated according to ```database/models.py```. Modifications of the models require a rebuild of the database containers with docker.
-
-<br>

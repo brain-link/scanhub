@@ -21,10 +21,10 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import ExamViewController from '../components/job_view/ViewController';
+import ExamViewController from '../components/job_view/JobViewController';
 import ExamCreateModal from '../components/ExamCreateModal';
 import ProcedureCreateModal from '../components/ProcedureCreateModal';
-import JobViewController from '../components/job_view/ViewController';
+import JobViewController from '../components/job_view/JobViewController';
 
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface';

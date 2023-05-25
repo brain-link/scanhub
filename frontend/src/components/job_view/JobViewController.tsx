@@ -26,7 +26,7 @@ function JobViewController({data: jobs, refetchParentData, isSelected}: Componen
 
     const params = useParams();
 
-    const [newJob, setNewJob] = React.useState<Job>({
+    const newJob: Job = {
         id: 0,
         type: "Enter job type...",
         comment: "Comment",
@@ -35,7 +35,7 @@ function JobViewController({data: jobs, refetchParentData, isSelected}: Componen
         workflow_id: null,
         device_id: 0,
         datetime_created: new Date(),
-    });
+    };
 
     // const { data: devices, isLoading: devicesLoading, isError: devicesError } = useQuery<Device[], Error>({
     //     queryKey: ['devices'],
@@ -51,6 +51,7 @@ function JobViewController({data: jobs, refetchParentData, isSelected}: Componen
         // Add a new empty job, editable in job-item component
         // setNewJob({...newJob, ["procedure_id"]: Number(params.procedureId)});
         console.log("New job: ", newJob)
+        console.log("New job procedure id: ", newJob.procedure_id)
         await client.jobService.create(newJob)
         .then(() => { refetchParentData() })
         .catch((err) => { console.log("Error during job creation: ", err) })
