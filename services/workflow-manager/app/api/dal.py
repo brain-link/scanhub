@@ -1,10 +1,10 @@
 """Workflow data access layer."""
 
 from pprint import pprint
-from typing import Sequence
 
 from api.db import Workflow, async_session
 from api.models import BaseWorkflow
+from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 
@@ -28,7 +28,7 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
     return new_workflow
 
 
-async def get_workflow(id: int) -> Workflow:
+async def get_workflow(id: int) -> (Workflow | None):
     """Fetch a workflow from database.
 
     Arguments:
@@ -42,15 +42,15 @@ async def get_workflow(id: int) -> Workflow:
     return workflow
 
 
-async def get_all_workflows() -> Sequence[Workflow]:
+async def get_all_workflows() -> list[Workflow]:
     """Get a list of all existing workflows.
 
     Returns:
         List[Workflow] -- List of database orm models
     """
     async with async_session() as session:
-        result = await session.execute(select(Workflow))
-        workflows = result.scalars().all()
+        result: Result = await session.execute(select(Workflow))
+        workflows = list(result.scalars().all())
     return workflows
 
 
@@ -64,17 +64,14 @@ async def delete_workflow(id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        workflow = await session.get(Workflow, id)
-        if workflow:
+        if (workflow := await session.get(Workflow, id)):
             await session.delete(workflow)
             await session.commit()
             return True
-        else:
-            return False
-        # TODO: What to return here?
+        return False
 
 
-async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow | None:
+async def update_workflow(id: int, payload: BaseWorkflow) -> (Workflow | None):
     """Update an existing workflow in database.
 
     Arguments:
@@ -85,11 +82,9 @@ async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow | None:
         Workflow -- Updated database orm model
     """
     async with async_session() as session:
-        workflow = await session.get(Workflow, id)
-        if workflow:
+        if (workflow := await session.get(Workflow, id)):
             workflow.update(payload.dict())
             await session.commit()
             await session.refresh(workflow)
             return workflow
-        else:
-            return None
+        return None

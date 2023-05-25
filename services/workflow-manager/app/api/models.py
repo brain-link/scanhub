@@ -1,6 +1,6 @@
 """Workflow object pydantic models."""
+
 from datetime import datetime
-from typing import Optional
 
 from api.db import Workflow
 from pydantic import BaseModel
@@ -11,7 +11,7 @@ class BaseWorkflow(BaseModel):
 
     host: str
     name: str
-    author: Optional[str] = None
+    author: (str | None)
     modality: str
     type: str
     status: str
@@ -24,7 +24,7 @@ class WorkflowOut(BaseWorkflow):
     # TODO: Use uuid as id instead of id
     id: int
     datetime_created: datetime
-    datetime_updated: datetime | None
+    datetime_updated: (datetime | None)
 
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:

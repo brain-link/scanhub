@@ -76,8 +76,7 @@ async def exam_get_all(patient_id: int) -> list[ExamOut]:
     if not (exams := await dal.exam_get_all(patient_id)):
         # Don't raise exception here, list might be empty
         return []
-    else:
-        return [await get_exam_out(data=exam) for exam in exams]
+    return [await get_exam_out(data=exam) for exam in exams]
 
 
 @router.delete('/{exam_id}', response_model={}, status_code=204, tags=["exams"])
@@ -185,8 +184,7 @@ async def procedure_get_all(exam_id: int) -> list[ProcedureOut]:
     if not (procedures := await dal.procedure_get_all(exam_id)):
         # Don't raise exception, list might be empty
         return []
-    else:
-        return [await get_procedure_out(data=procedure) for procedure in procedures]
+    return [await get_procedure_out(data=procedure) for procedure in procedures]
 
 
 @router.delete('/procedure/{procedure_id}', response_model={}, status_code=204, tags=["procedures"])
@@ -295,8 +293,7 @@ async def job_get_all(procedure_id: int) -> list[JobOut]:
     if not (jobs := await dal.get_all_jobs(procedure_id)):
         # Don't raise exception, list might be empty
         return []
-    else:
-        return [await get_job_out(data=job) for job in jobs]
+    return [await get_job_out(data=job) for job in jobs]
 
 
 @router.delete('/job/{job_id}', response_model={}, status_code=204, tags=["jobs"])
@@ -404,8 +401,7 @@ async def record_get_all(job_id: int) -> list[RecordOut]:
     if not (records := await dal.get_all_records(job_id)):
         # Don't raise exception here, list might be empty.
         return []
-    else:
-        return [await get_record_out(data=record) for record in records]
+    return [await get_record_out(data=record) for record in records]
 
 
 @router.delete('/record/{record_id}', response_model={}, status_code=204, tags=["records"])

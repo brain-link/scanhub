@@ -38,8 +38,7 @@ async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
     HTTPException
         404: Creation unsuccessful
     """
-    workflow = await dal.add_workflow(payload)
-    if not workflow:
+    if not (workflow := await dal.add_workflow(payload)):
         raise HTTPException(status_code=404, detail="Could not create workflow")
     return await get_workflow_out(workflow)
 
@@ -62,8 +61,7 @@ async def get_workflow(workflow_id: int) -> WorkflowOut:
     HTTPException
         404: Not found
     """
-    workflow = await dal.get_workflow(workflow_id)
-    if not workflow:
+    if not (workflow := await dal.get_workflow(workflow_id)):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(workflow)
 
@@ -76,8 +74,7 @@ async def get_workflow_list() -> list[WorkflowOut]:
     -------
         List of workflow pydantic output models, might be empty
     """
-    workflows = await dal.get_all_workflows()
-    if not workflows:
+    if not (workflows := await dal.get_all_workflows()):
         # raise HTTPException(status_code=404, detail="Workflows not found")
         return []
     else:
@@ -122,7 +119,6 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
     HTTPException
         404: Not found
     """
-    workflow = await dal.update_workflow(workflow_id, payload)
-    if not workflow:
+    if not (workflow := await dal.update_workflow(workflow_id, payload)):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(workflow)
