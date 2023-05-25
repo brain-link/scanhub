@@ -1,12 +1,17 @@
-from datetime import datetime
-from pydantic import BaseModel, Extra
+"""Patient pydantic models."""
 
-from api.db import Patient
+from datetime import datetime
+
+from .db import Patient
+from pydantic import BaseModel, Extra
 
 
 class BasePatient(BaseModel):
-    
+    """Patient pydantic base model."""
+
     class Config:
+        """Pydantic model configuration."""
+
         extra = Extra.ignore
 
     sex: str
@@ -18,14 +23,27 @@ class BasePatient(BaseModel):
 
 
 class PatientOut(BasePatient):
-    id: int
+    """Patient pydantic output model."""
+
+    patient_id: int
     datetime_created: datetime
     datetime_updated: datetime | None
 
 
 async def get_patient_out(data: Patient) -> PatientOut:
+    """Get pydantic output model from database ORM model.
+
+    Parameters
+    ----------
+    data
+        Database ORM model
+
+    Returns
+    -------
+        Pydantic output model
+    """
     return PatientOut(
-        id=data.id,
+        patient_id=data.patient_id,
         sex=data.sex,
         name=data.name,
         status=data.status,

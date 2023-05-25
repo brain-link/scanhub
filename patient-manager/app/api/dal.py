@@ -1,24 +1,26 @@
-# Data Access Layer (DAL)
+"""Data Access Layer (DAL)."""
 
-from sqlalchemy.future import select
-from typing import List
 from pprint import pprint
 
-from api.models import BasePatient
-from api.db import Patient, async_session
+from sqlalchemy.future import select
 
+from .db import Patient, async_session
+from .models import BasePatient
 
 
 async def add_patient(payload: BasePatient) -> Patient:
-    """Add a new patient to the database
+    """Create a new patient entry in database.
 
-    Arguments:
-        payload {BasePatient} -- Pydantic base model to create a new database entry
+    Parameters
+    ----------
+    payload
+        Patient pydantic base model
 
-    Returns:
-        Patient -- Database orm model
+    Returns
+    -------
+        Patient database entry
     """
-    new_patient = Patient(**payload.dict())
+    new_patient: Patient = Patient(**payload.dict())
     async with async_session() as session:
         session.add(new_patient)
         await session.commit()
@@ -28,67 +30,71 @@ async def add_patient(payload: BasePatient) -> Patient:
     return new_patient
 
 
-async def get_patient(id: int) -> Patient:
-    """Fetch a patient from database
+async def get_patient(patient_id: int) -> Patient:
+    """Fetch a patient from database.
 
-    Arguments:
-        id {int} -- ID of patient
+    Parameters
+    ----------
+    patient_id
+        Id of the requested patient
 
-    Returns:
-        Patient -- Database orm model
+    Returns
+    -------
+        Patient database entry
     """
     async with async_session() as session:
-        patient = await session.get(Patient, id)
+        patient = await session.get(Patient, patient_id)
     return patient
 
 
-async def get_all_patients() -> List[Patient]:
-    """Get a list of all existing patients
+async def get_all_patients() -> list[Patient]:
+    """Get a list of all existing patients.
 
     Returns:
         List[Patient] -- List of database orm models
     """
     async with async_session() as session:
         result = await session.execute(select(Patient))
-        patients = result.scalars().all()
+        patients = list(result.scalars().all())
     return patients
 
 
-async def delete_patient(id: int) -> bool:
-    """Delete a patient by ID
+async def delete_patient(patient_id: int) -> bool:
+    """Delete patient entry from database.
 
-    Arguments:
-        id {int} -- ID of patient to be deleted
+    Parameters
+    ----------
+    patient_id
+        Id of the patient to be deleted
 
-    Returns:
-        bool -- Success of delete event
+    Returns
+    -------
+        Delete success
     """
     async with async_session() as session:
-        patient = await session.get(Patient, id)
-        if patient:
+        if (patient := await session.get(Patient, patient_id)):
             await session.delete(patient)
             await session.commit()
             return True
-        else:
-            return False
-        
+        return False
 
-async def update_patient(id: int, payload: BasePatient) -> Patient:
-    """Update an existing patient in database
 
-    Arguments:
-        id {int} -- ID of patient
-        payload {BasePatient} -- Pydantic model, data to be updated
+async def update_patient(patient_id: int, payload: BasePatient) -> (Patient | None):
+    """Update existing patient in database.
 
-    Returns:
-        Patient -- Updated database orm model
+    Parameters
+    ----------
+    patient_id
+        Id of the patient to be updated
+
+    Returns
+    -------
+        Updated database entry
     """
     async with async_session() as session:
-        patient = await session.get(Patient, id)
-        if patient:
-            patient.update(payload.dict())
+        if (patient := await session.get(Patient, patient_id)):
+            patient.update(payload)
             await session.commit()
             await session.refresh(patient)
             return patient
-        else:
-            return None
+        return None
