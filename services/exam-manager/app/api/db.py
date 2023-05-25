@@ -1,7 +1,6 @@
 """Definition of exam-tree database ORM models."""
 import datetime
 import os
-from typing import List
 
 from sqlalchemy import ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -35,7 +34,7 @@ class Exam(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
-    procedures: Mapped[List["Procedure"]] = relationship(lazy="selectin")
+    procedures: Mapped[list["Procedure"]] = relationship(lazy="selectin")
     patient_id: Mapped[int] = mapped_column(nullable=False)
 
     # Fields
@@ -69,7 +68,7 @@ class Procedure(Base):
 
     # Relations and references
     exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
-    jobs: Mapped[List["Job"]] = relationship(lazy="selectin")
+    jobs: Mapped[list["Job"]] = relationship(lazy="selectin")
 
     # Fields
     name: Mapped[str] = mapped_column(nullable=False)
@@ -101,7 +100,7 @@ class Job(Base):
     workflow_id: Mapped[int] = mapped_column(nullable=True)
     device_id: Mapped[int] = mapped_column(nullable=True)
     sequence_id: Mapped[str] = mapped_column(nullable=False)
-    records: Mapped[List["Record"]] = relationship(lazy="selectin")
+    records: Mapped[list["Record"]] = relationship(lazy="selectin")
 
     # Fields
     type: Mapped[str] = mapped_column(nullable=False)
@@ -144,7 +143,7 @@ try:
     Device = MappedBase.classes.device
     Workflow = MappedBase.classes.workflow
 except AttributeError as e:
-    print("***** ERROR: Table does not exist: ", e)
+    raise AttributeError("Could not find device and/or workflow table(s).")
 
 
 db_uri_async = os.getenv('DB_URI_ASYNC')
