@@ -77,8 +77,7 @@ async def get_workflow_list() -> list[WorkflowOut]:
     if not (workflows := await dal.get_all_workflows()):
         # raise HTTPException(status_code=404, detail="Workflows not found")
         return []
-    else:
-        return [await get_workflow_out(workflow) for workflow in workflows]
+    return [await get_workflow_out(workflow) for workflow in workflows]
 
 
 @router.delete('/{workflow_id}', response_model={}, status_code=204, tags=["workflow"])

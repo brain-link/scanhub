@@ -10,8 +10,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 # Create base for device
 Base: DeclarativeMeta = declarative_base()
 
-db_uri = os.getenv('DB_URI')
-if db_uri:
+if (db_uri := os.getenv('DB_URI')):
     engine = create_engine(db_uri, echo=False)
 else:
     raise RuntimeError("Database URI not defined.")
@@ -53,8 +52,7 @@ class Workflow(Base):
             setattr(self, key, value)
 
 
-db_uri_async = os.getenv('DB_URI_ASYNC')
-if db_uri_async:
+if (db_uri_async := os.getenv('DB_URI_ASYNC')):
     # Create async engine and session, echo=True generates console output
     async_engine = create_async_engine(
         db_uri_async,

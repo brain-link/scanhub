@@ -28,17 +28,20 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
     return new_workflow
 
 
-async def get_workflow(id: int) -> (Workflow | None):
-    """Fetch a workflow from database.
+async def get_workflow(workflow_id: int) -> (Workflow | None):
+    """Get workflow from database.
 
-    Arguments:
-        id {int} -- ID of workflow
+    Parameters
+    ----------
+    workflow_id
+        Id of workflow to be returned
 
-    Returns:
-        Workflow -- Database orm model
+    Returns
+    -------
+        Workflow database ORM model if exists
     """
     async with async_session() as session:
-        workflow = await session.get(Workflow, id)
+        workflow = await session.get(Workflow, workflow_id)
     return workflow
 
 
@@ -54,35 +57,38 @@ async def get_all_workflows() -> list[Workflow]:
     return workflows
 
 
-async def delete_workflow(id: int) -> bool:
-    """Delete a workflow by ID.
+async def delete_workflow(workflow_id: int) -> bool:
+    """Delete workflow entry by id.
 
-    Arguments:
-        id {int} -- ID of workflow to be deleted
+    Parameters
+    ----------
+    workflow_id
+        Id of the workflow to be deleted
 
-    Returns:
-        bool -- Success of delete event
+    Returns
+    -------
+        Success of delete eveent
     """
     async with async_session() as session:
-        if (workflow := await session.get(Workflow, id)):
+        if (workflow := await session.get(Workflow, workflow_id)):
             await session.delete(workflow)
             await session.commit()
             return True
         return False
 
 
-async def update_workflow(id: int, payload: BaseWorkflow) -> (Workflow | None):
+async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> (Workflow | None):
     """Update an existing workflow in database.
 
     Arguments:
-        id {int} -- ID of workflow
+        workflow_id {int} -- ID of workflow
         payload {BaseWorkflow} -- Pydantic base model, data to be updated
 
     Returns:
         Workflow -- Updated database orm model
     """
     async with async_session() as session:
-        if (workflow := await session.get(Workflow, id)):
+        if (workflow := await session.get(Workflow, workflow_id)):
             workflow.update(payload.dict())
             await session.commit()
             await session.refresh(workflow)

@@ -111,7 +111,7 @@ async def delete_device(device_id: int):
 
     Parameters
     ----------
-    id
+    device_id
         Id of device to be deleted
 
     Raises
