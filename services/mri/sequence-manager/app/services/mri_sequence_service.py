@@ -1,15 +1,25 @@
-from typing import List, Tuple, Any
-from motor.motor_asyncio import AsyncIOMotorDatabase
-from database.models import MRISequence
-import datetime
-from bson import ObjectId
+"""MRI Sequence Service."""
 
+import datetime
 import logging
+from typing import Any, List, Tuple
+
+from bson import ObjectId
+from database.models import MRISequence
+from fastapi import HTTPException, status
+from motor.motor_asyncio import AsyncIOMotorDatabase
+
 logger = logging.getLogger(__name__)
+
 
 async def create_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence: MRISequence) -> MRISequence:
     """
     Create a new MRI sequence in the database.
+
+    TODO: Seems like AsyncIOMotorDatabase is invalid.
+    Do you mean pymongo.database.Database? -> from pymongo.database import Database
+    According to motor documentation it should be Database.
+    See: database/mongodb.py, you create db = Database()
 
     Parameters:
     -----------
@@ -27,15 +37,16 @@ async def create_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence: MRISequenc
 
     mri_sequence.created_at = datetime.datetime.utcnow()
     mri_sequence.updated_at = mri_sequence.created_at
-    mri_sequence_data  = mri_sequence.dict(by_alias=True)
-    
+    mri_sequence_data = mri_sequence.dict(by_alias=True)
+
     mri_sequence_data.pop("id", None)  # Remove the id field from the dictionary
     mri_sequence_data.pop("_id", None)  # Remove the id field from the dictionary
     result = await db.collection.insert_one(mri_sequence_data)
     mri_sequence.id = str(result.inserted_id)
-    
+
     logger.info("done creating MRI sequence.")
     return mri_sequence
+
 
 async def get_mri_sequences(db: AsyncIOMotorDatabase) -> List[MRISequence]:
     """
@@ -60,7 +71,8 @@ async def get_mri_sequences(db: AsyncIOMotorDatabase) -> List[MRISequence]:
 
     return sequences
 
-async def get_mri_sequence_by_id(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> MRISequence:
+
+async def get_mri_sequence_by_id(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> (MRISequence | None):
     """
     Retrieve an MRI sequence by its ID from the database.
 
@@ -75,18 +87,16 @@ async def get_mri_sequence_by_id(db: AsyncIOMotorDatabase, mri_sequence_id: str)
     --------
     MRISequence
         The retrieved MRI sequence.
-    """
-    
+    """    
     logger.info("retrieve MRI sequence...")
+    if (sequence_data := await db.collection.find_one({"_id": ObjectId(mri_sequence_id)})):
+        sequence_data["_id"] = str(sequence_data["_id"])  # Convert the ObjectId to a string
+        logger.info("done retrieving MRI sequence.")
+        return MRISequence(**sequence_data)
+    return None
 
-    sequence_data = await db.collection.find_one({"_id": ObjectId(mri_sequence_id)})
-    sequence_data["_id"] = str(sequence_data["_id"])  # Convert the ObjectId to a string
 
-    logger.info("done retrieving MRI sequence.")
-
-    return MRISequence(**sequence_data) if sequence_data else None
-
-async def update_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str, mri_sequence: MRISequence) -> MRISequence:
+async def update_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str, mri_sequence: MRISequence) -> (MRISequence | None):
     """
     Update an MRI sequence with new data in the database.
 
@@ -106,7 +116,9 @@ async def update_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str, mr
     """
     mri_sequence.updated_at = datetime.datetime.utcnow()
     result = await db.collection.replace_one({"_id": mri_sequence_id}, mri_sequence.dict(by_alias=True))
+
     return mri_sequence if result.modified_count > 0 else None
+
 
 async def delete_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> int:
     """
@@ -127,6 +139,7 @@ async def delete_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str) ->
     result = await db.collection.delete_one({"_id": mri_sequence_id})
     return result.deleted_count
 
+
 async def search_mri_sequences(db: AsyncIOMotorDatabase, search_query: str) -> List[MRISequence]:
     """
     Search for MRI sequences in the database based on a search query.
@@ -143,6 +156,7 @@ async def search_mri_sequences(db: AsyncIOMotorDatabase, search_query: str) -> L
     mri_sequences = await cursor.to_list(length=100)
 
     return mri_sequences
+
 
 async def download_mri_sequence_file(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> Tuple[str, Any]:
     """
