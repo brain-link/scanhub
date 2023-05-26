@@ -11,7 +11,7 @@ on:
 jobs:
 
   linting:
-    name: 'Lint patient-manager'
+    name: 'Linting patient-manager'
     runs-on: ubuntu-latest
 
     env:
@@ -62,25 +62,25 @@ jobs:
       - name: Run pylint
         working-directory: ${{env.working-directory}}
         run: |
-          poetry run pylint
+          poetry run pylint app/
           continue-on-error: true
           
       - name: Run flake8
         working-directory: ${{env.working-directory}}
         run: |
-          poetry run flake8
+          poetry run flake8 app/
           continue-on-error: true
         
       - name: Run mypy
         working-directory: ${{env.working-directory}}
         run: |
-          poetry run mypy
+          poetry run mypy app/
           continue-on-error: true
           
       - name: Run pydocstyle
         working-directory: ${{env.working-directory}}
         run: |
-          poetry run pydocstyle
+          poetry run pydocstyle app/
           continue-on-error: true
       
 
