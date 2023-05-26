@@ -9,9 +9,9 @@ on:
 
 jobs:
   job:
-    name: 'docker-compose up'
+    name: 'docker-compose'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build the stack
+      - name: Build scanhub-ui
         run: docker-compose up -d
