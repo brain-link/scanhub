@@ -1,7 +1,7 @@
 """Patient manager main file."""
 
-import api.db as db
-import api.routes as routes
+from api.db import init_db
+from api.routes import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -22,7 +22,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup() -> None:
     """Initialize patient database."""
-    db.init_db()
+    init_db()
 
 
-app.include_router(routes.router)
+app.include_router(router)
