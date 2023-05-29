@@ -30,7 +30,7 @@ async def add_patient(payload: BasePatient) -> Patient:
     return new_patient
 
 
-async def get_patient(patient_id: int) -> Patient:
+async def get_patient(patient_id: int) -> (Patient | None):
     """Fetch a patient from database.
 
     Parameters
@@ -50,8 +50,9 @@ async def get_patient(patient_id: int) -> Patient:
 async def get_all_patients() -> list[Patient]:
     """Get a list of all existing patients.
 
-    Returns:
-        List[Patient] -- List of database orm models
+    Returns
+    -------
+        List of database orm models
     """
     async with async_session() as session:
         result = await session.execute(select(Patient))

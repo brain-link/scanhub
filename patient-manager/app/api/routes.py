@@ -32,7 +32,7 @@ async def create_patient(payload: BasePatient) -> PatientOut:
     return await get_patient_out(patient)
 
 
-@router.get("/{id}/", response_model=PatientOut, status_code=200, tags=["patients"])
+@router.get("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"])
 async def get_patient(patient_id: int) -> PatientOut:
     """Get a patient from database by id.
 
@@ -67,11 +67,10 @@ async def get_patient_list() -> list[PatientOut]:
     if not (patients := await dal.get_all_patients()):
         # If return is none, list is empty
         return []
-    else:
-        return [await get_patient_out(patient) for patient in patients]
+    return [await get_patient_out(patient) for patient in patients]
 
 
-@router.delete("/{id}/", response_model={}, status_code=204, tags=["patients"])
+@router.delete("/{patient_id}", response_model={}, status_code=204, tags=["patients"])
 async def delete_patient(patient_id: int) -> None:
     """Delete patient from database.
 
@@ -89,13 +88,13 @@ async def delete_patient(patient_id: int) -> None:
         raise HTTPException(status_code=404, detail="Patient not found")
 
 
-@router.put("/{id}/", response_model=PatientOut, status_code=200, tags=["patients"])
-async def update_patient(id: int, payload: BasePatient):
+@router.put("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"])
+async def update_patient(patient_id: int, payload: BasePatient):
     """Update existing patient endpoint.
 
     Parameters
     ----------
-    id
+    patient_id
         Id of the patient to be updated
     payload
         Patient data to be updated
@@ -109,6 +108,6 @@ async def update_patient(id: int, payload: BasePatient):
     HTTPException
         404: Patient not found
     """
-    if not (patient := await dal.update_patient(id, payload)):
+    if not (patient := await dal.update_patient(patient_id, payload)):
         raise HTTPException(status_code=404, detail="Patient not found")
     return await get_patient_out(patient)
