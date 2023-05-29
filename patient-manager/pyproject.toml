@@ -27,6 +27,7 @@ fastapi = "^0.95.2"
 [tool.poetry.group.lint.dependencies]
 mypy = "*"
 flake8 = "*"
+Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
 isort = "*"
 autopep8 = "*"
 pydocstyle = "*"
@@ -52,7 +53,12 @@ convention = "numpy"
 # warn_unreachable = "True"
 
 [tool.pylint]
-py-version = 3.10
+py-version = "3.10"
+max-attributes = 20
+extension-pkg-allow-list = ["pydantic"]
 
 [tool.flake8]
 max-line-length = 120
+
+[tool.mypy]
+plugins = ["sqlalchemy.ext.mypy.plugin"]
