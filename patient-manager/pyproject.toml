@@ -19,6 +19,7 @@ uvicorn = {extras = ["standard"], version = "^0.17.5"}
 asyncpg = "^0.25.0"
 numpy = "^1.24.0"
 plotly = "^5.14.0"
+psycopg2-binary = "^2.9.6"
 scipy = "^1.10.0"
 pypulseq = "^1.4.0"
 async-sqlalchemy = "^1.0.0"
@@ -37,7 +38,6 @@ pylint = "*"
 coverage = "*"
 codecov = "*"
 pytest = "*"
-# pre-commit = "*"
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "*"
@@ -45,12 +45,6 @@ sphinx_rtd_theme = "*"
 
 [tool.pydocstyle]
 convention = "numpy"
-
-# [tool.mypy]
-# warn_return_any = "False"
-# check_untyped_defs = "True"
-# warn_no_return = "True"
-# warn_unreachable = "True"
 
 [tool.pylint]
 py-version = "3.10"
