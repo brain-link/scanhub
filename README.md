@@ -3,11 +3,8 @@
 </p>
 
 
-
-<p align="center">
-  [![build](https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml)
-  [![static-tests](https://github.com/brain-link/scanhub-ui/actions/workflows/static-tests.yml/badge.svg?branch=main)](https://github.com/brain-link/scanhub-ui/actions/workflows/static-tests.yml)
-</p>
+[![build](https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml)
+[![static-tests](https://github.com/brain-link/scanhub-ui/actions/workflows/static-tests.yml/badge.svg?branch=main)](https://github.com/brain-link/scanhub-ui/actions/workflows/static-tests.yml)
 
 -----------------
   
