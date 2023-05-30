@@ -5,13 +5,8 @@
 
 
 <p align="center">
-<a href="https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml/badge.svg" alt="Github Actions">
-</a>
-  
-<a href="https://github.com/brain-link/scanhub-ui/actions/workflows/test.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub-ui/actions/workflows/test.yml/badge.svg" alt="Github Actions">
-</a>
+  [![build](https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/brain-link/scanhub-ui/actions/workflows/build.yml)
+  [![static-tests](https://github.com/brain-link/scanhub-ui/actions/workflows/static-tests.yml/badge.svg?branch=main)](https://github.com/brain-link/scanhub-ui/actions/workflows/static-tests.yml)
 </p>
 
 -----------------
