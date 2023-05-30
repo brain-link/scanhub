@@ -50,6 +50,7 @@ convention = "numpy"
 py-version = "3.10"
 max-attributes = 20
 extension-pkg-allow-list = ["pydantic"]
+disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
 
 [tool.flake8]
 max-line-length = 120

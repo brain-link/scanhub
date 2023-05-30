@@ -2,7 +2,6 @@
 
 import datetime
 import os
-from dataclasses import dataclass
 
 from pydantic import BaseModel
 from sqlalchemy import create_engine, func
@@ -25,7 +24,6 @@ def init_db() -> None:
     Base.metadata.create_all(engine)
 
 
-@dataclass
 class Patient(Base):
     """Patient ORM model."""
 
@@ -40,8 +38,10 @@ class Patient(Base):
     status: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=False)
 
-    datetime_created: Mapped[datetime.datetime] = mapped_column(insert_default=func.now)
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now, nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now())  # pylint: disable=not-callable
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
     def update(self, data: BaseModel):
         """Update a patient entry.
