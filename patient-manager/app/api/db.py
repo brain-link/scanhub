@@ -3,14 +3,14 @@
 import datetime
 import os
 
+from pydantic import BaseModel
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy.orm import Mapped, declarative_base, mapped_column
-
-from .models import BasePatient
+from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+from sqlalchemy.orm import Mapped, mapped_column
 
 # Create base for device
-Base = declarative_base()
+Base: DeclarativeMeta = declarative_base()
 
 if (db_uri := os.getenv('DB_URI')):
     engine = create_engine(db_uri, echo=False)
@@ -38,10 +38,12 @@ class Patient(Base):
     status: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=False)
 
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now())  # pylint: disable=not-callable
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
-    def update(self, data: BasePatient):
+    def update(self, data: BaseModel):
         """Update a patient entry.
 
         Parameters

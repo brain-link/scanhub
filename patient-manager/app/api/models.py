@@ -1,18 +1,23 @@
 """Patient pydantic models."""
 
+# from dataclasses import dataclass
 from datetime import datetime
 
-from .db import Patient
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, Field, Extra
+
+from . import db
 
 
+# @dataclass
 class BasePatient(BaseModel):
     """Patient pydantic base model."""
 
+    # @dataclass
     class Config:
         """Pydantic model configuration."""
 
         extra = Extra.ignore
+        allow_population_by_field_name = True
 
     sex: str
     name: str
@@ -22,15 +27,16 @@ class BasePatient(BaseModel):
     comment: str
 
 
+# @dataclass
 class PatientOut(BasePatient):
     """Patient pydantic output model."""
 
-    patient_id: int
+    patient_id: int = Field(alias="id")
     datetime_created: datetime
     datetime_updated: datetime | None
 
 
-async def get_patient_out(data: Patient) -> PatientOut:
+async def get_patient_out(data: db.Patient) -> PatientOut:
     """Get pydantic output model from database ORM model.
 
     Parameters
@@ -43,7 +49,7 @@ async def get_patient_out(data: Patient) -> PatientOut:
         Pydantic output model
     """
     return PatientOut(
-        patient_id=data.patient_id,
+        id=data.patient_id,
         sex=data.sex,
         name=data.name,
         status=data.status,
