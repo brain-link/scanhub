@@ -8,7 +8,10 @@ from fastapi import (
     UploadFile,
     BackgroundTasks
 )
+from os.path import exists
 from fastapi.responses import FileResponse
+from pypulseq import Sequence
+from services.mri_sequence_plot import get_sequence_plot
 from typing import List, Union
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from dependencies import get_database
@@ -24,6 +27,7 @@ from services import (
 )
 
 from bson.binary import Binary
+import plotly
 
 import json
 import tempfile
@@ -144,6 +148,7 @@ async def get_mri_sequences_endpoint(db=Depends(get_database)):
     logger.info(f"Retrieving all MRI sequences")
     return await get_mri_sequences(db)
 
+
 @router.get("/{mri_sequence_id}", response_model=MRISequence)
 async def get_mri_sequence_by_id_endpoint(mri_sequence_id: str, db=Depends(get_database)):
     """
@@ -167,6 +172,7 @@ async def get_mri_sequence_by_id_endpoint(mri_sequence_id: str, db=Depends(get_d
         return mri_sequence
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found")
+    
 
 @router.get("/mri-sequence-file/{mri_sequence_id}")
 async def get_mri_sequence_file_by_id_endpoint(mri_sequence_id: str, background_tasks: BackgroundTasks, name: str = "sequence", db=Depends(get_database)):
@@ -248,6 +254,7 @@ async def update_mri_sequence_endpoint(mri_sequence_id: str, mri_sequence: MRISe
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found")
 
+
 @router.delete("/{mri_sequence_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_mri_sequence_endpoint(mri_sequence_id: str, db=Depends(get_database)):
     """
@@ -268,3 +275,47 @@ async def delete_mri_sequence_endpoint(mri_sequence_id: str, db=Depends(get_data
     deleted_count = await delete_mri_sequence(db, mri_sequence_id)
     if deleted_count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found")
+
+
+@router.get("/mri-sequence-plot/{seq_id}", status_code=status.HTTP_201_CREATED)
+async def plot_mri_sequence(seq_id: str, db=Depends(get_database)) -> str:
+    """Generate plotly sequence plot data.
+
+    Parameters
+    ----------
+    seq_id
+        Id of the sequence to be plotted
+
+    Returns
+    -------
+        List of plot data models for plotly
+    """
+    filename = f"data_lake/mri-sequence-{seq_id}"
+
+    # Check if pulseq file already exist, request it from db if not
+    if not exists(filename+".seq"):
+        if (mri_seq := await get_mri_sequence_by_id(db, seq_id)):
+
+            with open(filename+".seq", "w") as fh:
+                fh.write(mri_seq.file.decode("utf-8"))
+            print("WRITTEN PULSEQ FILE")
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    # Generate plotly json string from sequence object, if json file does not already exists
+    if not exists(filename+".json"):
+        seq = Sequence()
+        seq.read(filename+".seq")
+
+        fig = get_sequence_plot(seq)
+        plot_data = plotly.io.to_json(fig, pretty=True)
+
+        with open(filename+".json", "w") as fh:
+            fh.write(plot_data)
+    else:
+        with open(filename+".json") as fh:
+            plot_data = json.dumps(json.loads(fh.read()), indent=2)
+
+    # print(plot_data)
+
+    return plot_data
