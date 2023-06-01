@@ -31,7 +31,7 @@ async def startup() -> None:
 @app.on_event("shutdown")
 async def shutdown() -> None:
     """Skeleton for shutdown routine."""
-    pass
+    return None
 
 
 @router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
