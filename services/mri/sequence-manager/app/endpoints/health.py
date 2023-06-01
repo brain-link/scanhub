@@ -15,7 +15,7 @@ async def check_db_connection() -> bool:
         return False
     return True
 
-@router.get("/health", status_code=status.HTTP_200_OK)
+@router.get("/health", status_code=status.HTTP_200_OK, tags=["health"])
 async def health_check(is_db_connected: bool = Depends(check_db_connection)):
     """
     Perform a health check for the microservice.
@@ -35,7 +35,7 @@ async def health_check(is_db_connected: bool = Depends(check_db_connection)):
         raise HTTPException(status_code=503, detail="Database not connected")
     return {"status": "OK"}
 
-@router.get("/readiness", status_code=status.HTTP_200_OK)
+@router.get("/readiness", status_code=status.HTTP_200_OK, tags=["health"])
 async def readiness_check():
     """
     Perform a readiness check for the microservice.

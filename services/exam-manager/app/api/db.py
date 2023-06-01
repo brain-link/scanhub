@@ -1,7 +1,6 @@
 """Definition of exam-tree database ORM models."""
 import datetime
 import os
-from typing import List
 
 from sqlalchemy import ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -13,8 +12,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 # Create base for exam, record and procedure table
 Base: DeclarativeMeta = declarative_base()
 
-db_uri = os.getenv('DB_URI')
-if db_uri:
+if (db_uri := os.getenv('DB_URI')):
     engine = create_engine(db_uri, echo=False)
 else:
     raise RuntimeError("Database URI not defined.")
@@ -35,7 +33,7 @@ class Exam(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
-    procedures: Mapped[List["Procedure"]] = relationship(lazy="selectin")
+    procedures: Mapped[list["Procedure"]] = relationship(lazy="selectin")
     patient_id: Mapped[int] = mapped_column(nullable=False)
 
     # Fields
@@ -69,7 +67,7 @@ class Procedure(Base):
 
     # Relations and references
     exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
-    jobs: Mapped[List["Job"]] = relationship(lazy="selectin")
+    jobs: Mapped[list["Job"]] = relationship(lazy="selectin")
 
     # Fields
     name: Mapped[str] = mapped_column(nullable=False)
@@ -101,7 +99,7 @@ class Job(Base):
     workflow_id: Mapped[int] = mapped_column(nullable=True)
     device_id: Mapped[int] = mapped_column(nullable=True)
     sequence_id: Mapped[str] = mapped_column(nullable=False)
-    records: Mapped[List["Record"]] = relationship(lazy="selectin")
+    records: Mapped[list["Record"]] = relationship(lazy="selectin")
 
     # Fields
     type: Mapped[str] = mapped_column(nullable=False)
@@ -143,12 +141,11 @@ MappedBase.prepare(autoload_with=engine, reflect=True)
 try:
     Device = MappedBase.classes.device
     Workflow = MappedBase.classes.workflow
-except AttributeError as e:
-    print("***** ERROR: Table does not exist: ", e)
+except AttributeError as error:
+    raise AttributeError("Could not find device and/or workflow table(s).") from error
 
 
-db_uri_async = os.getenv('DB_URI_ASYNC')
-if db_uri_async:
+if (db_uri_async := os.getenv('DB_URI_ASYNC')):
     # Create async engine and session, echo=True generates console output
     async_engine = create_async_engine(
         db_uri_async,

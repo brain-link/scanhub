@@ -15,15 +15,18 @@ app = FastAPI(
     docs_url="/api/v1/mri/sequences/docs"
 )
 
+
 # Exception handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"Request: {request.method} {request.url}\n{str(exc)}")
     return JSONResponse(status_code=500, content={"detail": str(exc)})
 
+
 # Include routers for endpoints
 app.include_router(mri_sequence_endpoints.router, prefix="/api/v1/mri/sequences", tags=["MRI Sequences"])
 app.include_router(health.router)
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -32,6 +35,7 @@ async def startup_event():
     """
     logger.info("StartUp...")
     await connect_to_mongo()
+
 
 @app.on_event("shutdown")
 async def shutdown_event():

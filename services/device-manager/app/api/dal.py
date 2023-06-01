@@ -1,10 +1,10 @@
 """Device data access layer."""
 
 from pprint import pprint
-from typing import Sequence
 
 from api.db import Device, async_session
 from api.models import BaseDevice
+from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 
@@ -28,7 +28,7 @@ async def device_create(payload: BaseDevice) -> Device:
     return new_device
 
 
-async def device_get(device_id: int) -> Device:
+async def device_get(device_id: int) -> (Device | None):
     """Fetch a device from database.
 
     Arguments:
@@ -42,15 +42,15 @@ async def device_get(device_id: int) -> Device:
     return device
 
 
-async def get_all_devices() -> Sequence[Device]:
+async def get_all_devices() -> list[Device]:
     """Get a list of all existing devices.
 
     Returns:
         List[Device] -- List of database orm models
     """
     async with async_session() as session:
-        result = await session.execute(select(Device))
-        devices = result.scalars().all()
+        result: Result = await session.execute(select(Device))
+        devices = list(result.scalars().all())
     return devices
 
 
@@ -64,16 +64,14 @@ async def delete_device(device_id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        device = await session.get(Device, device_id)
-        if device:
+        if (device := await session.get(Device, device_id)):
             await session.delete(device)
             await session.commit()
             return True
-        else:
-            return False
+        return False
 
 
-async def update_device(device_id: int, payload: BaseDevice) -> Device | None:
+async def update_device(device_id: int, payload: BaseDevice) -> (Device | None):
     """Update an existing device in database.
 
     Arguments:
@@ -84,11 +82,9 @@ async def update_device(device_id: int, payload: BaseDevice) -> Device | None:
         Device -- Updated database orm model
     """
     async with async_session() as session:
-        device = await session.get(Device, device_id)
-        if device:
+        if (device := await session.get(Device, device_id)):
             device.update(payload.dict())
             await session.commit()
             await session.refresh(device)
             return device
-        else:
-            return None
+        return None

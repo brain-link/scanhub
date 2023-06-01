@@ -1,7 +1,6 @@
 """Pydantic models of device."""
 
 from datetime import datetime
-from typing import Optional
 
 from api.db import Device
 from pydantic import BaseModel
@@ -14,7 +13,7 @@ class BaseDevice(BaseModel):
     manufacturer: str
     modality: str
     status: str
-    site: Optional[str] = None
+    site: str | None
     ip_address: str
 
 
@@ -23,7 +22,7 @@ class DeviceOut(BaseDevice):
 
     id: int
     datetime_created: datetime
-    datetime_updated: Optional[datetime] = None
+    datetime_updated: datetime | None
 
 
 async def get_device_out(data: Device) -> DeviceOut:

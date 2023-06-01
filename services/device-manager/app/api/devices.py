@@ -5,8 +5,6 @@ import json
 from api import dal
 from api.models import BaseDevice, DeviceOut, get_device_out
 from fastapi import APIRouter, HTTPException
-# from fastapi import UploadFile, File
-# from fastapi.responses import FileResponse
 from kafka import KafkaProducer
 
 # Http status codes
@@ -65,8 +63,7 @@ async def create_device(payload: BaseDevice) -> DeviceOut:
     HTTPException
         404: Creation unsuccessful
     """
-    device = await dal.device_create(payload)
-    if not device:
+    if not (device := await dal.device_create(payload)):
         raise HTTPException(status_code=404, detail="Could not create device")
     return await get_device_out(device)
 
@@ -89,8 +86,7 @@ async def get_device(device_id: int):
     HTTPException
         404: Not found
     """
-    device = await dal.device_get(device_id)
-    if not device:
+    if not (device := await dal.device_get(device_id)):
         raise HTTPException(status_code=404, detail="Device not found")
     return await get_device_out(device)
 
@@ -103,8 +99,7 @@ async def get_devices() -> list[DeviceOut]:
     -------
         List of device pydantic output models
     """
-    devices = await dal.get_all_devices()
-    if not devices:
+    if not (devices := await dal.get_all_devices()):
         # Don't raise exception here, list might be empty
         return []
     return [await get_device_out(device) for device in devices]
@@ -116,7 +111,7 @@ async def delete_device(device_id: int):
 
     Parameters
     ----------
-    id
+    device_id
         Id of device to be deleted
 
     Raises
@@ -148,7 +143,6 @@ async def update_device(device_id: int, payload: BaseDevice):
     HTTPException
         404: Not found
     """
-    device = await dal.update_device(device_id, payload)
-    if not device:
+    if not (device := await dal.update_device(device_id, payload)):
         raise HTTPException(status_code=404, detail="Device not found")
     return await get_device_out(device)

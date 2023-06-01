@@ -1,10 +1,10 @@
 """Workflow data access layer."""
 
 from pprint import pprint
-from typing import Sequence
 
 from api.db import Workflow, async_session
 from api.models import BaseWorkflow
+from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 
@@ -28,68 +28,69 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
     return new_workflow
 
 
-async def get_workflow(id: int) -> Workflow:
-    """Fetch a workflow from database.
+async def get_workflow(workflow_id: int) -> (Workflow | None):
+    """Get workflow from database.
 
-    Arguments:
-        id {int} -- ID of workflow
+    Parameters
+    ----------
+    workflow_id
+        Id of workflow to be returned
 
-    Returns:
-        Workflow -- Database orm model
+    Returns
+    -------
+        Workflow database ORM model if exists
     """
     async with async_session() as session:
-        workflow = await session.get(Workflow, id)
+        workflow = await session.get(Workflow, workflow_id)
     return workflow
 
 
-async def get_all_workflows() -> Sequence[Workflow]:
+async def get_all_workflows() -> list[Workflow]:
     """Get a list of all existing workflows.
 
     Returns:
         List[Workflow] -- List of database orm models
     """
     async with async_session() as session:
-        result = await session.execute(select(Workflow))
-        workflows = result.scalars().all()
+        result: Result = await session.execute(select(Workflow))
+        workflows = list(result.scalars().all())
     return workflows
 
 
-async def delete_workflow(id: int) -> bool:
-    """Delete a workflow by ID.
+async def delete_workflow(workflow_id: int) -> bool:
+    """Delete workflow entry by id.
 
-    Arguments:
-        id {int} -- ID of workflow to be deleted
+    Parameters
+    ----------
+    workflow_id
+        Id of the workflow to be deleted
 
-    Returns:
-        bool -- Success of delete event
+    Returns
+    -------
+        Success of delete eveent
     """
     async with async_session() as session:
-        workflow = await session.get(Workflow, id)
-        if workflow:
+        if (workflow := await session.get(Workflow, workflow_id)):
             await session.delete(workflow)
             await session.commit()
             return True
-        else:
-            return False
-        # TODO: What to return here?
+        return False
 
 
-async def update_workflow(id: int, payload: BaseWorkflow) -> Workflow | None:
+async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> (Workflow | None):
     """Update an existing workflow in database.
 
     Arguments:
-        id {int} -- ID of workflow
+        workflow_id {int} -- ID of workflow
         payload {BaseWorkflow} -- Pydantic base model, data to be updated
 
     Returns:
         Workflow -- Updated database orm model
     """
     async with async_session() as session:
-        workflow = await session.get(Workflow, id)
-        if workflow:
+        if (workflow := await session.get(Workflow, workflow_id)):
             workflow.update(payload.dict())
             await session.commit()
             await session.refresh(workflow)
             return workflow
-        else:
-            return None
+        return None
