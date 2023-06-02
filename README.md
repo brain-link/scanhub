@@ -28,6 +28,9 @@ We welcome anyone who would like to join our mission, just [get in touch](mailto
 Installation
 ------------
 
+To install the package, you need install [Docker](https://docs.docker.com/engine/install/) first. 
+The installation of ScanHub-UI is as simple as using the following command.
+
     docker-compose up -d --build
 
 
