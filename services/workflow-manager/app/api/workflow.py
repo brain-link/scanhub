@@ -1,4 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
 """Workflow manager endpoints."""
+
 import json
 
 from api import dal

@@ -1,3 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""Health check endpoint for FastAPI."""
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from database.mongodb import db
 import logging

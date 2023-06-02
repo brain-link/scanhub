@@ -1,3 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""Worker file for the MRI cartesian reco service."""
+
 from typing import Set, Any
 
 import logging
