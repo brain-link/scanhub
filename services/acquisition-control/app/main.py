@@ -1,4 +1,8 @@
-"""Acquisition control. Receives control cmd from ui and controls scans on devices"""
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""Acquisition control. Receives control cmd from ui and controls scans on devices."""
+
 #  python -m uvicorn acquisitioncontrol:app --reload
 import logging
 import json

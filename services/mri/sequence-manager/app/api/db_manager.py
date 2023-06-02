@@ -1,3 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""Database manager file for the MRI sequence manager service."""
+
 from api.models import SequenceIn, SequenceOut, SequenceUpdate
 from api.db import sequences, database
 

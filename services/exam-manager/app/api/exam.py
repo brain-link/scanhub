@@ -1,4 +1,8 @@
-"""Exam api endpoints."""
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""Exam API endpoints."""
+
 from api import dal
 from api.models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn,
                         ProcedureOut, RecordIn, RecordOut, get_exam_out,

@@ -1,3 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""MongoDB database handle."""
+
 from motor.motor_asyncio import AsyncIOMotorClient
 from core.config import settings
 import logging

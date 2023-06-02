@@ -55,31 +55,25 @@ The advent of cloud computing has enabled a new era of innovation, and ScanHub i
 License
 -------
 
-ScanHub is **BSD-licenced** (3 clause):
+ScanHub, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
 
-    Copyright (c) 2021-2023, authors of ScanHub. All rights reserved.
+### Open Source License
 
-    Redistribution and use in source and binary forms, with or without
-    modification, are permitted provided that the following conditions are met:
+If you want to use the Software under the terms of the GPLv3, you may do so for free. Under the GPLv3, you are allowed to modify and distribute the Software, but any derivative works that you distribute must also be licensed under the GPLv3. For the precise terms and conditions, please refer to the text of the GPLv3, which is included with the Software and can also be found at: http://www.gnu.org/licenses/gpl-3.0.html
 
-    1. Redistributions of source code must retain the above copyright notice, this
-       list of conditions and the following disclaimer.
+### Commercial License
 
-    2. Redistributions in binary form must reproduce the above copyright notice,
-       this list of conditions and the following disclaimer in the documentation
-       and/or other materials provided with the distribution.
+If you wish to use the Software without the restrictions of the GPLv3, such as for the purpose of developing proprietary software that includes the Software without the obligation to disclose your source code, you may purchase a commercial license from BRAIN-LINK UG (haftungsbeschränkt).
 
-    3. Neither the name of the copyright holder nor the names of its
-       contributors may be used to endorse or promote products derived from
-       this software without specific prior written permission.
+The commercial license grants you, the licensee, the rights to use, modify, and distribute the Software without the requirement of providing the source code of your proprietary software to the end users. The commercial license also includes access to premium support and services.
 
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+For more information on the commercial license, including pricing, please contact us at info@brain-link.de.
+
+### Choice of License
+
+You may choose to use the Software under either the GPLv3 or the commercial license. If you choose to use the Software under the GPLv3, you must comply with all of the terms of the GPLv3. If you choose to use the Software under the commercial license, you must comply with all of the terms of the commercial license.
+
+### Disclaimer
+
+This is not a legal document. The exact terms of the GPLv3 and the commercial license are specified in their respective legal texts. This document is merely intended to provide a general overview of the dual licensing scheme.
+
