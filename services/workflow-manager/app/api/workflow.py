@@ -7,11 +7,11 @@ import json
 
 from api import dal
 from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, File, UploadFile
 from kafka import KafkaProducer
 
 #### Old code ####
-from scanhub import RecoJob, AcquisitionEvent, AcquisitionCommand
+from scanhub import RecoJob
 #### Old code end ####
 
 # Http status codes
@@ -144,7 +144,7 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
 
 #     return response
 
-@workflow.post('/upload/{record_id}/')
+@router.post('/upload/{record_id}/')
 async def upload_result(record_id: str, file: UploadFile = File(...)):
 
     filename = f'records/{record_id}/{file.filename}'
