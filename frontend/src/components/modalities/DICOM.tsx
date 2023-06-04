@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// DICOM.tsx is responsible for rendering the DICOM modality.
+
 import type { ModalityProps } from './types'
 import { Camera, camera2d, camera3d, Clear, DrawCmd, ReglRoot, useCamera, useRegl } from 'react-regl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'

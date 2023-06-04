@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// PatientInfo.tsx is responsible for displaying patient information in the patient view.
+
 import * as React from 'react';
 // import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';

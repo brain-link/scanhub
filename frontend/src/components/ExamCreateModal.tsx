@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
+
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from 'react-query';

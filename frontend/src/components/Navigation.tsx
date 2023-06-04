@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
+
 import React from 'react';
 import { Link as RouterLink, useLocation} from 'react-router-dom';
 
