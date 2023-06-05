@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field  # pylint: disable=no-name-in-module
 
 #DEVICE_URI = "host.docker.internal:8001"
-DEVICE_URI = "localhost:5000"
+DEVICE_URI = "127.0.0.1:5000"
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
