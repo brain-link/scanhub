@@ -12,7 +12,8 @@ import requests
 from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field  # pylint: disable=no-name-in-module
 
-DEVICE_URI = "host.docker.internal:8001"
+#DEVICE_URI = "host.docker.internal:8001"
+DEVICE_URI = "localhost:5000"
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
@@ -77,10 +78,18 @@ async def start_scan(scan_job: ScanJob):
     # start scan and forward sequence, workflow, record_id
     logging.debug("Received job: %s, Generated record id: %s", scan_job.job_id, record_id)
     print(sequence_json)
-    res = requests.post(f"http://{DEVICE_URI}/start-scan",
+
+    url = f"http://{DEVICE_URI}/api/start-scan"
+    response = requests.post(url,
                         json={"record_id": record_id,
                               "sequence": json.dumps(sequence_json)}, timeout=60)
-    print(res)
+    
+    if response.status_code == 200:
+        print('Scan started successfully.')
+    else:
+        print('Failed to start scan.')
+
+    print(response)
     return {"record_id": record_id}
 
 @app.post("/api/v1/mri/acquisitioncontrol/forward-status")
