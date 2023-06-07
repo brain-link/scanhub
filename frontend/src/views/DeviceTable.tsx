@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// DeviceTable.tsx is responsible for rendering the device table view.
+
 import * as React from 'react';
 import { useMutation } from "react-query";
 import Table from '@mui/material/Table';

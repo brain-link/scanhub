@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// SequenceViewer.tsx is responsible for displaying the sequence viewer.
+
 import { useMutation, useQuery } from "react-query"
 import React, {useState, useEffect} from "react"
 import axios from "axios"

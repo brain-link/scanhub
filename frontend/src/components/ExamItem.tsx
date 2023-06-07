@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// ExamItem.tsx is responsible for rendering a single exam item in the exam list of the patient view.
+
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';

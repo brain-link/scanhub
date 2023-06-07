@@ -1,5 +1,9 @@
-import axios, { AxiosInstance } from 'axios';
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
+// AbstractQueryClient.tsx is responsible for defining the abstract query client class.
+
+import axios, { AxiosInstance } from 'axios';
 
 // TODO:
 // - id's are currently of type number and should become of type uuid

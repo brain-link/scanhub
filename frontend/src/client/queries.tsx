@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// Definition of global variables
+
 import { Patient } from '../interfaces/data.interface';
 import { Device } from '../interfaces/data.interface';
 import { Workflow } from '../interfaces/data.interface';

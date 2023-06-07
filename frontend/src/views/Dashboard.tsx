@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// Dashboard.tsx is responsible for rendering the dashboard view. It is the default view of the app.
+
 import React from "react";
 import Container from '@mui/system/Container';
 import Typography from '@mui/joy/Typography';
