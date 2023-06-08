@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "workflow-manager"
+version = "0.0.1"
+description = "The Workflow Manager organizes the processing chains forming ScanHub Workflows."
+authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+readme = "README.md"
+packages = [{include = "workflow_manager"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.96.0"
+asyncpg = "^0.27.0"
+uvicorn = "^0.22.0"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.15"}
+kafka-python = "^2.0.2"
+scanhub = "^0.0.4.dev3"
+psycopg2-binary = "^2.9.6"
+python-multipart = "^0.0.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.lint.dependencies]
+mypy = "*"
+flake8 = "*"
+Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+isort = "*"
+autopep8 = "*"
+pydocstyle = "*"
+pylint = "*"
+
+[tool.poetry.group.test.dependencies]
+coverage = "*"
+codecov = "*"
+pytest = "*"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx_rtd_theme = "*"
+
+[tool.pydocstyle]
+convention = "numpy"
+
+[tool.pylint]
+py-version = "3.10"
+max-attributes = 20
+extension-pkg-allow-list = ["pydantic"]
+disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
+
+[tool.flake8]
+max-line-length = 120
