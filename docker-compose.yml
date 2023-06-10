@@ -245,7 +245,6 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-
 volumes:
   data_lake:
   mongodb_data_sequence:
