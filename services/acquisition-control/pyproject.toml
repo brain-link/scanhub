@@ -1,20 +1,17 @@
 [tool.poetry]
 name = "app"
 version = "0.0.1"
-description = "The device manager service is responsible for managing the devices that are connected to scanhub."
-authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+description = "Acquisition control. Receives control cmd from ui and controls scans on devices."
+authors = ["Joahnnes Behrens <johannes.behrens@brain-link.de>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.96.0"
+requests = "^2.31.0"
 uvicorn = "^0.22.0"
-websockets = "^11.0.3"
-kafka-python = "^2.0.2"
 scanhub = "^0.0.4.dev3"
-asyncpg = "^0.27.0"
-sqlalchemy = {extras = ["asyncio"], version = "^2.0.15"}
-psycopg2-binary = "^2.9.6"
+
 
 [build-system]
 requires = ["poetry-core"]

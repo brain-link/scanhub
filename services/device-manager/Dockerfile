@@ -13,5 +13,5 @@ RUN apt-get -y update \
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-interaction --no-root && rm -rf /root/.cache/pip
-    
+
 COPY . /app/
