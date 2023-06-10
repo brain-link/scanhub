@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "app"
+version = "0.0.1"
+description = "The device manager service is responsible for managing the devices that are connected to scanhub."
+authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.96.0"
+uvicorn = "^0.22.0"
+websockets = "^11.0.3"
+kafka-python = "^2.0.2"
+scanhub = "^0.0.4.dev3"
+asyncpg = "^0.27.0"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.15"}
+psycopg2-binary = "^2.9.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "ScanHub-UI Patient Manager"
+version = "0.0.1"
+description = ""
+authors = [
+    "David Schote <david.schote@brain-link.de>",
+]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+pydantic = "^1.10.0"
+python = ">=3.10,<3.11"
+uvicorn = {extras = ["standard"], version = "^0.17.5"}
+asyncpg = "^0.25.0"
+numpy = "^1.24.0"
+plotly = "^5.14.0"
+psycopg2-binary = "^2.9.6"
+scipy = "^1.10.0"
+pypulseq = "^1.4.0"
+async-sqlalchemy = "^1.0.0"
+fastapi = "^0.95.2"
+
+[tool.poetry.group.lint.dependencies]
+mypy = "*"
+flake8 = "*"
+Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+isort = "*"
+autopep8 = "*"
+pydocstyle = "*"
+pylint = "*"
+
+[tool.poetry.group.test.dependencies]
+coverage = "*"
+codecov = "*"
+pytest = "*"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx_rtd_theme = "*"
+
+[tool.pydocstyle]
+convention = "numpy"
+
+[tool.pylint]
+py-version = "3.10"
+max-attributes = 20
+extension-pkg-allow-list = ["pydantic"]
+disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
+
+[tool.flake8]
+max-line-length = 120
