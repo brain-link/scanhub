@@ -3,6 +3,12 @@
 
 """MRI sequence endpoints"""
 
+import json
+import tempfile
+import os
+from pathlib import Path
+import logging
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -16,8 +22,9 @@ from fastapi import (
 from os.path import exists
 from fastapi.responses import FileResponse
 from pypulseq import Sequence
+import plotly
 from services.mri_sequence_plot import get_sequence_plot
-from typing import List, Union
+from typing import Union
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from dependencies import get_database
 from database.models import MRISequence, MRISequenceCreate
@@ -32,14 +39,6 @@ from services import (
 )
 
 from bson.binary import Binary
-import plotly
-
-import json
-import tempfile
-import os
-from pathlib import Path
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +134,7 @@ async def upload_mri_sequence_file(mri_sequence: MRISequenceCreate = Depends(mri
     return await create_mri_sequence(db, mri_sequence_with_file)
 
 
-@router.get("/", response_model=List[MRISequence])
+@router.get("/", response_model=list[MRISequence])
 async def get_mri_sequences_endpoint(db=Depends(get_database)):
     """
     Retrieve a list of all MRI sequences from the database.
