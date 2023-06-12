@@ -3,8 +3,9 @@
 
 """Init kafka topics."""
 
-from kafka.admin import KafkaAdminClient, NewTopic
 import logging
+from kafka.admin import KafkaAdminClient, NewTopic
+
 logger = logging.getLogger('kafka')
 logger.setLevel(logging.DEBUG)
 
