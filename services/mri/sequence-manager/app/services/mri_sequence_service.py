@@ -5,7 +5,7 @@
 
 import datetime
 import logging
-from typing import Any, List, Tuple
+from typing import Any
 
 from bson import ObjectId
 from database.models import MRISequence
@@ -51,7 +51,7 @@ async def create_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence: MRISequenc
     return mri_sequence
 
 
-async def get_mri_sequences(db: AsyncIOMotorDatabase) -> List[MRISequence]:
+async def get_mri_sequences(db: AsyncIOMotorDatabase) -> list[MRISequence]:
     """
     Retrieve all MRI sequences from the database.
 
@@ -143,7 +143,7 @@ async def delete_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str) ->
     return result.deleted_count
 
 
-async def search_mri_sequences(db: AsyncIOMotorDatabase, search_query: str) -> List[MRISequence]:
+async def search_mri_sequences(db: AsyncIOMotorDatabase, search_query: str) -> list[MRISequence]:
     """
     Search for MRI sequences in the database based on a search query.
 
@@ -161,7 +161,7 @@ async def search_mri_sequences(db: AsyncIOMotorDatabase, search_query: str) -> L
     return mri_sequences
 
 
-async def download_mri_sequence_file(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> Tuple[str, Any]:
+async def download_mri_sequence_file(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> tuple[str, Any]:
     """
     Download the MRI sequence file associated with the given MRI sequence ID.
 
