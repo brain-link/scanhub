@@ -12,7 +12,7 @@ import random
 
 
 from fastapi import FastAPI
-from pydantic import BaseModel, Extra, Field  # pylint: disable=no-name-in-module
+from pydantic import BaseModel, Extra, Field
 
 #DEVICE_URI = "host.docker.internal:8001"
 DEVICE_URI = "host.docker.internal:5000"
@@ -65,7 +65,7 @@ async def start_scan(scan_job: ScanJob):
     # TODO: Dont ignore device_id, check returns, ... 
 
     debug_flag = True
-    if debug_flag == True:
+    if debug_flag is True:
         record_id = "test_"+str(random.randint(0,1000))
         sequence_json = {"test": "test"}
 
