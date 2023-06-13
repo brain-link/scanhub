@@ -65,7 +65,7 @@ async def start_scan(scan_job: ScanJob):
     # TODO: Dont ignore device_id, check returns, ... 
 
     debug_flag = True
-    if debug_flag:
+    if debug_flag == True:
         record_id = "test_"+str(random.randint(0,1000))
         sequence_json = {"test": "test"}
 
@@ -81,7 +81,6 @@ async def start_scan(scan_job: ScanJob):
             print('Failed to start scan.')
 
     else:
-        """Receives a job. Create a record id, trigger scan with it and returns it"""
         # get sequence
         res = requests.get(
             f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{scan_job.sequence_id}", timeout=60)
@@ -116,4 +115,5 @@ async def start_scan(scan_job: ScanJob):
 @app.post("/api/v1/mri/acquisitioncontrol/forward-status")
 async def forward_status(scan_status: ScanStatus):
     """Receives status for a job. Forwards it to the ui and returns ok."""
+    print("Received status: %s", scan_status)
     return {"message": "Status submitted"}
