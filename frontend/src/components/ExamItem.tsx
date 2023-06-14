@@ -20,7 +20,7 @@ import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp';
 // Interfaces and api service
 import { Exam } from '../interfaces/data.interface';
 import { ComponentProps } from '../interfaces/components.interface';
-import client from '../client/queries';
+import client from '../client/exam-tree-queries';
 
 
 

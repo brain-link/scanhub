@@ -14,7 +14,7 @@ import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 
 // Import api service and interfaces
-import client from '../client/queries';
+import client from '../client/exam-tree-queries';
 import { Exam } from '../interfaces/data.interface';
 import { CreateModalProps } from '../interfaces/components.interface';
 

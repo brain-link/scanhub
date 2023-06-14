@@ -21,17 +21,16 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import ExamViewController from '../components/job_view/JobViewController';
+import JobView from '../components/job_view/JobView';
 import ExamCreateModal from '../components/ExamCreateModal';
 import ProcedureCreateModal from '../components/ProcedureCreateModal';
-import JobViewController from '../components/job_view/JobViewController';
 
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface';
 import { Exam } from '../interfaces/data.interface';
 import { Procedure } from '../interfaces/data.interface';
 import { Job } from '../interfaces/data.interface';
-import client from '../client/queries';
+import client from '../client/exam-tree-queries';
 import { patientView, navigation } from '../utils/size_vars';
 
 
@@ -75,9 +74,9 @@ function PatientIndex() {
     const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined);
 
     // Set active tool if component is rendered
-    if (params.examViewId && params.examViewId.toString() !== activeTool) {
-        setActiveTool(params.examViewId.toString())
-    }
+    // if (params.examViewId && params.examViewId.toString() !== activeTool) {
+    //     setActiveTool(params.examViewId.toString())
+    // }
 
     // useQuery for caching the fetched data
     const { data: patient, refetch: refetchPatient, isLoading: patientLoading, isError: patientError } = useQuery<Patient, Error>({
@@ -267,7 +266,7 @@ function PatientIndex() {
 
                 {/* job view controller */}
                 <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-                    <JobViewController
+                    <JobView
                         // Implementation of new interface may be required
                         data={ jobs ? jobs : [] }
                         refetchParentData={ refetchExams }

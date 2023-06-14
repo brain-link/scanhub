@@ -14,7 +14,7 @@ import Stack from '@mui/joy/Stack';
 import Grid from '@mui/joy/Grid';
 
 // Import procedure api service and interfaces 
-import client from '../client/queries';
+import client from '../client/exam-tree-queries';
 import { Procedure } from '../interfaces/data.interface';
 import { CreateModalProps } from '../interfaces/components.interface';
 

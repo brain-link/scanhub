@@ -20,7 +20,7 @@ import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
 // Interfaces and api service
 import { Procedure } from '../interfaces/data.interface'; 
 import { ComponentProps } from '../interfaces/components.interface';
-import client from '../client/queries';
+import client from '../client/exam-tree-queries';
 
 
 function ProcedureItem({data: procedure, refetchParentData, isSelected}: ComponentProps<Procedure>) {
