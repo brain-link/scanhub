@@ -2,7 +2,7 @@
 name = "workflow-manager"
 version = "0.0.1"
 description = "The Workflow Manager organizes the processing chains forming ScanHub Workflows."
-authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+authors = ["David Schote <david.schote@brain-link.de>", "Christoph Dinh <christoph.dinh@brain-link.de>"]
 readme = "README.md"
 packages = [{include = "workflow_manager"}]
 

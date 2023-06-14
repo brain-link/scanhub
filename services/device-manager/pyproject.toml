@@ -2,7 +2,7 @@
 name = "app"
 version = "0.0.1"
 description = "The device manager service is responsible for managing the devices that are connected to scanhub."
-authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+authors = ["David Schote <david.schote@brain-link.de>", "Christoph Dinh <christoph.dinh@brain-link.de>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

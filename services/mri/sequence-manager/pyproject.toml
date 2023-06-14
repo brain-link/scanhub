@@ -2,7 +2,7 @@
 name = "ScanHub Sequence Manager"
 version = "0.0.1"
 description = "The MRI Sequence Manager is a CRUD service that manages MRI sequences."
-authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+authors = ["David Schote <david.schote@brain-link.de>", "Christoph Dinh <christoph.dinh@brain-link.de>"]
 readme = "README.md"
 packages = [{include = "app"}]
 
