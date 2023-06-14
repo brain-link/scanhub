@@ -57,3 +57,6 @@ max-line-length = 120
 
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[tool.poetry.scripts]
+lint = ""   # run all linting tools at once

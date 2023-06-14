@@ -137,3 +137,4 @@ node_modules
 orthanc-db
 
 .examples
+data_lake/
