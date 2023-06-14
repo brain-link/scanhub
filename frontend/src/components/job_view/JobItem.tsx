@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useMutation } from 'react-query';
-import { Link as RouterLink } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 import Card from '@mui/joy/Card';
 import Box from '@mui/joy/Box';
@@ -26,15 +25,17 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { Job } from '../../interfaces/data.interface'; 
 import { JobComponentProps } from '../../interfaces/components.interface';
-import client from '../../client/queries';
+import client from '../../client/exam-tree-queries';
 
 
 
-function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProps) {
+function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProps) {
 
     // Context: Delete and edit options, anchor for context location
     const [contextOpen, setContextOpen] = React.useState<boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [jobUpdate, setJobUpdate] = React.useState<Job>(job);
     
@@ -43,13 +44,10 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
     // and modify db only when focus changed to different component?
 
     const updateJob = useMutation( async () => {
-        console.log("JOB UPDATE", jobUpdate)
-        console.log("Procedure id: ", job.procedure_id)
         await client.jobService.update(job.id, jobUpdate)
         .then( () => { refetchParentData() } )
         .catch( (err) => { console.log("Error on job update: ", err) })
     })
-
 
     const deleteThisJob = useMutation(async () => {
         await client.jobService.delete(job.id)
@@ -58,6 +56,10 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
             refetchParentData(); 
         })
     })
+
+    React.useEffect(() => {
+        updateJob.mutate();
+    }, [jobUpdate])
 
     // TODO: Add controls
 
@@ -106,7 +108,7 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
                             variant='plain' 
                             color='neutral'
                             sx={{ "--IconButton-size": "40px" }}
-                            onClick={ () => {} }
+                            onClick={ () => { navigate(`${location.pathname}/${job.id}/seq`) } }
                         >
                             <GraphicEqSharpIcon/>
                         </IconButton>
@@ -162,13 +164,29 @@ function JobItem ({job, devices, workflows, refetchParentData}: JobComponentProp
                 {/* Configuration: Device, Workflow, Sequence */}
                 <Stack direction='row' spacing={2}>
                     <Select placeholder="Device">
-                        <Option>Device 1</Option>
+                        <Option value="device" >
+                            Scanner 1: ULF-MRI
+                        </Option>
                     </Select>
-                    <Select placeholder="Sequence">
-                        <Option>Sequence 1</Option>
+                    <Select
+                        placeholder="Sequence"
+                        onChange={(
+                            event: React.SyntheticEvent | null,
+                            newValue: string | null
+                        ) => { setJobUpdate({...jobUpdate, ["sequence_id"]: newValue ? newValue : "" }) }}
+                    >
+                        {
+                            sequences?.map( (sequence, index) => (
+                                <Option key={index} value={sequence._id}>
+                                    { sequence.name }
+                                </Option>
+                            ))
+                        }
                     </Select>
                     <Select placeholder="Workflow">
-                        <Option>Workflow 1</Option>
+                        <Option value="workflow">
+                            Reco-Cartesian
+                        </Option>
                     </Select>
                 </Stack>
 
