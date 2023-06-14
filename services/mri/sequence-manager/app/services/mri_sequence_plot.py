@@ -2,19 +2,14 @@
 import numpy as np
 from pypulseq import Sequence
 import plotly.graph_objects as go
-from pydantic_numpy import NumpyModel, NDArrayFp32
+from pydantic import BaseModel
 
 
-
-def cast_data(x):
-    return np.round(x, 2).astype(float)
-
-
-class TraceData(NumpyModel):
+class TraceData(BaseModel):
     """Numpy model for trace data."""
 
-    x: NDArrayFp32
-    y: NDArrayFp32
+    x: list[float]
+    y: list[float]
     name: str
 
 
@@ -35,14 +30,11 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
         list of plot data models
     """
     # Empty lists for RX and TX channel: [Time, Magnitude, Phase]
-    # rx: list[list] = [[], [], []]
-    # tx: list[list] = [[], [], []]
-    rx = [np.array([]), np.array([]), np.array([])]
-    tx = [np.array([]), np.array([]), np.array([])]
+    rx: list[list] = [[], [], []]
+    tx: list[list] = [[], [], []]
 
     # Empty gradient channel dictionary: {channel: [Time, Magnitude]}
-    # gradients: dict[str, list[list]] = {channel: [[], []] for channel in ['gx', 'gy', 'gz']}
-    gradients = {channel: [np.array([]), np.array([])] for channel in ['gx', 'gy', 'gz']}
+    gradients: dict[str, list[list]] = {channel: [[], []] for channel in ['gx', 'gy', 'gz']}
 
     t0 = 0.
 
@@ -57,31 +49,21 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
                 # From Pulseq: According to the information from Klaus Scheffler and indirectly from Siemens this
                 # is the present convention - the samples are shifted by 0.5 dwell
                 t = adc.delay + (np.arange(int(adc.num_samples)) + 0.5) * adc.dwell
-                # rx[0].append(np.round(time_factor * (t0 + t), 2).astype(float))
-                # rx[1].append(np.ones(len(t), dtype=float))
-                # rx[2].append(np.round(np.angle(
-                #     np.exp(1j * adc.phase_offset) * np.exp(1j * 2 * np.pi * t * adc.freq_offset)
-                # ), 2).astype(float))
-                rx[0] = np.append(rx[0], time_factor * (t0 + t))
-                rx[1] = np.append(rx[1], np.ones(len(t)))
-                rx[2] = np.append(rx[2], np.angle(
+                rx[0] += list(np.round(time_factor * (t0 + t), 2).astype(float))
+                rx[1] += list(np.ones(len(t), dtype=float))
+                rx[2] += list(np.round(np.angle(
                     np.exp(1j * adc.phase_offset) * np.exp(1j * 2 * np.pi * t * adc.freq_offset)
-                ))
+                ), 2).astype(float))
                 
             # RF event
             if block.rf:
                 rf = block.rf
                 t = rf.t + rf.delay
-                # tx[0].append(np.round(time_factor * (t0 + t), 2).astype(float))
-                # tx[1].append(np.round(np.abs(rf.signal), 2).astype(float))
-                # tx[2].append(np.round(np.angle(
-                #     rf.signal * np.exp(1j * rf.phase_offset) * np.exp(1j * 2 * np.pi * rf.t * rf.freq_offset)
-                # ), 2).astype(float))
-                tx[0] = np.append(tx[0], time_factor * (t0 + t))
-                tx[1] = np.append(tx[1], np.abs(rf.signal))
-                tx[2] = np.append(tx[2], np.angle(
+                tx[0] += list(np.round(time_factor * (t0 + t), 2).astype(float))
+                tx[1] += list(np.round(np.abs(rf.signal), 2).astype(float))
+                tx[2] += list(np.round(np.angle(
                     rf.signal * np.exp(1j * rf.phase_offset) * np.exp(1j * 2 * np.pi * rf.t * rf.freq_offset)
-                ))
+                ), 2).astype(float))
 
             # Gradient event
             for ch in gradients.keys():
@@ -94,20 +76,18 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
                         t = np.cumsum([0, gb.delay, gb.rise_time, gb.flat_time, gb.fall_time])
                         waveform = 1e-3 * gb.amplitude * np.array([0, 0, 1, 1, 0])
 
-                    # gradients[ch][0].append(np.round(time_factor * (t0 + t), 2).astype(float))
-                    # gradients[ch][1].append(np.round(waveform, 2).astype(float))
-                    gradients[ch][0] = np.append(gradients[ch][0], time_factor * (t0 + t))
-                    gradients[ch][1] = np.append(gradients[ch][1], waveform)
+                    gradients[ch][0] += list(np.round(time_factor * (t0 + t), 2).astype(float))
+                    gradients[ch][1] += list(np.round(waveform, 2).astype(float))
 
         # Update current time offset
         t0 += seq.block_durations[idx]
 
     traces = [
-        TraceData(x=cast_data(tx[0]), y=cast_data(tx[1]), name="Tx"),
-        TraceData(x=cast_data(rx[0]), y=cast_data(rx[1]), name="Rx"),
-        TraceData(x=cast_data(gradients["gx"][0]), y=cast_data(gradients["gx"][1]), name="Gx"),
-        TraceData(x=cast_data(gradients["gy"][0]), y=cast_data(gradients["gy"][1]), name="Gy"),
-        TraceData(x=cast_data(gradients["gz"][0]), y=cast_data(gradients["gz"][1]), name="Gz")
+        TraceData(x=tx[0], y=tx[1], name="Tx"),
+        TraceData(x=rx[0], y=rx[1], name="Rx"),
+        TraceData(x=gradients["gx"][0], y=gradients["gx"][1], name="Gx"),
+        TraceData(x=gradients["gy"][0], y=gradients["gy"][1], name="Gy"),
+        TraceData(x=gradients["gz"][0], y=gradients["gz"][1], name="Gz"),
     ]
 
     fig = go.Figure()
@@ -122,7 +102,11 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
 
     fig.update_layout(
         autosize=True,
-        xaxis=dict(ticks="outside", title="Time (ms)", rangeslider=dict(autorange=True)),
+        xaxis=dict(
+            ticks="outside", 
+            title="Time (ms)", 
+            rangeslider=dict(autorange=True)
+        ),
         yaxis=dict(domain=[0.0, 0.15]),
         yaxis2=dict(domain=[0.2, 0.35]),
         yaxis3=dict(domain=[0.4, 0.55]),
