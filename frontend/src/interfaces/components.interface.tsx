@@ -3,6 +3,7 @@
 import { Job } from './data.interface';
 import { Device } from './data.interface';
 import { Workflow } from './data.interface';
+import { MRISequence } from './mri-data.interface';
 
 export interface CreateModalProps {
     dialogOpen: boolean,
@@ -19,6 +20,11 @@ export interface ComponentProps<T> {
 export interface JobComponentProps {
     job: Job;
     devices: Device[];
-    workflows: Workflow[];
+    sequences: MRISequence[];
+    // workflows: Workflow[];
     refetchParentData: () => void;
+}
+
+export interface SequenceViewerProps {
+    sequence_id: string;
 }
