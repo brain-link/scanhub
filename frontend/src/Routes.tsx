@@ -7,6 +7,7 @@ import Dashboard from './views/Dashboard';
 import DeviceTable from './views/DeviceTable';
 import PatientTable from './views/PatientTable';
 import PatientIndex from './views/PatientIndex';
+import DataViewer from './views/DataViewer';
 
 export function RouteConfiguration () {
     return (
@@ -19,7 +20,7 @@ export function RouteConfiguration () {
                     <Route path=':patientId' element={<PatientIndex/>} />
                     <Route path=':patientId/:examId' element={<PatientIndex/>} />
                     <Route path=':patientId/:examId/:procedureId' element={<PatientIndex/>} />
-                    <Route path=':patientId/:examId/:procedureId/:examViewId' element={<PatientIndex/>} />
+                    <Route path=':patientId/:examId/:procedureId/:jobId/:viewId' element={<DataViewer/>} />
                 </Route>
                 <Route path="/devices">
                     <Route index element={ <DeviceTable /> } />
