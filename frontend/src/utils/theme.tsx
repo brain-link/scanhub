@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// Theme.tsx is responsible for defining the theme of the react app.
+
 import { deepmerge } from '@mui/utils';
 import {
   experimental_extendTheme as extendMuiTheme,

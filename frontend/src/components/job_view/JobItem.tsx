@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// JobItem.tsx is responsible for rendering a single job item in the job table.
+
 import * as React from 'react';
 import { useMutation } from 'react-query';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
