@@ -1,3 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""MRI sequence object pydantic models."""
+
 from pydantic import BaseModel, Field
 from typing import List, Optional, Any
 import datetime
