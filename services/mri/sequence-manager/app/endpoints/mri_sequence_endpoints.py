@@ -316,6 +316,4 @@ async def plot_mri_sequence(seq_id: str, db=Depends(get_database)) -> str:
         with open(filename+".json") as fh:
             plot_data = json.dumps(json.loads(fh.read()), indent=2)
 
-    # print(plot_data)
-
     return plot_data

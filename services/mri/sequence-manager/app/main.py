@@ -1,9 +1,10 @@
 import logging
 
+from database.mongodb import close_mongo_connection, connect_to_mongo
+from endpoints import health, mri_sequence_endpoints
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from endpoints import mri_sequence_endpoints, health
-from database.mongodb import connect_to_mongo, close_mongo_connection
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -13,6 +14,26 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     openapi_url="/api/v1/mri/sequences/openapi.json",
     docs_url="/api/v1/mri/sequences/docs"
+)
+
+#   Wildcard ["*"] excludes eeverything that involves credentials
+#   Better specify explicitly the allowed origins
+#   See: https://fastapi.tiangolo.com/tutorial/cors/ 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",    # frontned
+    "http://localhost:8100",    # patient-manager
+    "http://localhost:8080",    # nginx
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    # allow_origins=['*'],
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 

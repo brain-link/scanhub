@@ -117,7 +117,7 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
             y=trace.y,
             name=trace.name,
             yaxis=f"y{len(traces)-k}",
-            mode="lines",
+            mode="lines"
         ))
 
     fig.update_layout(
