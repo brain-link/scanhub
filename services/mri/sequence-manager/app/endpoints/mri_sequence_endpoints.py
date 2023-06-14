@@ -3,6 +3,12 @@
 
 """MRI sequence endpoints"""
 
+import json
+import tempfile
+import os
+from pathlib import Path
+import logging
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -16,8 +22,9 @@ from fastapi import (
 from os.path import exists
 from fastapi.responses import FileResponse
 from pypulseq import Sequence
+import plotly
 from services.mri_sequence_plot import get_sequence_plot
-from typing import List, Union
+from typing import Union
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from dependencies import get_database
 from database.models import MRISequence, MRISequenceCreate
@@ -32,14 +39,6 @@ from services import (
 )
 
 from bson.binary import Binary
-import plotly
-
-import json
-import tempfile
-import os
-from pathlib import Path
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +93,7 @@ async def create_mri_sequence_endpoint(mri_sequence: MRISequence, db=Depends(get
     MRISequence
         The created MRI sequence.
     """
-    logger.info(f"Creating MRI sequence with data: {mri_sequence}")
+    logger.info(f"Creating MRI sequence with data: %s", mri_sequence)
     return await create_mri_sequence(db, mri_sequence)
 
 @router.post("/upload", response_model=MRISequence, status_code=status.HTTP_201_CREATED)
@@ -119,7 +118,7 @@ async def upload_mri_sequence_file(mri_sequence: MRISequenceCreate = Depends(mri
     MRISequence
         The stored MRI sequence with the uploaded file.
     """
-    logger.info(f"Uploading MRI sequence file with metadata: {mri_sequence}")
+    logger.info(f"Uploading MRI sequence file with metadata: %s", mri_sequence)
 
     filename = file.filename
     file_extension = Path(filename).suffix
@@ -135,7 +134,7 @@ async def upload_mri_sequence_file(mri_sequence: MRISequenceCreate = Depends(mri
     return await create_mri_sequence(db, mri_sequence_with_file)
 
 
-@router.get("/", response_model=List[MRISequence])
+@router.get("/", response_model=list[MRISequence])
 async def get_mri_sequences_endpoint(db=Depends(get_database)):
     """
     Retrieve a list of all MRI sequences from the database.
@@ -150,7 +149,7 @@ async def get_mri_sequences_endpoint(db=Depends(get_database)):
     List[MRISequence]
         The list of MRI sequences.
     """
-    logger.info(f"Retrieving all MRI sequences")
+    logger.info("Retrieving all MRI sequences")
     return await get_mri_sequences(db)
 
 
@@ -171,7 +170,7 @@ async def get_mri_sequence_by_id_endpoint(mri_sequence_id: str, db=Depends(get_d
     MRISequence
         The retrieved MRI sequence.
     """
-    logger.info(f"Retrieving MRI sequence with ID: {mri_sequence_id}")
+    logger.info(f"Retrieving MRI sequence with ID: %s", mri_sequence_id)
     mri_sequence = await get_mri_sequence_by_id(db, mri_sequence_id)
     if mri_sequence:
         return mri_sequence
@@ -201,7 +200,7 @@ async def get_mri_sequence_file_by_id_endpoint(mri_sequence_id: str, background_
         The retrieved MRI sequence file.
     """
     
-    logger.info(f"Retrieving MRI sequence file with ID: {mri_sequence_id}")
+    logger.info(f"Retrieving MRI sequence file with ID: %s", mri_sequence_id)
     mri_sequence = await get_mri_sequence_by_id(db, mri_sequence_id)
     
     if mri_sequence:
@@ -252,7 +251,7 @@ async def update_mri_sequence_endpoint(mri_sequence_id: str, mri_sequence: MRISe
     MRISequence
         The updated MRI sequence.
     """
-    logger.info(f"Updating MRI sequence with ID: {mri_sequence_id}")
+    logger.info(f"Updating MRI sequence with ID: %s", mri_sequence_id)
     updated_mri_sequence = await update_mri_sequence(db, mri_sequence_id, mri_sequence)
     if updated_mri_sequence:
         return updated_mri_sequence
@@ -276,7 +275,7 @@ async def delete_mri_sequence_endpoint(mri_sequence_id: str, db=Depends(get_data
     --------
     None
     """
-    logger.info(f"Deleting MRI sequence with ID: {mri_sequence_id}")
+    logger.info(f"Deleting MRI sequence with ID: %s", mri_sequence_id)
     deleted_count = await delete_mri_sequence(db, mri_sequence_id)
     if deleted_count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found")

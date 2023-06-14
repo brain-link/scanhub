@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "cartesian-reco-service"
+version = "0.0.1"
+description = "The MRI cartesian reco service imlements a reconstruction for equidistant sampled cartesian K-Spaces."
+authors = ["Christoph Dinh <christoph.dinh@brain-link.de>"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiokafka = "^0.8.1"
+asyncio = "^3.4.3"
+scanhub = "^0.0.4.dev3"
+fastapi = "^0.96.0"
+uvicorn = "^0.22.0"
+numpy = "^1.24.3"
+pydicom = "^2.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.lint.dependencies]
+mypy = "*"
+flake8 = "*"
+Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+isort = "*"
+autopep8 = "*"
+pydocstyle = "*"
+pylint = "*"
+
+[tool.poetry.group.test.dependencies]
+coverage = "*"
+codecov = "*"
+pytest = "*"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx_rtd_theme = "*"
+
+[tool.pydocstyle]
+convention = "numpy"
+
+[tool.pylint]
+py-version = "3.10"
+max-attributes = 20
+extension-pkg-allow-list = ["pydantic"]
+disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
+
+[tool.flake8]
+max-line-length = 120
