@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      working-directory: ./exam-manager
+      working-directory: ./services/exam-manager
 
     strategy:
       matrix:
