@@ -4,13 +4,12 @@
 """Sequence object pydantic models."""
 
 from pydantic import BaseModel
-from typing import List, Optional
 
 class SequenceIn(BaseModel):
     name: str
     plot: str
-    genres: List[str]
-    devices_id: List[int]
+    genres: list[str]
+    devices_id: list[int]
 
 
 class SequenceOut(SequenceIn):
@@ -18,7 +17,7 @@ class SequenceOut(SequenceIn):
 
 
 class SequenceUpdate(SequenceIn):
-    name: Optional[str] = None
-    plot: Optional[str] = None
-    genres: Optional[List[str]] = None
-    devices_id: Optional[List[int]] = None
+    name: (str | None)
+    plot: (str | None)
+    genres: (list[str] | None)
+    devices_id: (list[int] | None)

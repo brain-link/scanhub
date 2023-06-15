@@ -6,10 +6,8 @@
 #  python -m uvicorn acquisitioncontrol:app --reload
 import logging
 import json
-import requests
-
 import random
-
+import requests
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field
