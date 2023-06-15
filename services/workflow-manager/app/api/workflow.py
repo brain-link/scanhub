@@ -7,8 +7,8 @@ import json
 
 import os
 
-from api import dal
-from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
+from . import dal
+from .models import BaseWorkflow, WorkflowOut, get_workflow_out
 from fastapi import APIRouter, HTTPException, File, UploadFile
 from kafka import KafkaProducer
 
@@ -159,7 +159,7 @@ async def upload_result(record_id: str, file: UploadFile = File(...)):
             f.write(contents)
     except Exception as ex:
         return {"message": "There was an error uploading the file" + str(ex)}
-        raise HTTPException(status_code = 500, detail = "")
+        # raise HTTPException(status_code = 500, detail = "")
     finally:
         file.file.close()
 
