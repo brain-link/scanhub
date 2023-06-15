@@ -3,22 +3,21 @@
 
 """Exam manager main file."""
 
-from api.db import init_db, engine
+from api.db import engine, init_db
 from api.exam import router
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
-
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
     docs_url="/api/v1/exam/docs",
 )
 
-# TODO: Specify specific origins
+# To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
 #   Better specify explicitly the allowed origins
-#   See: https://fastapi.tiangolo.com/tutorial/cors/ 
+#   See: https://fastapi.tiangolo.com/tutorial/cors/
 origins = [
     "http://localhost",
     "http://localhost:3000",    # frontned

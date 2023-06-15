@@ -6,12 +6,12 @@
 import datetime
 import os
 
+from pydantic import BaseModel
 from sqlalchemy import ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import (Mapped, declarative_base, mapped_column,
-                            relationship)
-from sqlalchemy.orm.decl_api import DeclarativeMeta
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Create base for exam, record and procedure table
 Base: DeclarativeMeta = declarative_base()
@@ -33,7 +33,7 @@ class Exam(Base):
     __tablename__ = 'exam'
     __table_args__ = {'extend_existing': True}
 
-    # TODO: Use uuid (string?) here
+    # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
@@ -47,16 +47,21 @@ class Exam(Base):
     address: Mapped[str] = mapped_column(nullable=True)
     creator: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False)
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
 
-    def update(self, data: dict) -> None:
-        """Update attributes of orm model.
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now())  # pylint: disable=not-callable
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
-        Arguments:
-            data {dict} -- Entries to be updated
+    def update(self, data: BaseModel) -> None:
+        """Update a exam entry.
+
+        Parameters
+        ----------
+        data
+            Data to be written
         """
-        for key, value in data.items():
+        for key, value in data.dict().items():
             setattr(self, key, value)
 
 
@@ -66,7 +71,7 @@ class Procedure(Base):
     __tablename__ = 'procedure'
     __table_args__ = {'extend_existing': True}
 
-    # TODO: Use uuid (string?) here
+    # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
@@ -76,16 +81,20 @@ class Procedure(Base):
     # Fields
     name: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False)
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now())  # pylint: disable=not-callable
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
-    def update(self, data: dict):
-        """Update attributes of orm model.
+    def update(self, data: BaseModel) -> None:
+        """Update a procedure entry.
 
-        Arguments:
-            data {dict} -- Entries to be updated
+        Parameters
+        ----------
+        data
+            Data to be written
         """
-        for key, value in data.items():
+        for key, value in data.dict().items():
             setattr(self, key, value)
 
 
@@ -95,7 +104,7 @@ class Job(Base):
     __tablename__ = 'job'
     __table_args__ = {'extend_existing': True}
 
-    # TODO: Use uuid (string?) here
+    # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
@@ -109,16 +118,20 @@ class Job(Base):
     type: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
     is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now())  # pylint: disable=not-callable
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
-    def update(self, data: dict):
-        """Update attributes of orm model.
+    def update(self, data: BaseModel) -> None:
+        """Update a job entry.
 
-        Arguments:
-            data {dict} -- Entries to be updated
+        Parameters
+        ----------
+        data
+            Data to be written
         """
-        for key, value in data.items():
+        for key, value in data.dict().items():
             setattr(self, key, value)
 
 
@@ -128,13 +141,15 @@ class Record(Base):
     __tablename__ = 'record'
     __table_args__ = {'extend_existing': True}
 
+    # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
     # Relations and references
     job_id: Mapped[int] = mapped_column(ForeignKey("job.id"))
     data_path: Mapped[str] = mapped_column(nullable=True)
     # Fields
     comment: Mapped[str] = mapped_column(nullable=True)
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now())  # pylint: disable=not-callable
 
 
 # Create automap base

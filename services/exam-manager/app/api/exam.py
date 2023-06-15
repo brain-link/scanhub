@@ -3,11 +3,12 @@
 
 """Exam API endpoints."""
 
-from api import dal
-from api.models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn,
-                        ProcedureOut, RecordIn, RecordOut, get_exam_out,
-                        get_job_out, get_procedure_out, get_record_out)
 from fastapi import APIRouter, HTTPException
+
+from . import dal
+from .models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn,
+                     ProcedureOut, RecordIn, RecordOut, get_exam_out,
+                     get_job_out, get_procedure_out, get_record_out)
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -254,7 +255,6 @@ async def job_create(payload: BaseJob) -> JobOut:
     """
     if not (job := await dal.add_job(payload)):
         raise HTTPException(status_code=404, detail="Could not create job")
-    # TODO: Query device, workflow if not None
     return await get_job_out(data=job)
 
 

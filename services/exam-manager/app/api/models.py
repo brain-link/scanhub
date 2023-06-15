@@ -5,8 +5,9 @@
 
 from datetime import datetime
 
-from api.db import Device, Exam, Job, Procedure, Record, Workflow
 from pydantic import BaseModel, Extra
+
+from .db import Device, Exam, Job, Procedure, Record, Workflow
 
 
 class BaseDevice(BaseModel):
