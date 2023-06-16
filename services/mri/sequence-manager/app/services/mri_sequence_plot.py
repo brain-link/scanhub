@@ -1,4 +1,8 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+# %%
 """Utility function to create a sequence plot with plotly."""
+
 import numpy as np
 from pypulseq import Sequence
 import plotly.graph_objects as go
@@ -30,11 +34,11 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
         list of plot data models
     """
     # Empty lists for RX and TX channel: [Time, Magnitude, Phase]
-    rx: list[list] = [[], [], []]
-    tx: list[list] = [[], [], []]
+    rx: list[list] = [[0.], [0.], [0.]]
+    tx: list[list[float]] = [[0.], [0.], [0.]]
 
     # Empty gradient channel dictionary: {channel: [Time, Magnitude]}
-    gradients: dict[str, list[list]] = {channel: [[], []] for channel in ['gx', 'gy', 'gz']}
+    gradients: dict[str, list[list]] = {channel: [[0.], [0.]] for channel in ['gx', 'gy', 'gz']}
 
     t0 = 0.
 
@@ -48,13 +52,16 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
                 adc = block.adc
                 # From Pulseq: According to the information from Klaus Scheffler and indirectly from Siemens this
                 # is the present convention - the samples are shifted by 0.5 dwell
-                t = adc.delay + (np.arange(int(adc.num_samples)) + 0.5) * adc.dwell
-                rx[0] += list(np.round(time_factor * (t0 + t), 2).astype(float))
-                rx[1] += list(np.ones(len(t), dtype=float))
-                rx[2] += list(np.round(np.angle(
-                    np.exp(1j * adc.phase_offset) * np.exp(1j * 2 * np.pi * t * adc.freq_offset)
-                ), 2).astype(float))
-                
+                # t = adc.delay + (np.arange(int(adc.num_samples)) + 0.5) * adc.dwell
+                # rx[0] += list(np.round(time_factor * (t0 + t), 2).astype(float))
+                # rx[1] += list(np.ones(len(t), dtype=float))
+                # rx[2] += list(np.round(np.angle(
+                #     np.exp(1j * adc.phase_offset) * np.exp(1j * 2 * np.pi * t * adc.freq_offset)
+                # ), 2).astype(float))
+                adc_duration = adc.dwell * (adc.num_samples + 0.5)
+                rx[0] += list(np.cumsum([t0, adc.delay, 0, adc_duration, 0]) * time_factor)
+                rx[1] += [0., 0., 1., 1., 0.]
+
             # RF event
             if block.rf:
                 rf = block.rf
@@ -80,7 +87,16 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
                     gradients[ch][1] += list(np.round(waveform, 2).astype(float))
 
         # Update current time offset
-        t0 += seq.block_durations[idx]
+        t0 += float(seq.block_durations[idx])
+
+    # Set all channels back to zero
+    tx[0] += [tx[0][-1], seq.duration()[0] * time_factor]
+    tx[1] += [0., 0.]
+    rx[0] += [rx[0][-1], seq.duration()[0] * time_factor]
+    rx[1] += [0., 0.]
+    for grad in gradients.values():
+        grad[0] += [grad[0][-1], seq.duration()[0] * time_factor]
+        grad[1] += [0., 0.]
 
     traces = [
         TraceData(x=tx[0], y=tx[1], name="Tx"),
