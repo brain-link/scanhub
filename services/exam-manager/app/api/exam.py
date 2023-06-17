@@ -6,9 +6,20 @@
 from fastapi import APIRouter, HTTPException
 
 from . import dal
-from .models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn,
-                     ProcedureOut, RecordIn, RecordOut, get_exam_out,
-                     get_job_out, get_procedure_out, get_record_out)
+from .models import (
+    BaseExam,
+    BaseJob,
+    ExamOut,
+    JobOut,
+    ProcedureIn,
+    ProcedureOut,
+    RecordIn,
+    RecordOut,
+    get_exam_out,
+    get_job_out,
+    get_procedure_out,
+    get_record_out,
+)
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -19,7 +30,7 @@ from .models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn,
 router = APIRouter()
 
 
-@router.post('/', response_model=ExamOut, status_code=201, tags=["exams"])
+@router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
 async def exam_create(payload: BaseExam) -> ExamOut:
     """Create exam endpoint.
 
@@ -42,7 +53,7 @@ async def exam_create(payload: BaseExam) -> ExamOut:
     return await get_exam_out(data=exam)
 
 
-@router.get('/{exam_id}', response_model=ExamOut, status_code=200, tags=["exams"])
+@router.get("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
 async def exam_get(exam_id: int) -> ExamOut:
     """Get exam endpoint.
 
@@ -65,7 +76,9 @@ async def exam_get(exam_id: int) -> ExamOut:
     return await get_exam_out(data=exam)
 
 
-@router.get('/all/{patient_id}', response_model=list[ExamOut], status_code=200, tags=["exams"])
+@router.get(
+    "/all/{patient_id}", response_model=list[ExamOut], status_code=200, tags=["exams"]
+)
 async def exam_get_all(patient_id: int) -> list[ExamOut]:
     """Get all exams of a patient endpoint.
 
@@ -84,7 +97,7 @@ async def exam_get_all(patient_id: int) -> list[ExamOut]:
     return [await get_exam_out(data=exam) for exam in exams]
 
 
-@router.delete('/{exam_id}', response_model={}, status_code=204, tags=["exams"])
+@router.delete("/{exam_id}", response_model={}, status_code=204, tags=["exams"])
 async def exam_delete(exam_id: int) -> None:
     """Delete exam by id.
 
@@ -102,7 +115,7 @@ async def exam_delete(exam_id: int) -> None:
         raise HTTPException(status_code=404, detail="Exam not found")
 
 
-@router.put('/{exam_id}', response_model=ExamOut, status_code=200, tags=["exams"])
+@router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
 async def exam_update(exam_id: int, payload: BaseExam) -> ExamOut:
     """Update exam.
 
@@ -127,7 +140,9 @@ async def exam_update(exam_id: int, payload: BaseExam) -> ExamOut:
     return await get_exam_out(data=exam)
 
 
-@router.post('/procedure', response_model=ProcedureOut, status_code=201, tags=["procedures"])
+@router.post(
+    "/procedure", response_model=ProcedureOut, status_code=201, tags=["procedures"]
+)
 async def procedure_create(payload: ProcedureIn) -> ProcedureOut:
     """Procedure post endpoint.
 
@@ -150,7 +165,12 @@ async def procedure_create(payload: ProcedureIn) -> ProcedureOut:
     return await get_procedure_out(data=procedure)
 
 
-@router.get('/procedure/{procedure_id}', response_model=ProcedureOut, status_code=200, tags=["procedures"])
+@router.get(
+    "/procedure/{procedure_id}",
+    response_model=ProcedureOut,
+    status_code=200,
+    tags=["procedures"],
+)
 async def procedure_get(procedure_id: int) -> ProcedureOut:
     """Procedure get endpoint.
 
@@ -173,7 +193,12 @@ async def procedure_get(procedure_id: int) -> ProcedureOut:
     return await get_procedure_out(data=procedure)
 
 
-@router.get('/procedure/all/{exam_id}', response_model=list[ProcedureOut], status_code=200, tags=["procedures"])
+@router.get(
+    "/procedure/all/{exam_id}",
+    response_model=list[ProcedureOut],
+    status_code=200,
+    tags=["procedures"],
+)
 async def procedure_get_all(exam_id: int) -> list[ProcedureOut]:
     """Get all procedures of a parent endpoint.
 
@@ -192,7 +217,9 @@ async def procedure_get_all(exam_id: int) -> list[ProcedureOut]:
     return [await get_procedure_out(data=procedure) for procedure in procedures]
 
 
-@router.delete('/procedure/{procedure_id}', response_model={}, status_code=204, tags=["procedures"])
+@router.delete(
+    "/procedure/{procedure_id}", response_model={}, status_code=204, tags=["procedures"]
+)
 async def procedure_delete(procedure_id: int) -> None:
     """Delete procedure endpoint.
 
@@ -210,7 +237,12 @@ async def procedure_delete(procedure_id: int) -> None:
         raise HTTPException(status_code=404, detail="Procedure not found")
 
 
-@router.put('/procedure/{procedure_id}', response_model=ProcedureOut, status_code=200, tags=["procedures"])
+@router.put(
+    "/procedure/{procedure_id}",
+    response_model=ProcedureOut,
+    status_code=200,
+    tags=["procedures"],
+)
 async def proceedure_update(procedure_id: int, payload: ProcedureIn) -> ProcedureOut:
     """Update procedure endpoint.
 
@@ -235,7 +267,7 @@ async def proceedure_update(procedure_id: int, payload: ProcedureIn) -> Procedur
     return await get_procedure_out(data=procedure)
 
 
-@router.post('/job', response_model=JobOut, status_code=201, tags=["jobs"])
+@router.post("/job", response_model=JobOut, status_code=201, tags=["jobs"])
 async def job_create(payload: BaseJob) -> JobOut:
     """Create new job endpoint.
 
@@ -258,7 +290,7 @@ async def job_create(payload: BaseJob) -> JobOut:
     return await get_job_out(data=job)
 
 
-@router.get('/job/{job_id}', response_model=JobOut, status_code=200, tags=["jobs"])
+@router.get("/job/{job_id}", response_model=JobOut, status_code=200, tags=["jobs"])
 async def job_get(job_id: int) -> JobOut:
     """Get job endpoint.
 
@@ -281,7 +313,12 @@ async def job_get(job_id: int) -> JobOut:
     return await get_job_out(data=job)
 
 
-@router.get('/job/all/{procedure_id}', response_model=list[JobOut], status_code=200, tags=["jobs"])
+@router.get(
+    "/job/all/{procedure_id}",
+    response_model=list[JobOut],
+    status_code=200,
+    tags=["jobs"],
+)
 async def job_get_all(procedure_id: int) -> list[JobOut]:
     """Get all jobs of a procedure endpoint.
 
@@ -300,7 +337,7 @@ async def job_get_all(procedure_id: int) -> list[JobOut]:
     return [await get_job_out(data=job) for job in jobs]
 
 
-@router.delete('/job/{job_id}', response_model={}, status_code=204, tags=["jobs"])
+@router.delete("/job/{job_id}", response_model={}, status_code=204, tags=["jobs"])
 async def job_delete(job_id: int) -> None:
     """Delete job endpoint.
 
@@ -318,7 +355,7 @@ async def job_delete(job_id: int) -> None:
         raise HTTPException(status_code=404, detail="Job not found")
 
 
-@router.put('/job/{job_id}', response_model=JobOut, status_code=200, tags=["jobs"])
+@router.put("/job/{job_id}", response_model=JobOut, status_code=200, tags=["jobs"])
 async def job_update(job_id: int, payload: BaseJob) -> JobOut:
     """Update job endpoint.
 
@@ -343,7 +380,7 @@ async def job_update(job_id: int, payload: BaseJob) -> JobOut:
     return await get_job_out(data=job)
 
 
-@router.post('/record', response_model=RecordOut, status_code=201, tags=["records"])
+@router.post("/record", response_model=RecordOut, status_code=201, tags=["records"])
 async def record_create(payload: RecordIn) -> RecordOut:
     """Create record endpoint.
 
@@ -366,7 +403,9 @@ async def record_create(payload: RecordIn) -> RecordOut:
     return await get_record_out(data=record)
 
 
-@router.get('/record/{record_id}', response_model=RecordOut, status_code=200, tags=["records"])
+@router.get(
+    "/record/{record_id}", response_model=RecordOut, status_code=200, tags=["records"]
+)
 async def record_get(record_id: int) -> RecordOut:
     """Get single record endpoint.
 
@@ -389,7 +428,12 @@ async def record_get(record_id: int) -> RecordOut:
     return await get_record_out(data=record)
 
 
-@router.get('/record/all/{job_id}', response_model=list[RecordOut], status_code=200, tags=["records"])
+@router.get(
+    "/record/all/{job_id}",
+    response_model=list[RecordOut],
+    status_code=200,
+    tags=["records"],
+)
 async def record_get_all(job_id: int) -> list[RecordOut]:
     """Get all records of a job endpoint.
 
@@ -408,7 +452,9 @@ async def record_get_all(job_id: int) -> list[RecordOut]:
     return [await get_record_out(data=record) for record in records]
 
 
-@router.delete('/record/{record_id}', response_model={}, status_code=204, tags=["records"])
+@router.delete(
+    "/record/{record_id}", response_model={}, status_code=204, tags=["records"]
+)
 async def record_delete(record_id: int) -> None:
     """Delete record endpoint.
 

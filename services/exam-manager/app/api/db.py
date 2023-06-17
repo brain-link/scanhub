@@ -16,7 +16,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 # Create base for exam, record and procedure table
 Base: DeclarativeMeta = declarative_base()
 
-if (db_uri := os.getenv('DB_URI')):
+if db_uri := os.getenv("DB_URI"):
     engine = create_engine(db_uri, echo=False)
 else:
     raise RuntimeError("Database URI not defined.")
@@ -30,8 +30,8 @@ def init_db() -> None:
 class Exam(Base):
     """Exam ORM model."""
 
-    __tablename__ = 'exam'
-    __table_args__ = {'extend_existing': True}
+    __tablename__ = "exam"
+    __table_args__ = {"extend_existing": True}
 
     # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -49,9 +49,11 @@ class Exam(Base):
     status: Mapped[str] = mapped_column(nullable=False)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now())  # pylint: disable=not-callable
+        server_default=func.now()  # pylint: disable=not-callable
+    )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
+        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+    )
 
     def update(self, data: BaseModel) -> None:
         """Update a exam entry.
@@ -68,8 +70,8 @@ class Exam(Base):
 class Procedure(Base):
     """Procedure ORM model."""
 
-    __tablename__ = 'procedure'
-    __table_args__ = {'extend_existing': True}
+    __tablename__ = "procedure"
+    __table_args__ = {"extend_existing": True}
 
     # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -82,9 +84,11 @@ class Procedure(Base):
     name: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now())  # pylint: disable=not-callable
+        server_default=func.now()  # pylint: disable=not-callable
+    )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
+        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+    )
 
     def update(self, data: BaseModel) -> None:
         """Update a procedure entry.
@@ -101,8 +105,8 @@ class Procedure(Base):
 class Job(Base):
     """Job ORM model."""
 
-    __tablename__ = 'job'
-    __table_args__ = {'extend_existing': True}
+    __tablename__ = "job"
+    __table_args__ = {"extend_existing": True}
 
     # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -119,9 +123,11 @@ class Job(Base):
     comment: Mapped[str] = mapped_column(nullable=True)
     is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now())  # pylint: disable=not-callable
+        server_default=func.now()  # pylint: disable=not-callable
+    )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
+        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+    )
 
     def update(self, data: BaseModel) -> None:
         """Update a job entry.
@@ -138,8 +144,8 @@ class Job(Base):
 class Record(Base):
     """Record ORM model."""
 
-    __tablename__ = 'record'
-    __table_args__ = {'extend_existing': True}
+    __tablename__ = "record"
+    __table_args__ = {"extend_existing": True}
 
     # Use uuid here
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -149,7 +155,8 @@ class Record(Base):
     # Fields
     comment: Mapped[str] = mapped_column(nullable=True)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now())  # pylint: disable=not-callable
+        server_default=func.now()  # pylint: disable=not-callable
+    )
 
 
 # Create automap base
@@ -164,13 +171,10 @@ except AttributeError as error:
     raise AttributeError("Could not find device and/or workflow table(s).") from error
 
 
-if (db_uri_async := os.getenv('DB_URI_ASYNC')):
+if db_uri_async := os.getenv("DB_URI_ASYNC"):
     # Create async engine and session, echo=True generates console output
     async_engine = create_async_engine(
-        db_uri_async,
-        future=True,
-        echo=False,
-        isolation_level="AUTOCOMMIT"
+        db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT"
     )
 else:
     raise RuntimeError("Database URI not defined.")

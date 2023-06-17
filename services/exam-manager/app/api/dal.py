@@ -65,7 +65,9 @@ async def exam_get_all(patient_id: int) -> list[Exam]:
         List of exam data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Exam).where(Exam.patient_id == patient_id))
+        result: Result = await session.execute(
+            select(Exam).where(Exam.patient_id == patient_id)
+        )
         exams = list(result.scalars().all())
     return exams
 
@@ -83,7 +85,7 @@ async def exam_delete(exam_id: int) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if (exam := await session.get(Exam, exam_id)):
+        if exam := await session.get(Exam, exam_id):
             await session.delete(exam)
             await session.commit()
             return True
@@ -106,7 +108,7 @@ async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
         Database orm model of updated exam
     """
     async with async_session() as session:
-        if (exam := await session.get(Exam, exam_id)):
+        if exam := await session.get(Exam, exam_id):
             exam.update(payload)
             await session.commit()
             await session.refresh(exam)
@@ -167,7 +169,9 @@ async def procedure_get_all(exam_id: int) -> list[Procedure]:
         List of procedures data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Procedure).where(Procedure.exam_id == exam_id))
+        result: Result = await session.execute(
+            select(Procedure).where(Procedure.exam_id == exam_id)
+        )
         procedures = list(result.scalars().all())
     return procedures
 
@@ -185,14 +189,16 @@ async def procedure_delete(procedure_id: int) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if (procedure := await session.get(Procedure, procedure_id)):
+        if procedure := await session.get(Procedure, procedure_id):
             await session.delete(procedure)
             await session.commit()
             return True
         return False
 
 
-async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedure | None):
+async def procedure_update(
+    procedure_id: int, payload: ProcedureIn
+) -> (Procedure | None):
     """Update existing procedure.
 
     Parameters
@@ -208,7 +214,7 @@ async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedur
         Database orm model of updated procedure
     """
     async with async_session() as session:
-        if (procedure := await session.get(Procedure, procedure_id)):
+        if procedure := await session.get(Procedure, procedure_id):
             procedure.update(payload)
             await session.commit()
             await session.refresh(procedure)
@@ -269,7 +275,9 @@ async def get_all_jobs(procedure_id: int) -> list[Job]:
         List of job data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Job).where(Job.procedure_id == procedure_id))
+        result: Result = await session.execute(
+            select(Job).where(Job.procedure_id == procedure_id)
+        )
         jobs = list(result.scalars().all())
     return jobs
 
@@ -287,7 +295,7 @@ async def delete_job(job_id: int) -> bool:
         Success of delete event
     """
     async with async_session() as session:
-        if (job := await session.get(Job, job_id)):
+        if job := await session.get(Job, job_id):
             await session.delete(job)
             await session.commit()
             return True
@@ -309,7 +317,7 @@ async def update_job(job_id: int, payload: BaseJob) -> (Job | None):
         Job database orm model of updated job
     """
     async with async_session() as session:
-        if (job := await session.get(Job, job_id)):
+        if job := await session.get(Job, job_id):
             job.update(payload)
             await session.commit()
             await session.refresh(job)
@@ -370,7 +378,9 @@ async def get_all_records(job_id: int) -> list[Record]:
         List of record data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Record).where(Record.job_id == job_id))
+        result: Result = await session.execute(
+            select(Record).where(Record.job_id == job_id)
+        )
         records = list(result.scalars().all())
     return records
 
@@ -388,7 +398,7 @@ async def delete_record(record_id: int) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if (record := await session.get(Record, record_id)):
+        if record := await session.get(Record, record_id):
             await session.delete(record)
             await session.commit()
             return True

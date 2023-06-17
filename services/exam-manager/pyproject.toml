@@ -62,7 +62,7 @@ max-line-length = 120
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [tool.poe.tasks]
-lint.sequence = ["pylint", "flake8", "mypy", "pydocstyle"]
+lint.sequence = ["isort", "black", "pylint", "flake8", "mypy", "pydocstyle"]
 lint.ignore_fail = true
 
     [tool.poe.tasks.isort]
