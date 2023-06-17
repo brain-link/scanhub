@@ -4,11 +4,12 @@
 """Acquisition control. Receives control cmd from ui and controls scans on devices."""
 
 #  python -m uvicorn acquisitioncontrol:app --reload
-import logging
-import json
-import random
-import requests
 
+import json
+import logging
+import random
+
+import requests
 from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field
 
@@ -60,10 +61,9 @@ logging.basicConfig(level=logging.DEBUG)
 @app.post("/api/v1/mri/acquisitioncontrol/start-scan")
 async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it"""
-    # TODO: Dont ignore device_id, check returns, ... 
+    # TODO: Dont ignore device_id, check returns, ...
 
-    debug_flag = True
-    if debug_flag is True:
+    if (debug_flag := True) is True:
         record_id = "test_"+str(random.randint(0,1000))
         sequence_json = {"test": "test"}
 
@@ -72,7 +72,7 @@ async def start_scan(scan_job: ScanJob):
         response = requests.post(url,
                             json={"record_id": record_id,
                                 "sequence": json.dumps(sequence_json)}, timeout=60)
-        
+
         if response.status_code == 200:
             print('Scan started successfully.')
         else:
@@ -81,7 +81,8 @@ async def start_scan(scan_job: ScanJob):
     else:
         # get sequence
         res = requests.get(
-            f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{scan_job.sequence_id}", timeout=60)
+            f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{scan_job.sequence_id}",
+              timeout=60)
         sequence_json = res.json()
 
         # create record
@@ -101,7 +102,7 @@ async def start_scan(scan_job: ScanJob):
         response = requests.post(url,
                             json={"record_id": record_id,
                                 "sequence": json.dumps(sequence_json)}, timeout=60)
-        
+
         if response.status_code == 200:
             print('Scan started successfully.')
         else:
