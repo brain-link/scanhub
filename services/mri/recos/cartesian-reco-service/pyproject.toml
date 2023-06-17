@@ -9,7 +9,6 @@ description = "The MRI cartesian reco service imlements a reconstruction for equ
 authors = [
     "Christoph Dinh <christoph.dinh@brain-link.de>"
 ]
-readme = "README.md"
 packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
