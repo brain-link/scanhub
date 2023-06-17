@@ -5,8 +5,9 @@
 
 from datetime import datetime
 
-from api.db import Workflow
 from pydantic import BaseModel
+
+from .db import Workflow
 
 
 class BaseWorkflow(BaseModel):
@@ -24,8 +25,7 @@ class BaseWorkflow(BaseModel):
 class WorkflowOut(BaseWorkflow):
     """Workflow pydantic output model."""
 
-    # TODO: Use uuid as id instead of id
-    id: int
+    id: int  # TBD: Use uuid
     datetime_created: datetime
     datetime_updated: (datetime | None)
 

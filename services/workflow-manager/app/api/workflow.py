@@ -7,9 +7,8 @@ import json
 import os
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
-from kafka import KafkaProducer
-
-from scanhub import RecoJob  # Old code
+from kafka import KafkaProducer # type: ignore
+from scanhub import RecoJob # type: ignore
 
 from . import dal
 from .models import BaseWorkflow, WorkflowOut, get_workflow_out
@@ -21,14 +20,14 @@ from .models import BaseWorkflow, WorkflowOut, get_workflow_out
 # 404 = Not found
 
 producer = KafkaProducer(
-    bootstrap_servers=['kafka-broker:9093'],
-    value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8')
+    bootstrap_servers=["kafka-broker:9093"],
+    value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
 )
 
 router = APIRouter()
 
 
-@router.post('/', response_model=WorkflowOut, status_code=201, tags=["workflow"])
+@router.post("/", response_model=WorkflowOut, status_code=201, tags=["workflow"])
 async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
     """Create new workflow endpoint.
 
@@ -51,7 +50,9 @@ async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
     return await get_workflow_out(workflow)
 
 
-@router.get('/{workflow_id}', response_model=WorkflowOut, status_code=200, tags=["workflow"])
+@router.get(
+    "/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflow"]
+)
 async def get_workflow(workflow_id: int) -> WorkflowOut:
     """Get workflow endpoint.
 
@@ -74,7 +75,7 @@ async def get_workflow(workflow_id: int) -> WorkflowOut:
     return await get_workflow_out(workflow)
 
 
-@router.get('/', response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
+@router.get("/", response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
 async def get_workflow_list() -> list[WorkflowOut]:
     """Get all workflows endpoint.
 
@@ -88,7 +89,7 @@ async def get_workflow_list() -> list[WorkflowOut]:
     return [await get_workflow_out(workflow) for workflow in workflows]
 
 
-@router.delete('/{workflow_id}', response_model={}, status_code=204, tags=["workflow"])
+@router.delete("/{workflow_id}", response_model={}, status_code=204, tags=["workflow"])
 async def delete_workflow(workflow_id: int) -> None:
     """Delete workflow endpoint.
 
@@ -106,7 +107,9 @@ async def delete_workflow(workflow_id: int) -> None:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
 
-@router.put('/{workflow_id}/', response_model=WorkflowOut, status_code=200, tags=["workflow"])
+@router.put(
+    "/{workflow_id}/", response_model=WorkflowOut, status_code=200, tags=["workflow"]
+)
 async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOut:
     """Update existing workflow endpoint.
 
@@ -131,7 +134,7 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
     return await get_workflow_out(workflow)
 
 
-#### Old code ####
+# ****\\ OLD CODE //****
 
 # @workflow.post('/', response_model=WorkflowOut, status_code=201)
 # async def create_workflow(payload: WorkflowIn):
@@ -144,37 +147,52 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
 
 #     return response
 
-@router.post('/upload/{record_id}/')
-async def upload_result(record_id: str, file: UploadFile = File(...)):
 
-    filename = f'records/{record_id}/{file.filename}'
+@router.post("/upload/{record_id}/")
+async def upload_result(record_id: str, file: UploadFile = File(...)) -> dict[str, str]:
+    """Upload workflow result.
+
+    Parameters
+    ----------
+    record_id
+        Id of the record, which is processed by workflow
+    file, optional
+        Data upload, e.g. reconstruction result, by default File(...)
+
+    Returns
+    -------
+        Notification
+    """
+    filename = f"records/{record_id}/{file.filename}"
 
     try:
         contents = file.file.read()
-        app_filename = f'/app/data_lake/{filename}'
+        app_filename = f"/app/data_lake/{filename}"
         os.makedirs(os.path.dirname(app_filename), exist_ok=True)
-        with open(app_filename, 'wb') as f:
-            f.write(contents)
-    except Exception as ex:
+        with open(app_filename, "wb") as filehandle:
+            filehandle.write(contents)
+    except Exception as ex:  # pylint: disable=broad-except
         return {"message": "There was an error uploading the file" + str(ex)}
         # raise HTTPException(status_code = 500, detail = "")
     finally:
         file.file.close()
 
+    # TBD: switch based on the preselected reco
 
-    #TODO: switch based on the preselected reco
+    reco_job = RecoJob(
+        reco_id="cartesian", device_id="TB removed", record_id=record_id, input=filename
+    )
 
-    reco_job = RecoJob(reco_id="cartesian", device_id="TB removed", record_id=record_id, input=filename)
+    # TBD: On successful upload message kafka the correct topic to do reco
 
-    #TODO: On successful upload message kafka the correct topic to do reco
+    producer.send("mri_cartesian_reco", reco_job)
 
-    producer.send('mri_cartesian_reco', reco_job)
-
-    #TODO: On successful upload message kafka topic to do reco
+    # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
 
+
 # #EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
-# #TODO: frontend neesds to call a generic endpoint to trigger the acquisition
+# TBD: frontend neesds to call a generic endpoint to trigger the acquisition
 # #@workflow.post('/control/{device_id}/{record_id}/{command}')
 # @workflow.post('/control/{command}/')
 # async def acquistion_control(command: str):

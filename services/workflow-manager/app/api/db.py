@@ -6,6 +6,7 @@
 import datetime
 import os
 
+from pydantic import BaseModel
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
@@ -14,7 +15,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 # Create base for device
 Base: DeclarativeMeta = declarative_base()
 
-if (db_uri := os.getenv('DB_URI')):
+if db_uri := os.getenv("DB_URI"):
     engine = create_engine(db_uri, echo=False)
 else:
     raise RuntimeError("Database URI not defined.")
@@ -29,34 +30,38 @@ def init_db() -> None:
 class Workflow(Base):
     """Device ORM model."""
 
-    __tablename__ = 'workflow'
+    __tablename__ = "workflow"
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
     host: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
     author: Mapped[str] = mapped_column(nullable=True)
-    # TODO: Use enum to describe workflow modality
     modality: Mapped[str] = mapped_column(nullable=False)
     type: Mapped[str] = mapped_column(nullable=False)
-    # TODO: Use enum to describe workflow status
     status: Mapped[str] = mapped_column(nullable=False)
     kafka_topic: Mapped[str] = mapped_column(nullable=False)
 
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now()  # pylint: disable=not-callable
+    )
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+    )
 
-    def update(self, data: dict):
-        """Update attributes of orm model.
+    def update(self, data: BaseModel):
+        """Update workflow database entries.
 
-        Arguments:
-            data {dict} -- Entries to be updated
+        Parameters
+        ----------
+        data
+            Pydantic base model with data to be updated
         """
-        for key, value in data.items():
+        for key, value in data.dict().items():
             setattr(self, key, value)
 
 
-if (db_uri_async := os.getenv('DB_URI_ASYNC')):
+if db_uri_async := os.getenv("DB_URI_ASYNC"):
     # Create async engine and session, echo=True generates console output
     async_engine = create_async_engine(
         db_uri_async,
