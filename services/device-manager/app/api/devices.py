@@ -8,7 +8,8 @@ import json
 from fastapi import APIRouter, HTTPException
 from kafka import KafkaProducer
 
-from . import dal
+from .dal import (dal_create_device, dal_delete_device, dal_get_all_devices,
+                  dal_get_device, dal_update_device)
 from .models import BaseDevice, DeviceOut, get_device_out
 
 # Http status codes
@@ -67,7 +68,7 @@ async def create_device(payload: BaseDevice) -> DeviceOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not (device := await dal.device_create(payload)):
+    if not (device := await dal_create_device(payload)):
         raise HTTPException(status_code=404, detail="Could not create device")
     return await get_device_out(device)
 
@@ -90,7 +91,7 @@ async def get_device(device_id: int):
     HTTPException
         404: Not found
     """
-    if not (device := await dal.device_get(device_id)):
+    if not (device := await dal_get_device(device_id)):
         raise HTTPException(status_code=404, detail="Device not found")
     return await get_device_out(device)
 
@@ -103,7 +104,7 @@ async def get_devices() -> list[DeviceOut]:
     -------
         List of device pydantic output models
     """
-    if not (devices := await dal.get_all_devices()):
+    if not (devices := await dal_get_all_devices()):
         # Don't raise exception here, list might be empty
         return []
     return [await get_device_out(device) for device in devices]
@@ -123,7 +124,7 @@ async def delete_device(device_id: int):
     HTTPException
         404: Not found
     """
-    if not await dal.delete_device(device_id):
+    if not await dal_delete_device(device_id):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
@@ -147,6 +148,6 @@ async def update_device(device_id: int, payload: BaseDevice):
     HTTPException
         404: Not found
     """
-    if not (device := await dal.update_device(device_id, payload)):
+    if not (device := await dal_update_device(device_id, payload)):
         raise HTTPException(status_code=404, detail="Device not found")
     return await get_device_out(device)

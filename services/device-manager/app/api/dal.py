@@ -11,7 +11,7 @@ from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 
-async def device_create(payload: BaseDevice) -> Device:
+async def dal_create_device(payload: BaseDevice) -> Device:
     """Add a new device to the database.
 
     Arguments:
@@ -31,7 +31,7 @@ async def device_create(payload: BaseDevice) -> Device:
     return new_device
 
 
-async def device_get(device_id: int) -> (Device | None):
+async def dal_get_device(device_id: int) -> (Device | None):
     """Fetch a device from database.
 
     Arguments:
@@ -45,7 +45,7 @@ async def device_get(device_id: int) -> (Device | None):
     return device
 
 
-async def get_all_devices() -> list[Device]:
+async def dal_get_all_devices() -> list[Device]:
     """Get a list of all existing devices.
 
     Returns:
@@ -57,7 +57,7 @@ async def get_all_devices() -> list[Device]:
     return devices
 
 
-async def delete_device(device_id: int) -> bool:
+async def dal_delete_device(device_id: int) -> bool:
     """Delete a device by identifier.
 
     Arguments:
@@ -74,7 +74,7 @@ async def delete_device(device_id: int) -> bool:
         return False
 
 
-async def update_device(device_id: int, payload: BaseDevice) -> (Device | None):
+async def dal_update_device(device_id: int, payload: BaseDevice) -> (Device | None):
     """Update an existing device in database.
 
     Arguments:
