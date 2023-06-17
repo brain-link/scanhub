@@ -8,8 +8,13 @@ import json
 from fastapi import APIRouter, HTTPException
 from kafka import KafkaProducer
 
-from .dal import (dal_create_device, dal_delete_device, dal_get_all_devices,
-                  dal_get_device, dal_update_device)
+from .dal import (
+    dal_create_device,
+    dal_delete_device,
+    dal_get_all_devices,
+    dal_get_device,
+    dal_update_device,
+)
 from .models import BaseDevice, DeviceOut, get_device_out
 
 # Http status codes
@@ -33,13 +38,15 @@ class AcquisitionEvent:
         self.instruction = instruction
 
 
-producer = KafkaProducer(bootstrap_servers=['kafka-broker:9093'],
-                         value_serializer=lambda x: json.dumps(x.__dict__).encode('utf-8'))
+producer = KafkaProducer(
+    bootstrap_servers=["kafka-broker:9093"],
+    value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
+)
 
 router = APIRouter()
 
 
-@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -47,10 +54,10 @@ async def readiness() -> dict:
     -------
         Status dictionary
     """
-    return {'status': 'ok'}
+    return {"status": "ok"}
 
 
-@router.post('/', response_model=DeviceOut, status_code=201, tags=["devices"])
+@router.post("/", response_model=DeviceOut, status_code=201, tags=["devices"])
 async def create_device(payload: BaseDevice) -> DeviceOut:
     """Create new device endpoint.
 
@@ -73,7 +80,7 @@ async def create_device(payload: BaseDevice) -> DeviceOut:
     return await get_device_out(device)
 
 
-@router.get('/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
+@router.get("/{device_id}", response_model=DeviceOut, status_code=200, tags=["devices"])
 async def get_device(device_id: int):
     """Get device endpoint.
 
@@ -96,7 +103,7 @@ async def get_device(device_id: int):
     return await get_device_out(device)
 
 
-@router.get('/', response_model=list[DeviceOut], status_code=200, tags=["devices"])
+@router.get("/", response_model=list[DeviceOut], status_code=200, tags=["devices"])
 async def get_devices() -> list[DeviceOut]:
     """Get all devices endpoint.
 
@@ -110,7 +117,7 @@ async def get_devices() -> list[DeviceOut]:
     return [await get_device_out(device) for device in devices]
 
 
-@router.delete('/{device_id}', response_model={}, status_code=204, tags=["devices"])
+@router.delete("/{device_id}", response_model={}, status_code=204, tags=["devices"])
 async def delete_device(device_id: int):
     """Delete device endpoint.
 
@@ -128,7 +135,7 @@ async def delete_device(device_id: int):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-@router.put('/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
+@router.put("/{device_id}", response_model=DeviceOut, status_code=200, tags=["devices"])
 async def update_device(device_id: int, payload: BaseDevice):
     """Update device endpoint.
 

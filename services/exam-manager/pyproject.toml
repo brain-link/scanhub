@@ -20,7 +20,7 @@ fastapi = "^0.96.0"
 asyncpg = "^0.27.0"
 uvicorn = "^0.22.0"
 kafka-python = "^2.0.2"
-scanhub = "^0.0.4.dev3"
+scanhub = "^0.0.4.dev3" # required?
 psycopg2-binary = "^2.9.6"
 python-multipart = "^0.0.6"
 async-sqlalchemy = "^1.0.0"
@@ -88,4 +88,3 @@ lint.ignore_fail = true
     [tool.poe.tasks.pydocstyle]
     help = "Run pydocstyle"
     cmd  = "pydocstyle app/"
-

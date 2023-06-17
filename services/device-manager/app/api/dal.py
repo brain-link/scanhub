@@ -67,7 +67,7 @@ async def dal_delete_device(device_id: int) -> bool:
         bool -- Success of delete event
     """
     async with async_session() as session:
-        if (device := await session.get(Device, device_id)):
+        if device := await session.get(Device, device_id):
             await session.delete(device)
             await session.commit()
             return True
@@ -85,7 +85,7 @@ async def dal_update_device(device_id: int, payload: BaseDevice) -> (Device | No
         Device -- Updated database orm model
     """
     async with async_session() as session:
-        if (device := await session.get(Device, device_id)):
+        if device := await session.get(Device, device_id):
             device.update(payload.dict())
             await session.commit()
             await session.refresh(device)
