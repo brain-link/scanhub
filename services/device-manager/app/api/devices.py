@@ -5,10 +5,11 @@
 
 import json
 
-from . import dal
-from .models import BaseDevice, DeviceOut, get_device_out
 from fastapi import APIRouter, HTTPException
 from kafka import KafkaProducer
+
+from . import dal
+from .models import BaseDevice, DeviceOut, get_device_out
 
 # Http status codes
 # 200 = Ok: GET, PUT

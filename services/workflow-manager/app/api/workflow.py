@@ -4,17 +4,15 @@
 """Workflow manager endpoints."""
 
 import json
-
 import os
+
+from fastapi import APIRouter, File, HTTPException, UploadFile
+from kafka import KafkaProducer
+
+from scanhub import RecoJob  # Old code
 
 from . import dal
 from .models import BaseWorkflow, WorkflowOut, get_workflow_out
-from fastapi import APIRouter, HTTPException, File, UploadFile
-from kafka import KafkaProducer
-
-#### Old code ####
-from scanhub import RecoJob
-#### Old code end ####
 
 # Http status codes
 # 200 = Ok: GET, PUT
