@@ -12,9 +12,6 @@ import Box from '@mui/joy/Box';
 import Stack from '@mui/joy/Stack';
 import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton from '@mui/joy/ListItemButton';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import Typography from '@mui/joy/Typography';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
@@ -76,20 +73,21 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
     // TODO: Use devices and workflows in selectors 
 
     return (
-        <ListItem>
-            <ListItemButton 
-                id="job-item"
-                variant="plain"
-            >
-                <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
-                    <PendingActionsSharpIcon />
-                </ListItemDecorator>
+        <Card
+            orientation="horizontal"
+            variant="outlined"
+            sx={{ display: 'flex', bgcolor: 'background.body' }}
+        >
+            <CardOverflow sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+                <PendingActionsSharpIcon/>
+            </CardOverflow>
 
+            <CardContent sx={{ px: 2, gap: 1 }}>
 
                 {/* Card header */}
-                {/* <Box sx={{ display: 'flex', flexDirection: 'row', gap: 4, justifyContent: 'space-between', align: 'center' }}> */}
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
-                    {/* <Input 
+                    <Input 
                         type="string"
                         variant="plain"
                         name="type"
@@ -97,32 +95,8 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                         disabled={ job.is_acquired }
                         onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
                         onBlur={ () => updateJob.mutate() }
-                    /> */}
-
-
-
-                    {/* <Input 
-                        type="string"
-                        variant="plain"
-                        name="comment"
-                        defaultValue={ !job.comment || job.comment === "" ? "Enter comment..." : job.comment }
-                        disabled={ job.is_acquired }
-                        onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
-                        onBlur={ () => updateJob.mutate() }
-                    /> */}
-                
-                <Stack direction='row' spacing={4} sx={{alignItems: 'center'}}>
-
-                    <Stack direction='column'>
-                        <Typography level="body1" textColor="text.primary">{job.type}</Typography>
-                        <Typography level="body1" textColor="text.secondary">{job.comment}</Typography>
-                    </Stack>
-
-                    <Stack direction='column'>
-                        <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
-                        <Typography level="body2" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
-                    </Stack>
-
+                    />
+                    
                     {/* Job interactions */}
                     <Stack direction='row'>
                         <IconButton 
@@ -175,11 +149,30 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                         </MenuItem>
                     </Menu>
 
-                {/* </Box> */}
+                </Box>
             
-                
-                {/* Configuration: Device, Workflow, Sequence */}
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
+                    <Input 
+                        type="string"
+                        variant="plain"
+                        name="comment"
+                        defaultValue={ !job.comment || job.comment === "" ? "Enter comment..." : job.comment }
+                        disabled={ job.is_acquired }
+                        onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
+                        onBlur={ () => updateJob.mutate() }
+                    />
+
+                    <Stack>
+                        <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
+                        <Typography level="body2" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
+                    </Stack>
+
+                </Box>
+                
+
+                {/* Configuration: Device, Workflow, Sequence */}
+                <Stack direction='row' spacing={2}>
                     <Select placeholder="Device">
                         <Option value="device" >
                             Scanner 1: ULF-MRI
@@ -207,8 +200,24 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                     </Select>
                 </Stack>
 
-            </ListItemButton>   
-        </ListItem>
+            </CardContent>
+
+            <CardOverflow
+                variant="soft"
+                color={ job.is_acquired ? "success" :  "primary" }
+                sx={{
+                    px: 0.2,
+                    writingMode: 'vertical-rl',
+                    textAlign: 'center',
+                    fontSize: 'xs2',
+                    fontWeight: 'xl2',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                  }}
+            >
+                { job.is_acquired ? "Done" : "Pending" }
+            </CardOverflow>
+        </Card>
     );
 }
 

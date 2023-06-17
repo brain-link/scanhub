@@ -4,9 +4,11 @@ import { useMutation } from 'react-query';
 import { useQuery } from 'react-query';
 import Box from '@mui/joy/Box';
 import Stack from '@mui/joy/Stack';
+import List from '@mui/joy/List';
+import ListDivider from '@mui/joy/ListDivider';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
-import AddCircleOutlineSharpIcon from '@mui/icons-material/AddCircleOutlineSharp';
+import AddSharpIcon from '@mui/icons-material/AddSharp';
 
 // import MRIView from '../viewer/dicom-view/DicomViewer';
 import JobItem from './JobItem';
@@ -22,6 +24,7 @@ import sequenceClient from '../../client/mri-queries';
 import { Device } from '../../interfaces/data.interface';
 // import { Workflow } from '../../interfaces/data.interface';
 import { MRISequence } from '../../interfaces/mri-data.interface';
+import { patientView } from '../../utils/size_vars';
 
 
 function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job[]>) {
@@ -51,8 +54,8 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
 
 
     React.useEffect( () => {
-        console.log(sequences)
-    }, [sequences])
+        console.log(jobs)
+    }, [jobs])
 
 
 
@@ -90,17 +93,61 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
     return (
         <Stack sx={{
             display: 'flex',
-            p: 2,
-            rowGap: 2,
             width: '100%',
             height: '100%',
             bgcolor: 'background.componentBg',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
             overflow: 'auto',
         }}>
-            <Typography>Jobs</Typography>
-            {
+
+            {/* Exam list header */}
+            <Box sx={{ p: 1.5, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
+                            
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
+                    <Typography level="h5"> Jobs </Typography>
+                    {/* <Badge badgeContent={exams?.length} color="primary"/> */}
+                </Box>
+    
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                    <IconButton 
+                        variant='soft'
+                        sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                        onClick={() => createJob.mutate()}
+                    >
+                        <AddSharpIcon/>
+                    </IconButton>
+                </Box>
+
+                {/* <ExamCreateModal 
+                    dialogOpen={ newExamDialogOpen }
+                    setDialogOpen={ setNewExamDialogOpen }
+                    onCreated={ refetchExams }
+                /> */}
+
+            </Box>
+    
+            <ListDivider />  
+    
+            {/* List of exams */}
+            <List sx={{ pt: 0 }}>
+                {
+                    // Check if exams are loading
+                    jobs.map((job, index) => (
+                        <React.Fragment key={index}>
+                            <JobItem
+                                key={ index }
+                                job={ job }
+                                devices={ [] }
+                                sequences={ sequences ? sequences : [] }
+                                // Forward onDelete function which refetches the records
+                                refetchParentData={ refetchParentData }
+                            />
+                            <ListDivider sx={{ m: 0 }} />
+                        </React.Fragment>
+                    ))
+                }
+            </List>
+
+            {/* {
                 jobs.map((job, index) => (
                     <JobItem
                         key={ index }
@@ -111,13 +158,13 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                         refetchParentData={ refetchParentData }
                     />
                 ))
-            }
-            <IconButton
+            } */}
+            {/* <IconButton
                 variant='soft'
                 onClick={ () => createJob.mutate() }
             >
                 <AddCircleOutlineSharpIcon/>
-            </IconButton>
+            </IconButton> */}
         </Stack>
     )
 }
