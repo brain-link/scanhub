@@ -18,17 +18,17 @@ logger = logging.getLogger(__name__)
 # Instantiate FastAPI app
 app = FastAPI(
     openapi_url="/api/v1/mri/sequences/openapi.json",
-    docs_url="/api/v1/mri/sequences/docs"
+    docs_url="/api/v1/mri/sequences/docs",
 )
 
 #   Wildcard ["*"] excludes eeverything that involves credentials
 #   Better specify explicitly the allowed origins
-#   See: https://fastapi.tiangolo.com/tutorial/cors/ 
+#   See: https://fastapi.tiangolo.com/tutorial/cors/
 origins = [
     "http://localhost",
-    "http://localhost:3000",    # frontned
-    "http://localhost:8100",    # patient-manager
-    "http://localhost:8080",    # nginx
+    "http://localhost:3000",  # frontned
+    "http://localhost:8100",  # patient-manager
+    "http://localhost:8080",  # nginx
 ]
 
 app.add_middleware(
@@ -50,7 +50,11 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 # Include routers for endpoints
-app.include_router(mri_sequence_endpoints.router, prefix="/api/v1/mri/sequences", tags=["MRI Sequences"])
+app.include_router(
+    mri_sequence_endpoints.router,
+    prefix="/api/v1/mri/sequences",
+    tags=["MRI Sequences"],
+)
 app.include_router(health.router)
 
 
@@ -70,6 +74,7 @@ async def shutdown_event():
     """
     logger.info("ShutDown...")
     await close_mongo_connection()
+
 
 # from fastapi import FastAPI
 # from app.endpoints import health

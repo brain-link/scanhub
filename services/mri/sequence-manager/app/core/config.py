@@ -5,6 +5,7 @@
 
 from pydantic import BaseSettings
 
+
 class Settings(BaseSettings):
     """
     The Settings class represents the configuration settings for the application.
@@ -35,5 +36,5 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-settings = Settings()
 
+settings = Settings()

@@ -3,16 +3,18 @@
 
 """MongoDB database handle."""
 
-from motor.motor_asyncio import AsyncIOMotorClient
-from core.config import settings
 import logging
 
+from core.config import settings
+from motor.motor_asyncio import AsyncIOMotorClient
+
 logger = logging.getLogger(__name__)
+
 
 class Database:
     """
     MongoDB database handle.
-    
+
     Attributes:
     -----------
     client : AsyncIOMotorClient
@@ -24,8 +26,10 @@ class Database:
     client: AsyncIOMotorClient = None
     collection = None
 
+
 # Create a global database handle.
 db = Database()
+
 
 async def connect_to_mongo():
     """
@@ -44,15 +48,16 @@ async def connect_to_mongo():
         logger.info(await client.server_info())
     except Exception:
         logger.info("Unable to connect to the server.")
-    
+
     db.client = client[settings.MONGODB_DB]
     db.collection = client[settings.MONGODB_DB][settings.MONGODB_COLLECTION_NAME]
+
 
 async def close_mongo_connection():
     """
     Close the connection to MongoDB.
     """
     logger.info("Closing MongoDB connection...")
-    
+
     client = db.client
     client.close()

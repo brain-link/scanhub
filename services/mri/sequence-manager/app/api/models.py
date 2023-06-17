@@ -5,6 +5,7 @@
 
 from pydantic import BaseModel
 
+
 class SequenceIn(BaseModel):
     name: str
     plot: str

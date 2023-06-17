@@ -3,9 +3,11 @@
 
 """MRI sequence object pydantic models."""
 
-from pydantic import BaseModel, Field
-from typing import Any
 import datetime
+from typing import Any
+
+from pydantic import BaseModel, Field
+
 
 class MRISequence(BaseModel):
     """
@@ -22,6 +24,7 @@ class MRISequence(BaseModel):
         file: The MRI sequence definition file content or a reference to the stored file, such as a GridFS identifier or an S3 URL.
         file_extension: The file extension of the MRI sequence definition file.
     """
+
     id: (str | None) = Field(alias="_id")
     name: str
     description: (str | None)
@@ -31,6 +34,7 @@ class MRISequence(BaseModel):
     tags: (list[str] | None)
     file: (Any | None)
     file_extension: (str | None)
+
 
 class MRISequenceCreate(BaseModel):
     """
@@ -45,6 +49,7 @@ class MRISequenceCreate(BaseModel):
         updated_at: The timestamp of when the MRI sequence was last updated.
         tags: A list of tags or keywords associated with the MRI sequence, useful for searching and filtering.
     """
+
     id: (str | None) = Field(alias="_id")
     name: str
     description: (str | None)

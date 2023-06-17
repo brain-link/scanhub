@@ -3,13 +3,15 @@
 
 """Health check endpoint for FastAPI."""
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from database.mongodb import db
 import logging
+
+from database.mongodb import db
+from fastapi import APIRouter, Depends, HTTPException, status
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
 
 async def check_db_connection() -> bool:
     """
@@ -19,6 +21,7 @@ async def check_db_connection() -> bool:
     if not db or not db.collection:
         return False
     return True
+
 
 @router.get("/health", status_code=status.HTTP_200_OK, tags=["health"])
 async def health_check(is_db_connected: bool = Depends(check_db_connection)):
@@ -40,6 +43,7 @@ async def health_check(is_db_connected: bool = Depends(check_db_connection)):
         raise HTTPException(status_code=503, detail="Database not connected")
     return {"status": "OK"}
 
+
 @router.get("/readiness", status_code=status.HTTP_200_OK, tags=["health"])
 async def readiness_check():
     """
@@ -52,8 +56,6 @@ async def readiness_check():
     """
     logger.info("Readiness check")
     return {"status": "ready"}
-
-
 
 
 # from fastapi import APIRouter, Depends, HTTPException
