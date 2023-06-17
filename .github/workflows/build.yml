@@ -1,4 +1,5 @@
-name: 'build'
+name: 'docker-compose'
+
 on:
   push:
     branches:
