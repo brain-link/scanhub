@@ -3,7 +3,6 @@
 
 """API file for the MRI sequence manager service."""
 
-from typing import List
 from fastapi import APIRouter, HTTPException
 
 from api.models import SequenceOut, SequenceIn, SequenceUpdate
@@ -14,7 +13,7 @@ sequences = APIRouter()
 
 ### NEW API
 
-@sequences.get('/list', response_model=List[SequenceOut])
+@sequences.get('/list', response_model=list[SequenceOut])
 async def get_sequence_list():
     return await db_manager.get_all_sequences()
 
@@ -52,7 +51,7 @@ async def create_sequence(payload: SequenceIn):
 
     return response
 
-@sequences.get('/', response_model=List[SequenceOut])
+@sequences.get('/', response_model=list[SequenceOut])
 async def get_sequences():
     return await db_manager.get_all_sequences()
 

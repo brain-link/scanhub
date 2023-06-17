@@ -4,17 +4,15 @@
 """Workflow manager endpoints."""
 
 import json
-
 import os
 
-from api import dal
-from api.models import BaseWorkflow, WorkflowOut, get_workflow_out
-from fastapi import APIRouter, HTTPException, File, UploadFile
+from fastapi import APIRouter, File, HTTPException, UploadFile
 from kafka import KafkaProducer
 
-#### Old code ####
-from scanhub import RecoJob
-#### Old code end ####
+from scanhub import RecoJob  # Old code
+
+from . import dal
+from .models import BaseWorkflow, WorkflowOut, get_workflow_out
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -159,7 +157,7 @@ async def upload_result(record_id: str, file: UploadFile = File(...)):
             f.write(contents)
     except Exception as ex:
         return {"message": "There was an error uploading the file" + str(ex)}
-        raise HTTPException(status_code = 500, detail = "")
+        # raise HTTPException(status_code = 500, detail = "")
     finally:
         file.file.close()
 

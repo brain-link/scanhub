@@ -24,8 +24,7 @@ from fastapi.responses import FileResponse
 from pypulseq import Sequence
 import plotly
 from services.mri_sequence_plot import get_sequence_plot
-from typing import Union
-from motor.motor_asyncio import AsyncIOMotorDatabase
+
 from dependencies import get_database
 from database.models import MRISequence, MRISequenceCreate
 from services import (
@@ -34,8 +33,8 @@ from services import (
     get_mri_sequence_by_id,
     delete_mri_sequence,
     update_mri_sequence,
-    search_mri_sequences,
-    download_mri_sequence_file,
+    # search_mri_sequences,
+    # download_mri_sequence_file,
 )
 
 from bson.binary import Binary
