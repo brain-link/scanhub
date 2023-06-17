@@ -76,8 +76,10 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
             for ch in gradients.keys():
                 if gb := getattr(block, ch):
                     if gb.type == 'grad':
-                        # In place unpacking of grad.t with the starred expression
-                        t = gb.delay + [0, *(gb.tt+(gb.tt[1]-gb.tt[0])/2), gb.tt[-1]+gb.tt[1]-gb.tt[0]]
+                        # In place unpacking of grad.t with the starred expression -- produces weird shapes
+                        # t = gb.delay + [0, *(gb.tt+(gb.tt[1]-gb.tt[0])/2), gb.tt[-1]+gb.tt[1]-gb.tt[0]]
+                        # Double check: Is this the correct way to unwrap arbitrary waveform?
+                        t = np.array([gb.delay, *gb.tt + gb.delay, gb.shape_dur])
                         waveform = 1e-3 * np.array((gb.first, *gb.waveform, gb.last))
                     else:
                         t = np.cumsum([0, gb.delay, gb.rise_time, gb.flat_time, gb.fall_time])
@@ -131,3 +133,5 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
     )
 
     return fig
+
+# %%
