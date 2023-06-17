@@ -65,7 +65,7 @@ plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [tool.poe.tasks]
 lint.sequence = ["isort", "black", "pylint", "flake8", "mypy", "pydocstyle"]
-lint.ignore_fail = true
+lint.ignore_fail = "return_non_zero"
 
     [tool.poe.tasks.isort]
     help = "Run isort"

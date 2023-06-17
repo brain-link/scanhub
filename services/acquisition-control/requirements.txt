@@ -1,4 +1,0 @@
-fastapi
-requests
-uvicorn
-scanhub==0.0.4.dev3
