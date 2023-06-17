@@ -5,8 +5,8 @@
 
 import json
 
-from api import dal
-from api.models import BaseDevice, DeviceOut, get_device_out
+from . import dal
+from .models import BaseDevice, DeviceOut, get_device_out
 from fastapi import APIRouter, HTTPException
 from kafka import KafkaProducer
 
