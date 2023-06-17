@@ -20,8 +20,6 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10"]
-        
-    continue-on-error: True
     
     steps:
       - uses: actions/checkout@v3

@@ -28,5 +28,3 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint --rcfile ${GITHUB_WORKSPACE}/tools/linter/.pylintrc $(git ls-files '*.py')
-        continue-on-error: true
-    continue-on-error: true
