@@ -13,6 +13,8 @@ import requests
 from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field
 
+DEBUG_FLAG = True
+
 #DEVICE_URI = "host.docker.internal:8001"
 DEVICE_URI = "host.docker.internal:5000"
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
@@ -35,6 +37,7 @@ class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
         The id of the device to run the scan on.
     """
     class Config:
+        """Pydantic configuration"""
         extra = Extra.ignore
 
     job_id: int = Field(alias="id")
@@ -63,7 +66,7 @@ async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it"""
     # TODO: Dont ignore device_id, check returns, ...
 
-    if (debug_flag := True) is True:
+    if DEBUG_FLAG is True:
         record_id = "test_"+str(random.randint(0,1000))
         sequence_json = {"test": "test"}
 
