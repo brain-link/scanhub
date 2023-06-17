@@ -3,23 +3,19 @@
 
 """Cartesian reco file for the MRI cartesian reco service."""
 
-from scanhub import RecoJob
-
 import logging
+from typing import Any, Set
 
-from typing import Set, Any
 import numpy as np
-
 import pydicom
-from pydicom.dataset import Dataset
 import pydicom._storage_sopclass_uids
-
+from pydicom.dataset import Dataset
 from scanhub import RecoJob
-
 
 # initialize logger
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 log = logging.getLogger(__name__)
 
 # Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
@@ -35,6 +31,7 @@ finally:
     fftshift = np.fft.fftshift
     ifftshift = np.fft.ifftshift
 
+
 def np_ifft(kspace: np.ndarray, out: np.ndarray):
     """Performs inverse FFT function (kspace to [magnitude] image)
 
@@ -47,14 +44,15 @@ def np_ifft(kspace: np.ndarray, out: np.ndarray):
     """
     np.absolute(fftshift(ifft2(ifftshift(kspace))), out=out)
 
+
 def cartesian_reco(message: Any) -> None:
-    log.info(f'starting cartesian reco with message: {message}')
+    log.info(f"starting cartesian reco with message: {message}")
     reco_job = RecoJob(**(message.value))
-    log.info(f'reco_job.input: {reco_job.input}')
+    log.info(f"reco_job.input: {reco_job.input}")
 
-    app_filename = f'/app/data_lake/{reco_job.input}'
+    app_filename = f"/app/data_lake/{reco_job.input}"
 
-    log.info(f'Loading K-Space from {app_filename}')
+    log.info(f"Loading K-Space from {app_filename}")
 
     kspacedata = np.load(app_filename)
 
@@ -65,7 +63,6 @@ def cartesian_reco(message: Any) -> None:
     img = np.zeros_like(kspacedata, dtype=np.float32)
 
     np_ifft(kspacedata, img)
-
 
     ################################################################
     # Store DICOM
@@ -79,7 +76,7 @@ def cartesian_reco(message: Any) -> None:
     meta = pydicom.Dataset()
     meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
     meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
-    meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian  
+    meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
 
     ds = Dataset()
     ds.file_meta = meta
@@ -95,7 +92,7 @@ def cartesian_reco(message: Any) -> None:
     ds.SeriesInstanceUID = pydicom.uid.generate_uid()
     ds.StudyID = pydicom.uid.generate_uid()
     ds.SOPInstanceUID = pydicom.uid.generate_uid()
-    ds.SOPClassUID = 'RT Image Storage'
+    ds.SOPClassUID = "RT Image Storage"
     ds.StudyInstanceUID = pydicom.uid.generate_uid()
     ds.FrameOfReferenceUID = pydicom.uid.generate_uid()
 
@@ -130,9 +127,9 @@ def cartesian_reco(message: Any) -> None:
     log.info(ds)
     # Option 1: save to disk
 
-    file_name = f'{reco_job.reco_id}.dcm'
+    file_name = f"{reco_job.reco_id}.dcm"
 
-    ds.save_as(f'/app/data_lake/records/{reco_job.record_id}/{file_name}')
+    ds.save_as(f"/app/data_lake/records/{reco_job.record_id}/{file_name}")
 
     # Option 2: save to orthanc
     # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")
