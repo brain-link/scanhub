@@ -4,9 +4,9 @@
 """Worker file for the MRI cartesian reco service."""
 
 import logging
-from typing import Any, Set
+from typing import Any
 
-from cartesian_reco import cartesian_reco
+from .reco import cartesian_reco
 
 # initialize logger
 logging.basicConfig(
@@ -16,14 +16,25 @@ log = logging.getLogger(__name__)
 
 
 def init(message: Any) -> None:
-    log.info(f"Initializing worker: {message}")
+    """Initialize the worker.
+    
+    Parameters:
+        message (Any): Message to initialize the worker
+    """
+    log.info("Initializing worker: %s", message)
 
-    # ToDo place your initialization here
+    # place your initialization here
 
 
 def run(message: Any) -> None:
-    # do something with the message
-    log.info(f"Processing message: {message}")
+    """Run the worker.
 
-    # ToDo place your reco here
+    Parameters:
+        message (Any): Message to run the worker
+    """
+
+    # do something with the message
+    log.info("Processing message: %s", message)
+
+    # place your reco here
     cartesian_reco(message)

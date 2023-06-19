@@ -4,7 +4,7 @@
 """Cartesian reco file for the MRI cartesian reco service."""
 
 import logging
-from typing import Any, Set
+from typing import Any
 
 import numpy as np
 import pydicom
@@ -45,14 +45,19 @@ def np_ifft(kspace: np.ndarray, out: np.ndarray):
     np.absolute(fftshift(ifft2(ifftshift(kspace))), out=out)
 
 
-def cartesian_reco(message: Any) -> None:
-    log.info(f"starting cartesian reco with message: {message}")
+def cartesian_reco(message: Any) -> None: # pylint: disable=too-many-statements
+    """Run the cartesian reco.
+    
+    Parameters:
+        message (Any): Message to run the cartesian reco
+    """
+    log.info("starting cartesian reco with message: %s", message)
     reco_job = RecoJob(**(message.value))
-    log.info(f"reco_job.input: {reco_job.input}")
+    log.info("reco_job.input: %s", reco_job.input)
 
     app_filename = f"/app/data_lake/{reco_job.input}"
 
-    log.info(f"Loading K-Space from {app_filename}")
+    log.info("Loading K-Space from %s", app_filename)
 
     kspacedata = np.load(app_filename)
 
@@ -74,62 +79,62 @@ def cartesian_reco(message: Any) -> None:
     # Populate required values for file meta information
 
     meta = pydicom.Dataset()
-    meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
+    meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage # pylint: disable=protected-access
     meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
     meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
 
-    ds = Dataset()
-    ds.file_meta = meta
+    dicom_dataset = Dataset()
+    dicom_dataset.file_meta = meta
 
-    ds.is_little_endian = True
-    ds.is_implicit_VR = False
+    dicom_dataset.is_little_endian = True
+    dicom_dataset.is_implicit_VR = False
 
-    ds.SOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
-    ds.PatientName = "Max^Mustermann"
-    ds.PatientID = "123456"
+    dicom_dataset.SOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage # pylint: disable=protected-access
+    dicom_dataset.PatientName = "Max^Mustermann"
+    dicom_dataset.PatientID = "123456"
 
-    ds.Modality = "MR"
-    ds.SeriesInstanceUID = pydicom.uid.generate_uid()
-    ds.StudyID = pydicom.uid.generate_uid()
-    ds.SOPInstanceUID = pydicom.uid.generate_uid()
-    ds.SOPClassUID = "RT Image Storage"
-    ds.StudyInstanceUID = pydicom.uid.generate_uid()
-    ds.FrameOfReferenceUID = pydicom.uid.generate_uid()
+    dicom_dataset.Modality = "MR"
+    dicom_dataset.SeriesInstanceUID = pydicom.uid.generate_uid()
+    dicom_dataset.StudyID = pydicom.uid.generate_uid()
+    dicom_dataset.SOPInstanceUID = pydicom.uid.generate_uid()
+    dicom_dataset.SOPClassUID = "RT Image Storage"
+    dicom_dataset.StudyInstanceUID = pydicom.uid.generate_uid()
+    dicom_dataset.FrameOfReferenceUID = pydicom.uid.generate_uid()
 
-    ds.BitsStored = 16
-    ds.BitsAllocated = 16
-    ds.SamplesPerPixel = 1
-    ds.HighBit = 15
+    dicom_dataset.BitsStored = 16
+    dicom_dataset.BitsAllocated = 16
+    dicom_dataset.SamplesPerPixel = 1
+    dicom_dataset.HighBit = 15
 
-    ds.ImagesInAcquisition = "1"
+    dicom_dataset.ImagesInAcquisition = "1"
 
-    ds.Rows = img16.shape[0]
-    ds.Columns = img16.shape[1]
-    ds.InstanceNumber = 1
+    dicom_dataset.Rows = img16.shape[0]
+    dicom_dataset.Columns = img16.shape[1]
+    dicom_dataset.InstanceNumber = 1
 
-    ds.ImagePositionPatient = r"0\0\1"
-    ds.ImageOrientationPatient = r"1\0\0\0\-1\0"
-    ds.ImageType = r"ORIGINAL\PRIMARY\AXIAL"
+    dicom_dataset.ImagePositionPatient = r"0\0\1"
+    dicom_dataset.ImageOrientationPatient = r"1\0\0\0\-1\0"
+    dicom_dataset.ImageType = r"ORIGINAL\PRIMARY\AXIAL"
 
-    ds.RescaleIntercept = "0"
-    ds.RescaleSlope = "1"
-    ds.PixelSpacing = r"1\1"
-    ds.PhotometricInterpretation = "MONOCHROME2"
-    ds.PixelRepresentation = 1
+    dicom_dataset.RescaleIntercept = "0"
+    dicom_dataset.RescaleSlope = "1"
+    dicom_dataset.PixelSpacing = r"1\1"
+    dicom_dataset.PhotometricInterpretation = "MONOCHROME2"
+    dicom_dataset.PixelRepresentation = 1
 
-    pydicom.dataset.validate_file_meta(ds.file_meta, enforce_standard=True)
+    pydicom.dataset.validate_file_meta(dicom_dataset.file_meta, enforce_standard=True)
 
     log.info("Setting pixel data...")
-    ds.PixelData = img16.tobytes()
+    dicom_dataset.PixelData = img16.tobytes()
 
     # Save as DICOM
     log.info("Saving file...")
-    log.info(ds)
+    log.info(dicom_dataset)
     # Option 1: save to disk
 
     file_name = f"{reco_job.reco_id}.dcm"
 
-    ds.save_as(f"/app/data_lake/records/{reco_job.record_id}/{file_name}")
+    dicom_dataset.save_as(f"/app/data_lake/records/{reco_job.reco_id}/{file_name}")
 
     # Option 2: save to orthanc
     # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")
