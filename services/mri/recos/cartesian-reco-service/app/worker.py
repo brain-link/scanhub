@@ -34,7 +34,6 @@ def run(message: Any) -> None:
     ----------
         message (Any): Message to run the worker
     """
-
     # do something with the message
     log.info("Processing message: %s", message)
 
