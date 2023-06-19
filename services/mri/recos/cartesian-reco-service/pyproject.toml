@@ -54,6 +54,10 @@ disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel
 [tool.flake8]
 max-line-length = 120
 
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+
 [tool.poe.tasks]
 lint.sequence = ["isort", "black", "pylint", "flake8", "mypy", "pydocstyle"]
 lint.ignore_fail = "return_non_zero"

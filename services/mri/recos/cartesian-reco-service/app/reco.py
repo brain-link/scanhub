@@ -87,7 +87,7 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
 
     dicom_dataset = Dataset()
-    dicom_dataset.file_meta = meta
+    dicom_dataset.file_meta = meta  # type: ignore
 
     dicom_dataset.is_little_endian = True
     dicom_dataset.is_implicit_VR = False
