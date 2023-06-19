@@ -18,7 +18,8 @@ log = logging.getLogger(__name__)
 def init(message: Any) -> None:
     """Initialize the worker.
 
-    Parameters:
+    Parameters
+    ----------
         message (Any): Message to initialize the worker
     """
     log.info("Initializing worker: %s", message)
@@ -29,7 +30,8 @@ def init(message: Any) -> None:
 def run(message: Any) -> None:
     """Run the worker.
 
-    Parameters:
+    Parameters
+    ----------
         message (Any): Message to run the worker
     """
 

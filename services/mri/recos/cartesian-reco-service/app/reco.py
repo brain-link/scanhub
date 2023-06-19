@@ -33,12 +33,13 @@ finally:
 
 
 def np_ifft(kspace: np.ndarray, out: np.ndarray):
-    """Performs inverse FFT function (kspace to [magnitude] image)
+    """Perform inverse FFT function (kspace to [magnitude] image).
 
     Performs iFFT on the input data and updates the display variables for
     the image domain (magnitude) image and the kspace as well.
 
-    Parameters:
+    Parameters
+    ----------
         kspace (np.ndarray): Complex kspace ndarray
         out (np.ndarray): Array to store values
     """
@@ -48,7 +49,8 @@ def np_ifft(kspace: np.ndarray, out: np.ndarray):
 def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     """Run the cartesian reco.
 
-    Parameters:
+    Parameters
+    ----------
         message (Any): Message to run the cartesian reco
     """
     log.info("starting cartesian reco with message: %s", message)

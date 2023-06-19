@@ -117,7 +117,8 @@ async def consume():
 async def send_consumer_message(consumer):
     """Send consumer message to the worker.
 
-    Parameters:
+    Parameters
+    ----------
         consumer (AIOKafkaConsumer): Kafka consumer
     """
     try:
