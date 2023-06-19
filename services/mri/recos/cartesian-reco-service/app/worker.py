@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 
 def init(message: Any) -> None:
     """Initialize the worker.
-    
+
     Parameters:
         message (Any): Message to initialize the worker
     """

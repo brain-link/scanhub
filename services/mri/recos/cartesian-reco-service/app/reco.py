@@ -45,9 +45,9 @@ def np_ifft(kspace: np.ndarray, out: np.ndarray):
     np.absolute(fftshift(ifft2(ifftshift(kspace))), out=out)
 
 
-def cartesian_reco(message: Any) -> None: # pylint: disable=too-many-statements
+def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     """Run the cartesian reco.
-    
+
     Parameters:
         message (Any): Message to run the cartesian reco
     """
@@ -79,7 +79,8 @@ def cartesian_reco(message: Any) -> None: # pylint: disable=too-many-statements
     # Populate required values for file meta information
 
     meta = pydicom.Dataset()
-    meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage # pylint: disable=protected-access
+    # pylint: disable=protected-access
+    meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
     meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
     meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
 
@@ -89,7 +90,8 @@ def cartesian_reco(message: Any) -> None: # pylint: disable=too-many-statements
     dicom_dataset.is_little_endian = True
     dicom_dataset.is_implicit_VR = False
 
-    dicom_dataset.SOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage # pylint: disable=protected-access
+    # pylint: disable=protected-access
+    dicom_dataset.SOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
     dicom_dataset.PatientName = "Max^Mustermann"
     dicom_dataset.PatientID = "123456"
 
