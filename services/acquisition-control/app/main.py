@@ -21,7 +21,7 @@ SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
 
-# TODO: Move to scanhub-tools/models file
+# TODO: Move to scanhub-tools/models file # pylint: disable=fixme
 
 
 class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
@@ -38,7 +38,7 @@ class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
     device_id: int
 
 
-# TODO: Move to scanhub-tools
+# TODO: Move to scanhub-tools # pylint: disable=fixme
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of a scanjob."""
 
@@ -46,7 +46,7 @@ class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
     status_percent: int
 
 
-# TODO: Move to scanhub-tools
+# TODO: Move to scanhub-tools # pylint: disable=fixme
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive."""
 
@@ -64,8 +64,7 @@ logging.basicConfig(level=logging.DEBUG)
 async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
     if DEBUG_FLAG is True:
-
-        # TODO: Dont ignore device_id, check returns, ...
+        # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
 
         record_id = "test_" + str(random.randint(0, 1000))
         sequence_json = {"test": "test"}
@@ -92,7 +91,7 @@ async def start_scan(scan_job: ScanJob):
         sequence_json = res.json()
 
         # create record
-        # TODO: data_path, comment ?
+        # TODO: data_path, comment ? # pylint: disable=fixme
         res = requests.post(
             f"http://{EXAM_MANAGER_URI}/api/v1/exam/record",
             json={"data_path": "path", "comment": "blub", "job_id": scan_job.job_id},

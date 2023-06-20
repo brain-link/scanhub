@@ -54,7 +54,7 @@ disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel
 max-line-length = 120
 
 [tool.mypy]
-plugins = ["sqlalchemy.ext.mypy.plugin"]
+python_version = "3.10"
 
 [tool.poe.tasks]
 lint.sequence = ["isort", "black", "pylint", "flake8", "mypy", "pydocstyle"]
