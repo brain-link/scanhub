@@ -10,9 +10,9 @@ import os
 from random import randint
 from typing import Set
 
-import aiokafka
+import aiokafka # type: ignore
 from fastapi import FastAPI
-from kafka import TopicPartition
+from kafka import TopicPartition # type: ignore
 
 from .worker import init, run
 

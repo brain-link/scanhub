@@ -10,7 +10,7 @@ import numpy as np
 import pydicom
 import pydicom._storage_sopclass_uids
 from pydicom.dataset import Dataset
-from scanhub import RecoJob
+from scanhub import RecoJob # type: ignore
 
 # initialize logger
 logging.basicConfig(
@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 # Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
 try:
-    import mkl_fft as m
+    import mkl_fft as m # type: ignore
 
     fft2 = m.fft2
     ifft2 = m.ifft2
