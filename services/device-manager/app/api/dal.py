@@ -14,10 +14,12 @@ from sqlalchemy.future import select
 async def dal_create_device(payload: BaseDevice) -> Device:
     """Add a new device to the database.
 
-    Arguments:
+    Arguments
+    ---------
         payload {BaseDevice} -- Pydantic base model to create a new database entry
 
-    Returns:
+    Returns
+    -------
         Device -- Database orm model
     """
     new_device = Device(**payload.dict())
@@ -34,10 +36,12 @@ async def dal_create_device(payload: BaseDevice) -> Device:
 async def dal_get_device(device_id: int) -> (Device | None):
     """Fetch a device from database.
 
-    Arguments:
+    Arguments
+    ---------
         device_id {int} -- Identifier of the device
 
-    Returns:
+    Returns
+    -------
         Device -- Database orm model
     """
     async with async_session() as session:
@@ -48,7 +52,8 @@ async def dal_get_device(device_id: int) -> (Device | None):
 async def dal_get_all_devices() -> list[Device]:
     """Get a list of all existing devices.
 
-    Returns:
+    Returns
+    -------
         List[Device] -- List of database orm models
     """
     async with async_session() as session:
@@ -60,10 +65,12 @@ async def dal_get_all_devices() -> list[Device]:
 async def dal_delete_device(device_id: int) -> bool:
     """Delete a device by identifier.
 
-    Arguments:
+    Parameters
+    ----------
         device_id {int} -- Identifier of the device to be deleted
 
-    Returns:
+    Returns
+    -------
         bool -- Success of delete event
     """
     async with async_session() as session:
@@ -77,11 +84,13 @@ async def dal_delete_device(device_id: int) -> bool:
 async def dal_update_device(device_id: int, payload: BaseDevice) -> (Device | None):
     """Update an existing device in database.
 
-    Arguments:
+    Parameters
+    ----------
         id {int} -- Identifier of device
         payload {BaseDevice} -- Pydantic base model, data to be updated
 
-    Returns:
+    Returns
+    -------
         Device -- Updated database orm model
     """
     async with async_session() as session:

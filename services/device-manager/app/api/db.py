@@ -50,7 +50,8 @@ class Device(Base):
     def update(self, data: dict):
         """Update attributes of orm model.
 
-        Arguments:
+        Parameters
+        ----------
             data {dict} -- Entries to be updated
         """
         for key, value in data.items():
