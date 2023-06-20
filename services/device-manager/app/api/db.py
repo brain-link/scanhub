@@ -42,10 +42,10 @@ class Device(Base):
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()
-    )
+    ) # pylint: disable=not-callable
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True
-    )
+    ) # pylint: disable=not-callable
 
     def update(self, data: dict):
         """Update attributes of orm model.
