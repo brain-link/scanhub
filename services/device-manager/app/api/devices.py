@@ -6,7 +6,7 @@
 import json
 
 from fastapi import APIRouter, HTTPException
-from kafka import KafkaProducer
+from kafka import KafkaProducer # type: ignore
 
 from .dal import (
     dal_create_device,
