@@ -45,7 +45,20 @@ app.add_middleware(
 # Exception handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Request: {request.method} {request.url}\n{str(exc)}")
+    """Global exception handler.
+
+    Parameters
+    ----------
+    request
+        Request to be checked
+    exc
+        exception
+
+    Returns
+    -------
+        Json response
+    """
+    logger.error("Request: %s %s\n%s", request.method, request.url, str(exc))
     return JSONResponse(status_code=500, content={"detail": str(exc)})
 
 

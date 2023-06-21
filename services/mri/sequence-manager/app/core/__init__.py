@@ -1,1 +1,1 @@
-from . import config  # noqa: F401
+"""Init file."""

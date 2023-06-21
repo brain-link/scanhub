@@ -7,11 +7,10 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    """
-    The Settings class represents the configuration settings for the application.
+    """The Settings class represents the configuration settings for the application.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     MONGODB_USER : str
         The username for authenticating to the MongoDB server.
     MONGODB_PASSWORD : str
@@ -34,6 +33,8 @@ class Settings(BaseSettings):
     MONGODB_COLLECTION_NAME: str
 
     class Config:
+        """Base settings configuration."""
+
         env_file = ".env"
 
 

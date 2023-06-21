@@ -26,14 +26,14 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse
 from pypulseq import Sequence
-from services import (  # search_mri_sequences,; download_mri_sequence_file,
+from services.mri_sequence_plot import get_sequence_plot
+from services.mri_sequence_service import (  # search_mri_sequences,; download_mri_sequence_file,
     create_mri_sequence,
     delete_mri_sequence,
     get_mri_sequence_by_id,
     get_mri_sequences,
     update_mri_sequence,
 )
-from services.mri_sequence_plot import get_sequence_plot
 
 logger = logging.getLogger(__name__)
 
@@ -44,11 +44,10 @@ async def mri_sequence_form(
     sequence_type: str = Form(None),
     tags: str = Form(None),
 ) -> MRISequenceCreate:
-    """
-    Convert the form data to an MRISequenceCreate object.
+    """Convert the form data to an MRISequenceCreate object.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     name : str
         The name of the MRI sequence.
     description : str
@@ -58,8 +57,8 @@ async def mri_sequence_form(
     tags : str
         The tags of the MRI sequence.
 
-    Returns:
-    --------
+    Returns
+    -------
     MRISequenceCreate
         The MRI sequence data.
     """
@@ -74,54 +73,57 @@ router = APIRouter()
 
 @router.post("/", response_model=MRISequence, status_code=status.HTTP_201_CREATED)
 async def create_mri_sequence_endpoint(
-    mri_sequence: MRISequence, db=Depends(get_database)
+    mri_sequence: MRISequence, database=Depends(get_database)
 ):
-    """
-    Create a new MRI sequence and store it in the database.
+    """Create a new MRI sequence and store it in the database.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     mri_sequence : MRISequence
         The MRI sequence data to store.
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     MRISequence
         The created MRI sequence.
     """
-    logger.info(f"Creating MRI sequence with data: %s", mri_sequence)
-    return await create_mri_sequence(db, mri_sequence)
+    logger.info("Creating MRI sequence with data: %r", mri_sequence)
+    return await create_mri_sequence(database, mri_sequence)
 
 
 @router.post("/upload", response_model=MRISequence, status_code=status.HTTP_201_CREATED)
 async def upload_mri_sequence_file(
     mri_sequence: MRISequenceCreate = Depends(mri_sequence_form),
     file: UploadFile = File(...),
-    db=Depends(get_database),
+    database=Depends(get_database),
 ):
-    """
-    Upload an MRI sequence file and store it with the provided metadata.
+    """Upload an MRI sequence file and store it with the provided metadata.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     mri_sequence : MRISequenceCreate
         The MRI sequence metadata.
     file : UploadFile
         The MRI sequence file to store.
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     MRISequence
         The stored MRI sequence with the uploaded file.
     """
-    logger.info(f"Uploading MRI sequence file with metadata: %s", mri_sequence)
+    logger.info("Uploading MRI sequence file with metadata: %s", str(mri_sequence))
 
-    filename = file.filename
-    file_extension = Path(filename).suffix
+    if filename := file.filename:
+        file_extension = Path(filename).suffix
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invalid sequence file extension",
+        )
 
     # Read the content of the uploaded file
     file_content = await file.read()
@@ -133,17 +135,17 @@ async def upload_mri_sequence_file(
     mri_sequence_with_file.file_extension = file_extension
 
     # Store the MRI sequence with the uploaded file in the database
-    return await create_mri_sequence(db, mri_sequence_with_file)
+    return await create_mri_sequence(database, mri_sequence_with_file)
 
 
 @router.get("/", response_model=list[MRISequence])
-async def get_mri_sequences_endpoint(db=Depends(get_database)):
+async def get_mri_sequences_endpoint(database=Depends(get_database)):
     """
     Retrieve a list of all MRI sequences from the database.
 
     Parameters:
     -----------
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
     Returns:
@@ -152,12 +154,12 @@ async def get_mri_sequences_endpoint(db=Depends(get_database)):
         The list of MRI sequences.
     """
     logger.info("Retrieving all MRI sequences")
-    return await get_mri_sequences(db)
+    return await get_mri_sequences(database)
 
 
 @router.get("/{mri_sequence_id}", response_model=MRISequence)
 async def get_mri_sequence_by_id_endpoint(
-    mri_sequence_id: str, db=Depends(get_database)
+    mri_sequence_id: str, database=Depends(get_database)
 ):
     """
     Retrieve an MRI sequence by its ID.
@@ -166,7 +168,7 @@ async def get_mri_sequence_by_id_endpoint(
     -----------
     mri_sequence_id : str
         The ID of the MRI sequence to retrieve.
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
     Returns:
@@ -174,14 +176,12 @@ async def get_mri_sequence_by_id_endpoint(
     MRISequence
         The retrieved MRI sequence.
     """
-    logger.info(f"Retrieving MRI sequence with ID: %s", mri_sequence_id)
-    mri_sequence = await get_mri_sequence_by_id(db, mri_sequence_id)
-    if mri_sequence:
-        return mri_sequence
-    else:
+    logger.info("Retrieving MRI sequence with ID: %s", mri_sequence_id)
+    if not (mri_sequence := await get_mri_sequence_by_id(database, mri_sequence_id)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
         )
+    return mri_sequence
 
 
 @router.get("/mri-sequence-file/{mri_sequence_id}")
@@ -189,10 +189,9 @@ async def get_mri_sequence_file_by_id_endpoint(
     mri_sequence_id: str,
     background_tasks: BackgroundTasks,
     name: str = "sequence",
-    db=Depends(get_database),
+    database=Depends(get_database),
 ):
-    """
-    Retrieve an MRI sequence file by its ID.
+    """Retrieve an MRI sequence file by its ID.
 
     Parameters:
     -----------
@@ -202,7 +201,7 @@ async def get_mri_sequence_file_by_id_endpoint(
         The background tasks to run.
     name : str
         The name of the file to download.
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
     Returns:
@@ -211,17 +210,18 @@ async def get_mri_sequence_file_by_id_endpoint(
         The retrieved MRI sequence file.
     """
 
-    logger.info(f"Retrieving MRI sequence file with ID: %s", mri_sequence_id)
-    mri_sequence = await get_mri_sequence_by_id(db, mri_sequence_id)
+    logger.info("Retrieving MRI sequence file with ID: %s", mri_sequence_id)
+    mri_sequence = await get_mri_sequence_by_id(database, mri_sequence_id)
 
     if mri_sequence:
         binary_data = mri_sequence.file
         file_extension = mri_sequence.file_extension
 
         # Create a temporary file
-        temp_file = tempfile.NamedTemporaryFile(delete=False)
-        temp_file.write(binary_data)
-        temp_file.close()
+        # temp_file = tempfile.NamedTemporaryFile(delete=False)
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(binary_data)
+        # temp_file.close()
 
         # Create a FileResponse with the temporary file and the retrieved file extension
         response = FileResponse(
@@ -247,10 +247,9 @@ async def get_mri_sequence_file_by_id_endpoint(
 
 @router.put("/{mri_sequence_id}", response_model=MRISequence)
 async def update_mri_sequence_endpoint(
-    mri_sequence_id: str, mri_sequence: MRISequence, db=Depends(get_database)
+    mri_sequence_id: str, mri_sequence: MRISequence, database=Depends(get_database)
 ):
-    """
-    Update an MRI sequence with new data.
+    """Update an MRI sequence with new data.
 
     Parameters:
     -----------
@@ -258,7 +257,7 @@ async def update_mri_sequence_endpoint(
         The ID of the MRI sequence to update.
     mri_sequence : MRISequence
         The updated MRI sequence data.
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
     Returns:
@@ -266,34 +265,37 @@ async def update_mri_sequence_endpoint(
     MRISequence
         The updated MRI sequence.
     """
-    logger.info(f"Updating MRI sequence with ID: %s", mri_sequence_id)
-    updated_mri_sequence = await update_mri_sequence(db, mri_sequence_id, mri_sequence)
-    if updated_mri_sequence:
-        return updated_mri_sequence
-    else:
+    logger.info("Updating MRI sequence with ID: %s", mri_sequence_id)
+    if not (
+        updated_mri_sequence := await update_mri_sequence(
+            database, mri_sequence_id, mri_sequence
+        )
+    ):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
         )
+    return updated_mri_sequence
 
 
 @router.delete("/{mri_sequence_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_mri_sequence_endpoint(mri_sequence_id: str, db=Depends(get_database)):
-    """
-    Delete an MRI sequence by its ID.
+async def delete_mri_sequence_endpoint(
+    mri_sequence_id: str, database=Depends(get_database)
+):
+    """Delete an MRI sequence by its ID.
 
     Parameters:
     -----------
     mri_sequence_id : str
         The ID of the MRI sequence to delete.
-    db : AsyncIOMotorDatabase
+    database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
     Returns:
     --------
     None
     """
-    logger.info(f"Deleting MRI sequence with ID: %s", mri_sequence_id)
-    deleted_count = await delete_mri_sequence(db, mri_sequence_id)
+    logger.info("Deleting MRI sequence with ID: %s", mri_sequence_id)
+    deleted_count = await delete_mri_sequence(database, mri_sequence_id)
     if deleted_count == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
@@ -301,7 +303,7 @@ async def delete_mri_sequence_endpoint(mri_sequence_id: str, db=Depends(get_data
 
 
 @router.get("/mri-sequence-plot/{seq_id}", status_code=status.HTTP_201_CREATED)
-async def plot_mri_sequence(seq_id: str, db=Depends(get_database)) -> str:
+async def plot_mri_sequence(seq_id: str, database=Depends(get_database)) -> str:
     """Generate plotly sequence plot data.
 
     Parameters
@@ -315,11 +317,11 @@ async def plot_mri_sequence(seq_id: str, db=Depends(get_database)) -> str:
     """
     filename = f"data_lake/mri-sequence-{seq_id}"
 
-    # Check if pulseq file already exist, request it from db if not
+    # Check if pulseq file already exist, request it from database if not
     if not exists(filename + ".seq"):
-        if mri_seq := await get_mri_sequence_by_id(db, seq_id):
-            with open(filename + ".seq", "w") as fh:
-                fh.write(mri_seq.file.decode("utf-8"))
+        if mri_seq := await get_mri_sequence_by_id(database, seq_id):
+            with open(filename + ".seq", mode="w", encoding="utf8") as file_handle:
+                file_handle.write(mri_seq.file.decode("utf-8"))
             print("WRITTEN PULSEQ FILE")
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -332,10 +334,10 @@ async def plot_mri_sequence(seq_id: str, db=Depends(get_database)) -> str:
         fig = get_sequence_plot(seq)
         plot_data = plotly.io.to_json(fig, pretty=True)
 
-        with open(filename + ".json", "w") as fh:
-            fh.write(plot_data)
+        with open(filename + ".json", mode="w", encoding="utf8") as file_handle:
+            file_handle.write(plot_data)
     else:
-        with open(filename + ".json") as fh:
-            plot_data = json.dumps(json.loads(fh.read()), indent=2)
+        with open(filename + ".json", mode="r", encoding="utf8") as file_handle:
+            plot_data = json.dumps(json.loads(file_handle.read()), indent=2)
 
     return plot_data

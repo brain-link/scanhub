@@ -3,7 +3,7 @@
 
 """Dependency file for FastAPI."""
 
-from database.mongodb import close_mongo_connection, connect_to_mongo, db
+from database.mongodb import db
 from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
@@ -12,11 +12,7 @@ def get_database() -> AsyncIOMotorDatabase:
     """Dependency for getting a handle to the MongoDB database."""
     if db is not None:
         return db
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Database not connected",
-        )
-
-
-# TODO: Unused imports, wrong type AsyncIOMotorDatabase, should be pymongo.database.Daatabase
+    raise HTTPException(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        detail="Database not connected",
+    )
