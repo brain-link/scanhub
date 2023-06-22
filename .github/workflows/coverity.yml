@@ -1,0 +1,45 @@
+name: Coverity Scan with Docker
+
+on: [push]
+
+jobs:
+  coverity:
+    runs-on: ubuntu-latest
+    env:
+        DOCKER_COMPOSE_FILE: "docker-compose.yml"
+        NOTIFICATION_EMAIL: "info@brain-link.de"
+    strategy:
+      matrix:
+        service: [service1, service2, service3]
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Download Coverity Scan tool
+      run: |
+        wget https://scan.coverity.com/download/linux64 --post-data "token=<COVERITY_TOKEN>&project=<COVERITY_PROJECT_NAME>" -O coverity_tool.tgz
+        tar xaf coverity_tool.tgz
+        rm -rf cov-analysis
+        mv cov-analysis-linux64-* cov-analysis
+
+    - name: Build with Docker Compose
+      run: |
+        docker-compose -f $DOCKER_COMPOSE_FILE build ${ { matrix.service }}
+
+    - name: Run Coverity Scan in Docker
+      run: |
+        docker-compose -f $DOCKER_COMPOSE_FILE run --rm ${ { matrix.service }} bash -c "\
+          cov-analysis/bin/cov-build --dir cov-int python setup.py build"
+
+    - name: Upload result to Coverity
+      run: |
+        tar czvf cov-int.tgz cov-int
+        SHA=`git rev-parse --short HEAD`
+        curl \
+          --form token=<COVERITY_TOKEN> \
+          --form email=$NOTIFICATION_EMAIL \
+          --form file=@cov-int.tgz \
+          --form version=$SHA \
+          --form description="Github Actions build" \
+          https://scan.coverity.com/builds?project=<COVERITY_PROJECT_NAME>
