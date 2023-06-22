@@ -14,17 +14,19 @@ jobs:
     name: 'Linting service'
 
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./services
 
     strategy:
       matrix:
         python-version: ["3.10"]
-        working-dir: [
-          "./services/exam-manager",
-          "./services/workflow-manager",
-          "./services/device-manager",
-          "./services/acquisition-control",
-          "./services/mri/sequence-manager",
-          "./services/mri/recos/cartesian-reco-service",
+        service: [
+          "exam-manager",
+          "workflow-manager",
+          "device-manager",
+          "acquisition-control",
+          "mri/sequence-manager",
+          "mri/recos/cartesian-reco-service",
         ]
 
     continue-on-error: True
@@ -58,14 +60,14 @@ jobs:
           key: pydeps-${{ hashFiles('**/poetry.lock') }}
 
       - name: Check cached dependencies
-        working-directory: ${{ matrix.working-dir }}
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry install --no-interaction --with lint --no-root
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
       - name: Poetry install
-        working-directory: ${{ matrix.working-dir }}
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry install --no-interaction --with lint
 
       - name: Run linter
-        working-directory: ${{ matrix.working-dir }}
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry run poe lint
