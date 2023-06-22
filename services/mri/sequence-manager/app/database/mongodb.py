@@ -22,7 +22,7 @@ class Database:
         The MongoDB collection.
     """
 
-    client: AsyncIOMotorClient = None
+    client: AsyncIOMotorClient | None = None
     collection = None
 
 
@@ -50,9 +50,7 @@ async def connect_to_mongo():
 
 
 async def close_mongo_connection():
-    """
-    Close the connection to MongoDB.
-    """
+    """Close the connection to MongoDB."""
     logger.info("Closing MongoDB connection...")
 
     client = db.client

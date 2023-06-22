@@ -51,10 +51,10 @@ class MRISequenceCreate(BaseModel):
         tags: A list of tags or keywords associated with the MRI sequence, useful for searching and filtering.
     """
 
-    id: (str | None) = Field(alias="_id")
+    id: str | None = Field(alias="_id", default=None)
     name: str
-    description: (str | None)
-    sequence_type: (str | None)
-    created_at: (datetime.datetime | None)
-    updated_at: (datetime.datetime | None)
-    tags: (list[str] | None)
+    description: str | None = None
+    sequence_type: str | None = None
+    created_at: datetime.datetime | None = None
+    updated_at: datetime.datetime | None = None
+    tags: list[str] | None = None

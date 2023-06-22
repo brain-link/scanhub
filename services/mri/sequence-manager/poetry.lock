@@ -958,6 +958,17 @@ pymongo = ">=3.12,<4"
 encryption = ["pymongo[encryption] (>=3.12,<4)"]
 
 [[package]]
+name = "motor-stubs"
+version = "1.7.1"
+description = ""
+optional = false
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "motor-stubs-1.7.1.tar.gz", hash = "sha256:e24340e3e80ca92b081834268a7e6264bb8196cd5e238913b6ebed7c4afd1270"},
+    {file = "motor_stubs-1.7.1-py3-none-any.whl", hash = "sha256:35a9b57a338c2c82d3dce23e863f6cec8051a8200fe91de5acd2b2b318059acd"},
+]
+
+[[package]]
 name = "mypy"
 version = "1.4.0"
 description = "Optional static typing for Python"
@@ -1514,6 +1525,20 @@ snappy = ["python-snappy"]
 srv = ["dnspython (>=1.16.0,<1.17.0)"]
 tls = ["ipaddress"]
 zstd = ["zstandard"]
+
+[[package]]
+name = "pymongo-stubs"
+version = "0.2.0"
+description = "Experimental stub files for PyMongo"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pymongo-stubs-0.2.0.tar.gz", hash = "sha256:f53d497c8f9d64d9187b8e969184027112234fcef1b99dbc3190bb133d19ee19"},
+    {file = "pymongo_stubs-0.2.0-py3-none-any.whl", hash = "sha256:4f634211cc15257a9f5e6e69fea69f9322c8a1fb2b81ac0f1dbc88dc6df12066"},
+]
+
+[package.dependencies]
+pymongo = ">=3.11,<4.0"
 
 [[package]]
 name = "pyparsing"
@@ -2121,4 +2146,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "5423274b33cbd92c936b7ce3fbf427cdf30ad64601db1759275efde80c3044f6"
+content-hash = "b853faecfcb61654bca611b4cf86a28aab513dfe32fc037f89e598b62e9465be"

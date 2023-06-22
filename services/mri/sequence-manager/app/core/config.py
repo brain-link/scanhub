@@ -38,4 +38,7 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 
-settings = Settings()
+# Create settings instance
+# settings = Settings()     # throws mypy error: missing named aarguments # pyright: ignore
+# Possible solution according to https://github.com/pydantic/pydantic/issues/3753:
+settings = Settings.parse_obj({})

@@ -1,7 +1,7 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""MRI sequence endpoints"""
+"""MRI sequence endpoints."""
 
 import json
 import logging
@@ -10,7 +10,7 @@ import tempfile
 from os.path import exists
 from pathlib import Path
 
-import plotly
+import plotly  # type: ignore
 from bson.binary import Binary
 from database.models import MRISequence, MRISequenceCreate
 from dependencies import get_database
@@ -25,7 +25,7 @@ from fastapi import (
     status,
 )
 from fastapi.responses import FileResponse
-from pypulseq import Sequence
+from pypulseq import Sequence  # type: ignore
 from services.mri_sequence_plot import get_sequence_plot
 from services.mri_sequence_service import (  # search_mri_sequences,; download_mri_sequence_file,
     create_mri_sequence,
@@ -140,16 +140,15 @@ async def upload_mri_sequence_file(
 
 @router.get("/", response_model=list[MRISequence])
 async def get_mri_sequences_endpoint(database=Depends(get_database)):
-    """
-    Retrieve a list of all MRI sequences from the database.
+    """Retrieve a list of all MRI sequences from the database.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     List[MRISequence]
         The list of MRI sequences.
     """
@@ -161,18 +160,17 @@ async def get_mri_sequences_endpoint(database=Depends(get_database)):
 async def get_mri_sequence_by_id_endpoint(
     mri_sequence_id: str, database=Depends(get_database)
 ):
-    """
-    Retrieve an MRI sequence by its ID.
+    """Retrieve an MRI sequence by its ID.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     mri_sequence_id : str
         The ID of the MRI sequence to retrieve.
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     MRISequence
         The retrieved MRI sequence.
     """
@@ -193,8 +191,8 @@ async def get_mri_sequence_file_by_id_endpoint(
 ):
     """Retrieve an MRI sequence file by its ID.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     mri_sequence_id : str
         The ID of the MRI sequence to retrieve.
     background_tasks : BackgroundTasks
@@ -204,12 +202,11 @@ async def get_mri_sequence_file_by_id_endpoint(
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     FileResponse
         The retrieved MRI sequence file.
     """
-
     logger.info("Retrieving MRI sequence file with ID: %s", mri_sequence_id)
     mri_sequence = await get_mri_sequence_by_id(database, mri_sequence_id)
 
@@ -251,8 +248,8 @@ async def update_mri_sequence_endpoint(
 ):
     """Update an MRI sequence with new data.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     mri_sequence_id : str
         The ID of the MRI sequence to update.
     mri_sequence : MRISequence
@@ -260,8 +257,8 @@ async def update_mri_sequence_endpoint(
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     MRISequence
         The updated MRI sequence.
     """
@@ -283,15 +280,15 @@ async def delete_mri_sequence_endpoint(
 ):
     """Delete an MRI sequence by its ID.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     mri_sequence_id : str
         The ID of the MRI sequence to delete.
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
-    Returns:
-    --------
+    Returns
+    -------
     None
     """
     logger.info("Deleting MRI sequence with ID: %s", mri_sequence_id)

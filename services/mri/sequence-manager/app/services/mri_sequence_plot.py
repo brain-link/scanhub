@@ -4,9 +4,9 @@
 """Utility function to create a sequence plot with plotly."""
 
 import numpy as np
-import plotly.graph_objects as go
-from pydantic import BaseModel
-from pypulseq import Sequence
+import plotly.graph_objects as go  # type: ignore
+from pydantic import BaseModel  # type: ignore
+from pypulseq import Sequence  # type: ignore
 
 
 class TraceData(BaseModel):

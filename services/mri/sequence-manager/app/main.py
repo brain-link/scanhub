@@ -1,7 +1,7 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-""" MRI sequence manager main module. """
+"""MRI sequence manager main module."""
 
 import logging
 
@@ -73,18 +73,14 @@ app.include_router(health.router)
 
 @app.on_event("startup")
 async def startup_event():
-    """
-    Connect to MongoDB on startup.
-    """
+    """Connect to MongoDB on startup."""
     logger.info("StartUp...")
     await connect_to_mongo()
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    """
-    Close MongoDB connection on shutdown.
-    """
+    """Close MongoDB connection on shutdown."""
     logger.info("ShutDown...")
     await close_mongo_connection()
 

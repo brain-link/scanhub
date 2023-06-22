@@ -66,7 +66,7 @@ async def get_mri_sequences(database: AsyncIOMotorDatabase) -> list[MRISequence]
     cursor = database.collection.find()
     sequences = []
 
-    async for sequence in cursor:
+    async for sequence in cursor:  # type: ignore
         sequence["_id"] = str(sequence["_id"])
         sequences.append(MRISequence(**sequence))
 

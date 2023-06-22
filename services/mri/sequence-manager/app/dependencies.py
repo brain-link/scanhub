@@ -3,12 +3,11 @@
 
 """Dependency file for FastAPI."""
 
-from database.mongodb import db
+from database.mongodb import Database, db
 from fastapi import HTTPException, status
-from motor.motor_asyncio import AsyncIOMotorDatabase
 
 
-def get_database() -> AsyncIOMotorDatabase:
+def get_database() -> Database:
     """Dependency for getting a handle to the MongoDB database."""
     if db is not None:
         return db
