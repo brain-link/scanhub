@@ -1,4 +1,4 @@
-name: 'docker-compose'
+name: 'Build'
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   job:
-    name: 'docker-compose up'
+    name: 'docker-compose'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
