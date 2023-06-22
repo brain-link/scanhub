@@ -4,10 +4,10 @@
 
 <p align="center">
 <a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Github Actions">
+    <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build">
 </a>
-<a href="https://github.com/brain-link/scanhub/actions/workflows/test.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/test.yml/badge.svg" alt="Github Actions">
+<a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
+    <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests">
 </a>
 </p>
 

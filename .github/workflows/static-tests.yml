@@ -1,4 +1,4 @@
-name: 'Static'
+name: 'Static Tests'
 
 on:
   push:
