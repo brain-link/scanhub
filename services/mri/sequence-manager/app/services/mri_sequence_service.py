@@ -5,7 +5,7 @@
 
 import datetime
 import logging
-from typing import Any, List, Tuple
+from typing import Any
 
 from bson import ObjectId
 from database.models import MRISequence
@@ -15,25 +15,25 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 logger = logging.getLogger(__name__)
 
 
-async def create_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence: MRISequence) -> MRISequence:
-    """
-    Create a new MRI sequence in the database.
+async def create_mri_sequence(
+    database: AsyncIOMotorDatabase, mri_sequence: MRISequence
+) -> MRISequence:
+    """Create a new MRI sequence in the database.
 
     TODO: Seems like AsyncIOMotorDatabase is invalid.
     Do you mean pymongo.database.Database? -> from pymongo.database import Database
     According to motor documentation it should be Database.
-    See: database/mongodb.py, you create db = Database()
+    See: database/mongodb.py, you create database = Database()
 
-    Parameters:
-    -----------
-    db : AsyncIOMotorDatabase
+    Parameters
+    ----------
+    database
         The MongoDB database handle.
-    mri_sequence : MRISequence
+    mri_sequence
         The MRI sequence data to store.
 
-    Returns:
-    --------
-    MRISequence
+    Returns
+    -------
         The created MRI sequence.
     """
     logger.info("create MRI sequence...")
@@ -44,141 +44,164 @@ async def create_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence: MRISequenc
 
     mri_sequence_data.pop("id", None)  # Remove the id field from the dictionary
     mri_sequence_data.pop("_id", None)  # Remove the id field from the dictionary
-    result = await db.collection.insert_one(mri_sequence_data)
+    result = await database.collection.insert_one(mri_sequence_data)
     mri_sequence.id = str(result.inserted_id)
 
     logger.info("done creating MRI sequence.")
     return mri_sequence
 
 
-async def get_mri_sequences(db: AsyncIOMotorDatabase) -> List[MRISequence]:
-    """
-    Retrieve all MRI sequences from the database.
+async def get_mri_sequences(database: AsyncIOMotorDatabase) -> list[MRISequence]:
+    """Retrieve all MRI sequences from the database.
 
-    Parameters:
-    -----------
-    db : AsyncIOMotorDatabase
+    Parameters
+    ----------
+    database
         The MongoDB database handle.
 
-    Returns:
-    --------
-    List[MRISequence]
+    Returns
+    -------
         The list of MRI sequences.
     """
-    cursor = db.collection.find()
+    cursor = database.collection.find()
     sequences = []
 
-    async for sequence in cursor:
+    async for sequence in cursor:  # type: ignore
         sequence["_id"] = str(sequence["_id"])
         sequences.append(MRISequence(**sequence))
 
     return sequences
 
 
-async def get_mri_sequence_by_id(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> (MRISequence | None):
-    """
-    Retrieve an MRI sequence by its ID from the database.
+async def get_mri_sequence_by_id(
+    database: AsyncIOMotorDatabase, mri_sequence_id: str
+) -> (MRISequence | None):
+    """Retrieve an MRI sequence by its ID from the database.
 
-    Parameters:
-    -----------
-    db : AsyncIOMotorDatabase
+    Parameters
+    ----------
+    database
         The MongoDB database handle.
-    mri_sequence_id : str
+    mri_sequence_id
         The ID of the MRI sequence to retrieve.
 
-    Returns:
-    --------
-    MRISequence
+    Returns
+    -------
         The retrieved MRI sequence.
-    """    
+    """
     logger.info("retrieve MRI sequence...")
-    if (sequence_data := await db.collection.find_one({"_id": ObjectId(mri_sequence_id)})):
-        sequence_data["_id"] = str(sequence_data["_id"])  # Convert the ObjectId to a string
+    if sequence_data := await database.collection.find_one(
+        {"_id": ObjectId(mri_sequence_id)}
+    ):
+        sequence_data["_id"] = str(
+            sequence_data["_id"]
+        )  # Convert the ObjectId to a string
         logger.info("done retrieving MRI sequence.")
         return MRISequence(**sequence_data)
     return None
 
 
-async def update_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str, mri_sequence: MRISequence) -> (MRISequence | None):
-    """
-    Update an MRI sequence with new data in the database.
+async def update_mri_sequence(
+    database: AsyncIOMotorDatabase, mri_sequence_id: str, mri_sequence: MRISequence
+) -> (MRISequence | None):
+    """Update an MRI sequence with new data in the database.
 
-    Parameters:
-    -----------
-    db : AsyncIOMotorDatabase
+    Parameters
+    ----------
+    database
         The MongoDB database handle.
-    mri_sequence_id : str
+    mri_sequence_id
         The ID of the MRI sequence to update.
-    mri_sequence : MRISequence
+    mri_sequence
         The updated MRI sequence data.
 
-    Returns:
-    --------
-    MRISequence
+    Returns
+    -------
         The updated MRI sequence.
     """
     mri_sequence.updated_at = datetime.datetime.utcnow()
-    result = await db.collection.replace_one({"_id": mri_sequence_id}, mri_sequence.dict(by_alias=True))
+    result = await database.collection.replace_one(
+        {"_id": mri_sequence_id}, mri_sequence.dict(by_alias=True)
+    )
 
     return mri_sequence if result.modified_count > 0 else None
 
 
-async def delete_mri_sequence(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> int:
-    """
-    Delete an MRI sequence by its ID from the database.
+async def delete_mri_sequence(
+    database: AsyncIOMotorDatabase, mri_sequence_id: str
+) -> int:
+    """Delete an MRI sequence by its ID from the database.
 
-    Parameters:
-    -----------
-    db : AsyncIOMotorDatabase
+    Parameters
+    ----------
+    database
         The MongoDB database handle.
-    mri_sequence_id : str
+    mri_sequence_id
         The ID of the MRI sequence to delete.
 
-    Returns:
-    --------
-    int
+    Returns
+    -------
         The number of deleted MRI sequences (0 or 1).
     """
-    result = await db.collection.delete_one({"_id": mri_sequence_id})
+    result = await database.collection.delete_one({"_id": mri_sequence_id})
     return result.deleted_count
 
 
-async def search_mri_sequences(db: AsyncIOMotorDatabase, search_query: str) -> List[MRISequence]:
-    """
-    Search for MRI sequences in the database based on a search query.
+async def search_mri_sequences(
+    database: AsyncIOMotorDatabase, search_query: str
+) -> list[MRISequence]:
+    """Search for MRI sequences in the database based on a search query.
 
-    Args:
-        db: The MongoDB database.
-        search_query: The search query to filter MRI sequences.
+    Parameters
+    ----------
+    database
+        The MongoDB database.
+    search_query
+        The search query to filter MRI sequences.
 
-    Returns:
+    Returns
+    -------
         A list of MRISequence objects that match the search query.
     """
-    mri_sequences_collection = db.collection
+    mri_sequences_collection = database.collection
     cursor = mri_sequences_collection.find({"$text": {"$search": search_query}})
     mri_sequences = await cursor.to_list(length=100)
 
     return mri_sequences
 
 
-async def download_mri_sequence_file(db: AsyncIOMotorDatabase, mri_sequence_id: str) -> Tuple[str, Any]:
-    """
-    Download the MRI sequence file associated with the given MRI sequence ID.
+async def download_mri_sequence_file(
+    database: AsyncIOMotorDatabase, mri_sequence_id: str
+) -> tuple[str, Any]:
+    """Download the MRI sequence file associated with the given MRI sequence ID.
 
-    Args:
-        db: The MongoDB database.
-        mri_sequence_id: The ID of the MRI sequence.
+    Parameters
+    ----------
+    database
+        The MongoDB database.
+    mri_sequence_id
+        The ID of the MRI sequence.
 
-    Returns:
+    Returns
+    -------
         A tuple containing the file name and the file content or reference.
+
+    Raises
+    ------
+    HTTPException
+        _description_
     """
     # Retrieve the MRI sequence document from the database
-    mri_sequence_collection = db.collection
-    mri_sequence = await mri_sequence_collection.find_one({"_id": ObjectId(mri_sequence_id)})
+    mri_sequence_collection = database.collection
+    mri_sequence = await mri_sequence_collection.find_one(
+        {"_id": ObjectId(mri_sequence_id)}
+    )
 
     # Check if the MRI sequence exists
     if not mri_sequence:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
+        )
 
     # Extract the file name and the file content
     file_name = f"{mri_sequence_id}.nii.gz"  # or use mri_sequence['file_name'] if it's stored in the database

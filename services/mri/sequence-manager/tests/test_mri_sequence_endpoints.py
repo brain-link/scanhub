@@ -5,7 +5,7 @@
 
 from fastapi.testclient import TestClient
 from main import app
-from database.models import MRISequence
+# from database.models import MRISequence
 
 client = TestClient(app)
 

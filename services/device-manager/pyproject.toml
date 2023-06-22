@@ -1,0 +1,90 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "device-manager"
+version = "0.0.1"
+description = "The device manager service is responsible for managing the devices that are connected to scanhub."
+authors = [
+    "David Schote <david.schote@brain-link.de>", 
+    "Christoph Dinh <christoph.dinh@brain-link.de>"
+]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+fastapi = "^0.96.0"
+uvicorn = "^0.22.0"
+websockets = "^11.0.3"
+kafka-python = "^2.0.2"
+asyncpg = "^0.27.0"
+psycopg2-binary = "^2.9.6"
+pydantic = "^1.10.9"
+async-sqlalchemy = "^1.0.0"
+python-multipart = "^0.0.6"
+
+[tool.poetry.group.lint.dependencies]
+mypy = "*"
+flake8 = "*"
+Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+isort = "*"
+autopep8 = "*"
+pydocstyle = "*"
+pylint = "*"
+poethepoet = "^0.20.0"
+black = "^23.3.0"
+
+[tool.poetry.group.test.dependencies]
+coverage = "*"
+codecov = "*"
+pytest = "*"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx_rtd_theme = "*"
+
+[tool.pydocstyle]
+convention = "numpy"
+
+[tool.pylint]
+py-version = "3.10"
+max-attributes = 20
+max-line-length = 120
+extension-pkg-allow-list = ["pydantic"]
+disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
+
+[tool.flake8]
+max-line-length = 120
+
+[tool.mypy]
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[tool.poe.tasks]
+lint.sequence = ["isort", "black", "pylint", "flake8", "mypy", "pydocstyle"]
+lint.ignore_fail = "return_non_zero"
+
+    [tool.poe.tasks.isort]
+    help = "Run isort"
+    cmd  = "isort app/"
+
+    [tool.poe.tasks.black]
+    help = "Run black"
+    cmd  = "black app/"
+
+    [tool.poe.tasks.pylint]
+    help = "Run pylint"
+    cmd  = "pylint app/"
+
+    [tool.poe.tasks.mypy]
+    help = "Run mypy"
+    cmd  = "mypy app/"
+
+    [tool.poe.tasks.flake8]
+    help = "Run flake8"
+    cmd  = "flake8 app/"
+
+    [tool.poe.tasks.pydocstyle]
+    help = "Run pydocstyle"
+    cmd  = "pydocstyle app/"

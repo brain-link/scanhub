@@ -3,27 +3,26 @@
 
 """Exam manager main file."""
 
-from api.db import init_db, engine
+from api.db import engine, init_db
 from api.exam import router
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
-
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
     docs_url="/api/v1/exam/docs",
 )
 
-# TODO: Specify specific origins
+# To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
 #   Better specify explicitly the allowed origins
-#   See: https://fastapi.tiangolo.com/tutorial/cors/ 
+#   See: https://fastapi.tiangolo.com/tutorial/cors/
 origins = [
     "http://localhost",
-    "http://localhost:3000",    # frontned
-    "http://localhost:8100",    # patient-manager
-    "http://localhost:8080",    # nginx
+    "http://localhost:3000",  # frontned
+    "http://localhost:8100",  # patient-manager
+    "http://localhost:8080",  # nginx
 ]
 
 app.add_middleware(
@@ -52,9 +51,15 @@ async def startup():
     tables = ins.get_table_names()
     print(f"Existing tables: {tables}")
     if "device" not in tables:
-        raise HTTPException(status_code=500, detail="SQL-DB: Device table is required but does not exist.")
+        raise HTTPException(
+            status_code=500,
+            detail="SQL-DB: Device table is required but does not exist.",
+        )
     if "workflow" not in tables:
-        raise HTTPException(status_code=500, detail="SQL-DB: Workflow table is required but does not exist.")
+        raise HTTPException(
+            status_code=500,
+            detail="SQL-DB: Workflow table is required but does not exist.",
+        )
     init_db()
 
 
@@ -64,7 +69,7 @@ async def shutdown() -> None:
     return None
 
 
-@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -85,7 +90,7 @@ async def readiness() -> dict:
 
     #     raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
 
-    return {'status': 'ok'}
+    return {"status": "ok"}
 
 
-app.include_router(router, prefix='/api/v1/exam')
+app.include_router(router, prefix="/api/v1/exam")
