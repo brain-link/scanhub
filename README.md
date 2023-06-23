@@ -12,7 +12,14 @@
 ## Demo :clapper:
 
 https://user-images.githubusercontent.com/42237900/193445329-93d344d1-2587-4d99-abe0-332d3c63e66d.mp4
-  
+
+### Recent UI Update 🚀
+
+<p allign="center">
+<img width="500" alt="Bildschirmfoto 2023-06-23 um 16 44 53" src="https://github.com/brain-link/scanhub-ui/assets/42237900/6ddd912f-b922-4cb6-afc7-536e5dacf7b8"> 
+<img width="500" alt="Bildschirmfoto 2023-06-23 um 16 44 43" src="https://github.com/brain-link/scanhub-ui/assets/42237900/8403095c-c3c6-491f-9985-7d595dd2edf4">
+</p>
+
 ScanHub is intended to be a multi modal acquisition software, which allows individualizable, modular and cloud-based processing of functional and anatomical medical images. 
 It seamlessly merges the acquisition with the processing of complex data on a single platform.
 ScanHub is open-source and freely availably to anyone :earth_africa:.
