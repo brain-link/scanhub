@@ -18,7 +18,7 @@ jobs:
 
     - name: Download Coverity Scan tool
       run: |
-        wget https://scan.coverity.com/download/linux64 --post-data "token=<COVERITY_TOKEN>&project=<COVERITY_PROJECT_NAME>" -O coverity_tool.tgz
+        wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=${{ secrets.COVERITY_PROJECT_NAME }}" -O coverity_tool.tgz
         tar xaf coverity_tool.tgz
         rm -rf cov-analysis
         mv cov-analysis-linux64-* cov-analysis
@@ -37,9 +37,9 @@ jobs:
         tar czvf cov-int.tgz cov-int
         SHA=`git rev-parse --short HEAD`
         curl \
-          --form token=<COVERITY_TOKEN> \
+          --form token=${{ secrets.COVERITY_TOKEN }} \
           --form email=$NOTIFICATION_EMAIL \
           --form file=@cov-int.tgz \
           --form version=$SHA \
           --form description="Github Actions build" \
-          https://scan.coverity.com/builds?project=<COVERITY_PROJECT_NAME>
+          https://scan.coverity.com/builds?project=${{ secrets.COVERITY_PROJECT_NAME }}
