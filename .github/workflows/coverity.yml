@@ -10,7 +10,7 @@ jobs:
         NOTIFICATION_EMAIL: "info@brain-link.de"
     strategy:
       matrix:
-        service: [service1, service2, service3]
+        service: [workflow-manager, device-manager, acquisition-control]
     steps:
 
     - name: Checkout source code
