@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         DOCKER_COMPOSE_FILE: "docker-compose.yml"
-        NOTIFICATION_EMAIL: "info@brain-link.de"
+        NOTIFICATION_EMAIL: "christoph.dinh@brain-link.de"
         COVERITY_SCAN_PROJECT_NAME: "brain-link/scanhub"
         COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_TOKEN }}
     strategy:
@@ -44,4 +44,4 @@ jobs:
           --form file=@cov-int.tgz \
           --form version=$SHA \
           --form description="Github Actions build" \
-          https://scan.coverity.com/builds?project=${{ secrets.COVERITY_PROJECT_NAME }}
+          https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME
