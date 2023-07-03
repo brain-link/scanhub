@@ -8,6 +8,8 @@ jobs:
     env:
         DOCKER_COMPOSE_FILE: "docker-compose.yml"
         NOTIFICATION_EMAIL: "info@brain-link.de"
+        COVERITY_SCAN_PROJECT_NAME: "brain-link/scanhub"
+        COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_TOKEN }}
     strategy:
       matrix:
         service: [workflow-manager, device-manager, acquisition-control]
@@ -18,7 +20,7 @@ jobs:
 
     - name: Download Coverity Scan tool
       run: |
-        wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_TOKEN }}&project=${{ secrets.COVERITY_PROJECT_NAME }}" -O coverity_tool.tgz
+        wget https://scan.coverity.com/download/linux64 --post-data "project=$COVERITY_SCAN_PROJECT_NAME&token=$COVERITY_SCAN_TOKEN" -O coverity_tool.tgz
         tar xaf coverity_tool.tgz
         rm -rf cov-analysis
         mv cov-analysis-linux64-* cov-analysis
