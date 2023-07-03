@@ -12,7 +12,15 @@ jobs:
         COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_TOKEN }}
     strategy:
       matrix:
-        service: [workflow-manager, device-manager, acquisition-control]
+        service: [
+          "exam-manager",
+          "workflow-manager",
+          "device-manager",
+          "acquisition-control"
+        ]
+
+    continue-on-error: True
+
     steps:
 
     - name: Checkout source code
@@ -27,11 +35,11 @@ jobs:
 
     - name: Build with Docker Compose
       run: |
-        docker-compose -f $DOCKER_COMPOSE_FILE build ${ { matrix.service }}
+        docker-compose -f $DOCKER_COMPOSE_FILE build ${{ matrix.service }}
 
     - name: Run Coverity Scan in Docker
       run: |
-        docker-compose -f $DOCKER_COMPOSE_FILE run --rm ${ { matrix.service }} bash -c "\
+        docker-compose -f $DOCKER_COMPOSE_FILE run --rm ${{ matrix.service }} bash -c "\
           cov-analysis/bin/cov-build --dir cov-int python setup.py build"
 
     - name: Upload result to Coverity
