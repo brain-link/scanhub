@@ -32,6 +32,7 @@ jobs:
         tar xaf coverity_tool.tgz
         rm -rf cov-analysis
         mv cov-analysis-linux64-* cov-analysis
+        ls -la cov-analysis/bin
 
     - name: Build with Docker Compose
       run: |
