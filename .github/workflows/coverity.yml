@@ -45,8 +45,7 @@ jobs:
           -v $(pwd)/cov-int:/cov-int \
           ${{ matrix.service }} bash -c "\
             /cov-analysis/bin/cov-configure --python && \
-            /cov-analysis/bin/cov-build --dir /cov-int --no-command --fs-capture-search /app && \
-            /cov-analysis/bin/cov-analyze --dir /cov-int --webapp-security"
+            /cov-analysis/bin/cov-build --dir /cov-int --no-command --fs-capture-search /app"
 
     - name: Upload result to Coverity
       run: |
