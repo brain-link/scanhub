@@ -39,8 +39,11 @@ jobs:
 
     - name: Run Coverity Scan in Docker
       run: |
-        docker-compose -f $DOCKER_COMPOSE_FILE run --rm ${{ matrix.service }} bash -c "\
-          cov-analysis/bin/cov-build --dir cov-int python setup.py build"
+        docker-compose -f $DOCKER_COMPOSE_FILE run --rm \
+          -v $(pwd)/cov-analysis:/cov-analysis \
+          -v $(pwd)/cov-int:/cov-int \
+          ${{ matrix.service }} bash -c "\
+          /cov-analysis/bin/cov-build --dir /cov-int python setup.py build"
 
     - name: Upload result to Coverity
       run: |
