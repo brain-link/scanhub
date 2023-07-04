@@ -47,6 +47,9 @@ jobs:
             /cov-analysis/bin/cov-configure --python && \
             /cov-analysis/bin/cov-build --dir /cov-int --no-command --fs-capture-search /app"
 
+    - name: Change ownership of cov-int
+      run: sudo chown -R $USER:$USER cov-int
+      
     - name: Upload result to Coverity
       run: |
         tar czvf cov-int.tgz cov-int
