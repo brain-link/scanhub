@@ -5,8 +5,9 @@
 
 from datetime import datetime
 
-from api.db import Device, Exam, Job, Procedure, Record, Workflow
 from pydantic import BaseModel, Extra
+
+from .db import Device, Exam, Job, Procedure, Record, Workflow
 
 
 class BaseDevice(BaseModel):
@@ -231,11 +232,13 @@ async def get_record_out(data: Record) -> RecordOut:
         id=data.id,
         data_path=data.data_path,
         comment=data.comment,
-        datetime_created=data.datetime_created
+        datetime_created=data.datetime_created,
     )
 
 
-async def get_job_out(data: Job, device: Device = None, workflow: Workflow = None) -> JobOut:
+async def get_job_out(
+    data: Job, device: Device = None, workflow: Workflow = None
+) -> JobOut:
     """Job output helper function.
 
     Parameters
@@ -309,7 +312,9 @@ async def get_exam_out(data: Exam) -> ExamOut:
         Exam pydantic output model
     """
     # Create procedures of the exam
-    exam_procedures = [await get_procedure_out(procedure) for procedure in data.procedures]
+    exam_procedures = [
+        await get_procedure_out(procedure) for procedure in data.procedures
+    ]
 
     return ExamOut(
         id=data.id,

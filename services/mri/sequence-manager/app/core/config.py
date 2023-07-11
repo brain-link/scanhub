@@ -5,12 +5,12 @@
 
 from pydantic import BaseSettings
 
-class Settings(BaseSettings):
-    """
-    The Settings class represents the configuration settings for the application.
 
-    Attributes:
-    -----------
+class Settings(BaseSettings):
+    """The Settings class represents the configuration settings for the application.
+
+    Attributes
+    ----------
     MONGODB_USER : str
         The username for authenticating to the MongoDB server.
     MONGODB_PASSWORD : str
@@ -33,7 +33,12 @@ class Settings(BaseSettings):
     MONGODB_COLLECTION_NAME: str
 
     class Config:
+        """Base settings configuration."""
+
         env_file = ".env"
 
-settings = Settings()
 
+# Create settings instance
+# settings = Settings()     # throws mypy error: missing named aarguments # pyright: ignore
+# Possible solution according to https://github.com/pydantic/pydantic/issues/3753:
+settings = Settings.parse_obj({})

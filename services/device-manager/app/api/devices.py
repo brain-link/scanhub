@@ -23,7 +23,7 @@ from .dal import (
 router = APIRouter()
 
 
-@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -31,7 +31,7 @@ async def readiness() -> dict:
     -------
         Status dictionary
     """
-    return {'status': 'ok'}
+    return {"status": "ok"}
 
 
 @router.get('/devices', response_model=List[DeviceOut], status_code=200, tags=["devices"])

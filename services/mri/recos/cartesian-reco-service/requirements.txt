@@ -1,8 +1,0 @@
-aiokafka
-asyncio
-scanhub==0.0.4.dev3
-fastapi
-uvicorn
-# Reco dependencies
-numpy
-pydicom

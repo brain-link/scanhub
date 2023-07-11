@@ -1,24 +1,28 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""Workflow data access layer"""
+"""Workflow data access layer."""
 
 from pprint import pprint
 
-from api.db import Workflow, async_session
-from api.models import BaseWorkflow
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
+from .db import Workflow, async_session
+from .models import BaseWorkflow
+
 
 async def add_workflow(payload: BaseWorkflow) -> Workflow:
-    """Add a new workflow to the database.
+    """Add new workflow to database.
 
-    Arguments:
-        payload {BaseWorkflow} -- Pydantic base model to create a new database entry
+    Parameters
+    ----------
+    payload
+        Workflow pydantic base model with data of new workflow entry
 
-    Returns:
-        Workflow -- Database orm model
+    Returns
+    -------
+        Database orm model of new workflow
     """
     new_workflow = Workflow(**payload.dict())
     async with async_session() as session:
@@ -49,10 +53,11 @@ async def get_workflow(workflow_id: int) -> (Workflow | None):
 
 
 async def get_all_workflows() -> list[Workflow]:
-    """Get a list of all existing workflows.
+    """Get a list of all workflows.
 
-    Returns:
-        List[Workflow] -- List of database orm models
+    Returns
+    -------
+        List of workflow database orm models
     """
     async with async_session() as session:
         result: Result = await session.execute(select(Workflow))
@@ -73,7 +78,7 @@ async def delete_workflow(workflow_id: int) -> bool:
         Success of delete eveent
     """
     async with async_session() as session:
-        if (workflow := await session.get(Workflow, workflow_id)):
+        if workflow := await session.get(Workflow, workflow_id):
             await session.delete(workflow)
             await session.commit()
             return True
@@ -81,18 +86,23 @@ async def delete_workflow(workflow_id: int) -> bool:
 
 
 async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> (Workflow | None):
-    """Update an existing workflow in database.
+    """Update existing workflow in database by id.
 
-    Arguments:
-        workflow_id {int} -- ID of workflow
-        payload {BaseWorkflow} -- Pydantic base model, data to be updated
+    Parameters
+    ----------
+    workflow_id
+        Id of the workflow to be updated
 
-    Returns:
-        Workflow -- Updated database orm model
+    payload
+        Workflow pydantic base model with data  to be updated
+
+    Returns
+    -------
+        Updated workflow database orm model, if update successful
     """
     async with async_session() as session:
-        if (workflow := await session.get(Workflow, workflow_id)):
-            workflow.update(payload.dict())
+        if workflow := await session.get(Workflow, workflow_id):
+            workflow.update(payload)
             await session.commit()
             await session.refresh(workflow)
             return workflow
