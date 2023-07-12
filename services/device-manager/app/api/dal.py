@@ -33,7 +33,7 @@ async def dal_create_device(payload: BaseDevice) -> Device:
     return new_device
 
 
-async def dal_get_device(device_id: int) -> (Device | None):
+async def dal_get_device(device_id: str) -> (Device | None):
     """Fetch a device from database.
 
     Arguments
@@ -62,7 +62,7 @@ async def dal_get_all_devices() -> list[Device]:
     return devices
 
 
-async def dal_delete_device(device_id: int) -> bool:
+async def dal_delete_device(device_id: str) -> bool:
     """Delete a device by identifier.
 
     Parameters
@@ -81,7 +81,7 @@ async def dal_delete_device(device_id: int) -> bool:
         return False
 
 
-async def dal_update_device(device_id: int, payload: BaseDevice) -> (Device | None):
+async def dal_update_device(device_id: str, payload: BaseDevice) -> (Device | None):
     """Update an existing device in database.
 
     Parameters
