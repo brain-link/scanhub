@@ -111,7 +111,7 @@ async def get_device_status(device_id: str):
         current_status = response.get('status')
         await websocket.close()
 
-        device_out = get_device_out(device)
+        device_out = await get_device_out(device)
         # Update the device's status and last_status_update
         device_out.status = current_status
         device_out.datetime_updated = datetime.now()
