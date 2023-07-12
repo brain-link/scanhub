@@ -6,7 +6,7 @@
 from pprint import pprint
 
 from api.db import Device, async_session
-from api.models import BaseDevice
+from api.models import BaseDevice, DeviceOut
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
@@ -81,7 +81,7 @@ async def dal_delete_device(device_id: str) -> bool:
         return False
 
 
-async def dal_update_device(device_id: str, payload: Device) -> (Device | None):
+async def dal_update_device(device_id: str, payload: DeviceOut) -> (Device | None):
     """Update an existing device in database.
 
     Parameters
