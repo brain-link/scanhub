@@ -10,6 +10,7 @@ from typing import List
 from datetime import datetime, timedelta
 from fastapi import APIRouter, WebSocket, HTTPException
 import websockets
+import websockets.client
 from .models import DeviceOut, get_device_out
 
 from .dal import (
