@@ -111,10 +111,11 @@ async def get_device_status(device_id: str):
         current_status = response.get('status')
         await websocket.close()
 
+        device_out = get_device_out(device)
         # Update the device's status and last_status_update
-        device.status = current_status
-        device.datetime_updated = datetime.now()
-        if not (device_new := await dal_update_device(device_id, device)):
+        device_out.status = current_status
+        device_out.datetime_updated = datetime.now()
+        if not (device_new := await dal_update_device(device_id, device_out)):
             raise HTTPException(status_code=404, detail="Error updating device in db")
 
     # Return the current status of the device
