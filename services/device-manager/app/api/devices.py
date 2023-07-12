@@ -39,7 +39,8 @@ async def get_devices() -> list[DeviceOut]:
     """
     Retrieve the list of registered devices.
 
-    Returns:
+    Returns
+    -------
         List[Device]: The list of registered devices.
     """
     if not (devices_all := await dal_get_all_devices()):
@@ -53,10 +54,12 @@ async def get_device_ip_address(device_id: str):
     """
     Retrieve the IP address of a specific device.
 
-    Args:
+    Args
+    -------
         device_id (str): The ID of the device.
 
-    Returns:
+    Returns
+    -------
         dict: The response containing the IP address of the device.
     """
     if not (device := await dal_get_device(device_id)):
@@ -69,10 +72,12 @@ async def get_device(device_id: str):
     """
     Retrieve a specific device.
 
-    Args:
+    Args
+    -------
         device_id (str): The ID of the device.
 
-    Returns:
+    Returns
+    -------
         dict: The response containing the information about the device
     """
     if not (device := await dal_get_device(device_id)):
@@ -85,10 +90,12 @@ async def get_device_status(device_id: str):
     """
     Retrieve the status of a specific device.
 
-    Args:
+    Args
+    -------
         device_id (str): The ID of the device.
 
-    Returns:
+    Returns
+    -------
         dict: The response containing the status of the device.
     """
     if not (device := await dal_get_device(device_id)):
@@ -119,10 +126,12 @@ async def delete_device(device_id: str):
     """
     Delete a device.
 
-    Args:
+    Args
+    -------
         device_id (str): The ID of the device.
 
-    Returns:
+    Returns
+    -------
         dict: The response indicating the success or failure of the deletion.
     """
     if not await dal_delete_device(device_id):
@@ -133,10 +142,12 @@ async def create_websocket_connection(ip_address: str) -> WebSocket:
     """
     Create a WebSocket connection to the specified IP address.
 
-    Args:
+    Args
+    -------
         ip_address (str): The IP address of the device.
 
-    Returns:
+    Returns
+    -------
         WebSocket: The WebSocket connection object.
     """
     websocket_url = f"ws://{ip_address}/ws"  # Assuming WebSocket endpoint is /ws
@@ -146,9 +157,10 @@ async def create_websocket_connection(ip_address: str) -> WebSocket:
 @router.websocket('/ws')
 async def websocket_endpoint(websocket: WebSocket):
     """
-    WebSocket endpoint for device communication.
+    Websocket endpoint for device communication.
 
-    Args:
+    Args
+    -------
         websocket (WebSocket): The WebSocket connection object.
     """
     await websocket.accept()
