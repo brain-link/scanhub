@@ -160,7 +160,7 @@ async def websocket_endpoint(websocket: WebSocket):
     Websocket endpoint for device communication.
 
     Args
-    -------
+    ----
         websocket (WebSocket): The WebSocket connection object.
     """
     await websocket.accept()
@@ -198,12 +198,13 @@ async def websocket_endpoint(websocket: WebSocket):
     except websockets.exceptions.ConnectionClosedOK:
         print('Device disconnected:', websocket.client.host)
         # Set the status of the disconnected device to "disconnected"
-        for device in devices:
-            if device.ip_address == websocket.client.host:
-                device.status = 'disconnected'
-                device.last_status_update = datetime.now()
-                print('Device status updated:', device)
-                break
-        else:
-            print('Device not found:', websocket.client.host)
+        # TODO: don't use ip to identify
+        # for device in devices:
+        #     if device.ip_address == websocket.client.host:
+        #         device.status = 'disconnected'
+        #         device.last_status_update = datetime.now()
+        #         print('Device status updated:', device)
+        #         break
+        # else:
+        #     print('Device not found:', websocket.client.host)
             
