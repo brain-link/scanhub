@@ -38,7 +38,7 @@ async def dal_get_device(device_id: str) -> (Device | None):
 
     Arguments
     ---------
-        device_id {int} -- Identifier of the device
+        device_id {str} -- Identifier of the device
 
     Returns
     -------
@@ -67,7 +67,7 @@ async def dal_delete_device(device_id: str) -> bool:
 
     Parameters
     ----------
-        device_id {int} -- Identifier of the device to be deleted
+        device_id {str} -- Identifier of the device to be deleted
 
     Returns
     -------
@@ -81,12 +81,12 @@ async def dal_delete_device(device_id: str) -> bool:
         return False
 
 
-async def dal_update_device(device_id: str, payload: BaseDevice) -> (Device | None):
+async def dal_update_device(device_id: str, payload: Device) -> (Device | None):
     """Update an existing device in database.
 
     Parameters
     ----------
-        id {int} -- Identifier of device
+        id {str} -- Identifier of device
         payload {BaseDevice} -- Pydantic base model, data to be updated
 
     Returns
