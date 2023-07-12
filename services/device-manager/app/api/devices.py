@@ -101,7 +101,7 @@ async def get_device_status(device_id: str):
     if not (device := await dal_get_device(device_id)):
         raise HTTPException(status_code=404, detail="Device not found")
 
-
+    status = device.status
     # Check if the stored status is outdated (e.g., older than 1 hour)
     if device.datetime_updated < datetime.now() - timedelta(hours=1):
         # Send request for current status over the WebSocket connection
@@ -114,12 +114,13 @@ async def get_device_status(device_id: str):
         device_out = await get_device_out(device)
         # Update the device's status and last_status_update
         device_out.status = current_status
+        status = current_status
         device_out.datetime_updated = datetime.now()
-        if not (device_new := await dal_update_device(device_id, device_out)):
+        if not await dal_update_device(device_id, device_out):
             raise HTTPException(status_code=404, detail="Error updating device in db")
 
     # Return the current status of the device
-    return {'status': device_new.status}
+    return {'status': status}
 
 
 @router.delete('/devices/{device_id}', response_model={}, status_code=204, tags=["devices"])
@@ -176,7 +177,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 ip_address = websocket.client.host
                 device_id = device_data.get('id')
                 device = DeviceOut(id=device_id, ip_address=ip_address, **device_data)
-                if not (device := await dal_create_device(device)):
+                if not await dal_create_device(device):
                     print('Error registering device: ', device)
                     await websocket.send_json({'message': 'Error registering device'})
                 else:
@@ -190,11 +191,15 @@ async def websocket_endpoint(websocket: WebSocket):
                 if not (device := await dal_get_device(status_data.get('id'))):
                     await websocket.send_json({'message': 'Device not registered'})
                 else:
-                    if not (device_new := await dal_update_device(device_id, device)):
+                    device_out = await get_device_out(device)
+                    # Update the device's status and last_status_update
+                    device_out.status = status_data.get('status')
+                    device_out.datetime_updated = datetime.now()
+                    if not await dal_update_device(device_id, device_out):
                         await websocket.send_json({'message': 'Error updating device.'})
                     else:
                         # Send response to the device
-                        await websocket.send_json({'message': f'Device status updated successfully, {device_new}'})
+                        await websocket.send_json({'message': f'Device status updated successfully, {device}'})
 
     except websockets.exceptions.ConnectionClosedOK:
         print('Device disconnected:', websocket.client.host)
