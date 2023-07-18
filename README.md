@@ -3,16 +3,15 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build"/>
-</a>
-<a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests"/>
-</a>
-
-<a href="https://scan.coverity.com/projects/brain-link-scanhub">
-  <img src="https://scan.coverity.com/projects/28706/badge.svg" alt="Coverity Scan Build Status"/>
-</a>
+  <a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
+      <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build"/>
+  </a>
+  <a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
+      <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests"/>
+  </a>
+  <a href="https://scan.coverity.com/projects/brain-link-scanhub">
+    <img src="https://scan.coverity.com/projects/28706/badge.svg" alt="Coverity Scan Build Status"/>
+  </a>
 </p>
 
 -----------------
