@@ -1,5 +1,5 @@
-services
-========
+acquisition-control
+===================
 
 .. toctree::
    :maxdepth: 4
