@@ -1,12 +1,12 @@
-name: 'static-tests'
+name: 'Static Tests'
 
 on:
   push:
     branches:
-      - main
+      - '*'
   pull_request:
     branches:
-      - main
+      - '*'
 
 jobs:
 
