@@ -1,6 +1,35 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../services'))
+
+# Add all directories that contain Python files to the Python path
+sys.path.extend([
+    os.path.abspath('../services/acquisition-control'),
+    os.path.abspath('../services/device-manager'),
+    os.path.abspath('../services/exam-manager'),
+    os.path.abspath('../services/mri'),
+    os.path.abspath('../services/workflow-manager'),
+    os.path.abspath('../services/acquisition-control/app'),
+    os.path.abspath('../services/device-manager/app'),
+    os.path.abspath('../services/device-manager/app/api'),
+    os.path.abspath('../services/device-manager/app/data_lake'),
+    os.path.abspath('../services/exam-manager/app'),
+    os.path.abspath('../services/exam-manager/app/api'),
+    os.path.abspath('../services/exam-manager/app/data_lake'),
+    os.path.abspath('../services/mri/recos'),
+    os.path.abspath('../services/mri/sequence-manager'),
+    os.path.abspath('../services/mri/recos/cartesian-reco-service'),
+    os.path.abspath('../services/mri/recos/cartesian-reco-service/app'),
+    os.path.abspath('../services/mri/recos/cartesian-reco-service/app/data_lake'),
+    os.path.abspath('../services/mri/sequence-manager/app'),
+    os.path.abspath('../services/mri/sequence-manager/tests'),
+    os.path.abspath('../services/mri/sequence-manager/app/core'),
+    os.path.abspath('../services/mri/sequence-manager/app/database'),
+    os.path.abspath('../services/mri/sequence-manager/app/endpoints'),
+    os.path.abspath('../services/mri/sequence-manager/app/services'),
+    os.path.abspath('../services/workflow-manager/app'),
+    os.path.abspath('../services/workflow-manager/app/api'),
+    os.path.abspath('../services/workflow-manager/app/data_lake'),
+])
 
 # -- Project information -----------------------------------------------------
 
