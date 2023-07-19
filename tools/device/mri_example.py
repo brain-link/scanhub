@@ -16,10 +16,9 @@ class Mri(Device):
         return
 
     @staticmethod
-    def start_scan(scan_request):
+    def start_scan(scan_request, records_path):
         """do something to start the scan"""
         Mri.simulate_scan()
-        return
 
     @staticmethod
     def pre_scan(scan_request):

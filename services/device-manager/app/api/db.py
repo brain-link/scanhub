@@ -14,7 +14,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 # Create base for device
 Base: DeclarativeMeta = declarative_base()
 
-if (db_uri := os.getenv('DB_URI')):
+if db_uri := os.getenv("DB_URI"):
     engine = create_engine(db_uri, echo=False)
 else:
     raise RuntimeError("Database URI not defined.")
@@ -29,7 +29,7 @@ def init_db() -> None:
 class Device(Base):
     """Device ORM model."""
 
-    __tablename__ = 'device'
+    __tablename__ = "device"
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -40,26 +40,28 @@ class Device(Base):
     site: Mapped[str] = mapped_column(nullable=True)
     ip_address: Mapped[str] = mapped_column(nullable=False)
 
-    datetime_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(onupdate=func.now(), nullable=True)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now()  # pylint: disable=not-callable
+    )
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+    )
 
     def update(self, data: dict):
         """Update attributes of orm model.
 
-        Arguments:
+        Parameters
+        ----------
             data {dict} -- Entries to be updated
         """
         for key, value in data.items():
             setattr(self, key, value)
 
 
-if (db_uri_async := os.getenv('DB_URI_ASYNC')):
+if db_uri_async := os.getenv("DB_URI_ASYNC"):
     # Create async engine and session, echo=True generates console output
     async_engine = create_async_engine(
-        db_uri_async,
-        future=True,
-        echo=False,
-        isolation_level="AUTOCOMMIT"
+        db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT"
     )
 else:
     raise RuntimeError("Database URI not defined.")

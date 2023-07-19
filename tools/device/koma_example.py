@@ -9,7 +9,7 @@ from device import Device
 
 import julia  # pylint: disable=wrong-import-order
 julia.install()
-from julia import KomaMRI  # pylint: disable=no-name-in-module,wrong-import-position,wrong-import-order
+from julia import KomaMRI  # pylint: disable=wrong-import-position,wrong-import-order
 
 
 app = FastAPI()
@@ -31,7 +31,6 @@ class Mri(Device):
 
         raw = KomaMRI.simulate(obj, seq, sys)
         KomaMRI.plot_signal(raw)
-        return
 
     @staticmethod
     def pre_scan(scan_request):

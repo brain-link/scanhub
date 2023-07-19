@@ -9,7 +9,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-
 app = FastAPI(
     openapi_url="/api/v1/workflow/openapi.json",
     docs_url="/api/v1/workflow/docs",
@@ -17,7 +16,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,7 +36,7 @@ async def shutdown() -> None:
     return None
 
 
-@router.get('/health/readiness', response_model={}, status_code=200, tags=['health'])
+@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -54,10 +53,12 @@ async def readiness() -> dict:
     """
     ins = inspect(engine)
     print(f"Found tables: {ins.get_table_names()}")
-    if 'workflow' not in ins.get_table_names():
-        raise HTTPException(status_code=500, detail="Could not find workflow table, table not created.")
+    if "workflow" not in ins.get_table_names():
+        raise HTTPException(
+            status_code=500, detail="Could not find workflow table, table not created."
+        )
     print("Healthcheck: Endpoint is ready.")
-    return {'status': 'ok'}
+    return {"status": "ok"}
 
 
-app.include_router(router, prefix='/api/v1/workflow')
+app.include_router(router, prefix="/api/v1/workflow")

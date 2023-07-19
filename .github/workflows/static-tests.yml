@@ -10,254 +10,64 @@ on:
 
 jobs:
 
-  linting-exam-manager:
-    name: 'Linting exam-manager'
-    runs-on: ubuntu-latest
-    env:
-      working-directory: ./services/exam-manager
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-    continue-on-error: True
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache poetry dependencies
-        uses: actions/cache@v2
-        id: cached-poetry-dependencies
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-      - name: Check cached dependencies
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint --no-root
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      - name: Poetry install
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint
-      - name: Run linter
-        working-directory: ${{env.working-directory}}
-        run: poetry run poe lint
-        
-  linting-workflow-manager:
-    name: 'Linting workflow-manager'
-    runs-on: ubuntu-latest
-    env:
-      working-directory: ./services/workflow-manager
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-    continue-on-error: True
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache poetry dependencies
-        uses: actions/cache@v2
-        id: cached-poetry-dependencies
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-      - name: Check cached dependencies
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint --no-root
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      - name: Poetry install
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint
-      - name: Run linter
-        working-directory: ${{env.working-directory}}
-        run: poetry run poe lint
-        
-  linting-device-manager:
-    name: 'Linting device-manager'
-    runs-on: ubuntu-latest
-    env:
-      working-directory: ./services/device-manager
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-    continue-on-error: True
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache poetry dependencies
-        uses: actions/cache@v2
-        id: cached-poetry-dependencies
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-      - name: Check cached dependencies
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint --no-root
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      - name: Poetry install
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint
-      - name: Run linter
-        working-directory: ${{env.working-directory}}
-        run: poetry run poe lint
+  Linting:
+    name: 'Linting service'
 
-  linting-acquisition-control:
-    name: 'Linting acquisition-control'
     runs-on: ubuntu-latest
     env:
-      working-directory: ./services/acquisition-control
+      working-directory: ./services
+
     strategy:
       matrix:
         python-version: ["3.10"]
+        service: [
+          "exam-manager",
+          "workflow-manager",
+          "device-manager",
+          "acquisition-control",
+          "mri/sequence-manager",
+          "mri/recos/cartesian-reco-service",
+        ]
+
     continue-on-error: True
+
     steps:
+
       - uses: actions/checkout@v3
+
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Cache poetry install
         uses: actions/cache@v2
         with:
           path: ~/.local
           key: poetry
+
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
           virtualenvs-create: true
           virtualenvs-in-project: true
+
       - name: Cache poetry dependencies
         uses: actions/cache@v2
         id: cached-poetry-dependencies
         with:
           path: .venv
           key: pydeps-${{ hashFiles('**/poetry.lock') }}
+
       - name: Check cached dependencies
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry install --no-interaction --with lint --no-root
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
       - name: Poetry install
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry install --no-interaction --with lint
+
       - name: Run linter
-        working-directory: ${{env.working-directory}}
-        run: poetry run poe lint
-          
-  linting-mri-sequence-manager:
-    name: 'Linting MRI sequence-manager'
-    runs-on: ubuntu-latest
-    env:
-      working-directory: ./services/mri/sequence-manager
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-    continue-on-error: True
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache poetry dependencies
-        uses: actions/cache@v2
-        id: cached-poetry-dependencies
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-      - name: Check cached dependencies
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint --no-root
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      - name: Poetry install
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint
-      - name: Run linter
-        working-directory: ${{env.working-directory}}
-        run: poetry run poe lint
-        
-  linting-mri-cartesian-reco-service:
-    name: 'Linting MRI cartesian-reco-service'
-    runs-on: ubuntu-latest
-    env:
-      working-directory: ./services/mri/recos/cartesian-reco-service
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-    continue-on-error: True
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Cache poetry dependencies
-        uses: actions/cache@v2
-        id: cached-poetry-dependencies
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-      - name: Check cached dependencies
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint --no-root
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      - name: Poetry install
-        working-directory: ${{env.working-directory}}
-        run: poetry install --no-interaction --with lint
-      - name: Run linter
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry run poe lint

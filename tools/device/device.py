@@ -5,9 +5,9 @@
 #  python -m uvicorn mri:app --reload
 from abc import ABC, abstractmethod
 import logging
-from fastapi import APIRouter, BackgroundTasks
 import os
-from pydantic import BaseModel, Json  # pylint: disable=no-name-in-module
+from fastapi import APIRouter, BackgroundTasks
+from pydantic import BaseModel, Json
 import requests
 
 # TODO: Move to scanhub-tools
@@ -67,28 +67,26 @@ class Device(ABC):
         return {"message": f"""Scanrequest {scan_request.record_id} received.
         Scan is scheduled."""}
 
-
     def upload_image(self, record_id):
         """upload the image to acq control"""
         try:
-            file_handler = open(f"{self.records_path}{record_id}/result",
-                                "r", encoding='UTF-8')
+            with open(f"{self.records_path}{record_id}/result",
+                                "r", encoding='UTF-8') as file_handler:
+                file = {'file': file_handler}
+                url = f"{self.url_acq_ctrl}"  # TODO: complete url
+                
+                try:
+                    response = requests.post(url, files=file, timeout=10)
+                    response.raise_for_status()
+                except requests.exceptions.HTTPError as errh:
+                    print("Http Error:", errh)
+                    return False
+                      
         except Exception as ex:  # pylint: disable=broad-exception-caught
             print(ex)
             return False
-
-        file = {'file': file_handler}
-        url = f"{self.url_acq_ctrl}"  # TODO: complete url
-
-        try:
-            requests.post(url, files=file, timeout=10)
-        except Exception as ex:  # pylint: disable=broad-exception-caught
-            print(ex)
-            file_handler.close()
-            return False
-
-        file_handler.close()
-        return
+        
+        return True
 
     def submit_status(self, record_id, percentage):  # pylint: disable=unused-argument
         """submit status to acq_control"""

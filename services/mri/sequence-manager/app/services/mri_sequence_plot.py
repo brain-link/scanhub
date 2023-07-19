@@ -1,25 +1,26 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+# %%
 """Utility function to create a sequence plot with plotly."""
+
 import numpy as np
-from pypulseq import Sequence
-import plotly.graph_objects as go
-from pydantic_numpy import NumpyModel, NDArrayFp32
+import plotly.graph_objects as go  # type: ignore
+from pydantic import BaseModel  # type: ignore
+from pypulseq import Sequence  # type: ignore
 
 
-
-def cast_data(x):
-    return np.round(x, 2).astype(float)
-
-
-class TraceData(NumpyModel):
+class TraceData(BaseModel):
     """Numpy model for trace data."""
 
-    x: NDArrayFp32
-    y: NDArrayFp32
+    x: list[float]
+    y: list[float]
     name: str
 
 
-def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.inf), time_factor=1e3):
-    """Computes a sequence dictionary from pulseq sequence object.
+def get_sequence_plot(
+    seq: Sequence, time_range: tuple[float, float] = (0.0, np.inf), time_factor=1e3
+) -> list[TraceData]:
+    """Compute a sequence dictionary from pulseq sequence object.
 
     Parameters
     ----------
@@ -35,99 +36,145 @@ def get_sequence_plot(seq: Sequence, time_range: tuple[float, float] = (0., np.i
         list of plot data models
     """
     # Empty lists for RX and TX channel: [Time, Magnitude, Phase]
-    # rx: list[list] = [[], [], []]
-    # tx: list[list] = [[], [], []]
-    rx = [np.array([]), np.array([]), np.array([])]
-    tx = [np.array([]), np.array([]), np.array([])]
+    rx_data: list[list] = [[0.0], [0.0], [0.0]]
+    tx_data: list[list[float]] = [[0.0], [0.0], [0.0]]
 
     # Empty gradient channel dictionary: {channel: [Time, Magnitude]}
-    # gradients: dict[str, list[list]] = {channel: [[], []] for channel in ['gx', 'gy', 'gz']}
-    gradients = {channel: [np.array([]), np.array([])] for channel in ['gx', 'gy', 'gz']}
+    gradients: dict[str, list[list]] = {
+        channel: [[0.0], [0.0]] for channel in ["gx", "gy", "gz"]
+    }
 
-    t0 = 0.
+    t_0 = 0.0
 
     for idx in range(len(seq.block_events.keys())):
-        block = seq.get_block(idx+1)
-        is_valid = time_range[0] <= t0 <= time_range[1]
+        block = seq.get_block(idx + 1)
+        is_valid = time_range[0] <= t_0 <= time_range[1]
         if is_valid:
-
             # ADC event
-            if block.adc:
-                adc = block.adc
-                # From Pulseq: According to the information from Klaus Scheffler and indirectly from Siemens this
-                # is the present convention - the samples are shifted by 0.5 dwell
-                t = adc.delay + (np.arange(int(adc.num_samples)) + 0.5) * adc.dwell
-                # rx[0].append(np.round(time_factor * (t0 + t), 2).astype(float))
-                # rx[1].append(np.ones(len(t), dtype=float))
-                # rx[2].append(np.round(np.angle(
-                #     np.exp(1j * adc.phase_offset) * np.exp(1j * 2 * np.pi * t * adc.freq_offset)
-                # ), 2).astype(float))
-                rx[0] = np.append(rx[0], time_factor * (t0 + t))
-                rx[1] = np.append(rx[1], np.ones(len(t)))
-                rx[2] = np.append(rx[2], np.angle(
-                    np.exp(1j * adc.phase_offset) * np.exp(1j * 2 * np.pi * t * adc.freq_offset)
-                ))
-                
+            if adc := block.adc:
+                adc_duration = adc.dwell * (adc.num_samples + 0.5)
+                rx_data[0] += list(
+                    np.cumsum([t_0, adc.delay, 0, adc_duration, 0]) * time_factor
+                )
+                rx_data[1] += [0.0, 0.0, 1.0, 1.0, 0.0]
+
             # RF event
-            if block.rf:
-                rf = block.rf
-                t = rf.t + rf.delay
-                # tx[0].append(np.round(time_factor * (t0 + t), 2).astype(float))
-                # tx[1].append(np.round(np.abs(rf.signal), 2).astype(float))
-                # tx[2].append(np.round(np.angle(
-                #     rf.signal * np.exp(1j * rf.phase_offset) * np.exp(1j * 2 * np.pi * rf.t * rf.freq_offset)
-                # ), 2).astype(float))
-                tx[0] = np.append(tx[0], time_factor * (t0 + t))
-                tx[1] = np.append(tx[1], np.abs(rf.signal))
-                tx[2] = np.append(tx[2], np.angle(
-                    rf.signal * np.exp(1j * rf.phase_offset) * np.exp(1j * 2 * np.pi * rf.t * rf.freq_offset)
-                ))
+            if rf_data := block.rf:
+                time_points = rf_data.t + rf_data.delay
+                tx_data[0] += list(
+                    np.round(time_factor * (t_0 + time_points), 2).astype(float)
+                )
+                tx_data[1] += list(np.round(np.abs(rf_data.signal), 2).astype(float))
+                tx_data[2] += list(
+                    np.round(
+                        np.angle(
+                            rf_data.signal
+                            * np.exp(1j * rf_data.phase_offset)
+                            * np.exp(1j * 2 * np.pi * rf_data.t * block.rf.freq_offset)
+                        ),
+                        2,
+                    ).astype(float)
+                )
 
             # Gradient event
-            for ch in gradients.keys():
-                if gb := getattr(block, ch):
-                    if gb.type == 'grad':
-                        # In place unpacking of grad.t with the starred expression
-                        t = gb.delay + [0, *(gb.tt+(gb.tt[1]-gb.tt[0])/2), gb.tt[-1]+gb.tt[1]-gb.tt[0]]
-                        waveform = 1e-3 * np.array((gb.first, *gb.waveform, gb.last))
+            for channel in gradients.keys():
+                if gradient_block := getattr(block, channel):
+                    if gradient_block.type == "grad":
+                        time_points = np.array(
+                            [
+                                gradient_block.delay,
+                                *gradient_block.tt + gradient_block.delay,
+                                gradient_block.shape_dur,
+                            ]
+                        )
+                        waveform = 1e-3 * np.array(
+                            [
+                                gradient_block.first,
+                                *gradient_block.waveform,
+                                gradient_block.last,
+                            ]
+                        )
                     else:
-                        t = np.cumsum([0, gb.delay, gb.rise_time, gb.flat_time, gb.fall_time])
-                        waveform = 1e-3 * gb.amplitude * np.array([0, 0, 1, 1, 0])
+                        time_points = np.cumsum(
+                            [
+                                0,
+                                gradient_block.delay,
+                                gradient_block.rise_time,
+                                gradient_block.flat_time,
+                                gradient_block.fall_time,
+                            ]
+                        )
+                        waveform = (
+                            1e-3 * gradient_block.amplitude * np.array([0, 0, 1, 1, 0])
+                        )
 
-                    # gradients[ch][0].append(np.round(time_factor * (t0 + t), 2).astype(float))
-                    # gradients[ch][1].append(np.round(waveform, 2).astype(float))
-                    gradients[ch][0] = np.append(gradients[ch][0], time_factor * (t0 + t))
-                    gradients[ch][1] = np.append(gradients[ch][1], waveform)
+                    gradients[channel][0] += list(
+                        np.round(time_factor * (t_0 + time_points), 2).astype(float)
+                    )
+                    gradients[channel][1] += list(np.round(waveform, 2).astype(float))
 
         # Update current time offset
-        t0 += seq.block_durations[idx]
+        t_0 += float(seq.block_durations[idx])
 
-    traces = [
-        TraceData(x=cast_data(tx[0]), y=cast_data(tx[1]), name="Tx"),
-        TraceData(x=cast_data(rx[0]), y=cast_data(rx[1]), name="Rx"),
-        TraceData(x=cast_data(gradients["gx"][0]), y=cast_data(gradients["gx"][1]), name="Gx"),
-        TraceData(x=cast_data(gradients["gy"][0]), y=cast_data(gradients["gy"][1]), name="Gy"),
-        TraceData(x=cast_data(gradients["gz"][0]), y=cast_data(gradients["gz"][1]), name="Gz")
-    ]
+    # Set all channels back to zero
+    tx_data[0] += [tx_data[0][-1], seq.duration()[0] * time_factor]
+    tx_data[1] += [0.0, 0.0]
+    rx_data[0] += [rx_data[0][-1], seq.duration()[0] * time_factor]
+    rx_data[1] += [0.0, 0.0]
+    for grad in gradients.values():
+        grad[0] += [grad[0][-1], seq.duration()[0] * time_factor]
+        grad[1] += [0.0, 0.0]
 
+    return generate_plotly_figure(
+        [
+            TraceData(x=tx_data[0], y=tx_data[1], name="Tx"),
+            TraceData(x=rx_data[0], y=rx_data[1], name="Rx"),
+            TraceData(x=gradients["gx"][0], y=gradients["gx"][1], name="Gx"),
+            TraceData(x=gradients["gy"][0], y=gradients["gy"][1], name="Gy"),
+            TraceData(x=gradients["gz"][0], y=gradients["gz"][1], name="Gz"),
+        ]
+    )
+
+
+def generate_plotly_figure(traces: list[TraceData]):
+    """Generate plotly figure of traces.
+
+    Parameters
+    ----------
+    traces
+        List of trace data
+
+    Returns
+    -------
+        Plotly figure
+    """
     fig = go.Figure()
     for k, trace in enumerate(traces):
-        fig.add_trace(go.Scatter(
-            x=trace.x,
-            y=trace.y,
-            name=trace.name,
-            yaxis=f"y{len(traces)-k}",
-            mode="lines",
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=trace.x,
+                y=trace.y,
+                name=trace.name,
+                yaxis=f"y{len(traces)-k}",
+                mode="lines",
+            )
+        )
 
     fig.update_layout(
         autosize=True,
-        xaxis=dict(ticks="outside", title="Time (ms)", rangeslider=dict(autorange=True)),
-        yaxis=dict(domain=[0.0, 0.15]),
-        yaxis2=dict(domain=[0.2, 0.35]),
-        yaxis3=dict(domain=[0.4, 0.55]),
-        yaxis4=dict(domain=[0.6, 0.75]),
-        yaxis5=dict(domain=[0.8, 0.95]),
+        xaxis={
+            "ticks": "outside",
+            "title": "Time (ms)",
+            "rangeslider": {"autorange": True},
+        },
+        yaxis={"domain": [0.0, 0.15]},
+        yaxis2={"domain": [0.2, 0.35]},
+        yaxis3={"domain": [0.4, 0.55]},
+        yaxis4={"domain": [0.6, 0.75]},
+        yaxis5={"domain": [0.8, 0.95]},
     )
 
     return fig
+
+
+# %%
