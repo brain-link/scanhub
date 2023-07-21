@@ -21,7 +21,7 @@ import Grid from '@mui/joy/Grid';
 // Import procedure api service and interfaces 
 import client from '../client/exam-tree-queries';
 import { Procedure } from '../interfaces/data.interface';
-import { CreateModalProps } from '../interfaces/components.interface';
+import { ModalProps } from '../interfaces/components.interface';
 
 
 // Procedure form template
@@ -30,25 +30,26 @@ const createProcedureForm = [
     {key: 'status', label: 'Status', placeholder: 'Procedure created'},
 ]
 
-function ProceduresList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
+function ProcedureModal({data, dialogOpen, setDialogOpen, onSave}: ModalProps<Procedure>) {
 
     const params = useParams();
 
-    const [procedure, setProcedure] = React.useState<Procedure>({
-        id: 0,
-        exam_id: Number(params.examId),
-        name: "",
-        status: "",
-        jobs: [],
-        datetime_created: new Date(),
-    });
+    const [procedure, setProcedure] = data ? React.useState<Procedure>(data) :
+        React.useState<Procedure>({
+            id: 0,
+            exam_id: Number(params.examId),
+            name: "",
+            status: "",
+            jobs: [],
+            datetime_created: new Date(),
+        });
 
-    // Post a new record and refetch records table
-    const createProcedure = useMutation(async() => {
-        await client.procedureService.create(procedure)
-        .then( () => { onCreated() } )
-        .catch((err) => { console.log("Error during procedure creation: ", err) }) 
-    })
+    // // Post a new record and refetch records table
+    // const createProcedure = useMutation(async() => {
+    //     await client.procedureService.create(procedure)
+    //     .then( () => { onCreated() } )
+    //     .catch((err) => { console.log("Error during procedure creation: ", err) }) 
+    // })
 
 
     return (
@@ -85,7 +86,8 @@ function ProceduresList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps
                 <form
                     onSubmit={(event) => {
                         event.preventDefault();
-                        createProcedure.mutate();
+                        // createProcedure.mutate();
+                        onSave.mutate(procedure);
                         setDialogOpen(false);
                     }}
                 >
@@ -119,4 +121,4 @@ function ProceduresList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps
     );  
 }
 
-export default ProceduresList;
+export default ProcedureModal;

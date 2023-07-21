@@ -7,6 +7,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from 'react-query';
 
+
 // Import mui joy components
 import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
@@ -21,7 +22,7 @@ import ModalDialog from '@mui/joy/ModalDialog';
 // Import api service and interfaces
 import client from '../client/exam-tree-queries';
 import { Exam } from '../interfaces/data.interface';
-import { CreateModalProps } from '../interfaces/components.interface';
+import { ModalProps } from '../interfaces/components.interface';
 
 
 // Exam form template, order is row wise
@@ -34,36 +35,55 @@ const createExamFormContent = [
 ]
 
 
-function ExamList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
+// function ExamModal({data, dialogOpen, setDialogOpen, onSave}: React.PropsWithChildren<ModalProps<Exam>>) {
+// function ExamModal(props: ModalProps<Exam>) {
+function ExamModal(props: any) {
+
+// const ExamModal: React.FC<ModalProps<Exam>> = ({data, dialogOpen, setDialogOpen, onSave}) => {
 
     const params = useParams();
 
-    const [exam, setExam] = React.useState<Exam>({
-        id: 0, 
-        patient_id: Number(params.patientId),
-        name: '',
-        procedures: [],
-        country: 'D',
-        site: '',
-        address: '',
-        creator: '', 
-        status: '', 
-        datetime_created: new Date(), 
-        datetime_updated: new Date(),
+    const [exam, setExam] = props.data ? React.useState<Exam>(props.data) :
+        React.useState<Exam>({
+            id: NaN, 
+            patient_id: Number(params.patientId),
+            name: '',
+            procedures: [],
+            country: 'D',
+            site: '',
+            address: '',
+            creator: '', 
+            status: '', 
+            datetime_created: new Date(), 
+            datetime_updated: new Date(),
+        })
+
+    const title = props.data ? "Update Exam" : "Create Exam"
+
+    React.useEffect( () => {
+        console.log(props)
+        // console.log(props.onSave)
     })
 
-    const createExam = useMutation( async() => {
-        await client.examService.create(exam)
-        .then( () => { onCreated() })
-        .catch((err) => { console.log("Error during exam creation: ", err) }) 
-    })
+    // const onSave = useMutation( async() => {
+    //     await client.examService.create(exam)
+    //     .then( () => { onCreated() })
+    //     .catch((err) => { console.log("Error in exam modal: ", err) }) 
+    // })
+
+    const handleSave = () => {
+        console.log("PRE SAVE");
+        // props.onSave(exam);
+        // props.modalSubmit();
+        console.log("POST SAVE");
+      };
 
     return (
         <Modal 
             keepMounted
-            open={dialogOpen}
+            open={props.dialogOpen}
             color='neutral'
-            onClose={() => setDialogOpen(false)}
+            onClose={() => props.setDialogOpen(false)}
             sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
             <ModalDialog
@@ -86,15 +106,19 @@ function ExamList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
                     fontSize="1.25em"
                     mb="0.25em"
                 >
-                    Create new exam
+                    { title }
                 </Typography>
                 
                 <form
-                    onSubmit={(event) => {
-                        event.preventDefault();
-                        createExam.mutate();
-                        setDialogOpen(false);
-                    }}
+                    onSubmit={ 
+                        (event) => {
+                            event.preventDefault();
+                            // console.log("SAVE EXAM: ", exam)
+                            // // onSave(exam);
+                            handleSave();
+                            // setDialogOpen(false);
+                        }
+                    }
                 >
                     <Stack spacing={5}>
                         <Grid container rowSpacing={1.5} columnSpacing={5}>
@@ -107,13 +131,16 @@ function ExamList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
                                             name={ item.key }
                                             onChange={(e) => setExam({...exam, [e.target.name]: e.target.value})} 
                                             placeholder={ item.placeholder }
+                                            defaultValue={ exam[item.key] }
                                             required 
                                         />
                                     </Grid>
                                 ))
                             }
                         </Grid>
+
                         <Button size='sm' type="submit" sx={{ maxWidth: 100 }}>Submit</Button>
+
                     </Stack>
 
                 </form>
@@ -122,4 +149,4 @@ function ExamList({dialogOpen, setDialogOpen, onCreated}: CreateModalProps) {
     );  
 }
 
-export default ExamList;
+export default ExamModal;
