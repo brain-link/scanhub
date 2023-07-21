@@ -21,6 +21,7 @@ import IconButton from '@mui/joy/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import FilterCenterFocusSharpIcon from '@mui/icons-material/FilterCenterFocusSharp';
 import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
+import ProcedureModal from '../components/ProcedureModal';
 
 // Interfaces and api service
 import { Procedure } from '../interfaces/data.interface'; 
@@ -36,6 +37,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
     // Context: Delete and edit options, anchor for context location
     const [contextOpen, setContextOpen] = React.useState<number | null>(null);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [procedureModalOpen, setProcedureModaalOpen] = React.useState(false);
 
 
     const handleContextClose = () => {
@@ -55,6 +57,12 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
             navigate(`/patients/${params.patientId}/${params.examId}`);
             refetchParentData(); 
         })
+    })
+
+    const updateProcedure = useMutation( async (updatedProcedure: Procedure) => {
+        await client.procedureService.update(updatedProcedure.id, updatedProcedure)
+        .then( () => { refetchParentData() } )
+        .catch( (err) => { console.log("Error on procedure update: ", err) })
     })
 
 
@@ -98,13 +106,23 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                     onClose={() => handleContextClose()}
                     sx={{ zIndex: 'snackbar' }}
                 >
-                    <MenuItem key='edit' onClick={() => { console.log('To be implemented...') }}>
+
+                    <MenuItem key='edit' onClick={() => { setProcedureModaalOpen(true); }}>
                         Edit
                     </MenuItem>
-                    <MenuItem key='delete' onClick={() => { deleteThisProcedure.mutate() }}>
+
+                    <MenuItem key='delete' onClick={() => { deleteThisProcedure.mutate(); }}>
                         Delete
                     </MenuItem>
+
                 </Menu>
+
+                <ProcedureModal 
+                    data={ procedure }
+                    dialogOpen={ procedureModalOpen }
+                    setDialogOpen={ setProcedureModaalOpen }
+                    onSave={ updateProcedure }
+                />
                 
             </ListItemButton>  
         </ListItem>

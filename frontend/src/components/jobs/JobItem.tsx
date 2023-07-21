@@ -22,7 +22,7 @@ import Divider from '@mui/joy/Divider';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import IconButton from '@mui/joy/IconButton';
-import Input from '@mui/joy/Input';
+import Badge from '@mui/joy/Badge';
 import FormControl from '@mui/joy/FormControl';
 
 // Icons
@@ -80,11 +80,26 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
             <ListItemButton 
                 id="job-item"
                 variant="plain"
+                sx={{
+                    alignItems: 'center',
+                    gap: 3,
+                }}
             >
-                <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
+                {/* <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                     <PendingActionsSharpIcon />
-                </ListItemDecorator>
+                </ListItemDecorator> */}
 
+                <Badge color="success"  sx={{ml: 3}} />
+
+                <IconButton
+                    aria-label='Acquire'
+                    variant='plain' 
+                    color='neutral'
+                    sx={{ "--IconButton-size": "40px" }}
+                    onClick={ () => {} }
+                >
+                    <PlayCircleFilledSharpIcon/>
+                </IconButton>
 
                 {/* Card header */}
                 {/* <Box sx={{ display: 'flex', flexDirection: 'row', gap: 4, justifyContent: 'space-between', align: 'center' }}> */}
@@ -111,53 +126,43 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                         onBlur={ () => updateJob.mutate() }
                     /> */}
                 
-                <Stack direction='row' spacing={4} sx={{alignItems: 'center'}}>
+                {/* <Stack direction='row' spacing={4} sx={{alignItems: 'center'}}> */}
 
-                    <Stack direction='column'>
-                        <Typography level="body1" textColor="text.primary">{job.type}</Typography>
-                        <Typography level="body1" textColor="text.secondary">{job.comment}</Typography>
-                    </Stack>
+                <Stack direction='column'>
+                    <Typography level="body1" textColor="text.primary">{job.type}</Typography>
+                    <Typography level="body1" textColor="text.secondary">{job.comment}</Typography>
+                </Stack>
 
-                    <Stack direction='column'>
-                        <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
-                        <Typography level="body2" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
-                    </Stack>
+                <Stack direction='column'>
+                    <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
+                    <Typography level="body2" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
+                </Stack>
 
-                    {/* Job interactions */}
-                    <Stack direction='row'>
-                        <IconButton 
-                            aria-label='Options'
-                            variant='plain' 
-                            color='neutral'
-                            sx={{ "--IconButton-size": "40px" }}
-                            onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
-                        >
-                            <MoreHorizIcon/>
-                        </IconButton>
-                        <IconButton 
-                            aria-label='Show sequence'
-                            variant='plain' 
-                            color='neutral'
-                            sx={{ "--IconButton-size": "40px" }}
-                            onClick={ () => { 
-                                console.log(`${location.pathname}/${job.id}/seq`); 
-                                // navigate(`${location.pathname}/${job.id}/seq`);
-                                navigate(`${job.id}/seq`)
-                            }}
-                        >
-                            <GraphicEqSharpIcon/>
-                        </IconButton>
+                {/* Job interactions */}
+                    <IconButton 
+                        aria-label='Options'
+                        variant='plain' 
+                        color='neutral'
+                        sx={{ "--IconButton-size": "40px" }}
+                        onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
+                    >
+                        <MoreHorizIcon/>
+                    </IconButton>
+                    <IconButton 
+                        aria-label='Show sequence'
+                        variant='plain' 
+                        color='neutral'
+                        sx={{ "--IconButton-size": "40px" }}
+                        onClick={ () => { 
+                            console.log(`${location.pathname}/${job.id}/seq`); 
+                            // navigate(`${location.pathname}/${job.id}/seq`);
+                            navigate(`${job.id}/seq`)
+                        }}
+                    >
+                        <GraphicEqSharpIcon/>
+                    </IconButton>
 
-                        <IconButton
-                            aria-label='Acquire'
-                            variant='plain' 
-                            color='neutral'
-                            sx={{ "--IconButton-size": "40px" }}
-                            onClick={ () => {} }
-                        >
-                            <PlayCircleFilledSharpIcon/>
-                        </IconButton>
-                    </Stack>
+                    {/* </Stack> */}
                     
                     <Menu   
                         id='context-menu'
@@ -180,32 +185,31 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                 
                 {/* Configuration: Device, Workflow, Sequence */}
 
-                    <Select placeholder="Device">
-                        <Option value="device" >
-                            Scanner 1: ULF-MRI
-                        </Option>
-                    </Select>
-                    <Select
-                        placeholder="Sequence"
-                        onChange={(
-                            event: React.SyntheticEvent | null,
-                            newValue: string | null
-                        ) => { setJobUpdate({...jobUpdate, ["sequence_id"]: newValue ? newValue : "" }) }}
-                    >
-                        {
-                            sequences?.map( (sequence, index) => (
-                                <Option key={index} value={sequence._id}>
-                                    { sequence.name }
-                                </Option>
-                            ))
-                        }
-                    </Select>
-                    <Select placeholder="Workflow">
-                        <Option value="workflow">
-                            Reco-Cartesian
-                        </Option>
-                    </Select>
-                </Stack>
+                <Select placeholder="Device">
+                    <Option value="device" >
+                        Scanner 1: ULF-MRI
+                    </Option>
+                </Select>
+                <Select
+                    placeholder="Sequence"
+                    onChange={(
+                        event: React.SyntheticEvent | null,
+                        newValue: string | null
+                    ) => { setJobUpdate({...jobUpdate, ["sequence_id"]: newValue ? newValue : "" }) }}
+                >
+                    {
+                        sequences?.map( (sequence, index) => (
+                            <Option key={index} value={sequence._id}>
+                                { sequence.name }
+                            </Option>
+                        ))
+                    }
+                </Select>
+                <Select placeholder="Workflow">
+                    <Option value="workflow">
+                        Reco-Cartesian
+                    </Option>
+                </Select>
 
             </ListItemButton>   
         </ListItem>
