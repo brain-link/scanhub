@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 
 // Mui Material
 import { styled } from '@mui/material/styles';
@@ -26,9 +27,9 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import JobView from '../components/job_view/JobView';
-import ExamCreateModal from '../components/ExamCreateModal';
-import ProcedureCreateModal from '../components/ProcedureCreateModal';
+import JobView from '../components/jobs/JobView';
+import ExamModal from '../components/ExamModal';
+import ProcedureModal from '../components/ProcedureModal';
 
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface';
@@ -72,8 +73,8 @@ function PatientIndex() {
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
 
     // State of create modals for exam and procedure
-    const [newExamDialogOpen, setNewExamDialogOpen] = React.useState(false);
-    const [newProcedureDialogOpen, setNewProcedureDialogOpen] = React.useState(false);
+    const [examModalOpen, setExamModalOpen] = React.useState(false);
+    const [procedureModalOpen, setProcedureModalOpen] = React.useState(false);
 
     const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
     const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined);
@@ -120,6 +121,19 @@ function PatientIndex() {
             }
         }
     }, [procedures, params.procedureId])
+
+    // Mutations to create exam and procedure
+    const createExam = useMutation( async(newExam: Exam) => {
+        await client.examService.create(newExam)
+        .then( () => { refetchExams() })
+        .catch((err) => { console.log("Error on exam creation: ", err) }) 
+    })
+
+    const createProcedure = useMutation( async(newProcedure: Procedure) => {
+        await client.procedureService.create(newProcedure)
+        .then( () => { refetchExams() })
+        .catch((err) => { console.log("Error on procedure creation: ", err)})
+    })
 
 
     return (    
@@ -168,16 +182,19 @@ function PatientIndex() {
                             <IconButton 
                                 variant='soft'
                                 sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                                onClick={() => setNewExamDialogOpen(true)}
+                                onClick={() => setExamModalOpen(true)}
                             >
                                 <AddSharpIcon/>
                             </IconButton>
                         </Box>
 
-                        <ExamCreateModal 
-                            dialogOpen={ newExamDialogOpen }
-                            setDialogOpen={ setNewExamDialogOpen }
-                            onCreated={ refetchExams }
+                        <ExamModal 
+                            // When data is null, modal fills data in new empty procedure 
+                            data={ null }
+                            dialogOpen={ examModalOpen }
+                            setDialogOpen={ setExamModalOpen }
+                            // onSave={ refetchExams }
+                            onSave={ createExam }
                         />
 
                     </Box>
@@ -235,17 +252,20 @@ function PatientIndex() {
                             <IconButton 
                                 variant='soft' 
                                 sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                                onClick={() => {setNewProcedureDialogOpen(true)}}
+                                onClick={() => {setProcedureModalOpen(true)}}
                             >
                                 <AddSharpIcon/>
                             </IconButton>
 
-                            <ProcedureCreateModal 
-                                dialogOpen={ newProcedureDialogOpen }
-                                setDialogOpen={ setNewProcedureDialogOpen }
+                            <ProcedureModal
+                                // When data is null, modal fills data in new empty procedure 
+                                data={ null }
+                                dialogOpen={ procedureModalOpen }
+                                setDialogOpen={ setProcedureModalOpen }
                                 // Refetch exams, once a new procedure is created:
                                 // Procedures are extracted from selected exam by useEffect hook
-                                onCreated={ refetchExams }
+                                // onSave={ refetchExams }
+                                onSave={ createProcedure }
                             />
                     </Box>
 
