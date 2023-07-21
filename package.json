@@ -1,8 +1,7 @@
 {
   "private": true,
-  "devDependencies": {},
-  "dependencies": {},
   "workspaces": [
     "frontend"
-  ]
+  ],
+  "packageManager": "yarn@3.6.1"
 }

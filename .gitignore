@@ -138,3 +138,6 @@ orthanc-db
 
 .examples
 data_lake/
+
+.yarn/*
+*/.yarn/*
