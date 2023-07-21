@@ -20,11 +20,6 @@ function Viewer () {
         queryFn: () => client.jobService.get(Number(params.jobId))
     });
 
-    React.useEffect(() => {
-        console.log(job)
-    }, [job])
-    
-
     switch (params.viewId) {
         default:
             return (
@@ -33,7 +28,9 @@ function Viewer () {
 
         case 'seq':
             if (!job?.sequence_id) {
-                <div>Error: No sequence id</div>
+                return (
+                    <div>Error: No sequence id</div>
+                )
             }
             else {
                 return (
@@ -41,7 +38,6 @@ function Viewer () {
                 )
             }
     }
-
 }
 
 export default Viewer;
