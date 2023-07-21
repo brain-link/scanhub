@@ -2,16 +2,17 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 // Component interfaces: Pass data and functions between components
-
+import * as React from 'react';
 import { Job } from './data.interface';
 import { Device } from './data.interface';
 import { Workflow } from './data.interface';
 import { MRISequence } from './mri-data.interface';
 
-export interface CreateModalProps {
-    dialogOpen: boolean,
+export interface ModalProps<T> {
+    handleModalSubmit: () => void;
+    data: T | null;
+    dialogOpen: boolean;
     setDialogOpen: (open: boolean) => void;
-    onCreated: () => void;
 }
 
 export interface ComponentProps<T> {
@@ -21,7 +22,7 @@ export interface ComponentProps<T> {
 }
 
 export interface JobComponentProps {
-    job: Job;
+    data: Job | null;
     devices: Device[];
     sequences: MRISequence[];
     // workflows: Workflow[];
