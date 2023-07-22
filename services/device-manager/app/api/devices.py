@@ -199,7 +199,7 @@ async def websocket_endpoint(websocket: WebSocket):
                         await websocket.send_json({'message': 'Error updating device.'})
                     else:
                         # Send response to the device
-                        await websocket.send_json({'message': f'Device status updated successfully, {device}'})
+                        await websocket.send_json({'message': f'Device status updated successfully'})
 
     except websockets.exceptions.ConnectionClosedOK:
         return
