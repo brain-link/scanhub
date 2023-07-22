@@ -38,6 +38,7 @@ import { Procedure } from '../interfaces/data.interface';
 import { Job } from '../interfaces/data.interface';
 import client from '../client/exam-tree-queries';
 import { patientView, navigation } from '../utils/size_vars';
+import { create } from '@mui/material/styles/createTransitions';
 
 
 const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
@@ -135,7 +136,6 @@ function PatientIndex() {
         .catch((err) => { console.log("Error on procedure creation: ", err)})
     })
 
-
     return (    
         <div 
             id="page-container" 
@@ -154,7 +154,7 @@ function PatientIndex() {
                     }
                 }}
                 PaperProps={{ style: { position: 'absolute' } }}
-                BackdropProps={{ style: { position: 'absolute' } }}
+                // BackdropProps={{ style: { position: 'absolute' } }}
                 ModalProps={{
                     container: document.getElementById('page-container'),
                     style: { position: 'absolute' }
@@ -193,8 +193,7 @@ function PatientIndex() {
                             data={ null }
                             dialogOpen={ examModalOpen }
                             setDialogOpen={ setExamModalOpen }
-                            // onSave={ refetchExams }
-                            onSave={ createExam }
+                            handleModalSubmit={ (data: Exam) => { createExam.mutate(data)} }
                         />
 
                     </Box>
@@ -265,7 +264,8 @@ function PatientIndex() {
                                 // Refetch exams, once a new procedure is created:
                                 // Procedures are extracted from selected exam by useEffect hook
                                 // onSave={ refetchExams }
-                                onSave={ createProcedure }
+                                // onSave={ createProcedure }
+                                handleModalSubmit={ () => {console.log("test")} }
                             />
                     </Box>
 

@@ -9,7 +9,7 @@ import { Workflow } from './data.interface';
 import { MRISequence } from './mri-data.interface';
 
 export interface ModalProps<T> {
-    handleModalSubmit: () => void;
+    handleModalSubmit: (data: T) => void;
     data: T | null;
     dialogOpen: boolean;
     setDialogOpen: (open: boolean) => void;

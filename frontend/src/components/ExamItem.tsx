@@ -22,7 +22,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import ContentPasteSharpIcon from '@mui/icons-material/ContentPasteSharp';
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp';
 import ExamModal from '../components/ExamModal';
-import ExamModal2 from '../components/ExamModal2';
 
 // Interfaces and api service
 import { Exam } from '../interfaces/data.interface';
@@ -64,29 +63,11 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
     })
 
     const updateExam = useMutation( async (data: Exam) => {
-        console.log("EXAM ITEM: Updating exam data...")
+        console.log("Updating exam data...")
         await client.examService.update(data.id, data)
         .then( () => { refetchParentData(); } )
         .catch( (err) => { console.log("Error on exam update: ", err) })
     })
-
-    const handleModalSave = (data: Exam) => {
-        console.log("EXAM ITEM: Mutating...")
-        if (Number.isNaN(data.id)) {
-            console.log("Create exam...")
-        }
-        else {
-            console.log("Update exam")
-            // updateExam.mutate(data);
-        }
-    }
-
-    // const handleModalSave = () => {
-    //     console.log("ITEM")
-    // }
-
-    // Debug content of exam.procedure
-    // React.useEffect( () => console.log(exam.procedures), [exam]);
 
     return (
         <ListItem>
@@ -142,23 +123,11 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
 
                 </Menu>
 
-                {/* <ExamModal 
+                <ExamModal 
                     data={ exam }
                     dialogOpen={ examModalOpen }
                     setDialogOpen={ setExamModalOpen }
-                    // onSave={ refetchExams }
-                    // onSave={ (data) => { console.log("Exam modal save..."); updatedExam.mutate(data); } }
-                    handleModalSubmit={() => { console.log(); } }
-                    test={"test"}
-                /> */}
-
-                <ExamModal2
-                    data={ exam }
-                    dialogOpen={ examModalOpen }
-                    setDialogOpen={ setExamModalOpen }
-                    // onSave={ refetchExams }
-                    // onSave={ (data) => { console.log("Exam modal save..."); updatedExam.mutate(data); } }
-                    handleModalSubmit={() => { console.log(); } }
+                    handleModalSubmit={ (data: Exam) => { updateExam.mutate(data)} }
                 />
                 
             </ListItemButton>   
