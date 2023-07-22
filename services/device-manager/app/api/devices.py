@@ -167,11 +167,6 @@ async def websocket_endpoint(websocket: WebSocket):
     """
     await websocket.accept()
 
-    # Check if the WebSocket connection was successful
-    if not websocket.client.host:
-        print('WebSocket connection failed. Device host is None.')
-        return
-
     print('Device connected.')
 
     try:
@@ -207,7 +202,8 @@ async def websocket_endpoint(websocket: WebSocket):
                         await websocket.send_json({'message': f'Device status updated successfully, {device}'})
 
     except websockets.exceptions.ConnectionClosedOK:
-        print('Device disconnected:', websocket.client.host)
+        return
+        # print('Device disconnected:', websocket.client.host)
         # Set the status of the disconnected device to "disconnected"
         # TODO: don't use ip to identify
         # for device in devices:
