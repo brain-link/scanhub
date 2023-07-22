@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Device api endpoints."""
-# TODO: Work on database instead of local list
 # pylint: disable=no-name-in-module
 
 from typing import List
@@ -141,7 +140,7 @@ async def delete_device(device_id: str):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-async def create_websocket_connection(ip_address: str) -> WebSocket:
+async def create_websocket_connection(ip_address: str) -> websockets.WebSocketClientProtocol:
     """
     Create a WebSocket connection to the specified IP address.
 
