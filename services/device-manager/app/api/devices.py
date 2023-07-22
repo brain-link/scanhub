@@ -4,7 +4,7 @@
 """Device api endpoints."""
 # pylint: disable=no-name-in-module
 
-from typing import List
+from typing import List, Any
 
 from datetime import datetime, timedelta
 from fastapi import APIRouter, WebSocket, HTTPException
@@ -140,7 +140,7 @@ async def delete_device(device_id: str):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-async def create_websocket_connection(ip_address: str) -> websockets.WebSocketClientProtocol:
+async def create_websocket_connection(ip_address: str) -> Any:
     """
     Create a WebSocket connection to the specified IP address.
 
