@@ -166,6 +166,12 @@ async def websocket_endpoint(websocket: WebSocket):
         websocket (WebSocket): The WebSocket connection object.
     """
     await websocket.accept()
+
+    # Check if the WebSocket connection was successful
+    if not websocket.client.host:
+        print('WebSocket connection failed. Device host is None.')
+        return
+
     print('Device connected:', websocket.client.host)
 
     try:
