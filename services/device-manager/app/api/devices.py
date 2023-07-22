@@ -172,7 +172,7 @@ async def websocket_endpoint(websocket: WebSocket):
         print('WebSocket connection failed. Device host is None.')
         return
 
-    print('Device connected:', websocket.client.host)
+    print('Device connected.')
 
     try:
         while True:
@@ -180,7 +180,7 @@ async def websocket_endpoint(websocket: WebSocket):
             command = message.get('command')
             if command == 'register':
                 device_data = message.get('data')
-                ip_address = websocket.client.host
+                ip_address = message.get('ip_address')
                 device_id = device_data.get('id')
                 device = DeviceOut(id=device_id, ip_address=ip_address, **device_data)
                 if not await dal_create_device(device):
@@ -193,7 +193,6 @@ async def websocket_endpoint(websocket: WebSocket):
 
             elif command == 'update_status':
                 status_data = message.get('data')
-                ip_address = websocket.client.host
                 if not (device := await dal_get_device(status_data.get('id'))):
                     await websocket.send_json({'message': 'Device not registered'})
                 else:
