@@ -155,7 +155,7 @@ async def create_websocket_connection(ip_address: str) -> Any:
     websocket_url = f"ws://{ip_address}/ws"  # Assuming WebSocket endpoint is /ws
     return await websockets.client.connect(websocket_url)
 
-
+# pylint: disable=locally-disabled, too-many-branches
 @router.websocket('/ws')
 async def websocket_endpoint(websocket: WebSocket):
     """
