@@ -189,7 +189,7 @@ async def websocket_endpoint(websocket: WebSocket):
             elif command == 'update_status':
                 status_data = message.get('data')
                 device_id = status_data.get('id')
-                if not (device := await dal_get_device(device_id)):
+                if not (device_to_update := await dal_get_device(device_id)):
                     await websocket.send_json({'message': 'Device not registered'})
                 else:
                     return
