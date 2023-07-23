@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScanHub Overview &mdash; ScanHub 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to ScanHub’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ScanHub
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ScanHub Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloud-based-image-reconstruction-and-processing">Cloud-based image reconstruction and processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-storage-and-management">Data storage and management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#open-source-algorithm-development">Open-source algorithm development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security-and-compliance">Security and compliance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-driven-architecture-with-kafka-message-broker-and-microservices">Event-driven architecture with Kafka message broker and microservices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mri-sequence-management">MRI Sequence Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-manager">Device Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exam-manager">Exam Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interoperability-and-open-standards">Interoperability and Open Standards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-devices-with-komamri-integration">Simulation Devices with KomaMRI Integration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ScanHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ScanHub Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scanhub-overview">
+<h1>ScanHub Overview<a class="headerlink" href="#scanhub-overview" title="Permalink to this heading"></a></h1>
+<p>ScanHub is an innovative cloud-based, open-source platform that transforms how MRI data is processed, stored, and shared. Leveraging the power of cloud computing, ScanHub offers an array of features, such as efficient resource utilization, enhanced data sharing, rigorous security measures, and integration of advanced simulation devices.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>Magnetic Resonance Imaging (MRI) is a powerful tool in modern medicine. However, the traditional approach to MRI processing and storage often comes with challenges. ScanHub seeks to address these by introducing a scalable, cost-efficient, and collaborative platform.</p>
+<p>ScanHub’s platform offers several advantages:</p>
+<ol class="arabic simple">
+<li><p>Open-source transparency: Facilitating a collaborative environment for the MRI community.</p></li>
+<li><p>Cost-efficiency: Reducing both upfront investments and ongoing maintenance costs.</p></li>
+<li><p>Scalability and flexibility: Offering easy resource scaling and platform-agnostic design.</p></li>
+<li><p>Efficient resource utilization: Providing optimal resource allocation and utilization.</p></li>
+<li><p>Enhanced collaboration and data sharing: Encouraging researchers to pool resources and insights.</p></li>
+<li><p>Security and compliance: Adhering to stringent data security protocols and compliance requirements.</p></li>
+</ol>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<p>ScanHub integrates various key features and functionalities, each of which is designed to enhance the MRI data processing and storage experience.</p>
+<section id="concept">
+<h3>Concept<a class="headerlink" href="#concept" title="Permalink to this heading"></a></h3>
+<p>ScanHub is a comprehensive platform for MRI image reconstruction, processing, and data management. It features event-driven architecture, MRI sequence management, and a device manager that streamline the user experience.</p>
+</section>
+<section id="cloud-based-image-reconstruction-and-processing">
+<h3>Cloud-based image reconstruction and processing<a class="headerlink" href="#cloud-based-image-reconstruction-and-processing" title="Permalink to this heading"></a></h3>
+<p>ScanHub employs cloud computing resources to handle MRI image reconstruction and processing tasks. It offers seamless integration with various MRI scanners and supports a wide range of acquisition techniques.</p>
+</section>
+<section id="data-storage-and-management">
+<h3>Data storage and management<a class="headerlink" href="#data-storage-and-management" title="Permalink to this heading"></a></h3>
+<p>ScanHub provides a centralized data storage solution that simplifies data management and sharing. Data is stored in a standard format, ensuring seamless interoperability and collaboration.</p>
+</section>
+<section id="open-source-algorithm-development">
+<h3>Open-source algorithm development<a class="headerlink" href="#open-source-algorithm-development" title="Permalink to this heading"></a></h3>
+<p>ScanHub’s open-source platform promotes transparency and collaboration within the MRI community. It offers a framework for researchers and developers to share and improve existing algorithms and processing techniques.</p>
+</section>
+<section id="security-and-compliance">
+<h3>Security and compliance<a class="headerlink" href="#security-and-compliance" title="Permalink to this heading"></a></h3>
+<p>ScanHub ensures the protection of sensitive patient data and compliance with relevant regulations. It employs robust encryption, access control mechanisms, and auditing procedures to safeguard data privacy and security.</p>
+</section>
+<section id="event-driven-architecture-with-kafka-message-broker-and-microservices">
+<h3>Event-driven architecture with Kafka message broker and microservices<a class="headerlink" href="#event-driven-architecture-with-kafka-message-broker-and-microservices" title="Permalink to this heading"></a></h3>
+<p>ScanHub uses an event-driven architecture to enable seamless communication and processing. This architecture facilitates efficient and scalable processing using a Kafka message broker and a collection of microservices.</p>
+</section>
+<section id="mri-sequence-management">
+<h3>MRI Sequence Management<a class="headerlink" href="#mri-sequence-management" title="Permalink to this heading"></a></h3>
+<p>ScanHub includes an integrated solution for MRI sequence management. This feature enhances the overall efficiency of the platform and ensures consistency and reproducibility of imaging data.</p>
+</section>
+<section id="device-manager">
+<h3>Device Manager<a class="headerlink" href="#device-manager" title="Permalink to this heading"></a></h3>
+<p>ScanHub features a device manager, which simplifies the device selection process and streamlines the workflow for acquiring MRI data.</p>
+</section>
+<section id="exam-manager">
+<h3>Exam Manager<a class="headerlink" href="#exam-manager" title="Permalink to this heading"></a></h3>
+<p>In addition to the device manager, ScanHub also includes an exam manager. This tool enables users to plan scans and view scan results through the ScanHub UI.</p>
+</section>
+<section id="interoperability-and-open-standards">
+<h3>Interoperability and Open Standards<a class="headerlink" href="#interoperability-and-open-standards" title="Permalink to this heading"></a></h3>
+<p>ScanHub is designed with interoperability in mind, leveraging widely-adopted open standards to ensure seamless integration with existing systems.</p>
+</section>
+<section id="simulation-devices-with-komamri-integration">
+<h3>Simulation Devices with KomaMRI Integration<a class="headerlink" href="#simulation-devices-with-komamri-integration" title="Permalink to this heading"></a></h3>
+<p>ScanHub incorporates KomaMRI-powered simulation devices. These virtual devices enable users to test and validate sequences and reconstruction algorithms without requiring a physical MRI scanner.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to ScanHub’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
