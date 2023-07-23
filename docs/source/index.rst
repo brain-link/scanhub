@@ -10,7 +10,7 @@ Welcome to ScanHub's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   introduction
 
 Indices and tables
 ==================
