@@ -169,14 +169,20 @@ async def websocket_endpoint(websocket: WebSocket):
 
     print('Device connected.')
 
+    device_id_global = ""
+
     try:
         while True:
             message = await websocket.receive_json()
             command = message.get('command')
             if command == 'register':
+                if device_id_global != "":
+                    await websocket.send_json({'message': 'Error registering device. \
+In this session a device already was registered.'})
                 device_data = message.get('data')
                 ip_address = message.get('ip_address')
                 device_id = device_data.get('id')
+                device_id_global = device_id
                 device = DeviceOut(id=device_id, ip_address=ip_address, **device_data)
                 if not await dal_create_device(device):
                     print('Error registering device: ', device)
@@ -189,6 +195,11 @@ async def websocket_endpoint(websocket: WebSocket):
             elif command == 'update_status':
                 status_data = message.get('data')
                 device_id = status_data.get('id')
+                if device_id_global == "":
+                    device_id_global = device_id
+                if device_id_global != device_id:
+                    await websocket.send_json({'message': 'Error updating device. \
+Device ID does not match'})
                 if not (device_to_update := await dal_get_device(device_id)):
                     await websocket.send_json({'message': 'Device not registered'})
                 else:
@@ -203,16 +214,17 @@ async def websocket_endpoint(websocket: WebSocket):
                         await websocket.send_json({'message': 'Device status updated successfully'})
 
     except websockets.exceptions.ConnectionClosedOK:
-        return
-        # print('Device disconnected:', websocket.client.host)
+        print('Device disconnected:', device_id_global)
         # Set the status of the disconnected device to "disconnected"
-        # TODO: don't use ip to identify
-        # for device in devices:
-        #     if device.ip_address == websocket.client.host:
-        #         device.status = 'disconnected'
-        #         device.last_status_update = datetime.now()
-        #         print('Device status updated:', device)
-        #         break
-        # else:
-        #     print('Device not found:', websocket.client.host)
-            
+        if not (device_to_update := await dal_get_device(device_id_global)):
+            print('Device not registered')
+        else:
+            device_out = await get_device_out(device_to_update)
+            # Update the device's status and last_status_update
+            device_out.status = 'disconnected'
+            device_out.datetime_updated = datetime.now()
+            if not await dal_update_device(device_id, device_out):
+                print('Error updating device.')
+            else:
+                # Send response to the device
+                print('Device status updated successfully')
