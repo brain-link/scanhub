@@ -27,7 +27,7 @@ import { patientView } from '../../utils/size_vars';
 // import { Workflow } from '../../interfaces/data.interface';
 
 import client from '../../client/exam-tree-queries';
-import sequenceClient from '../../client/mri-queries';
+import sequenceClient from '../../client/sequence-api';
 
 
 function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job[]>) {

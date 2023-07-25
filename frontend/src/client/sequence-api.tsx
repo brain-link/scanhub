@@ -1,9 +1,7 @@
-import { MRISequence } from '../interfaces/mri-data.interface';
-
 import baseUrls from './urls';
 
 import { ApiService } from './abstract-query-client';
-import { PlotData } from '../interfaces/mri-data.interface';
+import { PlotData, MRISequence } from '../interfaces/mri-data.interface';
 
 
 class MRISequenceApiService extends ApiService<MRISequence> {
@@ -39,6 +37,16 @@ class MRISequenceApiService extends ApiService<MRISequence> {
         try {
             const response = await this.axiosInstance.get(`/mri-sequence-plot/${seq_id}`)
             return JSON.parse(response.data);
+        } catch (error) {
+            this.handleError(error);
+            throw error;
+        }
+    }
+
+    async getSequenceMeta(seq_id: string): Promise<MRISequence> {
+        try {
+            const response = await this.axiosInstance.get(`/${seq_id}`)
+            return response.data;
         } catch (error) {
             this.handleError(error);
             throw error;
