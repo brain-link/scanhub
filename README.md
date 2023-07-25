@@ -1,14 +1,17 @@
 <p align="center">
-  <a href="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"><img src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg" width="300" height="150" alt="ScanHub"></a>
+  <a href="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"><img src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg" width="300" height="150" alt="ScanHub"/></a>
 </p>
 
 <p align="center">
-<a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Github Actions">
-</a>
-<a href="https://github.com/brain-link/scanhub/actions/workflows/test.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/test.yml/badge.svg" alt="Github Actions">
-</a>
+  <a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
+      <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build"/>
+  </a>
+  <a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
+      <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests"/>
+  </a>
+  <a href="https://scan.coverity.com/projects/brain-link-scanhub">
+    <img src="https://scan.coverity.com/projects/28706/badge.svg" alt="Coverity Scan Build Status"/>
+  </a>
 </p>
 
 -----------------

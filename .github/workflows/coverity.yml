@@ -1,0 +1,63 @@
+name: Coverity Scan with Docker
+
+on: [push]
+
+jobs:
+  coverity:
+    runs-on: ubuntu-latest
+    env:
+        DOCKER_COMPOSE_FILE: "docker-compose.yml"
+        NOTIFICATION_EMAIL: "christoph.dinh@brain-link.de"
+        COVERITY_SCAN_PROJECT_NAME: "brain-link/scanhub"
+        COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_TOKEN }}
+    strategy:
+      matrix:
+        service: [
+          "exam-manager",
+          "workflow-manager",
+          "device-manager",
+          "acquisition-control"
+        ]
+
+    continue-on-error: True
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Download Coverity Scan tool
+      run: |
+        wget https://scan.coverity.com/download/linux64 --post-data "project=$COVERITY_SCAN_PROJECT_NAME&token=$COVERITY_SCAN_TOKEN" -O coverity_tool.tgz
+        tar xaf coverity_tool.tgz
+        rm -rf cov-analysis
+        mv cov-analysis-linux64-* cov-analysis
+        ls -la cov-analysis/bin
+
+    - name: Build with Docker Compose
+      run: |
+        docker-compose -f $DOCKER_COMPOSE_FILE build ${{ matrix.service }}
+
+    - name: Run Coverity Scan in Docker
+      run: |
+        docker-compose -f $DOCKER_COMPOSE_FILE run --rm \
+          -v $(pwd)/cov-analysis:/cov-analysis \
+          -v $(pwd)/cov-int:/cov-int \
+          ${{ matrix.service }} bash -c "\
+            /cov-analysis/bin/cov-configure --python && \
+            /cov-analysis/bin/cov-build --dir /cov-int --no-command --fs-capture-search /app"
+
+    - name: Change ownership of cov-int
+      run: sudo chown -R $USER:$USER cov-int
+      
+    - name: Upload result to Coverity
+      run: |
+        tar czvf cov-int.tgz cov-int
+        SHA=`git rev-parse --short HEAD`
+        curl \
+          --form token=${{ secrets.COVERITY_TOKEN }} \
+          --form email=$NOTIFICATION_EMAIL \
+          --form file=@cov-int.tgz \
+          --form version=$SHA \
+          --form description="Github Actions build" \
+          https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME
