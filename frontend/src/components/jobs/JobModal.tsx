@@ -1,11 +1,10 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-// ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
+// JobModal.tsx is responsible for rendering the modal for creating or updating a job.
 
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import { useMutation } from 'react-query';
 
 // Import mui joy components
 import Typography from '@mui/joy/Typography';
@@ -13,49 +12,45 @@ import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import FormLabel from '@mui/joy/FormLabel';
 import Stack from '@mui/joy/Stack';
-import Grid from '@mui/joy/Grid';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
 
 // Import api service and interfaces
-import client from '../../client/exam-tree-queries';
 import { Job } from '../../interfaces/data.interface';
-import { ModalProps } from '../../interfaces/components.interface';
+import { JobModalProps } from '../../interfaces/components.interface';
 
 
-function ExamList({data, dialogOpen, setDialogOpen, onCreated}: ModalProps<Job>) {
+function JobModal(props: JobModalProps) {
 
     const params = useParams();
 
-    const [job, setJob] = data ? React.useState<Job>(data) : 
+    const [job, setJob] = props.data ? React.useState<Job>(props.data) : 
         React.useState<Job>({
-            id: 0, 
-            procedure_id: Number(params.procedure_id),
-            type: '',
-            comment: '',
-            is_acquired: false,
-            sequence_id: '',
+            id: 0,
+            type: "",
+            comment: "",
+            procedure_id: Number(params.procedureId),
+            sequence_id: "",
+            workflow_id: null,
             device_id: 0,
-            workflow_id: null, 
-            records: [], 
             datetime_created: new Date(),
-            datetime_updated: new Date(),
         })
     
+    // To be replaced by devices and workflows from database
+    const devices = [{"id": 1, "name": "MRI Simulator"}]
+    const workflows = [{"id": 0, "name": "2d FFT"}]
 
-    const createExam = useMutation( async() => {
-        await client.jobService.create(job)
-        .then( () => { onCreated() })
-        .catch((err) => { console.log("Error during job creation: ", err) }) 
-    })
+    const title = props.data ? "Update Job" : "Create Job"
 
     return (
         <Modal 
             keepMounted
-            open={dialogOpen}
+            open={props.dialogOpen}
             color='neutral'
-            onClose={() => setDialogOpen(false)}
+            onClose={() => props.setDialogOpen(false)}
             sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
             <ModalDialog
@@ -78,49 +73,117 @@ function ExamList({data, dialogOpen, setDialogOpen, onCreated}: ModalProps<Job>)
                     fontSize="1.25em"
                     mb="0.25em"
                 >
-                    Create new exam
+                    { title }
                 </Typography>
                 
-                <form
-                    onSubmit={(event) => {
-                        event.preventDefault();
-                        createExam.mutate();
-                        setDialogOpen(false);
-                    }}
-                >
-                    <Stack direction="column" spacing={5}>
-                        
-                        <Stack direction="row">
+                <Stack direction="column" spacing={3}>
+                    <Stack direction="column" spacing={1.5}>
 
-                            <FormLabel>Type</FormLabel>
-                            <Input 
-                                name="type"
-                                onChange={(e) => setJob({...job, [e.target.name]: e.target.value})} 
-                                placeholder="Job type"
-                                required 
-                            />
+                        <FormLabel>Type</FormLabel>
+                        <Input 
+                            name="type"
+                            onChange={(e) => setJob({...job, [e.target.name]: e.target.value})} 
+                            placeholder="Job type"
+                            defaultValue={ job.type }
+                            required 
+                        />
 
-                            <FormLabel>Comment</FormLabel>
-                            <Input 
-                                name="comment"
-                                onChange={(e) => setJob({...job, [e.target.name]: e.target.value})} 
-                                placeholder="Job description"
-                                required 
-                            />
+                        <FormLabel>Comment</FormLabel>
+                        <Input 
+                            name="comment"
+                            onChange={(e) => setJob({...job, [e.target.name]: e.target.value})} 
+                            placeholder="Job description"
+                            defaultValue={ job.type }
+                            required 
+                        />
 
-                            <FormLabel>Sequence</FormLabel>
+                        <FormLabel>Device</FormLabel>
+                        <Select 
+                            placeholder="Select..."
+                            onChange={(
+                                event: React.SyntheticEvent | null,
+                                newValue: Number | null
+                            ) => {
+                                // Only set new device if newValue is not null
+                                newValue ? setJob({...job, ["device_id"]: newValue}) : () => {} 
+                            }}
+                            defaultValue={
+                                // Device value cannot be null -> check if device id is contained in device list
+                                devices.find(x => x.id === job.device_id) ? job.device_id : null 
+                            }
+                        >
+                            {
+                                devices.map((device, index) => (
+                                    <Option key={index} value={device.id}>
+                                        { device.name }
+                                    </Option>
+                                ))
+                            }
+                        </Select>
 
+                        <FormLabel>Sequence</FormLabel>
+                        <Select
+                            placeholder="Select..."
+                            onChange={(
+                                event: React.SyntheticEvent | null,
+                                newValue: string | null
+                            ) => { 
+                                // Only set sequence id if newValue is not null
+                                newValue ? setJob({...job, ["sequence_id"]: newValue}) : () => {}
+                            }}
+                            defaultValue={ job.sequence_id }
+                        >
+                            {
+                                props.sequences?.map( (sequence, index) => (
+                                    <Option key={index} value={sequence._id}>
+                                        { sequence.name }
+                                    </Option>
+                                ))
+                            }
+                        </Select>
 
-                        </Stack>
-
-                        <Button size='sm' type="submit" sx={{ maxWidth: 100 }}>Save</Button>
+                        <FormLabel>Workflow</FormLabel>
+                        <Select 
+                            placeholder="Select..."
+                            onChange={(
+                                event: React.SyntheticEvent | null,
+                                newValue: Number | null
+                            ) => {
+                                // Workflow id can be null, no checks needed
+                                setJob({...job, ["workflow_id"]: newValue});
+                            }}
+                            defaultValue={ job.workflow_id }
+                        >
+                            {
+                                workflows.map( (workflow, index) => (
+                                    <Option key={index} value={workflow.id}>
+                                        { workflow.name }
+                                    </Option>
+                                ))
+                            }
+                        </Select>
 
                     </Stack>
 
-                </form>
+                    <Button 
+                        size='sm'
+                        sx={{ maxWidth: 120 }}
+                        onClick={
+                            (event) => {
+                                event.preventDefault();
+                                props.handleModalSubmit(job);
+                                props.setDialogOpen(false);
+                            }
+                        }
+                    >
+                        Save    
+                    </Button>
+
+                </Stack>
+
             </ModalDialog>
         </Modal>
     );  
 }
 
-export default ExamList;
+export default JobModal;

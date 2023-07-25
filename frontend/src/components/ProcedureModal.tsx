@@ -30,34 +30,28 @@ const createProcedureForm = [
     {key: 'status', label: 'Status', placeholder: 'Procedure created'},
 ]
 
-function ProcedureModal({data, dialogOpen, setDialogOpen, onSave}: ModalProps<Procedure>) {
+function ProcedureModal(props: ModalProps<Procedure>) {
 
     const params = useParams();
 
-    const [procedure, setProcedure] = data ? React.useState<Procedure>(data) :
+    const [procedure, setProcedure] = props.data ? React.useState<Procedure>(props.data) :
         React.useState<Procedure>({
-            id: 0,
+            id: NaN,
             exam_id: Number(params.examId),
             name: "",
             status: "",
-            jobs: [],
+            // jobs: [],
             datetime_created: new Date(),
         });
 
-    // // Post a new record and refetch records table
-    // const createProcedure = useMutation(async() => {
-    //     await client.procedureService.create(procedure)
-    //     .then( () => { onCreated() } )
-    //     .catch((err) => { console.log("Error during procedure creation: ", err) }) 
-    // })
-
+    const title = props.data ? "Update Procedure" : "Create Procedure"
 
     return (
         <Modal 
             keepMounted
-            open={ dialogOpen }
+            open={ props.dialogOpen }
             color='neutral'
-            onClose={() => setDialogOpen(false)}
+            onClose={() => props.setDialogOpen(false)}
             sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
             <ModalDialog
@@ -80,42 +74,44 @@ function ProcedureModal({data, dialogOpen, setDialogOpen, onSave}: ModalProps<Pr
                     fontSize="1.25em"
                     mb="0.25em"
                 >
-                    Create new procedure
+                    { title }
                 </Typography>
                 
-                <form
-                    onSubmit={(event) => {
-                        event.preventDefault();
-                        // createProcedure.mutate();
-                        onSave.mutate(procedure);
-                        setDialogOpen(false);
-                    }}
-                >
-                    <Stack spacing={5}>
+                <Stack spacing={3}>
 
-                        <Grid container rowSpacing={1.5} columnSpacing={5}>
-                            {
-                                createProcedureForm.map((item, index) => (
-                                    <Grid key={ index } md={12}
-                                    >
-                                        <FormLabel>{ item.label }</FormLabel>
-                                        <Input 
-                                            name={ item.key }
-                                            onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
-                                            placeholder={ item.placeholder }
-                                            required 
-                                        />
-                                    </Grid>
-                                ))
+                    <Grid container rowSpacing={1.5} columnSpacing={5}>
+                        {
+                            createProcedureForm.map((item, index) => (
+                                <Grid key={ index } md={12}
+                                >
+                                    <FormLabel>{ item.label }</FormLabel>
+                                    <Input 
+                                        name={ item.key }
+                                        onChange={(e) => setProcedure({...procedure, [e.target.name]: e.target.value})} 
+                                        placeholder={ item.placeholder }
+                                        defaultValue={ procedure[item.key] }
+                                        required 
+                                    />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+
+                    <Button 
+                        size='sm'
+                        sx={{ maxWidth: 120 }}
+                        onClick={
+                            (event) => {
+                                event.preventDefault();
+                                props.handleModalSubmit(procedure);
+                                props.setDialogOpen(false);
                             }
-                        </Grid>
-
-                        <Button size='sm' type="submit" sx={{ maxWidth: 100 }}>Submit</Button>
-
-                    </Stack>
-
-                </form>
-
+                        }
+                    >
+                        Save    
+                    </Button>
+                    
+                </Stack>
             </ModalDialog>
         </Modal>
     );  

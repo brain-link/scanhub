@@ -36,7 +36,7 @@ export interface Device {
     manufacturer: string;
     modality: string;
     status: string;
-    site?: string | null;
+    site: string | null;
     ip_address: string;
     datetime_created: Date;
     datetime_updated?: Date | null;
@@ -68,7 +68,7 @@ export interface Procedure {
     exam_id: number;
     name: string;
     status: string;
-    jobs: [Job] | [];
+    jobs?: [Job] | [];
     datetime_created: Date;
     datetime_updated?: Date | null;
 }
@@ -77,12 +77,12 @@ export interface Exam {
     id: number;
     patient_id: number;
     name: string;
-    procedures: [Procedure] | [];
+    procedures?: [Procedure] | [];
     country: string | null;
     site: string | null;
     address: string | null;
     creator: string;
     status: string;
     datetime_created: Date;
-    datetime_updated: Date | null;
+    datetime_updated?: Date | null;
 }

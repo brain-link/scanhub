@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// JobList.tsx is responsible for rendering a list of jobs to be executed.
+
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -11,37 +16,24 @@ import IconButton from '@mui/joy/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp';
 
-// import MRIView from '../viewer/dicom-view/DicomViewer';
+import JobModal from './JobModal'
 import JobItem from './JobItem';
-// import { SequenceForm } from '../viewer/sequence-view/SequenceViewer';
-
 
 import { Job } from '../../interfaces/data.interface';
 import { ComponentProps } from '../../interfaces/components.interface';
+import { MRISequence } from '../../interfaces/mri-data.interface';
+import { patientView } from '../../utils/size_vars';
+// import { Device } from '../../interfaces/data.interface';
+// import { Workflow } from '../../interfaces/data.interface';
 
 import client from '../../client/exam-tree-queries';
 import sequenceClient from '../../client/mri-queries';
 
-import { Device } from '../../interfaces/data.interface';
-// import { Workflow } from '../../interfaces/data.interface';
-import { MRISequence } from '../../interfaces/mri-data.interface';
-import { patientView } from '../../utils/size_vars';
 
-
-function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job[]>) {
+function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job[]>) {
 
     const params = useParams();
-
-    const newJob: Job = {
-        id: 0,
-        type: "Enter job type...",
-        comment: "Comment",
-        procedure_id: Number(params.procedureId),
-        sequence_id: "",
-        workflow_id: null,
-        device_id: 0,
-        datetime_created: new Date(),
-    };
+    const [jobModalOpen, setJobModalOpen] = React.useState(false);
 
     // const { data: devices, isLoading: devicesLoading, isError: devicesError } = useQuery<Device[], Error>({
     //     queryKey: ['devices'],
@@ -53,24 +45,8 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
         queryFn: () => sequenceClient.getAll()
     });
 
-
-    // React.useEffect( () => {
-    //     console.log(jobs)
-    // }, [jobs])
-
-
-
-    // const { data: workflows, isLoading: workflowLoading, isError: workflowError } = useQuery<Workflow[], Error>({
-    //     queryKey: ['workflows'],
-    //     queryFn: () => client.workflowService.getAll()
-    // });
-
-    const createJob = useMutation( async () => {
-        // Add a new empty job, editable in job-item component
-        // setNewJob({...newJob, ["procedure_id"]: Number(params.procedureId)});
-        console.log("New job: ", newJob)
-        console.log("New job procedure id: ", newJob.procedure_id)
-        await client.jobService.create(newJob)
+    const createJob = useMutation( async (data: Job) => {
+        await client.jobService.create(data)
         .then(() => { refetchParentData() })
         .catch((err) => { console.log("Error during job creation: ", err) })
     })
@@ -84,12 +60,6 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
             </div>
         )
     }
-
-    // if (sequencesLoading) {
-    //     return (
-    //         <div> Loading workflows and devices...</div>
-    //     )
-    // }
 
     return (
         <Stack sx={{
@@ -121,17 +91,22 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                     <IconButton 
                         variant='soft'
                         sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                        onClick={() => createJob.mutate()}
+                        onClick={ () => { setJobModalOpen(true) }}
+                        disabled={ sequences ? sequences.length === 0 : true }
                     >
                         <AddSharpIcon/>
                     </IconButton>
                 </Box>
 
-                {/* <ExamCreateModal 
-                    dialogOpen={ newExamDialogOpen }
-                    setDialogOpen={ setNewExamDialogOpen }
-                    onCreated={ refetchExams }
-                /> */}
+                <JobModal 
+                    data={ null }
+                    dialogOpen={ jobModalOpen }
+                    setDialogOpen={ setJobModalOpen }
+                    devices={[]}    // TODO: Fetch devices and pass them to modal
+                    sequences={ sequences ? sequences : [] }
+                    refetchParentData={ () => {} } // unused
+                    handleModalSubmit={ (data: Job) => { createJob.mutate(data) }}
+                />
 
             </Box>
     
@@ -148,7 +123,6 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                                 data={ job }
                                 devices={ [] }
                                 sequences={ sequences ? sequences : [] }
-                                // Forward onDelete function which refetches the records
                                 refetchParentData={ refetchParentData }
                             />
                             <ListDivider sx={{ m: 0 }} />
@@ -157,26 +131,8 @@ function JobView({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                 }
             </List>
 
-            {/* {
-                jobs.map((job, index) => (
-                    <JobItem
-                        key={ index }
-                        job={ job }
-                        devices={ [] }
-                        sequences={ sequences ? sequences : [] }
-                        // Forward onDelete function which refetches the records
-                        refetchParentData={ refetchParentData }
-                    />
-                ))
-            } */}
-            {/* <IconButton
-                variant='soft'
-                onClick={ () => createJob.mutate() }
-            >
-                <AddCircleOutlineSharpIcon/>
-            </IconButton> */}
         </Stack>
     )
 }
 
-export default JobView;
+export default JobList;

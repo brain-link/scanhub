@@ -19,7 +19,6 @@ import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import IconButton from '@mui/joy/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-// import FilterCenterFocusSharpIcon from '@mui/icons-material/FilterCenterFocusSharp';
 import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
 import ProcedureModal from '../components/ProcedureModal';
 
@@ -51,7 +50,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
         setContextOpen(procedureId);
     }
 
-    const deleteThisProcedure = useMutation(async () => {
+    const deleteProcedure = useMutation(async () => {
         await client.procedureService.delete(procedure.id)
         .then(() => {
             navigate(`/patients/${params.patientId}/${params.examId}`);
@@ -59,12 +58,12 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
         })
     })
 
-    const updateProcedure = useMutation( async (updatedProcedure: Procedure) => {
-        await client.procedureService.update(updatedProcedure.id, updatedProcedure)
-        .then( () => { refetchParentData() } )
+    const updateProcedure = useMutation( async (data: Procedure) => {
+        console.log("Updating procedure... ", data)
+        await client.procedureService.update(data.id, procedure)
+        .then( () => { refetchParentData() })
         .catch( (err) => { console.log("Error on procedure update: ", err) })
     })
-
 
     return (
         <ListItem>
@@ -73,7 +72,6 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                 component={ RouterLink }
                 // If procedureId exists, we redirect to this procedure id, otherwise procedure id is appended
                 to={ `/patients/${params.patientId}/${params.examId}/${procedure.id}` }
-                // selected={ procedure.id === Number(params.procedureId) }
                 selected={ isSelected }
                 variant={( isSelected || procedure.id === contextOpen) ? "soft" : "plain" }
             >
@@ -107,11 +105,11 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                     sx={{ zIndex: 'snackbar' }}
                 >
 
-                    <MenuItem key='edit' onClick={() => { setProcedureModaalOpen(true); }}>
+                    <MenuItem key='edit' onClick={() => { setProcedureModaalOpen(true) }}>
                         Edit
                     </MenuItem>
 
-                    <MenuItem key='delete' onClick={() => { deleteThisProcedure.mutate(); }}>
+                    <MenuItem key='delete' onClick={() => { deleteProcedure.mutate() }}>
                         Delete
                     </MenuItem>
 
@@ -121,7 +119,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                     data={ procedure }
                     dialogOpen={ procedureModalOpen }
                     setDialogOpen={ setProcedureModaalOpen }
-                    onSave={ updateProcedure }
+                    handleModalSubmit={ (data: Procedure) => { updateProcedure.mutate(data)} }
                 />
                 
             </ListItemButton>  

@@ -20,11 +20,8 @@ import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 
 // Import api service and interfaces
-import client from '../client/exam-tree-queries';
 import { Exam } from '../interfaces/data.interface';
 import { ModalProps } from '../interfaces/components.interface';
-import { Container } from '@mui/joy';
-
 
 // Exam form template, order is row wise, used to map the exam fields
 const createExamFormContent = [
@@ -51,19 +48,12 @@ function ExamModal(props: ModalProps<Exam>) {
             creator: '', 
             status: '', 
             datetime_created: new Date(), 
-            datetime_updated: new Date(),
         })
-
-    React.useEffect( () => {
-        console.log(props)
-        console.log(exam)
-    }, [props.dialogOpen])
 
     const title = props.data ? "Update Exam" : "Create Exam"
 
     return (
         <Modal 
-            // keepMounted
             open={props.dialogOpen}
             color='neutral'
             onClose={() => props.setDialogOpen(false)}

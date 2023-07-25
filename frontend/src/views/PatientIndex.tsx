@@ -27,7 +27,7 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import JobView from '../components/jobs/JobView';
+import JobList from '../components/jobs/JobList';
 import ExamModal from '../components/ExamModal';
 import ProcedureModal from '../components/ProcedureModal';
 
@@ -36,16 +36,15 @@ import { Patient } from '../interfaces/data.interface';
 import { Exam } from '../interfaces/data.interface';
 import { Procedure } from '../interfaces/data.interface';
 import { Job } from '../interfaces/data.interface';
-import client from '../client/exam-tree-queries';
 import { patientView, navigation } from '../utils/size_vars';
-import { create } from '@mui/material/styles/createTransitions';
+
+import client from '../client/exam-tree-queries';
 
 
 const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
 (
     ({ theme, open }) => (
         {
-            // flexGrow: 1,
             display: 'flex',
             flexDirection: 'row',
             height: '100%',
@@ -73,17 +72,12 @@ function PatientIndex() {
     const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined);
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
 
-    // State of create modals for exam and procedure
+    // Modal states for exam and procedure
     const [examModalOpen, setExamModalOpen] = React.useState(false);
     const [procedureModalOpen, setProcedureModalOpen] = React.useState(false);
 
     const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
     const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined);
-
-    // Set active tool if component is rendered
-    // if (params.examViewId && params.examViewId.toString() !== activeTool) {
-    //     setActiveTool(params.examViewId.toString())
-    // }
 
     // useQuery for caching the fetched data
     const { data: patient, refetch: refetchPatient, isLoading: patientLoading, isError: patientError } = useQuery<Patient, Error>({
@@ -104,7 +98,6 @@ function PatientIndex() {
             const exam = exams.filter( (exam) => exam.id === Number(params.examId))[0];
             // Set procedures if exam exists
             if (exam) {
-                // console.log("Set procedures: ", exam.procedures)
                 setProcedures(exam.procedures);
             }
         }
@@ -117,21 +110,20 @@ function PatientIndex() {
             const procedure = procedures.filter( (procedure) => procedure.id === Number(params.procedureId))[0];
             // Set procedures if exam exists
             if (procedure) {
-                // console.log("Set jobs: ", procedure.jobs)
                 setJobs(procedure.jobs);
             }
         }
     }, [procedures, params.procedureId])
 
     // Mutations to create exam and procedure
-    const createExam = useMutation( async(newExam: Exam) => {
-        await client.examService.create(newExam)
+    const createExam = useMutation( async(data: Exam) => {
+        await client.examService.create(data)
         .then( () => { refetchExams() })
         .catch((err) => { console.log("Error on exam creation: ", err) }) 
     })
 
-    const createProcedure = useMutation( async(newProcedure: Procedure) => {
-        await client.procedureService.create(newProcedure)
+    const createProcedure = useMutation( async(data: Procedure) => {
+        await client.procedureService.create(data)
         .then( () => { refetchExams() })
         .catch((err) => { console.log("Error on procedure creation: ", err)})
     })
@@ -261,11 +253,7 @@ function PatientIndex() {
                                 data={ null }
                                 dialogOpen={ procedureModalOpen }
                                 setDialogOpen={ setProcedureModalOpen }
-                                // Refetch exams, once a new procedure is created:
-                                // Procedures are extracted from selected exam by useEffect hook
-                                // onSave={ refetchExams }
-                                // onSave={ createProcedure }
-                                handleModalSubmit={ () => {console.log("test")} }
+                                handleModalSubmit={ (data: Procedure) => { createProcedure.mutate(data)} }
                             />
                     </Box>
 
@@ -291,7 +279,7 @@ function PatientIndex() {
 
                 {/* job view controller */}
                 <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-                    <JobView
+                    <JobList
                         // Implementation of new interface may be required
                         data={ jobs ? jobs : [] }
                         refetchParentData={ refetchExams }

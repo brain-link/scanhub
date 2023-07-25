@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 // Component interfaces: Pass data and functions between components
-import * as React from 'react';
+
 import { Job } from './data.interface';
 import { Device } from './data.interface';
-import { Workflow } from './data.interface';
+// import { Workflow } from './data.interface';
 import { MRISequence } from './mri-data.interface';
 
 export interface ModalProps<T> {
@@ -22,11 +22,19 @@ export interface ComponentProps<T> {
 }
 
 export interface JobComponentProps {
-    data: Job | null;
+    data: Job;
     devices: Device[];
     sequences: MRISequence[];
     // workflows: Workflow[];
     refetchParentData: () => void;
+}
+
+// Reuse JobComponentProps but omit data which can be null in case of the modal props
+export interface JobModalProps extends Omit<JobComponentProps, "data"> {
+    data: Job | null;
+    handleModalSubmit: (data: Job) => void;
+    dialogOpen: boolean;
+    setDialogOpen: (open: boolean) => void;
 }
 
 export interface SequenceViewerProps {

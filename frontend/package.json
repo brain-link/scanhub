@@ -45,7 +45,7 @@
   },
   "scripts": {
     "start": "parcel src/index.html -p 3000 && parcel watch src/index.html",
-    "build": "parcel build",
+    "build": "parcel build src/index.html",
     "lint": "eslint ."
   }
 }

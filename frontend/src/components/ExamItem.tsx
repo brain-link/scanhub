@@ -19,7 +19,6 @@ import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import IconButton from '@mui/joy/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-// import ContentPasteSharpIcon from '@mui/icons-material/ContentPasteSharp';
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp';
 import ExamModal from '../components/ExamModal';
 
@@ -27,7 +26,6 @@ import ExamModal from '../components/ExamModal';
 import { Exam } from '../interfaces/data.interface';
 import { ComponentProps } from '../interfaces/components.interface';
 import client from '../client/exam-tree-queries';
-
 
 
 function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Exam>) {
@@ -51,10 +49,10 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
         setContextOpen(examId);
     }
 
-    const deleteExamById = useMutation( async (id: number) => {
-        await client.examService.delete(id)
+    const deleteExam = useMutation( async () => {
+        await client.examService.delete(exam.id)
         .then(() => {
-            if (Number(params.examId) === id) {
+            if (Number(params.examId) === exam.id) {
                 // Reset router path if this exam id is in the path
                 navigate(`/patients/${params.patientId}`)
             }
@@ -63,9 +61,9 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
     })
 
     const updateExam = useMutation( async (data: Exam) => {
-        console.log("Updating exam data...")
+        console.log("Updating exam data... ", data)
         await client.examService.update(data.id, data)
-        .then( () => { refetchParentData(); } )
+        .then( () => { refetchParentData() } )
         .catch( (err) => { console.log("Error on exam update: ", err) })
     })
 
@@ -74,8 +72,6 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
             <ListItemButton 
                 id="exam-item"
                 component={ RouterLink }
-                // If examId exists in parameters, we redirect to this exam id, otherwise exam id is appended
-                // to={ params.examId ? `../${exam.id}` : String(exam.id)
                 to={ `/patients/${params.patientId}/${exam.id}` }
                 relative='path'
                 selected={ isSelected } 
@@ -99,7 +95,7 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
                     </Box>
 
                     <Typography level="body2" textColor="text.tertiary">{ `Issuer: ${exam.creator}, ${exam.site}`}</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{exam.status}</Typography>
+                    <Typography level="body2" textColor="text.tertiary">{ exam.status }</Typography>
                     <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(exam.datetime_created).toDateString()}` }</Typography>
                     <Typography level="body2" textColor="text.tertiary">{ `Updated: ${exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}` }</Typography>
                 
@@ -117,7 +113,7 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
                         Edit
                     </MenuItem>
 
-                    <MenuItem key='delete' onClick={() => { deleteExamById.mutate(exam.id); }}>
+                    <MenuItem key='delete' onClick={() => { deleteExam.mutate() }}>
                         Delete
                     </MenuItem>
 

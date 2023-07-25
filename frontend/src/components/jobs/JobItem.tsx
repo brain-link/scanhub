@@ -5,54 +5,39 @@
 
 import * as React from 'react';
 import { useMutation } from 'react-query';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import Card from '@mui/joy/Card';
-import Box from '@mui/joy/Box';
 import Stack from '@mui/joy/Stack';
-import CardContent from '@mui/joy/CardContent';
-import CardOverflow from '@mui/joy/CardOverflow';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import Typography from '@mui/joy/Typography';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
-import Divider from '@mui/joy/Divider';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
 import IconButton from '@mui/joy/IconButton';
 import Badge from '@mui/joy/Badge';
-import FormControl from '@mui/joy/FormControl';
+import Button from '@mui/joy/Button';
 
 // Icons
-import PendingActionsSharpIcon from '@mui/icons-material/PendingActionsSharp';
 import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp';
-import GraphicEqSharpIcon from '@mui/icons-material/GraphicEqSharp';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
+import JobModal from './JobModal'
 import { Job } from '../../interfaces/data.interface'; 
 import { JobComponentProps } from '../../interfaces/components.interface';
 import client from '../../client/exam-tree-queries';
 
 
 
-function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProps) {
+function JobItem ({data: job, devices, sequences, refetchParentData}: JobComponentProps) {
 
     // Context: Delete and edit options, anchor for context location
+    const navigate = useNavigate();
     const [contextOpen, setContextOpen] = React.useState<boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const [jobModalOpen, setJobModalOpen] = React.useState(false);
 
-    const [jobUpdate, setJobUpdate] = React.useState<Job>(job);
-    
-    // TODO: Use update function to update job, deep clone by newJob = { ...job }
-    // What is the fastest way? Update db on every change or create a deep copy, work on deep copy (update values here)
-    // and modify db only when focus changed to different component?
-
-    const updateJob = useMutation( async () => {
-        await client.jobService.update(job.id, jobUpdate)
+    const updateJob = useMutation( async (data: Job) => {
+        await client.jobService.update(data.id, data)
         .then( () => { refetchParentData() } )
         .catch( (err) => { console.log("Error on job update: ", err) })
     })
@@ -63,16 +48,10 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
             setContextOpen(false); 
             refetchParentData(); 
         })
+
     })
 
-    React.useEffect(() => {
-        updateJob.mutate();
-    }, [jobUpdate])
-
-    // TODO: Add controls
-
     // TODO: Implementation of sequence upload
-
     // TODO: Use devices and workflows in selectors 
 
     return (
@@ -85,9 +64,6 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                     gap: 3,
                 }}
             >
-                {/* <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
-                    <PendingActionsSharpIcon />
-                </ListItemDecorator> */}
 
                 <Badge color="success"  sx={{ml: 3}} />
 
@@ -100,33 +76,6 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                 >
                     <PlayCircleFilledSharpIcon/>
                 </IconButton>
-
-                {/* Card header */}
-                {/* <Box sx={{ display: 'flex', flexDirection: 'row', gap: 4, justifyContent: 'space-between', align: 'center' }}> */}
-
-                    {/* <Input 
-                        type="string"
-                        variant="plain"
-                        name="type"
-                        defaultValue={ job.type === "" ? "Enter type..." : job.type }
-                        disabled={ job.is_acquired }
-                        onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
-                        onBlur={ () => updateJob.mutate() }
-                    /> */}
-
-
-
-                    {/* <Input 
-                        type="string"
-                        variant="plain"
-                        name="comment"
-                        defaultValue={ !job.comment || job.comment === "" ? "Enter comment..." : job.comment }
-                        disabled={ job.is_acquired }
-                        onChange={ (e) => setJobUpdate({...jobUpdate, [e.target.name]: e.target.value}) }
-                        onBlur={ () => updateJob.mutate() }
-                    /> */}
-                
-                {/* <Stack direction='row' spacing={4} sx={{alignItems: 'center'}}> */}
 
                 <Stack direction='column'>
                     <Typography level="body1" textColor="text.primary">{job.type}</Typography>
@@ -148,21 +97,6 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                     >
                         <MoreHorizIcon/>
                     </IconButton>
-                    <IconButton 
-                        aria-label='Show sequence'
-                        variant='plain' 
-                        color='neutral'
-                        sx={{ "--IconButton-size": "40px" }}
-                        onClick={ () => { 
-                            console.log(`${location.pathname}/${job.id}/seq`); 
-                            // navigate(`${location.pathname}/${job.id}/seq`);
-                            navigate(`${job.id}/seq`)
-                        }}
-                    >
-                        <GraphicEqSharpIcon/>
-                    </IconButton>
-
-                    {/* </Stack> */}
                     
                     <Menu   
                         id='context-menu'
@@ -172,7 +106,7 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                         onClose={() => { setAnchorEl(null); setContextOpen(false); }}
                         sx={{ zIndex: 'snackbar' }}
                     >
-                        <MenuItem key='edit' onClick={() => { console.log('To be implemented...') }}>
+                        <MenuItem key='edit' onClick={() => { setJobModalOpen(true); }}>
                             Edit
                         </MenuItem>
                         <MenuItem key='delete' onClick={() => { deleteThisJob.mutate() }}>
@@ -180,37 +114,25 @@ function JobItem ({job, devices, sequences, refetchParentData}: JobComponentProp
                         </MenuItem>
                     </Menu>
 
-                {/* </Box> */}
-            
-                
-                {/* Configuration: Device, Workflow, Sequence */}
+                    <JobModal 
+                        data={ job }
+                        dialogOpen={ jobModalOpen }
+                        setDialogOpen={ setJobModalOpen }
+                        devices={ devices }
+                        sequences={ sequences }
+                        refetchParentData={ () => {} } // unused
+                        handleModalSubmit={ (data: Job) => { updateJob.mutate(data) }}
+                    />
 
-                <Select placeholder="Device">
-                    <Option value="device" >
-                        Scanner 1: ULF-MRI
-                    </Option>
-                </Select>
-                <Select
-                    placeholder="Sequence"
-                    onChange={(
-                        event: React.SyntheticEvent | null,
-                        newValue: string | null
-                    ) => { setJobUpdate({...jobUpdate, ["sequence_id"]: newValue ? newValue : "" }) }}
+                <Button
+                    variant="outlined"
+                    color="neutral"
+                    disabled={ job.sequence_id === "" }   // no sequence id
+                    onClick={ () => { navigate(`${job.id}/seq`) }}
                 >
-                    {
-                        sequences?.map( (sequence, index) => (
-                            <Option key={index} value={sequence._id}>
-                                { sequence.name }
-                            </Option>
-                        ))
-                    }
-                </Select>
-                <Select placeholder="Workflow">
-                    <Option value="workflow">
-                        Reco-Cartesian
-                    </Option>
-                </Select>
-
+                    { !job.sequence_id || job.sequence_id === "" ? "No sequence..." : `View ${sequences.find(x => x._id === job.sequence_id)?.name}` }
+                </Button>
+                
             </ListItemButton>   
         </ListItem>
     );
