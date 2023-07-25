@@ -1,3 +1,8 @@
+// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+// SequenceViewer.tsx is responsible for rendering an mri sequence.
+
 import { useQuery } from "react-query"
 import { useNavigate } from "react-router-dom";
 import React from "react"
@@ -31,42 +36,35 @@ function SequenceViewer({sequence_id}: SequenceViewerProps) {
         }
     }, [data])
 
+    return (
+        <Stack sx={{ overflow: 'clip' }}>
 
-    if (isLoading) {
-        return (
-            <div>Loading sequence...</div>
-        )
-    }
+            <Box sx={{ m: 2, gap: 2, display: 'flex', justifyContent: 'space-between'}}>
+                <IconButton
+                    variant='soft'
+                    onClick={ () => { navigate(-1); } }
+                >
+                    <ArrowBackSharpIcon/>
+                </IconButton>
 
-    if (data && !isError) {
-        return (
-            <Stack sx={{ overflow: 'clip' }}>
+                <IconButton
+                    variant='soft'
+                    onClick={ () => {} }
+                >
+                    <FileDownloadSharpIcon/>
+                </IconButton>
+            </Box>
+            
+            { 
+                // Wait until sequences is loaded
+                isLoading ? <div>Loading sequence...</div> : (
+                    // Check for errors if sequence has been loaded
+                    isError ? <div>No sequence...</div> : <Plot data={data?.data} layout={data?.layout} useResizeHandler={true} />
+                )                     
+            }
 
-                <Box sx={{ m: 2, display: 'flex', justifyContent: 'space-between'}}>
-                    <IconButton
-                        variant='soft'
-                        onClick={ () => { navigate(-1); } }
-                    >
-                        <ArrowBackSharpIcon/>
-                    </IconButton>
-
-                    <IconButton
-                        variant='soft'
-                        onClick={ () => {} }
-                    >
-                        <FileDownloadSharpIcon/>
-                    </IconButton>
-                </Box>
-                
-                <Plot data={data.data} layout={data.layout} useResizeHandler={true} />
-
-            </Stack>
-        );
-    } else {
-        return (
-            <div>No sequence...</div>
-        )
-    }
+        </Stack>
+    );
 }
 
 export default SequenceViewer;
