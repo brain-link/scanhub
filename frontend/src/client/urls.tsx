@@ -11,7 +11,8 @@ const baseUrls = {
     procedureService: 'http://localhost:8080/api/v1/exam/procedure',
     jobService: 'http://localhost:8080/api/v1/exam/job',
     recordService: 'http://localhost:8080/api/v1/exam/record',
-    mriSequenceService: 'http://localhost:8080/api/v1/mri/sequences'
+    mriSequenceService: 'http://localhost:8080/api/v1/mri/sequences',
+    acquisitionControlService: 'http://localhost:8080/api/v1/mri/acquisitioncontrol',
 }
 
 export default baseUrls;
