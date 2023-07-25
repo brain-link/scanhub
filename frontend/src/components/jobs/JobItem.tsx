@@ -25,6 +25,7 @@ import JobModal from './JobModal'
 import { Job } from '../../interfaces/data.interface'; 
 import { JobComponentProps } from '../../interfaces/components.interface';
 import client from '../../client/exam-tree-queries';
+import acquisitionControl from '../../client/acquisition-api';
 
 
 
@@ -51,6 +52,15 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
 
     })
 
+    const handleAcquire = async() => {
+        console.log("Starting acquisition...")
+        await acquisitionControl.post(job)
+        .then((response) => {
+            // Debug...
+            console.log("Acquisition control response... ", response)
+        })
+    }
+
     // TODO: Implementation of sequence upload
     // TODO: Use devices and workflows in selectors 
 
@@ -72,7 +82,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                     variant='plain' 
                     color='neutral'
                     sx={{ "--IconButton-size": "40px" }}
-                    onClick={ () => {} }
+                    onClick={ handleAcquire }
                 >
                     <PlayCircleFilledSharpIcon/>
                 </IconButton>
@@ -88,41 +98,41 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                 </Stack>
 
                 {/* Job interactions */}
-                    <IconButton 
-                        aria-label='Options'
-                        variant='plain' 
-                        color='neutral'
-                        sx={{ "--IconButton-size": "40px" }}
-                        onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
-                    >
-                        <MoreHorizIcon/>
-                    </IconButton>
-                    
-                    <Menu   
-                        id='context-menu'
-                        variant='plain'
-                        anchorEl={anchorEl}
-                        open={ contextOpen }
-                        onClose={() => { setAnchorEl(null); setContextOpen(false); }}
-                        sx={{ zIndex: 'snackbar' }}
-                    >
-                        <MenuItem key='edit' onClick={() => { setJobModalOpen(true); }}>
-                            Edit
-                        </MenuItem>
-                        <MenuItem key='delete' onClick={() => { deleteThisJob.mutate() }}>
-                            Delete
-                        </MenuItem>
-                    </Menu>
+                <IconButton 
+                    aria-label='Options'
+                    variant='plain' 
+                    color='neutral'
+                    sx={{ "--IconButton-size": "40px" }}
+                    onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
+                >
+                    <MoreHorizIcon/>
+                </IconButton>
+                
+                <Menu   
+                    id='context-menu'
+                    variant='plain'
+                    anchorEl={anchorEl}
+                    open={ contextOpen }
+                    onClose={() => { setAnchorEl(null); setContextOpen(false); }}
+                    sx={{ zIndex: 'snackbar' }}
+                >
+                    <MenuItem key='edit' onClick={() => { setJobModalOpen(true); }}>
+                        Edit
+                    </MenuItem>
+                    <MenuItem key='delete' onClick={() => { deleteThisJob.mutate() }}>
+                        Delete
+                    </MenuItem>
+                </Menu>
 
-                    <JobModal 
-                        data={ job }
-                        dialogOpen={ jobModalOpen }
-                        setDialogOpen={ setJobModalOpen }
-                        devices={ devices }
-                        sequences={ sequences }
-                        refetchParentData={ () => {} } // unused
-                        handleModalSubmit={ (data: Job) => { updateJob.mutate(data) }}
-                    />
+                <JobModal 
+                    data={ job }
+                    dialogOpen={ jobModalOpen }
+                    setDialogOpen={ setJobModalOpen }
+                    devices={ devices }
+                    sequences={ sequences }
+                    refetchParentData={ () => {} } // unused
+                    handleModalSubmit={ (data: Job) => { updateJob.mutate(data) }}
+                />
 
                 <Button
                     variant="outlined"
