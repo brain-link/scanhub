@@ -1,5 +1,5 @@
 # FROM node:bullseye-slim AS BUILD_IMAGE
-FROM node:slim AS BUILD_IMAGE
+FROM node:20.5.0-slim AS BUILD_IMAGE
 
 # Install python, required for node-gyp
 # RUN apt-get update || : && apt-get install python -y
@@ -31,7 +31,7 @@ COPY . .
 
 # Final stage
 # FROM node:bullseye-slim
-FROM node:slim
+FROM node:20.5.0-slim
 
 WORKDIR /app
 
