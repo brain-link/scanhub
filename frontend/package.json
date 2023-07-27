@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "source": "/src/index.html",
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -47,5 +47,17 @@
     "start": "parcel src/index.html -p 3000 && parcel watch src/index.html",
     "build": "parcel build src/index.html",
     "lint": "eslint ."
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
