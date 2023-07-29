@@ -11,7 +11,7 @@ import axios, { AxiosInstance } from 'axios';
 
 
 export abstract class ApiService<T> {
-    private readonly axiosInstance: AxiosInstance;
+    protected readonly axiosInstance: AxiosInstance;
 
     constructor(private readonly baseURL: string) {
         this.axiosInstance = axios.create({
@@ -75,7 +75,7 @@ export abstract class ApiService<T> {
         }
     }
 
-    private handleError(error: any) {
+    protected handleError(error: any) {
         if (axios.isAxiosError(error)) {
             console.log("Catched axios error: ", error)
         }

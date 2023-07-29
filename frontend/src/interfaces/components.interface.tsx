@@ -5,12 +5,14 @@
 
 import { Job } from './data.interface';
 import { Device } from './data.interface';
-import { Workflow } from './data.interface';
+// import { Workflow } from './data.interface';
+import { MRISequence } from './mri-data.interface';
 
-export interface CreateModalProps {
-    dialogOpen: boolean,
+export interface ModalProps<T> {
+    handleModalSubmit: (data: T) => void;
+    data: T | null;
+    dialogOpen: boolean;
     setDialogOpen: (open: boolean) => void;
-    onCreated: () => void;
 }
 
 export interface ComponentProps<T> {
@@ -20,8 +22,21 @@ export interface ComponentProps<T> {
 }
 
 export interface JobComponentProps {
-    job: Job;
+    data: Job;
     devices: Device[];
-    workflows: Workflow[];
+    sequences: MRISequence[];
+    // workflows: Workflow[];
     refetchParentData: () => void;
+}
+
+// Reuse JobComponentProps but omit data which can be null in case of the modal props
+export interface JobModalProps extends Omit<JobComponentProps, "data"> {
+    data: Job | null;
+    handleModalSubmit: (data: Job) => void;
+    dialogOpen: boolean;
+    setDialogOpen: (open: boolean) => void;
+}
+
+export interface SequenceViewerProps {
+    sequence_id: string;
 }

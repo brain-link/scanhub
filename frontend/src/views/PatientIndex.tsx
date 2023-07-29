@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 
 // Mui Material
 import { styled } from '@mui/material/styles';
@@ -26,25 +27,24 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import ExamViewController from '../components/job_view/JobViewController';
-import ExamCreateModal from '../components/ExamCreateModal';
-import ProcedureCreateModal from '../components/ProcedureCreateModal';
-import JobViewController from '../components/job_view/JobViewController';
+import JobList from '../components/jobs/JobList';
+import ExamModal from '../components/ExamModal';
+import ProcedureModal from '../components/ProcedureModal';
 
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface';
 import { Exam } from '../interfaces/data.interface';
 import { Procedure } from '../interfaces/data.interface';
 import { Job } from '../interfaces/data.interface';
-import client from '../client/queries';
 import { patientView, navigation } from '../utils/size_vars';
+
+import client from '../client/exam-tree-queries';
 
 
 const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
 (
     ({ theme, open }) => (
         {
-            // flexGrow: 1,
             display: 'flex',
             flexDirection: 'row',
             height: '100%',
@@ -72,17 +72,12 @@ function PatientIndex() {
     const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined);
     const [sidePanelOpen, setSidePanelOpen] = React.useState(true);
 
-    // State of create modals for exam and procedure
-    const [newExamDialogOpen, setNewExamDialogOpen] = React.useState(false);
-    const [newProcedureDialogOpen, setNewProcedureDialogOpen] = React.useState(false);
+    // Modal states for exam and procedure
+    const [examModalOpen, setExamModalOpen] = React.useState(false);
+    const [procedureModalOpen, setProcedureModalOpen] = React.useState(false);
 
     const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined);
     const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined);
-
-    // Set active tool if component is rendered
-    if (params.examViewId && params.examViewId.toString() !== activeTool) {
-        setActiveTool(params.examViewId.toString())
-    }
 
     // useQuery for caching the fetched data
     const { data: patient, refetch: refetchPatient, isLoading: patientLoading, isError: patientError } = useQuery<Patient, Error>({
@@ -103,7 +98,6 @@ function PatientIndex() {
             const exam = exams.filter( (exam) => exam.id === Number(params.examId))[0];
             // Set procedures if exam exists
             if (exam) {
-                // console.log("Set procedures: ", exam.procedures)
                 setProcedures(exam.procedures);
             }
         }
@@ -116,12 +110,23 @@ function PatientIndex() {
             const procedure = procedures.filter( (procedure) => procedure.id === Number(params.procedureId))[0];
             // Set procedures if exam exists
             if (procedure) {
-                // console.log("Set jobs: ", procedure.jobs)
                 setJobs(procedure.jobs);
             }
         }
     }, [procedures, params.procedureId])
 
+    // Mutations to create exam and procedure
+    const createExam = useMutation( async(data: Exam) => {
+        await client.examService.create(data)
+        .then( () => { refetchExams() })
+        .catch((err) => { console.log("Error on exam creation: ", err) }) 
+    })
+
+    const createProcedure = useMutation( async(data: Procedure) => {
+        await client.procedureService.create(data)
+        .then( () => { refetchExams() })
+        .catch((err) => { console.log("Error on procedure creation: ", err)})
+    })
 
     return (    
         <div 
@@ -141,7 +146,7 @@ function PatientIndex() {
                     }
                 }}
                 PaperProps={{ style: { position: 'absolute' } }}
-                BackdropProps={{ style: { position: 'absolute' } }}
+                // BackdropProps={{ style: { position: 'absolute' } }}
                 ModalProps={{
                     container: document.getElementById('page-container'),
                     style: { position: 'absolute' }
@@ -169,16 +174,18 @@ function PatientIndex() {
                             <IconButton 
                                 variant='soft'
                                 sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                                onClick={() => setNewExamDialogOpen(true)}
+                                onClick={() => setExamModalOpen(true)}
                             >
                                 <AddSharpIcon/>
                             </IconButton>
                         </Box>
 
-                        <ExamCreateModal 
-                            dialogOpen={ newExamDialogOpen }
-                            setDialogOpen={ setNewExamDialogOpen }
-                            onCreated={ refetchExams }
+                        <ExamModal 
+                            // When data is null, modal fills data in new empty procedure 
+                            data={ null }
+                            dialogOpen={ examModalOpen }
+                            setDialogOpen={ setExamModalOpen }
+                            handleModalSubmit={ (data: Exam) => { createExam.mutate(data)} }
                         />
 
                     </Box>
@@ -236,17 +243,17 @@ function PatientIndex() {
                             <IconButton 
                                 variant='soft' 
                                 sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                                onClick={() => {setNewProcedureDialogOpen(true)}}
+                                onClick={() => {setProcedureModalOpen(true)}}
                             >
                                 <AddSharpIcon/>
                             </IconButton>
 
-                            <ProcedureCreateModal 
-                                dialogOpen={ newProcedureDialogOpen }
-                                setDialogOpen={ setNewProcedureDialogOpen }
-                                // Refetch exams, once a new procedure is created:
-                                // Procedures are extracted from selected exam by useEffect hook
-                                onCreated={ refetchExams }
+                            <ProcedureModal
+                                // When data is null, modal fills data in new empty procedure 
+                                data={ null }
+                                dialogOpen={ procedureModalOpen }
+                                setDialogOpen={ setProcedureModalOpen }
+                                handleModalSubmit={ (data: Procedure) => { createProcedure.mutate(data)} }
                             />
                     </Box>
 
@@ -272,7 +279,7 @@ function PatientIndex() {
 
                 {/* job view controller */}
                 <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-                    <JobViewController
+                    <JobList
                         // Implementation of new interface may be required
                         data={ jobs ? jobs : [] }
                         refetchParentData={ refetchExams }

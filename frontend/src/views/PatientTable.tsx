@@ -24,8 +24,7 @@ import Button from '@mui/joy/Button';
 import Table from '@mui/joy/Table';
 import Box from '@mui/joy/Box';
 
-// import client from '../client/queries';
-import client from '../client/queries';
+import client from '../client/exam-tree-queries';
 import { Patient } from '../interfaces/data.interface';
 
 // Patient form items, order is row wise
