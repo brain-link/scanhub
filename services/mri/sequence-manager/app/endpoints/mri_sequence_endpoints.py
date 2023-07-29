@@ -299,7 +299,7 @@ async def delete_mri_sequence_endpoint(
         )
 
 
-@router.get("/mri-sequence-plot/{seq_id}", status_code=status.HTTP_201_CREATED)
+@router.get("/mri-sequence-plot/{seq_id}")
 async def plot_mri_sequence(seq_id: str, database=Depends(get_database)) -> str:
     """Generate plotly sequence plot data.
 
@@ -326,7 +326,15 @@ async def plot_mri_sequence(seq_id: str, database=Depends(get_database)) -> str:
     # Generate plotly json string from sequence object, if json file does not already exists
     if not exists(filename + ".json"):
         seq = Sequence()
-        seq.read(filename + ".seq")
+        try:
+            seq.read(filename + ".seq")
+        except Exception as exc:
+            print(
+                "Could not read pulseq file. The uploaded pulseq file is probably not compatible."
+            )
+            raise HTTPException(
+                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+            ) from exc
 
         fig = get_sequence_plot(seq)
         plot_data = plotly.io.to_json(fig, pretty=True)
