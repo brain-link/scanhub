@@ -17,7 +17,6 @@ import IconButton from '@mui/joy/IconButton';
 import Badge from '@mui/joy/Badge';
 import Button from '@mui/joy/Button';
 
-// Icons
 import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -26,7 +25,6 @@ import { Job } from '../../interfaces/data.interface';
 import { JobComponentProps } from '../../interfaces/components.interface';
 import client from '../../client/exam-tree-queries';
 import acquisitionControl from '../../client/acquisition-api';
-
 
 
 function JobItem ({data: job, devices, sequences, refetchParentData}: JobComponentProps) {
