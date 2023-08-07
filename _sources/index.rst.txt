@@ -12,6 +12,8 @@ Welcome to ScanHub's documentation!
 
    introduction
 
+   exam
+
 Indices and tables
 ==================
 
