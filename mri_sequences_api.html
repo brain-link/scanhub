@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MRI Sequences Manager API &mdash; ScanHub 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="MRI Acquisition Manager API" href="mri_acquisition_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ScanHub
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mri_acquisition_api.html">MRI Acquisition Manager API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MRI Sequences Manager API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ScanHub</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MRI Sequences Manager API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mri_sequences_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mri-sequences-manager-api">
+<h1>MRI Sequences Manager API<a class="headerlink" href="#mri-sequences-manager-api" title="Permalink to this heading"></a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-mri-sequences-">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Get Mri Sequences Endpoint</strong></p>
+<p>Retrieve a list of all MRI sequences from the database.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>List[MRISequence]</dt><dd><p>The list of MRI sequences.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-mri-sequences-">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/</span></span><a class="headerlink" href="#post--api-v1-mri-sequences-" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create Mri Sequence Endpoint</strong></p>
+<p>Create a new MRI sequence and store it in the database.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>mri_sequence<span class="classifier">MRISequence</span></dt><dd><p>The MRI sequence data to store.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>MRISequence</dt><dd><p>The created MRI sequence.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-mri-sequences-upload">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/upload</span></span><a class="headerlink" href="#post--api-v1-mri-sequences-upload" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Upload Mri Sequence File</strong></p>
+<p>Upload an MRI sequence file and store it with the provided metadata.</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>mri_sequence<span class="classifier">MRISequenceCreate</span></dt><dd><p>The MRI sequence metadata.</p>
+</dd>
+<dt>file<span class="classifier">UploadFile</span></dt><dd><p>The MRI sequence file to store.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Returns<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>MRISequence</dt><dd><p>The stored MRI sequence with the uploaded file.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-mri-sequences-mri_sequence_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Get Mri Sequence By Id Endpoint</strong></p>
+<p>Retrieve an MRI sequence by its ID.</p>
+<section id="id5">
+<h2>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to retrieve.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h2>Returns<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>MRISequence</dt><dd><p>The retrieved MRI sequence.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param string mri_sequence_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-mri-sequences-mri_sequence_id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#put--api-v1-mri-sequences-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update Mri Sequence Endpoint</strong></p>
+<p>Update an MRI sequence with new data.</p>
+<section id="id7">
+<h2>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to update.</p>
+</dd>
+<dt>mri_sequence<span class="classifier">MRISequence</span></dt><dd><p>The updated MRI sequence data.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h2>Returns<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>MRISequence</dt><dd><p>The updated MRI sequence.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param string mri_sequence_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--api-v1-mri-sequences-mri_sequence_id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#delete--api-v1-mri-sequences-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete Mri Sequence Endpoint</strong></p>
+<p>Delete an MRI sequence by its ID.</p>
+<section id="id9">
+<h2>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to delete.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h2>Returns<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
+<p>None</p>
+<dl class="field-list simple">
+<dt class="field-odd">param string mri_sequence_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 204<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/mri-sequence-file/{mri_sequence_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Get Mri Sequence File By Id Endpoint</strong></p>
+<p>Retrieve an MRI sequence file by its ID.</p>
+<section id="id11">
+<h2>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to retrieve.</p>
+</dd>
+<dt>background_tasks<span class="classifier">BackgroundTasks</span></dt><dd><p>The background tasks to run.</p>
+</dd>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the file to download.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h2>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>FileResponse</dt><dd><p>The retrieved MRI sequence file.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param string mri_sequence_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">query string name<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-mri-sequences-mri-sequence-plot-seq_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/mri-sequence-plot/{seq_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri-sequence-plot-seq_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Plot Mri Sequence</strong></p>
+<p>Generate plotly sequence plot data.</p>
+<section id="id13">
+<h2>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>seq_id</dt><dd><p>Id of the sequence to be plotted</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h2>Returns<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>List of plot data models for plotly</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param string seq_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 201<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--health">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/health</span></span><a class="headerlink" href="#get--health" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Health Check</strong></p>
+<p>Perform a health check for the microservice.</p>
+<section id="id15">
+<h2>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>is_db_connected: bool</dt><dd><p>The status of the database connection.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h2>Returns<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>The status of the microservice.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--readiness">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/readiness</span></span><a class="headerlink" href="#get--readiness" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Readiness Check</strong></p>
+<p>Perform a readiness check for the microservice.</p>
+<section id="id17">
+<h2>Returns<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>dict</dt><dd><p>The readiness status of the microservice.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mri_acquisition_api.html" class="btn btn-neutral float-left" title="MRI Acquisition Manager API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

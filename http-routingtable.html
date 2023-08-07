@@ -49,8 +49,9 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mri_acquisition_api.html">MRI Acquisition API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mri_acquisition_api.html">MRI Acquisition Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mri_sequences_api.html">MRI Sequences Manager API</a></li>
 </ul>
 
         </div>
@@ -80,7 +81,9 @@
    <h1>HTTP Routing Table</h1>
 
    <div class="modindex-jumpbox">
-   <a href="#cap-/api"><strong>/api</strong></a>
+   <a href="#cap-/api"><strong>/api</strong></a> | 
+   <a href="#cap-/health"><strong>/health</strong></a> | 
+   <a href="#cap-/readiness"><strong>/readiness</strong></a>
    </div>
 
    <table class="indextable modindextable">
@@ -135,6 +138,26 @@
      <tr>
        <td></td>
        <td>
+       <a href="mri_sequences_api.html#get--api-v1-mri-sequences-"><code class="xref">GET /api/v1/mri/sequences/</code></a></td><td>
+       <em>Get Mri Sequences Endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id"><code class="xref">GET /api/v1/mri/sequences/mri-sequence-file/{mri_sequence_id}</code></a></td><td>
+       <em>Get Mri Sequence File By Id Endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#get--api-v1-mri-sequences-mri-sequence-plot-seq_id"><code class="xref">GET /api/v1/mri/sequences/mri-sequence-plot/{seq_id}</code></a></td><td>
+       <em>Plot Mri Sequence</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#get--api-v1-mri-sequences-mri_sequence_id"><code class="xref">GET /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
+       <em>Get Mri Sequence By Id Endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
        <a href="exam_api.html#post--api-v1-exam-"><code class="xref">POST /api/v1/exam/</code></a></td><td>
        <em>Exam Create</em></td></tr>
      <tr>
@@ -165,6 +188,16 @@
      <tr>
        <td></td>
        <td>
+       <a href="mri_sequences_api.html#post--api-v1-mri-sequences-"><code class="xref">POST /api/v1/mri/sequences/</code></a></td><td>
+       <em>Create Mri Sequence Endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#post--api-v1-mri-sequences-upload"><code class="xref">POST /api/v1/mri/sequences/upload</code></a></td><td>
+       <em>Upload Mri Sequence File</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
        <a href="exam_api.html#put--api-v1-exam-job-job_id"><code class="xref">PUT /api/v1/exam/job/{job_id}</code></a></td><td>
        <em>Job Update</em></td></tr>
      <tr>
@@ -177,6 +210,11 @@
        <td>
        <a href="exam_api.html#put--api-v1-exam-exam_id"><code class="xref">PUT /api/v1/exam/{exam_id}</code></a></td><td>
        <em>Exam Update</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#put--api-v1-mri-sequences-mri_sequence_id"><code class="xref">PUT /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
+       <em>Update Mri Sequence Endpoint</em></td></tr>
      <tr>
        <td></td>
        <td>
@@ -197,6 +235,27 @@
        <td>
        <a href="exam_api.html#delete--api-v1-exam-exam_id"><code class="xref">DELETE /api/v1/exam/{exam_id}</code></a></td><td>
        <em>Exam Delete</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#delete--api-v1-mri-sequences-mri_sequence_id"><code class="xref">DELETE /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
+       <em>Delete Mri Sequence Endpoint</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/health"><td></td><td>
+       <strong>/health</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#get--health"><code class="xref">GET /health</code></a></td><td>
+       <em>Health Check</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/readiness"><td></td><td>
+       <strong>/readiness</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="mri_sequences_api.html#get--readiness"><code class="xref">GET /readiness</code></a></td><td>
+       <em>Readiness Check</em></td></tr>
    </table>
 
 
