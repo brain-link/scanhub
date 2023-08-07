@@ -73,6 +73,680 @@
              
   <section id="exam-api-documentation">
 <h1>Exam API Documentation<a class="headerlink" href="#exam-api-documentation" title="Permalink to this heading"></a></h1>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-exam-">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/</span></span><a class="headerlink" href="#post--api-v1-exam-" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Exam Create</strong></p>
+<p>Create exam endpoint.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>payload</dt><dd><p>Exam pydantic input model.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Exam pydantic output moddel.</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-exam_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/{exam_id}</span></span><a class="headerlink" href="#get--api-v1-exam-exam_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Exam Get</strong></p>
+<p>Get exam endpoint.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of requested exam entry</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Exam pydantic output model.</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h2>Raises<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer exam_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-exam-exam_id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/{exam_id}</span></span><a class="headerlink" href="#put--api-v1-exam-exam_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Exam Update</strong></p>
+<p>Update exam.</p>
+<section id="id4">
+<h2>Parameters<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of the exam to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Exam pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h2>Returns<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Exam pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h2>Raises<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer exam_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--api-v1-exam-exam_id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/{exam_id}</span></span><a class="headerlink" href="#delete--api-v1-exam-exam_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Exam Delete</strong></p>
+<p>Delete exam by id.</p>
+<section id="id7">
+<h2>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of the exam to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h2>Raises<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer exam_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 204<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-all-patient_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/all/{patient_id}</span></span><a class="headerlink" href="#get--api-v1-exam-all-patient_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Exam Get All</strong></p>
+<p>Get all exams of a patient endpoint.</p>
+<section id="id9">
+<h2>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>patient_id</dt><dd><p>Id of parent</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h2>Returns<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>List of exam pydantic output models</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param integer patient_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-exam-procedure">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/procedure</span></span><a class="headerlink" href="#post--api-v1-exam-procedure" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Procedure Create</strong></p>
+<p>Procedure post endpoint.</p>
+<section id="id11">
+<h2>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>payload</dt><dd><p>Pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h2>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id13">
+<h2>Raises<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation not succesful</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-procedure-procedure_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/procedure/{procedure_id}</span></span><a class="headerlink" href="#get--api-v1-exam-procedure-procedure_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Procedure Get</strong></p>
+<p>Procedure get endpoint.</p>
+<section id="id14">
+<h2>Parameters<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of entry to return</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h2>Returns<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id16">
+<h2>Raises<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer procedure_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-exam-procedure-procedure_id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/procedure/{procedure_id}</span></span><a class="headerlink" href="#put--api-v1-exam-procedure-procedure_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Proceedure Update</strong></p>
+<p>Update procedure endpoint.</p>
+<section id="id17">
+<h2>Parameters<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of procedure to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h2>Returns<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id19">
+<h2>Raises<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Entry not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer procedure_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--api-v1-exam-procedure-procedure_id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/procedure/{procedure_id}</span></span><a class="headerlink" href="#delete--api-v1-exam-procedure-procedure_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Procedure Delete</strong></p>
+<p>Delete procedure endpoint.</p>
+<section id="id20">
+<h2>Parameters<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of entry to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h2>Raises<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer procedure_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 204<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-procedure-all-exam_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/procedure/all/{exam_id}</span></span><a class="headerlink" href="#get--api-v1-exam-procedure-all-exam_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Procedure Get All</strong></p>
+<p>Get all procedures of a parent endpoint.</p>
+<section id="id22">
+<h2>Parameters<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of the parent object</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h2>Returns<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>List of pydantic output models</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param integer exam_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-exam-job">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/job</span></span><a class="headerlink" href="#post--api-v1-exam-job" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Job Create</strong></p>
+<p>Create new job endpoint.</p>
+<section id="id24">
+<h2>Parameters<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>payload</dt><dd><p>Job pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h2>Returns<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Job pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id26">
+<h2>Raises<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-job-job_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/job/{job_id}</span></span><a class="headerlink" href="#get--api-v1-exam-job-job_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Job Get</strong></p>
+<p>Get job endpoint.</p>
+<section id="id27">
+<h2>Parameters<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of the job to be returned</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h2>Returns<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Job pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id29">
+<h2>Raises<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer job_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-exam-job-job_id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/job/{job_id}</span></span><a class="headerlink" href="#put--api-v1-exam-job-job_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Job Update</strong></p>
+<p>Update job endpoint.</p>
+<section id="id30">
+<h2>Parameters<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of the job to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Job pydantic indput model</p>
+</dd>
+</dl>
+</section>
+<section id="id31">
+<h2>Returns<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Job pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id32">
+<h2>Raises<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer job_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--api-v1-exam-job-job_id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/job/{job_id}</span></span><a class="headerlink" href="#delete--api-v1-exam-job-job_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Job Delete</strong></p>
+<p>Delete job endpoint.</p>
+<section id="id33">
+<h2>Parameters<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of the job to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id34">
+<h2>Raises<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer job_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 204<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-job-all-procedure_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/job/all/{procedure_id}</span></span><a class="headerlink" href="#get--api-v1-exam-job-all-procedure_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Job Get All</strong></p>
+<p>Get all jobs of a procedure endpoint.</p>
+<section id="id35">
+<h2>Parameters<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of parent procedure</p>
+</dd>
+</dl>
+</section>
+<section id="id36">
+<h2>Returns<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>List of job pydantic output model</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param integer procedure_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-exam-record">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/record</span></span><a class="headerlink" href="#post--api-v1-exam-record" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Record Create</strong></p>
+<p>Create record endpoint.</p>
+<section id="id37">
+<h2>Parameters<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>payload</dt><dd><p>Record pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h2>Returns<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Record pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id39">
+<h2>Raises<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-record-record_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/record/{record_id}</span></span><a class="headerlink" href="#get--api-v1-exam-record-record_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Record Get</strong></p>
+<p>Get single record endpoint.</p>
+<section id="id40">
+<h2>Parameters<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>record_id</dt><dd><p>Id of the record to return</p>
+</dd>
+</dl>
+</section>
+<section id="id41">
+<h2>Returns<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Record pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id42">
+<h2>Raises<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer record_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--api-v1-exam-record-record_id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/record/{record_id}</span></span><a class="headerlink" href="#delete--api-v1-exam-record-record_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Record Delete</strong></p>
+<p>Delete record endpoint.</p>
+<section id="id43">
+<h2>Parameters<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>record_id</dt><dd><p>Id of the record to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id44">
+<h2>Raises<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param integer record_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 204<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-record-all-job_id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/record/all/{job_id}</span></span><a class="headerlink" href="#get--api-v1-exam-record-all-job_id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Record Get All</strong></p>
+<p>Get all records of a job endpoint.</p>
+<section id="id45">
+<h2>Parameters<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of parental job</p>
+</dd>
+</dl>
+</section>
+<section id="id46">
+<h2>Returns<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>List of record pydantic output model</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param integer job_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-exam-health-readiness">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/health/readiness</span></span><a class="headerlink" href="#get--api-v1-exam-health-readiness" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Readiness</strong></p>
+<p>Readiness health endpoint.</p>
+<section id="id47">
+<h2>Returns<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>Status dictionary</p>
+</div></blockquote>
+</section>
+<section id="id48">
+<h2>Raises<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>500: Any of the exam-tree tables does not exist</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
 </section>
 
 
