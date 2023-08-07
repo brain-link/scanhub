@@ -12,7 +12,8 @@ Welcome to ScanHub's documentation!
 
    introduction
 
-   exam
+   exam_api
+   mri_acquisition_api
 
 Indices and tables
 ==================
