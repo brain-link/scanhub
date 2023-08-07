@@ -14,6 +14,7 @@ Welcome to ScanHub's documentation!
 
    exam_api
    mri_acquisition_api
+   mri_sequences_api
 
 Indices and tables
 ==================
