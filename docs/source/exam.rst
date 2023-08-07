@@ -1,4 +1,4 @@
 Exam API Documentation
 ======================
 
-.. openapi:: ./source/_openapi/exam_openapi.json
+.. openapi:: ./_openapi/exam_openapi.json
