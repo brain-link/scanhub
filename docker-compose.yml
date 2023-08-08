@@ -194,7 +194,6 @@ services:
         condition: service_healthy
       exam-manager: 
         condition: service_healthy
-      # Add healthchecks for sequence manager and acquisition control
       sequence-manager:
         condition: service_started
       acquisition-control:
