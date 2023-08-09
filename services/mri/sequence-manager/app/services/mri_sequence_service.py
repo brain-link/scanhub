@@ -121,7 +121,7 @@ async def update_mri_sequence(
     """
     mri_sequence.updated_at = datetime.datetime.utcnow()
     result = await database.collection.replace_one(
-        {"_id": mri_sequence_id}, mri_sequence.dict(by_alias=True)
+        {"_id": ObjectId(mri_sequence_id)}, mri_sequence.dict(by_alias=True)
     )
 
     return mri_sequence if result.modified_count > 0 else None
@@ -143,7 +143,7 @@ async def delete_mri_sequence(
     -------
         The number of deleted MRI sequences (0 or 1).
     """
-    result = await database.collection.delete_one({"_id": mri_sequence_id})
+    result = await database.collection.delete_one({"_id": ObjectId(mri_sequence_id)})
     return result.deleted_count
 
 

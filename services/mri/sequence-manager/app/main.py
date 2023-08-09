@@ -27,13 +27,11 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:3000",  # frontned
-    "http://localhost:8100",  # patient-manager
     "http://localhost:8080",  # nginx
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=['*'],
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
@@ -83,28 +81,3 @@ async def shutdown_event():
     """Close MongoDB connection on shutdown."""
     logger.info("ShutDown...")
     await close_mongo_connection()
-
-
-# from fastapi import FastAPI
-# from app.endpoints import health
-# from app.database.mongodb import connect_to_mongo, close_mongo_connection
-# import logging
-
-# logger = logging.getLogger(__name__)
-
-# logger.info("Instantiate APP...")
-
-# app = FastAPI()
-
-# @app.on_event("startup")
-# async def startup_event():
-#     logger.info("Connecting to MongoDB...")
-#     await connect_to_mongo()
-
-# @app.on_event("shutdown")
-# async def shutdown_event():
-#     logger.info("Disconnecting from MongoDB...")
-#     await close_mongo_connection()
-
-# logger.info("Adding API routers...")
-# app.include_router(health.router)

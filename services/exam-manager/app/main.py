@@ -27,7 +27,6 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=['*'],
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
@@ -49,7 +48,6 @@ async def startup():
     """
     ins = inspect(engine)
     tables = ins.get_table_names()
-    print(f"Existing tables: {tables}")
     if "device" not in tables:
         raise HTTPException(
             status_code=500,
@@ -83,12 +81,12 @@ async def readiness() -> dict:
         500: Any of the exam-tree tables does not exist
     """
     ins = inspect(engine)
-    exam_tables = ["exam", "procedure", "job", "record"]
-    print(exam_tables)
-    print(ins.get_table_names())
-    # if not all(t in exam_tables for t in ins.get_table_names()):
+    existing_tables = ins.get_table_names()
+    required_tables = ["exam", "procedure", "job", "record"]
+    print("Existing tables: ", existing_tables)
 
-    #     raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
+    if not all(t in existing_tables for t in required_tables):
+        raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
 
     return {"status": "ok"}
 
