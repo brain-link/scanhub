@@ -12,13 +12,8 @@ Welcome to ScanHub's documentation!
 
    introduction
 
+   device_api
    exam_api
+   workflow_api
    mri_acquisition_api
    mri_sequences_api
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
