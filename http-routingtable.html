@@ -49,7 +49,9 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow_api.html">Workflow Manager API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mri_acquisition_api.html">MRI Acquisition Manager API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mri_sequences_api.html">MRI Sequences Manager API</a></li>
 </ul>
@@ -81,15 +83,45 @@
    <h1>HTTP Routing Table</h1>
 
    <div class="modindex-jumpbox">
+   <a href="#cap-/"><strong>/</strong></a> | 
    <a href="#cap-/api"><strong>/api</strong></a> | 
    <a href="#cap-/health"><strong>/health</strong></a> | 
-   <a href="#cap-/readiness"><strong>/readiness</strong></a>
+   <a href="#cap-/readiness"><strong>/readiness</strong></a> | 
+   <a href="#cap-/{patient_id}"><strong>/{patient_id}</strong></a>
    </div>
 
    <table class="indextable modindextable">
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/"><td></td><td>
+       <strong>/</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ui_patient_manager_api.html#get--"><code class="xref">GET /</code></a></td><td>
+       <em>Get Patient List</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ui_patient_manager_api.html#post--"><code class="xref">POST /</code></a></td><td>
+       <em>Create Patient</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-/api"><td></td><td>
        <strong>/api</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="device_api.html#get--api-v1-device-"><code class="xref">GET /api/v1/device/</code></a></td><td>
+       <em>Get Devices</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="device_api.html#get--api-v1-device-health-readiness"><code class="xref">GET /api/v1/device/health/readiness</code></a></td><td>
+       <em>Readiness</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="device_api.html#get--api-v1-device-device_id"><code class="xref">GET /api/v1/device/{device_id}</code></a></td><td>
+       <em>Get Device</em></td></tr>
      <tr>
        <td></td>
        <td>
@@ -158,6 +190,26 @@
      <tr>
        <td></td>
        <td>
+       <a href="workflow_api.html#get--api-v1-workflow-"><code class="xref">GET /api/v1/workflow/</code></a></td><td>
+       <em>Get Workflow List</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="workflow_api.html#get--api-v1-workflow-health-readiness"><code class="xref">GET /api/v1/workflow/health/readiness</code></a></td><td>
+       <em>Readiness</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="workflow_api.html#get--api-v1-workflow-workflow_id"><code class="xref">GET /api/v1/workflow/{workflow_id}</code></a></td><td>
+       <em>Get Workflow</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="device_api.html#post--api-v1-device-"><code class="xref">POST /api/v1/device/</code></a></td><td>
+       <em>Create Device</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
        <a href="exam_api.html#post--api-v1-exam-"><code class="xref">POST /api/v1/exam/</code></a></td><td>
        <em>Exam Create</em></td></tr>
      <tr>
@@ -198,6 +250,21 @@
      <tr>
        <td></td>
        <td>
+       <a href="workflow_api.html#post--api-v1-workflow-"><code class="xref">POST /api/v1/workflow/</code></a></td><td>
+       <em>Create Workflow</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="workflow_api.html#post--api-v1-workflow-upload-record_id-"><code class="xref">POST /api/v1/workflow/upload/{record_id}/</code></a></td><td>
+       <em>Upload Result</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="device_api.html#put--api-v1-device-device_id"><code class="xref">PUT /api/v1/device/{device_id}</code></a></td><td>
+       <em>Update Device</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
        <a href="exam_api.html#put--api-v1-exam-job-job_id"><code class="xref">PUT /api/v1/exam/job/{job_id}</code></a></td><td>
        <em>Job Update</em></td></tr>
      <tr>
@@ -215,6 +282,16 @@
        <td>
        <a href="mri_sequences_api.html#put--api-v1-mri-sequences-mri_sequence_id"><code class="xref">PUT /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
        <em>Update Mri Sequence Endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="workflow_api.html#put--api-v1-workflow-workflow_id-"><code class="xref">PUT /api/v1/workflow/{workflow_id}/</code></a></td><td>
+       <em>Update Workflow</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="device_api.html#delete--api-v1-device-device_id"><code class="xref">DELETE /api/v1/device/{device_id}</code></a></td><td>
+       <em>Delete Device</em></td></tr>
      <tr>
        <td></td>
        <td>
@@ -240,6 +317,11 @@
        <td>
        <a href="mri_sequences_api.html#delete--api-v1-mri-sequences-mri_sequence_id"><code class="xref">DELETE /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
        <em>Delete Mri Sequence Endpoint</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="workflow_api.html#delete--api-v1-workflow-workflow_id"><code class="xref">DELETE /api/v1/workflow/{workflow_id}</code></a></td><td>
+       <em>Delete Workflow</em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-/health"><td></td><td>
        <strong>/health</strong></td><td></td></tr>
@@ -256,6 +338,24 @@
        <td>
        <a href="mri_sequences_api.html#get--readiness"><code class="xref">GET /readiness</code></a></td><td>
        <em>Readiness Check</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/{patient_id}"><td></td><td>
+       <strong>/{patient_id}</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ui_patient_manager_api.html#get--patient_id"><code class="xref">GET /{patient_id}</code></a></td><td>
+       <em>Get Patient</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ui_patient_manager_api.html#put--patient_id"><code class="xref">PUT /{patient_id}</code></a></td><td>
+       <em>Update Patient</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ui_patient_manager_api.html#delete--patient_id"><code class="xref">DELETE /{patient_id}</code></a></td><td>
+       <em>Delete Patient</em></td></tr>
    </table>
 
 
