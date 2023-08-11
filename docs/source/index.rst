@@ -12,6 +12,8 @@ Welcome to ScanHub's documentation!
 
    introduction
 
+   ui_patient_manager_api
+
    device_api
    exam_api
    workflow_api
