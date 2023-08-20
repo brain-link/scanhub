@@ -3,18 +3,21 @@ name: Sphinx Docs
 on:
   push:
     branches:
-      - '*'
+      - main
+      - docu
 
 jobs:
-  build-and-deploy:
+  Documentation:
+    name: 'Build and Deploy documentation'
+
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
