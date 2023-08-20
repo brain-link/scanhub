@@ -1,10 +1,8 @@
-.. ScanHub documentation master file, created by
-   sphinx-quickstart on Sun Jul 23 15:50:57 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-Welcome to ScanHub's documentation!
-===================================
+ScanHub Doucmentation
+=====================
 
 .. toctree::
    :maxdepth: 2
