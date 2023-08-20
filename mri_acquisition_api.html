@@ -46,10 +46,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ui_patient_manager_api.html">UI Patient Manager API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow_api.html">Workflow Manager API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MRI Acquisition Manager API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#open-source-license">Open Source License</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commercial-license">Commercial License</a></li>
@@ -88,8 +90,13 @@
              
   <section id="mri-acquisition-manager-api">
 <h1>MRI Acquisition Manager API<a class="headerlink" href="#mri-acquisition-manager-api" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>The Acquisition Manager API provides a streamlined interface for managing the MRI acquisition process, bridging the gap between the scanning devices and the user-facing components.
 Its straightforward design ensures that the initiation and monitoring of scans are conducted efficiently and transparently, enhancing the overall workflow of medical imaging procedures.</p>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>
 <dl class="http post">
 <dt class="sig sig-object http" id="post--api-v1-mri-acquisitioncontrol-start-scan">
 <span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/acquisitioncontrol/start-scan</span></span><a class="headerlink" href="#post--api-v1-mri-acquisitioncontrol-start-scan" title="Permalink to this definition"></a></dt>
@@ -120,6 +127,7 @@ Its straightforward design ensures that the initiation and monitoring of scans a
 </dl>
 </dd></dl>
 
+</section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
 <p>MRI Acquisition Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>

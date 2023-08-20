@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="MRI Acquisition Manager API" href="mri_acquisition_api.html" />
-    <link rel="prev" title="Exam Manager API" href="exam_api.html" /> 
+    <link rel="prev" title="Exam Manager" href="exam_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,9 +46,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ui_patient_manager_api.html">UI Patient Manager API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Workflow Manager API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#open-source-license">Open Source License</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commercial-license">Commercial License</a></li>
@@ -88,15 +90,20 @@
              
   <section id="workflow-manager-api">
 <h1>Workflow Manager API<a class="headerlink" href="#workflow-manager-api" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>The Workflow Manager API provided by ScanHub is specifically designed to manage the workflows within a scanning and imaging environment.
 It plays a crucial role in creating, updating, retrieving, and deleting workflows, as well as handling the uploading of results related to specific records. The key endpoints in this API are:</p>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-workflow-">
 <span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflow/</span></span><a class="headerlink" href="#get--api-v1-workflow-" title="Permalink to this definition"></a></dt>
 <dd><p><strong>Get Workflow List</strong></p>
 <p>Get all workflows endpoint.</p>
 <section id="returns">
-<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>List of workflow pydantic output models, might be empty</p>
 </div></blockquote>
@@ -114,20 +121,20 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 <dd><p><strong>Create Workflow</strong></p>
 <p>Create new workflow endpoint.</p>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Workflow pydantic base model</p>
 </dd>
 </dl>
 </section>
 <section id="id1">
-<h2>Returns<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Workflow pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="raises">
-<h2>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
 </dd>
@@ -149,20 +156,20 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 <dd><p><strong>Get Workflow</strong></p>
 <p>Get workflow endpoint.</p>
 <section id="id2">
-<h2>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>workflow_id</dt><dd><p>Id of the workflow object to be returned</p>
 </dd>
 </dl>
 </section>
 <section id="id3">
-<h2>Returns<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Workflow pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id4">
-<h2>Raises<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -186,14 +193,14 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 <dd><p><strong>Delete Workflow</strong></p>
 <p>Delete workflow endpoint.</p>
 <section id="id5">
-<h2>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>workflow_id</dt><dd><p>Id of workflow to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id6">
-<h2>Raises<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -217,7 +224,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 <dd><p><strong>Update Workflow</strong></p>
 <p>Update existing workflow endpoint.</p>
 <section id="id7">
-<h2>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>workflow_id</dt><dd><p>Id of the workflow to be updated</p>
 </dd>
@@ -226,13 +233,13 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 </dl>
 </section>
 <section id="id8">
-<h2>Returns<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Workflow pydantic output model.</p>
 </div></blockquote>
 </section>
 <section id="id9">
-<h2>Raises<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -256,7 +263,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 <dd><p><strong>Upload Result</strong></p>
 <p>Upload workflow result.</p>
 <section id="id10">
-<h2>Parameters<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Id of the record, which is processed by workflow</p>
 </dd>
@@ -265,7 +272,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 </dl>
 </section>
 <section id="id11">
-<h2>Returns<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Notification</p>
 </div></blockquote>
@@ -289,13 +296,13 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 <p>Readiness health endpoint.</p>
 <p>Inspects sqlalchemy engine and check if workflow table exists.</p>
 <section id="id12">
-<h2>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Status docstring</p>
 </div></blockquote>
 </section>
 <section id="id13">
-<h2>Raises<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>500: Workflow table does not exist</p>
 </dd>
@@ -308,6 +315,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 </section>
 </dd></dl>
 
+</section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
 <p>Workflow Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
@@ -336,7 +344,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="exam_api.html" class="btn btn-neutral float-left" title="Exam Manager API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="exam_api.html" class="btn btn-neutral float-left" title="Exam Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="mri_acquisition_api.html" class="btn btn-neutral float-right" title="MRI Acquisition Manager API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

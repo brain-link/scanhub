@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Device Manager API" href="device_api.html" />
+    <link rel="next" title="Device Manager" href="device_api.html" />
     <link rel="prev" title="ScanHub Overview" href="introduction.html" /> 
 </head>
 
@@ -46,6 +46,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">UI Patient Manager API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#open-source-license">Open Source License</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commercial-license">Commercial License</a></li>
@@ -55,8 +57,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow_api.html">Workflow Manager API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mri_acquisition_api.html">MRI Acquisition Manager API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mri_sequences_api.html">MRI Sequences Manager API</a></li>
@@ -88,16 +90,21 @@
              
   <section id="ui-patient-manager-api">
 <h1>UI Patient Manager API<a class="headerlink" href="#ui-patient-manager-api" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>The Patient Manager API is a critical interface designed to manage patient information within ScanHub.
 It centralizes functionalities around the creation, retrieval, updating, and deletion of patient records, providing a streamlined approach to handle patient-related data.
 Here’s a brief look at the main endpoints:</p>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>
 <dl class="http get">
 <dt class="sig sig-object http" id="get--">
 <span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/</span></span><a class="headerlink" href="#get--" title="Permalink to this definition"></a></dt>
 <dd><p><strong>Get Patient List</strong></p>
 <p>Get all patients endpoint.</p>
 <section id="returns">
-<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>List of patient pydantic output models</p>
 </div></blockquote>
@@ -115,20 +122,20 @@ Here’s a brief look at the main endpoints:</p>
 <dd><p><strong>Create Patient</strong></p>
 <p>Create new patient database entry.</p>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Patient pydantic base model</p>
 </dd>
 </dl>
 </section>
 <section id="id1">
-<h2>Returns<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Patient pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="raises">
-<h2>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Could not create patient</p>
 </dd>
@@ -150,20 +157,20 @@ Here’s a brief look at the main endpoints:</p>
 <dd><p><strong>Get Patient</strong></p>
 <p>Get a patient from database by id.</p>
 <section id="id2">
-<h2>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>patient_id</dt><dd><p>Id of the requested patient</p>
 </dd>
 </dl>
 </section>
 <section id="id3">
-<h2>Returns<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Patient pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id4">
-<h2>Raises<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Patient not found</p>
 </dd>
@@ -187,7 +194,7 @@ Here’s a brief look at the main endpoints:</p>
 <dd><p><strong>Update Patient</strong></p>
 <p>Update existing patient endpoint.</p>
 <section id="id5">
-<h2>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>patient_id</dt><dd><p>Id of the patient to be updated</p>
 </dd>
@@ -196,13 +203,13 @@ Here’s a brief look at the main endpoints:</p>
 </dl>
 </section>
 <section id="id6">
-<h2>Returns<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Updated patient pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id7">
-<h2>Raises<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Patient not found</p>
 </dd>
@@ -226,14 +233,14 @@ Here’s a brief look at the main endpoints:</p>
 <dd><p><strong>Delete Patient</strong></p>
 <p>Delete patient from database.</p>
 <section id="id8">
-<h2>Parameters<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>patient_id</dt><dd><p>Id of patient to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id9">
-<h2>Raises<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>_description_</p>
 </dd>
@@ -251,6 +258,7 @@ Here’s a brief look at the main endpoints:</p>
 </section>
 </dd></dl>
 
+</section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
 <p>Patient Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
@@ -280,7 +288,7 @@ Here’s a brief look at the main endpoints:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="ScanHub Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="device_api.html" class="btn btn-neutral float-right" title="Device Manager API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="device_api.html" class="btn btn-neutral float-right" title="Device Manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

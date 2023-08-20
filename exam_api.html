@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exam Manager API &mdash; ScanHub 0.0.1 documentation</title>
+  <title>Exam Manager &mdash; ScanHub 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Workflow Manager API" href="workflow_api.html" />
-    <link rel="prev" title="Device Manager API" href="device_api.html" /> 
+    <link rel="prev" title="Device Manager" href="device_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,8 +46,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ui_patient_manager_api.html">UI Patient Manager API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Exam Manager API</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="device_api.html">Device Manager</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Exam Manager</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#open-source-license">Open Source License</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#commercial-license">Commercial License</a></li>
@@ -76,7 +78,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Exam Manager API</li>
+      <li class="breadcrumb-item active">Exam Manager</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/exam_api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -86,30 +88,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="exam-manager-api">
-<h1>Exam Manager API<a class="headerlink" href="#exam-manager-api" title="Permalink to this heading"></a></h1>
+  <section id="exam-manager">
+<h1>Exam Manager<a class="headerlink" href="#exam-manager" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>The Exam Manager API is designed to manage the complete lifecycle of exams, procedures, jobs, and records within the healthcare system.
 This comprehensive API allows users to perform essential operations on these entities and offers the following key endpoints:</p>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>
 <dl class="http post">
 <dt class="sig sig-object http" id="post--api-v1-exam-">
 <span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/exam/</span></span><a class="headerlink" href="#post--api-v1-exam-" title="Permalink to this definition"></a></dt>
 <dd><p><strong>Exam Create</strong></p>
 <p>Create exam endpoint.</p>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Exam pydantic input model.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Exam pydantic output moddel.</p>
 </div></blockquote>
 </section>
 <section id="raises">
-<h2>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
 </dd>
@@ -131,20 +138,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Exam Get</strong></p>
 <p>Get exam endpoint.</p>
 <section id="id1">
-<h2>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>exam_id</dt><dd><p>Id of requested exam entry</p>
 </dd>
 </dl>
 </section>
 <section id="id2">
-<h2>Returns<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Exam pydantic output model.</p>
 </div></blockquote>
 </section>
 <section id="id3">
-<h2>Raises<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -168,7 +175,7 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Exam Update</strong></p>
 <p>Update exam.</p>
 <section id="id4">
-<h2>Parameters<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>exam_id</dt><dd><p>Id of the exam to be updated</p>
 </dd>
@@ -177,13 +184,13 @@ This comprehensive API allows users to perform essential operations on these ent
 </dl>
 </section>
 <section id="id5">
-<h2>Returns<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Exam pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id6">
-<h2>Raises<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -207,14 +214,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Exam Delete</strong></p>
 <p>Delete exam by id.</p>
 <section id="id7">
-<h2>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>exam_id</dt><dd><p>Id of the exam to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id8">
-<h2>Raises<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -238,14 +245,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Exam Get All</strong></p>
 <p>Get all exams of a patient endpoint.</p>
 <section id="id9">
-<h2>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>patient_id</dt><dd><p>Id of parent</p>
 </dd>
 </dl>
 </section>
 <section id="id10">
-<h2>Returns<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>List of exam pydantic output models</p>
 </div></blockquote>
@@ -268,20 +275,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Procedure Create</strong></p>
 <p>Procedure post endpoint.</p>
 <section id="id11">
-<h2>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Pydantic input model</p>
 </dd>
 </dl>
 </section>
 <section id="id12">
-<h2>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id13">
-<h2>Raises<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Creation not succesful</p>
 </dd>
@@ -303,20 +310,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Procedure Get</strong></p>
 <p>Procedure get endpoint.</p>
 <section id="id14">
-<h2>Parameters<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>procedure_id</dt><dd><p>Id of entry to return</p>
 </dd>
 </dl>
 </section>
 <section id="id15">
-<h2>Returns<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id16">
-<h2>Raises<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -340,7 +347,7 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Proceedure Update</strong></p>
 <p>Update procedure endpoint.</p>
 <section id="id17">
-<h2>Parameters<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>procedure_id</dt><dd><p>Id of procedure to be updated</p>
 </dd>
@@ -349,13 +356,13 @@ This comprehensive API allows users to perform essential operations on these ent
 </dl>
 </section>
 <section id="id18">
-<h2>Returns<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id19">
-<h2>Raises<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Entry not found</p>
 </dd>
@@ -379,14 +386,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Procedure Delete</strong></p>
 <p>Delete procedure endpoint.</p>
 <section id="id20">
-<h2>Parameters<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>procedure_id</dt><dd><p>Id of entry to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id21">
-<h2>Raises<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -410,14 +417,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Procedure Get All</strong></p>
 <p>Get all procedures of a parent endpoint.</p>
 <section id="id22">
-<h2>Parameters<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>exam_id</dt><dd><p>Id of the parent object</p>
 </dd>
 </dl>
 </section>
 <section id="id23">
-<h2>Returns<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>List of pydantic output models</p>
 </div></blockquote>
@@ -440,20 +447,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Job Create</strong></p>
 <p>Create new job endpoint.</p>
 <section id="id24">
-<h2>Parameters<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Job pydantic input model</p>
 </dd>
 </dl>
 </section>
 <section id="id25">
-<h2>Returns<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Job pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id26">
-<h2>Raises<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
 </dd>
@@ -475,20 +482,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Job Get</strong></p>
 <p>Get job endpoint.</p>
 <section id="id27">
-<h2>Parameters<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>job_id</dt><dd><p>Id of the job to be returned</p>
 </dd>
 </dl>
 </section>
 <section id="id28">
-<h2>Returns<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Job pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id29">
-<h2>Raises<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -512,7 +519,7 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Job Update</strong></p>
 <p>Update job endpoint.</p>
 <section id="id30">
-<h2>Parameters<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>job_id</dt><dd><p>Id of the job to be updated</p>
 </dd>
@@ -521,13 +528,13 @@ This comprehensive API allows users to perform essential operations on these ent
 </dl>
 </section>
 <section id="id31">
-<h2>Returns<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Job pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id32">
-<h2>Raises<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -551,14 +558,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Job Delete</strong></p>
 <p>Delete job endpoint.</p>
 <section id="id33">
-<h2>Parameters<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>job_id</dt><dd><p>Id of the job to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id34">
-<h2>Raises<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -582,14 +589,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Job Get All</strong></p>
 <p>Get all jobs of a procedure endpoint.</p>
 <section id="id35">
-<h2>Parameters<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>procedure_id</dt><dd><p>Id of parent procedure</p>
 </dd>
 </dl>
 </section>
 <section id="id36">
-<h2>Returns<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>List of job pydantic output model</p>
 </div></blockquote>
@@ -612,20 +619,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Record Create</strong></p>
 <p>Create record endpoint.</p>
 <section id="id37">
-<h2>Parameters<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Record pydantic input model</p>
 </dd>
 </dl>
 </section>
 <section id="id38">
-<h2>Returns<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Record pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id39">
-<h2>Raises<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
 </dd>
@@ -647,20 +654,20 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Record Get</strong></p>
 <p>Get single record endpoint.</p>
 <section id="id40">
-<h2>Parameters<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Id of the record to return</p>
 </dd>
 </dl>
 </section>
 <section id="id41">
-<h2>Returns<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Record pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id42">
-<h2>Raises<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -684,14 +691,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Record Delete</strong></p>
 <p>Delete record endpoint.</p>
 <section id="id43">
-<h2>Parameters<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Id of the record to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id44">
-<h2>Raises<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -715,14 +722,14 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Record Get All</strong></p>
 <p>Get all records of a job endpoint.</p>
 <section id="id45">
-<h2>Parameters<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h2>
+<h3>Parameters<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>job_id</dt><dd><p>Id of parental job</p>
 </dd>
 </dl>
 </section>
 <section id="id46">
-<h2>Returns<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>List of record pydantic output model</p>
 </div></blockquote>
@@ -745,13 +752,13 @@ This comprehensive API allows users to perform essential operations on these ent
 <dd><p><strong>Readiness</strong></p>
 <p>Readiness health endpoint.</p>
 <section id="id47">
-<h2>Returns<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h2>
+<h3>Returns<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><p>Status dictionary</p>
 </div></blockquote>
 </section>
 <section id="id48">
-<h2>Raises<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h2>
+<h3>Raises<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>500: Any of the exam-tree tables does not exist</p>
 </dd>
@@ -764,6 +771,7 @@ This comprehensive API allows users to perform essential operations on these ent
 </section>
 </dd></dl>
 
+</section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
 <p>Exam Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
@@ -792,7 +800,7 @@ This comprehensive API allows users to perform essential operations on these ent
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="device_api.html" class="btn btn-neutral float-left" title="Device Manager API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="device_api.html" class="btn btn-neutral float-left" title="Device Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="workflow_api.html" class="btn btn-neutral float-right" title="Workflow Manager API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
