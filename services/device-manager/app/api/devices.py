@@ -3,6 +3,7 @@
 
 """Device api endpoints."""
 # pylint: disable=no-name-in-module
+# pylint: disable=too-many-statements
 
 from typing import List, Any
 
@@ -10,6 +11,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, WebSocket, HTTPException
 import websockets
 import websockets.client
+from sqlalchemy import exc
 from .models import DeviceOut, get_device_out
 
 from .dal import (
@@ -187,7 +189,7 @@ In this session a device already was registered.'})
                 device = DeviceOut(ip_address=ip_address, **device_data)
                 try:
                     await dal_create_device(device)
-                except Exception as ex:
+                except exc.SQLAlchemyError as ex:
                     print('Error registering device: ', device, ex)
                     await websocket.send_json({'message': 'Error registering device' + str(ex)})
                     continue
