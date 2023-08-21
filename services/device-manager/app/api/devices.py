@@ -202,13 +202,13 @@ In this session a device already was registered.'})
             elif command == 'update_status':
                 status_data = message.get('data')
                 device_id = status_data.get('id')
-                if device_id_global == "":
-                    device_id_global = device_id
-                if device_id_global != device_id:
+                if device_id_global != "" and device_id_global != device_id:
                     await websocket.send_json({'message': 'Error updating device. \
 Device ID does not match'})
+                    continue
                 if not (device_to_update := await dal_get_device(device_id)):
                     await websocket.send_json({'message': 'Device not registered'})
+                    continue
                 else:
                     device_out = await get_device_out(device_to_update)
                     # Update the device's status and last_status_update
@@ -216,9 +216,11 @@ Device ID does not match'})
                     device_out.datetime_updated = datetime.now()
                     if not await dal_update_device(device_id, device_out):
                         await websocket.send_json({'message': 'Error updating device.'})
+                        continue
                     else:
                         # Send response to the device
                         await websocket.send_json({'message': 'Device status updated successfully'})
+                        device_id_global = device_id
 
     except websockets.exceptions.ConnectionClosedOK:
         print('Device disconnected:', device_id_global)
