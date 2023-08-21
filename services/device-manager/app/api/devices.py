@@ -8,7 +8,7 @@
 from typing import List, Any
 
 from datetime import datetime, timedelta
-from fastapi import APIRouter, WebSocket, HTTPException
+from fastapi import APIRouter, WebSocket, HTTPException, WebSocketDisconnect
 import websockets
 import websockets.client
 from sqlalchemy import exc
@@ -219,7 +219,7 @@ Device ID does not match'})
                         await websocket.send_json({'message': 'Device status updated successfully'})
                         device_id_global = device_id
 
-    except websockets.exceptions.ConnectionClosedOK:
+    except WebSocketDisconnect:
         print('Device disconnected:', device_id_global)
         # Set the status of the disconnected device to "disconnected"
         if not (device_to_update := await dal_get_device(device_id_global)):
