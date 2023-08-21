@@ -35,7 +35,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinxcontrib.openapi'
+    'sphinxcontrib.openapi',
+    'pydata-sphinx-theme'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
