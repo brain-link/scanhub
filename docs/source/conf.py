@@ -56,6 +56,27 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'pydata_sphinx_theme'
 html_show_sphinx = False
 
+
+html_theme_options = {
+    "external_links": [{"url": "https://brain-link.de/", "name": "BRAIN-LINK"}],
+    "icon_links": [
+        {"name": "GitHub", "url": "https://github.com/brain-link/scanhub", "icon": "fab fa-github-square"},
+        {"name": "Twitter", "url": "https://twitter.com/BRAINLINK_DE", "icon": "fab fa-twitter-square"},
+    ],
+    "collapse_navigation": True,
+    "navigation_depth": 1,
+    "show_toc_level": 1,
+    "footer_start": ["copyright"],
+    "navbar_align": "content",
+    "logo": {"image_light": "ScanHub-logo.png", "image_dark": "ScanHub-logo.png"},
+}
+
+html_scaled_image_link = False
+html_show_sourcelink = True
+html_logo = "../images/ScanHub-logo.png"
+html_sidebars = {"**": ["search-field", "sidebar-nav-bs"]}
+pygments_style = "sphinx"
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
