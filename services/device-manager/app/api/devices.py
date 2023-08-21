@@ -175,23 +175,28 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive_json()
             command = message.get('command')
+            # ===============  Register device ===================
             if command == 'register':
                 if device_id_global != "":
                     await websocket.send_json({'message': 'Error registering device. \
 In this session a device already was registered.'})
+                    continue
                 device_data = message.get('data')
                 ip_address = message.get('ip_address')
                 device_id = device_data.get('id')
+                device = DeviceOut(ip_address=ip_address, **device_data)
+                try:
+                    await dal_create_device(device)
+                except Exception as ex:
+                    print('Error registering device: ', device, ex)
+                    await websocket.send_json({'message': 'Error registering device' + str(ex)})
+                    continue
+                print('Device registered:', device)
+                # Send response to the device
+                await websocket.send_json({'message': 'Device registered successfully'})
                 device_id_global = device_id
-                device = DeviceOut(id=device_id, ip_address=ip_address, **device_data)
-                if not await dal_create_device(device):
-                    print('Error registering device: ', device)
-                    await websocket.send_json({'message': 'Error registering device'})
-                else:
-                    print('Device registered:', device)
-                    # Send response to the device
-                    await websocket.send_json({'message': 'Device registered successfully'})
 
+            # ================ Update device status ===============
             elif command == 'update_status':
                 status_data = message.get('data')
                 device_id = status_data.get('id')
