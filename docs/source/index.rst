@@ -5,10 +5,14 @@ ScanHub Documentation
 =====================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Feature highlights
 
    introduction
+
+.. toctree::
+   :maxdepth: 1
+   :caption: API Reference
 
    ui_patient_manager_api
 
@@ -17,3 +21,9 @@ ScanHub Documentation
    workflow_api
    mri_acquisition_api
    mri_sequences_api
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
