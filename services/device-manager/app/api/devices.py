@@ -5,12 +5,10 @@
 # pylint: disable=no-name-in-module
 # pylint: disable=too-many-statements
 
-from typing import List, Any
+from typing import List
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from fastapi import APIRouter, WebSocket, HTTPException, WebSocketDisconnect
-import websockets
-import websockets.client
 from sqlalchemy import exc
 from .models import DeviceOut, get_device_out
 
