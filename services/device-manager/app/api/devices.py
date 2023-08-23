@@ -24,6 +24,8 @@ from .dal import (
 
 router = APIRouter()
 
+active_connections: list[WebSocket] = []
+dict_id_websocket = {}
 
 @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
@@ -104,23 +106,6 @@ async def get_device_status(device_id: str):
         raise HTTPException(status_code=404, detail="Device not found")
 
     status = device.status
-    # Check if the stored status is outdated (e.g., older than 1 hour)
-    if device.datetime_updated < datetime.now() - timedelta(hours=1):
-        # Send request for current status over the WebSocket connection
-        websocket = await create_websocket_connection(device.ip_address)
-        await websocket.send_json({'command': 'get_status'})
-        response = await websocket.receive_json()
-        current_status = response.get('status')
-        await websocket.close()
-
-        device_out = await get_device_out(device)
-        # Update the device's status and last_status_update
-        device_out.status = current_status
-        status = current_status
-        device_out.datetime_updated = datetime.now()
-        if not await dal_update_device(device_id, device_out):
-            raise HTTPException(status_code=404, detail="Error updating device in db")
-
     # Return the current status of the device
     return {'status': status}
 
@@ -142,21 +127,6 @@ async def delete_device(device_id: str):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-async def create_websocket_connection(ip_address: str) -> Any:
-    """
-    Create a WebSocket connection to the specified IP address.
-
-    Args
-    -------
-        ip_address (str): The IP address of the device.
-
-    Returns
-    -------
-        WebSocket: The WebSocket connection object.
-    """
-    websocket_url = f"ws://{ip_address}/ws"  # Assuming WebSocket endpoint is /ws
-    return await websockets.client.connect(websocket_url)
-
 # pylint: disable=locally-disabled, too-many-branches
 @router.websocket('/ws')
 async def websocket_endpoint(websocket: WebSocket):
@@ -168,6 +138,7 @@ async def websocket_endpoint(websocket: WebSocket):
         websocket (WebSocket): The WebSocket connection object.
     """
     await websocket.accept()
+    active_connections.append(websocket)
 
     print('Device connected.')
 
@@ -197,6 +168,7 @@ In this session a device already was registered.'})
                 # Send response to the device
                 await websocket.send_json({'message': 'Device registered successfully'})
                 device_id_global = device_id
+                dict_id_websocket[device_id] = websocket
 
             # ================ Update device status ===============
             elif command == 'update_status':
@@ -218,8 +190,12 @@ Device ID does not match'})
                         # Send response to the device
                         await websocket.send_json({'message': 'Device status updated successfully'})
                         device_id_global = device_id
+                        dict_id_websocket[device_id] = websocket
 
     except WebSocketDisconnect:
+        active_connections.remove(websocket)
+        if device_id_global in dict_id_websocket:
+            del dict_id_websocket[device_id_global]
         print('Device disconnected:', device_id_global)
         # Set the status of the disconnected device to "disconnected"
         if not (device_to_update := await dal_get_device(device_id_global)):
