@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -88,28 +88,28 @@
            <div itemprop="articleBody">
              
   <section id="mri-sequences-manager">
-<h1>MRI Sequences Manager<a class="headerlink" href="#mri-sequences-manager" title="Permalink to this heading"></a></h1>
+<h1>MRI Sequences Manager<a class="headerlink" href="#mri-sequences-manager" title="Link to this heading"></a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>The MRI Sequence Manager API is designed to handle the creation, retrieval, modification, and deletion of MRI sequences within a medical imaging environment.
 Leveraging MongoDB for storage, this API provides a comprehensive set of endpoints to manage various aspects of MRI sequences. Below is an overview of the key endpoints:</p>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading"></a></h2>
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-mri-sequences-">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-" title="Link to this definition"></a></dt>
 <dd><p><strong>Get Mri Sequences Endpoint</strong></p>
 <p>Retrieve a list of all MRI sequences from the database.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>List[MRISequence]</dt><dd><p>The list of MRI sequences.</p>
 </dd>
@@ -124,11 +124,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http post">
 <dt class="sig sig-object http" id="post--api-v1-mri-sequences-">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/</span></span><a class="headerlink" href="#post--api-v1-mri-sequences-" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/</span></span><a class="headerlink" href="#post--api-v1-mri-sequences-" title="Link to this definition"></a></dt>
 <dd><p><strong>Create Mri Sequence Endpoint</strong></p>
 <p>Create a new MRI sequence and store it in the database.</p>
 <section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>mri_sequence<span class="classifier">MRISequence</span></dt><dd><p>The MRI sequence data to store.</p>
 </dd>
@@ -137,7 +137,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 </dl>
 </section>
 <section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MRISequence</dt><dd><p>The created MRI sequence.</p>
 </dd>
@@ -155,11 +155,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http post">
 <dt class="sig sig-object http" id="post--api-v1-mri-sequences-upload">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/upload</span></span><a class="headerlink" href="#post--api-v1-mri-sequences-upload" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/upload</span></span><a class="headerlink" href="#post--api-v1-mri-sequences-upload" title="Link to this definition"></a></dt>
 <dd><p><strong>Upload Mri Sequence File</strong></p>
 <p>Upload an MRI sequence file and store it with the provided metadata.</p>
 <section id="id3">
-<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>mri_sequence<span class="classifier">MRISequenceCreate</span></dt><dd><p>The MRI sequence metadata.</p>
 </dd>
@@ -170,7 +170,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 </dl>
 </section>
 <section id="id4">
-<h3>Returns<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MRISequence</dt><dd><p>The stored MRI sequence with the uploaded file.</p>
 </dd>
@@ -188,11 +188,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-mri-sequences-mri_sequence_id">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri_sequence_id" title="Link to this definition"></a></dt>
 <dd><p><strong>Get Mri Sequence By Id Endpoint</strong></p>
 <p>Retrieve an MRI sequence by its ID.</p>
 <section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to retrieve.</p>
 </dd>
@@ -201,7 +201,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 </dl>
 </section>
 <section id="id6">
-<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MRISequence</dt><dd><p>The retrieved MRI sequence.</p>
 </dd>
@@ -221,11 +221,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http put">
 <dt class="sig sig-object http" id="put--api-v1-mri-sequences-mri_sequence_id">
-<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#put--api-v1-mri-sequences-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#put--api-v1-mri-sequences-mri_sequence_id" title="Link to this definition"></a></dt>
 <dd><p><strong>Update Mri Sequence Endpoint</strong></p>
 <p>Update an MRI sequence with new data.</p>
 <section id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to update.</p>
 </dd>
@@ -236,7 +236,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 </dl>
 </section>
 <section id="id8">
-<h3>Returns<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MRISequence</dt><dd><p>The updated MRI sequence.</p>
 </dd>
@@ -256,11 +256,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http delete">
 <dt class="sig sig-object http" id="delete--api-v1-mri-sequences-mri_sequence_id">
-<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#delete--api-v1-mri-sequences-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/{mri_sequence_id}</span></span><a class="headerlink" href="#delete--api-v1-mri-sequences-mri_sequence_id" title="Link to this definition"></a></dt>
 <dd><p><strong>Delete Mri Sequence Endpoint</strong></p>
 <p>Delete an MRI sequence by its ID.</p>
 <section id="id9">
-<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to delete.</p>
 </dd>
@@ -269,7 +269,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 </dl>
 </section>
 <section id="id10">
-<h3>Returns<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
 <p>None</p>
 <dl class="field-list simple">
 <dt class="field-odd">param string mri_sequence_id<span class="colon">:</span></dt>
@@ -286,11 +286,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/mri-sequence-file/{mri_sequence_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/mri-sequence-file/{mri_sequence_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id" title="Link to this definition"></a></dt>
 <dd><p><strong>Get Mri Sequence File By Id Endpoint</strong></p>
 <p>Retrieve an MRI sequence file by its ID.</p>
 <section id="id11">
-<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>mri_sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to retrieve.</p>
 </dd>
@@ -303,7 +303,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 </dl>
 </section>
 <section id="id12">
-<h3>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>FileResponse</dt><dd><p>The retrieved MRI sequence file.</p>
 </dd>
@@ -325,18 +325,18 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-mri-sequences-mri-sequence-plot-seq_id">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/mri-sequence-plot/{seq_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri-sequence-plot-seq_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/sequences/mri-sequence-plot/{seq_id}</span></span><a class="headerlink" href="#get--api-v1-mri-sequences-mri-sequence-plot-seq_id" title="Link to this definition"></a></dt>
 <dd><p><strong>Plot Mri Sequence</strong></p>
 <p>Generate plotly sequence plot data.</p>
 <section id="id13">
-<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>seq_id</dt><dd><p>Id of the sequence to be plotted</p>
 </dd>
 </dl>
 </section>
 <section id="id14">
-<h3>Returns<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
 <blockquote>
 <div><p>List of plot data models for plotly</p>
 </div></blockquote>
@@ -355,18 +355,18 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--health">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/health</span></span><a class="headerlink" href="#get--health" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/health</span></span><a class="headerlink" href="#get--health" title="Link to this definition"></a></dt>
 <dd><p><strong>Health Check</strong></p>
 <p>Perform a health check for the microservice.</p>
 <section id="id15">
-<h3>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>is_db_connected: bool</dt><dd><p>The status of the database connection.</p>
 </dd>
 </dl>
 </section>
 <section id="id16">
-<h3>Returns<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <blockquote>
 <div><p>The status of the microservice.</p>
 </div></blockquote>
@@ -380,11 +380,11 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--readiness">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/readiness</span></span><a class="headerlink" href="#get--readiness" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/readiness</span></span><a class="headerlink" href="#get--readiness" title="Link to this definition"></a></dt>
 <dd><p><strong>Readiness Check</strong></p>
 <p>Perform a readiness check for the microservice.</p>
 <section id="id17">
-<h3>Returns<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>dict</dt><dd><p>The readiness status of the microservice.</p>
 </dd>
@@ -399,24 +399,24 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 
 </section>
 <section id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
 <p>MRI Sequence Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
 <section id="open-source-license">
-<h3>Open Source License<a class="headerlink" href="#open-source-license" title="Permalink to this heading"></a></h3>
+<h3>Open Source License<a class="headerlink" href="#open-source-license" title="Link to this heading"></a></h3>
 <p>If you want to use the Software under the terms of the GPLv3, you may do so for free. Under the GPLv3, you are allowed to modify and distribute the Software, but any derivative works that you distribute must also be licensed under the GPLv3. For the precise terms and conditions, please refer to the text of the GPLv3, which is included with the Software and can also be found at: <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a></p>
 </section>
 <section id="commercial-license">
-<h3>Commercial License<a class="headerlink" href="#commercial-license" title="Permalink to this heading"></a></h3>
+<h3>Commercial License<a class="headerlink" href="#commercial-license" title="Link to this heading"></a></h3>
 <p>If you wish to use the Software without the restrictions of the GPLv3, such as for the purpose of developing proprietary software that includes the Software without the obligation to disclose your source code, you may purchase a commercial license from BRAIN-LINK UG (haftungsbeschränkt).</p>
 <p>The commercial license grants you, the licensee, the rights to use, modify, and distribute the Software without the requirement of providing the source code of your proprietary software to the end users. The commercial license also includes access to premium support and services.</p>
 <p>For more information on the commercial license, including pricing, please contact us at <a class="reference external" href="mailto:info&#37;&#52;&#48;brain-link&#46;de">info<span>&#64;</span>brain-link<span>&#46;</span>de</a>.</p>
 </section>
 <section id="choice-of-license">
-<h3>Choice of License<a class="headerlink" href="#choice-of-license" title="Permalink to this heading"></a></h3>
+<h3>Choice of License<a class="headerlink" href="#choice-of-license" title="Link to this heading"></a></h3>
 <p>You may choose to use the Software under either the GPLv3 or the commercial license. If you choose to use the Software under the GPLv3, you must comply with all of the terms of the GPLv3. If you choose to use the Software under the commercial license, you must comply with all of the terms of the commercial license.</p>
 </section>
 <section id="disclaimer">
-<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this heading"></a></h3>
+<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Link to this heading"></a></h3>
 <p>This is not a legal document. The exact terms of the GPLv3 and the commercial license are specified in their respective legal texts. This document is merely intended to provide a general overview of the dual licensing scheme.</p>
 </section>
 </section>
