@@ -11,7 +11,6 @@ import random
 
 import requests
 import httpx
-import asyncio
 from fastapi import FastAPI
 from pydantic import BaseModel, Extra, Field
 
@@ -61,6 +60,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def device_location_request(device_id):
+    """Retrieve ip from device-manager."""
     async with httpx.AsyncClient() as client:
         response = await client.get(f"http://api-gateway:8080/api/v1/device/devices/{device_id}/ip_address")
         return response.json()["ip_address"]
