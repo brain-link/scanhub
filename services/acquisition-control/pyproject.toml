@@ -19,6 +19,7 @@ requests = "^2.31.0"
 uvicorn = "^0.22.0"
 scanhub = "^0.0.4.dev3"
 types-requests = "^2.31.0.1"
+httpx = ">=0.1.0"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "*"

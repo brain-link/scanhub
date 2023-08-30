@@ -10,14 +10,13 @@ import logging
 import random
 
 import requests
+import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Extra, Field
 
 DEBUG_FLAG = True
 
-# DEVICE_URI = "host.docker.internal:8001"
-DEVICE_URI = "host.docker.internal:5000"
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
@@ -36,7 +35,7 @@ class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
     job_id: int = Field(alias="id")
     sequence_id: str
     workflow_id: int
-    device_id: int
+    device_id: str
 
 
 # TODO: Move to scanhub-tools # pylint: disable=fixme
@@ -61,9 +60,9 @@ app = FastAPI(
 logging.basicConfig(level=logging.DEBUG)
 
 
-#   Wildcard ["*"] excludes eeverything that involves credentials
-#   Better specify explicitly the allowed origins
-#   See: https://fastapi.tiangolo.com/tutorial/cors/
+# Wildcard ["*"] excludes eeverything that involves credentials
+# Better specify explicitly the allowed origins
+# See: https://fastapi.tiangolo.com/tutorial/cors/
 origins = [
     "http://localhost",
     "http://localhost:3000",  # frontned
@@ -79,18 +78,25 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+async def device_location_request(device_id):
+    """Retrieve ip from device-manager."""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"http://api-gateway:8080/api/v1/device/devices/{device_id}/ip_address")
+        return response.json()["ip_address"]
+
 
 @app.post("/api/v1/mri/acquisitioncontrol/start-scan")
 async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
-    return {"start_scan": "ok"} # debugging
+    device_ip = await device_location_request(scan_job.device_id)
+    
     if DEBUG_FLAG is True:
         # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
 
         record_id = "test_" + str(random.randint(0, 1000))
         sequence_json = {"test": "test"}
 
-        url = f"http://{DEVICE_URI}/api/start-scan"
+        url = f"http://{device_ip}/api/start-scan"
         print(url)
         response = requests.post(
             url,
@@ -126,7 +132,7 @@ async def start_scan(scan_job: ScanJob):
         )
         print(sequence_json)
 
-        url = f"http://{DEVICE_URI}/api/start-scan"
+        url = f"http://{device_ip}/api/start-scan"
         print(url)
         response = requests.post(
             url,
