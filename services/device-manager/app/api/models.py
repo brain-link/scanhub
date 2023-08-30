@@ -6,7 +6,7 @@
 from datetime import datetime
 
 from api.db import Device
-from pydantic import BaseModel
+from pydantic import BaseModel  # noqa
 
 
 class BaseDevice(BaseModel):
@@ -23,9 +23,9 @@ class BaseDevice(BaseModel):
 class DeviceOut(BaseDevice):
     """Device pydantic output model."""
 
-    id: int
-    datetime_created: datetime
-    datetime_updated: datetime | None
+    id: str
+    datetime_created: datetime = datetime.now()
+    datetime_updated: datetime = datetime.now()
 
 
 async def get_device_out(data: Device) -> DeviceOut:

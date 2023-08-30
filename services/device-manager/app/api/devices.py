@@ -2,11 +2,15 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Device api endpoints."""
+# pylint: disable=no-name-in-module
+# pylint: disable=too-many-statements
 
-import json
+from typing import List
 
-from fastapi import APIRouter, HTTPException
-from kafka import KafkaProducer  # type: ignore
+from datetime import datetime
+from fastapi import APIRouter, WebSocket, HTTPException, WebSocketDisconnect
+from sqlalchemy import exc
+from .models import DeviceOut, get_device_out
 
 from .dal import (
     dal_create_device,
@@ -15,36 +19,11 @@ from .dal import (
     dal_get_device,
     dal_update_device,
 )
-from .models import BaseDevice, DeviceOut, get_device_out
-
-# Http status codes
-# 200 = Ok: GET, PUT
-# 201 = Created: POST
-# 204 = No Content: Delete
-# 404 = Not found
-
-
-class AcquisitionEvent:
-    """Acquisition event class."""
-
-    def __init__(self, instruction: str):
-        """Acquisition event constructor.
-
-        Parameters
-        ----------
-        instruction
-            Instructions string
-        """
-        self.instruction = instruction
-
-
-producer = KafkaProducer(
-    bootstrap_servers=["kafka-broker:9093"],
-    value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
-)
 
 router = APIRouter()
 
+active_connections: list[WebSocket] = []
+dict_id_websocket = {}
 
 @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
@@ -57,104 +36,175 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
-@router.post("/", response_model=DeviceOut, status_code=201, tags=["devices"])
-async def create_device(payload: BaseDevice) -> DeviceOut:
-    """Create new device endpoint.
-
-    Parameters
-    ----------
-    payload
-        Device pydantic base model
-
-    Returns
-    -------
-        Device pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Creation unsuccessful
+@router.get('/devices', response_model=List[DeviceOut], status_code=200, tags=["devices"])
+async def get_devices() -> list[DeviceOut]:
     """
-    if not (device := await dal_create_device(payload)):
-        raise HTTPException(status_code=404, detail="Could not create device")
-    return await get_device_out(device)
-
-
-@router.get("/{device_id}", response_model=DeviceOut, status_code=200, tags=["devices"])
-async def get_device(device_id: int):
-    """Get device endpoint.
-
-    Parameters
-    ----------
-    device_id
-        Id of requested device
+    Retrieve the list of registered devices.
 
     Returns
     -------
-        Device pydantic output model
+        List[Device]: The list of registered devices.
+    """
+    if not (devices_all := await dal_get_all_devices()):
+        # Don't raise exception here, list might be empty
+        return []
+    return [await get_device_out(device) for device in devices_all]
 
-    Raises
-    ------
-    HTTPException
-        404: Not found
+
+@router.get('/devices/{device_id}/ip_address')
+async def get_device_ip_address(device_id: str):
+    """
+    Retrieve the IP address of a specific device.
+
+    Args
+    -------
+        device_id (str): The ID of the device.
+
+    Returns
+    -------
+        dict: The response containing the IP address of the device.
+    """
+    if not (device := await dal_get_device(device_id)):
+        raise HTTPException(status_code=404, detail="Device not found")
+    return {'ip_address': device.ip_address}
+
+
+@router.get('/devices/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
+async def get_device(device_id: str):
+    """
+    Retrieve a specific device.
+
+    Args
+    -------
+        device_id (str): The ID of the device.
+
+    Returns
+    -------
+        dict: The response containing the information about the device
     """
     if not (device := await dal_get_device(device_id)):
         raise HTTPException(status_code=404, detail="Device not found")
     return await get_device_out(device)
 
 
-@router.get("/", response_model=list[DeviceOut], status_code=200, tags=["devices"])
-async def get_devices() -> list[DeviceOut]:
-    """Get all devices endpoint.
+@router.get('/devices/{device_id}/status')
+async def get_device_status(device_id: str):
+    """
+    Retrieve the status of a specific device.
+
+    Args
+    -------
+        device_id (str): The ID of the device.
 
     Returns
     -------
-        List of device pydantic output models
+        dict: The response containing the status of the device.
     """
-    if not (devices := await dal_get_all_devices()):
-        # Don't raise exception here, list might be empty
-        return []
-    return [await get_device_out(device) for device in devices]
+    if not (device := await dal_get_device(device_id)):
+        raise HTTPException(status_code=404, detail="Device not found")
+
+    status = device.status
+    # Return the current status of the device
+    return {'status': status}
 
 
-@router.delete("/{device_id}", response_model={}, status_code=204, tags=["devices"])
-async def delete_device(device_id: int):
-    """Delete device endpoint.
+@router.delete('/devices/{device_id}', response_model={}, status_code=204, tags=["devices"])
+async def delete_device(device_id: str):
+    """
+    Delete a device.
 
-    Parameters
-    ----------
-    device_id
-        Id of device to be deleted
+    Args
+    -------
+        device_id (str): The ID of the device.
 
-    Raises
-    ------
-    HTTPException
-        404: Not found
+    Returns
+    -------
+        dict: The response indicating the success or failure of the deletion.
     """
     if not await dal_delete_device(device_id):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-@router.put("/{device_id}", response_model=DeviceOut, status_code=200, tags=["devices"])
-async def update_device(device_id: int, payload: BaseDevice):
-    """Update device endpoint.
-
-    Parameters
-    ----------
-    device_id
-        Id of device to be updated
-    payload
-        New device pydantic base model, contains new data
-
-    Returns
-    -------
-        Updated device pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
+# pylint: disable=locally-disabled, too-many-branches
+@router.websocket('/ws')
+async def websocket_endpoint(websocket: WebSocket):
     """
-    if not (device := await dal_update_device(device_id, payload)):
-        raise HTTPException(status_code=404, detail="Device not found")
-    return await get_device_out(device)
+    Websocket endpoint for device communication.
+
+    Args
+    ----
+        websocket (WebSocket): The WebSocket connection object.
+    """
+    await websocket.accept()
+    active_connections.append(websocket)
+
+    print('Device connected.')
+
+    device_id_global = ""
+
+    try:
+        while True:
+            message = await websocket.receive_json()
+            command = message.get('command')
+            # ===============  Register device ===================
+            if command == 'register':
+                if device_id_global != "":
+                    await websocket.send_json({'message': 'Error registering device. \
+In this session a device already was registered.'})
+                    continue
+                device_data = message.get('data')
+                ip_address = message.get('ip_address')
+                device_id = device_data.get('id')
+                device = DeviceOut(ip_address=ip_address, **device_data)
+                try:
+                    await dal_create_device(device)
+                except exc.SQLAlchemyError as ex:
+                    print('Error registering device: ', device, ex)
+                    await websocket.send_json({'message': 'Error registering device' + str(ex)})
+                    continue
+                print('Device registered:', device)
+                # Send response to the device
+                await websocket.send_json({'message': 'Device registered successfully'})
+                device_id_global = device_id
+                dict_id_websocket[device_id] = websocket
+
+            # ================ Update device status ===============
+            elif command == 'update_status':
+                status_data = message.get('data')
+                device_id = status_data.get('id')
+                if device_id_global not in ("", device_id):
+                    await websocket.send_json({'message': 'Error updating device. \
+Device ID does not match'})
+                elif not (device_to_update := await dal_get_device(device_id)):
+                    await websocket.send_json({'message': 'Device not registered'})
+                else:
+                    device_out = await get_device_out(device_to_update)
+                    # Update the device's status and last_status_update
+                    device_out.status = status_data.get('status')
+                    device_out.datetime_updated = datetime.now()
+                    if not await dal_update_device(device_id, device_out):
+                        await websocket.send_json({'message': 'Error updating device.'})
+                    else:
+                        # Send response to the device
+                        await websocket.send_json({'message': 'Device status updated successfully'})
+                        device_id_global = device_id
+                        dict_id_websocket[device_id] = websocket
+
+    except WebSocketDisconnect:
+        active_connections.remove(websocket)
+        if device_id_global in dict_id_websocket:
+            del dict_id_websocket[device_id_global]
+        print('Device disconnected:', device_id_global)
+        # Set the status of the disconnected device to "disconnected"
+        if not (device_to_update := await dal_get_device(device_id_global)):
+            print('Device not registered')
+        else:
+            device_out = await get_device_out(device_to_update)
+            # Update the device's status and last_status_update
+            device_out.status = 'disconnected'
+            device_out.datetime_updated = datetime.now()
+            if not await dal_update_device(device_id, device_out):
+                print('Error updating device.')
+            else:
+                # Send response to the device
+                print('Device status updated successfully')
