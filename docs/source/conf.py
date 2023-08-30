@@ -62,23 +62,41 @@ html_show_sphinx = False
 
 
 html_theme_options = {
-    "external_links": [{"url": "https://brain-link.de/", "name": "BRAIN-LINK"}],
+    "external_links": [
+        {
+            "url": "https://brain-link.de/",
+            "name": "BRAIN-LINK"
+        }
+    ],
     "icon_links": [
-        {"name": "GitHub", "url": "https://github.com/brain-link/scanhub", "icon": "fab fa-github-square"},
-        {"name": "Twitter", "url": "https://twitter.com/BRAINLINK_DE", "icon": "fab fa-twitter-square"},
+        {
+            "name": "GitHub",
+            "url": "https://github.com/brain-link/scanhub",
+            "icon": "fa-brands fa-github",
+        },
+        {
+            "name": "LinkedIn",
+            "url": "https://www.linkedin.com/company/brain-link/",
+            "icon": "fa-brands fa-linkedin",
+        },
     ],
     "collapse_navigation": True,
     "navigation_depth": 1,
     "show_toc_level": 1,
     "footer_start": ["copyright"],
     "navbar_align": "content",
-    "logo": {"image_light": "ScanHub_logo.png", "image_dark": "ScanHub_logo.png"},
 }
 
-html_scaled_image_link = False
+# html_scaled_image_link = False
 html_show_sourcelink = True
-html_logo = "../images/ScanHub_logo.png"
-html_sidebars = {"**": ["search-field", "sidebar-nav-bs"]}
+html_logo = "_static/logo_brainlink.svg"
+# html_logo = "_static/logo_scaanhub.png"
+html_sidebars = {
+    "**": [
+        "search-field",
+        "sidebar-nav-bs"
+    ]
+}
 pygments_style = "sphinx"
 
 # Add any paths that contain custom static files (such as style sheets) here,
