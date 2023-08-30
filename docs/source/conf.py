@@ -83,8 +83,11 @@ html_theme_options = {
     "collapse_navigation": True,
     "navigation_depth": 1,
     "show_toc_level": 1,
+    "show_nav_level": 0,
     "footer_start": ["copyright"],
     "navbar_align": "content",
+    "pygment_light_style": "default",
+    "pygment_dark_style": "github-dark",
 }
 
 # html_scaled_image_link = False
