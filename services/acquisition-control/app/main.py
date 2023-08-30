@@ -11,6 +11,7 @@ import random
 
 import requests
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Extra, Field
 
 DEBUG_FLAG = True
@@ -60,9 +61,29 @@ app = FastAPI(
 logging.basicConfig(level=logging.DEBUG)
 
 
+#   Wildcard ["*"] excludes eeverything that involves credentials
+#   Better specify explicitly the allowed origins
+#   See: https://fastapi.tiangolo.com/tutorial/cors/
+origins = [
+    "http://localhost",
+    "http://localhost:3000",  # frontned
+    "http://localhost:8080",  # nginx
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+
+
 @app.post("/api/v1/mri/acquisitioncontrol/start-scan")
 async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
+    return {"start_scan": "ok"} # debugging
     if DEBUG_FLAG is True:
         # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
 
