@@ -72,12 +72,12 @@ html_theme_options = {
     "show_toc_level": 1,
     "footer_start": ["copyright"],
     "navbar_align": "content",
-    "logo": {"image_light": "ScanHub-logo.png", "image_dark": "ScanHub-logo.png"},
+    "logo": {"image_light": "ScanHub_logo.png", "image_dark": "ScanHub_logo.png"},
 }
 
 html_scaled_image_link = False
 html_show_sourcelink = True
-html_logo = "../images/ScanHub-logo.png"
+html_logo = "../images/ScanHub_logo.png"
 html_sidebars = {"**": ["search-field", "sidebar-nav-bs"]}
 pygments_style = "sphinx"
 
