@@ -1,116 +1,509 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Device Manager &mdash; ScanHub 0.0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Device Manager &#8212; ScanHub 0.0.1 documentation</title>
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=d45e8c67"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/js/theme.js"></script>
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script src="_static/documentation_options.js?v=f539c95a"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'device_api';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Exam Manager" href="exam_api.html" />
-    <link rel="prev" title="UI Patient Manager" href="ui_patient_manager_api.html" /> 
-</head>
+    <link rel="prev" title="UI Patient Manager" href="ui_patient_manager_api.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
-          
-          
-          <a href="index.html" class="icon icon-home">
-            ScanHub
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">ScanHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ui_patient_manager_api.html">UI Patient Manager</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Device Manager</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#license">License</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#open-source-license">Open Source License</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#commercial-license">Commercial License</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#choice-of-license">Choice of License</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="exam_api.html">Exam Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow_api.html">Workflow Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mri_acquisition_api.html">MRI Acquisition Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mri_sequences_api.html">MRI Sequences Manager</a></li>
-</ul>
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/ScanHub-logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/ScanHub-logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="introduction.html">
+                        ScanHub
+                      </a>
+                    </li>
+                
 
-        </div>
-      </div>
-    </nav>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="ui_patient_manager_api.html">
+                        UI Patient Manager
+                      </a>
+                    </li>
+                
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">ScanHub</a>
-      </nav>
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Device Manager
+                      </a>
+                    </li>
+                
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Device Manager</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/device_api.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="exam_api.html">
+                        Exam Manager
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="workflow_api.html">
+                        Workflow Manager
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="mri_acquisition_api.html">
+                        MRI Acquisition Manager
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="mri_sequences_api.html">
+                        MRI Sequences Manager
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://brain-link.de/">
+                    BRAIN-LINK
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/BRAINLINK_DE" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="introduction.html">
+                        ScanHub
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="ui_patient_manager_api.html">
+                        UI Patient Manager
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Device Manager
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="exam_api.html">
+                        Exam Manager
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="workflow_api.html">
+                        Workflow Manager
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="mri_acquisition_api.html">
+                        MRI Acquisition Manager
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="mri_sequences_api.html">
+                        MRI Sequences Manager
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://brain-link.de/">
+                    BRAIN-LINK
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/BRAINLINK_DE" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Device Manager</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="device-manager">
-<h1>Device Manager<a class="headerlink" href="#device-manager" title="Link to this heading"></a></h1>
+<h1>Device Manager<a class="headerlink" href="#device-manager" title="Link to this heading">#</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>The Device Manager API provides a comprehensive interface to manage devices within the ScanHub system.
 This API allows you to perform essential operations such as reading the device health, retrieving, creating, updating, and deleting devices. Below are the key endpoints:</p>
 </section>
 <section id="api">
-<h2>API<a class="headerlink" href="#api" title="Link to this heading"></a></h2>
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-device-health-readiness">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/health/readiness</span></span><a class="headerlink" href="#get--api-v1-device-health-readiness" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/health/readiness</span></span><a class="headerlink" href="#get--api-v1-device-health-readiness" title="Link to this definition">#</a></dt>
 <dd><p><strong>Readiness</strong></p>
 <p>Readiness health endpoint.</p>
 <p>Inspects sqlalchemy engine and check if workflow table exists.</p>
 <section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Status docstring</p>
 </div></blockquote>
 </section>
 <section id="raises">
-<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h3>
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>500: Workflow table not found</p>
 </dd>
@@ -125,11 +518,11 @@ This API allows you to perform essential operations such as reading the device h
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-device-">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/</span></span><a class="headerlink" href="#get--api-v1-device-" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/</span></span><a class="headerlink" href="#get--api-v1-device-" title="Link to this definition">#</a></dt>
 <dd><p><strong>Get Devices</strong></p>
 <p>Get all devices endpoint.</p>
 <section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>List of device pydantic output models</p>
 </div></blockquote>
@@ -143,24 +536,24 @@ This API allows you to perform essential operations such as reading the device h
 
 <dl class="http post">
 <dt class="sig sig-object http" id="post--api-v1-device-">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/</span></span><a class="headerlink" href="#post--api-v1-device-" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/</span></span><a class="headerlink" href="#post--api-v1-device-" title="Link to this definition">#</a></dt>
 <dd><p><strong>Create Device</strong></p>
 <p>Create new device endpoint.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Device pydantic base model</p>
 </dd>
 </dl>
 </section>
 <section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Device pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id3">
-<h3>Raises<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<h3>Raises<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
 </dd>
@@ -178,24 +571,24 @@ This API allows you to perform essential operations such as reading the device h
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-device-device_id">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#get--api-v1-device-device_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#get--api-v1-device-device_id" title="Link to this definition">#</a></dt>
 <dd><p><strong>Get Device</strong></p>
 <p>Get device endpoint.</p>
 <section id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>device_id</dt><dd><p>Id of requested device</p>
 </dd>
 </dl>
 </section>
 <section id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Device pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id6">
-<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -215,11 +608,11 @@ This API allows you to perform essential operations such as reading the device h
 
 <dl class="http put">
 <dt class="sig sig-object http" id="put--api-v1-device-device_id">
-<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#put--api-v1-device-device_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#put--api-v1-device-device_id" title="Link to this definition">#</a></dt>
 <dd><p><strong>Update Device</strong></p>
 <p>Update device endpoint.</p>
 <section id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>device_id</dt><dd><p>Id of device to be updated</p>
 </dd>
@@ -228,13 +621,13 @@ This API allows you to perform essential operations such as reading the device h
 </dl>
 </section>
 <section id="id8">
-<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Updated device pydantic output model</p>
 </div></blockquote>
 </section>
 <section id="id9">
-<h3>Raises<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<h3>Raises<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -254,18 +647,18 @@ This API allows you to perform essential operations such as reading the device h
 
 <dl class="http delete">
 <dt class="sig sig-object http" id="delete--api-v1-device-device_id">
-<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#delete--api-v1-device-device_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#delete--api-v1-device-device_id" title="Link to this definition">#</a></dt>
 <dd><p><strong>Delete Device</strong></p>
 <p>Delete device endpoint.</p>
 <section id="id10">
-<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>device_id</dt><dd><p>Id of device to be deleted</p>
 </dd>
 </dl>
 </section>
 <section id="id11">
-<h3>Raises<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<h3>Raises<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>404: Not found</p>
 </dd>
@@ -285,55 +678,139 @@ This API allows you to perform essential operations such as reading the device h
 
 </section>
 <section id="license">
-<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
 <p>Device Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
 <section id="open-source-license">
-<h3>Open Source License<a class="headerlink" href="#open-source-license" title="Link to this heading"></a></h3>
+<h3>Open Source License<a class="headerlink" href="#open-source-license" title="Link to this heading">#</a></h3>
 <p>If you want to use the Software under the terms of the GPLv3, you may do so for free. Under the GPLv3, you are allowed to modify and distribute the Software, but any derivative works that you distribute must also be licensed under the GPLv3. For the precise terms and conditions, please refer to the text of the GPLv3, which is included with the Software and can also be found at: <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a></p>
 </section>
 <section id="commercial-license">
-<h3>Commercial License<a class="headerlink" href="#commercial-license" title="Link to this heading"></a></h3>
+<h3>Commercial License<a class="headerlink" href="#commercial-license" title="Link to this heading">#</a></h3>
 <p>If you wish to use the Software without the restrictions of the GPLv3, such as for the purpose of developing proprietary software that includes the Software without the obligation to disclose your source code, you may purchase a commercial license from BRAIN-LINK UG (haftungsbeschränkt).</p>
 <p>The commercial license grants you, the licensee, the rights to use, modify, and distribute the Software without the requirement of providing the source code of your proprietary software to the end users. The commercial license also includes access to premium support and services.</p>
 <p>For more information on the commercial license, including pricing, please contact us at <a class="reference external" href="mailto:info&#37;&#52;&#48;brain-link&#46;de">info<span>&#64;</span>brain-link<span>&#46;</span>de</a>.</p>
 </section>
 <section id="choice-of-license">
-<h3>Choice of License<a class="headerlink" href="#choice-of-license" title="Link to this heading"></a></h3>
+<h3>Choice of License<a class="headerlink" href="#choice-of-license" title="Link to this heading">#</a></h3>
 <p>You may choose to use the Software under either the GPLv3 or the commercial license. If you choose to use the Software under the GPLv3, you must comply with all of the terms of the GPLv3. If you choose to use the Software under the commercial license, you must comply with all of the terms of the commercial license.</p>
 </section>
 <section id="disclaimer">
-<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Link to this heading"></a></h3>
+<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Link to this heading">#</a></h3>
 <p>This is not a legal document. The exact terms of the GPLv3 and the commercial license are specified in their respective legal texts. This document is merely intended to provide a general overview of the dual licensing scheme.</p>
 </section>
 </section>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ui_patient_manager_api.html" class="btn btn-neutral float-left" title="UI Patient Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="exam_api.html" class="btn btn-neutral float-right" title="Exam Manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).</p>
-  </div>
-
-   
-
-</footer>
-        </div>
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ui_patient_manager_api.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">UI Patient Manager</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="exam_api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Exam Manager</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
 
-</body>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-license">Open Source License</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#commercial-license">Commercial License</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choice-of-license">Choice of License</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="_sources/device_api.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>
