@@ -11,3 +11,7 @@ html[data-theme="dark"] {
     --pst-color-warning: #E92076;
     --pst-color-info: #00A1E0;
 }
+
+.footer-items__start, .footer-items__end {
+  flex-direction: row;
+}
