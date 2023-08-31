@@ -8,3 +8,4 @@ scanhub-database.session.sql
 services/workflow-manager/app/__pycache__
 
 *.seq
+*/build
