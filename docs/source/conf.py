@@ -102,6 +102,7 @@ html_theme_options = {
     "show_toc_level": 3,
     "show_nav_level": 1,
     "footer_start": ["copyright"],
+    "footer_end": [],
     "navbar_align": "content",
     # "pygment_light_style": "default",
     # "pygment_dark_style": "github-dark",
