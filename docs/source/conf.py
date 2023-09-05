@@ -14,8 +14,12 @@
 #
 import os
 import sys
-basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
-sys.path.insert(0, basedir)
+
+sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
+# basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
+# sys.path.insert(0, basedir)
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -23,20 +27,31 @@ sys.path.insert(0, basedir)
 project = 'ScanHub'
 copyright = '2023, BRAIN-LINK UG (haftungsbeschraenkt)'
 author = 'BRAIN-LINK UG (haftungsbeschraenkt)'
-release = '0.0.1'
+release = '0.0.1'   # import this from scanhub package
+version = '0.0.1'   # import this from scanhub package
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+source_suffix = {".rst": "restructuredtext", ".txt": "restructuredtext", ".md": "markdown"}
+
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinxcontrib.openapi'
+    # 'sphinx.ext.napoleon',  # support numpy and google style docstrings (at the moment only openapi)
+    'sphinxcontrib.openapi',
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
 ]
+
+autoclass_content = "class"
+add_module_names = True
+autosectionlabel_prefix_document = True
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -53,10 +68,71 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'pydata_sphinx_theme'
 html_show_sphinx = False
+
+
+html_theme_options = {
+    "external_links": [
+        {
+            "url": "https://brain-link.de/",
+            "name": "BRAIN-LINK"
+        }
+    ],
+    "icon_links": [
+        {
+            "name": "Brain-Link",
+            "url": "https://brain-link.de/",
+            "icon": "https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg",
+            "type": "url"
+        },
+        {
+            "name": "GitHub",
+            "url": "https://github.com/brain-link/scanhub",
+            "icon": "fa-brands fa-github",
+        },
+        {
+            "name": "LinkedIn",
+            "url": "https://www.linkedin.com/company/brain-link/",
+            "icon": "fa-brands fa-linkedin",
+        },
+    ],
+    "collapse_navigation": True,
+    "navigation_depth": 1,
+    "show_toc_level": 3,
+    "show_nav_level": 1,
+    "footer_start": ["copyright"],
+    "footer_end": [],
+    "navbar_align": "content",
+    # "pygment_light_style": "default",
+    # "pygment_dark_style": "github-dark",
+}
+html_context = {
+    "github_user": "brain-link",
+    "github_repo": "scanhub",
+    "doc_path": "docs/",
+    "VERSION": version,
+}
+html_scaled_image_link = False
+html_show_sourcelink = True
+# html_logo = "_static/images/logo_brainlink.svg"
+html_logo = "_static/images/logo_scanhub.png"
+html_sidebars = {
+    # "**": [
+    #     "search-field",
+    #     # "sidebar-nav-bs", # default: links between pages in the active section
+    #     "page-toc", 
+    #     "edit-this-page", 
+    #     "sourcelink"
+    # ],
+    # "secondary_sidebar_items": [],
+    "**": []    # remove primary (left) sidebar
+}
+pygments_style = "sphinx"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['_static/css']
+html_css_files = ["custom.css"]
+html_title = "ScanHub Documentation"
