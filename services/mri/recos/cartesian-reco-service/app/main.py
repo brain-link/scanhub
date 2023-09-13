@@ -14,7 +14,7 @@ import aiokafka # type: ignore
 from fastapi import FastAPI
 from kafka import TopicPartition # type: ignore
 
-from .worker import init, run
+from worker import init, run
 
 # instantiate the API
 app = FastAPI()

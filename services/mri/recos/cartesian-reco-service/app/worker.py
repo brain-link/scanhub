@@ -6,7 +6,7 @@
 import logging
 from typing import Any
 
-from .reco import cartesian_reco
+from reco import cartesian_reco
 
 # initialize logger
 logging.basicConfig(
