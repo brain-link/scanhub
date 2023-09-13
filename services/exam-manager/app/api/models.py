@@ -85,7 +85,7 @@ class BaseJob(BaseModel):
     procedure_id: int
     sequence_id: str
     workflow_id: int | None
-    device_id: int
+    device_id: str
 
 
 class BaseRecord(BaseModel):
@@ -115,7 +115,7 @@ class RecordIn(BaseRecord):
 class DeviceOut(BaseDevice):
     """Devicee output model."""
 
-    id: int
+    id: str
     datetime_created: datetime
     datetime_updated: datetime | None
 

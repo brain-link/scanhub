@@ -114,7 +114,7 @@ class Job(Base):
     # Relations and references
     procedure_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
-    device_id: Mapped[int] = mapped_column(nullable=True)
+    device_id: Mapped[str] = mapped_column(nullable=True)
     sequence_id: Mapped[str] = mapped_column(nullable=False)
     records: Mapped[list["Record"]] = relationship(lazy="selectin")
 
