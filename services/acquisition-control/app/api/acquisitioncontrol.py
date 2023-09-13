@@ -16,7 +16,7 @@ from fastapi import APIRouter
 from .models import ScanJob, ScanStatus
 
 
-DEBUG_FLAG = True
+DEBUG_FLAG = False
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.DEBUG)
 async def device_location_request(device_id):
     """Retrieve ip from device-manager."""
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"http://api-gateway:8080/api/v1/device/devices/{device_id}/ip_address")
+        response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address")
         return response.json()["ip_address"]
 
 
@@ -58,6 +58,7 @@ async def start_scan(scan_job: ScanJob):
             print("Failed to start scan.")
 
     else:
+        print("Start-scan endpoint, device ip: ", device_ip)
         # get sequence
         res = requests.get(
             f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{scan_job.sequence_id}",
@@ -78,7 +79,9 @@ async def start_scan(scan_job: ScanJob):
         logging.debug(
             "Received job: %s, Generated record id: %s", scan_job.job_id, record_id
         )
-        print(sequence_json)
+        # print(sequence_json)
+
+        print("RECORD: ", res.json())
 
         url = f"http://{device_ip}/api/start-scan"
         print(url)

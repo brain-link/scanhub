@@ -149,7 +149,7 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
 
 
 @router.post("/upload/{record_id}/")
-async def upload_result(record_id: str, file: UploadFile = File(...)) -> dict[str, str]:
+async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[str, str]:
     """Upload workflow result.
 
     Parameters
