@@ -35,12 +35,12 @@ export default function Dashboard() {
 
     return (
         <Box sx={{ p: 5, display: 'flex', width: '100vw', justifyContent: 'center'}}>
-            <Card sx={{ width: 400, height: 300, m: 10 }}>
+            <Card sx={{ width: 600, height: 400, p: 10, m: 5 }}>
                 
                 <CardContent
                     component="img"
                     src="https://brain-link.de/wp-content/uploads/2022/03/ScanHub.svg"
-                    sx={{ m: 2, justifyContent: 'center', height: '100' }}
+                    sx={{ m: 2, justifyContent: 'center', height: '60%' }}
                 />
 
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 5, gap: 1}}>
