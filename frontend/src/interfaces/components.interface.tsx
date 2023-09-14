@@ -40,3 +40,21 @@ export interface JobModalProps extends Omit<JobComponentProps, "data"> {
 export interface SequenceViewerProps {
     sequence_id: string;
 }
+
+
+export enum Alerts {
+    Success = "success",
+    Warning = "warning",
+    Danger = "danger",
+    Neutral = "neutral"
+}
+
+export interface AlertProps {
+    title: string;
+    info?: string;
+    type: Alerts;
+}
+
+export interface ExamTreeProps {
+    setDataPath: (dataPath: string) => void;
+}
