@@ -33,10 +33,10 @@ export default function DeviceTable() {
   
     // const { data: devices, isSuccess } = useQuery<Device[]>("/devices");
     const [devices, setDevices] = React.useState<Device[] | undefined>(undefined);
-    const [expanded, setExpanded] = React.useState<number | false>(false);
+    const [expanded, setExpanded] = React.useState<string | false>(false);
 
     const handleExpandChange =
-      (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
       };
 

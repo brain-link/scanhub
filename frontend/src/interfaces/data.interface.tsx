@@ -31,7 +31,7 @@ export interface Workflow {
 }
 
 export interface Device {
-    id: number;
+    id: string;
     name: string;
     manufacturer: string;
     modality: string;
@@ -56,7 +56,7 @@ export interface Job {
     comment?: string | null;
     is_acquired?: boolean;
     sequence_id: string;
-    device_id: Number;
+    device_id: string;
     workflow_id?: Number | null;
     records?: [Record] | [];
     datetime_created: Date;

@@ -92,8 +92,8 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                         </IconButton>
                     </Box>
 
-                    <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(procedure.datetime_created).toDateString()}` }</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{ `Updated: ${procedure.datetime_updated ? new Date(procedure.datetime_updated).toDateString() : '-'}` }</Typography>
+                    <Typography level="body-sm" textColor="text.tertiary">{ `Created: ${new Date(procedure.datetime_created).toDateString()}` }</Typography>
+                    <Typography level="body-sm" textColor="text.tertiary">{ `Updated: ${procedure.datetime_updated ? new Date(procedure.datetime_updated).toDateString() : '-'}` }</Typography>
                 </Box>
 
                 <Menu   
