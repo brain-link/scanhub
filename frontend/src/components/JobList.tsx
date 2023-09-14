@@ -18,27 +18,30 @@ import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp
 
 import JobModal from './JobModal'
 import JobItem from './JobItem';
+import SequenceUpload from './SequenceUpload';
+import AlertItem from './AlertItem';
 
-import { Job } from '../../interfaces/data.interface';
-import { ComponentProps } from '../../interfaces/components.interface';
-import { MRISequence } from '../../interfaces/mri-data.interface';
-import { patientView } from '../../utils/size_vars';
-// import { Device } from '../../interfaces/data.interface';
-// import { Workflow } from '../../interfaces/data.interface';
+import { Job } from '../interfaces/data.interface';
+import { ComponentProps, Alerts } from '../interfaces/components.interface';
+import { MRISequence } from '../interfaces/mri-data.interface';
+import { patientView } from '../utils/size_vars';
+import { Device } from '../interfaces/data.interface';
+// import { Workflow } from '../interfaces/data.interface';
 
-import client from '../../client/exam-tree-queries';
-import sequenceClient from '../../client/sequence-api';
+import client from '../client/exam-tree-queries';
+import deviceClient from '../client/device-api';
+import sequenceClient from '../client/sequence-api';
 
 
-function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job[]>) {
+function JobList({data: jobs, refetchParentData, isSelected: isVisible}: ComponentProps<Job[]>) {
 
     const params = useParams();
     const [jobModalOpen, setJobModalOpen] = React.useState(false);
 
-    // const { data: devices, isLoading: devicesLoading, isError: devicesError } = useQuery<Device[], Error>({
-    //     queryKey: ['devices'],
-    //     queryFn: () => deviceClient.getAll()
-    // });
+    const { data: devices, isLoading: devicesLoading, isError: devicesError } = useQuery<Device[], Error>({
+        queryKey: ['devices'],
+        queryFn: () => deviceClient.getAll()
+    });
 
     const { data: sequences, isLoading: sequencesLoading, isError: sequencesError } = useQuery<MRISequence[], Error>({
         queryKey: ['sequences'],
@@ -51,13 +54,44 @@ function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
         .catch((err) => { console.log("Error during job creation: ", err) })
     })
 
-    if (!isSelected) {
-        // isSelected indicates if procedure is selected
-        // To do: Add indicator, if no procedure is selected
+    React.useEffect(() => {
+        console.log("DEVICES: ", devices)
+    }, [devices])
+
+    // No procedure selected, list of jobs not visible...
+    if (!isVisible) {
         return (
-            <div>
-                Noting to view...
-            </div>
+            <Stack sx={{ p: 10, display: 'flex', width: '100%', height: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
+                <AlertItem 
+                    title="Nothing to show..."
+                    info="Please select an exam and a procedure to view the jobs."
+                    type={ Alerts.Neutral }
+                />
+            </Stack>
+        )
+    }
+
+    if (sequencesError) {
+        return (
+            <Stack sx={{ p: 10, display: 'flex', width: '100%', height: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
+                <AlertItem 
+                    title="Error: No sequences"
+                    info="Sequences could not be loaded, an error occured."
+                    type={ Alerts.Danger }
+                />
+            </Stack>
+        )
+    }
+
+    if (devicesError) {
+        return (
+            <Stack sx={{ p: 10, display: 'flex', width: '100%', height: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
+                <AlertItem 
+                    title="Error: No devices"
+                    info="Devices could not be loaded, an error occured."
+                    type={ Alerts.Danger }
+                />
+            </Stack>
         )
     }
 
@@ -68,7 +102,7 @@ function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
             height: '100%',
             bgcolor: 'background.componentBg',
             overflow: 'auto',
-        }}>
+        }}>         
 
             {/* Exam list header */}
             <Box sx={{ p: 1.5, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -83,11 +117,14 @@ function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                     >
                         <PlayCircleFilledSharpIcon/>
                     </IconButton>
-                    <Typography level="h5"> Jobs </Typography>
+                    <Typography level="title-md"> Jobs </Typography>
                     {/* <Badge badgeContent={exams?.length} color="primary"/> */}
                 </Box>
     
                 <Box sx={{ display: 'flex', gap: 1 }}>
+
+                    <SequenceUpload />
+
                     <IconButton 
                         variant='soft'
                         sx={{ "--IconButton-size": patientView.iconButtonSize }}
@@ -102,7 +139,7 @@ function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                     data={ null }
                     dialogOpen={ jobModalOpen }
                     setDialogOpen={ setJobModalOpen }
-                    devices={[]}    // TODO: Fetch devices and pass them to modal
+                    devices={ devices ? devices : [] }    // TODO: Fetch devices and pass them to modal
                     sequences={ sequences ? sequences : [] }
                     refetchParentData={ () => {} } // unused
                     handleModalSubmit={ (data: Job) => { createJob.mutate(data) }}
@@ -121,7 +158,7 @@ function JobList({data: jobs, refetchParentData, isSelected}: ComponentProps<Job
                             <JobItem
                                 key={ index }
                                 data={ job }
-                                devices={ [] }
+                                devices={ devices ? devices : [] }
                                 sequences={ sequences ? sequences : [] }
                                 refetchParentData={ refetchParentData }
                             />

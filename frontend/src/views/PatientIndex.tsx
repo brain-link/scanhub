@@ -14,6 +14,7 @@ import Drawer from '@mui/material/Drawer';
 
 // Mui Joy
 import Box from '@mui/joy/Box';
+import Sheet from '@mui/joy/Sheet';
 import List from '@mui/joy/List';
 import Badge from '@mui/material/Badge';
 import Typography from '@mui/joy/Typography';
@@ -27,7 +28,7 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PatientInfo from '../components/PatientInfo';
 import ExamItem from '../components/ExamItem';
 import ProcedureItem from '../components/ProcedureItem';
-import JobList from '../components/jobs/JobList';
+import JobList from '../components/JobList';
 import ExamModal from '../components/ExamModal';
 import ProcedureModal from '../components/ProcedureModal';
 
@@ -51,6 +52,7 @@ const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ 
             transition: theme.transitions.create('margin', {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
+
             }),
             marginLeft: 0,
             ...(open && {
@@ -137,6 +139,7 @@ function PatientIndex() {
                 height: `calc(100vh - ${navigation.height})`
             }}
         >
+
             <Drawer
                 sx={{
                     width: patientView.drawerWidth,
@@ -155,6 +158,7 @@ function PatientIndex() {
                 anchor="left"
                 open={sidePanelOpen}
             >
+
                 <Box sx={{ overflow: 'auto', bgcolor: 'background.componentBg' }}>
 
                     {/* Conditional rendering: Only rendered if patient exists */}
@@ -166,7 +170,7 @@ function PatientIndex() {
                     <Box sx={{ p: 1.5, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
                             
                         <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                            <Typography level="h5"> Exams </Typography>
+                            <Typography level="title-md"> Exams </Typography>
                             <Badge badgeContent={exams?.length} color="primary"/>
                         </Box>
             
@@ -212,6 +216,9 @@ function PatientIndex() {
 
             </Drawer>
 
+
+
+
             <Main open={sidePanelOpen}>
                 
                 {/* List of procedures */}
@@ -235,7 +242,7 @@ function PatientIndex() {
                                     { sidePanelOpen ? <KeyboardArrowLeftSharpIcon /> : <KeyboardArrowRightSharpIcon/> }
                                 </IconButton>
 
-                                <Typography level="h5"> Procedures </Typography>
+                                <Typography level="title-md"> Procedures </Typography>
 
                                 <Badge badgeContent={procedures?.length} color="primary"/>
                             </Box>
