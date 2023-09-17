@@ -20,6 +20,7 @@ fastapi = "^0.96.0"
 uvicorn = "^0.22.0"
 numpy = "^1.24.3"
 pydicom = "^2.3.1"
+requests = "^2.31.0"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "*"
@@ -40,6 +41,12 @@ pytest = "*"
 [tool.poetry.group.docs.dependencies]
 sphinx = "*"
 sphinx_rtd_theme = "*"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
 
 [tool.pydocstyle]
 convention = "numpy"

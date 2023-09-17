@@ -28,7 +28,7 @@ async-sqlalchemy = "^1.0.0"
 [tool.poetry.group.lint.dependencies]
 mypy = "*"
 flake8 = "*"
-Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+Flake8-pyproject = "*"  # flake8 by default cannot be configured via this toml file, this package allows the configuration
 isort = "*"
 autopep8 = "*"
 pydocstyle = "*"
@@ -45,6 +45,12 @@ pytest = "*"
 sphinx = "*"
 sphinx_rtd_theme = "*"
 
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
+
 [tool.pydocstyle]
 convention = "numpy"
 
@@ -54,9 +60,6 @@ max-attributes = 20
 max-line-length = 120
 extension-pkg-allow-list = ["pydantic"]
 disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
-
-[tool.flake8]
-max-line-length = 120
 
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]
