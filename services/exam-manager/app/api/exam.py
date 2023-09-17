@@ -403,7 +403,9 @@ async def record_create(payload: RecordIn) -> RecordOut:
     return await get_record_out(data=record)
 
 
-@router.put('/record/{id}/', response_model=RecordOut, status_code=200, tags=["records"])
+@router.put(
+    "/record/{id}/", response_model=RecordOut, status_code=200, tags=["records"]
+)
 async def update_record(id: int, payload: dict):
     """Update existing record.
 
@@ -413,11 +415,11 @@ async def update_record(id: int, payload: dict):
         Id of the record to be updated
     payload
         Record pydantic input model
-    
+
     Returns
     -------
         Record pydantic output model
-    
+
     Raises
     ------
     HTTPException

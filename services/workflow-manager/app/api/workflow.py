@@ -5,16 +5,14 @@
 
 import json
 import os
-
 from typing import Generator
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
+from kafka import KafkaProducer  # type: ignore
 
-from kafka import KafkaProducer # type: ignore
 # from scanhub import RecoJob # type: ignore
 from pydantic import BaseModel, StrictStr
-
 
 from . import dal
 from .models import BaseWorkflow, WorkflowOut, get_workflow_out
@@ -25,11 +23,12 @@ from .models import BaseWorkflow, WorkflowOut, get_workflow_out
 # 204 = No Content: Delete
 # 404 = Not found
 
+
 class RecoJob(BaseModel):
-    """RecoJob is a pydantic model for a reco job.""" # noqa: E501
+    """RecoJob is a pydantic model for a reco job."""  # noqa: E501
+
     record_id: int
     input: StrictStr
-
 
 
 producer = KafkaProducer(
@@ -63,9 +62,7 @@ async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
     return await get_workflow_out(workflow)
 
 
-@router.get(
-    "/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflow"]
-)
+@router.get("/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def get_workflow(workflow_id: int) -> WorkflowOut:
     """Get workflow endpoint.
 
@@ -120,9 +117,7 @@ async def delete_workflow(workflow_id: int) -> None:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
 
-@router.put(
-    "/{workflow_id}/", response_model=WorkflowOut, status_code=200, tags=["workflow"]
-)
+@router.put("/{workflow_id}/", response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOut:
     """Update existing workflow endpoint.
 
@@ -192,26 +187,34 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
 
     # TBD: switch based on the preselected reco
 
-    reco_job = RecoJob(
-        record_id=record_id, input=filename
-    )
+    reco_job = RecoJob(record_id=record_id, input=filename)
 
     # TBD: On successful upload message kafka the correct topic to do reco
 
     producer.send("mri_cartesian_reco", reco_job)
 
-
-
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
 
 
-@router.get('/download/{record_id}/')
-async def download_result(record_id: int):
-    file_name = f"record-{record_id}.dcm"
-    file_path = f'/app/data_lake/records/{record_id}/{file_name}'
+@router.get("/download/{record_id}/")
+async def download_result(record_id: int) -> FileResponse:
+    """Download DICOM result.
 
-    return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
+    Parameters
+    ----------
+    record_id
+        ID of the record the DICOM file belongs to.
+
+    Returns
+    -------
+        DICOM file response
+    """
+    file_name = f"record-{record_id}.dcm"
+    file_path = f"/app/data_lake/records/{record_id}/{file_name}"
+
+    return FileResponse(path=file_path, media_type="application/octet-stream", filename=file_name)
+
 
 # #EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
 # TBD: frontend neesds to call a generic endpoint to trigger the acquisition
@@ -234,16 +237,43 @@ async def download_result(record_id: int):
 #     producer.send('acquisitionEvent', acquisition_event)
 #     return {"message": f"Triggered {acquisition_event}"}
 
-# A simple method to open the file and get the data
+
 def get_data_from_file(file_path: str) -> Generator:
+    """Open a file and read the data.
+
+    Parameters
+    ----------
+    file_path
+        Path of the file to open
+
+    Yields
+    ------
+        File content
+    """
     with open(file=file_path, mode="rb") as file_like:
         yield file_like.read()
 
-# Now response the API
-@router.get('/image/{record_id}/')
-async def get_image_file(record_id: int):
+
+@router.get("/image/{record_id}/")
+async def get_image_file(record_id: int) -> StreamingResponse:
+    """Read image file data and content as streaming response.
+
+    Parameters
+    ----------
+    record_id
+        Record ID the image should be read for
+
+    Returns
+    -------
+        Image file content
+
+    Raises
+    ------
+    HTTPException
+        File not found
+    """
     file_name = f"record-{record_id}.dcm"
-    file_path = f'/app/data_lake/records/{record_id}/{file_name}'
+    file_path = f"/app/data_lake/records/{record_id}/{file_name}"
     try:
         file_contents = get_data_from_file(file_path=file_path)
         response = StreamingResponse(

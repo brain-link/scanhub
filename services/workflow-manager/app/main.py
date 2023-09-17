@@ -55,9 +55,7 @@ async def readiness() -> dict:
     # print(f"Found tables: {ins.get_table_names()}")
 
     if "workflow" not in ins.get_table_names():
-        raise HTTPException(
-            status_code=500, detail="Could not find workflow table, table not created."
-        )
+        raise HTTPException(status_code=500, detail="Could not find workflow table, table not created.")
     # print("Healthcheck: Endpoint is ready.")
     return {"status": "ok"}
 

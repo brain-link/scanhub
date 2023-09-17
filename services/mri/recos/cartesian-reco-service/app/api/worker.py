@@ -6,12 +6,10 @@
 import logging
 from typing import Any
 
-from reco import cartesian_reco
+from .reco import cartesian_reco
 
 # initialize logger
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
 log = logging.getLogger(__name__)
 
 

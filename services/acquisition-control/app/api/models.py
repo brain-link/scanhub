@@ -8,9 +8,12 @@ from pydantic import BaseModel, Extra, Field  # noqa
 
 class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic model definition of a scanjob."""
+
     class Config:
         """Pydantic configuration."""
+
         extra = Extra.ignore
+
     job_id: int = Field(alias="id")
     sequence_id: str
     workflow_id: int
@@ -19,10 +22,12 @@ class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
 
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of a scanjob."""
+
     record_id: str
     status_percent: int
 
 
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive."""
+
     record_id: str
