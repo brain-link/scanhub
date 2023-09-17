@@ -70,7 +70,7 @@ async def start_scan(scan_job: ScanJob):
         # TODO: data_path, comment ? # pylint: disable=fixme
         res = requests.post(
             f"http://{EXAM_MANAGER_URI}/api/v1/exam/record",
-            json={"data_path": "path", "comment": "blub", "job_id": scan_job.job_id},
+            json={"data_path": "unknown", "comment": "Created in Acquisition Control", "job_id": scan_job.job_id},
             timeout=60,
         )
         record_id = res.json()["id"]

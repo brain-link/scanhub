@@ -158,6 +158,18 @@ class Record(Base):
         server_default=func.now()  # pylint: disable=not-callable
     )
 
+    def update(self, data: dict) -> None:
+        """Update a Record entry.
+
+        Parameters
+        ----------
+        data
+            Data to be written
+        """
+        print(type(data))
+        for key, value in data.items():
+            setattr(self, key, value)
+
 
 # Create automap base
 MappedBase = automap_base()
