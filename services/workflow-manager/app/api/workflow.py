@@ -17,7 +17,7 @@ from pydantic import BaseModel, StrictStr
 
 
 from . import dal
-from .models import BaseWorkflow, WorkflowOut, get_workflow_out
+from .models import BaseWorkflow, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -94,12 +94,26 @@ async def get_workflow_list() -> list[WorkflowOut]:
 
     Returns
     -------
-        List of workflow pydantic output models, might be empty
+        List of workflow meta pydantic output models, might be empty
     """
     if not (workflows := await dal.get_all_workflows()):
         # raise HTTPException(status_code=404, detail="Workflows not found")
         return []
     return [await get_workflow_out(workflow) for workflow in workflows]
+
+
+@router.get("/meta/", response_model=list[WorkflowMetaOut], status_code=200, tags=["workflow"])
+async def get_workflow_meta_list() -> list[WorkflowMetaOut]:
+    """Get all workflow meta information endpoint.
+
+    Returns
+    -------
+        List of workflow meta pydantic output models, might be empty
+    """
+    if not (workflows := await dal.get_all_workflows()):
+        # raise HTTPException(status_code=404, detail="Workflows not found")
+        return []
+    return [await get_workflow_meta_out(workflow) for workflow in workflows]
 
 
 @router.delete("/{workflow_id}", response_model={}, status_code=204, tags=["workflow"])
