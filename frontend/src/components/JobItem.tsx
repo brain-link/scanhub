@@ -109,7 +109,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                     <Typography level="body-md" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
                     <Typography level="body-md" textColor="text.tertiary">
                         { 
-                            `Last record: ${job.records ? new Date(job.records[job.records.length-1].datetime_created).toDateString() : '-'}` 
+                            `Last record: ${job.records && job.records.length > 0 ? new Date(job.records[job.records.length-1].datetime_created).toDateString() : '-'}` 
                         }
                     </Typography>
                 </Stack>
