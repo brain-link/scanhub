@@ -136,8 +136,7 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     log.info(dicom_dataset)
     # Option 1: save to disk
 
-    file_name = f"{reco_job.reco_id}.dcm"
-
+    file_name = f"record-{reco_job.record_id}.dcm"
     dicom_dataset.save_as(f"/app/data_lake/records/{reco_job.reco_id}/{file_name}")
 
     # Option 2: save to orthanc
