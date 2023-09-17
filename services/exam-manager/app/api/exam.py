@@ -403,6 +403,36 @@ async def record_create(payload: RecordIn) -> RecordOut:
     return await get_record_out(data=record)
 
 
+@router.put('/record/{id}/', response_model=RecordOut, status_code=200, tags=["records"])
+async def update_record(id: int, payload: dict):
+    """Update existing record.
+
+    Parameters
+    ----------
+    id
+        Id of the record to be updated
+    payload
+        Record pydantic input model
+    
+    Returns
+    -------
+        Record pydantic output model
+    
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+
+    print("Record to be updated: ")
+    record = await dal.update_record(id, payload)
+    print("Record updated: ", record)
+
+    if not record:
+        raise HTTPException(status_code=404, detail="Record not found")
+    return await get_record_out(record)
+
+
 @router.get(
     "/record/{record_id}", response_model=RecordOut, status_code=200, tags=["records"]
 )

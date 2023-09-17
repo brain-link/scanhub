@@ -6,9 +6,15 @@
 import json
 import os
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from typing import Generator
+
+from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse, StreamingResponse
+
 from kafka import KafkaProducer # type: ignore
-from scanhub import RecoJob # type: ignore
+# from scanhub import RecoJob # type: ignore
+from pydantic import BaseModel, StrictStr
+
 
 from . import dal
 from .models import BaseWorkflow, WorkflowOut, get_workflow_out
@@ -18,6 +24,13 @@ from .models import BaseWorkflow, WorkflowOut, get_workflow_out
 # 201 = Created: POST
 # 204 = No Content: Delete
 # 404 = Not found
+
+class RecoJob(BaseModel):
+    """RecoJob is a pydantic model for a reco job.""" # noqa: E501
+    record_id: int
+    input: StrictStr
+
+
 
 producer = KafkaProducer(
     bootstrap_servers=["kafka-broker:9093"],
@@ -180,16 +193,25 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
     # TBD: switch based on the preselected reco
 
     reco_job = RecoJob(
-        reco_id="cartesian", device_id="TB removed", record_id=record_id, input=filename
+        record_id=record_id, input=filename
     )
 
     # TBD: On successful upload message kafka the correct topic to do reco
 
     producer.send("mri_cartesian_reco", reco_job)
 
+
+
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
 
+
+@router.get('/download/{record_id}/')
+async def download_result(record_id: int):
+    file_name = f"record-{record_id}.dcm"
+    file_path = f'/app/data_lake/records/{record_id}/{file_name}'
+
+    return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
 
 # #EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
 # TBD: frontend neesds to call a generic endpoint to trigger the acquisition
@@ -212,9 +234,23 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
 #     producer.send('acquisitionEvent', acquisition_event)
 #     return {"message": f"Triggered {acquisition_event}"}
 
-# @workflow.get('/download/{record_id}/')
-# async def download(record_id: str):
-#     file_name = f'cartesian.dcm'
-#     file_path = f'/app/data_lake/records/{record_id}/{file_name}'
+# A simple method to open the file and get the data
+def get_data_from_file(file_path: str) -> Generator:
+    with open(file=file_path, mode="rb") as file_like:
+        yield file_like.read()
 
-#     return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
+# Now response the API
+@router.get('/image/{record_id}/')
+async def get_image_file(record_id: int):
+    file_name = f"record-{record_id}.dcm"
+    file_path = f'/app/data_lake/records/{record_id}/{file_name}'
+    try:
+        file_contents = get_data_from_file(file_path=file_path)
+        response = StreamingResponse(
+            content=file_contents,
+            status_code=status.HTTP_200_OK,
+            media_type="text/html",
+        )
+        return response
+    except FileNotFoundError:
+        raise HTTPException(detail="File not found.", status_code=status.HTTP_404_NOT_FOUND)

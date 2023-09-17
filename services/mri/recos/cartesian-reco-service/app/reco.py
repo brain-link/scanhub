@@ -3,14 +3,25 @@
 
 """Cartesian reco file for the MRI cartesian reco service."""
 
+import os
 import logging
 from typing import Any
 
+import requests
 import numpy as np
 import pydicom
 import pydicom._storage_sopclass_uids
 from pydicom.dataset import Dataset
-from scanhub import RecoJob # type: ignore
+# from scanhub import RecoJob # type: ignore
+
+from pydantic import BaseModel, StrictStr
+
+EXAM_MANAGER_URI = "host.docker.internal:8004"
+
+class RecoJob(BaseModel):
+    """RecoJob is a pydantic model for a reco job.""" # noqa: E501
+    record_id: int
+    input: StrictStr
 
 # initialize logger
 logging.basicConfig(
@@ -82,9 +93,11 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
 
     meta = pydicom.Dataset()
     # pylint: disable=protected-access
+    meta.FileMetaInformationGroupLength = 212
     meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
     meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
     meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
+    meta.SourceApplicationEntityTitle = 'BRAIN-LINK'
 
     dicom_dataset = Dataset()
     dicom_dataset.file_meta = meta  # type: ignore
@@ -101,7 +114,6 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     dicom_dataset.SeriesInstanceUID = pydicom.uid.generate_uid()
     dicom_dataset.StudyID = pydicom.uid.generate_uid()
     dicom_dataset.SOPInstanceUID = pydicom.uid.generate_uid()
-    dicom_dataset.SOPClassUID = "RT Image Storage"
     dicom_dataset.StudyInstanceUID = pydicom.uid.generate_uid()
     dicom_dataset.FrameOfReferenceUID = pydicom.uid.generate_uid()
 
@@ -137,11 +149,23 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     # Option 1: save to disk
 
     file_name = f"record-{reco_job.record_id}.dcm"
-    dicom_dataset.save_as(f"/app/data_lake/records/{reco_job.reco_id}/{file_name}")
+    file_path = f'/app/data_lake/records/{reco_job.record_id}/{file_name}'
+    dicom_dataset.save_as(file_path)
+
+    # Convert from dicom to dicom with gdcmconv to add P10 header -> temporary fix
+    cmd = f"gdcmconv -C {file_path} {file_path}"
+    os.system(cmd)  # returns the exit code in unix
 
     # Option 2: save to orthanc
     # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")
     # client.store_instances(datasets=[ds])
     log.info("File saved.")
+
+    # Update exam manager with new record URL
+    requests.put(
+        f"http://{EXAM_MANAGER_URI}/api/v1/exam/record/{reco_job.record_id}/",
+        json={"data_path": f"http://localhost:8080/api/v1/workflow/image/{reco_job.record_id}/", "comment": "Created DICOM"},
+        timeout=60
+    )
 
     # TBD Call topic from a stack or fixed topic
