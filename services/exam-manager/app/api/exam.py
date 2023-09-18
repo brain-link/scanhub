@@ -6,8 +6,20 @@
 from fastapi import APIRouter, HTTPException
 
 from . import dal
-from .models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn, ProcedureOut, RecordIn, RecordOut, get_exam_out,
-                     get_job_out, get_procedure_out, get_record_out)
+from .models import (
+    BaseExam,
+    BaseJob,
+    ExamOut,
+    JobOut,
+    ProcedureIn,
+    ProcedureOut,
+    RecordIn,
+    RecordOut,
+    get_exam_out,
+    get_job_out,
+    get_procedure_out,
+    get_record_out,
+)
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -405,11 +417,7 @@ async def update_record(record_id: int, payload: dict):
     HTTPException
         404: Not found
     """
-
-    print("Record to be updated: ")
     record = await dal.update_record(record_id, payload)
-    print("Record updated: ", record)
-
     if not record:
         raise HTTPException(status_code=404, detail="Record not found")
     return await get_record_out(record)
