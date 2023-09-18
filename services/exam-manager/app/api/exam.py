@@ -404,14 +404,14 @@ async def record_create(payload: RecordIn) -> RecordOut:
 
 
 @router.put(
-    "/record/{id}/", response_model=RecordOut, status_code=200, tags=["records"]
+    "/record/{record_id}/", response_model=RecordOut, status_code=200, tags=["records"]
 )
-async def update_record(id: int, payload: dict):
+async def update_record(record_id: int, payload: dict):
     """Update existing record.
 
     Parameters
     ----------
-    id
+    record_id
         Id of the record to be updated
     payload
         Record pydantic input model
@@ -427,7 +427,7 @@ async def update_record(id: int, payload: dict):
     """
 
     print("Record to be updated: ")
-    record = await dal.update_record(id, payload)
+    record = await dal.update_record(record_id, payload)
     print("Record updated: ", record)
 
     if not record:
