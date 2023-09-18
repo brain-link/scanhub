@@ -61,6 +61,9 @@ max-line-length = 120
 extension-pkg-allow-list = ["pydantic"]
 disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
 
+[tool.flake8]
+max-line-length = 120
+
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 
