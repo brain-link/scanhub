@@ -10,11 +10,11 @@ import json
 import logging
 import random
 
-import requests
 import httpx
+import requests
 from fastapi import APIRouter
-from .models import ScanJob, ScanStatus
 
+from .models import ScanJob, ScanStatus
 
 DEBUG_FLAG = False
 
@@ -29,7 +29,9 @@ logging.basicConfig(level=logging.DEBUG)
 async def device_location_request(device_id):
     """Retrieve ip from device-manager."""
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address")
+        response = await client.get(
+            f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address"
+        )
         return response.json()["ip_address"]
 
 
@@ -37,7 +39,7 @@ async def device_location_request(device_id):
 async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
     device_ip = await device_location_request(scan_job.device_id)
-    
+
     if DEBUG_FLAG is True:
         # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
 
@@ -70,7 +72,11 @@ async def start_scan(scan_job: ScanJob):
         # TODO: data_path, comment ? # pylint: disable=fixme
         res = requests.post(
             f"http://{EXAM_MANAGER_URI}/api/v1/exam/record",
-            json={"data_path": "unknown", "comment": "Created in Acquisition Control", "job_id": scan_job.job_id},
+            json={
+                "data_path": "unknown",
+                "comment": "Created in Acquisition Control",
+                "job_id": scan_job.job_id,
+            },
             timeout=60,
         )
         record_id = res.json()["id"]

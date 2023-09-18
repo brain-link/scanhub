@@ -3,35 +3,37 @@
 
 """Cartesian reco file for the MRI cartesian reco service."""
 
-import os
 import logging
+import os
 from typing import Any
 
-import requests
 import numpy as np
 import pydicom
 import pydicom._storage_sopclass_uids
+import requests
+from pydantic import BaseModel, StrictStr
 from pydicom.dataset import Dataset
+
 # from scanhub import RecoJob # type: ignore
 
-from pydantic import BaseModel, StrictStr
 
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
+
 class RecoJob(BaseModel):
-    """RecoJob is a pydantic model for a reco job.""" # noqa: E501
+    """RecoJob is a pydantic model for a reco job."""  # noqa: E501
+
     record_id: int
     input: StrictStr
 
+
 # initialize logger
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
 log = logging.getLogger(__name__)
 
 # Attempting to use mkl_fft (faster FFT library for Intel CPUs). Fallback is np
 try:
-    import mkl_fft as m # type: ignore
+    import mkl_fft as m  # type: ignore
 
     fft2 = m.fft2
     ifft2 = m.ifft2
@@ -97,7 +99,7 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     meta.MediaStorageSOPClassUID = pydicom._storage_sopclass_uids.MRImageStorage
     meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
     meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
-    meta.SourceApplicationEntityTitle = 'BRAIN-LINK'
+    meta.SourceApplicationEntityTitle = "BRAIN-LINK"
 
     dicom_dataset = Dataset()
     dicom_dataset.file_meta = meta  # type: ignore
@@ -149,7 +151,7 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     # Option 1: save to disk
 
     file_name = f"record-{reco_job.record_id}.dcm"
-    file_path = f'/app/data_lake/records/{reco_job.record_id}/{file_name}'
+    file_path = f"/app/data_lake/records/{reco_job.record_id}/{file_name}"
     dicom_dataset.save_as(file_path)
 
     # Convert from dicom to dicom with gdcmconv to add P10 header -> temporary fix
@@ -164,8 +166,11 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
     # Update exam manager with new record URL
     requests.put(
         f"http://{EXAM_MANAGER_URI}/api/v1/exam/record/{reco_job.record_id}/",
-        json={"data_path": f"http://localhost:8080/api/v1/workflow/image/{reco_job.record_id}/", "comment": "Created DICOM"},
-        timeout=60
+        json={
+            "data_path": f"http://localhost:8080/api/v1/workflow/image/{reco_job.record_id}/",
+            "comment": "Created DICOM",
+        },
+        timeout=60,
     )
 
     # TBD Call topic from a stack or fixed topic
