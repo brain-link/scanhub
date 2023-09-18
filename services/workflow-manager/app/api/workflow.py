@@ -282,5 +282,5 @@ async def get_image_file(record_id: int) -> StreamingResponse:
             media_type="text/html",
         )
         return response
-    except FileNotFoundError:
-        raise HTTPException(detail="File not found.", status_code=status.HTTP_404_NOT_FOUND)
+    except FileNotFoundError as exc:
+        raise HTTPException(detail='File not found.', status_code=status.HTTP_404_NOT_FOUND) from exc
