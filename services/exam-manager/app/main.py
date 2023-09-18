@@ -86,9 +86,7 @@ async def readiness() -> dict:
     # print("Existing tables: ", existing_tables)
 
     if not all(t in existing_tables for t in required_tables):
-        raise HTTPException(
-            status_code=500, detail="SQL-DB: Could not create all required tables."
-        )
+        raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
 
     return {"status": "ok"}
 

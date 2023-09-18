@@ -6,20 +6,8 @@
 from fastapi import APIRouter, HTTPException
 
 from . import dal
-from .models import (
-    BaseExam,
-    BaseJob,
-    ExamOut,
-    JobOut,
-    ProcedureIn,
-    ProcedureOut,
-    RecordIn,
-    RecordOut,
-    get_exam_out,
-    get_job_out,
-    get_procedure_out,
-    get_record_out,
-)
+from .models import (BaseExam, BaseJob, ExamOut, JobOut, ProcedureIn, ProcedureOut, RecordIn, RecordOut, get_exam_out,
+                     get_job_out, get_procedure_out, get_record_out)
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -76,9 +64,7 @@ async def exam_get(exam_id: int) -> ExamOut:
     return await get_exam_out(data=exam)
 
 
-@router.get(
-    "/all/{patient_id}", response_model=list[ExamOut], status_code=200, tags=["exams"]
-)
+@router.get("/all/{patient_id}", response_model=list[ExamOut], status_code=200, tags=["exams"])
 async def exam_get_all(patient_id: int) -> list[ExamOut]:
     """Get all exams of a patient endpoint.
 
@@ -140,9 +126,7 @@ async def exam_update(exam_id: int, payload: BaseExam) -> ExamOut:
     return await get_exam_out(data=exam)
 
 
-@router.post(
-    "/procedure", response_model=ProcedureOut, status_code=201, tags=["procedures"]
-)
+@router.post("/procedure", response_model=ProcedureOut, status_code=201, tags=["procedures"])
 async def procedure_create(payload: ProcedureIn) -> ProcedureOut:
     """Procedure post endpoint.
 
@@ -217,9 +201,7 @@ async def procedure_get_all(exam_id: int) -> list[ProcedureOut]:
     return [await get_procedure_out(data=procedure) for procedure in procedures]
 
 
-@router.delete(
-    "/procedure/{procedure_id}", response_model={}, status_code=204, tags=["procedures"]
-)
+@router.delete("/procedure/{procedure_id}", response_model={}, status_code=204, tags=["procedures"])
 async def procedure_delete(procedure_id: int) -> None:
     """Delete procedure endpoint.
 
@@ -403,9 +385,7 @@ async def record_create(payload: RecordIn) -> RecordOut:
     return await get_record_out(data=record)
 
 
-@router.put(
-    "/record/{record_id}/", response_model=RecordOut, status_code=200, tags=["records"]
-)
+@router.put("/record/{record_id}/", response_model=RecordOut, status_code=200, tags=["records"])
 async def update_record(record_id: int, payload: dict):
     """Update existing record.
 
@@ -435,9 +415,7 @@ async def update_record(record_id: int, payload: dict):
     return await get_record_out(record)
 
 
-@router.get(
-    "/record/{record_id}", response_model=RecordOut, status_code=200, tags=["records"]
-)
+@router.get("/record/{record_id}", response_model=RecordOut, status_code=200, tags=["records"])
 async def record_get(record_id: int) -> RecordOut:
     """Get single record endpoint.
 
@@ -484,9 +462,7 @@ async def record_get_all(job_id: int) -> list[RecordOut]:
     return [await get_record_out(data=record) for record in records]
 
 
-@router.delete(
-    "/record/{record_id}", response_model={}, status_code=204, tags=["records"]
-)
+@router.delete("/record/{record_id}", response_model={}, status_code=204, tags=["records"])
 async def record_delete(record_id: int) -> None:
     """Delete record endpoint.
 

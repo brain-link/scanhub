@@ -185,9 +185,7 @@ except AttributeError as error:
 
 if db_uri_async := os.getenv("DB_URI_ASYNC"):
     # Create async engine and session, echo=True generates console output
-    async_engine = create_async_engine(
-        db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT"
-    )
+    async_engine = create_async_engine(db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT")
 else:
     raise RuntimeError("Database URI not defined.")
 
