@@ -10,11 +10,10 @@ import os
 from random import randint
 from typing import Set
 
-import aiokafka # type: ignore
+import aiokafka  # type: ignore
+from api.worker import init, run
 from fastapi import FastAPI
-from kafka import TopicPartition # type: ignore
-
-from .worker import init, run
+from kafka import TopicPartition  # type: ignore
 
 # instantiate the API
 app = FastAPI()
@@ -29,9 +28,7 @@ KAFKA_CONSUMER_GROUP_PREFIX = os.getenv("KAFKA_CONSUMER_GROUP_PREFIX", "group")
 KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka-broker:9093")
 
 # initialize logger
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
@@ -93,8 +90,7 @@ async def initialize():
         if end_offset == 0:
             # pylint: disable=logging-fstring-interpolation
             log.warning(
-                f"Topic {KAFKA_TOPIC} has no messages (log_end_offset: "
-                f"{end_offset}), skipping initialization ..."
+                f"Topic {KAFKA_TOPIC} has no messages (log_end_offset: " f"{end_offset}), skipping initialization ..."
             )
             return
 

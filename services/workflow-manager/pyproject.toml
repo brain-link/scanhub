@@ -30,7 +30,7 @@ mypy-boto3-kafka = "^1.26.134"
 [tool.poetry.group.lint.dependencies]
 mypy = "*"
 flake8 = "*"
-Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+Flake8-pyproject = "*"  # flake8 by default cannot be configured via this toml file, this package allows the configuration
 isort = "*"
 autopep8 = "*"
 pydocstyle = "*"
@@ -49,6 +49,12 @@ sphinx_rtd_theme = "*"
 
 [tool.pydocstyle]
 convention = "numpy"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
 
 [tool.pylint]
 py-version = "3.10"

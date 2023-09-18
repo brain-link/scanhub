@@ -52,12 +52,11 @@ async def readiness() -> dict:
         500: Workflow table does not exist
     """
     ins = inspect(engine)
-    print(f"Found tables: {ins.get_table_names()}")
+    # print(f"Found tables: {ins.get_table_names()}")
+
     if "workflow" not in ins.get_table_names():
-        raise HTTPException(
-            status_code=500, detail="Could not find workflow table, table not created."
-        )
-    print("Healthcheck: Endpoint is ready.")
+        raise HTTPException(status_code=500, detail="Could not find workflow table, table not created.")
+    # print("Healthcheck: Endpoint is ready.")
     return {"status": "ok"}
 
 

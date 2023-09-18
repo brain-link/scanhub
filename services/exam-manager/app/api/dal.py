@@ -65,9 +65,7 @@ async def exam_get_all(patient_id: int) -> list[Exam]:
         List of exam data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(
-            select(Exam).where(Exam.patient_id == patient_id)
-        )
+        result: Result = await session.execute(select(Exam).where(Exam.patient_id == patient_id))
         exams = list(result.scalars().all())
     return exams
 
@@ -169,9 +167,7 @@ async def procedure_get_all(exam_id: int) -> list[Procedure]:
         List of procedures data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(
-            select(Procedure).where(Procedure.exam_id == exam_id)
-        )
+        result: Result = await session.execute(select(Procedure).where(Procedure.exam_id == exam_id))
         procedures = list(result.scalars().all())
     return procedures
 
@@ -196,9 +192,7 @@ async def procedure_delete(procedure_id: int) -> bool:
         return False
 
 
-async def procedure_update(
-    procedure_id: int, payload: ProcedureIn
-) -> (Procedure | None):
+async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedure | None):
     """Update existing procedure.
 
     Parameters
@@ -275,9 +269,7 @@ async def get_all_jobs(procedure_id: int) -> list[Job]:
         List of job data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(
-            select(Job).where(Job.procedure_id == procedure_id)
-        )
+        result: Result = await session.execute(select(Job).where(Job.procedure_id == procedure_id))
         jobs = list(result.scalars().all())
     return jobs
 
@@ -342,10 +334,31 @@ async def add_record(payload: RecordIn) -> Record:
         session.add(new_record)
         await session.commit()
         await session.refresh(new_record)
-    # Debugging
-    print("***** NEW RECORD *****")
-    pprint(new_record.__dict__)
     return new_record
+
+
+async def update_record(record_id: int, payload: dict) -> (Record | None):
+    """Update existing record.
+    
+    Parameters
+    ----------
+    record_id
+        Id of the record to be updated
+    payload
+        Dictionary with data to be updated
+    
+    Returns
+    -------
+        Database orm model of updated record
+    """
+    async with async_session() as session:
+        record = await session.get(Record, record_id)
+        if record:
+            record.update(payload)
+            await session.commit()
+            await session.refresh(record)
+            return record
+        return None
 
 
 async def get_record(record_id: int) -> (Record | None):
@@ -378,9 +391,7 @@ async def get_all_records(job_id: int) -> list[Record]:
         List of record data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(
-            select(Record).where(Record.job_id == job_id)
-        )
+        result: Result = await session.execute(select(Record).where(Record.job_id == job_id))
         records = list(result.scalars().all())
     return records
 

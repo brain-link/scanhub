@@ -114,7 +114,7 @@ class Job(Base):
     # Relations and references
     procedure_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
-    device_id: Mapped[int] = mapped_column(nullable=True)
+    device_id: Mapped[str] = mapped_column(nullable=True)
     sequence_id: Mapped[str] = mapped_column(nullable=False)
     records: Mapped[list["Record"]] = relationship(lazy="selectin")
 
@@ -158,6 +158,18 @@ class Record(Base):
         server_default=func.now()  # pylint: disable=not-callable
     )
 
+    def update(self, data: dict) -> None:
+        """Update a Record entry.
+
+        Parameters
+        ----------
+        data
+            Data to be written
+        """
+        print(type(data))
+        for key, value in data.items():
+            setattr(self, key, value)
+
 
 # Create automap base
 MappedBase = automap_base()
@@ -173,9 +185,7 @@ except AttributeError as error:
 
 if db_uri_async := os.getenv("DB_URI_ASYNC"):
     # Create async engine and session, echo=True generates console output
-    async_engine = create_async_engine(
-        db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT"
-    )
+    async_engine = create_async_engine(db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT")
 else:
     raise RuntimeError("Database URI not defined.")
 
