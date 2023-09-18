@@ -348,7 +348,7 @@ async def add_record(payload: RecordIn) -> Record:
     return new_record
 
 
-async def update_record(record_id: int, payload: dict) -> Record:
+async def update_record(record_id: int, payload: dict) -> (Record | None):
     """Update an existing record in database.
 
     Parameters
@@ -370,7 +370,6 @@ async def update_record(record_id: int, payload: dict) -> Record:
             await session.commit()
             await session.refresh(record)
             return record
-
         return None
 
 
