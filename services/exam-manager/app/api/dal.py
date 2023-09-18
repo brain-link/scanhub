@@ -349,12 +349,18 @@ async def add_record(payload: RecordIn) -> Record:
 
 
 async def update_record(record_id: int, payload: dict) -> Record:
-    """Update an existing record in database
-    Arguments:
-        record_id {int} -- ID of record
-        payload {BaseRecord} -- Pydantic base model, data to be updated
-    Returns:
-        Record -- Updated database orm model
+    """Update an existing record in database.
+
+    Parameters
+    ----------
+    record_id
+        ID of record
+    payload
+        Pydantic base model, data to be updated
+
+    Returns
+    -------
+        Updated database orm model
     """
     async with async_session() as session:
         record = await session.get(Record, record_id)
