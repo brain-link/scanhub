@@ -60,10 +60,11 @@ async def initialize():
     loop = asyncio.get_event_loop()
     global CONSUMER # pylint: disable=global-statement
     group_id = f"{KAFKA_CONSUMER_GROUP_PREFIX}-{randint(0, 10000)}"
+    # pylint: disable=logging-fstring-interpolation
     log.debug(
         f"Initializing KafkaConsumer for topic {KAFKA_TOPIC}, group_id "
         f"{group_id} and using bootstrap servers {KAFKA_BOOTSTRAP_SERVERS}"
-    ) # pylint: disable=logging-fstring-interpolation
+    )
 
     retries = 5
     for i in range(retries):
@@ -105,9 +106,10 @@ async def initialize():
             # pylint: disable=logging-fstring-interpolation
             log.warning(
                 f"Topic {KAFKA_TOPIC} has no messages (log_end_offset: " f"{end_offset}), skipping initialization ..."
-            ) # pylint: disable=logging-fstring-interpolation
+            )
             return
 
+        # pylint: disable=logging-fstring-interpolation
         log.debug(f"Found log_end_offset: {end_offset} seeking to {end_offset - 1}")
         CONSUMER.seek(topic, end_offset - 1)
         msg = await CONSUMER.getone()
