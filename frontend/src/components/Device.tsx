@@ -78,8 +78,13 @@ function DeviceItem({ device }: DeviceItemProps) {
                     <Typography level="body-sm" fontWeight="lg"> Status </Typography>
                     <Stack direction="row" gap={1.5} >
                         <Badge size="sm" badgeInset="50%" color={getStatusBadgeColor()} sx={{ml: 0.5}}/>
-                        <Typography level="body-sm">{`${status} (IP: ${device.ip_address})`}</Typography>
+                        <Typography noWrap level="body-sm">{status}</Typography>
+                        {/* <Typography noWrap level="body-sm">{`(IP: ${device.ip_address})`}</Typography> */}
                     </Stack>
+
+                    {/* Do display ip below status, add empty div before status serving as empty grid item */}
+                    <div></div> 
+                    <Typography noWrap level="body-sm">{`(IP: ${device.ip_address})`}</Typography>
                     
                     {/* <Typography level="body-sm" fontWeight="lg"> Created </Typography>
                     <Typography level="body-sm">{ `${new Date(device.datetime_created).toDateString()}` }</Typography> */}
