@@ -91,7 +91,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                 </IconButton>
             }
         >
-            <ListItemContent>
+            <ListItemContent sx={{ overflow: 'auto' }}>
                 <Stack gap={3} direction='row' sx={{ ml: 8, alignItems: 'center' }}>
 
                     {/* <Badge color="success"  sx={{ml: 3}} /> */}

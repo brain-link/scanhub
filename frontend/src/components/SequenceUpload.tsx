@@ -4,9 +4,7 @@
 // ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
 
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
 import { useMutation } from 'react-query';
-
 
 // Import mui joy components
 import Typography from '@mui/joy/Typography';
@@ -14,21 +12,17 @@ import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import FormLabel from '@mui/joy/FormLabel';
 import Stack from '@mui/joy/Stack';
-import Grid from '@mui/joy/Grid';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
-import IconButton from '@mui/joy/IconButton';
-import UploadFileSharpIcon from '@mui/icons-material/UploadFileSharp';
 
 // Import api service and interfaces
-import { patientView } from '../utils/size_vars';
 import { MRISequence } from '../interfaces/mri-data.interface';
 import mriSequenceService from '../client/sequence-api';
 
-function SequenceUpload() {
+function SequenceUpload(props) {
 
-    const [dialogOpen, setDialogOpen] = React.useState(false);
+    // const [dialogOpen, setDialogOpen] = React.useState(false);
 
     const [sequence, setSequence] = React.useState<MRISequence>({
         _id: "", 
@@ -52,18 +46,12 @@ function SequenceUpload() {
 
     return (
         <React.Fragment>
-            <IconButton 
-                variant='soft'
-                sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                onClick={ () => { setDialogOpen(true) }}
-            >
-                <UploadFileSharpIcon />
-            </IconButton>
+            
 
             <Modal 
-                open={dialogOpen}
+                open={props.dialogOpen}
                 color='neutral'
-                onClose={() => setDialogOpen(false)}
+                onClose={() => props.setDialogOpen(false)}
                 sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
             >
                 <ModalDialog
@@ -139,7 +127,8 @@ function SequenceUpload() {
                                 (event) => {
                                     event.preventDefault();
                                     uploadSequence.mutate();
-                                    setDialogOpen(false);
+                                    props.fetchSequences();
+                                    props.setDialogOpen(false);
                                 }
                             }
                         >

@@ -19,8 +19,8 @@ import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 
 // Import api service and interfaces
-import { Job } from '../../interfaces/data.interface';
-import { JobModalProps } from '../../interfaces/components.interface';
+import { Job } from '../interfaces/data.interface';
+import { JobModalProps } from '../interfaces/components.interface';
 
 
 function JobModal(props: JobModalProps) {

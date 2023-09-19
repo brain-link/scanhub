@@ -15,6 +15,7 @@ import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp';
+import UploadFileSharpIcon from '@mui/icons-material/UploadFileSharp';
 
 import JobModal from './JobModal'
 import JobItem from './JobItem';
@@ -37,13 +38,14 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
 
     const params = useParams();
     const [jobModalOpen, setJobModalOpen] = React.useState(false);
+    const [sequenceModalOpen, setSequenceModalOpen] = React.useState(false);
 
     const { data: devices, isLoading: devicesLoading, isError: devicesError } = useQuery<Device[], Error>({
         queryKey: ['devices'],
         queryFn: () => deviceClient.getAll()
     });
 
-    const { data: sequences, isLoading: sequencesLoading, isError: sequencesError } = useQuery<MRISequence[], Error>({
+    const { data: sequences, refetch: refetchSequences, isLoading: sequencesLoading, isError: sequencesError } = useQuery<MRISequence[], Error>({
         queryKey: ['sequences'],
         queryFn: () => sequenceClient.getAll()
     });
@@ -110,8 +112,16 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
     
                 <Box sx={{ display: 'flex', gap: 1 }}>
 
-                    <SequenceUpload />
+                    {/* Sequence upload */}
+                    <IconButton 
+                        variant='soft'
+                        sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                        onClick={ () => { setSequenceModalOpen(true) }}
+                    >
+                        <UploadFileSharpIcon />
+                    </IconButton>
 
+                    {/* Add job */}
                     <IconButton 
                         variant='soft'
                         sx={{ "--IconButton-size": patientView.iconButtonSize }}
@@ -121,6 +131,12 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                         <AddSharpIcon/>
                     </IconButton>
                 </Box>
+
+                <SequenceUpload
+                    fetchSequences={ () => refetchSequences() }
+                    dialogOpen={ sequenceModalOpen }
+                    setDialogOpen={ setSequenceModalOpen }
+                />
 
                 <JobModal 
                     data={ null }
