@@ -4,6 +4,7 @@
 """Workflow manager main."""
 
 from api.db import engine, init_db
+from api.producer import Producer
 from api.workflow import router
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,17 +24,20 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+producer = Producer()
+
 
 @app.on_event("startup")
 async def startup() -> None:
     """Call database initialization of startup."""
     init_db()
+    await producer.start()
 
 
 @app.on_event("shutdown")
 async def shutdown() -> None:
-    """Skeleton for shutdown routine."""
-    return None
+    """Shutdown event for the API."""
+    await producer.stop()
 
 
 @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])

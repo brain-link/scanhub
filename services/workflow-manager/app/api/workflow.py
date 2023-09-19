@@ -9,13 +9,13 @@ from typing import Generator
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
-from kafka import KafkaProducer  # type: ignore
 
 # from scanhub import RecoJob # type: ignore
 from pydantic import BaseModel, StrictStr
 
 from . import dal
 from .models import BaseWorkflow, WorkflowIn, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
+from .producer import Producer
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -31,12 +31,10 @@ class RecoJob(BaseModel):
     input: StrictStr
 
 
-producer = KafkaProducer(
-    bootstrap_servers=["kafka:9092"],
-    value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
-)
-
 router = APIRouter()
+
+# Get the producer singleton instance
+producer = Producer()
 
 
 @router.post("/", response_model=WorkflowOut, status_code=201, tags=["workflow"])
@@ -156,20 +154,6 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
     return await get_workflow_out(workflow)
 
 
-# ****\\ OLD CODE //****
-
-# @workflow.post('/', response_model=WorkflowOut, status_code=201)
-# async def create_workflow(payload: WorkflowIn):
-#     workflow_id = await db_manager.add_workflow(payload)
-
-#     response = {
-#         'id': workflow_id,
-#         **payload.dict()
-#     }
-
-#     return response
-
-
 @router.post("/upload/{record_id}/")
 async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[str, str]:
     """Upload workflow result.
@@ -205,7 +189,8 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
 
     # TBD: On successful upload message kafka the correct topic to do reco
 
-    producer.send("mri_cartesian_reco", reco_job)
+    # Send message to Kafka
+    await producer.send("mri_cartesian_reco", reco_job.dict())
 
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
