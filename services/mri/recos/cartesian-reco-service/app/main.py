@@ -10,11 +10,11 @@ import os
 from random import randint
 from typing import Set
 
-from aiokafka import AIOKafkaConsumer
+from aiokafka import AIOKafkaConsumer # type: ignore
 from api.worker import init, run
 from fastapi import FastAPI
-from kafka import TopicPartition
-from kafka.errors import GroupCoordinatorNotAvailableError, KafkaConnectionError, NoBrokersAvailable
+from kafka import TopicPartition # type: ignore
+from kafka.errors import GroupCoordinatorNotAvailableError, KafkaConnectionError, NoBrokersAvailable # type: ignore
 
 # instantiate the API
 app = FastAPI()
