@@ -7,19 +7,19 @@ import { useQuery } from "react-query"
 import { useNavigate } from "react-router-dom";
 import React from "react"
 import Plot from 'react-plotly.js';
-import { PlotData, MRISequence } from '../../interfaces/mri-data.interface';
+import { PlotData, MRISequence } from '../interfaces/mri-data.interface';
 import Box from '@mui/joy/Box';
 import Stack from '@mui/joy/Stack';
 import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
 import FileDownloadSharpIcon from '@mui/icons-material/FileDownloadSharp';
 import IconButton from '@mui/joy/IconButton';
-import { SequenceViewerProps } from "../../interfaces/components.interface";
-import sequenceClient from '../../client/sequence-api';
+import { SequenceViewerProps } from "../interfaces/components.interface";
+import sequenceClient from '../client/sequence-api';
 import Typography from "@mui/joy/Typography";
 
 
 
-function SequenceViewer({sequence_id}: SequenceViewerProps) {
+function SequencePlot({sequence_id}: SequenceViewerProps) {
     
     const navigate = useNavigate();
 
@@ -37,28 +37,12 @@ function SequenceViewer({sequence_id}: SequenceViewerProps) {
     React.useEffect(() => {
         if (sequencePlot) {
             sequencePlot.layout.width = window.innerWidth;
-            sequencePlot.layout.height = window.innerHeight - 150;
+            sequencePlot.layout.height = 0.75 * window.innerHeight;
         }
     }, [sequencePlot])
 
     return (
         <Stack sx={{ overflow: 'clip' }}>
-
-            <Box sx={{ m: 2, gap: 2, display: 'flex', justifyContent: 'space-between'}}>
-                <IconButton
-                    variant='soft'
-                    onClick={ () => { navigate(-1); } }
-                >
-                    <ArrowBackSharpIcon/>
-                </IconButton>
-
-                <IconButton
-                    variant='soft'
-                    onClick={ () => {} }
-                >
-                    <FileDownloadSharpIcon/>
-                </IconButton>
-            </Box>
 
             {
                 sequenceMeta && !sequenceMetaIsLoading && !sequenceMetaIsError &&
@@ -74,16 +58,9 @@ function SequenceViewer({sequence_id}: SequenceViewerProps) {
                         },
                     }}
                 >
-
-                    <Typography level="body2">Sequence</Typography>
-                    <Typography level="body2" textColor="text.primary">
-                        { sequenceMeta.name }
-                    </Typography>
-
-                    <Typography level="body2">Uploaded</Typography>
-                    <Typography level="body2" textColor="text.primary">
-                        { sequenceMeta.created_at ? new Date(sequenceMeta.created_at).toDateString() : '-' }
-                    </Typography>
+                    <Typography level="title-lg">Sequence: { sequenceMeta.name }</Typography>
+                    <Typography level="body-sm">Uploaded</Typography>
+                    <Typography level="body-sm" textColor="text.primary">{ sequenceMeta.created_at ? new Date(sequenceMeta.created_at).toDateString() : '-' }</Typography>
                 </Box>
             }
             
@@ -100,4 +77,4 @@ function SequenceViewer({sequence_id}: SequenceViewerProps) {
     );
 }
 
-export default SequenceViewer;
+export default SequencePlot;

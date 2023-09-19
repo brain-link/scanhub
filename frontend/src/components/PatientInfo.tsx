@@ -30,7 +30,7 @@ function PatientInfo(props: { patient: Patient, isLoading: Boolean, isError: Boo
 
     return (
         <Box>
-            <Typography level="h5" sx={{ p: 1.5 }}>Patient Info</Typography>
+            <Typography level="title-md" sx={{ p: 1.5 }}>Patient Info</Typography>
             <Divider />
             {
                 patient &&
@@ -47,38 +47,38 @@ function PatientInfo(props: { patient: Patient, isLoading: Boolean, isError: Boo
                     }}
                 >
 
-                    <Typography level="body2">ID</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">ID</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         {patient.id}
                     </Typography>
 
-                    <Typography level="body2">Sex</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">Sex</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         {patient.sex}
                     </Typography>
 
-                    <Typography level="body2">Birthday</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">Birthday</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         { patient.birth_date }
                     </Typography>
 
-                    <Typography level="body2">Admission</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">Admission</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         { new Date(patient.datetime_created).toDateString() }
                     </Typography>
 
-                    <Typography level="body2">Updated</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">Updated</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         { patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-' }
                     </Typography>
 
-                    <Typography level="body2">Status</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">Status</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         {patient.status}
                     </Typography>
 
-                    <Typography level="body2">Concern</Typography>
-                    <Typography level="body2" textColor="text.primary">
+                    <Typography level="body-sm">Concern</Typography>
+                    <Typography level="body-sm" textColor="text.primary">
                         {patient.issuer}
                     </Typography>
 

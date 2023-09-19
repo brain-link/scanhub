@@ -22,12 +22,6 @@ class PatientApiService extends ApiService<Patient> {
     }
 }
 
-class DeviceApiService extends ApiService<Device> {
-    constructor() {
-      super(baseUrls.deviceService);
-    }
-}
-
 class WorkflowApiService extends ApiService<Workflow> {
     constructor() {
       super(baseUrls.workflowService);
@@ -55,7 +49,6 @@ class JobApiService extends ApiService<Job> {
 
 const patientService = new PatientApiService();
 const workflowService = new WorkflowApiService();
-const deviceService = new DeviceApiService();
 const examService = new ExamApiService();
 const procedureService = new ProcedureApiService();
 const jobService = new JobApiService();
@@ -65,7 +58,6 @@ const jobService = new JobApiService();
 export default {
     patientService,
     workflowService,
-    deviceService,
     examService,
     procedureService,
     jobService,

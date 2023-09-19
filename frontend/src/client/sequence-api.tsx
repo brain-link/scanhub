@@ -9,23 +9,15 @@ class MRISequenceApiService extends ApiService<MRISequence> {
       super(baseUrls.mriSequenceService);
     }
 
-    // Additional upload function is required for sequence upload
-    // TODO: Needs to be tested
-    async uploadFile(file: File, sequence_meta: Partial<MRISequence>): Promise<MRISequence> {
+    async uploadSequenceFile(sequence_data: Partial<MRISequence>): Promise<MRISequence> {
        
         const formData = new FormData();
-
-        formData.append('file', file);
-        Object.entries(sequence_meta).forEach(([key, value]) => {
+        Object.entries(sequence_data).forEach(([key, value]) => {
             formData.append(key, value);
         });
 
         try {
-            const response = await this.axiosInstance.post('/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            const response = await this.axiosInstance.post('/upload', sequence_data, { headers: {'Content-Type': 'multipart/form-data'} });
             return response.data;
         } catch (error) {
             this.handleError(error);

@@ -6,10 +6,7 @@
 import React from 'react';
 import { Link as RouterLink, useLocation} from 'react-router-dom';
 
-// import AppBar from '@mui/material/AppBar';
-// import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-
+import Typography from '@mui/joy/Typography';
 import { useColorScheme } from '@mui/joy/styles';
 import IconButton from '@mui/joy/IconButton';
 import Button from '@mui/joy/Button';
@@ -35,7 +32,7 @@ import { navigation } from '../utils/size_vars';
 const menuItems = [
     {id: 0, text: "Home", link: "/"},
     {id: 1, text: "Patients", link: "/patients"},
-    // {id: 2, text: "Devices", link: "/devices"},
+    // {id: 2, text: "Dicom Viewer", link: "/dcmview"},
 ];
 
 function ColorSchemeToggle() {
@@ -106,7 +103,7 @@ export default function Navigation() {
                 />
             </IconButton>
 
-            <Typography variant="h4" sx={{ mr: 5 }}>
+            <Typography level="h4" sx={{ mr: 5 }}>
                 ScanHub
             </Typography> 
 

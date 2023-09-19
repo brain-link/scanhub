@@ -94,10 +94,10 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
                         </IconButton>
                     </Box>
 
-                    <Typography level="body2" textColor="text.tertiary">{ `Issuer: ${exam.creator}, ${exam.site}`}</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{ exam.status }</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{ `Created: ${new Date(exam.datetime_created).toDateString()}` }</Typography>
-                    <Typography level="body2" textColor="text.tertiary">{ `Updated: ${exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}` }</Typography>
+                    <Typography level="body-sm" textColor="text.tertiary">{ `Issuer: ${exam.creator}, ${exam.site}`}</Typography>
+                    <Typography level="body-sm" textColor="text.tertiary">{ exam.status }</Typography>
+                    <Typography level="body-sm" textColor="text.tertiary">{ `Created: ${new Date(exam.datetime_created).toDateString()}` }</Typography>
+                    <Typography level="body-sm" textColor="text.tertiary">{ `Updated: ${exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}` }</Typography>
                 
                 </Box>
 

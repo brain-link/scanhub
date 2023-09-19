@@ -19,8 +19,8 @@ import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 
 // Import api service and interfaces
-import { Job } from '../../interfaces/data.interface';
-import { JobModalProps } from '../../interfaces/components.interface';
+import { Job } from '../interfaces/data.interface';
+import { JobModalProps } from '../interfaces/components.interface';
 
 
 function JobModal(props: JobModalProps) {
@@ -35,12 +35,12 @@ function JobModal(props: JobModalProps) {
             procedure_id: Number(params.procedureId),
             sequence_id: "",
             workflow_id: null,
-            device_id: 0,
+            device_id: "",
             datetime_created: new Date(),
         })
     
     // To be replaced by devices and workflows from database
-    const devices = [{"id": 1, "name": "MRI Simulator"}]
+    // const devices = [{"id": 1, "name": "MRI Simulator"}]
     const workflows = [{"id": 0, "name": "2d FFT"}]
 
     const title = props.data ? "Update Job" : "Create Job"
@@ -102,18 +102,18 @@ function JobModal(props: JobModalProps) {
                             placeholder="Select..."
                             onChange={(
                                 event: React.SyntheticEvent | null,
-                                newValue: Number | null
+                                newValue: string | null
                             ) => {
                                 // Only set new device if newValue is not null
                                 newValue ? setJob({...job, ["device_id"]: newValue}) : () => {} 
                             }}
                             defaultValue={
                                 // Device value cannot be null -> check if device id is contained in device list
-                                devices.find(x => x.id === job.device_id) ? job.device_id : null 
+                                props.devices.find(x => x.id === job.device_id) ? job.device_id : null 
                             }
                         >
                             {
-                                devices.map((device, index) => (
+                                props.devices.map((device, index) => (
                                     <Option key={index} value={device.id}>
                                         { device.name }
                                     </Option>
