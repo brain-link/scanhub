@@ -89,9 +89,8 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
 
                                                                         // Check if job has records
                                                                         // Only display the last record for each job
-                                                                        job.records && <ListItem 
-                                                                            key={`record-${job.records[job.records.length - 1].id}`}
-                                                                        >
+                                                                        job.records && job.records.length > 0 &&
+                                                                        <ListItem key={`record-${job.records[job.records.length - 1].id}`}>
                                                                             <ListItemButton
                                                                                 id="record-entry"
                                                                                 onClick={ () => {
@@ -106,7 +105,11 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                                                                                 
                                                                                 <ListItemContent>
                                                                                     <Typography level="title-sm">{ job.type }</Typography>
-                                                                                    <Typography level="title-sm">{ job.records[job.records.length - 1].comment }</Typography>
+                                                                                    <Typography level="title-sm">
+                                                                                        { 
+                                                                                            job.records[job.records.length - 1] ? job.records[job.records.length - 1].comment : "-"
+                                                                                        }
+                                                                                    </Typography>
                                                                                     <Typography level="body-xs">
                                                                                         { `Created: ${new Date(job.records[job.records.length - 1].datetime_created).toDateString()}` }
                                                                                     </Typography>
