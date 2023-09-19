@@ -41,7 +41,7 @@ The installation of ScanHub-UI is as simple as using the following command.
 Documentation
 -----------
 
-See our [Wiki](https://github.com/brain-link/scanhub/wiki) to get insight into the structure of ScanHub, documentation of microservices and more.
+See our dedicated [Documentation](hhttps://scanhub.brain-link.de/) web page to get insights into the structure of ScanHub, microservice APIs and more.
 
 
 About
