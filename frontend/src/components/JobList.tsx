@@ -58,24 +58,11 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
         console.log("DEVICES: ", devices)
     }, [devices])
 
-    // No procedure selected, list of jobs not visible...
-    if (!isVisible) {
-        return (
-            <Stack sx={{ p: 10, display: 'flex', width: '100%', height: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
-                <AlertItem 
-                    title="Nothing to show..."
-                    info="Please select an exam and a procedure to view the jobs."
-                    type={ Alerts.Neutral }
-                />
-            </Stack>
-        )
-    }
-
     if (sequencesError) {
         return (
             <Stack sx={{ p: 10, display: 'flex', width: '100%', height: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
                 <AlertItem 
-                    title="Error: No sequences"
+                    title="Error loading sequences"
                     info="Sequences could not be loaded, an error occured."
                     type={ Alerts.Danger }
                 />
@@ -101,7 +88,7 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
             width: '100%',
             height: '100%',
             bgcolor: 'background.componentBg',
-            overflow: 'auto',
+            overflow: 'auto'
         }}>         
 
             {/* Exam list header */}
@@ -129,7 +116,7 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                         variant='soft'
                         sx={{ "--IconButton-size": patientView.iconButtonSize }}
                         onClick={ () => { setJobModalOpen(true) }}
-                        disabled={ sequences ? sequences.length === 0 : true }
+                        disabled={ params.procedureId === undefined }
                     >
                         <AddSharpIcon/>
                     </IconButton>
@@ -148,9 +135,46 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
             </Box>
     
             <ListDivider />  
+
     
             {/* List of exams */}
             <List sx={{ pt: 0 }}>
+
+                {
+                    // Notification to display when no jobs are present
+                    !isVisible && <Stack sx={{ p: 10, pt: 2, pb: 0, display: 'flex', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
+                        <AlertItem 
+                            title="Nothing to show..."
+                            info="Please select an exam and a procedure to view the jobs."
+                            type={ Alerts.Neutral }
+                        />
+                    </Stack>
+                }
+
+                {
+                    // Check device list
+                    !(devices && devices.length > 0) && 
+                    <Stack sx={{ p: 10, pt: 2, pb: 0, display: 'flex', width: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
+                        <AlertItem 
+                            title={devicesLoading ? "Loading devices..." : "No device found"}
+                            info={!devicesLoading ? "Could not find any registered device, please register a device first." : undefined}
+                            type={ Alerts.Warning }
+                        />
+                    </Stack>
+                }
+
+                {
+                    // Check sequence list
+                    !(sequences && sequences.length > 0) && 
+                    <Stack sx={{ p: 10, pt: 2, pb: 0, display: 'flex', width: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
+                        <AlertItem 
+                            title={sequencesLoading ? "Loading sequences..." : "No sequence found"}
+                            info={!sequencesLoading ? "Could not find any sequence, please upload a sequence first." : undefined}
+                            type={ Alerts.Warning }
+                        />
+                    </Stack>
+                }
+
                 {
                     // Check if exams are loading
                     !sequencesLoading && jobs.map((job, index) => (

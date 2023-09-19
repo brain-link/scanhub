@@ -65,8 +65,6 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
         })
     }
 
-    // TODO: Implementation of sequence upload
-    // TODO: Use devices and workflows in selectors 
 
     return (
         <ListItem
@@ -93,44 +91,44 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                 </IconButton>
             }
         >
+            <ListItemContent>
+                <Stack gap={3} direction='row' sx={{ ml: 8, alignItems: 'center' }}>
 
-            <Stack gap={3} direction='row' sx={{ ml: 8, alignItems: 'center' }}>
+                    {/* <Badge color="success"  sx={{ml: 3}} /> */}
 
-                {/* <Badge color="success"  sx={{ml: 3}} /> */}
+                    <Stack direction='column'>
+                        <Typography noWrap level="body-md">{job.type}</Typography>
+                        <Typography noWrap level="body-md">{job.comment}</Typography>
+                        {/* <Typography noWrap level="body-md">{`Records: ${job.records ? job.records.length : "-"}`}</Typography> */}
+                    {/* </Stack>
 
-                <Stack direction='column'>
-                    <Typography level="body-md">{job.type}</Typography>
-                    <Typography level="body-md">{job.comment}</Typography>
-                    <Typography level="body-md">{`Records: ${job.records ? job.records.length : "-"}`}</Typography>
-                </Stack>
-
-                <Stack direction='column'>
-                    <Typography level="body-md" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
-                    <Typography level="body-md" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography>
-                    <Typography level="body-md" textColor="text.tertiary">
-                        { 
-                            `Last record: ${job.records && job.records.length > 0 ? new Date(job.records[job.records.length-1].datetime_created).toDateString() : '-'}` 
-                        }
-                    </Typography>
-                </Stack>
-
-                <DeviceItem device={devices.find(x => x.id === job.device_id)} />
-
-
-                <Button
-                    variant="outlined"
-                    color="neutral"
-                    disabled={ job.sequence_id === "" }   // no sequence id
-                    onClick={() => setSeqModalOpen(true)}
-                >
-                    <Stack>
-                        <Typography level="body-md">Sequence</Typography>
-                        <Typography level="body-md">{ job.sequence_id ? sequences.find(x => x._id === job.sequence_id)?.name : "-" }</Typography>
+                    <Stack direction='column'> */}
+                        <Typography noWrap level="body-md" textColor="text.tertiary">{ `Created: ${new Date(job.datetime_created).toDateString()}` }</Typography>
+                        {/* <Typography noWrap level="body-md" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography> */}
+                        <Typography noWrap level="body-md" textColor="text.tertiary">
+                            { 
+                                `Last record: ${job.records && job.records.length > 0 ? new Date(job.records[job.records.length-1].datetime_created).toDateString() + ` (${job.records ? job.records.length : "-"})` : '-'}` 
+                            }
+                        </Typography>
                     </Stack>
-                </Button>
 
-            </Stack>
-            
+                    <DeviceItem device={devices.find(x => x.id === job.device_id)} />
+
+
+                    <Button
+                        variant="outlined"
+                        color="neutral"
+                        disabled={ job.sequence_id === "" }   // no sequence id
+                        onClick={() => setSeqModalOpen(true)}
+                    >
+                        <Stack>
+                            <Typography level="body-md">Sequence</Typography>
+                            <Typography level="body-md">{ job.sequence_id ? sequences.find(x => x._id === job.sequence_id)?.name : "-" }</Typography>
+                        </Stack>
+                    </Button>
+
+                </Stack>
+            </ListItemContent>
 
             {/* Job interaction menu */}
             <Menu   
