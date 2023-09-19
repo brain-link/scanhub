@@ -3,7 +3,6 @@
 
 """Workflow manager endpoints."""
 
-import json
 import os
 from typing import Generator
 

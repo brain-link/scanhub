@@ -1,8 +1,9 @@
-import asyncio
 import json
 import logging
 
 from aiokafka import AIOKafkaProducer
+
+# pylint: disable=no-member
 
 
 class Producer:
@@ -60,6 +61,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Usage example
 async def main():
+    """Main test function."""
     producer_instance = Producer.get_producer()
     await producer_instance.start()
     await producer_instance.send("my_topic", {"key": "value"})
