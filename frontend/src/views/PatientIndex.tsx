@@ -251,6 +251,7 @@ function PatientIndex() {
                                 variant='soft' 
                                 sx={{ "--IconButton-size": patientView.iconButtonSize }}
                                 onClick={() => {setProcedureModalOpen(true)}}
+                                disabled={ params.examId === undefined }
                             >
                                 <AddSharpIcon/>
                             </IconButton>
