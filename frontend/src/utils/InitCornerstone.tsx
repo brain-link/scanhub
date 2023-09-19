@@ -29,8 +29,8 @@ export default function InitCornerstone() {
     // cornerstoneTools.textStyle.setFont(`16px ${fontFamily}`);
 
     cornerstoneTools.toolStyle.setToolWidth(2);
-    cornerstoneTools.toolColors.setToolColor("rgb(255, 255, 255)");
-    cornerstoneTools.toolColors.setActiveColor("rgb(255, 255, 255)");
+    cornerstoneTools.toolColors.setToolColor("#2196f3");
+    cornerstoneTools.toolColors.setActiveColor("#4dabf5");
 
     cornerstoneTools.store.state.touchProximity = 40;
 
