@@ -5,15 +5,13 @@
 
 import datetime
 import os
+from typing import Any
 
 from pydantic import BaseModel
-from sqlalchemy import JSON
-from sqlalchemy import create_engine, func
+from sqlalchemy import JSON, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 from sqlalchemy.orm.decl_api import DeclarativeMeta
-
-from typing import Any
 
 # Create base for device
 Base: DeclarativeMeta = declarative_base()
@@ -41,7 +39,7 @@ class Workflow(Base):
     description: Mapped[str] = mapped_column(nullable=True)
     version: Mapped[str] = mapped_column(nullable=False)
     author: Mapped[str] = mapped_column(nullable=False)
-    definition: Mapped[dict[str,Any]] = mapped_column(type_=JSON, nullable=False)
+    definition: Mapped[dict[str, Any]] = mapped_column(type_=JSON, nullable=False)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable

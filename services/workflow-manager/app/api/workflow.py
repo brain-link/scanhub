@@ -15,7 +15,7 @@ from kafka import KafkaProducer  # type: ignore
 from pydantic import BaseModel, StrictStr
 
 from . import dal
-from .models import BaseWorkflow, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
+from .models import BaseWorkflow, WorkflowIn, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -40,13 +40,13 @@ router = APIRouter()
 
 
 @router.post("/", response_model=WorkflowOut, status_code=201, tags=["workflow"])
-async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
+async def create_workflow(payload: WorkflowIn) -> WorkflowOut:
     """Create new workflow endpoint.
 
     Parameters
     ----------
     payload
-        Workflow pydantic base model
+        Data to be added, workflow iutput model
 
     Returns
     -------
@@ -275,4 +275,4 @@ async def get_image_file(record_id: int) -> StreamingResponse:
         )
         return response
     except FileNotFoundError as exc:
-        raise HTTPException(detail='File not found.', status_code=status.HTTP_404_NOT_FOUND) from exc
+        raise HTTPException(detail="File not found.", status_code=status.HTTP_404_NOT_FOUND) from exc

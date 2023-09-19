@@ -18,10 +18,12 @@ class BaseWorkflow(BaseModel):
     version: str
     author: (str | None)
 
+
 class WorkflowIn(BaseWorkflow):
     """Workflow pydantic output model."""
 
     definition: dict
+
 
 class WorkflowMetaOut(BaseWorkflow):
     """Workflow pydantic output model."""
@@ -29,6 +31,7 @@ class WorkflowMetaOut(BaseWorkflow):
     id: int  # TBD: Use uuid
     datetime_created: datetime
     datetime_updated: (datetime | None)
+
 
 class WorkflowOut(WorkflowMetaOut):
     """Workflow pydantic output model."""
@@ -57,6 +60,7 @@ async def get_workflow_meta_out(data: Workflow) -> WorkflowMetaOut:
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
     )
+
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
     """Workflow pydantic output model helper function.
