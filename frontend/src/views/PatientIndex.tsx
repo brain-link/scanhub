@@ -10,10 +10,9 @@ import { useMutation } from 'react-query';
 
 // Mui Joy
 import Box from '@mui/joy/Box';
-import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 import List from '@mui/joy/List';
-import Badge from '@mui/material/Badge';
+import Badge from '@mui/joy/Badge';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import ListDivider from '@mui/joy/ListDivider';
