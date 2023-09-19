@@ -32,7 +32,7 @@ class RecoJob(BaseModel):
 
 
 producer = KafkaProducer(
-    bootstrap_servers=["kafka-broker:9093"],
+    bootstrap_servers=["kafka:9092"],
     value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
 )
 
@@ -228,28 +228,6 @@ async def download_result(record_id: int) -> FileResponse:
     file_path = f"/app/data_lake/records/{record_id}/{file_name}"
 
     return FileResponse(path=file_path, media_type="application/octet-stream", filename=file_name)
-
-
-# #EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
-# TBD: frontend neesds to call a generic endpoint to trigger the acquisition
-# #@workflow.post('/control/{device_id}/{record_id}/{command}')
-# @workflow.post('/control/{command}/')
-# async def acquistion_control(command: str):
-#     try:
-#         acquisition_command = AcquisitionCommand[command]
-#     except KeyError:
-#         print('KeyError: acquisition command not found')
-
-#     device_id = 'mri_simulator' #DEBUG: this should be the device_id from the frontend
-#     record_id = uuid.uuid4() #DEBUG: this should be the record_id from the frontend
-#     input_sequence = 'input_sequence' #DEBUG: this should be the input_sequence from the frontend
-
-#     acquisition_event = AcquisitionEvent(   device_id=device_id,
-#                                             record_id=record_id,
-#                                             command_id=acquisition_command,
-#                                             input_sequence=input_sequence)
-#     producer.send('acquisitionEvent', acquisition_event)
-#     return {"message": f"Triggered {acquisition_event}"}
 
 
 def get_data_from_file(file_path: str) -> Generator:
