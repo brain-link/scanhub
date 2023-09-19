@@ -19,13 +19,13 @@ services:
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflow/health/readiness"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 2s
       retries: 3
     depends_on:
       scanhub-database:
         condition: service_healthy
-      broker:
+      kafka:
         condition: service_healthy
 
 
@@ -44,13 +44,11 @@ services:
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://device-manager:8000/api/v1/device/health/readiness"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 2s
       retries: 3
     depends_on:
       scanhub-database:
-        condition: service_healthy
-      broker:
         condition: service_healthy
 
 
@@ -63,9 +61,6 @@ services:
     ports:
       # TODO: Order of ports, 8001 - 8005 for exam, device, workflow, sequence and acqisition
       - 8111:8000
-    depends_on:
-      broker:
-        condition: service_healthy
 
 
   exam-manager:
@@ -83,8 +78,8 @@ services:
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 2s
       retries: 3
     depends_on:
       scanhub-database:
@@ -92,8 +87,6 @@ services:
       device-manager:
         condition: service_healthy
       workflow-manager:
-        condition: service_healthy
-      broker:
         condition: service_healthy
 
 
@@ -115,8 +108,6 @@ services:
       - MONGODB_DB=mri_sequences_db
       - MONGODB_COLLECTION_NAME=mri_sequences
     depends_on:
-      broker:
-        condition: service_healthy
       sequence-database:
         condition: service_healthy
 
@@ -129,14 +120,14 @@ services:
     environment:
       - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
     depends_on:
-      - broker
+      kafka:
+        condition: service_healthy
     volumes:
       - ./services/mri/recos/cartesian-reco-service/app/:/app/
       - data_lake:/app/data_lake/
 
 
   # Databases
-
   # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
   scanhub-database:
     container_name: db-scanhub
@@ -151,8 +142,8 @@ services:
     healthcheck:  
       # Workflow, device and exam microservices depend on healthy postgres database
       test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 2s
       retries: 3
       start_period: 5s 
     ports:
@@ -171,8 +162,8 @@ services:
     #   MONGO_INITDB_ROOT_PASSWORD: 9ArU5*Sr
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh sequence-database:27017/test --quiet
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 2s
       retries: 3
       start_period: 20s
     ports:
@@ -200,52 +191,35 @@ services:
         condition: service_started
 
 
-  # Kafka Services
-  zookeeper:
-    container_name: kafka-zookeeper
-    image: confluentinc/cp-zookeeper:7.3.1
-    hostname: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-
-  broker:
-    container_name: kafka-broker
-    image: confluentinc/cp-kafka:7.3.1
-    hostname: broker
-    depends_on:
-      - zookeeper
+  # Message Broker (Kafka)
+  kafka:
+    container_name: message-broker
+    image: bitnami/kafka:latest
     ports:
       - "9092:9092"
-      - "9101:9101"
-    healthcheck:
-      test: nc -z localhost 9092 || exit -1
-      start_period: 30s
-      interval: 5s
-      timeout: 10s
-      retries: 5
+    volumes:
+      - "kafka_data:/bitnami"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_LOG4J_LOGGERS: 'kafka.controller=WARN,kafka.foo.bar=ERROR'
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_CONTAINER:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092,PLAINTEXT_CONTAINER://kafka-broker:9093
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9101
-      KAFKA_JMX_HOSTNAME: localhost
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
-      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
 volumes:
   data_lake:
   mongodb_data_sequence:
   postgres_data_scanhub:
+  kafka_data:
+    driver: local

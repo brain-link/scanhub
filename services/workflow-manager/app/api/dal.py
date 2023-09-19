@@ -9,10 +9,10 @@ from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from .db import Workflow, async_session
-from .models import BaseWorkflow
+from .models import BaseWorkflow, WorkflowIn
 
 
-async def add_workflow(payload: BaseWorkflow) -> Workflow:
+async def add_workflow(payload: WorkflowIn) -> Workflow:
     """Add new workflow to database.
 
     Parameters

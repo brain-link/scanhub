@@ -15,7 +15,7 @@ from kafka import KafkaProducer  # type: ignore
 from pydantic import BaseModel, StrictStr
 
 from . import dal
-from .models import BaseWorkflow, WorkflowOut, get_workflow_out
+from .models import BaseWorkflow, WorkflowIn, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -32,7 +32,7 @@ class RecoJob(BaseModel):
 
 
 producer = KafkaProducer(
-    bootstrap_servers=["kafka-broker:9093"],
+    bootstrap_servers=["kafka:9092"],
     value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
 )
 
@@ -40,13 +40,13 @@ router = APIRouter()
 
 
 @router.post("/", response_model=WorkflowOut, status_code=201, tags=["workflow"])
-async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
+async def create_workflow(payload: WorkflowIn) -> WorkflowOut:
     """Create new workflow endpoint.
 
     Parameters
     ----------
     payload
-        Workflow pydantic base model
+        Data to be added, workflow iutput model
 
     Returns
     -------
@@ -91,12 +91,26 @@ async def get_workflow_list() -> list[WorkflowOut]:
 
     Returns
     -------
-        List of workflow pydantic output models, might be empty
+        List of workflow meta pydantic output models, might be empty
     """
     if not (workflows := await dal.get_all_workflows()):
         # raise HTTPException(status_code=404, detail="Workflows not found")
         return []
     return [await get_workflow_out(workflow) for workflow in workflows]
+
+
+@router.get("/meta/", response_model=list[WorkflowMetaOut], status_code=200, tags=["workflow"])
+async def get_workflow_meta_list() -> list[WorkflowMetaOut]:
+    """Get all workflow meta information endpoint.
+
+    Returns
+    -------
+        List of workflow meta pydantic output models, might be empty
+    """
+    if not (workflows := await dal.get_all_workflows()):
+        # raise HTTPException(status_code=404, detail="Workflows not found")
+        return []
+    return [await get_workflow_meta_out(workflow) for workflow in workflows]
 
 
 @router.delete("/{workflow_id}", response_model={}, status_code=204, tags=["workflow"])
@@ -216,28 +230,6 @@ async def download_result(record_id: int) -> FileResponse:
     return FileResponse(path=file_path, media_type="application/octet-stream", filename=file_name)
 
 
-# #EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
-# TBD: frontend neesds to call a generic endpoint to trigger the acquisition
-# #@workflow.post('/control/{device_id}/{record_id}/{command}')
-# @workflow.post('/control/{command}/')
-# async def acquistion_control(command: str):
-#     try:
-#         acquisition_command = AcquisitionCommand[command]
-#     except KeyError:
-#         print('KeyError: acquisition command not found')
-
-#     device_id = 'mri_simulator' #DEBUG: this should be the device_id from the frontend
-#     record_id = uuid.uuid4() #DEBUG: this should be the record_id from the frontend
-#     input_sequence = 'input_sequence' #DEBUG: this should be the input_sequence from the frontend
-
-#     acquisition_event = AcquisitionEvent(   device_id=device_id,
-#                                             record_id=record_id,
-#                                             command_id=acquisition_command,
-#                                             input_sequence=input_sequence)
-#     producer.send('acquisitionEvent', acquisition_event)
-#     return {"message": f"Triggered {acquisition_event}"}
-
-
 def get_data_from_file(file_path: str) -> Generator:
     """Open a file and read the data.
 
@@ -283,4 +275,4 @@ async def get_image_file(record_id: int) -> StreamingResponse:
         )
         return response
     except FileNotFoundError as exc:
-        raise HTTPException(detail='File not found.', status_code=status.HTTP_404_NOT_FOUND) from exc
+        raise HTTPException(detail="File not found.", status_code=status.HTTP_404_NOT_FOUND) from exc

@@ -10,10 +10,11 @@ import os
 from random import randint
 from typing import Set
 
-import aiokafka  # type: ignore
+from aiokafka import AIOKafkaConsumer # type: ignore
 from api.worker import init, run
 from fastapi import FastAPI
-from kafka import TopicPartition  # type: ignore
+from kafka import TopicPartition # type: ignore
+from kafka.errors import GroupCoordinatorNotAvailableError, KafkaConnectionError, NoBrokersAvailable # type: ignore
 
 # instantiate the API
 app = FastAPI()
@@ -25,7 +26,7 @@ CONSUMER = None
 # env variables
 KAFKA_TOPIC = os.getenv("KAFKA_TOPIC_SUBSCRIPTION")
 KAFKA_CONSUMER_GROUP_PREFIX = os.getenv("KAFKA_CONSUMER_GROUP_PREFIX", "group")
-KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka-broker:9093")
+KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
 
 # initialize logger
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -57,23 +58,37 @@ async def root():
 async def initialize():
     """Initialize the API."""
     loop = asyncio.get_event_loop()
-    global CONSUMER  # pylint: disable=global-statement
+    global CONSUMER # pylint: disable=global-statement
     group_id = f"{KAFKA_CONSUMER_GROUP_PREFIX}-{randint(0, 10000)}"
     # pylint: disable=logging-fstring-interpolation
     log.debug(
         f"Initializing KafkaConsumer for topic {KAFKA_TOPIC}, group_id "
         f"{group_id} and using bootstrap servers {KAFKA_BOOTSTRAP_SERVERS}"
     )
-    CONSUMER = aiokafka.AIOKafkaConsumer(
-        KAFKA_TOPIC,
-        loop=loop,
-        bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
-        group_id=group_id,
-        value_deserializer=lambda x: json.loads(x.decode("utf-8")),
-    )
-    # get cluster layout and join group
-    await CONSUMER.start()
 
+    retries = 5
+    for i in range(retries):
+        try:
+            CONSUMER = AIOKafkaConsumer(
+                KAFKA_TOPIC,
+                loop=loop,
+                bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+                group_id=group_id,
+                value_deserializer=lambda x: json.loads(x.decode("utf-8")),
+            )
+            await CONSUMER.start()
+            break
+        except NoBrokersAvailable:
+            print("Brokers not available yet. Retrying...")
+            await asyncio.sleep(5)
+        except KafkaConnectionError:
+            print(f"Attempt {i+1}: Could not connect. Retrying...")
+            await asyncio.sleep(5)
+        except GroupCoordinatorNotAvailableError:
+            print(f"Attempt {i+1}: Group Coordinator not available. Retrying...")
+            await asyncio.sleep(5)
+
+    # get cluster layout and join group
     partitions: Set[TopicPartition] = CONSUMER.assignment()
     nr_partitions = len(partitions)
     if nr_partitions != 1:
@@ -94,6 +109,7 @@ async def initialize():
             )
             return
 
+        # pylint: disable=logging-fstring-interpolation
         log.debug(f"Found log_end_offset: {end_offset} seeking to {end_offset - 1}")
         CONSUMER.seek(topic, end_offset - 1)
         msg = await CONSUMER.getone()
@@ -106,7 +122,7 @@ async def initialize():
 
 async def consume():
     """Consume messages from the Kafka topic."""
-    global CONSUMER_TASK  # pylint: disable=global-statement
+    global CONSUMER_TASK # pylint: disable=global-statement
     CONSUMER_TASK = asyncio.create_task(send_consumer_message(CONSUMER))
 
 
@@ -118,14 +134,10 @@ async def send_consumer_message(consumer):
         consumer (AIOKafkaConsumer): Kafka consumer
     """
     try:
-        # consume messages
         async for msg in consumer:
-            # x = json.loads(msg.value)
             log.info("Consumed msg: %s", msg)
-
             # run worker
             run(msg)
     finally:
-        # will leave consumer group; perform autocommit if enabled
         log.warning("Stopping consumer")
         await consumer.stop()
