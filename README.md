@@ -9,6 +9,10 @@
 <a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
     <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests"/>
 </a>
+
+<a href="https://scanhub.brain-link.de/" target="_blank">
+    <img src="https://img.shields.io/badge/Documentation-online-brightgreen" alt="Documentation"/>
+</a>
 </p>
 
 -----------------
