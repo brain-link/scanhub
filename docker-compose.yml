@@ -20,8 +20,8 @@ services:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflow/health/readiness"]
       interval: 5s
-      timeout: 2s
-      retries: 3
+      timeout: 5s
+      retries: 10
     depends_on:
       scanhub-database:
         condition: service_healthy
@@ -45,8 +45,8 @@ services:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://device-manager:8000/api/v1/device/health/readiness"]
       interval: 5s
-      timeout: 2s
-      retries: 3
+      timeout: 5s
+      retries: 10
     depends_on:
       scanhub-database:
         condition: service_healthy
@@ -79,8 +79,8 @@ services:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
       interval: 5s
-      timeout: 2s
-      retries: 3
+      timeout: 5s
+      retries: 10
     depends_on:
       scanhub-database:
         condition: service_healthy
@@ -143,8 +143,8 @@ services:
       # Workflow, device and exam microservices depend on healthy postgres database
       test: ["CMD-SHELL", "pg_isready"]
       interval: 5s
-      timeout: 2s
-      retries: 3
+      timeout: 5s
+      retries: 10
       start_period: 5s 
     ports:
       - "5433:5432"
@@ -163,8 +163,8 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh sequence-database:27017/test --quiet
       interval: 5s
-      timeout: 2s
-      retries: 3
+      timeout: 5s
+      retries: 10
       start_period: 20s
     ports:
       - "27017:27017"
@@ -212,9 +212,9 @@ services:
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
     healthcheck:
       test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
 volumes:
