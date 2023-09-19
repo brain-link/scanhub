@@ -8,13 +8,10 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { useMutation } from 'react-query';
 
-// Mui Material
-import { styled } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
-
 // Mui Joy
 import Box from '@mui/joy/Box';
 import Sheet from '@mui/joy/Sheet';
+import Stack from '@mui/joy/Stack';
 import List from '@mui/joy/List';
 import Badge from '@mui/material/Badge';
 import Typography from '@mui/joy/Typography';
@@ -40,31 +37,6 @@ import { Job } from '../interfaces/data.interface';
 import { patientView, navigation } from '../utils/size_vars';
 
 import client from '../client/exam-tree-queries';
-
-
-const Main = styled('div', { shouldForwardProp: (prop) => prop !== 'open' }) <{ open?: boolean }>
-(
-    ({ theme, open }) => (
-        {
-            display: 'flex',
-            flexDirection: 'row',
-            height: '100%',
-            transition: theme.transitions.create('margin', {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-
-            }),
-            marginLeft: 0,
-            ...(open && {
-                transition: theme.transitions.create('margin', {
-                    easing: theme.transitions.easing.easeOut,
-                    duration: theme.transitions.duration.enteringScreen,
-                }),
-                marginLeft: patientView.drawerWidth     //theme.patientView.drawerWidth
-            })
-        }
-    )
-);
 
 
 function PatientIndex() {
@@ -131,95 +103,72 @@ function PatientIndex() {
     })
 
     return (    
-        <div 
-            id="page-container" 
-            style={{ 
-                width: '100%', 
-                position: 'relative', 
-                height: `calc(100vh - ${navigation.height})`
-            }}
-        >
 
-            <Drawer
-                sx={{
-                    width: patientView.drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: patientView.drawerWidth,
-                    }
-                }}
-                PaperProps={{ style: { position: 'absolute' } }}
-                // BackdropProps={{ style: { position: 'absolute' } }}
-                ModalProps={{
-                    container: document.getElementById('page-container'),
-                    style: { position: 'absolute' }
-                }}
-                variant="persistent"
-                anchor="left"
-                open={sidePanelOpen}
-            >
+        <Stack direction="row" sx={{ height: `calc(100vh - ${navigation.height})`, width: '100%' }}>
 
-                <Box sx={{ overflow: 'auto', bgcolor: 'background.componentBg' }}>
+            <Box sx={{ 
+                minWidth: sidePanelOpen ? patientView.drawerWidth : 0,
+                width: sidePanelOpen ? patientView.drawerWidth : 0,
+                overflow: 'auto', 
+                bgcolor: 'background.componentBg', 
+                borderRight: '1px solid',
+                borderColor: 'divider'
+            }}>
 
-                    {/* Conditional rendering: Only rendered if patient exists */}
-                    { patient && <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError}/> }
-                    
-                    <ListDivider />
-                    
-                    {/* Exam list header */}
-                    <Box sx={{ p: 1.5, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
-                            
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
-                            <Typography level="title-md"> Exams </Typography>
-                            <Badge badgeContent={exams?.length} color="primary"/>
-                        </Box>
-            
-                        <Box sx={{ display: 'flex', gap: 1 }}>
-                            <IconButton 
-                                variant='soft'
-                                sx={{ "--IconButton-size": patientView.iconButtonSize }}
-                                onClick={() => setExamModalOpen(true)}
-                            >
-                                <AddSharpIcon/>
-                            </IconButton>
-                        </Box>
-
-                        <ExamModal 
-                            // When data is null, modal fills data in new empty procedure 
-                            data={ null }
-                            dialogOpen={ examModalOpen }
-                            setDialogOpen={ setExamModalOpen }
-                            handleModalSubmit={ (data: Exam) => { createExam.mutate(data)} }
-                        />
-
+                {/* Conditional rendering: Only rendered if patient exists */}
+                { patient && <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError}/> }
+                
+                <ListDivider />
+                
+                {/* Exam list header */}
+                <Box sx={{ p: 1.5, display: 'flex', flexDirection:'row', justifyContent:'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
+                        
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
+                        <Typography level="title-md"> Exams </Typography>
+                        <Badge badgeContent={exams?.length} color="primary"/>
+                    </Box>
+        
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                        <IconButton 
+                            variant='soft'
+                            sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                            onClick={() => setExamModalOpen(true)}
+                        >
+                            <AddSharpIcon/>
+                        </IconButton>
                     </Box>
 
-                    <ListDivider />  
+                    <ExamModal 
+                        // When data is null, modal fills data in new empty procedure 
+                        data={ null }
+                        dialogOpen={ examModalOpen }
+                        setDialogOpen={ setExamModalOpen }
+                        handleModalSubmit={ (data: Exam) => { createExam.mutate(data)} }
+                    />
 
-                    {/* List of exams */}
-                    <List sx={{ pt: 0 }}>
-                        {
-                            // Check if exams are loading
-                            exams?.map( (exam, index) => (
-                                <React.Fragment key={index}>
-                                    <ExamItem 
-                                        data={ exam } 
-                                        refetchParentData={ refetchExams } 
-                                        isSelected={ exam.id === Number(params.examId) }
-                                    />
-                                    <ListDivider sx={{ m: 0 }} />
-                                </React.Fragment>
-                            ))
-                        }
-                    </List>
                 </Box>
 
-            </Drawer>
+                <ListDivider />  
 
+                {/* List of exams */}
+                <List sx={{ pt: 0 }}>
+                    {
+                        // Check if exams are loading
+                        exams?.map( (exam, index) => (
+                            <React.Fragment key={index}>
+                                <ExamItem 
+                                    data={ exam } 
+                                    refetchParentData={ refetchExams } 
+                                    isSelected={ exam.id === Number(params.examId) }
+                                />
+                                <ListDivider sx={{ m: 0 }} />
+                            </React.Fragment>
+                        ))
+                    }
+                </List>
+            </Box>
 
-
-
-            <Main open={sidePanelOpen}>
+            <Stack direction="row" sx={{ width: '100%' }}>
                 
                 {/* List of procedures */}
                 <Box sx={{ 
@@ -295,8 +244,8 @@ function PatientIndex() {
                     />
                 </Box>
 
-            </Main>
-        </div>
+            </Stack>
+        </Stack>
     );      
 }
 
