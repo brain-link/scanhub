@@ -33,7 +33,7 @@ We welcome anyone who would like to join our mission, just [get in touch](mailto
 Demo :clapper:
 --------------
 
-The following video shows a short demonstration of the ScanHub UI. You will see how to navigate through the acquisition planner, inspect an MRI sequence and start an MRI simulation on a virtual MRI scanner. In the end we are demonstrating how to view the DICOM image, reconstructed by our workflow engine subsequently to the acquisition.
+The following video shows a short demonstration of the ScanHub UI (September 2023). You will see how to navigate through the acquisition planner, inspect an MRI sequence and start an MRI simulation on a virtual MRI scanner. In the end we are demonstrating how to view the DICOM image, reconstructed by our workflow engine subsequently to the acquisition.
 
 https://github.com/brain-link/scanhub-ui/assets/42237900/beb8edc9-04c4-4f96-83d7-d8134bd2840e
 
