@@ -1,6 +1,10 @@
 ScanHub - Product Requirement Specifications (PRS)
 =================================================
 
+Add requireemnts to the table below.:
+- Current setups often don't allow running in the cloud - on prem setups need to be supported
+
+
 .. table:: 
    :widths: 10 10 40 30 10 20
 
