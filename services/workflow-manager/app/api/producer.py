@@ -1,8 +1,14 @@
-import asyncio
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+"""Producer Singleton class definition for Kafka producer."""
+
 import json
 import logging
 
-from aiokafka import AIOKafkaProducer
+from aiokafka import AIOKafkaProducer # type: ignore
+
+# pylint: disable=no-member
 
 
 class Producer:
@@ -60,6 +66,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Usage example
 async def main():
+    """Define main test function."""
     producer_instance = Producer.get_producer()
     await producer_instance.start()
     await producer_instance.send("my_topic", {"key": "value"})
