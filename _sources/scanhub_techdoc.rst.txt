@@ -1,5 +1,5 @@
-TechDoc
-=======
+Technical Documentation
+=======================
 
 Technical documentation of ScanHub.
 
