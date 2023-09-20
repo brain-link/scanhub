@@ -11,16 +11,10 @@ ScanHub Documentation
    introduction
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: API Reference
 
-   ui_patient_manager_api
-
-   device_api
-   exam_api
-   workflow_api
-   mri_acquisition_api
-   mri_sequences_api
+   scanhub_api
 
 Indices and tables
 ==================
