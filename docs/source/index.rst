@@ -16,6 +16,13 @@ ScanHub Documentation
 
    scanhub_api
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Technical Documentation
+
+   scanhub_techdoc
+   
+
 Indices and tables
 ==================
 

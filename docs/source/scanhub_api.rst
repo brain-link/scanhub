@@ -1,5 +1,5 @@
-ScanHub API
-===========
+API
+===
 
 API documentation for services.
 

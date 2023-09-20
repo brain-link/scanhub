@@ -1,4 +1,4 @@
-ScanHub - Product Requirement Specification (PRS)
+ScanHub - Product Requirement Specifications (PRS)
 =================================================
 
 .. table:: 
