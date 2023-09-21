@@ -89,7 +89,8 @@ html_context = {
 }
 
 html_sidebars = {
-    "**": ["search-field", "sidebar-nav-bs"]
+    # "**": ["search-field", "sidebar-nav-bs"]
+    "**": ["sidebar-nav-bs"]
     # "**": []    # remove primary (left) sidebar
 }
 
