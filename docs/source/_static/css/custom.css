@@ -1,3 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Lekton:700|Roboto&display=swap');
+body{
+    font-family:'Roboto',
+    sans-serif;
+}.wy-menu-vertical 
+*{
+    font-variant-ligatures: none;
+}.autoclasstoc
+td {
+    padding: 0.2rem;
+    line-height: normal;
+}
+dl.field-list>dt{word-break: normal}
+
+/* Default font size */
+html {
+    --pst-font-size-base: 15px;
+}
+
+/* Definition of colors, according to Brain-Link cooporate design */
 html[data-theme="light"] {
     --pst-color-primary: #005678;
     --pst-color-secondary: #E92076;
@@ -11,3 +31,6 @@ html[data-theme="dark"] {
     --pst-color-warning: #E92076;
     --pst-color-info: #00A1E0;
 }
+
+
+
