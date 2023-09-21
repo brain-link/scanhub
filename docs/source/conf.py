@@ -73,12 +73,6 @@ html_show_sphinx = False
 
 
 html_theme_options = {
-    "external_links": [
-        {
-            "url": "https://brain-link.de/",
-            "name": "BRAIN-LINK"
-        }
-    ],
     "icon_links": [
         {
             "name": "Brain-Link",
@@ -117,17 +111,17 @@ html_scaled_image_link = False
 html_show_sourcelink = True
 # html_logo = "_static/images/logo_brainlink.svg"
 html_logo = "_static/images/logo_scanhub.png"
-html_sidebars = {
-    # "**": [
-    #     "search-field",
-    #     # "sidebar-nav-bs", # default: links between pages in the active section
-    #     "page-toc", 
-    #     "edit-this-page", 
-    #     "sourcelink"
-    # ],
-    # "secondary_sidebar_items": [],
-    "**": []    # remove primary (left) sidebar
-}
+# html_sidebars = {
+#     # "**": [
+#     #     "search-field",
+#     #     # "sidebar-nav-bs", # default: links between pages in the active section
+#     #     "page-toc", 
+#     #     "edit-this-page", 
+#     #     "sourcelink"
+#     # ],
+#     # "secondary_sidebar_items": [],
+#     "**": []    # remove primary (left) sidebar
+# }
 pygments_style = "sphinx"
 
 # Add any paths that contain custom static files (such as style sheets) here,
