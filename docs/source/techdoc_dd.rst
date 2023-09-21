@@ -1,5 +1,5 @@
-Device Descritpion
-==================
+Device Descritpion (DD)
+=======================
 
 !!This Section is Work in Progress.!!
 
