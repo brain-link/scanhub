@@ -57,16 +57,15 @@ function DeviceItem({ device }: DeviceItemProps) {
                     columnGap: 4,
                     display: 'grid',
                     gridTemplateColumns: 'auto 1fr',
-                    // '& > div': { flex: 1 },
                     '& > *:nth-child(odd)': { 
                         color: 'text.secondary' 
                     },
                 }}
             >
-                    <Typography level="body-sm" fontWeight="lg"> Device </Typography>
+                    <Typography noWrap level="body-sm" fontWeight="lg"> Device </Typography>
                     <Typography level="body-sm">{ device.name }</Typography>
 
-                    <Typography level="body-sm" fontWeight="lg"> Modality </Typography>
+                    <Typography noWrap level="body-sm" fontWeight="lg"> Modality </Typography>
                     <Typography level="body-sm">{ device.modality }</Typography>
 
                     {/* <Typography level="body-md" fontWeight="lg"> Manufacturer </Typography>
@@ -75,7 +74,7 @@ function DeviceItem({ device }: DeviceItemProps) {
                     <Typography level="body-md" fontWeight="lg"> Site </Typography>
                     <Typography>{ device.site }</Typography> */}
 
-                    <Typography level="body-sm" fontWeight="lg"> Status </Typography>
+                    <Typography noWrap level="body-sm" fontWeight="lg"> Status </Typography>
                     <Stack direction="row" gap={1.5} >
                         <Badge size="sm" badgeInset="50%" color={getStatusBadgeColor()} sx={{ml: 0.5}}/>
                         <Typography noWrap level="body-sm">{status}</Typography>
@@ -89,8 +88,8 @@ function DeviceItem({ device }: DeviceItemProps) {
                     {/* <Typography level="body-sm" fontWeight="lg"> Created </Typography>
                     <Typography level="body-sm">{ `${new Date(device.datetime_created).toDateString()}` }</Typography> */}
 
-                    <Typography level="body-sm" fontWeight="lg"> Updated </Typography>
-                    <Typography level="body-sm">{ `${device.datetime_updated ? new Date(device.datetime_updated).toDateString() : '-'}` }</Typography>
+                    <Typography noWrap level="body-sm" fontWeight="lg"> Updated </Typography>
+                    <Typography noWrap level="body-sm">{ `${device.datetime_updated ? new Date(device.datetime_updated).toDateString() : '-'}` }</Typography>
 
             </Sheet>
           </React.Fragment>

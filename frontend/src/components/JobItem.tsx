@@ -5,7 +5,6 @@
 
 import * as React from 'react';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 
 import Stack from '@mui/joy/Stack';
 import ListItem from '@mui/joy/ListItem';
@@ -14,7 +13,9 @@ import Typography from '@mui/joy/Typography';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import IconButton from '@mui/joy/IconButton';
-import Badge from '@mui/joy/Badge';
+import Box from '@mui/joy/Box';
+// import Badge from '@mui/joy/Badge';
+import Card from '@mui/joy/Card';
 import Button from '@mui/joy/Button';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
@@ -67,6 +68,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
 
 
     return (
+        <Card variant="plain" sx={{ m: 1, p: 0.5 }}>
         <ListItem
             startAction={
             <IconButton
@@ -78,17 +80,6 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
             >
                 <PlayCircleFilledSharpIcon/>
             </IconButton>
-            }
-            endAction={
-                <IconButton 
-                    aria-label='Options'
-                    variant='plain' 
-                    color='neutral'
-                    sx={{ "--IconButton-size": "40px" }}
-                    onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
-                >
-                    <MoreHorizIcon/>
-                </IconButton>
             }
         >
             <ListItemContent sx={{ overflow: 'auto' }}>
@@ -126,6 +117,19 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                             <Typography level="body-md">{ job.sequence_id ? sequences.find(x => x._id === job.sequence_id)?.name : "-" }</Typography>
                         </Stack>
                     </Button>
+
+                    <Box sx={{display: 'flex', flexGrow: 1, justifyContent: 'flex-end'}}>
+                        <IconButton 
+                            aria-label='Options'
+                            variant='plain' 
+                            color='neutral'
+                            sx={{ "--IconButton-size": "40px" }}
+                            onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
+                        >
+                            <MoreHorizIcon/>
+                        </IconButton>
+                    </Box>
+                    
 
                 </Stack>
             </ListItemContent>
@@ -174,6 +178,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
             </Modal>
 
         </ListItem>
+        </Card>
     );
 }
 

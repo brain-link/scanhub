@@ -45,6 +45,11 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
         queryFn: () => deviceClient.getAll()
     });
 
+    // const { data: workflows, isLoading: workflowsLoading, isError: workflowsError } = useQuery<Workflow[], Error>({
+    //     queryKey: ['workflows'],
+    //     queryFn: () => deviceClient.getAll()
+    // });
+
     const { data: sequences, refetch: refetchSequences, isLoading: sequencesLoading, isError: sequencesError } = useQuery<MRISequence[], Error>({
         queryKey: ['sequences'],
         queryFn: () => sequenceClient.getAll()
@@ -202,7 +207,9 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                                 sequences={ sequences ? sequences : [] }
                                 refetchParentData={ refetchParentData }
                             />
-                            <ListDivider sx={{ m: 0 }} />
+
+                            {/* When not using card items, divided is required to separate jobs */}
+                            {/* <ListDivider sx={{ m: 0 }} /> */}
                         </React.Fragment>
                     ))
                 }
