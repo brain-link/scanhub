@@ -1,9 +1,14 @@
 Product Requirement Specifications (PRS)
 ========================================
 
+!!This Section is Work in Progress.!!
+
 Add requireemnts to the table below.:
 - Current setups often don't allow running in the cloud - on prem setups need to be supported
-
+- XNAT support
+- NIFTI support
+- ISMRMRD support
+- RAW MR support
 
 +--------------+-----------+-------------------------------------------+------------------------------------------+---------------------+------------------------------------+
 | ID           | Priority* | Customer Need (Customer)                  | Product Requirement                      | Targeted Performance| Intended claim**                   |
