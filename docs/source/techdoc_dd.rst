@@ -9,6 +9,6 @@ Device Descritpion
 - abbild vom menschlichen gewebe
 
 
-The A4IM scanner is intended to aid professionals as an additive support measurement to trigger further investigation.
+The A:sup:`4`IM scanner is intended to aid professionals as an additive support measurement to trigger further investigation.
 
-The A4IM scanner is intended to be used as an additive support measure without any diagnostic relevance for human brain and extremity imaging.
+The A:sup:`4`IM scanner is intended to be used as an additive support measure without any diagnostic relevance for human brain and extremity imaging.
