@@ -21,7 +21,6 @@
     "cornerstone-tools": "^6.0.10",
     "cornerstone-wado-image-loader": "^4.13.2",
     "dicom-parser": "^1.8.21",
-    "eslint": "^8.45.0",
     "hammerjs": "^2.0.8",
     "node-sass": "^9.0.0",
     "parcel": "^2.9.3",
@@ -43,8 +42,7 @@
   },
   "scripts": {
     "start": "parcel src/index.html -p 3000 && parcel watch src/index.html",
-    "build": "parcel build src/index.html",
-    "lint": "eslint ."
+    "build": "parcel build src/index.html"
   },
   "browserslist": {
     "production": [
