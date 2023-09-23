@@ -68,7 +68,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
 
 
     return (
-        <Card variant="plain" sx={{ m: 1, p: 0.5 }}>
+        <Card variant="soft" sx={{ m: 1, p: 0.5 }}>
         <ListItem
             startAction={
             <IconButton

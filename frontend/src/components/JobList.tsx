@@ -27,7 +27,7 @@ import { ComponentProps, Alerts } from '../interfaces/components.interface';
 import { MRISequence } from '../interfaces/mri-data.interface';
 import { patientView } from '../utils/size_vars';
 import { Device } from '../interfaces/data.interface';
-// import { Workflow } from '../interfaces/data.interface';
+import { Workflow } from '../interfaces/data.interface';
 
 import client from '../client/exam-tree-queries';
 import deviceClient from '../client/device-api';
@@ -45,10 +45,17 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
         queryFn: () => deviceClient.getAll()
     });
 
-    // const { data: workflows, isLoading: workflowsLoading, isError: workflowsError } = useQuery<Workflow[], Error>({
-    //     queryKey: ['workflows'],
-    //     queryFn: () => deviceClient.getAll()
-    // });
+    const { data: workflows, isLoading: workflowsLoading, isError: workflowsError } = useQuery<Workflow[], Error>({
+        queryKey: ['workflows'],
+        queryFn: () => client.workflowService.getAll()
+    });
+
+    React.useEffect(() => {
+        console.log("Workflows: ", workflows)
+        if (workflows) {
+            console.log("Definition type: ", typeof(workflows[0].definition))
+        }
+    }, [workflows])
 
     const { data: sequences, refetch: refetchSequences, isLoading: sequencesLoading, isError: sequencesError } = useQuery<MRISequence[], Error>({
         queryKey: ['sequences'],
@@ -94,7 +101,8 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
             display: 'flex',
             width: '100%',
             height: '100%',
-            bgcolor: 'background.componentBg',
+            // bgcolor: 'background.componentBg',
+            // bgcolor: 'background.level1',
             overflow: 'auto'
         }}>         
 

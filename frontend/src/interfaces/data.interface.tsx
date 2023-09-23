@@ -19,13 +19,11 @@ export interface Patient {
 
 export interface Workflow {
     id: number;
-    host: string;
     name: string;
-    author?: string | null;
-    modality: string;
-    type: string;
-    status: string;
-    kafka_topic: string;
+    version: string;
+    author?: string;
+    description?: string;
+    definition: object;
     datetime_created: Date;
     datetime_updated?: Date | null;
 }
