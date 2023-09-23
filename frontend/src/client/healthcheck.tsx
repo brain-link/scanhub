@@ -3,26 +3,24 @@
 
 // Custom hook for health check
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 function useHealthCheck(url: string, interval: number = 5000) {
+  const [isReady, setIsReady] = useState(false)
 
-    const [isReady, setIsReady] = useState(false);
-
-    useEffect(() => {
-
+  useEffect(() => {
     const intervalId = setInterval(() => {
-        fetch(`${url}/health/readiness`).then(response => {
-            response.status === 200 ? setIsReady(true) : setIsReady(false);
+      fetch(`${url}/health/readiness`)
+        .then((response) => {
+          response.status === 200 ? setIsReady(true) : setIsReady(false)
         })
-        .catch(() => setIsReady(false));
-    }, interval);
+        .catch(() => setIsReady(false))
+    }, interval)
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId)
+  }, [url, interval])
 
-    }, [url, interval]);
-
-    return isReady;
+  return isReady
 }
 
-export default useHealthCheck;
+export default useHealthCheck

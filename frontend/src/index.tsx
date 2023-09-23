@@ -3,20 +3,20 @@
 
 // Index.tsx is the entry point for the react app. It is responsible for rendering the app into the DOM.
 
-import * as React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import * as React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 
 import { RouteConfiguration } from './Routes'
 
-const queryClient = new QueryClient();
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const queryClient = new QueryClient()
+const root = ReactDOM.createRoot(document.getElementById('root')!)
 
 root.render(
   <React.StrictMode>
@@ -25,6 +25,5 @@ root.render(
         <RouteConfiguration />
       </BrowserRouter>
     </QueryClientProvider>
-    
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+)
