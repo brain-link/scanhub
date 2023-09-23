@@ -15,7 +15,7 @@ import RotateLeftSharpIcon from '@mui/icons-material/RotateLeftSharp';
 import ContrastSharpIcon from '@mui/icons-material/ContrastSharp';
 import HighlightAltSharpIcon from '@mui/icons-material/HighlightAltSharp';
 
-import * as cornerstoneTools from "cornerstone-tools";
+import * as cornerstoneTools from 'cornerstone-tools';
 
 // Todo: Add tools only once in CornerstoneInit.ts
 export const tools = [
@@ -62,7 +62,7 @@ function DicomViewerToolbar() {
     React.useEffect(() => {
         if (activeTool) {
             cornerstoneTools.setToolActive(activeTool, { mouseButtonMask: 1 });
-            console.log("Set active tool: ", activeTool)
+            console.log('Set active tool: ', activeTool)
         }
     }, [activeTool])
 

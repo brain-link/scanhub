@@ -3,18 +3,18 @@
 
 // Dashboard.tsx is responsible for rendering the dashboard view. It is the default view of the app.
 
-import React from "react";
+import React from 'react';
 import Container from '@mui/system/Container';
 import Typography from '@mui/joy/Typography';
 // import CircularProgress from '@mui/joy/CircularProgress';
 import LinearProgress from '@mui/joy/LinearProgress';
 import Card from '@mui/joy/Card';
-import CardContent from "@mui/joy/CardContent";
+import CardContent from '@mui/joy/CardContent';
 import IconButton from '@mui/joy/IconButton';
 import Box from '@mui/joy/Box';
 
-import useHealthCheck from "../client/healthcheck";
-import baseUrls from "../client/urls";
+import useHealthCheck from '../client/healthcheck';
+import baseUrls from '../client/urls';
 
 // import DeviceTable from "./DeviceTable";
 // import PatientTable from "./PatientTable";

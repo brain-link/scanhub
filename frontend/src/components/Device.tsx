@@ -31,12 +31,12 @@ function DeviceItem({ device }: DeviceItemProps) {
 
     const getStatusBadgeColor = () => {
         switch(status) {
-            case "connected":
-                return "success"
-            case "disconnected":
-                return "danger"
+            case 'connected':
+                return 'success'
+            case 'disconnected':
+                return 'danger'
             default:
-                return "neutral"
+                return 'neutral'
         }
     }
 

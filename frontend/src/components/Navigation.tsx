@@ -30,8 +30,8 @@ import { navigation } from '../utils/size_vars';
 
 // Menu elements
 const menuItems = [
-    {id: 0, text: "Home", link: "/"},
-    {id: 1, text: "Patients", link: "/patients"},
+    {id: 0, text: 'Home', link: '/'},
+    {id: 1, text: 'Patients', link: '/patients'},
     // {id: 2, text: "Dicom Viewer", link: "/dcmview"},
 ];
 
@@ -115,7 +115,7 @@ export default function Navigation() {
                         to={item.link}
                         size="sm"
                         color="primary"
-                        startDecorator={ item.link === "/" ? <HomeRoundedIcon/> : null }
+                        startDecorator={ item.link === '/' ? <HomeRoundedIcon/> : null }
                         disabled={ loc.pathname === item.link }
                         variant={ loc.pathname === item.link ? 'soft' : 'plain' }
                         key={item.id}

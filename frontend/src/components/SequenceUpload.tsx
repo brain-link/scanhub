@@ -25,18 +25,18 @@ function SequenceUpload(props) {
     // const [dialogOpen, setDialogOpen] = React.useState(false);
 
     const [sequence, setSequence] = React.useState<MRISequence>({
-        _id: "", 
-        name: "",
-        description: "",
-        sequence_type: "",
+        _id: '', 
+        name: '',
+        description: '',
+        sequence_type: '',
         tags: [],
         file: null,
-        file_extension: ".seq"
+        file_extension: '.seq'
     })
 
     const uploadSequence = useMutation( async () => {
         await mriSequenceService.uploadSequenceFile(sequence)
-        .catch( (err) => { console.log("Error on sequence upload: ", err) })
+        .catch( (err) => { console.log('Error on sequence upload: ', err) })
         // check if upload was successful
     })
 
@@ -102,7 +102,7 @@ function SequenceUpload(props) {
                             name="sequence_type"
                             onChange={(e) => setSequence({...sequence, [e.target.name]: e.target.value})} 
                             placeholder="Sequence type"
-                            defaultValue={ sequence.sequence_type ? sequence.sequence_type : "" }
+                            defaultValue={ sequence.sequence_type ? sequence.sequence_type : '' }
                             required 
                         />
 

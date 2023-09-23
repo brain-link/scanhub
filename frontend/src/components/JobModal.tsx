@@ -30,12 +30,12 @@ function JobModal(props: JobModalProps) {
     const [job, setJob] = props.data ? React.useState<Job>(props.data) : 
         React.useState<Job>({
             id: 0,
-            type: "",
-            comment: "",
+            type: '',
+            comment: '',
             procedure_id: Number(params.procedureId),
-            sequence_id: "",
+            sequence_id: '',
             workflow_id: null,
-            device_id: "",
+            device_id: '',
             datetime_created: new Date(),
         })
 
@@ -45,9 +45,9 @@ function JobModal(props: JobModalProps) {
     
     // To be replaced by devices and workflows from database
     // const devices = [{"id": 1, "name": "MRI Simulator"}]
-    const workflows = [{"id": 0, "name": "2d FFT"}]
+    const workflows = [{'id': 0, 'name': '2d FFT'}]
 
-    const title = props.data ? "Update Job" : "Create Job"
+    const title = props.data ? 'Update Job' : 'Create Job'
 
     return (
         <Modal 
@@ -109,7 +109,7 @@ function JobModal(props: JobModalProps) {
                                 newValue: string | null
                             ) => {
                                 // Only set new device if newValue is not null
-                                newValue ? setJob({...job, ["device_id"]: newValue}) : () => {} 
+                                newValue ? setJob({...job, ['device_id']: newValue}) : () => {} 
                             }}
                             defaultValue={
                                 // Device value cannot be null -> check if device id is contained in device list
@@ -133,7 +133,7 @@ function JobModal(props: JobModalProps) {
                                 newValue: string | null
                             ) => { 
                                 // Only set sequence id if newValue is not null
-                                newValue ? setJob({...job, ["sequence_id"]: newValue}) : () => {}
+                                newValue ? setJob({...job, ['sequence_id']: newValue}) : () => {}
                             }}
                             defaultValue={ job.sequence_id }
                         >
@@ -151,10 +151,10 @@ function JobModal(props: JobModalProps) {
                             placeholder="Select..."
                             onChange={(
                                 event: React.SyntheticEvent | null,
-                                newValue: Number | null
+                                newValue: number | null
                             ) => {
                                 // Workflow id can be null, no checks needed
-                                setJob({...job, ["workflow_id"]: newValue});
+                                setJob({...job, ['workflow_id']: newValue});
                             }}
                             defaultValue={ job.workflow_id }
                         >

@@ -14,7 +14,7 @@ import Box from '@mui/joy/Box';
 import { Patient } from '../interfaces/data.interface';
 
 
-function PatientInfo(props: { patient: Patient, isLoading: Boolean, isError: Boolean }) {
+function PatientInfo(props: { patient: Patient, isLoading: boolean, isError: boolean }) {
 
     const { patient, isLoading, isError } = props;
 

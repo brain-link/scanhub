@@ -107,7 +107,7 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                                                                                     <Typography level="title-sm">{ job.type }</Typography>
                                                                                     <Typography level="title-sm">
                                                                                         { 
-                                                                                            job.records[job.records.length - 1] ? job.records[job.records.length - 1].comment : "-"
+                                                                                            job.records[job.records.length - 1] ? job.records[job.records.length - 1].comment : '-'
                                                                                         }
                                                                                     </Typography>
                                                                                     <Typography level="body-xs">

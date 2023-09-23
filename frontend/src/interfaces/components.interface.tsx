@@ -30,7 +30,7 @@ export interface JobComponentProps {
 }
 
 // Reuse JobComponentProps but omit data which can be null in case of the modal props
-export interface JobModalProps extends Omit<JobComponentProps, "data"> {
+export interface JobModalProps extends Omit<JobComponentProps, 'data'> {
     data: Job | null;
     handleModalSubmit: (data: Job) => void;
     dialogOpen: boolean;
@@ -43,10 +43,10 @@ export interface SequenceViewerProps {
 
 
 export enum Alerts {
-    Success = "success",
-    Warning = "warning",
-    Danger = "danger",
-    Neutral = "neutral"
+    Success = 'success',
+    Warning = 'warning',
+    Danger = 'danger',
+    Neutral = 'neutral'
 }
 
 export interface AlertProps {

@@ -4,12 +4,12 @@
 // DeviceTable.tsx is responsible for rendering the device table view.
 
 import * as React from 'react';
-import { useMutation } from "react-query";
+import { useMutation } from 'react-query';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from "@mui/material/TableHead";
+import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -41,7 +41,7 @@ export default function DeviceTable() {
       };
 
     async function fetchDevices() {
-        await axios.get(`${config["baseURL"]}/devices`)
+        await axios.get(`${config['baseURL']}/devices`)
         .then((response) => {setDevices(response.data)})
     }
 
@@ -50,7 +50,7 @@ export default function DeviceTable() {
     }, [])
 
     const mutation = useMutation(async() => {
-        await axios.post(`${config["baseURL"]}/devices/new`)
+        await axios.post(`${config['baseURL']}/devices/new`)
         .then(() => {
             fetchDevices();
         })

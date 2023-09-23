@@ -45,7 +45,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
     const updateJob = useMutation( async (data: Job) => {
         await client.jobService.update(data.id, data)
         .then( () => { refetchParentData() } )
-        .catch( (err) => { console.log("Error on job update: ", err) })
+        .catch( (err) => { console.log('Error on job update: ', err) })
     })
 
     const deleteThisJob = useMutation(async () => {
@@ -58,11 +58,11 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
     })
 
     const handleAcquire = async() => {
-        console.log("Starting acquisition...")
+        console.log('Starting acquisition...')
         await acquisitionControl.post(job)
         .then((response) => {
             // Debug...
-            console.log("Acquisition control response... ", response)
+            console.log('Acquisition control response... ', response)
         })
     }
 
@@ -75,7 +75,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                 aria-label='Acquire'
                 variant='plain' 
                 color='neutral'
-                sx={{ "--IconButton-size": "40px" }}
+                sx={{ '--IconButton-size': '40px' }}
                 onClick={ handleAcquire }
             >
                 <PlayCircleFilledSharpIcon/>
@@ -98,7 +98,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                         {/* <Typography noWrap level="body-md" textColor="text.tertiary">{ `Updated: ${job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'}` }</Typography> */}
                         <Typography noWrap level="body-md" textColor="text.tertiary">
                             { 
-                                `Last record: ${job.records && job.records.length > 0 ? new Date(job.records[job.records.length-1].datetime_created).toDateString() + ` (${job.records ? job.records.length : "-"})` : '-'}` 
+                                `Last record: ${job.records && job.records.length > 0 ? new Date(job.records[job.records.length-1].datetime_created).toDateString() + ` (${job.records ? job.records.length : '-'})` : '-'}` 
                             }
                         </Typography>
                     </Stack>
@@ -109,12 +109,12 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                     <Button
                         variant="outlined"
                         color="neutral"
-                        disabled={ job.sequence_id === "" }   // no sequence id
+                        disabled={ job.sequence_id === '' }   // no sequence id
                         onClick={() => setSeqModalOpen(true)}
                     >
                         <Stack>
                             <Typography level="body-md">Sequence</Typography>
-                            <Typography level="body-md">{ job.sequence_id ? sequences.find(x => x._id === job.sequence_id)?.name : "-" }</Typography>
+                            <Typography level="body-md">{ job.sequence_id ? sequences.find(x => x._id === job.sequence_id)?.name : '-' }</Typography>
                         </Stack>
                     </Button>
 
@@ -123,7 +123,7 @@ function JobItem ({data: job, devices, sequences, refetchParentData}: JobCompone
                             aria-label='Options'
                             variant='plain' 
                             color='neutral'
-                            sx={{ "--IconButton-size": "40px" }}
+                            sx={{ '--IconButton-size': '40px' }}
                             onClick={ (e) => { e.preventDefault(); setAnchorEl(e.currentTarget); setContextOpen(true); } }
                         >
                             <MoreHorizIcon/>

@@ -154,7 +154,7 @@ const procedures = {
             return response.data;
         } catch (err) {
             if (axios.isAxiosError(err) && err.response?.status) {
-                console.log("Error response status: ", err.response?.status);
+                console.log('Error response status: ', err.response?.status);
             } else {
                 console.log(err);
             }
@@ -187,7 +187,7 @@ const exams = {
         } catch (err) {
             // TODO: Implementation of error handling
             if (axios.isAxiosError(err) && err.response?.status) {
-                console.log("Error response status: ", err.response?.status);
+                console.log('Error response status: ', err.response?.status);
             } else {
                 console.log(err);
             }

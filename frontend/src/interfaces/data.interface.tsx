@@ -55,7 +55,7 @@ export interface Job {
     is_acquired?: boolean;
     sequence_id: string;
     device_id: string;
-    workflow_id?: Number | null;
+    workflow_id?: number | null;
     records?: [Record] | [];
     datetime_created: Date;
     datetime_updated?: Date | null;

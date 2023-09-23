@@ -92,13 +92,13 @@ function PatientIndex() {
     const createExam = useMutation( async(data: Exam) => {
         await client.examService.create(data)
         .then( () => { refetchExams() })
-        .catch((err) => { console.log("Error on exam creation: ", err) }) 
+        .catch((err) => { console.log('Error on exam creation: ', err) }) 
     })
 
     const createProcedure = useMutation( async(data: Procedure) => {
         await client.procedureService.create(data)
         .then( () => { refetchExams() })
-        .catch((err) => { console.log("Error on procedure creation: ", err)})
+        .catch((err) => { console.log('Error on procedure creation: ', err)})
     })
 
     return (    
@@ -130,7 +130,7 @@ function PatientIndex() {
                     <Box sx={{ display: 'flex', gap: 1 }}>
                         <IconButton 
                             variant='soft'
-                            sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                            sx={{ '--IconButton-size': patientView.iconButtonSize }}
                             onClick={() => setExamModalOpen(true)}
                         >
                             <AddSharpIcon/>
@@ -184,7 +184,7 @@ function PatientIndex() {
                             <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
                                 <IconButton
                                     variant='soft'
-                                    sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                                    sx={{ '--IconButton-size': patientView.iconButtonSize }}
                                     onClick={() => { setSidePanelOpen(!sidePanelOpen) }}
                                 >
                                     { sidePanelOpen ? <KeyboardArrowLeftSharpIcon /> : <KeyboardArrowRightSharpIcon/> }
@@ -197,7 +197,7 @@ function PatientIndex() {
             
                             <IconButton 
                                 variant='soft' 
-                                sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                                sx={{ '--IconButton-size': patientView.iconButtonSize }}
                                 onClick={() => {setProcedureModalOpen(true)}}
                                 disabled={ params.examId === undefined }
                             >

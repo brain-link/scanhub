@@ -51,9 +51,9 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
     });
 
     React.useEffect(() => {
-        console.log("Workflows: ", workflows)
+        console.log('Workflows: ', workflows)
         if (workflows) {
-            console.log("Definition type: ", typeof(workflows[0].definition))
+            console.log('Definition type: ', typeof(workflows[0].definition))
         }
     }, [workflows])
 
@@ -65,11 +65,11 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
     const createJob = useMutation( async (data: Job) => {
         await client.jobService.create(data)
         .then(() => { refetchParentData() })
-        .catch((err) => { console.log("Error during job creation: ", err) })
+        .catch((err) => { console.log('Error during job creation: ', err) })
     })
 
     React.useEffect(() => {
-        console.log("DEVICES: ", devices)
+        console.log('DEVICES: ', devices)
     }, [devices])
 
     if (sequencesError) {
@@ -114,7 +114,7 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                         aria-label='Acquire'
                         variant='plain' 
                         color='neutral'
-                        sx={{ "--IconButton-size": "40px" }}
+                        sx={{ '--IconButton-size': '40px' }}
                         onClick={ () => {} }
                     >
                         <PlayCircleFilledSharpIcon/>
@@ -128,7 +128,7 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                     {/* Sequence upload */}
                     <IconButton 
                         variant='soft'
-                        sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                        sx={{ '--IconButton-size': patientView.iconButtonSize }}
                         onClick={ () => { setSequenceModalOpen(true) }}
                     >
                         <UploadFileSharpIcon />
@@ -137,7 +137,7 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                     {/* Add job */}
                     <IconButton 
                         variant='soft'
-                        sx={{ "--IconButton-size": patientView.iconButtonSize }}
+                        sx={{ '--IconButton-size': patientView.iconButtonSize }}
                         onClick={ () => { setJobModalOpen(true) }}
                         disabled={ params.procedureId === undefined }
                     >
@@ -185,8 +185,8 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                     !(devices && devices.length > 0) && 
                     <Stack sx={{ p: 10, pt: 2, pb: 0, display: 'flex', width: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
                         <AlertItem 
-                            title={devicesLoading ? "Loading devices..." : "No device found"}
-                            info={!devicesLoading ? "Could not find any registered device, please register a device first." : undefined}
+                            title={devicesLoading ? 'Loading devices...' : 'No device found'}
+                            info={!devicesLoading ? 'Could not find any registered device, please register a device first.' : undefined}
                             type={ Alerts.Warning }
                         />
                     </Stack>
@@ -197,8 +197,8 @@ function JobList({data: jobs, refetchParentData, isSelected: isVisible}: Compone
                     !(sequences && sequences.length > 0) && 
                     <Stack sx={{ p: 10, pt: 2, pb: 0, display: 'flex', width: '100%', bgcolor: 'background.componentBg', justifyContent: 'center'}}>
                         <AlertItem 
-                            title={sequencesLoading ? "Loading sequences..." : "No sequence found"}
-                            info={!sequencesLoading ? "Could not find any sequence, please upload a sequence first." : undefined}
+                            title={sequencesLoading ? 'Loading sequences...' : 'No sequence found'}
+                            info={!sequencesLoading ? 'Could not find any sequence, please upload a sequence first.' : undefined}
                             type={ Alerts.Warning }
                         />
                     </Stack>

@@ -16,7 +16,7 @@ class AcquisitionControlApi {
         }
         catch (error) {
             if (axios.isAxiosError(error)) {
-                console.log("Catched axios error: ", error)
+                console.log('Catched axios error: ', error)
             }
         }
     }

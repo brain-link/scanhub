@@ -3,7 +3,7 @@
 
 // Routes.tsx is responsible for defining the routes of the react app.
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
 import React from 'react';
 
 // Import views

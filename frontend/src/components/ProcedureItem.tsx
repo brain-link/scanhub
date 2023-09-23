@@ -59,10 +59,10 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
     })
 
     const updateProcedure = useMutation( async (data: Procedure) => {
-        console.log("Updating procedure... ", data)
+        console.log('Updating procedure... ', data)
         await client.procedureService.update(data.id, procedure)
         .then( () => { refetchParentData() })
-        .catch( (err) => { console.log("Error on procedure update: ", err) })
+        .catch( (err) => { console.log('Error on procedure update: ', err) })
     })
 
     return (
@@ -73,7 +73,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                 // If procedureId exists, we redirect to this procedure id, otherwise procedure id is appended
                 to={ `/patients/${params.patientId}/${params.examId}/${procedure.id}` }
                 selected={ isSelected }
-                variant={( isSelected || procedure.id === contextOpen) ? "soft" : "plain" }
+                variant={( isSelected || procedure.id === contextOpen) ? 'soft' : 'plain' }
             >
                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                     <DescriptionSharpIcon />
@@ -85,7 +85,7 @@ function ProcedureItem({data: procedure, refetchParentData, isSelected}: Compone
                         <Typography>{procedure.name}</Typography>
                         <IconButton 
                             variant='plain' 
-                            sx={{ "--IconButton-size": "25px" }}
+                            sx={{ '--IconButton-size': '25px' }}
                             onClick={ (e) => handleContextOpen(e, procedure.id) }
                         >
                             <MoreHorizIcon />

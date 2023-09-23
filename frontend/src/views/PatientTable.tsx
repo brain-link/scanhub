@@ -4,8 +4,8 @@
 // PatientTable.tsx is responsible for rendering the patient table view.
 
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from "react-query";
-import { useQuery } from "react-query";
+import { useMutation } from 'react-query';
+import { useQuery } from 'react-query';
 import * as React from 'react';
 
 import Typography from '@mui/joy/Typography';
@@ -45,12 +45,12 @@ export default function PatientTable() {
     // Create raw patient
     const [patient, setPatient] = React.useState<Patient>({
         id: 0, 
-        sex: "", 
-        name: "", 
-        issuer: "", 
-        status: "", 
-        comment: "", 
-        birth_date: "", 
+        sex: '', 
+        name: '', 
+        issuer: '', 
+        status: '', 
+        comment: '', 
+        birth_date: '', 
         datetime_created: new Date(), 
         datetime_updated: new Date()
     });

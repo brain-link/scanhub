@@ -38,8 +38,8 @@ function ProcedureModal(props: ModalProps<Procedure>) {
         React.useState<Procedure>({
             id: NaN,
             exam_id: Number(params.examId),
-            name: "",
-            status: "",
+            name: '',
+            status: '',
             datetime_created: new Date(),
         });
 
@@ -49,7 +49,7 @@ function ProcedureModal(props: ModalProps<Procedure>) {
         setProcedure({...procedure, exam_id: Number(params.examId)})
     }, [params.examId])
 
-    const title = props.data ? "Update Procedure" : "Create Procedure"
+    const title = props.data ? 'Update Procedure' : 'Create Procedure'
 
     return (
         <Modal 

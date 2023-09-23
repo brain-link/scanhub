@@ -50,7 +50,7 @@ function ExamModal(props: ModalProps<Exam>) {
             datetime_created: new Date(), 
         })
 
-    const title = props.data ? "Update Exam" : "Create Exam"
+    const title = props.data ? 'Update Exam' : 'Create Exam'
 
     return (
         <Modal 

@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import CornerstoneViewport from "react-cornerstone-viewport"
-import * as cornerstone from "cornerstone-core";
-import * as cornerstoneMath from "cornerstone-math";
-import * as cornerstoneTools from "cornerstone-tools";
-import Hammer from "hammerjs";
-import cornerstoneWADOImageLoader from "cornerstone-wado-image-loader";
-import dicomParser from "dicom-parser";
+import CornerstoneViewport from 'react-cornerstone-viewport'
+import * as cornerstone from 'cornerstone-core';
+import * as cornerstoneMath from 'cornerstone-math';
+import * as cornerstoneTools from 'cornerstone-tools';
+import Hammer from 'hammerjs';
+import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+import dicomParser from 'dicom-parser';
 
 export default function InitCornerstone() {
 
@@ -21,7 +21,7 @@ export default function InitCornerstone() {
         showSVGCursors: true
     });
 
-    localStorage.setItem("debug", "cornerstoneTools");
+    localStorage.setItem('debug', 'cornerstoneTools');
 
     // Preferences
     // const fontFamily =
@@ -29,8 +29,8 @@ export default function InitCornerstone() {
     // cornerstoneTools.textStyle.setFont(`16px ${fontFamily}`);
 
     cornerstoneTools.toolStyle.setToolWidth(2);
-    cornerstoneTools.toolColors.setToolColor("#2196f3");
-    cornerstoneTools.toolColors.setActiveColor("#4dabf5");
+    cornerstoneTools.toolColors.setToolColor('#2196f3');
+    cornerstoneTools.toolColors.setActiveColor('#4dabf5');
 
     cornerstoneTools.store.state.touchProximity = 40;
 

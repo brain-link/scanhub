@@ -7,7 +7,7 @@ import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from "react-query";
+import { useMutation } from 'react-query';
 
 // Mui joy components
 import Box from '@mui/joy/Box';
@@ -61,10 +61,10 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
     })
 
     const updateExam = useMutation( async (data: Exam) => {
-        console.log("Updating exam data... ", data)
+        console.log('Updating exam data... ', data)
         await client.examService.update(data.id, data)
         .then( () => { refetchParentData() } )
-        .catch( (err) => { console.log("Error on exam update: ", err) })
+        .catch( (err) => { console.log('Error on exam update: ', err) })
     })
 
     return (
@@ -75,7 +75,7 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
                 to={ `/patients/${params.patientId}/${exam.id}` }
                 relative='path'
                 selected={ isSelected } 
-                variant={(isSelected || exam.id === contextOpen)? "soft" : "plain"}
+                variant={(isSelected || exam.id === contextOpen)? 'soft' : 'plain'}
             >
                 <ListItemDecorator sx={{ align: 'center', justify: 'center'}}>
                     <SnippetFolderSharpIcon />
@@ -87,7 +87,7 @@ function ExamItem({data: exam, refetchParentData, isSelected}: ComponentProps<Ex
                         <Typography>{exam.name}</Typography>
                         <IconButton 
                             variant='plain' 
-                            sx={{ "--IconButton-size": "25px" }}
+                            sx={{ '--IconButton-size': '25px' }}
                             onClick={ (e) => handleContextOpen(e, exam.id) }
                         >
                             <MoreHorizIcon />

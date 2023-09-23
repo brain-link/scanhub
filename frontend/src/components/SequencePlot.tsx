@@ -3,9 +3,9 @@
 
 // SequenceViewer.tsx is responsible for rendering an mri sequence.
 
-import { useQuery } from "react-query"
-import { useNavigate } from "react-router-dom";
-import React from "react"
+import { useQuery } from 'react-query'
+import { useNavigate } from 'react-router-dom';
+import React from 'react'
 import Plot from 'react-plotly.js';
 import { PlotData, MRISequence } from '../interfaces/mri-data.interface';
 import Box from '@mui/joy/Box';
@@ -13,9 +13,9 @@ import Stack from '@mui/joy/Stack';
 import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
 import FileDownloadSharpIcon from '@mui/icons-material/FileDownloadSharp';
 import IconButton from '@mui/joy/IconButton';
-import { SequenceViewerProps } from "../interfaces/components.interface";
+import { SequenceViewerProps } from '../interfaces/components.interface';
 import sequenceClient from '../client/sequence-api';
-import Typography from "@mui/joy/Typography";
+import Typography from '@mui/joy/Typography';
 
 
 

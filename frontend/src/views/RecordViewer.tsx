@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import CornerstoneViewport from "react-cornerstone-viewport"
+import CornerstoneViewport from 'react-cornerstone-viewport'
 
 import Stack from '@mui/joy/Stack';
 import Sheet from '@mui/joy/Sheet';
@@ -29,7 +29,7 @@ function Viewer () {
     // Set state variables
     const [viewportIds, setViewportIds] = React.useState<number[]>([0]);
     const [activeViewportIndex, setActiveViewportIndex] = React.useState<number>(0);
-    const [viewportData, setViewportData] = React.useState<string[]>(["", "", ""]);
+    const [viewportData, setViewportData] = React.useState<string[]>(['', '', '']);
 
     // >> Debugging
     // const debugDataPath = "https://marketing.webassets.siemens-healthineers.com/1800000000016144/8de2b3a4af48/IMA08_1800000000016144.IMA"
@@ -43,7 +43,7 @@ function Viewer () {
 
 
     const handleDatapathSet = (datapath: string) => {
-        if (datapath !== "") {
+        if (datapath !== '') {
             // Make a copy of the current viewport data
             const newData = [...viewportData];
             // Set the new datapath
@@ -83,9 +83,9 @@ function Viewer () {
                         viewportIds.map((index) => (
                             <Grid xs={ 12 / viewportIds.length } key={index}>
                                 <Card
-                                    variant={ index === activeViewportIndex ? "outlined" : "plain" }
-                                    color={ index === activeViewportIndex ? "primary" : "neutral" }
-                                    sx={{p: 0.5, bgcolor: "#000000", height: '100%', border: '5px solid'}}
+                                    variant={ index === activeViewportIndex ? 'outlined' : 'plain' }
+                                    color={ index === activeViewportIndex ? 'primary' : 'neutral' }
+                                    sx={{p: 0.5, bgcolor: '#000000', height: '100%', border: '5px solid'}}
                                 >
                                     {
                                         // The following condition checks, if some viewportData is defined for this index

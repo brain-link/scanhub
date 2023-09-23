@@ -60,7 +60,7 @@ class DeviceApi {
 
     protected handleError(error: any) {
         if (axios.isAxiosError(error)) {
-            console.log("Catched axios error: ", error)
+            console.log('Catched axios error: ', error)
         }
     }
 
