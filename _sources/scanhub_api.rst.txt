@@ -6,10 +6,10 @@ API documentation for services.
 .. toctree::
    :maxdepth: 1
 
-   ui_patient_manager_api
+   api_ui_patient_manager
 
-   device_api
-   exam_api
-   workflow_api
-   mri_acquisition_api
-   mri_sequences_api
+   api_device
+   api_exam
+   api_workflow
+   api_mri_acquisition
+   api_mri_sequences
