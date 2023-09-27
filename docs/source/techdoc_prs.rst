@@ -17,13 +17,13 @@ Operational Requirements
 | PRS_0020   | Should Have  | Alerting (MTA)                       | Real-time alerts for scan anomalies or      | <5 minutes          | Rapid response to scan anomalies or      |
 |            |              |                                      | issues.                                     |                     | issues.                                  |
 +------------+--------------+--------------------------------------+---------------------------------------------+---------------------+------------------------------------------+
-| PRS_0030   | Must Have    | On-Prem Setup (IT Specialist)        | Support for on-prem setups.                 | 100% Compatibility   | Provide flexibility in deployment       |
-|            |              |                                      |                                             |                      | options to cater to different           |
-|            |              |                                      |                                             |                      | organizational needs.                   |
-+------------+--------------+--------------------------------------+---------------------------------------------+----------------------+-----------------------------------------+
-| PRS_0040   | Must Have    | Cloud Setup (IT Specialist)          | Support for cloud setups in environments    | 100% Compatibility   | Enable versatile deployment options     |
-|            |              |                                      | with no local compute workstations.         |                      | to accommodate varying infrastructure.  |
-+------------+--------------+--------------------------------------+---------------------------------------------+----------------------+-----------------------------------------+
+| PRS_0030   | Must Have    | On-Prem Setup (IT Specialist)        | Support for on-prem setups.                 | 100% Compatibility  | Provide flexibility in deployment        |
+|            |              |                                      |                                             |                     | options to cater to different            |
+|            |              |                                      |                                             |                     | organizational needs.                    |
++------------+--------------+--------------------------------------+---------------------------------------------+---------------------+------------------------------------------+
+| PRS_0040   | Must Have    | Cloud Setup (IT Specialist)          | Support for cloud setups in environments    | 100% Compatibility  | Enable versatile deployment options      |
+|            |              |                                      | with no local compute workstations.         |                     | to accommodate varying infrastructure.   |
++------------+--------------+--------------------------------------+---------------------------------------------+---------------------+------------------------------------------+
 
 Regulatory Requirements
 -----------------------
@@ -102,9 +102,9 @@ Maintainability Requirements
 
 System Interfaces to Third Party Solutions
 ------------------------------------------
-+------------+--------------+--------------------------------------+---------------------------------------------+----------------------+------------------------------------------+
-| ID         | Priority     | User Need (Actor)                    | Product Requirement                         | Targeted Performance | Intended claim                           |
-+============+==============+======================================+=============================================+======================+==========================================+
-| PRS_0610   | Must Have    | Patient Monitoring Systems (Healthcare| Seamless interaction with patient          | Real-time data       | Ensure real-time data exchange and       |
-|            |              | Provider)                            | monitoring systems.                         | exchange             | patient safety.                          |
-+------------+--------------+--------------------------------------+---------------------------------------------+----------------------+------------------------------------------+
++------------+--------------+---------------------------------------+---------------------------------------------+----------------------+------------------------------------------+
+| ID         | Priority     | User Need (Actor)                     | Product Requirement                         | Targeted Performance | Intended claim                           |
++============+==============+=======================================+=============================================+======================+==========================================+
+| PRS_0610   | Must Have    | Patient Monitoring Systems (Healthcare| Seamless interaction with patient           | Real-time data       | Ensure real-time data exchange and       |
+|            |              | Provider)                             | monitoring systems.                         | exchange             | patient safety.                          |
++------------+--------------+---------------------------------------+---------------------------------------------+----------------------+------------------------------------------+
