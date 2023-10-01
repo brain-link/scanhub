@@ -5,5 +5,5 @@ Software Architecture Descritpion (SWAD)
 
 
 .. image:: _static/images/swad/ScanHub_Development_View.drawio.png
-  :width: 400
+  :width: 800
   :alt: ScanHub Development View
