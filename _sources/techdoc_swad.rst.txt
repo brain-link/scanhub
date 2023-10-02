@@ -1,4 +1,4 @@
-Software Architecture Design Descritpion (SWAD)
+Software Architecture Design Description (SWAD)
 ###############################################
 
 !!This Section is Work in Progress.!!
@@ -41,11 +41,27 @@ System Context
 ==============
 
 
+
+
+
+
+Sysetem Decomposition
+=====================
+
 .. figure:: _static/images/swad/ScanHub_Development_View.drawio.png
   :width: 800
   :alt: ScanHub Development View
 
   Figure 1: ScanHub Development View
+
+
++---------------+-----------+-----------------------+--------------+ 
+| ID            | Component | Description           | Safety Class | 
++===============+===========+=======================+==============+ 
+| SWAD_CMP_0001 | column 2  | column 3              |              | 
++---------------+-----------+-----------------------+--------------+ 
+| SWAD_CMP_0002 |           |                       |              | 
++---------------+-----------+-----------------------+--------------+ 
 
  
 
