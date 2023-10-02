@@ -1,5 +1,5 @@
-Software Architecture Descritpion (SWAD)
-########################################
+Software Architecture Design Descritpion (SWAD)
+###############################################
 
 !!This Section is Work in Progress.!!
 
