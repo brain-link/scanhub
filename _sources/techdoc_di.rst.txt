@@ -1,12 +1,16 @@
-Product Requirement Specifications (PRS)
-========================================
+Design Input (DI)
+#################
 
 !!This Section is Work in Progress.!!
+
+
+User Needs
+==========
 
 Operational Requirements
 ------------------------
 +------------+--------------+--------------------------------------+---------------------------------------------+---------------------+------------------------------------------+
-| ID         | Priority     | User Need (User)                     | Product Requirement                         | Targeted Performance| Intended claim                           |
+| ID         | Priority     | User Need (User)                     | Product Requirement                         | Acceptance Criteria | Intended claim                           |
 +============+==============+======================================+=============================================+=====================+==========================================+
 | PRS_0010   | Must Have    | Real-time Monitoring (Radiologist)   | - Continuously monitor and display MRI scan | 99% uptime          | Ensure real-time monitoring for accurate |
 |            |              |                                      | data in real-time.                          |                     | diagnosis.                               |
@@ -28,7 +32,7 @@ Operational Requirements
 Regulatory Requirements
 -----------------------
 +------------+--------------+--------------------------------------+--------------------------------------------+----------------------+------------------------------------------+
-| ID         | Priority     | User Need (Actor)                    | Product Requirement                        | Targeted Performance | Intended claim                           |
+| ID         | Priority     | User Need (Actor)                    | Product Requirement                        | Acceptance Criteria  | Intended claim                           |
 +============+==============+======================================+============================================+======================+==========================================+
 | PRS_0110   | Must Have    | Compliance (Regulatory Affairs       | - Compliance with HIPAA, GDPR, and FDA     | 100% Compliance      | Ensure compliance with industry          |
 |            |              | Specialist)                          | regulations.                               |                      | regulations for patient safety.          |
@@ -46,7 +50,7 @@ Regulatory Requirements
 Reliability and Resilience Requirements
 ---------------------------------------
 +------------+--------------+--------------------------------------+--------------------------------------------+---------------------+------------------------------------------+
-| ID         | Priority     | User Need (User)                     | Product Requirement                        | Targeted Performance| Intended claim                           |
+| ID         | Priority     | User Need (User)                     | Product Requirement                        | Acceptance Criteria | Intended claim                           |
 +============+==============+======================================+============================================+=====================+==========================================+
 | PRS_0210   | Must Have    | Reliability (Site/Support Engineer)  | System stability with minimum downtime.    | 99.99% uptime       | Maintain a reliable and stable MRI       |
 |            |              |                                      |                                            |                     | acquisition system.                      |
@@ -55,7 +59,7 @@ Reliability and Resilience Requirements
 Usability Requirements
 ----------------------
 +------------+--------------+--------------------------------------+--------------------------------------------+---------------------+------------------------------------------+
-| ID         | Priority     | User Need (User)                     | Product Requirement                        | Targeted Performance| Intended claim                           |
+| ID         | Priority     | User Need (User)                     | Product Requirement                        | Acceptance Criteria | Intended claim                           |
 +============+==============+======================================+============================================+=====================+==========================================+
 | PRS_0310   | Should Have  | User-Friendly (MTA)                  | - Intuitive UI for scan setup and patient  | <30 minutes         | Streamline user interaction for          |
 |            |              |                                      | management.                                | onboarding          | increased productivity.                  |
@@ -69,7 +73,7 @@ Usability Requirements
 Interoperability Requirements
 -----------------------------
 +------------+--------------+--------------------------------------+---------------------------------------------+----------------------+------------------------------------------+
-| ID         | Priority     | User Need (Actor)                    | Product Requirement                         | Targeted Performance | Intended claim                           |
+| ID         | Priority     | User Need (Actor)                    | Product Requirement                         | Acceptance Criteria  | Intended claim                           |
 +============+==============+======================================+=============================================+======================+==========================================+
 | PRS_0410   | Should Have  |Interoperability (Healthcare Provider)| Compatibility with various DICOM systems.   | N/A                  | Seamless integration with existing       |
 |            |              |                                      |                                             |                      | healthcare systems.                      |
@@ -90,7 +94,7 @@ Interoperability Requirements
 Maintainability Requirements
 ----------------------------
 +------------+--------------+--------------------------------------+---------------------------------------------+----------------------+--------------------------------------------+
-| ID         | Priority     | User Need (Actor)                    | Product Requirement                         | Targeted Performance | Intended claim                             |
+| ID         | Priority     | User Need (Actor)                    | Product Requirement                         | Acceptance Criteria  | Intended claim                             |
 +============+==============+======================================+=============================================+======================+============================================+
 | PRS_0510   | Should Have  | Scalability (System Administrator)   | - Scalable architecture to accommodate      | <10% degradation     | Ensure system performance as data and      |
 |            |              |                                      | increasing data and users.                  | at 2x data           | users grow.                                |
@@ -103,7 +107,7 @@ Maintainability Requirements
 System Interfaces to Third Party Solutions
 ------------------------------------------
 +------------+--------------+---------------------------------------+---------------------------------------------+----------------------+------------------------------------------+
-| ID         | Priority     | User Need (Actor)                     | Product Requirement                         | Targeted Performance | Intended claim                           |
+| ID         | Priority     | User Need (Actor)                     | Product Requirement                         | Acceptance Criteria  | Intended claim                           |
 +============+==============+=======================================+=============================================+======================+==========================================+
 | PRS_0610   | Must Have    | Patient Monitoring Systems (Healthcare| Seamless interaction with patient           | Real-time data       | Ensure real-time data exchange and       |
 |            |              | Provider)                             | monitoring systems.                         | exchange             | patient safety.                          |
