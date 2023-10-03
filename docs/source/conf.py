@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     # 'sphinx.ext.napoleon',  # support numpy and google style docstrings (at the moment only openapi)
+    "sphinx.ext.todo",
     'sphinxcontrib.openapi',
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
@@ -67,18 +68,34 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
+
+pygments_style = "sphinx"
+
 html_theme = 'pydata_sphinx_theme'
 html_show_sphinx = False
+html_scaled_image_link = False
+html_show_sourcelink = True
+html_logo = "_static/images/logo_brainlink.svg"
+html_favicon = "_static/brainlink_favicon/favicon-32x32.png"
+# html_logo = "_static/images/logo_scanhub.png"
 
+html_context = {
+    "github_user": "brain-link",
+    "github_repo": "scanhub",
+    "github_version": "dev",
+    "doc_path": "docs/",
+    "conf_py_path": "/docs/",
+    "VERSION": version,
+}
+
+html_sidebars = {
+    # "**": ["search-field", "sidebar-nav-bs"]
+    "**": ["sidebar-nav-bs"]
+    # "**": []    # remove primary (left) sidebar
+}
 
 html_theme_options = {
-    "external_links": [
-        {
-            "url": "https://brain-link.de/",
-            "name": "BRAIN-LINK"
-        }
-    ],
+    # "external_links": [{"url": "https://github.com/Project-MONAI/tutorials", "name": "Tutorials"}],
     "icon_links": [
         {
             "name": "Brain-Link",
@@ -99,36 +116,15 @@ html_theme_options = {
     ],
     "collapse_navigation": True,
     "navigation_depth": 1,
-    "show_toc_level": 3,
     "show_nav_level": 1,
+    "show_toc_level": 2,
     "footer_start": ["copyright"],
     "footer_end": [],
     "navbar_align": "content",
+    "header_links_before_dropdown": 4,
     # "pygment_light_style": "default",
     # "pygment_dark_style": "github-dark",
 }
-html_context = {
-    "github_user": "brain-link",
-    "github_repo": "scanhub",
-    "doc_path": "docs/",
-    "VERSION": version,
-}
-html_scaled_image_link = False
-html_show_sourcelink = True
-# html_logo = "_static/images/logo_brainlink.svg"
-html_logo = "_static/images/logo_scanhub.png"
-html_sidebars = {
-    # "**": [
-    #     "search-field",
-    #     # "sidebar-nav-bs", # default: links between pages in the active section
-    #     "page-toc", 
-    #     "edit-this-page", 
-    #     "sourcelink"
-    # ],
-    # "secondary_sidebar_items": [],
-    "**": []    # remove primary (left) sidebar
-}
-pygments_style = "sphinx"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
