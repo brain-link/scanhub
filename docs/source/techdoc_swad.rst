@@ -45,8 +45,8 @@ System Context
 
 
 
-Sysetem Decomposition
-=====================
+System Decomposition
+====================
 
 .. figure:: _static/images/swad/ScanHub_Development_View.drawio.png
   :width: 800
