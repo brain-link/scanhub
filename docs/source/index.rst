@@ -2,7 +2,7 @@
    SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 ScanHub Documentation
-=====================
+#####################
 
 Welcome to the online documentation of ScanHub, an open-source multimodal platform dedicated to rethink the workflows of medical imaging. Focusing prominently on MRI technology, ScanHub addresses the nuanced challenges of image acquisition, processing, and sharing by seamlessly integrating cloud-based solutions.
 
@@ -21,7 +21,7 @@ Developed in response to the pervasive challenges in traditional MRI infrastruct
    
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
