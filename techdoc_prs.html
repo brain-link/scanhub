@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Design Input (DI) &#8212; ScanHub Documentation</title>
+    <title>Product Requirements (PRS) &#8212; ScanHub Documentation</title>
   
   
   
@@ -39,12 +39,12 @@
     <script src="_static/documentation_options.js?v=f539c95a"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'techdoc_di';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'techdoc_prs';</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Software Requirement Specification (SWRS)" href="techdoc_swrs.html" />
-    <link rel="prev" title="Device Descritpion (DD)" href="techdoc_dd.html" />
+    <link rel="prev" title="Device Description (DD)" href="techdoc_dd.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -369,8 +369,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Descritpion (DD)</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Design Input (DI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Product Requirements (PRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -413,7 +413,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="scanhub_techdoc.html" class="nav-link">Technical Documentation</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Design Input (DI)</li>
+    <li class="breadcrumb-item active" aria-current="page">Product...</li>
   </ul>
 </nav>
 </div>
@@ -430,17 +430,138 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="design-input-di">
-<h1>Design Input (DI)<a class="headerlink" href="#design-input-di" title="Link to this heading">#</a></h1>
-<p>!!This Section is Work in Progress.!!</p>
+  <section id="product-requirements-prs">
+<h1>Product Requirements (PRS)<a class="headerlink" href="#product-requirements-prs" title="Link to this heading">#</a></h1>
+<p>!! This Section is Work in Progress. !!</p>
+<p>This section gathers all product requirements which can also be interpreted as the design input for the ScanHub platform.</p>
+<section id="steakholder-and-user-roles">
+<h2>Steakholder and User Roles<a class="headerlink" href="#steakholder-and-user-roles" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Magnetic Resonance Imaging (MRI) Technician / MTRA</p></li>
+<li><p>Radiologist</p></li>
+<li><p>Developer</p></li>
+<li><p>Scientist</p></li>
+<li><p>System Administrator</p></li>
+<li><p>Site Engineer</p></li>
+<li><p>Regulatory Affairs (RA) Specialist</p></li>
+<li><p>Medical Device Manufacturer</p></li>
+<li><p>Patient</p></li>
+<li><p>Healthcare Facility / Clinic / Hospital / Customer</p></li>
+</ul>
+<p>TODO: Description of user roles and assignment of user IDs</p>
+</section>
 <section id="user-needs">
 <h2>User Needs<a class="headerlink" href="#user-needs" title="Link to this heading">#</a></h2>
+<section id="general">
+<h3>General<a class="headerlink" href="#general" title="Link to this heading">#</a></h3>
+<p>User needs in the following table needs to be sharpened.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Product Requirements [Steakholder]</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0010</p></td>
+<td><p>Execution of an MRI acquisition/job/experiment
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>Upload pulseq sequence, execution MRI job with withflows</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0020</p></td>
+<td><p>Planning of an MRI examination
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>Exam-Tree, workflows, processing modality worklist</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0030</p></td>
+<td><p>DICOM viewer
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>View DICOM image of a selected record, compare DICOM images,
+annotate DICOM image.</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0040</p></td>
+<td><p>User management
+(System Administrator)</p></td>
+<td><p>Assign different user roles, support of multi-tendency cloud environment</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0050</p></td>
+<td><p>Monitor device status
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>Current execution progress, detectable device malfunctiuons,
+device connection</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0060</p></td>
+<td><p>Monitor Patient safety
+(MRI Technician)</p></td>
+<td><p>Specific absorption rate (SAR), temparatur, total scan time duration,
+Optional: Video stream, patient communication system</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0070</p></td>
+<td><p>Integration of processing workflows
+(Scientist, Developer)</p></td>
+<td><p>Assambling of workflow steps to be executed on MRI raw data or images.
+Includes system calibration, image reconstruction and analysis.</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0080</p></td>
+<td><p>System calibration
+(MRI Technician, Scientist, Site Engineer, Radiologist)</p></td>
+<td><p>Adjust larmorfrequency, adjust gradients, adjust system flip angle,
+B0-field shimming</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0090</p></td>
+<td><p>Clinical report
+(Radiologist)</p></td>
+<td><p>Structured form to create a clinical report which allows to fomulate a diagnosis,
+viewer for clinical reports</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0100</p></td>
+<td><p>Device management
+(System Administrator, MRI Technician, Medical Device Manufacturer)</p></td>
+<td><p>Organisation of different devices, device authentification, device selection,
+device access management (who is trained on which device?)</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="operational-needs">
 <h3>Operational Needs<a class="headerlink" href="#operational-needs" title="Link to this heading">#</a></h3>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>ID</p></th>
-<th class="head"><p>User Need [User]</p></th>
+<th class="head"><p>Product Requirements [Steakholder]</p></th>
 <th class="head"><p>Design Input</p></th>
 <th class="head"><p>Acceptance Criteria</p></th>
 <th class="head"><p>Intended claim</p></th>
@@ -464,7 +585,7 @@ diagnosis.</p></td>
 <td><p>Must Have</p></td>
 </tr>
 <tr class="row-odd"><td><p>PRS_0020</p></td>
-<td><p>Alerting (MTA)</p></td>
+<td><p>Alerting (MRI Technician, Radiologist)</p></td>
 <td><p>Real-time alerts for scan anomalies or
 issues.</p></td>
 <td><p>&lt;5 minutes</p></td>
@@ -473,7 +594,7 @@ issues.</p></td>
 <td><p>Should Have</p></td>
 </tr>
 <tr class="row-even"><td><p>PRS_0030</p></td>
-<td><p>On-Prem Setup (IT Specialist)</p></td>
+<td><p>On-Prem Setup (System Administrator)</p></td>
 <td><p>Support for on-prem setups.</p></td>
 <td><p>100% Compatibility</p></td>
 <td><p>Provide flexibility in deployment
@@ -482,7 +603,7 @@ organizational needs.</p></td>
 <td><p>Must Have</p></td>
 </tr>
 <tr class="row-odd"><td><p>PRS_0040</p></td>
-<td><p>Cloud Setup (IT Specialist)</p></td>
+<td><p>Cloud Setup (System Administrator)</p></td>
 <td><p>Support for cloud setups in environments
 with no local compute workstations.</p></td>
 <td><p>100% Compatibility</p></td>
@@ -507,7 +628,7 @@ to accommodate varying infrastructure.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PRS_0110</p></td>
-<td><p>Compliance (Regulatory Affairs
+<td><p>Compliance (RA
 Specialist)</p></td>
 <td><ul class="simple">
 <li><p>Compliance with HIPAA, GDPR, and FDA</p></li>
@@ -533,7 +654,7 @@ compliance requirements.</p></td>
 </tr>
 <tr class="row-even"><td><p>PRS_0130</p></td>
 <td><p>Compliance with ISO 14971:2019
-(Regulatory Affairs Specialist)</p></td>
+(RA Specialist)</p></td>
 <td><p>Implementation of Risk Mitigation Measures
 (RMM) in adherence to ISO 14971:2019.</p></td>
 <td><p>100% Compliance</p></td>
@@ -558,7 +679,7 @@ system operation.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PRS_0210</p></td>
-<td><p>Reliability (Site/Support Engineer)</p></td>
+<td><p>Reliability (Site Engineer)</p></td>
 <td><p>System stability with minimum downtime.</p></td>
 <td><p>99.99% uptime</p></td>
 <td><p>Maintain a reliable and stable MRI
@@ -582,7 +703,7 @@ acquisition system.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PRS_0310</p></td>
-<td><p>User-Friendly (MTA)</p></td>
+<td><p>User-Friendly (MRI Technician)</p></td>
 <td><ul class="simple">
 <li><p>Intuitive UI for scan setup and patient</p></li>
 </ul>
@@ -610,6 +731,66 @@ research.</p></td>
 </section>
 <section id="interoperability-needs">
 <h3>Interoperability Needs<a class="headerlink" href="#interoperability-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (Actor)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0410</p></td>
+<td><p>Interoperability
+(Medical Device Manufacturer)</p></td>
+<td><p>Compatibility with various DICOM systems.</p></td>
+<td><p>N/A</p></td>
+<td><p>Seamless integration with existing
+healthcare systems.</p></td>
+<td><p>Should Have</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0420</p></td>
+<td><p>Data Storage (Radiologist)</p></td>
+<td><p>Support for XNAT storage.</p></td>
+<td><p>N/A</p></td>
+<td><p>Ensure compatibility with widely used
+medical imaging data storage formats.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0430</p></td>
+<td><p>File Format (Radiologist)</p></td>
+<td><p>Support for NIFTI file format.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate diverse data representation
+and interoperability.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0440</p></td>
+<td><p>File Format (Scientist)</p></td>
+<td><p>Support for ISMRMRD file format.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate diverse data representation
+and interoperability.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0450</p></td>
+<td><p>File Format (Scientist)</p></td>
+<td><p>Support for RAW MR file format.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate diverse data representation
+and interoperability.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="maintainability-needs">
 <h3>Maintainability Needs<a class="headerlink" href="#maintainability-needs" title="Link to this heading">#</a></h3>
@@ -658,8 +839,8 @@ users grow.</p></td>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PRS_0610</p></td>
-<td><p>Patient Monitoring Systems (Healthcare
-Provider)</p></td>
+<td><p>Patient Monitoring Systems
+(Medical Device Manufacturer)</p></td>
 <td><p>Seamless interaction with patient
 monitoring systems.</p></td>
 <td><p>Real-time data
@@ -690,7 +871,7 @@ patient safety.</p></td>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Device Descritpion (DD)</p>
+        <p class="prev-next-title">Device Description (DD)</p>
       </div>
     </a>
     <a class="right-next"
@@ -717,7 +898,9 @@ patient safety.</p></td>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steakholder-and-user-roles">Steakholder and User Roles</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-needs">User Needs</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operational-needs">Operational Needs</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regulatory-needs">Regulatory Needs</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reliability-and-resilience-needs">Reliability and Resilience Needs</a></li>
@@ -732,7 +915,7 @@ patient safety.</p></td>
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="_sources/techdoc_di.rst.txt">
+    <a href="_sources/techdoc_prs.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Software Architecture Design Description (SWAD)" href="techdoc_swad.html" />
-    <link rel="prev" title="Design Input (DI)" href="techdoc_di.html" />
+    <link rel="prev" title="Product Requirements (PRS)" href="techdoc_prs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -369,8 +369,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Descritpion (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_di.html">Design Input (DI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirements (PRS)</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -432,7 +432,7 @@ document.write(`
                   
   <section id="software-requirement-specification-swrs">
 <h1>Software Requirement Specification (SWRS)<a class="headerlink" href="#software-requirement-specification-swrs" title="Link to this heading">#</a></h1>
-<p>!!This Section is Work in Progress.!!</p>
+<p>!! This Section is Work in Progress. !!</p>
 <section id="functional-requirements">
 <h2>Functional Requirements<a class="headerlink" href="#functional-requirements" title="Link to this heading">#</a></h2>
 <table class="table">
@@ -445,17 +445,114 @@ document.write(`
 </thead>
 <tbody>
 <tr class="row-even"><td><p>SWRS_FR_0001</p></td>
-<td><p>column 2</p></td>
-<td><p>column 3</p></td>
-<td></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
 </tr>
 <tr class="row-odd"><td><p>SWRS_FR_0002</p></td>
-<td></td>
-<td></td>
-<td></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
+<td><p>TBD</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="device-communication">
+<h2>Device Communication<a class="headerlink" href="#device-communication" title="Link to this heading">#</a></h2>
+<section id="acquisition-request">
+<h3>Acquisition Request<a class="headerlink" href="#acquisition-request" title="Link to this heading">#</a></h3>
+<p>The following information shall be communicated with an acquisition request to specify modality specific instructions/commands.
+Authentification and authorization topics are left out for now.</p>
+<p>Request:</p>
+<ul class="simple">
+<li><p><strong>device-id:</strong> Double check if request was communicated to the right device</p></li>
+<li><p><strong>command:</strong> Start, stop, pause, …</p></li>
+<li><p><strong>parameters:</strong> Key-value pairs, can be simple values, instruction files or a combination of both, device limits</p></li>
+<li><p><strong>record-id:</strong> ID which is assigned per initial request and traced from record creation to the last workflow step, gives access to job-id (may be extended by additional trace ID)</p></li>
+<li><p><strong>device-authentication-key:</strong> TBD</p></li>
+</ul>
+<p>Response: HTTPS_RESPONSE</p>
+<p><strong>Communication Flow Overview</strong></p>
+<p>UI =&gt; Acquisition Control: [Request acquisition command/parameters (sequence manager) -&gt; create record (exam manager) -&gt; get device (device manager)] =&gt; Device (acquisition request) =&gt; Workflow Manager =&gt; Workflows =&gt; UI</p>
+<p><strong>MR-Domain Model</strong></p>
+<p>(To be moved to SWAD)
+JSON payload which is communicated from acquisition control to device (MRI acquisition request).
+The following example is</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+{</p>
+<blockquote>
+<div><p>device-id: str,
+command: enum, // start, stop, pause
+parameters: {</p>
+<blockquote>
+<div><p>context: str, // content of a sequence file (can be pulseq)
+format: enum, // pulseq, ocra, …
+acqusition_limits: {</p>
+<blockquote>
+<div><p>// parameters used to calculate SAR, double check for completeness
+patient_height: float,
+patient_weight: float,
+patient_gender: enum,
+patient_age: int,</p>
+</div></blockquote>
+<p>},
+sequence_parameters: {</p>
+<blockquote>
+<div><p>// User input for MRI console to execute the sequence properly, for now only fov.
+// Note: The following section is specific to the format (here pulseq). It may vary for different sequence formats and thus should be implemented as a generic dictionary inside a pydantic MR domain model.
+fov: [float, float, float],
+fov_offset: [float, float, float]</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<section id="id3">
+<h4>}<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+</section>
+</section>
+<section id="device-monitor">
+<h3>Device Monitor<a class="headerlink" href="#device-monitor" title="Link to this heading">#</a></h3>
+<p>Monitoring of device status through direct connection between device and device manager.
+Get the current device status: connected, disconnected, scanning, etc.
+TODO: What are possible device status?
+The device status is to be implemented as an enum with defined situations (see above).</p>
+</section>
+<section id="device-configuration">
+<h3>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading">#</a></h3>
+<p>This set of parameters is specific to one device. Read and/or write requests are performed through the device manager.
+Some parameters are fixed limits and cannot be modified by the device manager (<cite>system_limits</cite>).
+Another set of parameters may vary over time and may be set from a workflow/workflow-step result (<cite>current_device_configuration`</cite>).</p>
+<p><a href="#id4"><span class="problematic" id="id5">``</span></a>`
+// hard system limits (read only)
+system_limits: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>max_gradients: [</dt><dd><p>float,
+float,
+float</p>
+</dd>
+</dl>
+<p>],
+max_rf_duration: float,
+adc_deadtime: float,
+rf_dead_time: float,
+…</p>
+</div></blockquote>
+<p>},
+// temporary system values (read and write)
+current_device_configuration: {</p>
+<blockquote>
+<div><p>larmor_frequency: float,
+flip_angle_calibration: float,
+gradient_calibration: [float, float, float],
+gradient_offset: [float, float, float],
+…</p>
+</div></blockquote>
+<section id="id6">
+<h4>}<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+</section>
+</section>
 </section>
 </section>
 
@@ -470,12 +567,12 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="techdoc_di.html"
+       href="techdoc_prs.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Design Input (DI)</p>
+        <p class="prev-next-title">Product Requirements (PRS)</p>
       </div>
     </a>
     <a class="right-next"
@@ -503,6 +600,18 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-requirements">Functional Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-communication">Device Communication</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-request">Acquisition Request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">}</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-monitor">Device Monitor</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-configuration">Device Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">}</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
