@@ -1,4 +1,4 @@
-Device Descritpion (DD)
+Device Description (DD)
 #######################
 
 !!This Section is Work in Progress.!!
