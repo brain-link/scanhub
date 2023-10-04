@@ -18,8 +18,8 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-# basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
-# sys.path.insert(0, basedir)
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
+sys.path.insert(0, basedir)
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -43,10 +43,10 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     # 'sphinx.ext.napoleon',  # support numpy and google style docstrings (at the moment only openapi)
-    "sphinx.ext.todo",
+    'sphinx.ext.todo',
     'sphinxcontrib.openapi',
-    "sphinx.ext.autosectionlabel",
-    "sphinx.ext.autosummary",
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.autosummary',
 ]
 
 autoclass_content = "class"
