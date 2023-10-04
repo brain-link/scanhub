@@ -69,8 +69,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-pygments_style = "sphinx"
-
 html_theme = 'pydata_sphinx_theme'
 html_show_sphinx = False
 html_scaled_image_link = False
@@ -122,8 +120,8 @@ html_theme_options = {
     "footer_end": [],
     "navbar_align": "content",
     "header_links_before_dropdown": 4,
-    # "pygment_light_style": "default",
-    # "pygment_dark_style": "github-dark",
+    "pygment_light_style": "default",
+    "pygment_dark_style": "github-dark",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

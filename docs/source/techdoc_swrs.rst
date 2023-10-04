@@ -34,9 +34,26 @@ Request:
 
 Response: HTTPS_RESPONSE
 
-**Communication Flow Overview**
 
-UI => Acquisition Control: [Request acquisition command/parameters (sequence manager) -> create record (exam manager) -> get device (device manager)] => Device (acquisition request) => Workflow Manager => Workflows => UI
+**Communication Flow**
+
+(Replace by better formatting)
+
+    UI 
+    
+    -> Acquisition Control
+
+        -> Request acquisition command/parameters (sequence manager)
+
+        -> create record (exam manager) 
+
+        -> get device (device manager)
+
+    -> Device (acquisition request) 
+    
+    -> Workflow Manager 
+    
+    -> Workflows
 
 
 **MR-Domain Model**
@@ -45,9 +62,11 @@ UI => Acquisition Control: [Request acquisition command/parameters (sequence man
 JSON payload which is communicated from acquisition control to device (MRI acquisition request).
 The following example is
 
-```
-{
-    device-id: str,
+
+.. code-block:: javascript
+    :linenos:
+
+    device_id: str,
     command: enum, // start, stop, pause
     parameters: {
         context: str, // content of a sequence file (can be pulseq)
@@ -61,20 +80,31 @@ The following example is
         },
         sequence_parameters: {
             // User input for MRI console to execute the sequence properly, for now only fov.
-            // Note: The following section is specific to the format (here pulseq). It may vary for different sequence formats and thus should be implemented as a generic dictionary inside a pydantic MR domain model.
-            fov: [float, float, float],
-            fov_offset: [float, float, float]
+            // Note: The following section is specific to the format (here pulseq). 
+            // It may vary for different sequence formats and thus should be 
+            // implemented as a generic dictionary inside a pydantic MR domain model.
+            fov: [
+                float, 
+                float, 
+                float
+            ],
+            fov_offset: [
+                float, 
+                float, 
+                float
+            ]
         }
     }
-}
-```
+
 
 Device Monitor
 --------------
 
 Monitoring of device status through direct connection between device and device manager.
 Get the current device status: connected, disconnected, scanning, etc.
-TODO: What are possible device status?
+    
+    TODO: What are possible device status?
+
 The device status is to be implemented as an enum with defined situations (see above).
 
 
@@ -83,30 +113,40 @@ Device Configuration
 
 This set of parameters is specific to one device. Read and/or write requests are performed through the device manager.
 Some parameters are fixed limits and cannot be modified by the device manager (`system_limits`).
-Another set of parameters may vary over time and may be set from a workflow/workflow-step result (`current_device_configuration``).
+Another set of parameters may vary over time and may be set from a workflow/workflow-step result (`current_device_configuration`).
 
-```
-// hard system limits (read only)
-system_limits: {
-    max_gradients: [
-        float,
-        float,
-        float
-    ],
-    max_rf_duration: float,
-    adc_deadtime: float,
-    rf_dead_time: float,
-    ...
-},
-// temporary system values (read and write)
-current_device_configuration: {
-    larmor_frequency: float,
-    flip_angle_calibration: float,
-    gradient_calibration: [float, float, float],
-    gradient_offset: [float, float, float],
-    ...
-}
-```
+.. code-block:: javascript
+    :linenos:
+
+    
+    system_limits: {
+    // hard system limits (read only)
+        max_gradients: [
+            float, 
+            float, 
+            float
+        ],
+        max_rf_duration: float,
+        adc_deadtime: float,
+        rf_dead_time: float,
+        // ...
+    },
+    current_device_configuration: {
+    // temporary system values (read and write)
+        larmor_frequency: float,
+        flip_angle_calibration: float,
+        gradient_calibration: [
+            float, 
+            float, 
+            float
+        ],
+        gradient_offset: [
+            float, 
+            float, 
+            float
+        ],
+        // ...
+    }
 
 
 
