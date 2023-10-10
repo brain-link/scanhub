@@ -1,4 +1,4 @@
-name: 'static-tests'
+name: 'static-tests-backend'
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  linting:
+  linting-python:
     name: 'Linting patient-manager'
     runs-on: ubuntu-latest
 

@@ -1,0 +1,32 @@
+name: 'static-tests-frontend'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - ui-linter
+
+jobs:
+
+  linting-python:
+    name: 'Linting frontend'
+    runs-on: ubuntu-latest
+
+    env:
+      working-directory: ./frontend
+
+    continue-on-error: True
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install modules
+        working-directory: ${{env.working-directory}}
+        run: yarn install
+        
+      - name: Run linter
+        working-directory: ${{env.working-directory}}
+        run: yarn lint
