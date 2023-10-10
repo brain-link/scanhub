@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
-import { Device } from '../interfaces/data.interface'
 
+import { Device } from '../interfaces/data.interface'
 import baseUrls from './urls'
 
 interface DeviceStatus {

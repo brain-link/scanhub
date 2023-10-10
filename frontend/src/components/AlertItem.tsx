@@ -1,13 +1,12 @@
-import * as React from 'react'
-import { Alerts, AlertProps } from '../interfaces/components.interface'
-
-import Typography from '@mui/joy/Typography'
-import Alert from '@mui/joy/Alert'
-
-import InfoIcon from '@mui/icons-material/Info'
-import WarningIcon from '@mui/icons-material/Warning'
-import ReportIcon from '@mui/icons-material/Report'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import InfoIcon from '@mui/icons-material/Info'
+import ReportIcon from '@mui/icons-material/Report'
+import WarningIcon from '@mui/icons-material/Warning'
+import Alert from '@mui/joy/Alert'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+
+import { AlertProps, Alerts } from '../interfaces/components.interface'
 
 function AlertItem({ title, type, info }: AlertProps) {
   function getIcon(alertType) {
@@ -26,13 +25,7 @@ function AlertItem({ title, type, info }: AlertProps) {
   }
 
   return (
-    <Alert
-      key={title}
-      sx={{ alignItems: 'flex-start' }}
-      startDecorator={getIcon(type)}
-      variant='soft'
-      color={type}
-    >
+    <Alert key={title} sx={{ alignItems: 'flex-start' }} startDecorator={getIcon(type)} variant='soft' color={type}>
       <div>
         <Typography level='title-md'>{title}</Typography>
         {

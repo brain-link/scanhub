@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { Job } from '../interfaces/data.interface'
 
+import { Job } from '../interfaces/data.interface'
 import baseUrls from './urls'
 
 class AcquisitionControlApi {

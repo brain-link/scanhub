@@ -1,15 +1,12 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
-
-import * as React from 'react'
-import { Outlet } from 'react-router-dom'
-
 import Box from '@mui/joy/Box'
 import CssBaseline from '@mui/joy/CssBaseline'
-import { GlobalStyles } from '@mui/system'
 import { CssVarsProvider } from '@mui/joy/styles'
+import { GlobalStyles } from '@mui/system'
+import * as React from 'react'
+import { Outlet } from 'react-router-dom'
 
 import Navigation from '../components/Navigation'
 

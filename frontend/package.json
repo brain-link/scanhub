@@ -37,6 +37,7 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.9.3",
     "@parcel/transformer-typescript-tsc": "^2.9.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "buffer": "^6.0.3",
     "eslint": "^8.0.1",
@@ -56,7 +57,7 @@
   "scripts": {
     "start": "parcel src/index.html -p 3000 && parcel watch src/index.html",
     "build": "parcel build src/index.html",
-    "lint": "eslint src/**/*.tsx",  
+    "lint": "eslint src/**/*.tsx",
     "lint:fix": "eslint --fix 'src/**/*.tsx'",
     "format": "prettier --write 'src/**/*.tsx' --config ./.prettierrc"
   },

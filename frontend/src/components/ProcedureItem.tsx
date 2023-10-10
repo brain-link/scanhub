@@ -1,37 +1,30 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // ProcedureItem.tsx is responsible for rendering a single procedure item in the procedure list of the patient view.
-
-import * as React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useMutation } from 'react-query'
-
+import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 // Mui joy components
 import Box from '@mui/joy/Box'
-import Typography from '@mui/joy/Typography'
+import IconButton from '@mui/joy/IconButton'
 import ListItem from '@mui/joy/ListItem'
 import ListItemButton from '@mui/joy/ListItemButton'
 import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
-import IconButton from '@mui/joy/IconButton'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp'
-import ProcedureModal from '../components/ProcedureModal'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import { Link as RouterLink } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
+import client from '../client/exam-tree-queries'
+import ProcedureModal from '../components/ProcedureModal'
+import { ComponentProps } from '../interfaces/components.interface'
 // Interfaces and api service
 import { Procedure } from '../interfaces/data.interface'
-import { ComponentProps } from '../interfaces/components.interface'
-import client from '../client/exam-tree-queries'
 
-function ProcedureItem({
-  data: procedure,
-  refetchParentData,
-  isSelected,
-}: ComponentProps<Procedure>) {
+function ProcedureItem({ data: procedure, refetchParentData, isSelected }: ComponentProps<Procedure>) {
   const params = useParams()
   const navigate = useNavigate()
 

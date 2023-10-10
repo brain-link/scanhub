@@ -1,21 +1,18 @@
-import * as React from 'react'
-
-import CornerstoneViewport from 'react-cornerstone-viewport'
-
-import Stack from '@mui/joy/Stack'
-import Sheet from '@mui/joy/Sheet'
-import Card from '@mui/joy/Card'
-import Divider from '@mui/joy/Divider'
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
-import Select from '@mui/joy/Select'
-import Option from '@mui/joy/Option'
+import Card from '@mui/joy/Card'
+import Divider from '@mui/joy/Divider'
 import Grid from '@mui/joy/Grid'
+import Option from '@mui/joy/Option'
+import Select from '@mui/joy/Select'
+import Sheet from '@mui/joy/Sheet'
+import Stack from '@mui/joy/Stack'
+import * as React from 'react'
+import CornerstoneViewport from 'react-cornerstone-viewport'
 
-import ExamTree from '../components/ExamTree'
 import DicomViewerToolbar, { tools } from '../components/DicomViewerTools'
+import ExamTree from '../components/ExamTree'
 import initCornerstone from '../utils/InitCornerstone'
-
 import { navigation } from '../utils/size_vars'
 
 function Viewer() {

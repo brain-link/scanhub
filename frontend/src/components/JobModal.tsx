@@ -1,26 +1,23 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // JobModal.tsx is responsible for rendering the modal for creating or updating a job.
-
-import * as React from 'react'
-import { useParams } from 'react-router-dom'
-
-// Import mui joy components
-import Typography from '@mui/joy/Typography'
 import Button from '@mui/joy/Button'
-import Input from '@mui/joy/Input'
 import FormLabel from '@mui/joy/FormLabel'
-import Stack from '@mui/joy/Stack'
+import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
-import Select from '@mui/joy/Select'
 import Option from '@mui/joy/Option'
+import Select from '@mui/joy/Select'
+import Stack from '@mui/joy/Stack'
+// Import mui joy components
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useParams } from 'react-router-dom'
 
+import { JobModalProps } from '../interfaces/components.interface'
 // Import api service and interfaces
 import { Job } from '../interfaces/data.interface'
-import { JobModalProps } from '../interfaces/components.interface'
 
 function JobModal(props: JobModalProps) {
   const params = useParams()
@@ -69,13 +66,7 @@ function JobModal(props: JobModalProps) {
             bgcolor: 'background.body',
           }}
         />
-        <Typography
-          id='basic-modal-dialog-title'
-          component='h2'
-          level='inherit'
-          fontSize='1.25em'
-          mb='0.25em'
-        >
+        <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
           {title}
         </Typography>
 

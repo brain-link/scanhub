@@ -1,5 +1,4 @@
 // Collection of MRI modality related data interfaces
-
 import Plotly from 'plotly.js'
 
 export interface MRISequence {

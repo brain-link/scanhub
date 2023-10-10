@@ -1,42 +1,38 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // DeviceTable.tsx is responsible for rendering the device table view.
-
-import * as React from 'react'
-import { useMutation } from 'react-query'
+import AddSharpIcon from '@mui/icons-material/AddSharp'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import Box from '@mui/joy/Box'
+import IconButton from '@mui/joy/IconButton'
+import Typography from '@mui/joy/Typography'
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import LinearProgress from '@mui/material/LinearProgress'
+import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import LinearProgress from '@mui/material/LinearProgress'
-import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
-import AddSharpIcon from '@mui/icons-material/AddSharp'
-import IconButton from '@mui/joy/IconButton'
 import axios from 'axios'
-import config from '../utils/config'
-
-import Accordion from '@mui/material/Accordion'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import Box from '@mui/joy/Box'
+import * as React from 'react'
+import { useMutation } from 'react-query'
 
 import { Device } from '../interfaces/data.interface'
+import config from '../utils/config'
 
 export default function DeviceTable() {
   // const { data: devices, isSuccess } = useQuery<Device[]>("/devices");
   const [devices, setDevices] = React.useState<Device[] | undefined>(undefined)
   const [expanded, setExpanded] = React.useState<string | false>(false)
 
-  const handleExpandChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false)
-    }
+  const handleExpandChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false)
+  }
 
   async function fetchDevices() {
     await axios.get(`${config['baseURL']}/devices`).then((response) => {
@@ -73,25 +69,15 @@ export default function DeviceTable() {
       <Box sx={{ m: 2 }}>
         {devices?.map((device) => (
           <Accordion expanded={expanded === device.id} onChange={handleExpandChange(device.id)}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls='panel1bh-content'
-              id='panel1bh-header'
-            >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls='panel1bh-content' id='panel1bh-header'>
               <Typography sx={{ width: '33%', flexShrink: 0 }}>Device ID: {device.id}</Typography>
               <Typography sx={{ color: 'text.secondary' }}>Modality: {device.modality}</Typography>
             </AccordionSummary>
             <AccordionDetails>
+              <Typography> Created at: {new Date(device.datetime_created).toDateString()} </Typography>
               <Typography>
                 {' '}
-                Created at: {new Date(device.datetime_created).toDateString()}{' '}
-              </Typography>
-              <Typography>
-                {' '}
-                Address:{' '}
-                {device.datetime_updated
-                  ? new Date(device.datetime_updated).toDateString()
-                  : '-'}{' '}
+                Address: {device.datetime_updated ? new Date(device.datetime_updated).toDateString() : '-'}{' '}
               </Typography>
             </AccordionDetails>
           </Accordion>

@@ -1,14 +1,11 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // Definition of global variables
-
-import { useParams, Link } from 'react-router-dom'
-import { CModalBody, CModal, CModalTitle, CButton, CModalHeader, CCloseButton } from '@coreui/react'
-
+import { CButton, CCloseButton, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
+import axios from 'axios'
 import { useState } from 'react'
 import React from 'react'
-import axios from 'axios'
+import { Link, useParams } from 'react-router-dom'
 
 export function DeleteWarning(contextURL) {
   const [visible, setVisible] = useState(false)

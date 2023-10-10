@@ -1,7 +1,6 @@
-import baseUrls from './urls'
-
+import { MRISequence, PlotData } from '../interfaces/mri-data.interface'
 import { ApiService } from './abstract-query-client'
-import { PlotData, MRISequence } from '../interfaces/mri-data.interface'
+import baseUrls from './urls'
 
 class MRISequenceApiService extends ApiService<MRISequence> {
   constructor() {

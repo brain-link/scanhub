@@ -1,8 +1,6 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // Query clients for all services
-
 import axios from 'axios'
 
 import { Patient } from './interfaces'
@@ -12,7 +10,6 @@ import { Exam } from './interfaces'
 import { Procedure } from './interfaces'
 import { Job } from './interfaces'
 import { Record } from './interfaces'
-
 import baseUrls from './urls'
 
 // const patientApi = axios.create({baseURL: baseUrls.patientService})
@@ -105,8 +102,8 @@ const records = {
     const response = await axios.post<Record>(`${baseUrls.examService}/record/`, data)
     return response.data
   },
-  getAll: async (job_id: number): Promise<Record[]> => {
-    const response = await axios.get<Record[]>(`${baseUrls.examService}/records/${job_id}`)
+  getAll: async (jobId: number): Promise<Record[]> => {
+    const response = await axios.get<Record[]>(`${baseUrls.examService}/records/${jobId}`)
     return response.data
   },
   get: async (id: number): Promise<Record> => {
@@ -124,8 +121,8 @@ const jobs = {
     const response = await axios.post<Job>(`${baseUrls.examService}/job/`, data)
     return response.data
   },
-  getAll: async (procedure_id: number): Promise<Job[]> => {
-    const response = await axios.get<Job[]>(`${baseUrls.examService}/jobs/${procedure_id}`)
+  getAll: async (procedureId: number): Promise<Job[]> => {
+    const response = await axios.get<Job[]>(`${baseUrls.examService}/jobs/${procedureId}`)
     return response.data
   },
   get: async (id: number): Promise<Job> => {
@@ -147,11 +144,9 @@ const procedures = {
     const response = await axios.post<Procedure>(`${baseUrls.examService}/procedure/`, data)
     return response.data
   },
-  getAll: async (exam_id: number): Promise<Procedure[] | []> => {
+  getAll: async (examId: number): Promise<Procedure[] | []> => {
     try {
-      const response = await axios.get<Procedure[]>(
-        `${baseUrls.examService}/procedures/${exam_id}/`,
-      )
+      const response = await axios.get<Procedure[]>(`${baseUrls.examService}/procedures/${examId}/`)
       return response.data
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status) {

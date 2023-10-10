@@ -1,27 +1,24 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // ProcedureCreateModal.tsx is responsible for rendering the modal for creating a new procedure.
-
-import * as React from 'react'
-import { useParams } from 'react-router-dom'
-import { useMutation } from 'react-query'
-
 // Import mui joy components
 import Button from '@mui/joy/Button'
-import Typography from '@mui/joy/Typography'
-import Input from '@mui/joy/Input'
 import FormLabel from '@mui/joy/FormLabel'
+import Grid from '@mui/joy/Grid'
+import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
-import Grid from '@mui/joy/Grid'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 
 // Import procedure api service and interfaces
 import client from '../client/exam-tree-queries'
-import { Procedure } from '../interfaces/data.interface'
 import { ModalProps } from '../interfaces/components.interface'
+import { Procedure } from '../interfaces/data.interface'
 
 // Procedure form template
 const createProcedureForm = [
@@ -71,13 +68,7 @@ function ProcedureModal(props: ModalProps<Procedure>) {
             bgcolor: 'background.body',
           }}
         />
-        <Typography
-          id='basic-modal-dialog-title'
-          component='h2'
-          level='inherit'
-          fontSize='1.25em'
-          mb='0.25em'
-        >
+        <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
           {title}
         </Typography>
 

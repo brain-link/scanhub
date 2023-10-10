@@ -1,21 +1,18 @@
-import * as React from 'react'
-
-import IconButton from '@mui/joy/IconButton'
-import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup'
-import Divider from '@mui/joy/Divider'
-
-// Icons
-import StraightenSharpIcon from '@mui/icons-material/StraightenSharp'
-import SquareFootSharpIcon from '@mui/icons-material/SquareFootSharp'
 import AutoFixNormalSharpIcon from '@mui/icons-material/AutoFixNormalSharp'
-import VerticalAlignCenterSharpIcon from '@mui/icons-material/VerticalAlignCenterSharp'
-import ZoomInSharpIcon from '@mui/icons-material/ZoomInSharp'
-import PanToolSharpIcon from '@mui/icons-material/PanToolSharp'
-import RotateLeftSharpIcon from '@mui/icons-material/RotateLeftSharp'
 import ContrastSharpIcon from '@mui/icons-material/ContrastSharp'
 import HighlightAltSharpIcon from '@mui/icons-material/HighlightAltSharp'
-
+import PanToolSharpIcon from '@mui/icons-material/PanToolSharp'
+import RotateLeftSharpIcon from '@mui/icons-material/RotateLeftSharp'
+import SquareFootSharpIcon from '@mui/icons-material/SquareFootSharp'
+// Icons
+import StraightenSharpIcon from '@mui/icons-material/StraightenSharp'
+import VerticalAlignCenterSharpIcon from '@mui/icons-material/VerticalAlignCenterSharp'
+import ZoomInSharpIcon from '@mui/icons-material/ZoomInSharp'
+import Divider from '@mui/joy/Divider'
+import IconButton from '@mui/joy/IconButton'
+import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup'
 import * as cornerstoneTools from 'cornerstone-tools'
+import * as React from 'react'
 
 // Todo: Add tools only once in CornerstoneInit.ts
 export const tools = [

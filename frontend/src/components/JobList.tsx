@@ -1,37 +1,33 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // JobList.tsx is responsible for rendering a list of jobs to be executed.
-
-import * as React from 'react'
-import { useParams } from 'react-router-dom'
-import { useMutation } from 'react-query'
-import { useQuery } from 'react-query'
-import Box from '@mui/joy/Box'
-import Stack from '@mui/joy/Stack'
-import List from '@mui/joy/List'
-import ListDivider from '@mui/joy/ListDivider'
-import Typography from '@mui/joy/Typography'
-import IconButton from '@mui/joy/IconButton'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp'
 import UploadFileSharpIcon from '@mui/icons-material/UploadFileSharp'
+import Box from '@mui/joy/Box'
+import IconButton from '@mui/joy/IconButton'
+import List from '@mui/joy/List'
+import ListDivider from '@mui/joy/ListDivider'
+import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
 
-import JobModal from './JobModal'
-import JobItem from './JobItem'
-import SequenceUpload from './SequenceUpload'
-import AlertItem from './AlertItem'
-
+import deviceClient from '../client/device-api'
+import client from '../client/exam-tree-queries'
+import sequenceClient from '../client/sequence-api'
+import { Alerts, ComponentProps } from '../interfaces/components.interface'
 import { Job } from '../interfaces/data.interface'
-import { ComponentProps, Alerts } from '../interfaces/components.interface'
-import { MRISequence } from '../interfaces/mri-data.interface'
-import { patientView } from '../utils/size_vars'
 import { Device } from '../interfaces/data.interface'
 import { Workflow } from '../interfaces/data.interface'
-
-import client from '../client/exam-tree-queries'
-import deviceClient from '../client/device-api'
-import sequenceClient from '../client/sequence-api'
+import { MRISequence } from '../interfaces/mri-data.interface'
+import { patientView } from '../utils/size_vars'
+import AlertItem from './AlertItem'
+import JobItem from './JobItem'
+import JobModal from './JobModal'
+import SequenceUpload from './SequenceUpload'
 
 function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: ComponentProps<Job[]>) {
   const params = useParams()
@@ -253,9 +249,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
               <AlertItem
                 title={devicesLoading ? 'Loading devices...' : 'No device found'}
                 info={
-                  !devicesLoading
-                    ? 'Could not find any registered device, please register a device first.'
-                    : undefined
+                  !devicesLoading ? 'Could not find any registered device, please register a device first.' : undefined
                 }
                 type={Alerts.Warning}
               />
@@ -279,11 +273,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
             >
               <AlertItem
                 title={sequencesLoading ? 'Loading sequences...' : 'No sequence found'}
-                info={
-                  !sequencesLoading
-                    ? 'Could not find any sequence, please upload a sequence first.'
-                    : undefined
-                }
+                info={!sequencesLoading ? 'Could not find any sequence, please upload a sequence first.' : undefined}
                 type={Alerts.Warning}
               />
             </Stack>

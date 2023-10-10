@@ -1,28 +1,27 @@
-import * as React from 'react'
-import { useParams } from 'react-router-dom'
-import { useQuery } from 'react-query'
-
-import AccordionGroup from '@mui/joy/AccordionGroup'
+import CenterFocusWeakSharpIcon from '@mui/icons-material/CenterFocusWeakSharp'
+import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp'
+import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
+import { Typography } from '@mui/joy'
 import Accordion from '@mui/joy/Accordion'
 import AccordionDetails from '@mui/joy/AccordionDetails'
+import AccordionGroup from '@mui/joy/AccordionGroup'
 import AccordionSummary from '@mui/joy/AccordionSummary'
-import ListItemContent from '@mui/joy/ListItemContent'
-import ListItemButton from '@mui/joy/ListItemButton'
-import ListItem from '@mui/joy/ListItem'
-import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import Card from '@mui/joy/Card'
-import Stack from '@mui/joy/Stack'
 import CircularProgress from '@mui/joy/CircularProgress'
-import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
-import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp'
-import CenterFocusWeakSharpIcon from '@mui/icons-material/CenterFocusWeakSharp'
+import ListItem from '@mui/joy/ListItem'
+import ListItemButton from '@mui/joy/ListItemButton'
+import ListItemContent from '@mui/joy/ListItemContent'
+import ListItemDecorator from '@mui/joy/ListItemDecorator'
+import Stack from '@mui/joy/Stack'
+import * as React from 'react'
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
 
 import client from '../client/exam-tree-queries'
-import AlertItem from './AlertItem'
 import { Alerts } from '../interfaces/components.interface'
-import { Exam } from '../interfaces/data.interface'
 import { ExamTreeProps } from '../interfaces/components.interface'
-import { Typography } from '@mui/joy'
+import { Exam } from '../interfaces/data.interface'
+import AlertItem from './AlertItem'
 
 function ExamTree({ setDataPath }: ExamTreeProps) {
   const params = useParams()
@@ -81,9 +80,7 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                               procedure.datetime_created,
                             ).toDateString()}`}</Typography>
                             <Typography level='body-xs'>{`Updated: ${
-                              procedure.datetime_updated
-                                ? new Date(procedure.datetime_updated).toDateString()
-                                : '-'
+                              procedure.datetime_updated ? new Date(procedure.datetime_updated).toDateString() : '-'
                             }`}</Typography>
                           </ListItemContent>
                         </AccordionSummary>

@@ -1,16 +1,14 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // Device.tsx is responsible for rendering a device item.
-
-import * as React from 'react'
-import Typography from '@mui/joy/Typography'
+import Badge from '@mui/joy/Badge'
 import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
-import Badge from '@mui/joy/Badge'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
 
-import { Device } from '../interfaces/data.interface'
 import deviceClient from '../client/device-api'
+import { Device } from '../interfaces/data.interface'
 
 interface DeviceItemProps {
   device: Device | undefined

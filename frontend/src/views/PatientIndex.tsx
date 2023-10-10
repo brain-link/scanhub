@@ -1,41 +1,36 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // PatientIndex.tsx is responsible for rendering the patient view. It is the entry point for the patient view.
-
-import * as React from 'react'
-import { useParams } from 'react-router-dom'
-import { useQuery } from 'react-query'
-import { useMutation } from 'react-query'
-
+import AddSharpIcon from '@mui/icons-material/AddSharp'
+import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp'
+import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp'
+import Badge from '@mui/joy/Badge'
 // Mui Joy
 import Box from '@mui/joy/Box'
-import Stack from '@mui/joy/Stack'
-import List from '@mui/joy/List'
-import Badge from '@mui/joy/Badge'
-import Typography from '@mui/joy/Typography'
 import IconButton from '@mui/joy/IconButton'
+import List from '@mui/joy/List'
 import ListDivider from '@mui/joy/ListDivider'
-import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp'
-import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp'
-import AddSharpIcon from '@mui/icons-material/AddSharp'
+import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useQuery } from 'react-query'
+import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 
+import client from '../client/exam-tree-queries'
+import ExamItem from '../components/ExamItem'
+import ExamModal from '../components/ExamModal'
+import JobList from '../components/JobList'
 // Import sub components
 import PatientInfo from '../components/PatientInfo'
-import ExamItem from '../components/ExamItem'
 import ProcedureItem from '../components/ProcedureItem'
-import JobList from '../components/JobList'
-import ExamModal from '../components/ExamModal'
 import ProcedureModal from '../components/ProcedureModal'
-
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface'
 import { Exam } from '../interfaces/data.interface'
 import { Procedure } from '../interfaces/data.interface'
 import { Job } from '../interfaces/data.interface'
-import { patientView, navigation } from '../utils/size_vars'
-
-import client from '../client/exam-tree-queries'
+import { navigation, patientView } from '../utils/size_vars'
 
 function PatientIndex() {
   const params = useParams()
@@ -88,9 +83,7 @@ function PatientIndex() {
   React.useEffect(() => {
     if (params.procedureId && procedures) {
       // Get the selected exam
-      const procedure = procedures.filter(
-        (procedure) => procedure.id === Number(params.procedureId),
-      )[0]
+      const procedure = procedures.filter((procedure) => procedure.id === Number(params.procedureId))[0]
       // Set procedures if exam exists
       if (procedure) {
         setJobs(procedure.jobs)
@@ -134,9 +127,7 @@ function PatientIndex() {
         }}
       >
         {/* Conditional rendering: Only rendered if patient exists */}
-        {patient && (
-          <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError} />
-        )}
+        {patient && <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError} />}
 
         <ListDivider />
 
@@ -184,11 +175,7 @@ function PatientIndex() {
           {// Check if exams are loading
           exams?.map((exam, index) => (
             <React.Fragment key={index}>
-              <ExamItem
-                data={exam}
-                refetchParentData={refetchExams}
-                isSelected={exam.id === Number(params.examId)}
-              />
+              <ExamItem data={exam} refetchParentData={refetchExams} isSelected={exam.id === Number(params.examId)} />
               <ListDivider sx={{ m: 0 }} />
             </React.Fragment>
           ))}

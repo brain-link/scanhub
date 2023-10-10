@@ -1,26 +1,23 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
-
-import * as React from 'react'
-import { useParams } from 'react-router-dom'
-import { useMutation } from 'react-query'
-
-// Import mui joy components
-import Typography from '@mui/joy/Typography'
 import Button from '@mui/joy/Button'
-import Input from '@mui/joy/Input'
 import FormLabel from '@mui/joy/FormLabel'
-import Stack from '@mui/joy/Stack'
 import Grid from '@mui/joy/Grid'
+import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
+import Stack from '@mui/joy/Stack'
+// Import mui joy components
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 
+import { ModalProps } from '../interfaces/components.interface'
 // Import api service and interfaces
 import { Exam } from '../interfaces/data.interface'
-import { ModalProps } from '../interfaces/components.interface'
 
 // Exam form template, order is row wise, used to map the exam fields
 const createExamFormContent = [
@@ -71,13 +68,7 @@ function ExamModal(props: ModalProps<Exam>) {
             bgcolor: 'background.body',
           }}
         />
-        <Typography
-          id='basic-modal-dialog-title'
-          component='h2'
-          level='inherit'
-          fontSize='1.25em'
-          mb='0.25em'
-        >
+        <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
           {title}
         </Typography>
 

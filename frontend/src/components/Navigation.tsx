@@ -1,30 +1,26 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
-
-import React from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
-
-import Typography from '@mui/joy/Typography'
-import { useColorScheme } from '@mui/joy/styles'
-import IconButton from '@mui/joy/IconButton'
-import Button from '@mui/joy/Button'
-import Box from '@mui/joy/Box'
-import Avatar from '@mui/joy/Avatar'
-import Menu from '@mui/joy/Menu'
-import MenuItem from '@mui/joy/MenuItem'
-import ListItemDecorator from '@mui/joy/ListItemDecorator'
-import ListDivider from '@mui/joy/ListDivider'
-
+import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 // Icons
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
-import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp'
-import PersonSharpIcon from '@mui/icons-material/PersonSharp'
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
+import PersonSharpIcon from '@mui/icons-material/PersonSharp'
+import SettingsSharpIcon from '@mui/icons-material/SettingsSharp'
+import Avatar from '@mui/joy/Avatar'
+import Box from '@mui/joy/Box'
+import Button from '@mui/joy/Button'
+import IconButton from '@mui/joy/IconButton'
+import ListDivider from '@mui/joy/ListDivider'
+import ListItemDecorator from '@mui/joy/ListItemDecorator'
+import Menu from '@mui/joy/Menu'
+import MenuItem from '@mui/joy/MenuItem'
+import Typography from '@mui/joy/Typography'
+import { useColorScheme } from '@mui/joy/styles'
+import React from 'react'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
 
 import { navigation } from '../utils/size_vars'
 

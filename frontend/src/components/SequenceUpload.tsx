@@ -1,24 +1,21 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
-
-import * as React from 'react'
-import { useMutation } from 'react-query'
-
-// Import mui joy components
-import Typography from '@mui/joy/Typography'
 import Button from '@mui/joy/Button'
-import Input from '@mui/joy/Input'
 import FormLabel from '@mui/joy/FormLabel'
-import Stack from '@mui/joy/Stack'
+import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
+import Stack from '@mui/joy/Stack'
+// Import mui joy components
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation } from 'react-query'
 
+import mriSequenceService from '../client/sequence-api'
 // Import api service and interfaces
 import { MRISequence } from '../interfaces/mri-data.interface'
-import mriSequenceService from '../client/sequence-api'
 
 function SequenceUpload(props) {
   // const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -65,13 +62,7 @@ function SequenceUpload(props) {
               bgcolor: 'background.body',
             }}
           />
-          <Typography
-            id='basic-modal-dialog-title'
-            component='h2'
-            level='inherit'
-            fontSize='1.25em'
-            mb={3}
-          >
+          <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb={3}>
             Upload sequence
           </Typography>
 

@@ -1,37 +1,33 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // JobItem.tsx is responsible for rendering a single job item in the job table.
-
-import * as React from 'react'
-import { useMutation } from 'react-query'
-
-import Stack from '@mui/joy/Stack'
-import ListItem from '@mui/joy/ListItem'
-import ListItemContent from '@mui/joy/ListItemContent'
-import Typography from '@mui/joy/Typography'
-import Menu from '@mui/joy/Menu'
-import MenuItem from '@mui/joy/MenuItem'
-import IconButton from '@mui/joy/IconButton'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp'
 import Box from '@mui/joy/Box'
+import Button from '@mui/joy/Button'
 // import Badge from '@mui/joy/Badge';
 import Card from '@mui/joy/Card'
-import Button from '@mui/joy/Button'
+import IconButton from '@mui/joy/IconButton'
+import ListItem from '@mui/joy/ListItem'
+import ListItemContent from '@mui/joy/ListItemContent'
+import Menu from '@mui/joy/Menu'
+import MenuItem from '@mui/joy/MenuItem'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
-import PlayCircleFilledSharpIcon from '@mui/icons-material/PlayCircleFilledSharp'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation } from 'react-query'
 
-import JobModal from './JobModal'
-import DeviceItem from './Device'
-import client from '../client/exam-tree-queries'
 import acquisitionControl from '../client/acquisition-api'
-import SequenceViewer from './SequencePlot'
-
-import { Job } from '../interfaces/data.interface'
+import client from '../client/exam-tree-queries'
 import { JobComponentProps } from '../interfaces/components.interface'
+import { Job } from '../interfaces/data.interface'
 import { navigation } from '../utils/size_vars'
+import DeviceItem from './Device'
+import JobModal from './JobModal'
+import SequenceViewer from './SequencePlot'
 
 function JobItem({ data: job, devices, sequences, refetchParentData }: JobComponentProps) {
   // Context: Delete and edit options, anchor for context location
@@ -103,9 +99,8 @@ function JobItem({ data: job, devices, sequences, refetchParentData }: JobCompon
               <Typography noWrap level='body-md' textColor='text.tertiary'>
                 {`Last record: ${
                   job.records && job.records.length > 0
-                    ? new Date(
-                        job.records[job.records.length - 1].datetime_created,
-                      ).toDateString() + ` (${job.records ? job.records.length : '-'})`
+                    ? new Date(job.records[job.records.length - 1].datetime_created).toDateString() +
+                      ` (${job.records ? job.records.length : '-'})`
                     : '-'
                 }`}
               </Typography>
@@ -189,11 +184,7 @@ function JobItem({ data: job, devices, sequences, refetchParentData }: JobCompon
         />
 
         {/* Sequence viewer modal */}
-        <Modal
-          open={seqModalOpen}
-          onClose={() => setSeqModalOpen(false)}
-          sx={{ mt: navigation.height }}
-        >
+        <Modal open={seqModalOpen} onClose={() => setSeqModalOpen(false)} sx={{ mt: navigation.height }}>
           <ModalDialog layout='fullscreen' variant='plain'>
             <ModalClose />
             <SequenceViewer sequence_id={job.sequence_id} />

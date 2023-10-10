@@ -1,30 +1,27 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // PatientTable.tsx is responsible for rendering the patient table view.
-
-import { useNavigate } from 'react-router-dom'
-import { useMutation } from 'react-query'
-import { useQuery } from 'react-query'
-import * as React from 'react'
-
-import Typography from '@mui/joy/Typography'
-import Container from '@mui/system/Container'
-import Sheet from '@mui/joy/Sheet'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
+import Box from '@mui/joy/Box'
+import Button from '@mui/joy/Button'
+import FormLabel from '@mui/joy/FormLabel'
+import Grid from '@mui/joy/Grid'
 import IconButton from '@mui/joy/IconButton'
+import Input from '@mui/joy/Input'
 import LinearProgress from '@mui/joy/LinearProgress'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
+import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
-import Grid from '@mui/joy/Grid'
-import Input from '@mui/joy/Input'
-import FormLabel from '@mui/joy/FormLabel'
-import Button from '@mui/joy/Button'
 import Table from '@mui/joy/Table'
-import Box from '@mui/joy/Box'
+import Typography from '@mui/joy/Typography'
+import Container from '@mui/system/Container'
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import { useQuery } from 'react-query'
+import { useNavigate } from 'react-router-dom'
 
 import client from '../client/exam-tree-queries'
 import { Patient } from '../interfaces/data.interface'
@@ -117,13 +114,7 @@ export default function PatientTable() {
               bgcolor: 'background.body',
             }}
           />
-          <Typography
-            id='basic-modal-dialog-title'
-            component='h2'
-            level='inherit'
-            fontSize='1.25em'
-            mb='0.25em'
-          >
+          <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
             Create New Patient
           </Typography>
 
@@ -164,14 +155,7 @@ export default function PatientTable() {
       </Stack>
 
       <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
-        <Table
-          hoverRow
-          borderAxis='xBetween'
-          color='neutral'
-          size='sm'
-          stickyHeader
-          variant='plain'
-        >
+        <Table hoverRow borderAxis='xBetween' color='neutral' size='sm' stickyHeader variant='plain'>
           <thead>
             <tr>
               <th style={{ width: '4%' }}>ID</th>
@@ -198,11 +182,7 @@ export default function PatientTable() {
                 <td>{patient.status}</td>
                 <td>{patient.comment}</td>
                 <td>{new Date(patient.datetime_created).toDateString()}</td>
-                <td>
-                  {patient.datetime_updated
-                    ? new Date(patient.datetime_updated).toDateString()
-                    : '-'}
-                </td>
+                <td>{patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-'}</td>
 
                 <td>
                   <Box sx={{ display: 'flex', gap: 1 }}>

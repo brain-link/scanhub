@@ -1,21 +1,20 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // SequenceViewer.tsx is responsible for rendering an mri sequence.
-
-import { useQuery } from 'react-query'
-import { useNavigate } from 'react-router-dom'
-import React from 'react'
-import Plot from 'react-plotly.js'
-import { PlotData, MRISequence } from '../interfaces/mri-data.interface'
-import Box from '@mui/joy/Box'
-import Stack from '@mui/joy/Stack'
 import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp'
 import FileDownloadSharpIcon from '@mui/icons-material/FileDownloadSharp'
+import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
-import { SequenceViewerProps } from '../interfaces/components.interface'
-import sequenceClient from '../client/sequence-api'
+import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import React from 'react'
+import Plot from 'react-plotly.js'
+import { useQuery } from 'react-query'
+import { useNavigate } from 'react-router-dom'
+
+import sequenceClient from '../client/sequence-api'
+import { SequenceViewerProps } from '../interfaces/components.interface'
+import { MRISequence, PlotData } from '../interfaces/mri-data.interface'
 
 function SequencePlot({ sequence_id }: SequenceViewerProps) {
   const navigate = useNavigate()
