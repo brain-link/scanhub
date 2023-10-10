@@ -55,11 +55,11 @@
     "typescript": "*"
   },
   "scripts": {
-    "start": "parcel src/index.html -p 3000 && parcel watch src/index.html",
-    "build": "parcel build src/index.html",
-    "lint": "eslint src/**/*.tsx",
-    "lint:fix": "eslint --fix 'src/**/*.tsx'",
-    "format": "prettier --write 'src/**/*.tsx' --config ./.prettierrc"
+    "start": "parcel ./src/index.html -p 3000 && parcel watch ./src/index.html",
+    "build": "parcel build ./src/index.html",
+    "lint": "eslint ./src/**/*.tsx",
+    "lint:fix": "eslint --fix './src/**/*.tsx'",
+    "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc"
   },
   "browserslist": {
     "production": [
