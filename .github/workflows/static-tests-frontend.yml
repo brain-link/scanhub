@@ -15,6 +15,9 @@ jobs:
     name: 'Linting frontend'
     runs-on: ubuntu-latest
 
+    env:
+      working-directory: ./frontend
+
     steps:
       - uses: actions/checkout@v3
       - name: Install modules
