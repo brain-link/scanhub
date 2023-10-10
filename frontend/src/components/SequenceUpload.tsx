@@ -16,9 +16,9 @@ import { useMutation } from 'react-query'
 import mriSequenceService from '../client/sequence-api'
 // Import api service and interfaces
 import { MRISequence } from '../interfaces/mri-data.interface'
+import { SequenceUploadModal } from '../interfaces/components.interface'
 
-function SequenceUpload(props) {
-  // const [dialogOpen, setDialogOpen] = React.useState(false);
+function SequenceUpload(props: SequenceUploadModal) {
 
   const [sequence, setSequence] = React.useState<MRISequence>({
     _id: '',

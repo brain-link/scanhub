@@ -45,8 +45,8 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
 
   const {
     data: workflows,
-    isLoading: workflowsLoading,
-    isError: workflowsError,
+    // isLoading: workflowsLoading,
+    // isError: workflowsError,
   } = useQuery<Workflow[], Error>({
     queryKey: ['workflows'],
     queryFn: () => client.workflowService.getAll(),

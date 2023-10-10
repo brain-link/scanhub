@@ -8,7 +8,6 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
 import PersonSharpIcon from '@mui/icons-material/PersonSharp'
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp'
 import Avatar from '@mui/joy/Avatar'
 import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
@@ -63,7 +62,7 @@ function ColorSchemeToggle() {
 
 export default function Navigation() {
   const loc = useLocation()
-  const [anchorEl, setAnchorEl] = React.useState<any>(null)
+  const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null)
   const open = Boolean(anchorEl)
 
   return (

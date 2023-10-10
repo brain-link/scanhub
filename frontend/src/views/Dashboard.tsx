@@ -8,14 +8,10 @@ import IconButton from '@mui/joy/IconButton'
 // import CircularProgress from '@mui/joy/CircularProgress';
 import LinearProgress from '@mui/joy/LinearProgress'
 import Typography from '@mui/joy/Typography'
-import Container from '@mui/system/Container'
 import React from 'react'
 
 import useHealthCheck from '../client/healthcheck'
 import baseUrls from '../client/urls'
-
-// import DeviceTable from "./DeviceTable";
-// import PatientTable from "./PatientTable";
 
 export default function Dashboard() {
   const isReady = useHealthCheck(baseUrls.examService)

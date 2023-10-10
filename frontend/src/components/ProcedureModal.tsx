@@ -12,11 +12,9 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 // Import procedure api service and interfaces
-import client from '../client/exam-tree-queries'
 import { ModalProps } from '../interfaces/components.interface'
 import { Procedure } from '../interfaces/data.interface'
 

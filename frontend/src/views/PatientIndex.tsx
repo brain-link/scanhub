@@ -35,7 +35,6 @@ import { navigation, patientView } from '../utils/size_vars'
 function PatientIndex() {
   const params = useParams()
 
-  const [activeTool, setActiveTool] = React.useState<string | undefined>(undefined)
   const [sidePanelOpen, setSidePanelOpen] = React.useState(true)
 
   // Modal states for exam and procedure
@@ -48,7 +47,7 @@ function PatientIndex() {
   // useQuery for caching the fetched data
   const {
     data: patient,
-    refetch: refetchPatient,
+    // refetch: refetchPatient,
     isLoading: patientLoading,
     isError: patientError,
   } = useQuery<Patient, Error>({
@@ -60,8 +59,8 @@ function PatientIndex() {
   const {
     data: exams,
     refetch: refetchExams,
-    isLoading: examsLoading,
-    isError: examsError,
+    // isLoading: examsLoading,
+    // isError: examsError,
   } = useQuery<Exam[], Error>({
     queryKey: ['exam', params.patientId],
     queryFn: () => client.examService.getAll(Number(params.patientId)),

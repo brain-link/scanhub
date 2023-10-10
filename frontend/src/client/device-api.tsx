@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import { Device } from '../interfaces/data.interface'
 import baseUrls from './urls'
@@ -12,8 +12,10 @@ class DeviceApi {
     try {
       const response = await axios.get<Device[] | []>(`${baseUrls.deviceService}/`)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -21,8 +23,10 @@ class DeviceApi {
   async delete(id: number): Promise<void> {
     try {
       await axios.delete(`/${id}`)
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -31,8 +35,10 @@ class DeviceApi {
     try {
       const response = await axios.get<Device>(`${baseUrls.deviceService}/${id}`)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -41,8 +47,10 @@ class DeviceApi {
     try {
       const response = await axios.get<string>(`${baseUrls.deviceService}/${id}/ip_address`)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -51,13 +59,15 @@ class DeviceApi {
     try {
       const response = await axios.get<DeviceStatus>(`${baseUrls.deviceService}/${id}/status`)
       return response.data.status
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
 
-  protected handleError(error: any) {
+  protected handleError(error: AxiosError) {
     if (axios.isAxiosError(error)) {
       console.log('Catched axios error: ', error)
     }

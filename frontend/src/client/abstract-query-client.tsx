@@ -1,7 +1,7 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // AbstractQueryClient.tsx is responsible for defining the abstract query client class.
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosError, AxiosInstance } from 'axios'
 
 // TODO:
 // - id's are currently of type number and should become of type uuid
@@ -19,16 +19,18 @@ export abstract class ApiService<T> {
     })
   }
 
-  async getAll(parent_id?: number): Promise<T[] | []> {
+  async getAll(parentId?: number): Promise<T[] | []> {
     try {
       // Parent id parameter is optional, if provided it is used in an "/all/<parent_id>"" endpoint
       // Otherwise the default case endpoint "/" is used
-      const queryUrl = parent_id ? `/all/${parent_id}` : '/'
+      const queryUrl = parentId ? `/all/${parentId}` : '/'
 
       const response = await this.axiosInstance.get<T[]>(queryUrl)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -37,8 +39,10 @@ export abstract class ApiService<T> {
     try {
       const response = await this.axiosInstance.get<T>(`/${id}`)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -47,8 +51,10 @@ export abstract class ApiService<T> {
     try {
       const response = await this.axiosInstance.post<T>('/', data)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -57,8 +63,10 @@ export abstract class ApiService<T> {
     try {
       const response = await this.axiosInstance.put<T>(`/${id}`, data)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
@@ -66,15 +74,16 @@ export abstract class ApiService<T> {
   async delete(id: number): Promise<void> {
     try {
       await this.axiosInstance.delete(`/${id}`)
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
 
-  protected handleError(error: any) {
-    if (axios.isAxiosError(error)) {
-      console.log('Catched axios error: ', error)
-    }
+  protected handleError(error: AxiosError) {
+    // TODO: Properly catch axios error
+    console.log('Catched axios error: ', error)
   }
 }

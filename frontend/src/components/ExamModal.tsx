@@ -12,7 +12,6 @@ import Stack from '@mui/joy/Stack'
 // Import mui joy components
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 import { ModalProps } from '../interfaces/components.interface'

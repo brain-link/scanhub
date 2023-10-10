@@ -28,7 +28,7 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
 
   const {
     data: exams,
-    refetch,
+    // refetch,
     isLoading,
     isError,
   } = useQuery<Exam[], Error>({

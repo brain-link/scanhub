@@ -4,8 +4,6 @@ import * as cornerstoneTools from 'cornerstone-tools'
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader'
 import dicomParser from 'dicom-parser'
 import Hammer from 'hammerjs'
-import * as React from 'react'
-import CornerstoneViewport from 'react-cornerstone-viewport'
 
 export default function InitCornerstone() {
   cornerstoneTools.external.cornerstone = cornerstone

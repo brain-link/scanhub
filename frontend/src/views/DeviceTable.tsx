@@ -10,13 +10,6 @@ import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import LinearProgress from '@mui/material/LinearProgress'
-import Paper from '@mui/material/Paper'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
 import Container from '@mui/system/Container'
 import axios from 'axios'
 import * as React from 'react'
@@ -67,8 +60,8 @@ export default function DeviceTable() {
         </IconButton>
       </Box>
       <Box sx={{ m: 2 }}>
-        {devices?.map((device) => (
-          <Accordion expanded={expanded === device.id} onChange={handleExpandChange(device.id)}>
+        {devices?.map((device, index) => (
+          <Accordion key={index} expanded={expanded === device.id} onChange={handleExpandChange(device.id)}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls='panel1bh-content' id='panel1bh-header'>
               <Typography sx={{ width: '33%', flexShrink: 0 }}>Device ID: {device.id}</Typography>
               <Typography sx={{ color: 'text.secondary' }}>Modality: {device.modality}</Typography>

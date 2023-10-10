@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { MRISequence, PlotData } from '../interfaces/mri-data.interface'
 import { ApiService } from './abstract-query-client'
 import baseUrls from './urls'
@@ -7,39 +9,45 @@ class MRISequenceApiService extends ApiService<MRISequence> {
     super(baseUrls.mriSequenceService)
   }
 
-  async uploadSequenceFile(sequence_data: Partial<MRISequence>): Promise<MRISequence> {
+  async uploadSequenceFile(sequenceData: Partial<MRISequence>): Promise<MRISequence> {
     const formData = new FormData()
-    Object.entries(sequence_data).forEach(([key, value]) => {
+    Object.entries(sequenceData).forEach(([key, value]) => {
       formData.append(key, value)
     })
 
     try {
-      const response = await this.axiosInstance.post('/upload', sequence_data, {
+      const response = await this.axiosInstance.post('/upload', sequenceData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
 
-  async getSequencePlot(seq_id: string): Promise<PlotData> {
+  async getSequencePlot(seqId: string): Promise<PlotData> {
     try {
-      const response = await this.axiosInstance.get(`/mri-sequence-plot/${seq_id}`)
+      const response = await this.axiosInstance.get(`/mri-sequence-plot/${seqId}`)
       return JSON.parse(response.data)
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }
 
-  async getSequenceMeta(seq_id: string): Promise<MRISequence> {
+  async getSequenceMeta(seqId: string): Promise<MRISequence> {
     try {
-      const response = await this.axiosInstance.get(`/${seq_id}`)
+      const response = await this.axiosInstance.get(`/${seqId}`)
       return response.data
-    } catch (error) {
-      this.handleError(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
       throw error
     }
   }

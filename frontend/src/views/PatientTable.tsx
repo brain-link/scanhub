@@ -56,7 +56,7 @@ export default function PatientTable() {
 
   const {
     data: patients,
-    refetch,
+    // refetch,
     isLoading,
     isError,
   } = useQuery<Patient[], Error>({

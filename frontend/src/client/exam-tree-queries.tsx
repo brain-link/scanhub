@@ -2,12 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // Definition of global variables
 import { Patient } from '../interfaces/data.interface'
-import { Device } from '../interfaces/data.interface'
 import { Workflow } from '../interfaces/data.interface'
 import { Exam } from '../interfaces/data.interface'
 import { Procedure } from '../interfaces/data.interface'
 import { Job } from '../interfaces/data.interface'
-import { Record } from '../interfaces/data.interface'
 import { ApiService } from './abstract-query-client'
 import baseUrls from './urls'
 

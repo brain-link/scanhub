@@ -55,3 +55,9 @@ export interface AlertProps {
 export interface ExamTreeProps {
   setDataPath: (dataPath: string) => void
 }
+
+export interface SequenceUploadModal {
+  fetchSequences: () => void
+  dialogOpen: boolean
+  setDialogOpen: (open: boolean) => void
+}
