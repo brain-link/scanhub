@@ -1,0 +1,74 @@
+:py:mod:`api.acquisitioncontrol`
+================================
+
+.. py:module:: api.acquisitioncontrol
+
+.. autoapi-nested-parse::
+
+   Acquisition control. Receives control cmd from ui and controls scans on devices.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   api.acquisitioncontrol.device_location_request
+   api.acquisitioncontrol.start_scan
+   api.acquisitioncontrol.forward_status
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   api.acquisitioncontrol.DEBUG_FLAG
+   api.acquisitioncontrol.SEQUENCE_MANAGER_URI
+   api.acquisitioncontrol.EXAM_MANAGER_URI
+   api.acquisitioncontrol.router
+
+
+.. py:data:: DEBUG_FLAG
+   :value: False
+
+   
+
+.. py:data:: SEQUENCE_MANAGER_URI
+   :value: 'host.docker.internal:8003'
+
+   
+
+.. py:data:: EXAM_MANAGER_URI
+   :value: 'host.docker.internal:8004'
+
+   
+
+.. py:data:: router
+
+   
+
+.. py:function:: device_location_request(device_id)
+   :async:
+
+   Retrieve ip from device-manager.
+
+
+.. py:function:: start_scan(scan_job: api.models.ScanJob)
+   :async:
+
+   Receives a job. Create a record id, trigger scan with it and returns it.
+
+
+.. py:function:: forward_status(scan_status: api.models.ScanStatus)
+   :async:
+
+   Receives status for a job. Forwards it to the ui and returns ok.
+
+

@@ -1,0 +1,240 @@
+:py:mod:`api.workflow`
+======================
+
+.. py:module:: api.workflow
+
+.. autoapi-nested-parse::
+
+   Workflow manager endpoints.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   api.workflow.RecoJob
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   api.workflow.create_workflow
+   api.workflow.get_workflow
+   api.workflow.get_workflow_list
+   api.workflow.get_workflow_meta_list
+   api.workflow.delete_workflow
+   api.workflow.update_workflow
+   api.workflow.upload_result
+   api.workflow.download_result
+   api.workflow.get_data_from_file
+   api.workflow.get_image_file
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   api.workflow.router
+   api.workflow.producer
+
+
+.. py:class:: RecoJob
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   RecoJob is a pydantic model for a reco job.
+
+   .. py:attribute:: record_id
+      :type: int
+
+      
+
+   .. py:attribute:: input
+      :type: pydantic.StrictStr
+
+      
+
+
+.. py:data:: router
+
+   
+
+.. py:data:: producer
+
+   
+
+.. py:function:: create_workflow(payload: api.models.WorkflowIn) -> api.models.WorkflowOut
+   :async:
+
+   Create new workflow endpoint.
+
+   Parameters
+   ----------
+   payload
+       Data to be added, workflow iutput model
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Creation unsuccessful
+
+
+.. py:function:: get_workflow(workflow_id: int) -> api.models.WorkflowOut
+   :async:
+
+   Get workflow endpoint.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow object to be returned
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: get_workflow_list() -> list[api.models.WorkflowOut]
+   :async:
+
+   Get all workflows endpoint.
+
+   Returns
+   -------
+       List of workflow meta pydantic output models, might be empty
+
+
+.. py:function:: get_workflow_meta_list() -> list[api.models.WorkflowMetaOut]
+   :async:
+
+   Get all workflow meta information endpoint.
+
+   Returns
+   -------
+       List of workflow meta pydantic output models, might be empty
+
+
+.. py:function:: delete_workflow(workflow_id: int) -> None
+   :async:
+
+   Delete workflow endpoint.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of workflow to be deleted
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: update_workflow(workflow_id: int, payload: api.models.BaseWorkflow) -> api.models.WorkflowOut
+   :async:
+
+   Update existing workflow endpoint.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow to be updated
+   payload
+       Data to be updated, workflow pydantic base model
+
+   Returns
+   -------
+       Workflow pydantic output model.
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: upload_result(record_id: int, file: fastapi.UploadFile = File(...)) -> dict[str, str]
+   :async:
+
+   Upload workflow result.
+
+   Parameters
+   ----------
+   record_id
+       Id of the record, which is processed by workflow
+   file, optional
+       Data upload, e.g. reconstruction result, by default File(...)
+
+   Returns
+   -------
+       Notification
+
+
+.. py:function:: download_result(record_id: int) -> fastapi.responses.FileResponse
+   :async:
+
+   Download DICOM result.
+
+   Parameters
+   ----------
+   record_id
+       ID of the record the DICOM file belongs to.
+
+   Returns
+   -------
+       DICOM file response
+
+
+.. py:function:: get_data_from_file(file_path: str) -> Generator
+
+   Open a file and read the data.
+
+   Parameters
+   ----------
+   file_path
+       Path of the file to open
+
+   Yields
+   ------
+       File content
+
+
+.. py:function:: get_image_file(record_id: int) -> fastapi.responses.StreamingResponse
+   :async:
+
+   Read image file data and content as streaming response.
+
+   Parameters
+   ----------
+   record_id
+       Record ID the image should be read for
+
+   Returns
+   -------
+       Image file content
+
+   Raises
+   ------
+   HTTPException
+       File not found
+
+
