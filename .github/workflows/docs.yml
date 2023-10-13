@@ -24,10 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install poetry
-        cd docs
-        poetry install
-
+        pip install sphinx pydata-sphinx-theme sphinxcontrib-openapi sphinx-autoapi
 
     - name: Generate API docs
       run: sphinx-apidoc -o ./docs/source ./services -P
