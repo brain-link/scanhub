@@ -1,0 +1,132 @@
+:py:mod:`device-manager.app.api.db`
+===================================
+
+.. py:module:: device-manager.app.api.db
+
+.. autoapi-nested-parse::
+
+   Definition of device database ORM models.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   device-manager.app.api.db.Device
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   device-manager.app.api.db.init_db
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   device-manager.app.api.db.Base
+   device-manager.app.api.db.engine
+   device-manager.app.api.db.async_engine
+   device-manager.app.api.db.async_session
+
+
+.. py:data:: Base
+   :type: sqlalchemy.orm.decl_api.DeclarativeMeta
+
+   
+
+.. py:data:: engine
+
+   
+
+.. py:function:: init_db() -> None
+
+   Create database helper function.
+
+
+.. py:class:: Device
+
+
+   Bases: :py:obj:`Base`
+
+   Device ORM model.
+
+   .. py:attribute:: __tablename__
+      :value: 'device'
+
+      
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: name
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: manufacturer
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: modality
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: status
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: site
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: ip_address
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:method:: update(data: dict)
+
+      Update attributes of orm model.
+
+      Parameters
+      ----------
+          data {dict} -- Entries to be updated
+
+
+
+.. py:data:: async_engine
+
+   
+
+.. py:data:: async_session
+
+   
+

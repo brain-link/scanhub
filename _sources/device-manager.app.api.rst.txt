@@ -1,0 +1,50 @@
+device\-manager.app.api package
+===============================
+
+Submodules
+----------
+
+device\-manager.app.api.dal module
+----------------------------------
+
+.. automodule:: device-manager.app.api.dal
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+device\-manager.app.api.db module
+---------------------------------
+
+.. automodule:: device-manager.app.api.db
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+device\-manager.app.api.devices module
+--------------------------------------
+
+.. automodule:: device-manager.app.api.devices
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+device\-manager.app.api.models module
+-------------------------------------
+
+.. automodule:: device-manager.app.api.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: device-manager.app.api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

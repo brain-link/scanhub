@@ -1,0 +1,78 @@
+:py:mod:`exam-manager.app.main`
+===============================
+
+.. py:module:: exam-manager.app.main
+
+.. autoapi-nested-parse::
+
+   Exam manager main file.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.main.startup
+   exam-manager.app.main.shutdown
+   exam-manager.app.main.readiness
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.main.app
+   exam-manager.app.main.origins
+
+
+.. py:data:: app
+
+   
+
+.. py:data:: origins
+   :value: ['http://localhost', 'http://localhost:3000', 'http://localhost:8100', 'http://localhost:8080']
+
+   
+
+.. py:function:: startup()
+   :async:
+
+   Statup exam-tree microservice.
+
+   Raises
+   ------
+   HTTPException
+       500: Device table does not exist
+   HTTPException
+       500: Workflow table does not exist
+
+
+.. py:function:: shutdown() -> None
+   :async:
+
+   Shutdown function.
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+   Readiness health endpoint.
+
+   Returns
+   -------
+       Status dictionary
+
+   Raises
+   ------
+   HTTPException
+       500: Any of the exam-tree tables does not exist
+
+

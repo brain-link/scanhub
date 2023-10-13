@@ -1,0 +1,19 @@
+acquisition\-control package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   acquisition-control.app
+
+Module contents
+---------------
+
+.. automodule:: acquisition-control
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

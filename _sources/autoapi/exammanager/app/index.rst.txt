@@ -1,0 +1,29 @@
+:py:mod:`exam-manager.app`
+==========================
+
+.. py:module:: exam-manager.app
+
+.. autoapi-nested-parse::
+
+   Init file. That it is considerer by sphinx as a package.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   api/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   main/index.rst
+
+

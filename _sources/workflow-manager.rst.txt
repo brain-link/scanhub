@@ -1,0 +1,19 @@
+workflow\-manager package
+=========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   workflow-manager.app
+
+Module contents
+---------------
+
+.. automodule:: workflow-manager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

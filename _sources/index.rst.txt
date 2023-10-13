@@ -19,7 +19,7 @@ Getting started
 
 .. toctree::
    :maxdepth: 1
-   :caption: API Reference
+   :caption: Web API Reference
 
    scanhub_api
 
@@ -29,6 +29,10 @@ Getting started
    
    scanhub_techdoc
    
+.. toctree::
+   :maxdepth: 1
+   :caption: Source Code Documentation
+
 
 Indices and tables
 ==================

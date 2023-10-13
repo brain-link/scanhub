@@ -1,0 +1,31 @@
+device\-manager.app package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   device-manager.app.api
+
+Submodules
+----------
+
+device\-manager.app.main module
+-------------------------------
+
+.. automodule:: device-manager.app.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: device-manager.app
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,0 +1,356 @@
+:py:mod:`exam-manager.app.api.db`
+=================================
+
+.. py:module:: exam-manager.app.api.db
+
+.. autoapi-nested-parse::
+
+   Database file for the MRI sequence manager service.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.api.db.Exam
+   exam-manager.app.api.db.Procedure
+   exam-manager.app.api.db.Job
+   exam-manager.app.api.db.Record
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.api.db.init_db
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.api.db.Base
+   exam-manager.app.api.db.engine
+   exam-manager.app.api.db.MappedBase
+   exam-manager.app.api.db.Device
+   exam-manager.app.api.db.async_engine
+   exam-manager.app.api.db.async_session
+
+
+.. py:data:: Base
+   :type: sqlalchemy.ext.declarative.DeclarativeMeta
+
+   
+
+.. py:data:: engine
+
+   
+
+.. py:function:: init_db() -> None
+
+   Initialize the database.
+
+
+.. py:class:: Exam
+
+
+   Bases: :py:obj:`Base`
+
+   Exam ORM model.
+
+   .. py:attribute:: __tablename__
+      :value: 'exam'
+
+      
+
+   .. py:attribute:: __table_args__
+
+      
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: procedures
+      :type: sqlalchemy.orm.Mapped[list[Procedure]]
+
+      
+
+   .. py:attribute:: patient_id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: name
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: country
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: site
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: address
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: creator
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: status
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:method:: update(data: pydantic.BaseModel) -> None
+
+      Update a exam entry.
+
+      Parameters
+      ----------
+      data
+          Data to be written
+
+
+
+.. py:class:: Procedure
+
+
+   Bases: :py:obj:`Base`
+
+   Procedure ORM model.
+
+   .. py:attribute:: __tablename__
+      :value: 'procedure'
+
+      
+
+   .. py:attribute:: __table_args__
+
+      
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: exam_id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: jobs
+      :type: sqlalchemy.orm.Mapped[list[Job]]
+
+      
+
+   .. py:attribute:: name
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: status
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:method:: update(data: pydantic.BaseModel) -> None
+
+      Update a procedure entry.
+
+      Parameters
+      ----------
+      data
+          Data to be written
+
+
+
+.. py:class:: Job
+
+
+   Bases: :py:obj:`Base`
+
+   Job ORM model.
+
+   .. py:attribute:: __tablename__
+      :value: 'job'
+
+      
+
+   .. py:attribute:: __table_args__
+
+      
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: procedure_id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: workflow_id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: device_id
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: sequence_id
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: records
+      :type: sqlalchemy.orm.Mapped[list[Record]]
+
+      
+
+   .. py:attribute:: type
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: comment
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: is_acquired
+      :type: sqlalchemy.orm.Mapped[bool]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:method:: update(data: pydantic.BaseModel) -> None
+
+      Update a job entry.
+
+      Parameters
+      ----------
+      data
+          Data to be written
+
+
+
+.. py:class:: Record
+
+
+   Bases: :py:obj:`Base`
+
+   Record ORM model.
+
+   .. py:attribute:: __tablename__
+      :value: 'record'
+
+      
+
+   .. py:attribute:: __table_args__
+
+      
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: job_id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+   .. py:attribute:: data_path
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: comment
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:method:: update(data: dict) -> None
+
+      Update a Record entry.
+
+      Parameters
+      ----------
+      data
+          Data to be written
+
+
+
+.. py:data:: MappedBase
+
+   
+
+.. py:data:: Device
+
+   
+
+.. py:data:: async_engine
+
+   
+
+.. py:data:: async_session
+
+   
+

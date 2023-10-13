@@ -1,0 +1,32 @@
+acquisition\-control.app.api package
+====================================
+
+Submodules
+----------
+
+acquisition\-control.app.api.acquisitioncontrol module
+------------------------------------------------------
+
+.. automodule:: acquisition-control.app.api.acquisitioncontrol
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+acquisition\-control.app.api.models module
+------------------------------------------
+
+.. automodule:: acquisition-control.app.api.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: acquisition-control.app.api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
