@@ -21,6 +21,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
 sys.path.insert(0, basedir)
 
+# Create __init__.py files in the given directories that they are recognized as packages by sphinx
+def create_init_files(directories):
+    for directory in directories:
+        fp = open(f'{directory}/__init__.py', 'w')
+        fp.write('"""Init file, that enables sphinx to detect this package."""')
+        fp.close()
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -72,6 +79,13 @@ autoapi_dirs = ['../../services/acquisition-control',
                 ]
 
 autoapi_template_dir = '_templates/autoapi'
+
+init_dirs = []
+for autoapi_dir in autoapi_dirs:
+    init_dirs.append(autoapi_dir)
+    init_dirs.append(autoapi_dir + '/app')
+
+create_init_files(init_dirs)
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
