@@ -26,9 +26,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install sphinx pydata-sphinx-theme sphinxcontrib-openapi sphinx-autoapi
 
-    - name: Generate API docs
-      run: sphinx-apidoc -o ./docs/source ./services -P
-
     - name: Build docs
       run: sphinx-build -b html ./docs/source ./docs/build/html
 
