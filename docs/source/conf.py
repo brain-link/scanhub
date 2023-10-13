@@ -40,6 +40,7 @@ version = '0.0.1'   # import this from scanhub package
 source_suffix = {".rst": "restructuredtext", ".txt": "restructuredtext", ".md": "markdown"}
 
 extensions = [
+    'autoapi.extension',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     # 'sphinx.ext.napoleon',  # support numpy and google style docstrings (at the moment only openapi)
@@ -62,6 +63,15 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# -- Options for AutoAPI -----------------------------------------------------
+
+autoapi_dirs = ['../../services/acquisition-control',
+                '../../services/device-manager',
+                '../../services/exam-manager',
+                '../../services/workflow-manager',
+                ]
+
+autoapi_template_dir = '_templates/autoapi'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
