@@ -1,26 +1,25 @@
 // Collection of MRI modality related data interfaces
-
-import Plotly from 'plotly.js';
+import Plotly from 'plotly.js'
 
 export interface MRISequence {
-    _id: string;
-    name: string;
-    description?: string | null;
-    sequence_type?: string | null;
-    created_at?: Date | null;
-    updated_at?: Date | null;
-    tags?: [string] | [];
-    file?: any | null; 
-    file_extension?: string;
+  _id: string
+  name: string
+  description?: string | null
+  sequence_type?: string | null
+  created_at?: Date | null
+  updated_at?: Date | null
+  tags?: [string] | []
+  file?: string | null
+  file_extension?: string
 }
 
 export interface FileResponse {
-    filename: string;
-    contentType: string;
-    content: Blob;
+  filename: string
+  contentType: string
+  content: Blob
 }
 
 export interface PlotData {
-    layout: Plotly.Layout;
-    data: Plotly.Data[];
+  layout: Plotly.Layout
+  data: Plotly.Data[]
 }

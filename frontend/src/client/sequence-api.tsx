@@ -1,51 +1,57 @@
-import baseUrls from './urls';
+import axios from 'axios'
 
-import { ApiService } from './abstract-query-client';
-import { PlotData, MRISequence } from '../interfaces/mri-data.interface';
-
+import { MRISequence, PlotData } from '../interfaces/mri-data.interface'
+import { ApiService } from './abstract-query-client'
+import baseUrls from './urls'
 
 class MRISequenceApiService extends ApiService<MRISequence> {
-    constructor() {
-      super(baseUrls.mriSequenceService);
+  constructor() {
+    super(baseUrls.mriSequenceService)
+  }
+
+  async uploadSequenceFile(sequenceData: Partial<MRISequence>): Promise<MRISequence> {
+    const formData = new FormData()
+    Object.entries(sequenceData).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+
+    try {
+      const response = await this.axiosInstance.post('/upload', sequenceData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      return response.data
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
+      throw error
     }
+  }
 
-    async uploadSequenceFile(sequence_data: Partial<MRISequence>): Promise<MRISequence> {
-       
-        const formData = new FormData();
-        Object.entries(sequence_data).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-
-        try {
-            const response = await this.axiosInstance.post('/upload', sequence_data, { headers: {'Content-Type': 'multipart/form-data'} });
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-            throw error;
-        }
+  async getSequencePlot(seqId: string): Promise<PlotData> {
+    try {
+      const response = await this.axiosInstance.get(`/mri-sequence-plot/${seqId}`)
+      return JSON.parse(response.data)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
+      throw error
     }
+  }
 
-    async getSequencePlot(seq_id: string): Promise<PlotData> {
-        try {
-            const response = await this.axiosInstance.get(`/mri-sequence-plot/${seq_id}`)
-            return JSON.parse(response.data);
-        } catch (error) {
-            this.handleError(error);
-            throw error;
-        }
+  async getSequenceMeta(seqId: string): Promise<MRISequence> {
+    try {
+      const response = await this.axiosInstance.get(`/${seqId}`)
+      return response.data
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        this.handleError(error)
+      }
+      throw error
     }
-
-    async getSequenceMeta(seq_id: string): Promise<MRISequence> {
-        try {
-            const response = await this.axiosInstance.get(`/${seq_id}`)
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-            throw error;
-        }
-    }
-
+  }
 }
 
-const mriSequenceService = new MRISequenceApiService();
-export default mriSequenceService;
+const mriSequenceService = new MRISequenceApiService()
+export default mriSequenceService

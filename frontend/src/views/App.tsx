@@ -1,18 +1,14 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-
 // App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
+import Box from '@mui/joy/Box'
+import CssBaseline from '@mui/joy/CssBaseline'
+import { CssVarsProvider } from '@mui/joy/styles'
+import { GlobalStyles } from '@mui/system'
+import * as React from 'react'
+import { Outlet } from 'react-router-dom'
 
-import * as React from 'react';
-import { Outlet } from 'react-router-dom';
-
-import Box from '@mui/joy/Box';
-import CssBaseline from '@mui/joy/CssBaseline';
-import { GlobalStyles } from '@mui/system';
-import { CssVarsProvider } from '@mui/joy/styles';
-
-import Navigation from '../components/Navigation';
-
+import Navigation from '../components/Navigation'
 
 export default function App() {
   return (
@@ -34,21 +30,23 @@ export default function App() {
             // '--PatientView-recordWidth': '300px',
           },
         }}
-      />          
+      />
       <Navigation />
 
       {/* Main content */}
-      <Box sx={{ 
+      <Box
+        sx={{
           m: 0,
           p: 0,
           gap: 2,
           justifyContent: 'start',
           display: 'flex',
           flexDirection: 'row',
-          maxHeight: '100vh'
-      }}>
-          <Outlet />
+          maxHeight: '100vh',
+        }}
+      >
+        <Outlet />
       </Box>
     </CssVarsProvider>
-  );
+  )
 }
