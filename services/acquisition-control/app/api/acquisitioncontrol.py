@@ -14,7 +14,7 @@ import httpx
 import requests
 from fastapi import APIRouter
 
-from .models import ScanJob, ScanStatus
+from .models import ScanJob, ScanStatus, Commands, DeviceTask, ParametrizedSequence, SequenceFormat
 
 DEBUG_FLAG = False
 
@@ -33,76 +33,81 @@ async def device_location_request(device_id):
             f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address"
         )
         return response.json()["ip_address"]
+    
+
+async def retrieve_sequence(sequence_manager_uri, sequence_id):
+    """Retrieve sequence and sequence-type from sequence-manager."""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"http://{sequence_manager_uri}/api/v1/mri/sequences/{sequence_id}"
+        )
+        return response.json()
+    
+
+async def create_record(exam_manager_uri, job_id):
+    """Create new record at exam_manager and retrieve record_id"""
+    async with httpx.AsyncClient() as client:
+        # TODO: data_path, comment ? # pylint: disable=fixme
+        data = {
+            "data_path": "unknown",
+            "comment": "Created in Acquisition Control",
+            "job_id": job_id,
+        }
+        response = await client.post(
+            f"http://{exam_manager_uri}/api/v1/exam/record", 
+            json=data
+        )
+        return response.json()["id"]
+    
+
+async def post_device_task(url, device_task):
+    """Create new record at exam_manager and retrieve record_id"""
+    async with httpx.AsyncClient() as client:
+        data = json.dumps(device_task)
+        response = await client.post(
+            url, 
+            json=data
+        )
+        return response.status_code
 
 
 @router.post("/start-scan")
 async def start_scan(scan_job: ScanJob):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
-    device_ip = await device_location_request(scan_job.device_id)
+    device_id = scan_job.device_id
+    record_id = ""
+    parametrized_sequence = {}
+    command = Commands.start
+
+    device_ip = await device_location_request(device_id)
+    url = f"http://{device_ip}/api/start-scan"
 
     if DEBUG_FLAG is True:
         # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
-
         record_id = "test_" + str(random.randint(0, 1000))
         sequence_json = {"test": "test"}
-
-        url = f"http://{device_ip}/api/start-scan"
-        print(url)
-        response = requests.post(
-            url,
-            json={"record_id": record_id, "sequence": json.dumps(sequence_json)},
-            timeout=60,
-        )
-
-        if response.status_code == 200:
-            print("Scan started successfully.")
-        else:
-            print("Failed to start scan.")
-
+        parametrized_sequence = ParametrizedSequence(scan_job.acquisition_limits, scan_job.sequence_parameters, sequence_json)
     else:
         print("Start-scan endpoint, device ip: ", device_ip)
         # get sequence
-        res = requests.get(
-            f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{scan_job.sequence_id}",
-            timeout=60,
-        )
-        sequence_json = res.json()
+        sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.sequence_id)
 
         # create record
-        # TODO: data_path, comment ? # pylint: disable=fixme
-        res = requests.post(
-            f"http://{EXAM_MANAGER_URI}/api/v1/exam/record",
-            json={
-                "data_path": "unknown",
-                "comment": "Created in Acquisition Control",
-                "job_id": scan_job.job_id,
-            },
-            timeout=60,
-        )
-        record_id = res.json()["id"]
+        record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
+        parametrized_sequence = ParametrizedSequence(scan_job.acquisition_limits, scan_job.sequence_parameters, sequence_json)
 
-        # start scan and forward sequence, workflow, record_id
-        logging.debug(
-            "Received job: %s, Generated record id: %s", scan_job.job_id, record_id
-        )
-        # print(sequence_json)
+    # start scan and forward sequence, workflow, record_id
+    logging.debug(
+        "Received job: %s, Generated record id: %s", scan_job.job_id, record_id
+    )
 
-        print("RECORD: ", res.json())
+    device_task = DeviceTask(device_id, record_id, command, parametrized_sequence)
+    status_code = await post_device_task(url, device_task)
 
-        url = f"http://{device_ip}/api/start-scan"
-        print(url)
-        response = requests.post(
-            url,
-            json={"record_id": record_id, "sequence": json.dumps(sequence_json)},
-            timeout=60,
-        )
-
-        if response.status_code == 200:
-            print("Scan started successfully.")
-        else:
-            print("Failed to start scan.")
-
-    print(response)
+    if status_code == 200:
+        print("Scan started successfully.")
+    else:
+        print("Failed to start scan.")
     return {"record_id": record_id}
 
 
