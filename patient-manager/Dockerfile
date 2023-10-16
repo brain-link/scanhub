@@ -13,6 +13,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 # COPY app/ressources /ressources
 
+ENV POETRY_REQUESTS_TIMEOUT=100
 RUN poetry install --no-interaction --no-root && rm -rf /root/.cache/pip
 
 # RUN pip install -r /app/requirements.txt \
