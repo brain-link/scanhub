@@ -8,18 +8,41 @@ This section gathers all product requirements which can also be interpreted as t
 Steakholder and User Roles
 ==========================
 
-- Magnetic Resonance Imaging (MRI) Technician / MTRA
-- Radiologist
-- Developer
-- Scientist
-- System Administrator
-- Site Engineer
-- Regulatory Affairs (RA) Specialist
-- Medical Device Manufacturer
-- Patient
-- Healthcare Facility / Clinic / Hospital / Customer
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+|    ID    |              Stakeholder                   |                                    Description                                    |
++==========+============================================+===================================================================================+
+| SH_010   | MRI Technician / MTRA                      | Operates the MRI machine, prepares patients for scans, and ensures optimal        |
+|          |                                            | image quality. They provide feedback on the system's usability and functionality. |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_020   | Radiologist                                | Medical professionals who interpret MRI scans to diagnose medical conditions.     |
+|          |                                            | They require high-quality images and efficient workflow for accurate diagnosis.   |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_030   | Developer                                  | Software engineers responsible for designing, coding, and maintaining the MRI     |
+|          |                                            | system software. They ensure the system meets all technical requirements.         |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_040   | Scientist                                  | Researchers who use MRI for advanced studies and might require access to raw      |
+|          |                                            | data and experimental features for research purposes.                             |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_050   | System Administrator                       | IT professionals responsible for the system's setup, maintenance, and security.   |
+|          |                                            | They ensure the system's reliability and data integrity.                          |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_060   | Site Engineer                              | Technical experts responsible for the installation, maintenance, and repair of    |
+|          |                                            | the MRI hardware. They ensure the system's physical components are functioning.   |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_070   | Regulatory Affairs (RA) Specialist         | Professionals ensuring that the MRI system complies with all relevant regulatory  |
+|          |                                            | standards and guidelines, such as FDA, HIPAA, and GDPR.                           |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_080   | Medical Device Manufacturer                | Companies that produce and distribute the MRI system. They are concerned with     |
+|          |                                            | the system's marketability, quality, and regulatory compliance.                   |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_090   | Patient                                    | Individuals undergoing MRI scans. They are concerned with the comfort, safety,    |
+|          |                                            | and privacy aspects of the MRI experience.                                        |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
+| SH_100   | Healthcare Facility / Clinic / Hospital /  | Organizations that provide healthcare services and use the MRI system for         |
+|          | Customer                                   | patient diagnosis. They are concerned with the system's reliability, efficiency,  |
+|          |                                            | and integration with other healthcare systems.                                    |
++----------+--------------------------------------------+-----------------------------------------------------------------------------------+
 
-TODO: Description of user roles and assignment of user IDs
 
 User Needs
 ==========
