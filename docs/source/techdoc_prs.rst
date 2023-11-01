@@ -20,19 +20,20 @@ Steakholder and User Roles
 | SH_030   | Developer                                  | Software engineers responsible for designing, coding, and maintaining the MRI     |
 |          |                                            | system software. They ensure the system meets all technical requirements.         |
 +----------+--------------------------------------------+-----------------------------------------------------------------------------------+
-| SH_040   | Scientist                                  | Researchers who use MRI for advanced studies and might require access to raw      |
-|          |                                            | data and experimental features for research purposes.                             |
+| SH_040   | Scientist                                  | Researchers who use MRI for advanced studies and might require access to          |
+|          |                                            | sequences, raw data and experimental features for research purposes.              |
 +----------+--------------------------------------------+-----------------------------------------------------------------------------------+
 | SH_050   | System Administrator                       | IT professionals responsible for the system's setup, maintenance, and security.   |
 |          |                                            | They ensure the system's reliability and data integrity.                          |
 +----------+--------------------------------------------+-----------------------------------------------------------------------------------+
 | SH_060   | Site Engineer                              | Technical experts responsible for the installation, maintenance, and repair of    |
-|          |                                            | the MRI hardware. They ensure the system's physical components are functioning.   |
+|          |                                            | the MRI hardware. They ensure the system's physical as well as software components|
+|          |                                            | are functioning.                                                                  |
 +----------+--------------------------------------------+-----------------------------------------------------------------------------------+
 | SH_070   | Regulatory Affairs (RA) Specialist         | Professionals ensuring that the MRI system complies with all relevant regulatory  |
-|          |                                            | standards and guidelines, such as FDA, HIPAA, and GDPR.                           |
+|          |                                            | standards and guidelines, such as MDR and GDPR.                                   |
 +----------+--------------------------------------------+-----------------------------------------------------------------------------------+
-| SH_080   | Medical Device Manufacturer                | Companies that produce and distribute the MRI system. They are concerned with     |
+| SH_080   | Medical Device Manufacturer                | Company that produce and distribute the MRI system. It is concerned with          |
 |          |                                            | the system's marketability, quality, and regulatory compliance.                   |
 +----------+--------------------------------------------+-----------------------------------------------------------------------------------+
 | SH_090   | Patient                                    | Individuals undergoing MRI scans. They are concerned with the comfort, safety,    |
