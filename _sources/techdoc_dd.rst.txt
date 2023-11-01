@@ -132,7 +132,7 @@ The A4IM scanner represents a significant advancement in low-field MRI technolog
 
 
 Notes
-#####
+-----
 
 - Support for further investigation
 - research device (investigational vs research)
