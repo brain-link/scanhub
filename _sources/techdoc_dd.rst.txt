@@ -6,7 +6,7 @@ Device Description (DD)
 Overview of the System
 ======================
 
-The A4IM scanner is an innovative low-field Magnetic Resonance Imaging (MRI) device, specifically designed for high-quality imaging of the human brain and extremities. Utilizing permanent magnets, the A4IM scanner distinguishes itself from traditional high-field MRI systems that use superconducting magnets. This low-field approach allows for a more compact design and reduced operational costs while still providing detailed images. The system is intended for use in healthcare facilities such as hospitals, clinics, and diagnostic centers.
+The A4IM scanner is an innovative low-field Magnetic Resonance Imaging (MRI) device, specifically designed for high-quality imaging of the human head and extremities. Utilizing permanent magnets, the A4IM scanner distinguishes itself from traditional high-field MRI systems that use superconducting magnets. This low-field approach allows for a more compact design and reduced operational costs while still providing detailed images. The system is intended for use in healthcare facilities such as hospitals, clinics, and diagnostic centers.
 
 The A4IM scanner comprises several key components that work in harmony to deliver high-resolution imaging capabilities:
 
@@ -26,7 +26,7 @@ MRI SanHub Software (Cloud-based): A cutting-edge platform that provides advance
 Intended Use
 ============
 
-The A4IM scanner is intended to aid healthcare professionals as an additive support measurement to trigger further investigation. It is designed to assist in the imaging of the human brain and extremities, providing high-quality images that can be interpreted by trained physicians. The device is particularly useful in the diagnostic process, although it is not intended for quantitative measurements.
+The A4IM scanner is intended to aid healthcare professionals as an additive support measurement to trigger further investigation. It is designed to assist in the imaging of the human head and extremities, providing high-quality images that can be interpreted by trained physicians. The device is particularly useful in the diagnostic process, although it is not intended for quantitative measurements.
 
 
 Intended User Population
@@ -44,7 +44,7 @@ The A4IM scanner is contraindicated for patients with certain types of metal imp
 Treatment Specifications
 ========================
 
-The A4IM scanner is intended for patients requiring diagnostic imaging of the brain and extremities. Patient selection criteria and field of application should be determined by the healthcare provider based on the individual patient's medical condition and imaging needs.
+The A4IM scanner is intended for patients requiring diagnostic imaging of the head and extremities. Patient selection criteria and field of application should be determined by the healthcare provider based on the individual patient's medical condition and imaging needs.
 
 
 Proposed Conditions of Use
