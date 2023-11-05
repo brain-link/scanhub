@@ -85,7 +85,7 @@ class BaseJob(BaseModel):
     procedure_id: int
     sequence_id: str
     workflow_id: int | None
-    device_id: int
+    device_id: str
 
 
 class BaseRecord(BaseModel):
@@ -115,7 +115,7 @@ class RecordIn(BaseRecord):
 class DeviceOut(BaseDevice):
     """Devicee output model."""
 
-    id: int
+    id: str
     datetime_created: datetime
     datetime_updated: datetime | None
 
@@ -236,9 +236,7 @@ async def get_record_out(data: Record) -> RecordOut:
     )
 
 
-async def get_job_out(
-    data: Job, device: Device = None, workflow: Workflow = None
-) -> JobOut:
+async def get_job_out(data: Job, device: Device = None, workflow: Workflow = None) -> JobOut:
     """Job output helper function.
 
     Parameters
@@ -312,9 +310,7 @@ async def get_exam_out(data: Exam) -> ExamOut:
         Exam pydantic output model
     """
     # Create procedures of the exam
-    exam_procedures = [
-        await get_procedure_out(procedure) for procedure in data.procedures
-    ]
+    exam_procedures = [await get_procedure_out(procedure) for procedure in data.procedures]
 
     return ExamOut(
         id=data.id,

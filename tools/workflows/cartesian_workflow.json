@@ -1,0 +1,57 @@
+{
+    "workflow": {
+      "name": "cartesian-sh-workflow",
+      "description": "An example cartesian ScanHub workflow",
+      "version": 1,
+      "informatics-gateway": {
+        "ae-title": "Cartesian ScanHub Workflow",
+        "data-origins": [
+          {
+            "name": "ScanHub"
+          }
+        ],
+        "export-destinations": [
+          {
+            "name": "ScanHub"
+          }
+        ]
+      },
+      "task_templates": [
+        {
+          "id": "scanhub",
+          "type": "async-http",
+          "args": {
+            "url": "https://clinical-review.something.nhs.uk"
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "id": "input-router",
+          "description": "Route Input to top level tasks",
+          "type": null,
+          "output": [
+            {
+              "name": "file_type_detector",
+              "conditions": [
+                "metadata.input_type == npy"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cartesian_reco",
+          "description": "Cartesian MRI reconstruction",
+          "ref": "scanhub",
+          "args": {
+            "record_id": "{{context.record_id}}"
+          },
+          "output": [
+            {
+              "name": "ScanHub"
+            }
+          ]
+        }
+      ]
+    }
+  }

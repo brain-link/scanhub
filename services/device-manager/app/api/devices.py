@@ -36,7 +36,7 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
-@router.get('/devices', response_model=List[DeviceOut], status_code=200, tags=["devices"])
+@router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])
 async def get_devices() -> list[DeviceOut]:
     """
     Retrieve the list of registered devices.
@@ -51,7 +51,7 @@ async def get_devices() -> list[DeviceOut]:
     return [await get_device_out(device) for device in devices_all]
 
 
-@router.get('/devices/{device_id}/ip_address')
+@router.get('/{device_id}/ip_address', tags=["devices"])
 async def get_device_ip_address(device_id: str):
     """
     Retrieve the IP address of a specific device.
@@ -69,7 +69,7 @@ async def get_device_ip_address(device_id: str):
     return {'ip_address': device.ip_address}
 
 
-@router.get('/devices/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
+@router.get('/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
 async def get_device(device_id: str):
     """
     Retrieve a specific device.
@@ -87,7 +87,7 @@ async def get_device(device_id: str):
     return await get_device_out(device)
 
 
-@router.get('/devices/{device_id}/status')
+@router.get('/{device_id}/status', tags=["devices"])
 async def get_device_status(device_id: str):
     """
     Retrieve the status of a specific device.
@@ -108,7 +108,7 @@ async def get_device_status(device_id: str):
     return {'status': status}
 
 
-@router.delete('/devices/{device_id}', response_model={}, status_code=204, tags=["devices"])
+@router.delete('/{device_id}', response_model={}, status_code=204, tags=["devices"])
 async def delete_device(device_id: str):
     """
     Delete a device.

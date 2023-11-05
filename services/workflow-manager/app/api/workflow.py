@@ -3,15 +3,18 @@
 
 """Workflow manager endpoints."""
 
-import json
 import os
+from typing import Generator
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
-from kafka import KafkaProducer # type: ignore
-from scanhub import RecoJob # type: ignore
+from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse, StreamingResponse
+
+# from scanhub import RecoJob # type: ignore
+from pydantic import BaseModel, StrictStr
 
 from . import dal
-from .models import BaseWorkflow, WorkflowOut, get_workflow_out
+from .models import BaseWorkflow, WorkflowIn, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
+from .producer import Producer
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -19,22 +22,28 @@ from .models import BaseWorkflow, WorkflowOut, get_workflow_out
 # 204 = No Content: Delete
 # 404 = Not found
 
-producer = KafkaProducer(
-    bootstrap_servers=["kafka-broker:9093"],
-    value_serializer=lambda x: json.dumps(x.__dict__).encode("utf-8"),
-)
+
+class RecoJob(BaseModel):
+    """RecoJob is a pydantic model for a reco job."""  # noqa: E501
+
+    record_id: int
+    input: StrictStr
+
 
 router = APIRouter()
 
+# Get the producer singleton instance
+producer = Producer()
+
 
 @router.post("/", response_model=WorkflowOut, status_code=201, tags=["workflow"])
-async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
+async def create_workflow(payload: WorkflowIn) -> WorkflowOut:
     """Create new workflow endpoint.
 
     Parameters
     ----------
     payload
-        Workflow pydantic base model
+        Data to be added, workflow iutput model
 
     Returns
     -------
@@ -50,9 +59,7 @@ async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
     return await get_workflow_out(workflow)
 
 
-@router.get(
-    "/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflow"]
-)
+@router.get("/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def get_workflow(workflow_id: int) -> WorkflowOut:
     """Get workflow endpoint.
 
@@ -81,12 +88,26 @@ async def get_workflow_list() -> list[WorkflowOut]:
 
     Returns
     -------
-        List of workflow pydantic output models, might be empty
+        List of workflow meta pydantic output models, might be empty
     """
     if not (workflows := await dal.get_all_workflows()):
         # raise HTTPException(status_code=404, detail="Workflows not found")
         return []
     return [await get_workflow_out(workflow) for workflow in workflows]
+
+
+@router.get("/meta/", response_model=list[WorkflowMetaOut], status_code=200, tags=["workflow"])
+async def get_workflow_meta_list() -> list[WorkflowMetaOut]:
+    """Get all workflow meta information endpoint.
+
+    Returns
+    -------
+        List of workflow meta pydantic output models, might be empty
+    """
+    if not (workflows := await dal.get_all_workflows()):
+        # raise HTTPException(status_code=404, detail="Workflows not found")
+        return []
+    return [await get_workflow_meta_out(workflow) for workflow in workflows]
 
 
 @router.delete("/{workflow_id}", response_model={}, status_code=204, tags=["workflow"])
@@ -107,9 +128,7 @@ async def delete_workflow(workflow_id: int) -> None:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
 
-@router.put(
-    "/{workflow_id}/", response_model=WorkflowOut, status_code=200, tags=["workflow"]
-)
+@router.put("/{workflow_id}/", response_model=WorkflowOut, status_code=200, tags=["workflow"])
 async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOut:
     """Update existing workflow endpoint.
 
@@ -134,22 +153,8 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOu
     return await get_workflow_out(workflow)
 
 
-# ****\\ OLD CODE //****
-
-# @workflow.post('/', response_model=WorkflowOut, status_code=201)
-# async def create_workflow(payload: WorkflowIn):
-#     workflow_id = await db_manager.add_workflow(payload)
-
-#     response = {
-#         'id': workflow_id,
-#         **payload.dict()
-#     }
-
-#     return response
-
-
 @router.post("/upload/{record_id}/")
-async def upload_result(record_id: str, file: UploadFile = File(...)) -> dict[str, str]:
+async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[str, str]:
     """Upload workflow result.
 
     Parameters
@@ -179,42 +184,79 @@ async def upload_result(record_id: str, file: UploadFile = File(...)) -> dict[st
 
     # TBD: switch based on the preselected reco
 
-    reco_job = RecoJob(
-        reco_id="cartesian", device_id="TB removed", record_id=record_id, input=filename
-    )
+    reco_job = RecoJob(record_id=record_id, input=filename)
 
     # TBD: On successful upload message kafka the correct topic to do reco
 
-    producer.send("mri_cartesian_reco", reco_job)
+    # Send message to Kafka
+    await producer.send("mri_cartesian_reco", reco_job.dict())
 
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
 
 
-# #EXAMPLE: http://localhost:8080/api/v1/workflow/control/start/
-# TBD: frontend neesds to call a generic endpoint to trigger the acquisition
-# #@workflow.post('/control/{device_id}/{record_id}/{command}')
-# @workflow.post('/control/{command}/')
-# async def acquistion_control(command: str):
-#     try:
-#         acquisition_command = AcquisitionCommand[command]
-#     except KeyError:
-#         print('KeyError: acquisition command not found')
+@router.get("/download/{record_id}/")
+async def download_result(record_id: int) -> FileResponse:
+    """Download DICOM result.
 
-#     device_id = 'mri_simulator' #DEBUG: this should be the device_id from the frontend
-#     record_id = uuid.uuid4() #DEBUG: this should be the record_id from the frontend
-#     input_sequence = 'input_sequence' #DEBUG: this should be the input_sequence from the frontend
+    Parameters
+    ----------
+    record_id
+        ID of the record the DICOM file belongs to.
 
-#     acquisition_event = AcquisitionEvent(   device_id=device_id,
-#                                             record_id=record_id,
-#                                             command_id=acquisition_command,
-#                                             input_sequence=input_sequence)
-#     producer.send('acquisitionEvent', acquisition_event)
-#     return {"message": f"Triggered {acquisition_event}"}
+    Returns
+    -------
+        DICOM file response
+    """
+    file_name = f"record-{record_id}.dcm"
+    file_path = f"/app/data_lake/records/{record_id}/{file_name}"
 
-# @workflow.get('/download/{record_id}/')
-# async def download(record_id: str):
-#     file_name = f'cartesian.dcm'
-#     file_path = f'/app/data_lake/records/{record_id}/{file_name}'
+    return FileResponse(path=file_path, media_type="application/octet-stream", filename=file_name)
 
-#     return FileResponse(path=file_path, media_type='application/octet-stream', filename=file_name)
+
+def get_data_from_file(file_path: str) -> Generator:
+    """Open a file and read the data.
+
+    Parameters
+    ----------
+    file_path
+        Path of the file to open
+
+    Yields
+    ------
+        File content
+    """
+    with open(file=file_path, mode="rb") as file_like:
+        yield file_like.read()
+
+
+@router.get("/image/{record_id}/")
+async def get_image_file(record_id: int) -> StreamingResponse:
+    """Read image file data and content as streaming response.
+
+    Parameters
+    ----------
+    record_id
+        Record ID the image should be read for
+
+    Returns
+    -------
+        Image file content
+
+    Raises
+    ------
+    HTTPException
+        File not found
+    """
+    file_name = f"record-{record_id}.dcm"
+    file_path = f"/app/data_lake/records/{record_id}/{file_name}"
+    try:
+        file_contents = get_data_from_file(file_path=file_path)
+        response = StreamingResponse(
+            content=file_contents,
+            status_code=status.HTTP_200_OK,
+            media_type="text/html",
+        )
+        return response
+    except FileNotFoundError as exc:
+        raise HTTPException(detail="File not found.", status_code=status.HTTP_404_NOT_FOUND) from exc
