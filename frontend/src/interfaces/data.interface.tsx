@@ -47,6 +47,24 @@ export interface Record {
   datetime_created: Date
 }
 
+export interface XYZ {
+  x: number
+  y: number
+  z: number
+}
+
+export interface AcquisitonLimits {
+  patient_height: number
+  patient_weight: number
+  patient_gender: string
+  patient_age: number
+}
+
+export interface SequenceParameters {
+  fov: XYZ
+  fov_offset: XYZ
+}
+
 export interface Job {
   id: number
   procedure_id: number
@@ -59,6 +77,8 @@ export interface Job {
   records?: [Record] | []
   datetime_created: Date
   datetime_updated?: Date | null
+  acquisition_limits: AcquisitonLimits
+  sequence_parameters: SequenceParameters
 }
 
 export interface Procedure {

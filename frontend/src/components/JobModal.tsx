@@ -17,11 +17,29 @@ import { useParams } from 'react-router-dom'
 
 import { JobModalProps } from '../interfaces/components.interface'
 // Import api service and interfaces
-import { Job } from '../interfaces/data.interface'
+import { Job, AcquisitonLimits, SequenceParameters, XYZ } from '../interfaces/data.interface'
 
 function JobModal(props: JobModalProps) {
   const params = useParams()
 
+  const acq_limits: AcquisitonLimits = {
+    patient_age: 18,
+    patient_gender: "male",
+    patient_height: 181,
+    patient_weight: 50
+  }
+
+  const xyz: XYZ = {
+    x: 1,
+    y: 1,
+    z: 1
+  }
+
+  const seq_params: SequenceParameters = {
+    fov: xyz,
+    fov_offset: xyz
+  }
+  
   const [job, setJob] = props.data
     ? React.useState<Job>(props.data)
     : React.useState<Job>({
@@ -33,11 +51,17 @@ function JobModal(props: JobModalProps) {
         workflow_id: null,
         device_id: '',
         datetime_created: new Date(),
+        acquisition_limits: acq_limits,
+        sequence_parameters: seq_params
       })
 
   React.useEffect(() => {
     setJob({ ...job, procedure_id: Number(params.procedureId) })
   }, [params.procedureId])
+
+  React.useEffect(() => {
+    console.log(job)
+  }, [job])
 
   // To be replaced by devices and workflows from database
   // const devices = [{"id": 1, "name": "MRI Simulator"}]
