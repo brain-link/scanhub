@@ -15,24 +15,24 @@ from .db import Device, Exam, Job, Procedure, Record, Workflow
 class Gender(str, Enum):
     """Gender model."""
 
-    male = 'MALE'
-    female = 'FEMALE'
-    other = 'OTHER'
-    not_given = 'NOT_GIVEN'
+    MALE = 'MALE'
+    FEMALE = 'FEMALE'
+    OTHER = 'OTHER'
+    NOT_GIVEN = 'NOT_GIVEN'
 
 class Commands(str, Enum):
     """Commands model."""
 
-    start = 'START'
-    stop = 'STOP'
-    pause = 'PAUSE'
+    START = 'START'
+    STOP = 'STOP'
+    PAUSE = 'PAUSE'
 
 class XYZ(BaseModel):
     """XYZ model."""
 
-    x: float
-    y: float
-    z: float
+    X: float
+    Y: float
+    Z: float
 
 class AcquisitionLimits(BaseModel):
     """AcquisitionLimits models."""

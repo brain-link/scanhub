@@ -5,8 +5,6 @@
 
 import datetime
 import os
-from typing import Any
-
 from models import AcquisitionLimits, SequenceParameters
 
 from pydantic import BaseModel
