@@ -59,10 +59,6 @@ function JobModal(props: JobModalProps) {
     setJob({ ...job, procedure_id: Number(params.procedureId) })
   }, [params.procedureId])
 
-  React.useEffect(() => {
-    console.log(job)
-  }, [job])
-
   // To be replaced by devices and workflows from database
   // const devices = [{"id": 1, "name": "MRI Simulator"}]
   const workflows = [{ id: 0, name: '2d FFT' }]
