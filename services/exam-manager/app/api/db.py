@@ -5,7 +5,7 @@
 
 import datetime
 import os
-from models import AcquisitionLimits, SequenceParameters
+from .models import AcquisitionLimits, SequenceParameters
 
 from pydantic import BaseModel
 from sqlalchemy import ForeignKey, create_engine, func, JSON
