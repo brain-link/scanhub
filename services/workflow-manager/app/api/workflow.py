@@ -186,6 +186,17 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
 
     reco_job = RecoJob(record_id=record_id, input=filename)
 
+
+    # retrieve number of workflows from db
+    # print("Number of workflows in db: ", await dal.count_workflows())
+    
+    # if dal.get_workflow(record_id) is None:
+
+    # workflow_id = 1
+
+    # workflow = await dal.get_workflow(workflow_id)
+
+
     # TBD: On successful upload message kafka the correct topic to do reco
 
     # Send message to Kafka
