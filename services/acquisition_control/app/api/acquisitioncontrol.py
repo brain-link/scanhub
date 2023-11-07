@@ -11,10 +11,10 @@ import logging
 import random
 
 import httpx
-import requests
 from fastapi import APIRouter
+from pydantic.json import pydantic_encoder
 
-from .models import ScanJob, ScanStatus, Commands, DeviceTask, ParametrizedSequence, SequenceFormat
+from .models import ScanJob, ScanStatus, Commands, DeviceTask, ParametrizedSequence
 
 DEBUG_FLAG = False
 
@@ -63,10 +63,10 @@ async def create_record(exam_manager_uri, job_id):
 async def post_device_task(url, device_task):
     """Create new record at exam_manager and retrieve record_id"""
     async with httpx.AsyncClient() as client:
-        data = json.dumps(device_task)
+        data = json.dumps(device_task, default=pydantic_encoder)
         response = await client.post(
             url, 
-            json=data
+            data=data
         )
         return response.status_code
 
@@ -86,7 +86,9 @@ async def start_scan(scan_job: ScanJob):
         # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
         record_id = "test_" + str(random.randint(0, 1000))
         sequence_json = {"test": "test"}
-        parametrized_sequence = ParametrizedSequence(scan_job.acquisition_limits, scan_job.sequence_parameters, sequence_json)
+        parametrized_sequence = ParametrizedSequence(acquisition_limits=scan_job.acquisition_limits, 
+                                                     sequence_parameters=scan_job.sequence_parameters, 
+                                                     sequence=sequence_json)
     else:
         print("Start-scan endpoint, device ip: ", device_ip)
         # get sequence
@@ -94,14 +96,16 @@ async def start_scan(scan_job: ScanJob):
 
         # create record
         record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
-        parametrized_sequence = ParametrizedSequence(scan_job.acquisition_limits, scan_job.sequence_parameters, sequence_json)
+        parametrized_sequence = ParametrizedSequence(acquisition_limits=scan_job.acquisition_limits, 
+                                                     sequence_parameters=scan_job.sequence_parameters, 
+                                                     sequence=json.dumps(sequence_json))
 
     # start scan and forward sequence, workflow, record_id
     logging.debug(
         "Received job: %s, Generated record id: %s", scan_job.job_id, record_id
     )
 
-    device_task = DeviceTask(device_id, record_id, command, parametrized_sequence)
+    device_task = DeviceTask(device_id=device_id, record_id=record_id, command=command, parametrized_sequence=parametrized_sequence)
     status_code = await post_device_task(url, device_task)
 
     if status_code == 200:

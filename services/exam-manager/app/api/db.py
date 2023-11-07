@@ -5,9 +5,10 @@
 
 import datetime
 import os
+from typing import Any
 
 from pydantic import BaseModel
-from sqlalchemy import ForeignKey, create_engine, func
+from sqlalchemy import ForeignKey, create_engine, func, JSON
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -128,6 +129,8 @@ class Job(Base):
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
+    acquisition_limits: Mapped[dict[str, Any]] = mapped_column(type_=JSON, nullable=False)
+    sequence_parameters: Mapped[dict[str, Any]] = mapped_column(type_=JSON, nullable=False)
 
     def update(self, data: BaseModel) -> None:
         """Update a job entry.

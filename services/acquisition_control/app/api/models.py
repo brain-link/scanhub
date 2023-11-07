@@ -2,12 +2,15 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Pydantic models of acquisition control."""
+from typing import Any
 
-from pydantic import BaseModel, Extra, Field  # noqa
+from pydantic import BaseModel, Extra, Field, Json  # noqa
 from enum import Enum
 
 
 class Gender(str, Enum):
+    """Pydantic definition of genders."""
+
     male = 'male'
     female = 'female'
     other = 'other'
@@ -15,25 +18,33 @@ class Gender(str, Enum):
 
 
 class Commands(str, Enum):
+    """Pydantic definition of a commands."""
+
     start = 'start'
     stop = 'stop'
     pause = 'pause'
 
 
 class XYZ(BaseModel):
+    """Pydantic definition of coordinates."""
+    
     x: float
     y: float
     z: float
 
 
 class AcquisitionLimits(BaseModel):
+    """Pydantic definition of AcquisitionLimits."""
+
     patient_height: float
     patient_weight: float
-    patient_gender: Field(None, alias='Gender')
+    patient_gender: Gender = Field(None, alias='Gender')
     patient_age: int
 
 
 class SequenceParameters(BaseModel):
+    """Pydantic definition of SequenceParameters."""
+
     fov: XYZ
     fov_offset: XYZ
 
@@ -54,13 +65,13 @@ class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
     sequence_parameters: SequenceParameters
 
 
-class ParametrizedSequence:
+class ParametrizedSequence(BaseModel):
     acquisition_limits: AcquisitionLimits
     sequence_parameters: SequenceParameters
-    sequence: str
+    sequence: Json[Any]
 
 
-class DeviceTask:
+class DeviceTask(BaseModel):
     device_id: str
     record_id: str
     command: Commands

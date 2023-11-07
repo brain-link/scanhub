@@ -5,10 +5,48 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, Extra, Field
+
+from enum import Enum
 
 from .db import Device, Exam, Job, Procedure, Record, Workflow
 
+
+class Gender(str, Enum):
+    """Gender model."""
+
+    male = 'male'
+    female = 'female'
+    other = 'other'
+    not_given = 'not_given'
+
+class Commands(str, Enum):
+    """Commands model."""
+
+    start = 'start'
+    stop = 'stop'
+    pause = 'pause'
+
+class XYZ(BaseModel):
+    """XYZ model."""
+
+    x: float
+    y: float
+    z: float
+
+class AcquisitionLimits(BaseModel):
+    """AcquisitionLimits models."""
+
+    patient_height: float
+    patient_weight: float
+    patient_gender: Gender = Field(None, alias='Gender')
+    patient_age: int
+
+class SequenceParameters(BaseModel):
+    """SequenceParameters model."""
+    
+    fov: XYZ
+    fov_offset: XYZ
 
 class BaseDevice(BaseModel):
     """Device base model."""
@@ -86,6 +124,8 @@ class BaseJob(BaseModel):
     sequence_id: str
     workflow_id: int | None
     device_id: str
+    acquisition_limits: AcquisitionLimits
+    sequence_parameters: SequenceParameters
 
 
 class BaseRecord(BaseModel):
@@ -269,6 +309,8 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
         records=records,
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
+        acquisition_limits=data.acquisition_limits,
+        sequence_parameters=data.sequence_parameters
     )
 
 
