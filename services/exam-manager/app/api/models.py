@@ -15,17 +15,17 @@ from .db import Device, Exam, Job, Procedure, Record, Workflow
 class Gender(str, Enum):
     """Gender model."""
 
-    male = 'male'
-    female = 'female'
-    other = 'other'
-    not_given = 'not_given'
+    male = 'MALE'
+    female = 'FEMALE'
+    other = 'OTHER'
+    not_given = 'NOT_GIVEN'
 
 class Commands(str, Enum):
     """Commands model."""
 
-    start = 'start'
-    stop = 'stop'
-    pause = 'pause'
+    start = 'START'
+    stop = 'STOP'
+    pause = 'PAUSE'
 
 class XYZ(BaseModel):
     """XYZ model."""

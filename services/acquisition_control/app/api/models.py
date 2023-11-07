@@ -11,23 +11,23 @@ from enum import Enum
 class Gender(str, Enum):
     """Pydantic definition of genders."""
 
-    male = 'male'
-    female = 'female'
-    other = 'other'
-    not_given = 'not_given'
+    male = 'MALE'
+    female = 'FEMALE'
+    other = 'OTHER'
+    not_given = 'NOT_GIVEN'
 
 
 class Commands(str, Enum):
     """Pydantic definition of a commands."""
 
-    start = 'start'
-    stop = 'stop'
-    pause = 'pause'
+    start = 'START'
+    stop = 'STOP'
+    pause = 'PAUSE'
 
 
 class XYZ(BaseModel):
     """Pydantic definition of coordinates."""
-    
+
     x: float
     y: float
     z: float
