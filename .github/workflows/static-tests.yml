@@ -24,7 +24,7 @@ jobs:
           "exam-manager",
           "workflow-manager",
           "device-manager",
-          "acquisition-control",
+          "acquisition_control",
           "mri/sequence-manager",
           "mri/recos/cartesian-reco-service",
         ]
