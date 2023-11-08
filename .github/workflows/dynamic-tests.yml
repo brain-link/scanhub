@@ -27,8 +27,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: pip install -r requirements.txt
       - name: Run tests and collect coverage
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: pytest --cov app
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4-beta
