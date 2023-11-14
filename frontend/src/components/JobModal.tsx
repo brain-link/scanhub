@@ -24,7 +24,7 @@ function JobModal(props: JobModalProps) {
 
   const acq_limits: AcquisitonLimits = {
     patient_age: 18,
-    patient_gender: "MALE",
+    patient_gender: 'MALE',
     patient_height: 181,
     patient_weight: 50
   }
