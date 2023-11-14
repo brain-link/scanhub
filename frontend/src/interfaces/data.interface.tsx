@@ -48,9 +48,9 @@ export interface Record {
 }
 
 export interface XYZ {
-  x: number
-  y: number
-  z: number
+  X: number
+  Y: number
+  Z: number
 }
 
 export interface AcquisitonLimits {

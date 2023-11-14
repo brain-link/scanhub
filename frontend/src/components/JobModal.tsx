@@ -24,15 +24,15 @@ function JobModal(props: JobModalProps) {
 
   const acq_limits: AcquisitonLimits = {
     patient_age: 18,
-    patient_gender: "male",
+    patient_gender: "MALE",
     patient_height: 181,
     patient_weight: 50
   }
 
   const xyz: XYZ = {
-    x: 1,
-    y: 1,
-    z: 1
+    X: 1,
+    Y: 1,
+    Z: 1
   }
 
   const seq_params: SequenceParameters = {
