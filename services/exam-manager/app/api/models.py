@@ -4,49 +4,20 @@
 """Definitions of pydantic models and helper functions."""
 
 from datetime import datetime
-
-from pydantic import BaseModel, Extra, Field
-
 from enum import Enum
 
-from .db import Device, Exam, Job, Procedure, Record, Workflow
+from pydantic import BaseModel, Extra
 
+from .db import AcquisitionLimits, Device, Exam, Job, Procedure, Record, SequenceParameters, Workflow
 
-class Gender(str, Enum):
-    """Gender model."""
-
-    MALE = 'MALE'
-    FEMALE = 'FEMALE'
-    OTHER = 'OTHER'
-    NOT_GIVEN = 'NOT_GIVEN'
 
 class Commands(str, Enum):
     """Commands model."""
 
-    START = 'START'
-    STOP = 'STOP'
-    PAUSE = 'PAUSE'
+    START = "START"
+    STOP = "STOP"
+    PAUSE = "PAUSE"
 
-class XYZ(BaseModel):
-    """XYZ model."""
-
-    X: float
-    Y: float
-    Z: float
-
-class AcquisitionLimits(BaseModel):
-    """AcquisitionLimits models."""
-
-    patient_height: float
-    patient_weight: float
-    patient_gender: Gender = Field(None, alias='Gender')
-    patient_age: int
-
-class SequenceParameters(BaseModel):
-    """SequenceParameters model."""
-    
-    fov: XYZ
-    fov_offset: XYZ
 
 class BaseDevice(BaseModel):
     """Device base model."""
@@ -310,7 +281,7 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
         acquisition_limits=data.acquisition_limits,
-        sequence_parameters=data.sequence_parameters
+        sequence_parameters=data.sequence_parameters,
     )
 
 
