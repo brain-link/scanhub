@@ -27,21 +27,57 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def device_location_request(device_id):
-    """Retrieve ip from device-manager."""
+    """Retrieve ip from device-manager.
+
+    Parameters
+    ----------
+    device_id
+        Id of device
+
+    Returns
+    -------
+        ip_address of device
+    """
     async with httpx.AsyncClient() as client:
         response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address")
         return response.json()["ip_address"]
 
 
 async def retrieve_sequence(sequence_manager_uri, sequence_id):
-    """Retrieve sequence and sequence-type from sequence-manager."""
+    """Retrieve sequence and sequence-type from sequence-manager.
+
+    Parameters
+    ----------
+    sequence_manager_uri
+        uri of sequence manager
+
+    sequence_id
+        id of sequence
+
+    Returns
+    -------
+        sequence
+    """
     async with httpx.AsyncClient() as client:
         response = await client.get(f"http://{sequence_manager_uri}/api/v1/mri/sequences/{sequence_id}")
         return response.json()
 
 
 async def create_record(exam_manager_uri, job_id):
-    """Create new record at exam_manager and retrieve record_id."""
+    """Create new record at exam_manager and retrieve record_id.
+
+    Parameters
+    ----------
+    exam_manager_uri
+        uri of sequence manager
+
+    job_id
+        id of job
+
+    Returns
+    -------
+        id of newly created record
+    """
     async with httpx.AsyncClient() as client:
         # TODO: data_path, comment ? # pylint: disable=fixme
         data = {
@@ -54,7 +90,20 @@ async def create_record(exam_manager_uri, job_id):
 
 
 async def post_device_task(url, device_task):
-    """Create new record at exam_manager and retrieve record_id."""
+    """send task do device.
+
+    Parameters
+    ----------
+    url
+        url of the device
+
+    device_task
+        task
+
+    Returns
+    -------
+        response of device
+    """
     async with httpx.AsyncClient() as client:
         data = json.dumps(device_task, default=pydantic_encoder)
         response = await client.post(url, data=data)
