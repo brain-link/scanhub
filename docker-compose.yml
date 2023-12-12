@@ -54,10 +54,10 @@ services:
 
   acquisition-control:
     container_name: acquisition-control
-    build: ./services/acquisition_control
+    build: ./services/acquisition-control
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
-      - ./services/acquisition_control/app/:/app/
+      - ./services/acquisition-control/app/:/app/
     ports:
       # TODO: Order of ports, 8001 - 8005 for exam, device, workflow, sequence and acqisition
       - 8111:8000

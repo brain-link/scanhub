@@ -90,7 +90,7 @@ async def create_record(exam_manager_uri, job_id):
 
 
 async def post_device_task(url, device_task):
-    """send task do device.
+    """Send task do device.
 
     Parameters
     ----------
