@@ -1,0 +1,1 @@
+docker build -t scanhub-base .
