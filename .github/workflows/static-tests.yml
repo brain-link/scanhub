@@ -40,9 +40,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install shared-library
-        run: pip install ./base/shared_libs/
-
       - name: Cache poetry install
         uses: actions/cache@v2
         with:
@@ -70,6 +67,9 @@ jobs:
       - name: Poetry install
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry install --no-interaction --with lint
+
+      - name: Install shared-library
+        run: pip install ./base/shared_libs/
 
       - name: Run linter
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
