@@ -35,13 +35,13 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Install shared-library
-        run: pip install ./base/shared_libs/
-
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+
+      - name: Install shared-library
+        run: pip install ./base/shared_libs/
 
       - name: Cache poetry install
         uses: actions/cache@v2
