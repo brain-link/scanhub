@@ -14,7 +14,7 @@ import httpx
 from fastapi import APIRouter
 from pydantic.json import pydantic_encoder
 
-from scanhub_models import Commands, DeviceTask, ParametrizedSequence, ScanJob, ScanStatus
+from scanhub_models import Commands, DeviceTask, ParametrizedSequence, ScanJob, ScanStatus  # type: ignore
 
 DEBUG_FLAG = False
 
