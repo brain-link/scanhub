@@ -3,6 +3,7 @@
 
 """Definitions of pydantic models and helper functions."""
 
+import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, Extra
@@ -70,7 +71,7 @@ class BaseJob(BaseModel):
 
     type: str
     comment: str | None
-    exam_id: int
+    exam_id: uuid.UUID
     sequence_id: str
     workflow_id: int | None
     device_id: str
@@ -91,7 +92,7 @@ class BaseRecord(BaseModel):
 class RecordIn(BaseRecord):
     """Record input model."""
 
-    job_id: int
+    job_id: uuid.UUID
 
 
 class DeviceOut(BaseDevice):
@@ -113,14 +114,14 @@ class WorkflowOut(BaseWorkflow):
 class RecordOut(BaseRecord):
     """Record output model."""
 
-    id: int
+    id: uuid.UUID
     datetime_created: datetime
 
 
 class JobOut(BaseJob):
     """Job output model."""
 
-    id: int
+    id: uuid.UUID
     is_acquired: bool
     device: DeviceOut | None
     workflow: WorkflowOut | None
@@ -132,7 +133,7 @@ class JobOut(BaseJob):
 class ExamOut(BaseExam):
     """Exam output model."""
 
-    id: int
+    id: uuid.UUID
     datetime_created: datetime
     datetime_updated: datetime | None
     jobs: list[JobOut]

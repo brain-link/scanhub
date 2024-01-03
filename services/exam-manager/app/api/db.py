@@ -5,16 +5,36 @@
 
 import datetime
 import os
+import uuid
 
 from pydantic import BaseModel
 from sqlalchemy import ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
 
 # Create base for exam and job table
-Base: DeclarativeMeta = declarative_base()
+class Base(DeclarativeBase):
+    """Declarative base class."""
+
+    # def __init__(self, **kwargs):
+    #     if 'id' not in kwargs:
+    #         kwargs['id'] = uuid.uuid4()
+    #     super().__init__(**kwargs)
+
+    def update(self, data: BaseModel) -> None:
+        """Update a exam entry.
+
+        Parameters
+        ----------
+        data
+            Data to be written
+        """
+        for key, value in data.dict().items():
+            setattr(self, key, value)
+
+
 
 if db_uri := os.getenv("DB_URI"):
     engine = create_engine(db_uri, echo=False)
@@ -33,8 +53,7 @@ class Exam(Base):
     __tablename__ = "exam"
     __table_args__ = {"extend_existing": True}
 
-    # Use uuid here
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     # Relations and references
     jobs: Mapped[list["Job"]] = relationship(lazy="selectin")
@@ -55,17 +74,6 @@ class Exam(Base):
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
 
-    def update(self, data: BaseModel) -> None:
-        """Update a exam entry.
-
-        Parameters
-        ----------
-        data
-            Data to be written
-        """
-        for key, value in data.dict().items():
-            setattr(self, key, value)
-
 
 class Job(Base):
     """Job ORM model."""
@@ -74,7 +82,7 @@ class Job(Base):
     __table_args__ = {"extend_existing": True}
 
     # Use uuid here
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     # Relations and references
     exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
@@ -94,16 +102,6 @@ class Job(Base):
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
 
-    def update(self, data: BaseModel) -> None:
-        """Update a job entry.
-
-        Parameters
-        ----------
-        data
-            Data to be written
-        """
-        for key, value in data.dict().items():
-            setattr(self, key, value)
 
 
 class Record(Base):
@@ -113,7 +111,7 @@ class Record(Base):
     __table_args__ = {"extend_existing": True}
 
     # Use uuid here
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     # Relations and references
     job_id: Mapped[int] = mapped_column(ForeignKey("job.id"))
     data_path: Mapped[str] = mapped_column(nullable=True)
@@ -123,17 +121,6 @@ class Record(Base):
         server_default=func.now()  # pylint: disable=not-callable
     )
 
-    def update(self, data: dict) -> None:
-        """Update a Record entry.
-
-        Parameters
-        ----------
-        data
-            Data to be written
-        """
-        print(type(data))
-        for key, value in data.items():
-            setattr(self, key, value)
 
 
 # Create automap base

@@ -4,6 +4,7 @@
 """Data access layer."""
 
 from pprint import pprint
+from uuid import UUID
 
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
@@ -35,7 +36,7 @@ async def exam_add(payload: BaseExam) -> Exam:
     return new_exam
 
 
-async def exam_get(exam_id: int) -> (Exam | None):
+async def exam_get(exam_id: UUID) -> (Exam | None):
     """Get exam by id.
 
     Parameters
@@ -52,7 +53,7 @@ async def exam_get(exam_id: int) -> (Exam | None):
     return exam
 
 
-async def exam_get_all(patient_id: int) -> list[Exam]:
+async def exam_get_all(patient_id: UUID) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
@@ -70,7 +71,7 @@ async def exam_get_all(patient_id: int) -> list[Exam]:
     return exams
 
 
-async def exam_delete(exam_id: int) -> bool:
+async def exam_delete(exam_id: UUID) -> bool:
     """Delete exam by id.
 
     Parameters
@@ -90,7 +91,7 @@ async def exam_delete(exam_id: int) -> bool:
         return False
 
 
-async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
+async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
     """Update existing exam entry.
 
     Parameters
@@ -137,7 +138,7 @@ async def add_job(payload: BaseJob) -> Job:
     return new_job
 
 
-async def get_job(job_id: int) -> (Job | None):
+async def get_job(job_id: UUID) -> (Job | None):
     """Get job by id.
 
     Parameters
@@ -154,7 +155,7 @@ async def get_job(job_id: int) -> (Job | None):
     return job
 
 
-async def get_all_jobs(exam_id: int) -> list[Job]:
+async def get_all_jobs(exam_id: UUID) -> list[Job]:
     """Get a list of all jobs assigned to a certain exam.
 
     Parameters
@@ -172,7 +173,7 @@ async def get_all_jobs(exam_id: int) -> list[Job]:
     return jobs
 
 
-async def delete_job(job_id: int) -> bool:
+async def delete_job(job_id: UUID) -> bool:
     """Delete a job by ID.
 
     Parameters
@@ -192,7 +193,7 @@ async def delete_job(job_id: int) -> bool:
         return False
 
 
-async def update_job(job_id: int, payload: BaseJob) -> (Job | None):
+async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
     """Update existing job in database.
 
     Parameters
@@ -235,7 +236,7 @@ async def add_record(payload: RecordIn) -> Record:
     return new_record
 
 
-async def update_record(record_id: int, payload: dict) -> (Record | None):
+async def update_record(record_id: UUID, payload: dict) -> (Record | None):
     """Update existing record.
 
     Parameters
@@ -259,7 +260,7 @@ async def update_record(record_id: int, payload: dict) -> (Record | None):
         return None
 
 
-async def get_record(record_id: int) -> (Record | None):
+async def get_record(record_id: UUID) -> (Record | None):
     """Get a record from database by id.
 
     Parameters
@@ -276,7 +277,7 @@ async def get_record(record_id: int) -> (Record | None):
     return record
 
 
-async def get_all_records(job_id: int) -> list[Record]:
+async def get_all_records(job_id: UUID) -> list[Record]:
     """Get a list of all records assigned to a certain job.
 
     Parameters
@@ -294,7 +295,7 @@ async def get_all_records(job_id: int) -> list[Record]:
     return records
 
 
-async def delete_record(record_id: int) -> bool:
+async def delete_record(record_id: UUID) -> bool:
     """Delete record by id.
 
     Parameters
