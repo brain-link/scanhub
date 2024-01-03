@@ -8,8 +8,8 @@ from pprint import pprint
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from .db import Exam, Job, Procedure, Record, async_session
-from .models import BaseExam, BaseJob, ProcedureIn, RecordIn
+from .db import Exam, Job, Record, async_session
+from .models import BaseExam, BaseJob, RecordIn
 
 
 async def exam_add(payload: BaseExam) -> Exam:
@@ -114,108 +114,6 @@ async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
         return None
 
 
-async def procedure_add(payload: ProcedureIn) -> Procedure:
-    """Create new procedure.
-
-    Parameters
-    ----------
-    payload
-        Procedure pydantic input model with data for procedure creation
-
-    Returns
-    -------
-        Data base orm model of created procedure
-    """
-    new_procedure = Procedure(**payload.dict())
-    async with async_session() as session:
-        session.add(new_procedure)
-        await session.commit()
-        await session.refresh(new_procedure)
-    # debug
-    print("***** NEW PROCEDURE *****")
-    pprint(new_procedure.__dict__)
-    return new_procedure
-
-
-async def procedure_get(procedure_id: int) -> (Procedure | None):
-    """Get procedure by id.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of the requested procedure
-
-    Returns
-    -------
-        Data base orm model of requested procedure
-    """
-    async with async_session() as session:
-        procedure: (Procedure | None) = await session.get(Procedure, procedure_id)
-    return procedure
-
-
-async def procedure_get_all(exam_id: int) -> list[Procedure]:
-    """Get a list of all procedures assigned to a certain exam.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the parent exam entry, procedures are assigned to
-
-    Returns
-    -------
-        List of procedures data base orm models
-    """
-    async with async_session() as session:
-        result: Result = await session.execute(select(Procedure).where(Procedure.exam_id == exam_id))
-        procedures = list(result.scalars().all())
-    return procedures
-
-
-async def procedure_delete(procedure_id: int) -> bool:
-    """Delete procedure by id.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of the procedure to be deleted
-
-    Returns
-    -------
-        Success of deletion
-    """
-    async with async_session() as session:
-        if procedure := await session.get(Procedure, procedure_id):
-            await session.delete(procedure)
-            await session.commit()
-            return True
-        return False
-
-
-async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedure | None):
-    """Update existing procedure.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of procedure to be updated
-
-    payload
-        Procedure pydantic base model with data to be updated
-
-    Returns
-    -------
-        Database orm model of updated procedure
-    """
-    async with async_session() as session:
-        if procedure := await session.get(Procedure, procedure_id):
-            procedure.update(payload)
-            await session.commit()
-            await session.refresh(procedure)
-            return procedure
-        return None
-
-
 async def add_job(payload: BaseJob) -> Job:
     """Add new job.
 
@@ -256,20 +154,20 @@ async def get_job(job_id: int) -> (Job | None):
     return job
 
 
-async def get_all_jobs(procedure_id: int) -> list[Job]:
-    """Get a list of all jobs assigned to a certain procedure.
+async def get_all_jobs(exam_id: int) -> list[Job]:
+    """Get a list of all jobs assigned to a certain exam.
 
     Parameters
     ----------
-    procedure_id
-        Id of the parent procedure entry, jobs are assigned to
+    exam_id
+        Id of the parent exam entry, jobs are assigned to
 
     Returns
     -------
         List of job data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Job).where(Job.procedure_id == procedure_id))
+        result: Result = await session.execute(select(Job).where(Job.exam_id == exam_id))
         jobs = list(result.scalars().all())
     return jobs
 

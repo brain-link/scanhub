@@ -11,13 +11,10 @@ from .models import (
     BaseJob,
     ExamOut,
     JobOut,
-    ProcedureIn,
-    ProcedureOut,
     RecordIn,
     RecordOut,
     get_exam_out,
     get_job_out,
-    get_procedure_out,
     get_record_out,
 )
 
@@ -138,129 +135,6 @@ async def exam_update(exam_id: int, payload: BaseExam) -> ExamOut:
     return await get_exam_out(data=exam)
 
 
-@router.post("/procedure", response_model=ProcedureOut, status_code=201, tags=["procedures"])
-async def procedure_create(payload: ProcedureIn) -> ProcedureOut:
-    """Procedure post endpoint.
-
-    Parameters
-    ----------
-    payload
-        Pydantic input model
-
-    Returns
-    -------
-        Pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Creation not succesful
-    """
-    if not (procedure := await dal.procedure_add(payload)):
-        raise HTTPException(status_code=404, detail="Could not create procedure")
-    return await get_procedure_out(data=procedure)
-
-
-@router.get(
-    "/procedure/{procedure_id}",
-    response_model=ProcedureOut,
-    status_code=200,
-    tags=["procedures"],
-)
-async def procedure_get(procedure_id: int) -> ProcedureOut:
-    """Procedure get endpoint.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of entry to return
-
-    Returns
-    -------
-        Pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    if not (procedure := await dal.procedure_get(procedure_id)):
-        raise HTTPException(status_code=404, detail="Procedure not found")
-    return await get_procedure_out(data=procedure)
-
-
-@router.get(
-    "/procedure/all/{exam_id}",
-    response_model=list[ProcedureOut],
-    status_code=200,
-    tags=["procedures"],
-)
-async def procedure_get_all(exam_id: int) -> list[ProcedureOut]:
-    """Get all procedures of a parent endpoint.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the parent object
-
-    Returns
-    -------
-        List of pydantic output models
-    """
-    if not (procedures := await dal.procedure_get_all(exam_id)):
-        # Don't raise exception, list might be empty
-        return []
-    return [await get_procedure_out(data=procedure) for procedure in procedures]
-
-
-@router.delete("/procedure/{procedure_id}", response_model={}, status_code=204, tags=["procedures"])
-async def procedure_delete(procedure_id: int) -> None:
-    """Delete procedure endpoint.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of entry to be deleted
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    if not await dal.procedure_delete(procedure_id):
-        raise HTTPException(status_code=404, detail="Procedure not found")
-
-
-@router.put(
-    "/procedure/{procedure_id}",
-    response_model=ProcedureOut,
-    status_code=200,
-    tags=["procedures"],
-)
-async def proceedure_update(procedure_id: int, payload: ProcedureIn) -> ProcedureOut:
-    """Update procedure endpoint.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of procedure to be updated
-    payload
-        Pydantic input model
-
-    Returns
-    -------
-        Pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Entry not found
-    """
-    if not (procedure := await dal.procedure_update(procedure_id, payload)):
-        raise HTTPException(status_code=404, detail="Procedure not found")
-    return await get_procedure_out(data=procedure)
-
-
 @router.post("/job", response_model=JobOut, status_code=201, tags=["jobs"])
 async def job_create(payload: BaseJob) -> JobOut:
     """Create new job endpoint.
@@ -308,24 +182,24 @@ async def job_get(job_id: int) -> JobOut:
 
 
 @router.get(
-    "/job/all/{procedure_id}",
+    "/job/all/{exam_id}",
     response_model=list[JobOut],
     status_code=200,
     tags=["jobs"],
 )
-async def job_get_all(procedure_id: int) -> list[JobOut]:
-    """Get all jobs of a procedure endpoint.
+async def job_get_all(exam_id: int) -> list[JobOut]:
+    """Get all jobs of a exam endpoint.
 
     Parameters
     ----------
-    procedure_id
-        Id of parent procedure
+    exam_id
+        Id of parent exam
 
     Returns
     -------
         List of job pydantic output model
     """
-    if not (jobs := await dal.get_all_jobs(procedure_id)):
+    if not (jobs := await dal.get_all_jobs(exam_id)):
         # Don't raise exception, list might be empty
         return []
     return [await get_job_out(data=job) for job in jobs]

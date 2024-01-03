@@ -13,7 +13,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-# Create base for exam, record and procedure table
+# Create base for exam and job table
 Base: DeclarativeMeta = declarative_base()
 
 if db_uri := os.getenv("DB_URI"):
@@ -37,7 +37,7 @@ class Exam(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
-    procedures: Mapped[list["Procedure"]] = relationship(lazy="selectin")
+    jobs: Mapped[list["Job"]] = relationship(lazy="selectin")
     patient_id: Mapped[int] = mapped_column(nullable=False)
 
     # Fields
@@ -67,41 +67,6 @@ class Exam(Base):
             setattr(self, key, value)
 
 
-class Procedure(Base):
-    """Procedure ORM model."""
-
-    __tablename__ = "procedure"
-    __table_args__ = {"extend_existing": True}
-
-    # Use uuid here
-    id: Mapped[int] = mapped_column(primary_key=True)
-
-    # Relations and references
-    exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
-    jobs: Mapped[list["Job"]] = relationship(lazy="selectin")
-
-    # Fields
-    name: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[str] = mapped_column(nullable=False)
-    datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now()  # pylint: disable=not-callable
-    )
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
-    )
-
-    def update(self, data: BaseModel) -> None:
-        """Update a procedure entry.
-
-        Parameters
-        ----------
-        data
-            Data to be written
-        """
-        for key, value in data.dict().items():
-            setattr(self, key, value)
-
-
 class Job(Base):
     """Job ORM model."""
 
@@ -112,7 +77,7 @@ class Job(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # Relations and references
-    procedure_id: Mapped[int] = mapped_column(ForeignKey("procedure.id"))
+    exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
     device_id: Mapped[str] = mapped_column(nullable=True)
     sequence_id: Mapped[str] = mapped_column(nullable=False)
