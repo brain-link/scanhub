@@ -5,12 +5,11 @@
 # pylint: disable=no-name-in-module
 # pylint: disable=too-many-statements
 
+from datetime import datetime
 from typing import List
 
-from datetime import datetime
-from fastapi import APIRouter, WebSocket, HTTPException, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy import exc
-from .models import DeviceOut, get_device_out
 
 from .dal import (
     dal_create_device,
@@ -19,6 +18,7 @@ from .dal import (
     dal_get_device,
     dal_update_device,
 )
+from .models import DeviceOut, get_device_out
 
 router = APIRouter()
 

@@ -156,7 +156,7 @@ def cartesian_reco(message: Any) -> None:  # pylint: disable=too-many-statements
 
     # Convert from dicom to dicom with gdcmconv to add P10 header -> temporary fix
     cmd = f"gdcmconv -C {file_path} {file_path}"
-    os.system(cmd)  # returns the exit code in unix
+    os.system(cmd)  # noqa: S605  # returns the exit code in unix
 
     # Option 2: save to orthanc
     # client = DICOMwebClient(url="http://scanhub_new-orthanc-1:8042/dicom-web")

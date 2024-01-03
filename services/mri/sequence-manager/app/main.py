@@ -5,11 +5,12 @@
 
 import logging
 
-from database.mongodb import close_mongo_connection, connect_to_mongo
-from endpoints import health, mri_sequence_endpoints
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+
+from database.mongodb import close_mongo_connection, connect_to_mongo
+from endpoints import health, mri_sequence_endpoints
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

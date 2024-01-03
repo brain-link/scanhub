@@ -12,8 +12,6 @@ from pathlib import Path
 
 import plotly  # type: ignore
 from bson.binary import Binary
-from database.models import MRISequence, MRISequenceCreate
-from dependencies import get_database
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -26,6 +24,9 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse
 from pypulseq import Sequence  # type: ignore
+
+from database.models import MRISequence, MRISequenceCreate
+from dependencies import get_database
 from services.mri_sequence_plot import get_sequence_plot
 from services.mri_sequence_service import (  # search_mri_sequences,; download_mri_sequence_file,
     create_mri_sequence,

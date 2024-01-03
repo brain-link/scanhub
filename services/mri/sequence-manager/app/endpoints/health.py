@@ -5,8 +5,9 @@
 
 import logging
 
-from database.mongodb import db
 from fastapi import APIRouter, Depends, HTTPException, status
+
+from database.mongodb import db
 
 logger = logging.getLogger(__name__)
 
