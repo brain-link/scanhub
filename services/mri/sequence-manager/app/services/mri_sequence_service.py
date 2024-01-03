@@ -8,9 +8,10 @@ import logging
 from typing import Any
 
 from bson import ObjectId
-from database.models import MRISequence
 from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
+
+from database.models import MRISequence
 
 logger = logging.getLogger(__name__)
 

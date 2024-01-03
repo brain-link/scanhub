@@ -3,8 +3,9 @@
 
 """Dependency file for FastAPI."""
 
-from database.mongodb import Database, db
 from fastapi import HTTPException, status
+
+from database.mongodb import Database, db
 
 
 def get_database() -> Database:
