@@ -339,14 +339,14 @@ async def add_record(payload: RecordIn) -> Record:
 
 async def update_record(record_id: int, payload: dict) -> (Record | None):
     """Update existing record.
-    
+
     Parameters
     ----------
     record_id
         Id of the record to be updated
     payload
         Dictionary with data to be updated
-    
+
     Returns
     -------
         Database orm model of updated record
