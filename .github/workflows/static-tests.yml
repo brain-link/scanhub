@@ -41,7 +41,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Cache poetry install
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.local
           key: poetry
@@ -53,7 +53,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Cache poetry dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cached-poetry-dependencies
         with:
           path: .venv
