@@ -3,9 +3,10 @@
 
 """Main file for the acquisition control service."""
 
-from api.acquisitioncontrol import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from api.acquisitioncontrol import router
 
 app = FastAPI(
     openapi_url="/api/v1/mri/acquisitioncontrol/openapi.json",
