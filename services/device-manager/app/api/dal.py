@@ -5,10 +5,11 @@
 
 from pprint import pprint
 
-from api.db import Device, async_session
-from api.models import BaseDevice, DeviceOut
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
+
+from api.db import Device, async_session
+from api.models import BaseDevice, DeviceOut
 
 
 async def dal_create_device(payload: BaseDevice) -> Device:
