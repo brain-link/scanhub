@@ -43,7 +43,7 @@ async def start_scan(scan_job: ScanJob):
     if DEBUG_FLAG is True:
         # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
 
-        record_id = "test_" + str(random.randint(0, 1000))
+        record_id = "test_" + str(random.randint(0, 1000))  # noqa: S311
         sequence_json = {"test": "test"}
 
         url = f"http://{device_ip}/api/start-scan"
