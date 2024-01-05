@@ -1,6 +1,9 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
+import logging
+from pathlib import Path
+
 from cartesian_reco_operator import CartesianRecoOperator
 from dicom_operator import DICOMOperator
 
@@ -38,4 +41,7 @@ class App(Application):
 
 
 if __name__ == "__main__":
+    logging.info(f"Begin {__name__}")
     App(do_run=True)
+    # App().run()
+    logging.info(f"End {__name__}")
