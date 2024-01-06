@@ -1,4 +1,4 @@
-name: 'Build'
+name: 'Containerize Applications'
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   Containerize:
-    name: 'LintiContainerize Applications'
+    name: 'Containerize Applications'
 
     runs-on: ubuntu-latest
     env:
