@@ -7,3 +7,10 @@ A MONAI Application Package (MAP) is a specialized containerized application or 
 In the ScanHub platform, MAPs serve as plugins for post-acquisition processing steps. For example, a MAP could be designed to reconstruct an acquired MRI k-space with respect to the specific sequence used during the scan. This allows for a seamless and efficient workflow, from data acquisition to post-processing and analysis.
 
 For more details on MAPs, you can visit the [official MONAI guidelines](https://github.com/Project-MONAI/monai-deploy/blob/main/guidelines/monai-application-package.md).
+
+
+### How to Create a MAP
+
+tag_prefix = "cartesian_reco_app"
+
+!monai-deploy package cartesian_reco_app -c cartesian_reco_app/app.yaml -t {tag_prefix}:1.0 --platform x64-workstation -l DEBUG
