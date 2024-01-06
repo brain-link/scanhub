@@ -35,3 +35,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'pip' # caching pip dependencies
       - run: pip install holoscan monai-deploy-app-sdk
+
+      - name: Run linter
+        working-directory: ${{ env.working-directory }}/${{ matrix.applications }}
+        run: monai-deploy package cartesian_reco_app -c app.yaml -t cartesian_reco_app:1.0 --platform x64-workstation -l DEBUG
