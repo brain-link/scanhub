@@ -69,7 +69,7 @@ jobs:
         run: poetry install --no-interaction --with lint
 
       - name: Install build tools
-        run: pip install --upgrade twine
+        run: pip install --upgrade build
 
       - name: Build shared-library
         run: python3 -m build ./base/shared_libs/
