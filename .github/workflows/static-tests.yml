@@ -76,4 +76,4 @@ jobs:
 
       - name: Run linter
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
-        run: poetry run poe lint
+        run: poetry run ruff check

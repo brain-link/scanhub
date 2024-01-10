@@ -5,8 +5,9 @@
 
 from datetime import datetime
 
-from api.db import Device
 from pydantic import BaseModel  # noqa
+
+from api.db import Device
 
 
 class BaseDevice(BaseModel):

@@ -6,7 +6,7 @@
 import json
 import logging
 
-from aiokafka import AIOKafkaProducer # type: ignore
+from aiokafka import AIOKafkaProducer  # type: ignore
 
 # pylint: disable=no-member
 
