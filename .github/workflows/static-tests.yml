@@ -68,6 +68,9 @@ jobs:
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry install --no-interaction --with lint
 
+      - name: Build shared-library
+        run: python3 -m build ./base/shared_libs/
+
       - name: Install shared-library
         run: pip install ./base/shared_libs/
 
