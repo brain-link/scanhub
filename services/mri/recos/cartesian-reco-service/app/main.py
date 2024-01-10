@@ -10,11 +10,12 @@ import os
 from random import randint
 from typing import Set
 
-from aiokafka import AIOKafkaConsumer # type: ignore
-from api.worker import init, run
+from aiokafka import AIOKafkaConsumer  # type: ignore
 from fastapi import FastAPI
-from kafka import TopicPartition # type: ignore
-from kafka.errors import GroupCoordinatorNotAvailableError, KafkaConnectionError, NoBrokersAvailable # type: ignore
+from kafka import TopicPartition  # type: ignore
+from kafka.errors import GroupCoordinatorNotAvailableError, KafkaConnectionError, NoBrokersAvailable  # type: ignore
+
+from api.worker import init, run
 
 # instantiate the API
 app = FastAPI()
@@ -59,7 +60,7 @@ async def initialize():
     """Initialize the API."""
     loop = asyncio.get_event_loop()
     global CONSUMER # pylint: disable=global-statement
-    group_id = f"{KAFKA_CONSUMER_GROUP_PREFIX}-{randint(0, 10000)}"
+    group_id = f"{KAFKA_CONSUMER_GROUP_PREFIX}-{randint(0, 10000)}" # noqa: S311
     # pylint: disable=logging-fstring-interpolation
     log.debug(
         f"Initializing KafkaConsumer for topic {KAFKA_TOPIC}, group_id "

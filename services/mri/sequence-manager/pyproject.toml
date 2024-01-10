@@ -28,17 +28,6 @@ plotly = "^5.15.0"
 pymongo-stubs = "^0.2.0"
 motor-stubs = "^1.7.1"
 
-[tool.poetry.group.lint.dependencies]
-mypy = "*"
-flake8 = "*"
-Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
-isort = "*"
-autopep8 = "*"
-pydocstyle = "*"
-pylint = "*"
-black = "^23.3.0"
-poethepoet = "^0.20.0"
-
 [tool.poetry.group.test.dependencies]
 coverage = "*"
 codecov = "*"
@@ -48,59 +37,24 @@ pytest = "*"
 sphinx = "*"
 sphinx_rtd_theme = "*"
 
-[tool.black]
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.1.11"
+
+
+[tool.ruff]
+src = ["app"]
 line-length = 120
+indent-width = 4
+target-version = "py310"
 
-[tool.isort]
-line_length = 120
+[tool.ruff.lint]
+# Enable linters
+# W = pycodestyle, F = Pyflakes, S = flake8-bandit, I = isort, N = pep8-naming, D = pydocstyle
+select = ["W", "F", "S", "I", "N", "D"]
 
-[tool.pydocstyle]
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
-
-[tool.pylint]
-py-version = "3.10"
-max-locals = 25
-max-attributes = 20
-max-line-length = 120
-extension-pkg-allow-list = ["pydantic"]
-disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
-
-[tool.flake8]
-max-line-length = 120
-
-[tool.mypy]
-python_version = "3.10"
-
-# [tool.mypy-plotly]
-# ignore_missing_imports = true   # missing 3rd party stubs
-
-# [tool.mypy-pypulseq]
-# ignore_missing_imports = true   # missing 3rd party stubs
-
-[tool.poe.tasks]
-lint.sequence = ["isort", "black", "pylint", "flake8", "mypy", "pydocstyle"]
-lint.ignore_fail = "return_non_zero"
-
-    [tool.poe.tasks.isort]
-    help = "Run isort"
-    cmd  = "isort app/"
-
-    [tool.poe.tasks.black]
-    help = "Run black"
-    cmd  = "black app/"
-
-    [tool.poe.tasks.pylint]
-    help = "Run pylint"
-    cmd  = "pylint app/"
-
-    [tool.poe.tasks.mypy]
-    help = "Run mypy"
-    cmd  = "mypy app/"
-
-    [tool.poe.tasks.flake8]
-    help = "Run flake8"
-    cmd  = "flake8 app/"
-
-    [tool.poe.tasks.pydocstyle]
-    help = "Run pydocstyle"
-    cmd  = "pydocstyle app/"

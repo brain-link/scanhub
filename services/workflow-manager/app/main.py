@@ -3,12 +3,13 @@
 
 """Workflow manager main."""
 
-from api.db import engine, init_db
-from api.producer import Producer
-from api.workflow import router
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
+
+from api.db import engine, init_db
+from api.producer import Producer
+from api.workflow import router
 
 app = FastAPI(
     openapi_url="/api/v1/workflow/openapi.json",
