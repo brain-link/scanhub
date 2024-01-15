@@ -1,0 +1,1150 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>exam-manager.app.api.exam &#8212; ScanHub Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css?v=7e2203eb" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+
+    <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/exammanager/app/api/exam/index';</script>
+    <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="exam-manager.app.api.models" href="../models/index.html" />
+    <link rel="prev" title="exam-manager.app.api.db" href="../db/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <header>
+  
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../../_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
+    <script>document.write(`<img src="../../../../../_static/logo_brainlink.svg" class="logo__image only-dark" alt="ScanHub Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../introduction.html">
+                        ScanHub
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../scanhub_api.html">
+                        Web API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../scanhub_techdoc.html">
+                        Technical Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../../../index.html">
+                        Code Documentation
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </div>
+  
+  </header>
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../introduction.html">
+                        ScanHub
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../scanhub_api.html">
+                        Web API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../scanhub_techdoc.html">
+                        Technical Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../../../index.html">
+                        Code Documentation
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../acquisitioncontrol/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">acquisition-control</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../devicemanager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">device-manager</span></code></a></li>
+<li class="toctree-l1 current active"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exam-manager</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../workflowmanager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">workflow-manager</span></code></a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../../index.html" class="nav-link">Code Documentation</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exam-manager.app.api</span></code></a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><code...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-exam-manager.app.api.exam">
+<span id="exam-manager-app-api-exam"></span><h1><a class="reference internal" href="#module-exam-manager.app.api.exam" title="exam-manager.app.api.exam"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exam-manager.app.api.exam</span></code></a><a class="headerlink" href="#module-exam-manager.app.api.exam" title="Link to this heading">#</a></h1>
+<p>Exam API endpoints.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.exam_create" title="exam-manager.app.api.exam.exam_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exam_create</span></code></a>(→ exam-manager.app.api.models.ExamOut)</p></td>
+<td><p>Create exam endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.exam_get" title="exam-manager.app.api.exam.exam_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exam_get</span></code></a>(→ exam-manager.app.api.models.ExamOut)</p></td>
+<td><p>Get exam endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.exam_get_all" title="exam-manager.app.api.exam.exam_get_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exam_get_all</span></code></a>(→ list[exam-manager.app.api.models.ExamOut])</p></td>
+<td><p>Get all exams of a patient endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.exam_delete" title="exam-manager.app.api.exam.exam_delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exam_delete</span></code></a>(→ None)</p></td>
+<td><p>Delete exam by id.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.exam_update" title="exam-manager.app.api.exam.exam_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exam_update</span></code></a>(→ exam-manager.app.api.models.ExamOut)</p></td>
+<td><p>Update exam.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.procedure_create" title="exam-manager.app.api.exam.procedure_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">procedure_create</span></code></a>(...)</p></td>
+<td><p>Procedure post endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.procedure_get" title="exam-manager.app.api.exam.procedure_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">procedure_get</span></code></a>(→ exam-manager.app.api.models.ProcedureOut)</p></td>
+<td><p>Procedure get endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.procedure_get_all" title="exam-manager.app.api.exam.procedure_get_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">procedure_get_all</span></code></a>(...)</p></td>
+<td><p>Get all procedures of a parent endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.procedure_delete" title="exam-manager.app.api.exam.procedure_delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">procedure_delete</span></code></a>(→ None)</p></td>
+<td><p>Delete procedure endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.proceedure_update" title="exam-manager.app.api.exam.proceedure_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proceedure_update</span></code></a>(...)</p></td>
+<td><p>Update procedure endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.job_create" title="exam-manager.app.api.exam.job_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">job_create</span></code></a>(→ exam-manager.app.api.models.JobOut)</p></td>
+<td><p>Create new job endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.job_get" title="exam-manager.app.api.exam.job_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">job_get</span></code></a>(→ exam-manager.app.api.models.JobOut)</p></td>
+<td><p>Get job endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.job_get_all" title="exam-manager.app.api.exam.job_get_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">job_get_all</span></code></a>(→ list[exam-manager.app.api.models.JobOut])</p></td>
+<td><p>Get all jobs of a procedure endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.job_delete" title="exam-manager.app.api.exam.job_delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">job_delete</span></code></a>(→ None)</p></td>
+<td><p>Delete job endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.job_update" title="exam-manager.app.api.exam.job_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">job_update</span></code></a>(→ exam-manager.app.api.models.JobOut)</p></td>
+<td><p>Update job endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.record_create" title="exam-manager.app.api.exam.record_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_create</span></code></a>(→ exam-manager.app.api.models.RecordOut)</p></td>
+<td><p>Create record endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.update_record" title="exam-manager.app.api.exam.update_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_record</span></code></a>(record_id, payload)</p></td>
+<td><p>Update existing record.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.record_get" title="exam-manager.app.api.exam.record_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_get</span></code></a>(→ exam-manager.app.api.models.RecordOut)</p></td>
+<td><p>Get single record endpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.record_get_all" title="exam-manager.app.api.exam.record_get_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_get_all</span></code></a>(...)</p></td>
+<td><p>Get all records of a job endpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.record_delete" title="exam-manager.app.api.exam.record_delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_delete</span></code></a>(→ None)</p></td>
+<td><p>Delete record endpoint.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.exam.router" title="exam-manager.app.api.exam.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.router">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#exam-manager.app.api.exam.router" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.exam_create">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">exam_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.BaseExam</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.ExamOut" title="exam-manager.app.api.models.ExamOut"><span class="pre">exam-manager.app.api.models.ExamOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.exam_create" title="Link to this definition">#</a></dt>
+<dd><p>Create exam endpoint.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>payload</dt><dd><p>Exam pydantic input model.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Exam pydantic output moddel.</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h4>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.exam_get">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">exam_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exam_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.ExamOut" title="exam-manager.app.api.models.ExamOut"><span class="pre">exam-manager.app.api.models.ExamOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.exam_get" title="Link to this definition">#</a></dt>
+<dd><p>Get exam endpoint.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of requested exam entry</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Exam pydantic output model.</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h4>Raises<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.exam_get_all">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">exam_get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patient_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[exam-manager.app.api.models.ExamOut]</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.exam_get_all" title="Link to this definition">#</a></dt>
+<dd><p>Get all exams of a patient endpoint.</p>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>patient_id</dt><dd><p>Id of parent</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>List of exam pydantic output models</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.exam_delete">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">exam_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exam_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.exam_delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete exam by id.</p>
+<section id="id6">
+<h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of the exam to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h4>Raises<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.exam_update">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">exam_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exam_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.BaseExam</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.ExamOut" title="exam-manager.app.api.models.ExamOut"><span class="pre">exam-manager.app.api.models.ExamOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.exam_update" title="Link to this definition">#</a></dt>
+<dd><p>Update exam.</p>
+<section id="id8">
+<h4>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of the exam to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Exam pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h4>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Exam pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id10">
+<h4>Raises<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.procedure_create">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">procedure_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.ProcedureIn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.ProcedureOut" title="exam-manager.app.api.models.ProcedureOut"><span class="pre">exam-manager.app.api.models.ProcedureOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.procedure_create" title="Link to this definition">#</a></dt>
+<dd><p>Procedure post endpoint.</p>
+<section id="id11">
+<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>payload</dt><dd><p>Pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h4>Returns<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id13">
+<h4>Raises<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation not succesful</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.procedure_get">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">procedure_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procedure_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.ProcedureOut" title="exam-manager.app.api.models.ProcedureOut"><span class="pre">exam-manager.app.api.models.ProcedureOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.procedure_get" title="Link to this definition">#</a></dt>
+<dd><p>Procedure get endpoint.</p>
+<section id="id14">
+<h4>Parameters<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of entry to return</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h4>Returns<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id16">
+<h4>Raises<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.procedure_get_all">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">procedure_get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exam_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[exam-manager.app.api.models.ProcedureOut]</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.procedure_get_all" title="Link to this definition">#</a></dt>
+<dd><p>Get all procedures of a parent endpoint.</p>
+<section id="id17">
+<h4>Parameters<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>exam_id</dt><dd><p>Id of the parent object</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h4>Returns<a class="headerlink" href="#id18" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>List of pydantic output models</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.procedure_delete">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">procedure_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procedure_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.procedure_delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete procedure endpoint.</p>
+<section id="id19">
+<h4>Parameters<a class="headerlink" href="#id19" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of entry to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h4>Raises<a class="headerlink" href="#id20" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.proceedure_update">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">proceedure_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procedure_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.ProcedureIn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.ProcedureOut" title="exam-manager.app.api.models.ProcedureOut"><span class="pre">exam-manager.app.api.models.ProcedureOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.proceedure_update" title="Link to this definition">#</a></dt>
+<dd><p>Update procedure endpoint.</p>
+<section id="id21">
+<h4>Parameters<a class="headerlink" href="#id21" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of procedure to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h4>Returns<a class="headerlink" href="#id22" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id23">
+<h4>Raises<a class="headerlink" href="#id23" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Entry not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.job_create">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">job_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.BaseJob</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.JobOut" title="exam-manager.app.api.models.JobOut"><span class="pre">exam-manager.app.api.models.JobOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.job_create" title="Link to this definition">#</a></dt>
+<dd><p>Create new job endpoint.</p>
+<section id="id24">
+<h4>Parameters<a class="headerlink" href="#id24" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>payload</dt><dd><p>Job pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h4>Returns<a class="headerlink" href="#id25" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Job pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id26">
+<h4>Raises<a class="headerlink" href="#id26" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.job_get">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">job_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.JobOut" title="exam-manager.app.api.models.JobOut"><span class="pre">exam-manager.app.api.models.JobOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.job_get" title="Link to this definition">#</a></dt>
+<dd><p>Get job endpoint.</p>
+<section id="id27">
+<h4>Parameters<a class="headerlink" href="#id27" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of the job to be returned</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h4>Returns<a class="headerlink" href="#id28" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Job pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id29">
+<h4>Raises<a class="headerlink" href="#id29" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.job_get_all">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">job_get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procedure_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[exam-manager.app.api.models.JobOut]</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.job_get_all" title="Link to this definition">#</a></dt>
+<dd><p>Get all jobs of a procedure endpoint.</p>
+<section id="id30">
+<h4>Parameters<a class="headerlink" href="#id30" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>procedure_id</dt><dd><p>Id of parent procedure</p>
+</dd>
+</dl>
+</section>
+<section id="id31">
+<h4>Returns<a class="headerlink" href="#id31" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>List of job pydantic output model</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.job_delete">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">job_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.job_delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete job endpoint.</p>
+<section id="id32">
+<h4>Parameters<a class="headerlink" href="#id32" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of the job to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id33">
+<h4>Raises<a class="headerlink" href="#id33" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.job_update">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">job_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.BaseJob</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.JobOut" title="exam-manager.app.api.models.JobOut"><span class="pre">exam-manager.app.api.models.JobOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.job_update" title="Link to this definition">#</a></dt>
+<dd><p>Update job endpoint.</p>
+<section id="id34">
+<h4>Parameters<a class="headerlink" href="#id34" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of the job to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Job pydantic indput model</p>
+</dd>
+</dl>
+</section>
+<section id="id35">
+<h4>Returns<a class="headerlink" href="#id35" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Job pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id36">
+<h4>Raises<a class="headerlink" href="#id36" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.record_create">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">record_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">exam</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.RecordIn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.RecordOut" title="exam-manager.app.api.models.RecordOut"><span class="pre">exam-manager.app.api.models.RecordOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.record_create" title="Link to this definition">#</a></dt>
+<dd><p>Create record endpoint.</p>
+<section id="id37">
+<h4>Parameters<a class="headerlink" href="#id37" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>payload</dt><dd><p>Record pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h4>Returns<a class="headerlink" href="#id38" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Record pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id39">
+<h4>Raises<a class="headerlink" href="#id39" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.update_record">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">update_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.exam.update_record" title="Link to this definition">#</a></dt>
+<dd><p>Update existing record.</p>
+<section id="id40">
+<h4>Parameters<a class="headerlink" href="#id40" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>record_id</dt><dd><p>Id of the record to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Record pydantic input model</p>
+</dd>
+</dl>
+</section>
+<section id="id41">
+<h4>Returns<a class="headerlink" href="#id41" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Record pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id42">
+<h4>Raises<a class="headerlink" href="#id42" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.record_get">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">record_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#exam-manager.app.api.models.RecordOut" title="exam-manager.app.api.models.RecordOut"><span class="pre">exam-manager.app.api.models.RecordOut</span></a></span></span><a class="headerlink" href="#exam-manager.app.api.exam.record_get" title="Link to this definition">#</a></dt>
+<dd><p>Get single record endpoint.</p>
+<section id="id43">
+<h4>Parameters<a class="headerlink" href="#id43" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>record_id</dt><dd><p>Id of the record to return</p>
+</dd>
+</dl>
+</section>
+<section id="id44">
+<h4>Returns<a class="headerlink" href="#id44" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>Record pydantic output model</p>
+</div></blockquote>
+</section>
+<section id="id45">
+<h4>Raises<a class="headerlink" href="#id45" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.record_get_all">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">record_get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[exam-manager.app.api.models.RecordOut]</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.record_get_all" title="Link to this definition">#</a></dt>
+<dd><p>Get all records of a job endpoint.</p>
+<section id="id46">
+<h4>Parameters<a class="headerlink" href="#id46" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>job_id</dt><dd><p>Id of parental job</p>
+</dd>
+</dl>
+</section>
+<section id="id47">
+<h4>Returns<a class="headerlink" href="#id47" title="Link to this heading">#</a></h4>
+<blockquote>
+<div><p>List of record pydantic output model</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.exam.record_delete">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.exam.</span></span><span class="sig-name descname"><span class="pre">record_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.api.exam.record_delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete record endpoint.</p>
+<section id="id48">
+<h4>Parameters<a class="headerlink" href="#id48" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>record_id</dt><dd><p>Id of the record to be deleted</p>
+</dd>
+</dl>
+</section>
+<section id="id49">
+<h4>Raises<a class="headerlink" href="#id49" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../db/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exam-manager.app.api.db</span></code></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../models/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exam-manager.app.api.models</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.exam_create"><code class="docutils literal notranslate"><span class="pre">exam_create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.exam_get"><code class="docutils literal notranslate"><span class="pre">exam_get()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.exam_get_all"><code class="docutils literal notranslate"><span class="pre">exam_get_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.exam_delete"><code class="docutils literal notranslate"><span class="pre">exam_delete()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.exam_update"><code class="docutils literal notranslate"><span class="pre">exam_update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.procedure_create"><code class="docutils literal notranslate"><span class="pre">procedure_create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.procedure_get"><code class="docutils literal notranslate"><span class="pre">procedure_get()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.procedure_get_all"><code class="docutils literal notranslate"><span class="pre">procedure_get_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.procedure_delete"><code class="docutils literal notranslate"><span class="pre">procedure_delete()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.proceedure_update"><code class="docutils literal notranslate"><span class="pre">proceedure_update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.job_create"><code class="docutils literal notranslate"><span class="pre">job_create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.job_get"><code class="docutils literal notranslate"><span class="pre">job_get()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.job_get_all"><code class="docutils literal notranslate"><span class="pre">job_get_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.job_delete"><code class="docutils literal notranslate"><span class="pre">job_delete()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.job_update"><code class="docutils literal notranslate"><span class="pre">job_update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.record_create"><code class="docutils literal notranslate"><span class="pre">record_create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.update_record"><code class="docutils literal notranslate"><span class="pre">update_record()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.record_get"><code class="docutils literal notranslate"><span class="pre">record_get()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.record_get_all"><code class="docutils literal notranslate"><span class="pre">record_get_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.exam.record_delete"><code class="docutils literal notranslate"><span class="pre">record_delete()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../../../_sources/autoapi/exammanager/app/api/exam/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

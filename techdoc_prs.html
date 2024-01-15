@@ -1,0 +1,1035 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Product Requirements (PRS) &#8212; ScanHub Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+
+    <script src="_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'techdoc_prs';</script>
+    <link rel="icon" href="_static/favicon-32x32.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Software Requirement Specification (SWRS)" href="techdoc_swrs.html" />
+    <link rel="prev" title="Device Description (DD)" href="techdoc_dd.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <header>
+  
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
+    <script>document.write(`<img src="_static/logo_brainlink.svg" class="logo__image only-dark" alt="ScanHub Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="introduction.html">
+                        ScanHub
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="scanhub_api.html">
+                        Web API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="scanhub_techdoc.html">
+                        Technical Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="autoapi/index.html">
+                        Code Documentation
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </div>
+  
+  </header>
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="introduction.html">
+                        ScanHub
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="scanhub_api.html">
+                        Web API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="scanhub_techdoc.html">
+                        Technical Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="autoapi/index.html">
+                        Code Documentation
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Product Requirements (PRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="scanhub_techdoc.html" class="nav-link">Technical Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Product...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="product-requirements-prs">
+<h1>Product Requirements (PRS)<a class="headerlink" href="#product-requirements-prs" title="Link to this heading">#</a></h1>
+<p>!! This Section is Work in Progress. !!</p>
+<p>This section gathers all product requirements which can also be interpreted as the design input for the ScanHub platform.</p>
+<section id="steakholder-and-user-roles">
+<h2>Steakholder and User Roles<a class="headerlink" href="#steakholder-and-user-roles" title="Link to this heading">#</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Stakeholder</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SH_010</p></td>
+<td><p>MRI Technician / MTRA</p></td>
+<td><p>Operates the MRI machine, prepares patients for scans, and ensures optimal
+image quality. They provide feedback on the system’s usability and functionality.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SH_020</p></td>
+<td><p>Radiologist</p></td>
+<td><p>Medical professionals who interpret MRI scans to diagnose medical conditions.
+They require high-quality images and efficient workflow for accurate diagnosis.</p></td>
+</tr>
+<tr class="row-even"><td><p>SH_030</p></td>
+<td><p>Developer</p></td>
+<td><p>Software engineers responsible for designing, coding, and maintaining the MRI
+system software. They ensure the system meets all technical requirements.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SH_040</p></td>
+<td><p>Scientist</p></td>
+<td><p>Researchers who use MRI for advanced studies and might require access to
+sequences, raw data and experimental features for research purposes.</p></td>
+</tr>
+<tr class="row-even"><td><p>SH_050</p></td>
+<td><p>System Administrator</p></td>
+<td><p>IT professionals responsible for the system’s setup, maintenance, and security.
+They ensure the system’s reliability and data integrity.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SH_060</p></td>
+<td><p>Site Engineer</p></td>
+<td><p>Technical experts responsible for the installation, maintenance, and repair of
+the MRI hardware. They ensure the system’s physical as well as software components
+are functioning.</p></td>
+</tr>
+<tr class="row-even"><td><p>SH_070</p></td>
+<td><p>Regulatory Affairs (RA) Specialist</p></td>
+<td><p>Professionals ensuring that the MRI system complies with all relevant regulatory
+standards and guidelines, such as MDR and GDPR.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SH_080</p></td>
+<td><p>Medical Device Manufacturer</p></td>
+<td><p>Company that produce and distribute the MRI system. It is concerned with
+the system’s marketability, quality, and regulatory compliance.</p></td>
+</tr>
+<tr class="row-even"><td><p>SH_090</p></td>
+<td><p>Patient</p></td>
+<td><p>Individuals undergoing MRI scans. They are concerned with the comfort, safety,
+and privacy aspects of the MRI experience.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SH_100</p></td>
+<td><p>Healthcare Facility / Clinic / Hospital /
+Customer</p></td>
+<td><p>Organizations that provide healthcare services and use the MRI system for
+patient diagnosis. They are concerned with the system’s reliability, efficiency,
+and integration with other healthcare systems.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="user-needs">
+<h2>User Needs<a class="headerlink" href="#user-needs" title="Link to this heading">#</a></h2>
+<section id="general">
+<h3>General<a class="headerlink" href="#general" title="Link to this heading">#</a></h3>
+<p>User needs in the following table needs to be sharpened.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Product Requirements [Steakholder]</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0010</p></td>
+<td><p>Execution of an MRI acquisition/job/experiment
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>Upload pulseq sequence, execution MRI job with withflows</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0020</p></td>
+<td><p>Planning of an MRI examination
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>Exam-Tree, workflows, processing modality worklist</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0030</p></td>
+<td><p>DICOM viewer
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>View DICOM image of a selected record, compare DICOM images,
+annotate DICOM image.</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0040</p></td>
+<td><p>User management
+(System Administrator)</p></td>
+<td><p>Assign different user roles, support of multi-tendency cloud environment</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0050</p></td>
+<td><p>Monitor device status
+(Radiologist, MRI Technician, Scientist)</p></td>
+<td><p>Current execution progress, detectable device malfunctiuons,
+device connection</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0060</p></td>
+<td><p>Monitor Patient safety
+(MRI Technician)</p></td>
+<td><p>Specific absorption rate (SAR), temparatur, total scan time duration,
+Optional: Video stream, patient communication system</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0070</p></td>
+<td><p>Integration of processing workflows
+(Scientist, Developer)</p></td>
+<td><p>Assambling of workflow steps to be executed on MRI raw data or images.
+Includes system calibration, image reconstruction and analysis.</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0080</p></td>
+<td><p>System calibration
+(MRI Technician, Scientist, Site Engineer, Radiologist)</p></td>
+<td><p>Adjust larmorfrequency, adjust gradients, adjust system flip angle,
+B0-field shimming</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0090</p></td>
+<td><p>Clinical report
+(Radiologist)</p></td>
+<td><p>Structured form to create a clinical report which allows to fomulate a diagnosis,
+viewer for clinical reports</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0100</p></td>
+<td><p>Device management
+(System Administrator, MRI Technician, Medical Device Manufacturer)</p></td>
+<td><p>Organisation of different devices, device authentification, device selection,
+device access management (who is trained on which device?)</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="operational-needs">
+<h3>Operational Needs<a class="headerlink" href="#operational-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Product Requirements [Steakholder]</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0010</p></td>
+<td><p>Real-time Monitoring (Radiologist)</p></td>
+<td><ul class="simple">
+<li><p>Continuously monitor and display MRI scan</p></li>
+</ul>
+<p>data in real-time.
+- Provide real-time feedback on scan quality
+and progress.
+- Instant notification for scan completion.</p>
+</td>
+<td><p>99% uptime</p></td>
+<td><p>Ensure real-time monitoring for accurate
+diagnosis.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0020</p></td>
+<td><p>Alerting (MRI Technician, Radiologist)</p></td>
+<td><p>Real-time alerts for scan anomalies or
+issues.</p></td>
+<td><p>&lt;5 minutes</p></td>
+<td><p>Rapid response to scan anomalies or
+issues.</p></td>
+<td><p>Should Have</p></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0030</p></td>
+<td><p>On-Prem Setup (System Administrator)</p></td>
+<td><p>Support for on-prem setups.</p></td>
+<td><p>100% Compatibility</p></td>
+<td><p>Provide flexibility in deployment
+options to cater to different
+organizational needs.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0040</p></td>
+<td><p>Cloud Setup (System Administrator)</p></td>
+<td><p>Support for cloud setups in environments
+with no local compute workstations.</p></td>
+<td><p>100% Compatibility</p></td>
+<td><p>Enable versatile deployment options
+to accommodate varying infrastructure.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="regulatory-needs">
+<h3>Regulatory Needs<a class="headerlink" href="#regulatory-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (Actor)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0110</p></td>
+<td><p>Compliance (RA
+Specialist)</p></td>
+<td><ul class="simple">
+<li><p>Compliance with HIPAA, GDPR, and FDA</p></li>
+</ul>
+<p>regulations.
+- Regular updates to adhere to evolving
+regulations.
+- Detailed logging and audit trails.</p>
+</td>
+<td><p>100% Compliance</p></td>
+<td><p>Ensure compliance with industry
+regulations for patient safety.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0120</p></td>
+<td><p>Data Security (System Administrator)</p></td>
+<td><p>Strong data encryption and role-based
+access control.</p></td>
+<td><p>100% Compliance</p></td>
+<td><p>Secure patient data and adhere to
+compliance requirements.</p></td>
+<td><p>Nice to Have</p></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0130</p></td>
+<td><p>Compliance with ISO 14971:2019
+(RA Specialist)</p></td>
+<td><p>Implementation of Risk Mitigation Measures
+(RMM) in adherence to ISO 14971:2019.</p></td>
+<td><p>100% Compliance</p></td>
+<td><p>Minimize risks associated with the
+system operation.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reliability-and-resilience-needs">
+<h3>Reliability and Resilience Needs<a class="headerlink" href="#reliability-and-resilience-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (User)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0210</p></td>
+<td><p>Reliability (Site Engineer)</p></td>
+<td><p>System stability with minimum downtime.</p></td>
+<td><p>99.99% uptime</p></td>
+<td><p>Maintain a reliable and stable MRI
+acquisition system.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="usability-needs">
+<h3>Usability Needs<a class="headerlink" href="#usability-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (User)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0310</p></td>
+<td><p>User-Friendly (MRI Technician)</p></td>
+<td><ul class="simple">
+<li><p>Intuitive UI for scan setup and patient</p></li>
+</ul>
+<p>management.
+- Comprehensive user manuals and guides.
+- Quick access to frequently used features.</p>
+</td>
+<td><p>&lt;30 minutes
+onboarding</p></td>
+<td><p>Streamline user interaction for
+increased productivity.</p></td>
+<td><p>Should Have</p></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0320</p></td>
+<td><p>Advanced Features (Scientist)</p></td>
+<td><p>Access to raw MRI data and experimental
+sequence options.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate sequence development and
+research.</p></td>
+<td><p>Nice to Have</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="interoperability-needs">
+<h3>Interoperability Needs<a class="headerlink" href="#interoperability-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (Actor)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0410</p></td>
+<td><p>Interoperability
+(Medical Device Manufacturer)</p></td>
+<td><p>Compatibility with various DICOM systems.</p></td>
+<td><p>N/A</p></td>
+<td><p>Seamless integration with existing
+healthcare systems.</p></td>
+<td><p>Should Have</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0420</p></td>
+<td><p>Data Storage (Radiologist)</p></td>
+<td><p>Support for XNAT storage.</p></td>
+<td><p>N/A</p></td>
+<td><p>Ensure compatibility with widely used
+medical imaging data storage formats.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0430</p></td>
+<td><p>File Format (Radiologist)</p></td>
+<td><p>Support for NIFTI file format.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate diverse data representation
+and interoperability.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRS_0440</p></td>
+<td><p>File Format (Scientist)</p></td>
+<td><p>Support for ISMRMRD file format.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate diverse data representation
+and interoperability.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>PRS_0450</p></td>
+<td><p>File Format (Scientist)</p></td>
+<td><p>Support for RAW MR file format.</p></td>
+<td><p>N/A</p></td>
+<td><p>Facilitate diverse data representation
+and interoperability.</p></td>
+<td><p>Must Have</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="maintainability-needs">
+<h3>Maintainability Needs<a class="headerlink" href="#maintainability-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (Actor)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0510</p></td>
+<td><p>Scalability (System Administrator)</p></td>
+<td><ul class="simple">
+<li><p>Scalable architecture to accommodate</p></li>
+</ul>
+<p>increasing data and users.
+- Modular design for easy updates and
+enhancements.
+- Efficient data management and storage
+solutions.</p>
+</td>
+<td><p>&lt;10% degradation
+at 2x data</p></td>
+<td><p>Ensure system performance as data and
+users grow.</p></td>
+<td><p>Should Have</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="system-interfaces-to-third-party-solution-needs">
+<h3>System Interfaces to Third Party Solution Needs<a class="headerlink" href="#system-interfaces-to-third-party-solution-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>User Need (Actor)</p></th>
+<th class="head"><p>Design Input</p></th>
+<th class="head"><p>Acceptance Criteria</p></th>
+<th class="head"><p>Intended claim</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PRS_0610</p></td>
+<td><p>Patient Monitoring Systems
+(Medical Device Manufacturer)</p></td>
+<td><p>Seamless interaction with patient
+monitoring systems.</p></td>
+<td><p>Real-time data
+exchange</p></td>
+<td><p>Ensure real-time data exchange and
+patient safety.</p></td>
+<td><p>Must Have</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="techdoc_dd.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Device Description (DD)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="techdoc_swrs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Software Requirement Specification (SWRS)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steakholder-and-user-roles">Steakholder and User Roles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-needs">User Needs</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operational-needs">Operational Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regulatory-needs">Regulatory Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reliability-and-resilience-needs">Reliability and Resilience Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usability-needs">Usability Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperability-needs">Interoperability Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintainability-needs">Maintainability Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-interfaces-to-third-party-solution-needs">System Interfaces to Third Party Solution Needs</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/techdoc_prs.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

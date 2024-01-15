@@ -1,0 +1,59 @@
+:py:mod:`acquisition-control.app.main`
+======================================
+
+.. py:module:: acquisition-control.app.main
+
+.. autoapi-nested-parse::
+
+   Main file for the acquisition control service.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   acquisition-control.app.main.readiness
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   acquisition-control.app.main.app
+   acquisition-control.app.main.origins
+
+
+.. py:data:: app
+
+   
+
+.. py:data:: origins
+   :value: ['http://localhost', 'http://localhost:3000', 'http://localhost:8080']
+
+   
+
+.. py:function:: readiness() -> dict
+   :async:
+
+   Readiness health endpoint.
+
+   Inspects service status.
+
+   Returns
+   -------
+       Status docstring
+
+   Raises
+   ------
+   HTTPException
+       500: internal error
+
+
