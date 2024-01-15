@@ -124,13 +124,6 @@ Emergency Protocols and System Recovery
 * Procedure: Defined emergency protocols, rapid system recovery procedures, and data backup solutions for ensuring data integrity.
 * Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)
 
-User Feedback and System Improvement
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Scenario: Gathering and incorporating user feedback for system improvement.
-* Procedure: Feedback mechanisms within the software for users to report issues or suggest improvements, and processes for analyzing and implementing this feedback in future updates or patches.
-* Stakeholder: All stakeholders, especially MRI Technician/MTRA (SH_010) and Radiologist (SH_020)
-
 Interoperability with Other Healthcare Systems
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
