@@ -5,6 +5,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Any
+from uuid import UUID
 
 from pydantic import BaseModel, Extra, Field, Json  # noqa
 
@@ -58,7 +59,7 @@ class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
 
         extra = Extra.ignore
 
-    job_id: int = Field(alias="id")
+    job_id: UUID = Field(alias="id")
     sequence_id: str
     workflow_id: int
     device_id: str
@@ -129,7 +130,7 @@ class DeviceTask(BaseModel):
     """Pydantic model definition of a device job."""
 
     device_id: str
-    record_id: str
+    record_id: UUID
     command: Commands
     parametrized_sequence: ParametrizedSequence
 
@@ -137,14 +138,14 @@ class DeviceTask(BaseModel):
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of a scanjob."""
 
-    record_id: str
+    record_id: UUID
     status_percent: int
 
 
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive."""
 
-    record_id: str
+    record_id: UUID
 
 
 class BaseDevice(BaseModel):
@@ -188,7 +189,7 @@ class BaseExam(BaseModel):
 
         extra = Extra.ignore
 
-    patient_id: int
+    patient_id: UUID
     name: str
     country: str | None
     site: str | None
@@ -219,7 +220,6 @@ class BaseJob(BaseModel):
 
     type: str
     comment: str | None
-    procedure_id: int
     sequence_id: str
     workflow_id: int | None
     device_id: str
@@ -242,13 +242,13 @@ class BaseRecord(BaseModel):
 class ProcedureIn(BaseProcedure):
     """Procedure input model."""
 
-    exam_id: int
+    exam_id: UUID | str
 
 
 class RecordIn(BaseRecord):
     """Record input model."""
 
-    job_id: int
+    job_id: UUID
 
 
 class DeviceOut(BaseDevice):
@@ -270,14 +270,14 @@ class WorkflowOut(BaseWorkflow):
 class RecordOut(BaseRecord):
     """Record output model."""
 
-    id: int
+    id: UUID
     datetime_created: datetime
 
 
 class JobOut(BaseJob):
     """Job output model."""
 
-    id: int
+    id: UUID
     is_acquired: bool
     device: DeviceOut | None
     workflow: WorkflowOut | None
@@ -286,19 +286,10 @@ class JobOut(BaseJob):
     datetime_updated: datetime | None
 
 
-class ProcedureOut(BaseProcedure):
-    """Procedure output model."""
-
-    id: int
-    datetime_created: datetime
-    datetime_updated: datetime | None
-    jobs: list[JobOut]
-
-
 class ExamOut(BaseExam):
     """Exam output model."""
 
-    id: int
+    id: UUID
     datetime_created: datetime
     datetime_updated: datetime | None
-    procedures: list[ProcedureOut]
+    jobs: list[JobOut]
