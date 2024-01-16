@@ -3,20 +3,13 @@
 
 """Definitions of pydantic models and helper functions."""
 
+import uuid
 from datetime import datetime
 from enum import Enum
 
 from pydantic import BaseModel, Extra
 
-from .db import AcquisitionLimits, Device, Exam, Job, Procedure, Record, SequenceParameters, Workflow
-
-
-class Commands(str, Enum):
-    """Commands model."""
-
-    START = "START"
-    STOP = "STOP"
-    PAUSE = "PAUSE"
+from .db import Device, Exam, Job, Record, Workflow, AcquisitionLimits, SequenceParameters
 
 
 class BaseDevice(BaseModel):
@@ -69,18 +62,6 @@ class BaseExam(BaseModel):
     status: str
 
 
-class BaseProcedure(BaseModel):
-    """Procedure base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    name: str
-    status: str
-
-
 class BaseJob(BaseModel):
     """Job base model."""
 
@@ -91,7 +72,7 @@ class BaseJob(BaseModel):
 
     type: str
     comment: str | None
-    procedure_id: int
+    exam_id: uuid.UUID
     sequence_id: str
     workflow_id: int | None
     device_id: str
@@ -111,16 +92,10 @@ class BaseRecord(BaseModel):
     comment: str | None
 
 
-class ProcedureIn(BaseProcedure):
-    """Procedure input model."""
-
-    exam_id: int
-
-
 class RecordIn(BaseRecord):
     """Record input model."""
 
-    job_id: int
+    job_id: uuid.UUID
 
 
 class DeviceOut(BaseDevice):
@@ -142,14 +117,14 @@ class WorkflowOut(BaseWorkflow):
 class RecordOut(BaseRecord):
     """Record output model."""
 
-    id: int
+    id: uuid.UUID
     datetime_created: datetime
 
 
 class JobOut(BaseJob):
     """Job output model."""
 
-    id: int
+    id: uuid.UUID
     is_acquired: bool
     device: DeviceOut | None
     workflow: WorkflowOut | None
@@ -158,22 +133,13 @@ class JobOut(BaseJob):
     datetime_updated: datetime | None
 
 
-class ProcedureOut(BaseProcedure):
-    """Procedure output model."""
-
-    id: int
-    datetime_created: datetime
-    datetime_updated: datetime | None
-    jobs: list[JobOut]
-
-
 class ExamOut(BaseExam):
     """Exam output model."""
 
-    id: int
+    id: uuid.UUID
     datetime_created: datetime
     datetime_updated: datetime | None
-    procedures: list[ProcedureOut]
+    jobs: list[JobOut]
 
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
@@ -271,7 +237,7 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
         type=data.type,
         comment=data.comment,
         is_acquired=data.is_acquired,
-        procedure_id=data.procedure_id,
+        exam_id=data.exam_id,
         sequence_id=data.sequence_id,
         device_id=data.device_id,
         workflow_id=data.workflow_id,
@@ -282,31 +248,6 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
         datetime_updated=data.datetime_updated,
         acquisition_limits=data.acquisition_limits,
         sequence_parameters=data.sequence_parameters,
-    )
-
-
-async def get_procedure_out(data: Procedure) -> ProcedureOut:
-    """Procedure output helper function.
-
-    Parameters
-    ----------
-    data
-        Procedure database model
-
-    Returns
-    -------
-        Procedure pydantic output model
-    """
-    # Create jobs of the procedure
-    jobs = [await get_job_out(job) for job in data.jobs]
-
-    return ProcedureOut(
-        id=data.id,
-        name=data.name,
-        status=data.status,
-        datetime_created=data.datetime_created,
-        datetime_updated=data.datetime_updated,
-        jobs=jobs,
     )
 
 
@@ -323,7 +264,7 @@ async def get_exam_out(data: Exam) -> ExamOut:
         Exam pydantic output model
     """
     # Create procedures of the exam
-    exam_procedures = [await get_procedure_out(procedure) for procedure in data.procedures]
+    exam_jobs = [await get_job_out(job) for job in data.jobs]
 
     return ExamOut(
         id=data.id,
@@ -334,7 +275,7 @@ async def get_exam_out(data: Exam) -> ExamOut:
         address=data.address,
         creator=data.creator,
         status=data.status,
-        procedures=exam_procedures,
+        jobs=exam_jobs,
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
     )
