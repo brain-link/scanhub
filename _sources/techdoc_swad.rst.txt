@@ -131,8 +131,8 @@ Interoperability with Other Healthcare Systems
 * Procedure: Implementing standard protocols and APIs for data exchange, ensuring compatibility with various healthcare IT infrastructures.
 * Stakeholder: System Administrator (SH_050), Radiologist (SH_020), Healthcare Facility (SH_100)
 
-Remote Diagnostics and Support
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Remote System Diagnostics and Support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Providing remote assistance and diagnostics for technical issues or user queries.
 * Procedure: Remote access capabilities for technical support staff, diagnostic tools for system analysis, and secure communication channels.
