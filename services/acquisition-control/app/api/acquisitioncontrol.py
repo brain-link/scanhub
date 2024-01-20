@@ -82,7 +82,7 @@ async def create_record(exam_manager_uri, job_id):
         data = {
             "data_path": "unknown",
             "comment": "Created in Acquisition Control",
-            "job_id": job_id,
+            "job_id": str(job_id),
         }
         response = await client.post(f"http://{exam_manager_uri}/api/v1/exam/record", json=data)
         return response.json()["id"]
