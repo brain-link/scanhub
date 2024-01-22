@@ -77,6 +77,10 @@ jobs:
       - name: Install shared-library
         run: pip install ./base/shared_libs/
 
-      - name: Run linter
+      - name: Run ruff linter
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry run ruff check
+
+      - name: Run mypy type checker
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: mypy --install-types --non-interactive && mypy app/ 
