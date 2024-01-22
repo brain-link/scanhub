@@ -83,4 +83,4 @@ jobs:
 
       - name: Run mypy type checker
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
-        run: mypy --install-types --non-interactive && mypy app/ 
+        run: mypy app/ --install-types --non-interactive
