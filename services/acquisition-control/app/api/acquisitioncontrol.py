@@ -8,14 +8,11 @@
 
 import json
 import logging
-import random
 
 import httpx
 from fastapi import APIRouter
 from pydantic.json import pydantic_encoder
 from scanhub_libraries.models import Commands, DeviceTask, ParametrizedSequence, ScanJob, ScanStatus
-
-DEBUG_FLAG = False
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
@@ -119,27 +116,18 @@ async def start_scan(scan_job: ScanJob):
     device_ip = await device_location_request(device_id)
     url = f"http://{device_ip}/api/start-scan"
 
-    if DEBUG_FLAG is True:
-        # TODO: Dont ignore device_id, check returns, ... # pylint: disable=fixme
-        record_id = "test_" + str(random.randint(0, 1000))  # noqa: S311
-        sequence_json = {"test": "test"}
-        parametrized_sequence = ParametrizedSequence(
-            acquisition_limits=scan_job.acquisition_limits,
-            sequence_parameters=scan_job.sequence_parameters,
-            sequence=sequence_json,
-        )
-    else:
-        print("Start-scan endpoint, device ip: ", device_ip)
-        # get sequence
-        sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.sequence_id)
+    print("Start-scan endpoint, device ip: ", device_ip)
 
-        # create record
-        record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
-        parametrized_sequence = ParametrizedSequence(
-            acquisition_limits=scan_job.acquisition_limits,
-            sequence_parameters=scan_job.sequence_parameters,
-            sequence=json.dumps(sequence_json),
-        )
+    # get sequence
+    sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.sequence_id)
+
+    # create record
+    record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
+    parametrized_sequence = ParametrizedSequence(
+        acquisition_limits=scan_job.acquisition_limits,
+        sequence_parameters=scan_job.sequence_parameters,
+        sequence=json.dumps(sequence_json),
+    )
 
     # start scan and forward sequence, workflow, record_id
     logging.debug("Received job: %s, Generated record id: %s", scan_job.job_id, record_id)
