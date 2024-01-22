@@ -52,6 +52,10 @@ jobs:
           virtualenvs-create: false
           virtualenvs-in-project: false
 
+      - name: Update pip
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry run pip install --upgrade pip
+
       - name: Cache poetry dependencies
         uses: actions/cache@v3
         id: cached-poetry-dependencies
