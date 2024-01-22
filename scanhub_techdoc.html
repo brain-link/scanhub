@@ -18,24 +18,23 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
@@ -44,7 +43,7 @@
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Device Description (DD)" href="techdoc_dd.html" />
+    <link rel="next" title="Device Descritpion (DD)" href="techdoc_dd.html" />
     <link rel="prev" title="MRI Sequences Manager" href="api_mri_sequences.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -58,7 +57,6 @@
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -98,10 +96,8 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -150,7 +146,7 @@
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -158,13 +154,6 @@
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -268,9 +257,8 @@ document.write(`
   
 </div>
 
-    </div>
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
@@ -299,7 +287,7 @@ document.write(`
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -307,13 +295,6 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -387,8 +368,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirements (PRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Descritpion (DD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_di.html">Design Input (DI)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -451,8 +432,8 @@ document.write(`
 <p>Technical documentation of ScanHub.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirements (PRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Descritpion (DD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_di.html">Design Input (DI)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -483,7 +464,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Device Description (DD)</p>
+        <p class="prev-next-title">Device Descritpion (DD)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -519,8 +500,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

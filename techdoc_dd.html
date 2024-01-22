@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Device Description (DD) &#8212; ScanHub Documentation</title>
+    <title>Device Descritpion (DD) &#8212; ScanHub Documentation</title>
   
   
   
@@ -18,24 +18,23 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
@@ -44,7 +43,7 @@
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Product Requirements (PRS)" href="techdoc_prs.html" />
+    <link rel="next" title="Design Input (DI)" href="techdoc_di.html" />
     <link rel="prev" title="Technical Documentation" href="scanhub_techdoc.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -58,7 +57,6 @@
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -98,10 +96,8 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -150,7 +146,7 @@
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -158,13 +154,6 @@
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="scanhub_techdoc.html">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -268,9 +257,8 @@ document.write(`
   
 </div>
 
-    </div>
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
@@ -299,7 +287,7 @@ document.write(`
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -307,13 +295,6 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="scanhub_techdoc.html">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -387,8 +368,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Device Description (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirements (PRS)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Device Descritpion (DD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_di.html">Design Input (DI)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -448,90 +429,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="device-description-dd">
-<h1>Device Description (DD)<a class="headerlink" href="#device-description-dd" title="Link to this heading">#</a></h1>
+  <section id="device-descritpion-dd">
+<h1>Device Descritpion (DD)<a class="headerlink" href="#device-descritpion-dd" title="Link to this heading">#</a></h1>
 <p>!!This Section is Work in Progress.!!</p>
-<section id="overview-of-the-system">
-<h2>Overview of the System<a class="headerlink" href="#overview-of-the-system" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is an innovative low-field Magnetic Resonance Imaging (MRI) device, specifically designed for high-quality imaging of the human head and extremities. Utilizing permanent magnets, the A4IM scanner distinguishes itself from traditional high-field MRI systems that use superconducting magnets. This low-field approach allows for a more compact design and reduced operational costs while still providing detailed images. The system is intended for use in healthcare facilities such as hospitals, clinics, and diagnostic centers.</p>
-<p>The A4IM scanner comprises several key components that work in harmony to deliver high-resolution imaging capabilities:</p>
-<p>Permanent Magnets: Provide the B0 magnetic field required for imaging, offering a compact and cost-effective solution compared to superconducting magnets.</p>
-<p>Radiofrequency (RF) Coils: Essential for both transmitting and receiving signals necessary to generate images, these coils are designed for optimal sensitivity and image quality.</p>
-<p>Gradient Coils: Responsible for spatial encoding of the MRI signals, these coils allow for precise image localization and resolution, which is crucial for accurate diagnostics.</p>
-<p>Patient Table: Designed with patient comfort and safety in mind, the table ensures optimal positioning during scans.</p>
-<p>MRI Console: This component houses the computer system and reference cards essential for controlling the MRI hardware and managing the acquisition process. It serves as the central hub for system operation.</p>
-<p>MRI SanHub Software (Cloud-based): A cutting-edge platform that provides advanced image reconstruction and review capabilities. This software seamlessly integrates with the MRI console, enhancing the overall functionality and user experience.</p>
-</section>
-<section id="intended-use">
-<h2>Intended Use<a class="headerlink" href="#intended-use" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is intended to aid healthcare professionals as an additive support measurement to trigger further investigation. It is designed to assist in the imaging of the human head and extremities, providing high-quality images that can be interpreted by trained physicians. The device is particularly useful in the diagnostic process, although it is not intended for quantitative measurements.</p>
-</section>
-<section id="intended-user-population">
-<h2>Intended User Population<a class="headerlink" href="#intended-user-population" title="Link to this heading">#</a></h2>
-<p>The primary users of the A4IM scanner are radiologists, MRI technicians, and other healthcare professionals trained in medical imaging. The device is designed to be user-friendly and intuitive, ensuring ease of use for the intended user population.</p>
-</section>
-<section id="contraindications">
-<h2>Contraindications<a class="headerlink" href="#contraindications" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is contraindicated for patients with certain types of metal implants, electronic devices such as pacemakers, or any other condition that may pose a risk due to the magnetic field.</p>
-</section>
-<section id="treatment-specifications">
-<h2>Treatment Specifications<a class="headerlink" href="#treatment-specifications" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is intended for patients requiring diagnostic imaging of the head and extremities. Patient selection criteria and field of application should be determined by the healthcare provider based on the individual patient’s medical condition and imaging needs.</p>
-</section>
-<section id="proposed-conditions-of-use">
-<h2>Proposed Conditions of Use<a class="headerlink" href="#proposed-conditions-of-use" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is intended for use in a controlled clinical environment by trained professionals. The device should be operated according to the manufacturer’s instructions and applicable surgical techniques.</p>
-</section>
-<section id="explanation-of-features">
-<h2>Explanation of Features<a class="headerlink" href="#explanation-of-features" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner includes advanced features such as high-resolution imaging, fast scanning times, and a user-friendly interface. The system is designed for optimal patient comfort and safety.</p>
-</section>
-<section id="configurations">
-<h2>Configurations<a class="headerlink" href="#configurations" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is available in various configurations to meet the diverse needs of healthcare facilities.</p>
-</section>
-<section id="list-of-devices-subject-to-clearance">
-<h2>List of Devices Subject to Clearance<a class="headerlink" href="#list-of-devices-subject-to-clearance" title="Link to this heading">#</a></h2>
-<p>TBD: list of devices and components that require regulatory clearance.</p>
-</section>
-<section id="novel-features">
-<h2>Novel Features<a class="headerlink" href="#novel-features" title="Link to this heading">#</a></h2>
-<p>TBD: The A4IM scanner incorporates novel features such as advanced image processing algorithms and enhanced RF coil technology for superior image quality.</p>
-</section>
-<section id="principles-of-operation">
-<h2>Principles of Operation<a class="headerlink" href="#principles-of-operation" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner operates on the principles of magnetic resonance, where hydrogen atoms in the body are aligned by a magnetic field and then perturbed by radiofrequency pulses. The resulting signals are processed to create detailed images of the internal body structures.</p>
-</section>
-<section id="mode-of-action">
-<h2>Mode of Action<a class="headerlink" href="#mode-of-action" title="Link to this heading">#</a></h2>
-<p>The device’s mode of action involves non-invasive imaging through magnetic resonance, providing detailed anatomical information without the use of ionizing radiation.</p>
-</section>
-<section id="key-functional-elements">
-<h2>Key Functional Elements<a class="headerlink" href="#key-functional-elements" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner comprises several key functional elements that work in harmony to deliver high-resolution imaging capabilities:</p>
-<p>Patient Table: Designed with patient comfort and safety in mind, the table ensures optimal positioning during scans.</p>
-<p>MRI Hardware: Permanent magnets, RF coils, and gradient coils for image acquisition.</p>
-<p>MRI Console: Controls the MRI hardware and manages the acquisition process.</p>
-<p>MRI SanHub Software: Cloud-based platform for image reconstruction and review.</p>
-</section>
-<section id="list-of-components-and-accessories">
-<h2>List of Components and Accessories<a class="headerlink" href="#list-of-components-and-accessories" title="Link to this heading">#</a></h2>
-<p>TBD: A comprehensive list of components and accessories marketed with the A4IM scanner.</p>
-</section>
-<section id="interoperability-and-compatibility">
-<h2>Interoperability and Compatibility<a class="headerlink" href="#interoperability-and-compatibility" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is designed for interoperability with existing healthcare systems, ensuring seamless integration and data exchange.</p>
-</section>
-<section id="safety-class">
-<h2>Safety Class<a class="headerlink" href="#safety-class" title="Link to this heading">#</a></h2>
-<p>The A4IM scanner is classified as a Class 2a medical device.</p>
-</section>
-<section id="level-of-concern">
-<h2>Level of Concern<a class="headerlink" href="#level-of-concern" title="Link to this heading">#</a></h2>
-<p>The device is categorized as Level B concerning safety concerns. It is important to note that the A4IM scanner poses risks related to projectiles/flying objects and Specific Absorption Rate (SAR) heating.</p>
-<p>The A4IM scanner represents a significant advancement in low-field MRI technology, offering healthcare professionals a powerful tool for diagnostic imaging. Its innovative features, combined with a focus on patient safety and comfort, make it a valuable addition to any medical imaging facility.</p>
-<section id="notes">
-<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support for further investigation</p></li>
 <li><p>research device (investigational vs research)</p></li>
@@ -551,8 +451,6 @@ B</p>
 <li><p>SAR heating</p></li>
 <li><p>cannot be quenched</p></li>
 </ul>
-</section>
-</section>
 </section>
 
 
@@ -575,11 +473,11 @@ B</p>
       </div>
     </a>
     <a class="right-next"
-       href="techdoc_prs.html"
+       href="techdoc_di.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Product Requirements (PRS)</p>
+        <p class="prev-next-title">Design Input (DI)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -592,37 +490,6 @@ B</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview-of-the-system">Overview of the System</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intended-use">Intended Use</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intended-user-population">Intended User Population</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contraindications">Contraindications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#treatment-specifications">Treatment Specifications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposed-conditions-of-use">Proposed Conditions of Use</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-features">Explanation of Features</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configurations">Configurations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-devices-subject-to-clearance">List of Devices Subject to Clearance</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#novel-features">Novel Features</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principles-of-operation">Principles of Operation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-of-action">Mode of Action</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-functional-elements">Key Functional Elements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-components-and-accessories">List of Components and Accessories</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperability-and-compatibility">Interoperability and Compatibility</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#safety-class">Safety Class</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-of-concern">Level of Concern</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
 
   <div class="sidebar-secondary-item">
 
@@ -646,8 +513,8 @@ B</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

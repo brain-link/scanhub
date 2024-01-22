@@ -18,24 +18,23 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
@@ -45,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Software Architecture Design Description (SWAD)" href="techdoc_swad.html" />
-    <link rel="prev" title="Product Requirements (PRS)" href="techdoc_prs.html" />
+    <link rel="prev" title="Design Input (DI)" href="techdoc_di.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -58,7 +57,6 @@
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -98,10 +96,8 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -150,7 +146,7 @@
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -158,13 +154,6 @@
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="scanhub_techdoc.html">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -268,9 +257,8 @@ document.write(`
   
 </div>
 
-    </div>
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
@@ -299,7 +287,7 @@ document.write(`
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -307,13 +295,6 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="scanhub_techdoc.html">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -387,8 +368,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirements (PRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Descritpion (DD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_di.html">Design Input (DI)</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -450,7 +431,7 @@ document.write(`
                   
   <section id="software-requirement-specification-swrs">
 <h1>Software Requirement Specification (SWRS)<a class="headerlink" href="#software-requirement-specification-swrs" title="Link to this heading">#</a></h1>
-<p>!! This Section is Work in Progress. !!</p>
+<p>!!This Section is Work in Progress.!!</p>
 <section id="functional-requirements">
 <h2>Functional Requirements<a class="headerlink" href="#functional-requirements" title="Link to this heading">#</a></h2>
 <table class="table">
@@ -463,128 +444,17 @@ document.write(`
 </thead>
 <tbody>
 <tr class="row-even"><td><p>SWRS_FR_0001</p></td>
-<td><p>TBD</p></td>
-<td><p>TBD</p></td>
-<td><p>TBD</p></td>
+<td><p>column 2</p></td>
+<td><p>column 3</p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>SWRS_FR_0002</p></td>
-<td><p>TBD</p></td>
-<td><p>TBD</p></td>
-<td><p>TBD</p></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="device-communication">
-<h2>Device Communication<a class="headerlink" href="#device-communication" title="Link to this heading">#</a></h2>
-<section id="acquisition-request">
-<h3>Acquisition Request<a class="headerlink" href="#acquisition-request" title="Link to this heading">#</a></h3>
-<p>The following information shall be communicated with an acquisition request to specify modality specific instructions/commands.
-Authentification and authorization topics are left out for now.</p>
-<p>Request:</p>
-<ul class="simple">
-<li><p><strong>device-id:</strong> Double check if request was communicated to the right device</p></li>
-<li><p><strong>command:</strong> Start, stop, pause, …</p></li>
-<li><p><strong>parameters:</strong> Key-value pairs, can be simple values, instruction files or a combination of both, device limits</p></li>
-<li><p><strong>record-id:</strong> ID which is assigned per initial request and traced from record creation to the last workflow step, gives access to job-id (may be extended by additional trace ID)</p></li>
-<li><p><strong>device-authentication-key:</strong> TBD</p></li>
-</ul>
-<p>Response: HTTPS_RESPONSE</p>
-<p><strong>Communication Flow</strong></p>
-<p>(Replace by better formatting)</p>
-<blockquote>
-<div><p>UI</p>
-<p>-&gt; Acquisition Control</p>
-<blockquote>
-<div><p>-&gt; Request acquisition command/parameters (sequence manager)</p>
-<p>-&gt; create record (exam manager)</p>
-<p>-&gt; get device (device manager)</p>
-</div></blockquote>
-<p>-&gt; Device (acquisition request)</p>
-<p>-&gt; Workflow Manager</p>
-<p>-&gt; Workflows</p>
-</div></blockquote>
-<p><strong>MR-Domain Model</strong></p>
-<p>(To be moved to SWAD)
-JSON payload which is communicated from acquisition control to device (MRI acquisition request).
-The following example is</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nx">device_id</span><span class="o">:</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span>
-<span class="linenos"> 2</span><span class="nx">command</span><span class="o">:</span><span class="w"> </span><span class="kr">enum</span><span class="p">,</span><span class="w"> </span><span class="c1">// start, stop, pause</span>
-<span class="linenos"> 3</span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="nx">context</span><span class="o">:</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span><span class="w"> </span><span class="c1">// content of a sequence file (can be pulseq)</span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="nx">format</span><span class="o">:</span><span class="w"> </span><span class="kr">enum</span><span class="p">,</span><span class="w"> </span><span class="c1">// pulseq, ocra, ...</span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="nx">acqusition_limits</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos"> 7</span><span class="w">        </span><span class="c1">// parameters used to calculate SAR, double check for completeness</span>
-<span class="linenos"> 8</span><span class="w">        </span><span class="nx">patient_height</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos"> 9</span><span class="w">        </span><span class="nx">patient_weight</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">10</span><span class="w">        </span><span class="nx">patient_gender</span><span class="o">:</span><span class="w"> </span><span class="kr">enum</span><span class="p">,</span>
-<span class="linenos">11</span><span class="w">        </span><span class="nx">patient_age</span><span class="o">:</span><span class="w"> </span><span class="kr">int</span><span class="p">,</span>
-<span class="linenos">12</span><span class="w">    </span><span class="p">},</span>
-<span class="linenos">13</span><span class="w">    </span><span class="nx">sequence_parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">14</span><span class="w">        </span><span class="c1">// User input for MRI console to execute the sequence properly, for now only fov.</span>
-<span class="linenos">15</span><span class="w">        </span><span class="c1">// Note: The following section is specific to the format (here pulseq).</span>
-<span class="linenos">16</span><span class="w">        </span><span class="c1">// It may vary for different sequence formats and thus should be</span>
-<span class="linenos">17</span><span class="w">        </span><span class="c1">// implemented as a generic dictionary inside a pydantic MR domain model.</span>
-<span class="linenos">18</span><span class="w">        </span><span class="nx">fov</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="linenos">19</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">20</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">21</span><span class="w">            </span><span class="kr">float</span>
-<span class="linenos">22</span><span class="w">        </span><span class="p">],</span>
-<span class="linenos">23</span><span class="w">        </span><span class="nx">fov_offset</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="linenos">24</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">25</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">26</span><span class="w">            </span><span class="kr">float</span>
-<span class="linenos">27</span><span class="w">        </span><span class="p">]</span>
-<span class="linenos">28</span><span class="w">    </span><span class="p">}</span>
-<span class="linenos">29</span><span class="p">}</span>
-</pre></div>
-</div>
-</section>
-<section id="device-monitor">
-<h3>Device Monitor<a class="headerlink" href="#device-monitor" title="Link to this heading">#</a></h3>
-<p>Monitoring of device status through direct connection between device and device manager.
-Get the current device status: connected, disconnected, scanning, etc.</p>
-<blockquote>
-<div><p>TODO: What are possible device status?</p>
-</div></blockquote>
-<p>The device status is to be implemented as an enum with defined situations (see above).</p>
-</section>
-<section id="device-configuration">
-<h3>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading">#</a></h3>
-<p>This set of parameters is specific to one device. Read and/or write requests are performed through the device manager.
-Some parameters are fixed limits and cannot be modified by the device manager (<cite>system_limits</cite>).
-Another set of parameters may vary over time and may be set from a workflow/workflow-step result (<cite>current_device_configuration</cite>).</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nx">system_limits</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos"> 2</span><span class="c1">// hard system limits (read only)</span>
-<span class="linenos"> 3</span><span class="w">    </span><span class="nx">max_gradients</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="linenos"> 4</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos"> 5</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos"> 6</span><span class="w">        </span><span class="kr">float</span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="p">],</span>
-<span class="linenos"> 8</span><span class="w">    </span><span class="nx">max_rf_duration</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos"> 9</span><span class="w">    </span><span class="nx">adc_deadtime</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">10</span><span class="w">    </span><span class="nx">rf_dead_time</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">11</span><span class="w">    </span><span class="c1">// ...</span>
-<span class="linenos">12</span><span class="p">},</span>
-<span class="linenos">13</span><span class="nx">current_device_configuration</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">14</span><span class="c1">// temporary system values (read and write)</span>
-<span class="linenos">15</span><span class="w">    </span><span class="nx">larmor_frequency</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">16</span><span class="w">    </span><span class="nx">flip_angle_calibration</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">17</span><span class="w">    </span><span class="nx">gradient_calibration</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="linenos">18</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">19</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">20</span><span class="w">        </span><span class="kr">float</span>
-<span class="linenos">21</span><span class="w">    </span><span class="p">],</span>
-<span class="linenos">22</span><span class="w">    </span><span class="nx">gradient_offset</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="linenos">23</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">24</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
-<span class="linenos">25</span><span class="w">        </span><span class="kr">float</span>
-<span class="linenos">26</span><span class="w">    </span><span class="p">],</span>
-<span class="linenos">27</span><span class="w">    </span><span class="c1">// ...</span>
-<span class="linenos">28</span><span class="p">}</span>
-</pre></div>
-</div>
-</section>
 </section>
 </section>
 
@@ -599,12 +469,12 @@ Another set of parameters may vary over time and may be set from a workflow/work
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="techdoc_prs.html"
+       href="techdoc_di.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Product Requirements (PRS)</p>
+        <p class="prev-next-title">Design Input (DI)</p>
       </div>
     </a>
     <a class="right-next"
@@ -635,12 +505,6 @@ Another set of parameters may vary over time and may be set from a workflow/work
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-requirements">Functional Requirements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-communication">Device Communication</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-request">Acquisition Request</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-monitor">Device Monitor</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-configuration">Device Configuration</a></li>
-</ul>
-</li>
 </ul>
   </nav></div>
 
@@ -666,8 +530,8 @@ Another set of parameters may vary over time and may be set from a workflow/work
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
