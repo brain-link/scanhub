@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bullseye
+FROM scanhub-base
 
 RUN pip install --upgrade pip
 RUN pip install poetry

@@ -4,12 +4,13 @@
 """Data access layer."""
 
 from pprint import pprint
+from uuid import UUID
 
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from .db import Exam, Job, Procedure, Record, async_session
-from .models import BaseExam, BaseJob, ProcedureIn, RecordIn
+from .db import Exam, Job, Record, async_session
+from .models import BaseExam, BaseJob, RecordIn
 
 
 async def exam_add(payload: BaseExam) -> Exam:
@@ -35,7 +36,7 @@ async def exam_add(payload: BaseExam) -> Exam:
     return new_exam
 
 
-async def exam_get(exam_id: int) -> (Exam | None):
+async def exam_get(exam_id: UUID) -> (Exam | None):
     """Get exam by id.
 
     Parameters
@@ -52,7 +53,7 @@ async def exam_get(exam_id: int) -> (Exam | None):
     return exam
 
 
-async def exam_get_all(patient_id: int) -> list[Exam]:
+async def exam_get_all(patient_id: UUID) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
@@ -70,7 +71,7 @@ async def exam_get_all(patient_id: int) -> list[Exam]:
     return exams
 
 
-async def exam_delete(exam_id: int) -> bool:
+async def exam_delete(exam_id: UUID) -> bool:
     """Delete exam by id.
 
     Parameters
@@ -90,7 +91,7 @@ async def exam_delete(exam_id: int) -> bool:
         return False
 
 
-async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
+async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
     """Update existing exam entry.
 
     Parameters
@@ -111,108 +112,6 @@ async def update_exam(exam_id: int, payload: BaseExam) -> (Exam | None):
             await session.commit()
             await session.refresh(exam)
             return exam
-        return None
-
-
-async def procedure_add(payload: ProcedureIn) -> Procedure:
-    """Create new procedure.
-
-    Parameters
-    ----------
-    payload
-        Procedure pydantic input model with data for procedure creation
-
-    Returns
-    -------
-        Data base orm model of created procedure
-    """
-    new_procedure = Procedure(**payload.dict())
-    async with async_session() as session:
-        session.add(new_procedure)
-        await session.commit()
-        await session.refresh(new_procedure)
-    # debug
-    print("***** NEW PROCEDURE *****")
-    pprint(new_procedure.__dict__)
-    return new_procedure
-
-
-async def procedure_get(procedure_id: int) -> (Procedure | None):
-    """Get procedure by id.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of the requested procedure
-
-    Returns
-    -------
-        Data base orm model of requested procedure
-    """
-    async with async_session() as session:
-        procedure: (Procedure | None) = await session.get(Procedure, procedure_id)
-    return procedure
-
-
-async def procedure_get_all(exam_id: int) -> list[Procedure]:
-    """Get a list of all procedures assigned to a certain exam.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the parent exam entry, procedures are assigned to
-
-    Returns
-    -------
-        List of procedures data base orm models
-    """
-    async with async_session() as session:
-        result: Result = await session.execute(select(Procedure).where(Procedure.exam_id == exam_id))
-        procedures = list(result.scalars().all())
-    return procedures
-
-
-async def procedure_delete(procedure_id: int) -> bool:
-    """Delete procedure by id.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of the procedure to be deleted
-
-    Returns
-    -------
-        Success of deletion
-    """
-    async with async_session() as session:
-        if procedure := await session.get(Procedure, procedure_id):
-            await session.delete(procedure)
-            await session.commit()
-            return True
-        return False
-
-
-async def procedure_update(procedure_id: int, payload: ProcedureIn) -> (Procedure | None):
-    """Update existing procedure.
-
-    Parameters
-    ----------
-    procedure_id
-        Id of procedure to be updated
-
-    payload
-        Procedure pydantic base model with data to be updated
-
-    Returns
-    -------
-        Database orm model of updated procedure
-    """
-    async with async_session() as session:
-        if procedure := await session.get(Procedure, procedure_id):
-            procedure.update(payload)
-            await session.commit()
-            await session.refresh(procedure)
-            return procedure
         return None
 
 
@@ -239,7 +138,7 @@ async def add_job(payload: BaseJob) -> Job:
     return new_job
 
 
-async def get_job(job_id: int) -> (Job | None):
+async def get_job(job_id: UUID) -> (Job | None):
     """Get job by id.
 
     Parameters
@@ -256,25 +155,25 @@ async def get_job(job_id: int) -> (Job | None):
     return job
 
 
-async def get_all_jobs(procedure_id: int) -> list[Job]:
-    """Get a list of all jobs assigned to a certain procedure.
+async def get_all_jobs(exam_id: UUID) -> list[Job]:
+    """Get a list of all jobs assigned to a certain exam.
 
     Parameters
     ----------
-    procedure_id
-        Id of the parent procedure entry, jobs are assigned to
+    exam_id
+        Id of the parent exam entry, jobs are assigned to
 
     Returns
     -------
         List of job data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Job).where(Job.procedure_id == procedure_id))
+        result: Result = await session.execute(select(Job).where(Job.exam_id == exam_id))
         jobs = list(result.scalars().all())
     return jobs
 
 
-async def delete_job(job_id: int) -> bool:
+async def delete_job(job_id: UUID) -> bool:
     """Delete a job by ID.
 
     Parameters
@@ -294,7 +193,7 @@ async def delete_job(job_id: int) -> bool:
         return False
 
 
-async def update_job(job_id: int, payload: BaseJob) -> (Job | None):
+async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
     """Update existing job in database.
 
     Parameters
@@ -337,7 +236,7 @@ async def add_record(payload: RecordIn) -> Record:
     return new_record
 
 
-async def update_record(record_id: int, payload: dict) -> (Record | None):
+async def update_record(record_id: UUID, payload: dict) -> (Record | None):
     """Update existing record.
 
     Parameters
@@ -361,7 +260,7 @@ async def update_record(record_id: int, payload: dict) -> (Record | None):
         return None
 
 
-async def get_record(record_id: int) -> (Record | None):
+async def get_record(record_id: UUID) -> (Record | None):
     """Get a record from database by id.
 
     Parameters
@@ -378,7 +277,7 @@ async def get_record(record_id: int) -> (Record | None):
     return record
 
 
-async def get_all_records(job_id: int) -> list[Record]:
+async def get_all_records(job_id: UUID) -> list[Record]:
     """Get a list of all records assigned to a certain job.
 
     Parameters
@@ -396,7 +295,7 @@ async def get_all_records(job_id: int) -> list[Record]:
     return records
 
 
-async def delete_record(record_id: int) -> bool:
+async def delete_record(record_id: UUID) -> bool:
     """Delete record by id.
 
     Parameters
