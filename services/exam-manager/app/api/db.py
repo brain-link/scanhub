@@ -5,8 +5,8 @@
 
 import datetime
 import os
-from enum import Enum
 import uuid
+from enum import Enum
 
 from pydantic import BaseModel, Field
 from sqlalchemy import JSON, ForeignKey, create_engine, func

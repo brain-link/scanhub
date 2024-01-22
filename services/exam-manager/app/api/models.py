@@ -5,11 +5,10 @@
 
 import uuid
 from datetime import datetime
-from enum import Enum
 
 from pydantic import BaseModel, Extra
 
-from .db import Device, Exam, Job, Record, Workflow, AcquisitionLimits, SequenceParameters
+from .db import AcquisitionLimits, Device, Exam, Job, Record, SequenceParameters, Workflow
 
 
 class BaseDevice(BaseModel):
