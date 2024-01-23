@@ -1,0 +1,101 @@
+:py:mod:`workflow-manager.app.api.dal`
+======================================
+
+.. py:module:: workflow-manager.app.api.dal
+
+.. autoapi-nested-parse::
+
+   Workflow data access layer.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   workflow-manager.app.api.dal.add_workflow
+   workflow-manager.app.api.dal.get_workflow
+   workflow-manager.app.api.dal.get_all_workflows
+   workflow-manager.app.api.dal.delete_workflow
+   workflow-manager.app.api.dal.update_workflow
+
+
+
+.. py:function:: add_workflow(payload: workflow-manager.app.api.models.WorkflowIn) -> workflow-manager.app.api.db.Workflow
+   :async:
+
+   Add new workflow to database.
+
+   Parameters
+   ----------
+   payload
+       Workflow pydantic base model with data of new workflow entry
+
+   Returns
+   -------
+       Database orm model of new workflow
+
+
+.. py:function:: get_workflow(workflow_id: int) -> workflow-manager.app.api.db.Workflow | None
+   :async:
+
+   Get workflow from database.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of workflow to be returned
+
+   Returns
+   -------
+       Workflow database ORM model if exists
+
+
+.. py:function:: get_all_workflows() -> list[workflow-manager.app.api.db.Workflow]
+   :async:
+
+   Get a list of all workflows.
+
+   Returns
+   -------
+       List of workflow database orm models
+
+
+.. py:function:: delete_workflow(workflow_id: int) -> bool
+   :async:
+
+   Delete workflow entry by id.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow to be deleted
+
+   Returns
+   -------
+       Success of delete eveent
+
+
+.. py:function:: update_workflow(workflow_id: int, payload: workflow-manager.app.api.models.BaseWorkflow) -> workflow-manager.app.api.db.Workflow | None
+   :async:
+
+   Update existing workflow in database by id.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow to be updated
+
+   payload
+       Workflow pydantic base model with data  to be updated
+
+   Returns
+   -------
+       Updated workflow database orm model, if update successful
+
+
