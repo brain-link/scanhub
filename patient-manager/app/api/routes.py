@@ -8,7 +8,6 @@ from fastapi import APIRouter, HTTPException
 from . import dal
 from .models import BasePatient, PatientOut, get_patient_out
 
-
 router = APIRouter()
 
 

@@ -9,7 +9,7 @@ import os
 from pydantic import BaseModel
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
 
 # Create base for device
