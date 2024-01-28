@@ -236,7 +236,7 @@ async def add_record(payload: RecordIn) -> Record:
     return new_record
 
 
-async def update_record(record_id: UUID, payload: dict) -> (Record | None):
+async def update_record(record_id: UUID, payload: RecordIn) -> (Record | None):
     """Update existing record.
 
     Parameters

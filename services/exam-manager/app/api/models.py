@@ -5,10 +5,44 @@
 
 import uuid
 from datetime import datetime
+from enum import Enum
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, Extra, Field
 
-from .db import AcquisitionLimits, Device, Exam, Job, Record, SequenceParameters, Workflow
+from .db import Device, Exam, Job, Record, Workflow
+
+
+class XYZ(BaseModel):
+    """XYZ model."""
+
+    X: float
+    Y: float
+    Z: float
+
+
+class SequenceParameters(BaseModel):
+    """SequenceParameters model."""
+
+    fov: XYZ
+    fov_offset: XYZ
+
+
+class Gender(str, Enum):
+    """Gender model."""
+
+    MALE = "MALE"
+    FEMALE = "FEMALE"
+    OTHER = "OTHER"
+    NOT_GIVEN = "NOT_GIVEN"
+
+
+class AcquisitionLimits(BaseModel):
+    """AcquisitionLimits models."""
+
+    patient_height: float
+    patient_weight: float
+    patient_gender: Gender = Field(None, alias="Gender")
+    patient_age: int
 
 
 class BaseDevice(BaseModel):
@@ -25,6 +59,7 @@ class BaseDevice(BaseModel):
     status: str
     site: str | None
     ip_address: str
+
 
 
 class BaseWorkflow(BaseModel):

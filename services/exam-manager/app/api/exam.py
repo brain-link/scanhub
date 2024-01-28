@@ -281,7 +281,7 @@ async def record_create(payload: RecordIn) -> RecordOut:
 
 
 @router.put("/record/{record_id}/", response_model=RecordOut, status_code=200, tags=["records"])
-async def update_record(record_id: UUID | str, payload: dict):
+async def update_record(record_id: UUID | str, payload: RecordIn):
     """Update existing record.
 
     Parameters
