@@ -25,8 +25,6 @@ aiofiles = "^0.7.0"
 numpy = "1.23.0"    # pypulseq release 1.4 incompatible with numpy 1.25
 pypulseq = "^1.4.0"
 plotly = "^5.15.0"
-pymongo-stubs = "^0.2.0"
-motor-stubs = "^1.7.1"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
