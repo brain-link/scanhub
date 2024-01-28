@@ -168,7 +168,8 @@ async def search_mri_sequences(
     cursor = mri_sequences_collection.find({"$text": {"$search": search_query}})
     mri_sequences = await cursor.to_list(length=100)
 
-    return mri_sequences
+    # return mri_sequences
+    return [MRISequence(**seq) for seq in mri_sequences]
 
 
 async def download_mri_sequence_file(

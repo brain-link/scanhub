@@ -17,7 +17,6 @@ packages = [{include = "app"}]
 python = ">=3.10,<3.11"
 fastapi = "^0.95.2"
 uvicorn = "^0.15.0"
-motor = "^2.5.1"
 pydantic = "^1.10.9"
 python-dotenv = "^0.19.1"
 python-multipart = "^0.0.6"
@@ -25,6 +24,8 @@ aiofiles = "^0.7.0"
 numpy = "1.23.0"    # pypulseq release 1.4 incompatible with numpy 1.25
 pypulseq = "^1.4.0"
 plotly = "^5.15.0"
+motor = "^3.3.2"
+motor-types = "^1.0.0b4"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"

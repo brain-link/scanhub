@@ -21,9 +21,8 @@ async def check_db_connection() -> bool:
         str(db),
         str(db.collection),
     )
-    if not db or not db.collection:
-        return False
-    return True
+    return db.collection is not None
+
 
 
 @router.get("/health", status_code=status.HTTP_200_OK, tags=["health"])
