@@ -9,7 +9,11 @@ In the ScanHub platform, MAPs serve as plugins for post-acquisition processing s
 For more details on MAPs, you can visit the [official MONAI guidelines](https://github.com/Project-MONAI/monai-deploy/blob/main/guidelines/monai-application-package.md).
 
 
-### How to Create a MAP
+### How to Package a MAP
 
 monai-deploy package ./cartesian_reco_app -c ./cartesian_reco_app/app.yaml -t cartesian_reco_app:latest --platform x64-workstation
+
+### Alternative: How to Package a MAP with Docker
+
+docker build -t cartesian_reco_app:latest .
 
