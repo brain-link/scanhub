@@ -11,6 +11,5 @@ For more details on MAPs, you can visit the [official MONAI guidelines](https://
 
 ### How to Create a MAP
 
-tag_prefix = "cartesian_reco_app"
+monai-deploy package ./cartesian_reco_app -c ./cartesian_reco_app/app.yaml -t cartesian_reco_app:latest --platform x64-workstation
 
-!monai-deploy package cartesian_reco_app -c cartesian_reco_app/app.yaml -t {tag_prefix}:1.0 --platform x64-workstation -l DEBUG
