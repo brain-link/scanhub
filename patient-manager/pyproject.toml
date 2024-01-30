@@ -17,11 +17,7 @@ pydantic = "^1.10.0"
 python = ">=3.10,<3.11"
 uvicorn = {extras = ["standard"], version = "^0.17.5"}
 asyncpg = "^0.25.0"
-numpy = "^1.24.0"
-plotly = "^5.14.0"
 psycopg2-binary = "^2.9.6"
-scipy = "^1.10.0"
-pypulseq = "^1.4.0"
 async-sqlalchemy = "^1.0.0"
 fastapi = "^0.95.2"
 
