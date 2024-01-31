@@ -7,7 +7,7 @@ import datetime
 import os
 import uuid
 
-from models import AcquisitionLimits, SequenceParameters
+from scanhub_libraries.models import AcquisitionLimits, SequenceParameters
 from pydantic import BaseModel
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
