@@ -5,7 +5,7 @@
 
 import logging
 
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase, AsyncIOMotorCollection
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
 
 from core.config import settings
 
@@ -23,6 +23,7 @@ class Database:
         The MongoDB collection.
     """
 
+    # TODO: Can the client really take two different types?
     client: AsyncIOMotorClient | AsyncIOMotorDatabase | None = None
     collection: AsyncIOMotorCollection | None = None
 
