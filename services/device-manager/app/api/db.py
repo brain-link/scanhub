@@ -26,7 +26,7 @@ def init_db() -> None:
     Base.metadata.create_all(engine)
 
 
-class Device(Base):
+class Device(Base):  # type: ignore
     """Device ORM model."""
 
     __tablename__ = "device"
