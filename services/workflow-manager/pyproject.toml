@@ -19,18 +19,18 @@ python = ">=3.10,<3.11"
 fastapi = "^0.96.0"
 asyncpg = "^0.27.0"
 uvicorn = "^0.22.0"
-kafka-python = "^2.0.2"
 scanhub = "^0.0.4.dev3"
 psycopg2-binary = "^2.9.6"
 python-multipart = "^0.0.6"
 async-sqlalchemy = "^1.0.0"
 python-dotenv = "^1.0.0"
-mypy-boto3-kafka = "^1.26.134"
+aiokafka = "^0.8.1"
+asyncio = "^3.4.3"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "*"
 flake8 = "*"
-Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
+Flake8-pyproject = "*"  # flake8 by default cannot be configured via this toml file, this package allows the configuration
 isort = "*"
 autopep8 = "*"
 pydocstyle = "*"
@@ -49,6 +49,12 @@ sphinx_rtd_theme = "*"
 
 [tool.pydocstyle]
 convention = "numpy"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
 
 [tool.pylint]
 py-version = "3.10"

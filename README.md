@@ -9,6 +9,12 @@
 <a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
     <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests"/>
 </a>
+<a href="https://codecov.io/gh/brain-link/scanhub" target="_blank">
+    <img src="https://codecov.io/gh/brain-link/scanhub/graph/badge.svg?token=L1T3LA3EBX" alt="Coverage"/>
+</a>
+<a href="https://scanhub.brain-link.de/" target="_blank">
+    <img src="https://img.shields.io/badge/Documentation-online-brightgreen" alt="Documentation"/>
+</a>
 </p>
 
 -----------------
@@ -37,7 +43,7 @@ The installation of ScanHub-UI is as simple as using the following command.
 Documentation
 -----------
 
-See our [Wiki](https://github.com/brain-link/scanhub/wiki) to get insight into the structure of ScanHub, documentation of microservices and more.
+See our dedicated [Documentation](https://scanhub.brain-link.de/) web page to get insights into the structure of ScanHub, microservice APIs and more.
 
 
 About

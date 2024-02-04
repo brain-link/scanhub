@@ -1,0 +1,5 @@
+numpy >= 1.24.3
+pydicom >= 2.3.1
+scikit-image >= 0.17.2
+setuptools>=59.5.0 # for pkg_resources
+monai-deploy-app-sdk >= 0.6.0

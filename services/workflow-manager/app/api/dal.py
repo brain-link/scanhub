@@ -5,14 +5,15 @@
 
 from pprint import pprint
 
+from sqlalchemy import func
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from .db import Workflow, async_session
-from .models import BaseWorkflow
+from .models import BaseWorkflow, WorkflowIn
 
 
-async def add_workflow(payload: BaseWorkflow) -> Workflow:
+async def add_workflow(payload: WorkflowIn) -> Workflow:
     """Add new workflow to database.
 
     Parameters
@@ -107,3 +108,17 @@ async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> (Workflow 
             await session.refresh(workflow)
             return workflow
         return None
+
+
+# async def count_workflows() -> int:
+#     """Count the number of workflows in the database.
+
+#     Returns
+#     -------
+#         Number of workflows in the database
+#     """
+#     async with async_session() as session:
+#         row_count = await session.scalar(
+#             session.query(func.count()).select_from(Workflow)
+#         )
+#     return row_count

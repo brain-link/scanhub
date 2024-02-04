@@ -13,21 +13,53 @@ from .db import Workflow
 class BaseWorkflow(BaseModel):
     """Workflow pydantic base model."""
 
-    host: str
     name: str
+    description: (str | None)
+    version: str
     author: (str | None)
-    modality: str
-    type: str
-    status: str
-    kafka_topic: str
 
 
-class WorkflowOut(BaseWorkflow):
+class WorkflowIn(BaseWorkflow):
+    """Workflow pydantic output model."""
+
+    definition: dict
+
+
+class WorkflowMetaOut(BaseWorkflow):
     """Workflow pydantic output model."""
 
     id: int  # TBD: Use uuid
     datetime_created: datetime
     datetime_updated: (datetime | None)
+
+
+class WorkflowOut(WorkflowMetaOut):
+    """Workflow pydantic output model."""
+
+    definition: dict
+
+
+async def get_workflow_meta_out(data: Workflow) -> WorkflowMetaOut:
+    """Workflow pydantic output model helper function.
+
+    Parameters
+    ----------
+    data
+        Database ORM model
+
+    Returns
+    -------
+        Pydantic output model
+    """
+    return WorkflowMetaOut(
+        id=data.id,
+        name=data.name,
+        description=data.description,
+        version=data.version,
+        author=data.author,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
+    )
 
 
 async def get_workflow_out(data: Workflow) -> WorkflowOut:
@@ -44,13 +76,11 @@ async def get_workflow_out(data: Workflow) -> WorkflowOut:
     """
     return WorkflowOut(
         id=data.id,
-        host=data.host,
         name=data.name,
+        description=data.description,
+        version=data.version,
         author=data.author,
-        modality=data.modality,
-        type=data.type,
-        status=data.status,
-        kafka_topic=data.kafka_topic,
+        definition=data.definition,
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated,
     )

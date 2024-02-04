@@ -1,0 +1,84 @@
+{
+	"name": "ai-liver-seg",
+	"version": "1.0.0",
+	"description": "AI Liver Tumor 2.0",
+	"informatics_gateway": {
+		"ae_title": "MONAI-DEPLOY",
+		"data_origins": [
+			"ORTHANC"
+		],
+		"export_destinations": [
+			"ORTHANC"
+		]
+	},
+	"tasks": [
+		{
+			"id": "router",
+			"description": "Ensure series description contains liver",
+			"type": "router",
+			"task_destinations": [
+				{
+					"name": "liver",
+					"conditions": ["{{ context.dicom.series.any('0008','103E')}} == 'CT series for liver tumor from nii 014'"]
+				}
+			]
+		},
+		{
+			"id": "liver",
+			"description": "Execute Liver Segmentation MAP",
+			"type": "docker",
+			"args": {
+				"container_image": "ghcr.io/mmelqin/monai_ai_livertumor_seg_app_stl-x64-workstation-dgpu-linux-amd64:2.0",
+				"server_url": "unix:///var/run/docker.sock",
+				"user": "1000:1000",
+				"entrypoint": "/bin/bash,-c",
+				"command": "python3 -u /opt/holoscan/app/",
+				"task_timeout_minutes": "5",
+				"temp_storage_container_path": "/var/lib/mde/",
+				"env_HOLOSCAN_INPUT_PATH": "/var/holoscan/input/",
+				"env_HOLOSCAN_OUTPUT_PATH": "/var/holoscan/output/",
+				"env_HOLOSCAN_MODEL_PATH": "/opt/holoscan/models/",
+				"env_HOLOSCAN_WORKDIR": "/var/holoscan/"
+			},
+			"artifacts": {
+				"input": [
+					{
+						"name": "env_HOLOSCAN_INPUT_PATH",
+						"value": "{{ context.input.dicom }}"
+					}
+				],
+				"output": [
+					{
+						"name": "env_HOLOSCAN_OUTPUT_PATH",
+						"mandatory": true
+					}
+				]
+			},
+			"task_destinations": [
+				{
+					"name": "export-liver-seg"
+				}
+			]
+		},
+		{
+			"id": "export-liver-seg",
+			"description": "Export Segmentation Storage Object",
+			"type": "export",
+			"export_destinations": [
+				{
+					"Name": "ORTHANC"
+				}
+			],
+			"artifacts": {
+				"input": [
+					{
+						"name": "export-dicom",
+						"value": "{{ context.executions.liver.artifacts.env_HOLOSCAN_OUTPUT_PATH }}",
+						"mandatory": true
+					}
+				],
+				"output": []
+			}
+		}
+	]
+}

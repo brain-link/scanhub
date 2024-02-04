@@ -35,6 +35,7 @@ def get_sequence_plot(
     -------
         list of plot data models
     """
+    # Plotly requires list objects => use lists instead of numpy arrays
     # Empty lists for RX and TX channel: [Time, Magnitude, Phase]
     rx_data: list[list] = [[0.0], [0.0], [0.0]]
     tx_data: list[list[float]] = [[0.0], [0.0], [0.0]]
@@ -162,6 +163,10 @@ def generate_plotly_figure(traces: list[TraceData]):
 
     fig.update_layout(
         autosize=True,
+        margin_autoexpand=False,
+        margin_t=10,
+        margin_r=10,
+        margin_b=180,
         xaxis={
             "ticks": "outside",
             "title": "Time (ms)",
@@ -172,6 +177,13 @@ def generate_plotly_figure(traces: list[TraceData]):
         yaxis3={"domain": [0.4, 0.55]},
         yaxis4={"domain": [0.6, 0.75]},
         yaxis5={"domain": [0.8, 0.95]},
+        legend={
+            "orientation": "h",
+            "yanchor": "top",
+            "y": 1.02,
+            "xanchor": "left",
+            "x": 0.0
+        },
     )
 
     return fig
