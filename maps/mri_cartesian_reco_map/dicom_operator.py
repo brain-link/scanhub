@@ -11,7 +11,7 @@ from monai.deploy.core import DataPath, ExecutionContext, Image, InputContext, I
 # operators and the application in packaging time.
 @md.env(pip_packages=["pydicom >= 2.3.1", "numpy >= 1.24.3"])
 class DICOMOperator(Operator):
-    """This Operator implements a smoothening based on Gaussian.
+    """This Operator implements a MR DICOM image packager.
 
     It ingests a single input and provides a single output.
     """

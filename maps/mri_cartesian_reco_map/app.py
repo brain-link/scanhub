@@ -33,8 +33,6 @@ class App(Application):
         dicom_op = DICOMOperator()
 
         self.add_flow(cartesian_op, dicom_op)
-        # self.add_flow(sobel_op, median_op, {"image": "image"})
-        # self.add_flow(sobel_op, median_op, {"image": {"image"}})
 
 
 if __name__ == "__main__":
