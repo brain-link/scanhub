@@ -44,7 +44,103 @@ System Context
 Key Scenarios 
 -------------
 
-The following keyn scenarios focus on the basic functionality of the device from both the user's and system's perspectives. This includes user interactions, as well as essential system procedures like startup, shutdown, and service functionalities. These scenarios are crucial for ensuring the software architecture supports seamless operation and maintenance of the MRI system.
+The following key scenarios focus on the basic functionality of the device from both the user’s and system’s perspectives. This includes user interactions, as well as essential system procedures like start up, shutdown, and service functionality. These scenarios are crucial for ensuring the software architecture supports seamless operation and maintenance of the MRI system.
+
+System Startup and Initialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Booting up the MRI system, initializing all software components, and conducting self-checks.
+- Procedure: Automated system checks for hardware and software integrity, loading of necessary drivers and applications, and verification of system readiness for operation.
+- Stakeholder: SH_010, SH_020, SH_030, SH_040
+
+User Authentication and Access Control
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Ensuring only authorized personnel can operate or access different levels of the system.
+- Procedure: Secure login processes, role-based access control, and user authentication protocols.
+- Stakeholder: SH_030
+
+Patient Data Input and Retrieval
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Entering new patient data or retrieving existing patient records before starting a scan.
+- Procedure: Integration with hospital information systems for seamless data exchange, ensuring data accuracy and privacy compliance.
+- Stakeholder: SH_010, SH_020
+
+Scan Parameter Selection and Customization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Selection and customization of MRI scan parameters based on the specific clinical requirements.
+- Procedure: User interfaces that allow for easy selection and adjustment of scan parameters, including sequence, FOV dimensions and offsets, information on the hardware setup (e.g. coil code, etc.)
+- Stakeholder: SH_010, SH_020
+
+Real-Time Scan Monitoring
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Monitoring the MRI scan in real-time and making necessary adjustments.
+- Procedure: Dynamic display of scanning progress
+- Stakeholder: SH_010, SH_020
+
+Image Reconstruction and Storage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Reconstruction of the raw scan data to produce images and storing them appropriately.
+- Procedure: Automated image reconstruction algorithms, along with efficient data storage solutions both on-premises and in cloud environments.
+- Stakeholder: SH_010, SH_020, SH_030
+
+System Shutdown and Secure Data Handling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Properly shutting down the system while ensuring all patient data is securely saved and protected.
+- Procedure: Step-by-step shutdown process that includes data backup, closing of all active sessions, and hardware cooling procedures.
+- Stakeholder: SH_010, SH_020, SH_030
+
+Routine Maintenance and Calibration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Regular system maintenance and calibration to ensure ongoing accuracy and efficiency.
+- Procedure: Scheduled maintenance tasks, automated calibration routines, and alerts for maintenance requirements.
+- Stakeholder: SH_010, SH_020, SH_040
+
+Error Detection and Alerting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Detecting system errors or malfunctions and alerting the appropriate personnel.
+- Procedure: Continuous system monitoring with automated error detection algorithms and alert notifications with detailed information to system administrators or technicians. Simplified alert with instructions in any other case.
+- Stakeholder: SH_010 – SH_040
+
+Software Updates and Upgrades
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Updating the system software to enhance functionality or address security issues.
+- Procedure: Secure and efficient software update processes, with minimal system downtime and comprehensive post-update checks.
+- Stakeholder: SH_020, SH_030, SH_040
+
+Emergency Protocols and System Recovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Handling system emergencies or failures, including emergency shutdown, data recovery and system restoration.
+- Procedure: Defined emergency protocols, rapid system recovery procedures, and data backup solutions for ensuring data integrity.
+- Stakeholder: SH_030, SH_040System Administrator (SH_050), Site Engineer (SH_060)
+
+Data Security and Compliance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Ensuring the system adheres to relevant data security and privacy regulations.
+- Procedure: Implementing strong encryption, audit trails, and compliance with standards like HIPAA and GDPR.
+- Stakeholder: SH_030
+
+Patient Safety Monitoring
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- Scenario: Continuously monitoring patient safety parameter.
+- Procedure: Monitoring of SAR level and implementation of safety cutoffs or alerts.
+- Stakeholder: SH_010, SH_020
+
+Sequence Upload
+~~~~~~~~~~~~~~~
+- Scenario:Testing of sequences or new procedures under development.
+- Procedure:Enable import of custom sequences.
+- Stakeholder:SH_020
+
+Data Export
+~~~~~~~~~~~
+- Scenario:Development/evaluation of new/customized reconstruction methods or the comparison of reconstruction methods.
+- Procedure:Implementation of export functions on different stages, i.e. raw k-space data export, DICOM export, etc.
+- Stakeholder:SH_020
+
+Support
+~~~~~~~
+- Scenario:The system does not behave as expected or reports an error.
+- Procedure:System administrator reads our error message and notifies the manufacturer for support or troubleshooting to restore operability of the system. The manufacturer provides remote support and schedules an appointment with a field/service engineer as soon as possible.
+- Stakeholder:SH_030, SH_060, SH_040
 
 
 System Startup and Initialization
