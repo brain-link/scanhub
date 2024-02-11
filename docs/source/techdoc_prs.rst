@@ -1,5 +1,5 @@
-Product Requirements (PRS)
-##########################
+Product Requirement Specification (PRS)
+######################################
 
 !! This Section is Work in Progress. !!
 
