@@ -384,7 +384,7 @@ document.write(`
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirements (PRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirement Specification (PRS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -487,278 +487,15 @@ For additional details and specifications, refer to the design input documentati
 <section id="key-scenarios">
 <h3>Key Scenarios<a class="headerlink" href="#key-scenarios" title="Link to this heading">#</a></h3>
 <p>The following key scenarios focus on the basic functionality of the device from both the user’s and system’s perspectives. This includes user interactions, as well as essential system procedures like start up, shutdown, and service functionality. These scenarios are crucial for ensuring the software architecture supports seamless operation and maintenance of the MRI system.</p>
-<section id="system-startup-and-initialization">
-<h4>System Startup and Initialization<a class="headerlink" href="#system-startup-and-initialization" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Booting up the MRI system, initializing all software components, and conducting self-checks.</p></li>
-<li><p>Procedure: Automated system checks for hardware and software integrity, loading of necessary drivers and applications, and verification of system readiness for operation.</p></li>
-<li><p>Stakeholder: SH_010, SH_020, SH_030, SH_040</p></li>
-</ul>
-</section>
-<section id="user-authentication-and-access-control">
-<h4>User Authentication and Access Control<a class="headerlink" href="#user-authentication-and-access-control" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Ensuring only authorized personnel can operate or access different levels of the system.</p></li>
-<li><p>Procedure: Secure login processes, role-based access control, and user authentication protocols.</p></li>
-<li><p>Stakeholder: SH_030</p></li>
-</ul>
-</section>
-<section id="patient-data-input-and-retrieval">
-<h4>Patient Data Input and Retrieval<a class="headerlink" href="#patient-data-input-and-retrieval" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Entering new patient data or retrieving existing patient records before starting a scan.</p></li>
-<li><p>Procedure: Integration with hospital information systems for seamless data exchange, ensuring data accuracy and privacy compliance.</p></li>
-<li><p>Stakeholder: SH_010, SH_020</p></li>
-</ul>
-</section>
-<section id="scan-parameter-selection-and-customization">
-<h4>Scan Parameter Selection and Customization<a class="headerlink" href="#scan-parameter-selection-and-customization" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Selection and customization of MRI scan parameters based on the specific clinical requirements.</p></li>
-<li><p>Procedure: User interfaces that allow for easy selection and adjustment of scan parameters, including sequence, FOV dimensions and offsets, information on the hardware setup (e.g. coil code, etc.)</p></li>
-<li><p>Stakeholder: SH_010, SH_020</p></li>
-</ul>
-</section>
-<section id="real-time-scan-monitoring">
-<h4>Real-Time Scan Monitoring<a class="headerlink" href="#real-time-scan-monitoring" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Monitoring the MRI scan in real-time and making necessary adjustments.</p></li>
-<li><p>Procedure: Dynamic display of scanning progress</p></li>
-<li><p>Stakeholder: SH_010, SH_020</p></li>
-</ul>
-</section>
-<section id="image-reconstruction-and-storage">
-<h4>Image Reconstruction and Storage<a class="headerlink" href="#image-reconstruction-and-storage" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Reconstruction of the raw scan data to produce images and storing them appropriately.</p></li>
-<li><p>Procedure: Automated image reconstruction algorithms, along with efficient data storage solutions both on-premises and in cloud environments.</p></li>
-<li><p>Stakeholder: SH_010, SH_020, SH_030</p></li>
-</ul>
-</section>
-<section id="system-shutdown-and-secure-data-handling">
-<h4>System Shutdown and Secure Data Handling<a class="headerlink" href="#system-shutdown-and-secure-data-handling" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Properly shutting down the system while ensuring all patient data is securely saved and protected.</p></li>
-<li><p>Procedure: Step-by-step shutdown process that includes data backup, closing of all active sessions, and hardware cooling procedures.</p></li>
-<li><p>Stakeholder: SH_010, SH_020, SH_030</p></li>
-</ul>
-</section>
-<section id="routine-maintenance-and-calibration">
-<h4>Routine Maintenance and Calibration<a class="headerlink" href="#routine-maintenance-and-calibration" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Regular system maintenance and calibration to ensure ongoing accuracy and efficiency.</p></li>
-<li><p>Procedure: Scheduled maintenance tasks, automated calibration routines, and alerts for maintenance requirements.</p></li>
-<li><p>Stakeholder: SH_010, SH_020, SH_040</p></li>
-</ul>
-</section>
-<section id="error-detection-and-alerting">
-<h4>Error Detection and Alerting<a class="headerlink" href="#error-detection-and-alerting" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Detecting system errors or malfunctions and alerting the appropriate personnel.</p></li>
-<li><p>Procedure: Continuous system monitoring with automated error detection algorithms and alert notifications with detailed information to system administrators or technicians. Simplified alert with instructions in any other case.</p></li>
-<li><p>Stakeholder: SH_010 – SH_040</p></li>
-</ul>
-</section>
-<section id="software-updates-and-upgrades">
-<h4>Software Updates and Upgrades<a class="headerlink" href="#software-updates-and-upgrades" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Updating the system software to enhance functionality or address security issues.</p></li>
-<li><p>Procedure: Secure and efficient software update processes, with minimal system downtime and comprehensive post-update checks.</p></li>
-<li><p>Stakeholder: SH_020, SH_030, SH_040</p></li>
-</ul>
-</section>
-<section id="emergency-protocols-and-system-recovery">
-<h4>Emergency Protocols and System Recovery<a class="headerlink" href="#emergency-protocols-and-system-recovery" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Handling system emergencies or failures, including emergency shutdown, data recovery and system restoration.</p></li>
-<li><p>Procedure: Defined emergency protocols, rapid system recovery procedures, and data backup solutions for ensuring data integrity.</p></li>
-<li><p>Stakeholder: SH_030, SH_040System Administrator (SH_050), Site Engineer (SH_060)</p></li>
-</ul>
-</section>
-<section id="data-security-and-compliance">
-<h4>Data Security and Compliance<a class="headerlink" href="#data-security-and-compliance" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Ensuring the system adheres to relevant data security and privacy regulations.</p></li>
-<li><p>Procedure: Implementing strong encryption, audit trails, and compliance with standards like HIPAA and GDPR.</p></li>
-<li><p>Stakeholder: SH_030</p></li>
-</ul>
-</section>
-<section id="patient-safety-monitoring">
-<h4>Patient Safety Monitoring<a class="headerlink" href="#patient-safety-monitoring" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Continuously monitoring patient safety parameter.</p></li>
-<li><p>Procedure: Monitoring of SAR level and implementation of safety cutoffs or alerts.</p></li>
-<li><p>Stakeholder: SH_010, SH_020</p></li>
-</ul>
-</section>
-<section id="sequence-upload">
-<h4>Sequence Upload<a class="headerlink" href="#sequence-upload" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario:Testing of sequences or new procedures under development.</p></li>
-<li><p>Procedure:Enable import of custom sequences.</p></li>
-<li><p>Stakeholder:SH_020</p></li>
-</ul>
-</section>
-<section id="data-export">
-<h4>Data Export<a class="headerlink" href="#data-export" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario:Development/evaluation of new/customized reconstruction methods or the comparison of reconstruction methods.</p></li>
-<li><p>Procedure:Implementation of export functions on different stages, i.e. raw k-space data export, DICOM export, etc.</p></li>
-<li><p>Stakeholder:SH_020</p></li>
-</ul>
-</section>
-<section id="support">
-<h4>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario:The system does not behave as expected or reports an error.</p></li>
-<li><p>Procedure:System administrator reads our error message and notifies the manufacturer for support or troubleshooting to restore operability of the system. The manufacturer provides remote support and schedules an appointment with a field/service engineer as soon as possible.</p></li>
-<li><p>Stakeholder:SH_030, SH_060, SH_040</p></li>
-</ul>
-</section>
-<section id="id1">
-<h4>System Startup and Initialization<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Booting up the MRI system, initializing all software components, and conducting self-checks.</p></li>
-<li><p>Procedure: Automated system checks for hardware and software integrity, loading of necessary drivers and applications, and verification of system readiness for operation.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)</p></li>
-</ul>
-</section>
-<section id="id2">
-<h4>User Authentication and Access Control<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Ensuring only authorized personnel can operate or access different levels of the system.</p></li>
-<li><p>Procedure: Secure login processes, role-based access control, and user authentication protocols.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050)</p></li>
-</ul>
-</section>
-<section id="id3">
-<h4>Patient Data Input and Retrieval<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Entering new patient data or retrieving existing patient records before starting a scan.</p></li>
-<li><p>Procedure: Integration with hospital information systems for seamless data exchange, ensuring data accuracy and privacy compliance.</p></li>
-<li><p>Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020)</p></li>
-</ul>
-</section>
-<section id="id4">
-<h4>Scan Parameter Selection and Customization<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Selection and customization of MRI scan parameters based on the specific clinical requirements.</p></li>
-<li><p>Procedure: User interfaces that allow for easy selection and adjustment of scan parameters, including sequence types, intensity, and duration.</p></li>
-<li><p>Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020), Scientist (SH_040)</p></li>
-</ul>
-</section>
-<section id="real-time-scan-monitoring-and-adjustment">
-<h4>Real-Time Scan Monitoring and Adjustment<a class="headerlink" href="#real-time-scan-monitoring-and-adjustment" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Monitoring the MRI scan in real-time and making necessary adjustments.</p></li>
-<li><p>Procedure: Dynamic display of scanning progress, with capabilities to adjust parameters on-the-fly for optimal image quality.</p></li>
-<li><p>Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020)</p></li>
-</ul>
-</section>
-<section id="image-processing-and-storage">
-<h4>Image Processing and Storage<a class="headerlink" href="#image-processing-and-storage" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Processing the raw scan data to produce images and storing them appropriately.</p></li>
-<li><p>Procedure: Automated image reconstruction algorithms, along with efficient data storage solutions both on-premises and in cloud environments.</p></li>
-<li><p>Stakeholder: Radiologist (SH_020), Scientist (SH_040), System Administrator (SH_050)</p></li>
-</ul>
-</section>
-<section id="id5">
-<h4>System Shutdown and Secure Data Handling<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Properly shutting down the system while ensuring all patient data is securely saved and protected.</p></li>
-<li><p>Procedure: Step-by-step shutdown process that includes data backup, closing of all active sessions, and hardware cooling procedures.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050)</p></li>
-</ul>
-</section>
-<section id="id6">
-<h4>Routine Maintenance and Calibration<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Regular system maintenance and calibration to ensure ongoing accuracy and efficiency.</p></li>
-<li><p>Procedure: Scheduled maintenance tasks, automated calibration routines, and alerts for maintenance requirements.</p></li>
-<li><p>Stakeholder: Site Engineer (SH_060), MRI Technician/MTRA (SH_010)</p></li>
-</ul>
-</section>
-<section id="id7">
-<h4>Error Detection and Alerting<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Detecting system errors or malfunctions and alerting the appropriate personnel.</p></li>
-<li><p>Procedure: Continuous system monitoring with automated error detection algorithms and alert notifications to system administrators or technicians.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)</p></li>
-</ul>
-</section>
-<section id="id8">
-<h4>Software Updates and Upgrades<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Updating the system software to enhance functionality or address security issues.</p></li>
-<li><p>Procedure: Secure and efficient software update processes, with minimal system downtime and comprehensive post-update checks.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Developer (SH_030)</p></li>
-</ul>
-</section>
-<section id="id9">
-<h4>Emergency Protocols and System Recovery<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Handling system emergencies or failures, including data recovery and system restoration.</p></li>
-<li><p>Procedure: Defined emergency protocols, rapid system recovery procedures, and data backup solutions for ensuring data integrity.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)</p></li>
-</ul>
-</section>
-<section id="interoperability-with-other-healthcare-systems">
-<h4>Interoperability with Other Healthcare Systems<a class="headerlink" href="#interoperability-with-other-healthcare-systems" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Seamless interaction and data exchange with other healthcare systems like EHRs, PACS, and RIS.</p></li>
-<li><p>Procedure: Implementing standard protocols and APIs for data exchange, ensuring compatibility with various healthcare IT infrastructures.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Radiologist (SH_020), Healthcare Facility (SH_100)</p></li>
-</ul>
-</section>
-<section id="remote-system-diagnostics-and-support">
-<h4>Remote System Diagnostics and Support<a class="headerlink" href="#remote-system-diagnostics-and-support" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Providing remote assistance and diagnostics for technical issues or user queries.</p></li>
-<li><p>Procedure: Remote access capabilities for technical support staff, diagnostic tools for system analysis, and secure communication channels.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)</p></li>
-</ul>
-</section>
-<section id="id10">
-<h4>Data Security and Compliance<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Ensuring the system adheres to relevant data security and privacy regulations.</p></li>
-<li><p>Procedure: Implementing strong encryption, audit trails, and compliance with standards like HIPAA and GDPR.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Regulatory Affairs Specialist (SH_070)</p></li>
-</ul>
-</section>
-<section id="power-management-and-efficiency">
-<h4>Power Management and Efficiency<a class="headerlink" href="#power-management-and-efficiency" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Efficient management of system power consumption and operational efficiency.</p></li>
-<li><p>Procedure: Power-saving modes during periods of inactivity, efficient power usage during scans, and monitoring of overall system power consumption.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)</p></li>
-</ul>
-</section>
-<section id="customization-and-configuration-management">
-<h4>Customization and Configuration Management<a class="headerlink" href="#customization-and-configuration-management" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Customizing system settings and configurations to meet specific site or user requirements.</p></li>
-<li><p>Procedure: Flexible configuration options with user-friendly interfaces, along with configuration profiles for different user roles or scanning requirements.</p></li>
-<li><p>Stakeholder: System Administrator (SH_050), MRI Technician/MTRA (SH_010)</p></li>
-</ul>
-</section>
-<section id="id11">
-<h4>Patient Safety Monitoring<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Scenario: Continuously monitoring patient safety parameters during scans.</p></li>
-<li><p>Procedure: Automated systems for tracking patient vitals, SAR levels, and implementing safety cutoffs or alerts.</p></li>
-<li><p>Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020)</p></li>
-</ul>
-</section>
+<p>TBD - Add Key Scenarios</p>
 </section>
 </section>
 <section id="system-decomposition">
 <h2>System Decomposition<a class="headerlink" href="#system-decomposition" title="Link to this heading">#</a></h2>
-<figure class="align-default" id="id12">
+<figure class="align-default" id="id1">
 <img alt="ScanHub Development View" src="_images/ScanHub_Development_View.drawio.png" style="width: 800px;" />
 <figcaption>
-<p><span class="caption-text">Figure 1: ScanHub Development View</span><a class="headerlink" href="#id12" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 1: ScanHub Development View</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <table class="table">
@@ -787,16 +524,16 @@ For additional details and specifications, refer to the design input documentati
 </tr>
 </tbody>
 </table>
-<figure class="align-default" id="id13">
+<figure class="align-default" id="id2">
 <img alt="ScanHub Connected Device" src="_images/ScanHub_Component_Connected_Device.drawio.png" style="width: 800px;" />
 <figcaption>
-<p><span class="caption-text">Figure 2: ScanHub Connected Device Component</span><a class="headerlink" href="#id13" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 2: ScanHub Connected Device Component</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id14">
+<figure class="align-default" id="id3">
 <img alt="ScanHub Workflow" src="_images/ScanHub_Component_Workflow.drawio.png" style="width: 800px;" />
 <figcaption>
-<p><span class="caption-text">Figure 3: ScanHub Workflow Component</span><a class="headerlink" href="#id14" title="Link to this image">#</a></p>
+<p><span class="caption-text">Figure 3: ScanHub Workflow Component</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -858,42 +595,7 @@ For additional details and specifications, refer to the design input documentati
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-context">System Context</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-scenarios">Key Scenarios</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#system-startup-and-initialization">System Startup and Initialization</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#user-authentication-and-access-control">User Authentication and Access Control</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#patient-data-input-and-retrieval">Patient Data Input and Retrieval</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#scan-parameter-selection-and-customization">Scan Parameter Selection and Customization</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#real-time-scan-monitoring">Real-Time Scan Monitoring</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#image-reconstruction-and-storage">Image Reconstruction and Storage</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#system-shutdown-and-secure-data-handling">System Shutdown and Secure Data Handling</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#routine-maintenance-and-calibration">Routine Maintenance and Calibration</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-detection-and-alerting">Error Detection and Alerting</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#software-updates-and-upgrades">Software Updates and Upgrades</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#emergency-protocols-and-system-recovery">Emergency Protocols and System Recovery</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#data-security-and-compliance">Data Security and Compliance</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#patient-safety-monitoring">Patient Safety Monitoring</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sequence-upload">Sequence Upload</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#data-export">Data Export</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#support">Support</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">System Startup and Initialization</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">User Authentication and Access Control</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Patient Data Input and Retrieval</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Scan Parameter Selection and Customization</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#real-time-scan-monitoring-and-adjustment">Real-Time Scan Monitoring and Adjustment</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#image-processing-and-storage">Image Processing and Storage</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">System Shutdown and Secure Data Handling</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Routine Maintenance and Calibration</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Error Detection and Alerting</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Software Updates and Upgrades</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Emergency Protocols and System Recovery</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperability-with-other-healthcare-systems">Interoperability with Other Healthcare Systems</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-system-diagnostics-and-support">Remote System Diagnostics and Support</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Data Security and Compliance</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#power-management-and-efficiency">Power Management and Efficiency</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#customization-and-configuration-management">Customization and Configuration Management</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Patient Safety Monitoring</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-scenarios">Key Scenarios</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-decomposition">System Decomposition</a></li>
