@@ -271,17 +271,13 @@ Patient Safety Monitoring
 
 
 
-
-
-
-
-
-
-
 Functional Requirements
 =======================
 
 The functional requirements of the MRI acquisition software are derived from the scenarios and use cases outlined in the previous section. These requirements define the specific capabilities and behaviors that the software must exhibit to fulfill the needs of the stakeholders and ensure the successful operation of the MRI system. The functional requirements are organized into categories based on the primary functionalities they address, including acquisition, processing, user interaction, system management, and safety monitoring.
+
+General Requirements
+--------------------
 
 .. csv-table::
     :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
@@ -299,15 +295,114 @@ The functional requirements of the MRI acquisition software are derived from the
     "A4IM_FR_100", "The software shall manage devices, including organization of different devices, authentication, device selection, and access management based on training.", "Verify the software can organize and manage access to multiple devices with device-specific training requirements.", "PRS_0100", "1.0"
 
 
+Operational Requirements
+------------------------
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_110", "The software must continuously monitor and display MRI scan data in real-time, providing feedback on scan quality and progress with instant notification upon scan completion.", "Verify real-time monitoring during an MRI scan, including feedback on scan quality and instant notification at completion.", "PRS_0010", "1.0"
+    "A4IM_FR_120", "The software shall provide real-time alerts for scan anomalies or issues, with a response time of less than 5 minutes.", "Simulate a scan anomaly and verify that the software provides an alert within 5 minutes.", "PRS_0020", "1.0"
+    "A4IM_FR_130", "The software shall support on-prem setups with 100% compatibility.", "Set up the software in an on-prem environment and verify full functionality and compatibility.", "PRS_0030", "1.0"
+    "A4IM_FR_140", "The software shall support cloud setups, accommodating environments without local compute workstations.", "Deploy the software in a cloud environment and verify functionality without local compute dependencies.", "PRS_0040", "1.0"
 
 
+Regulatory Needs
+----------------
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_210", "The software must comply with HIPAA, GDPR, FDA regulations, and undergo regular updates for ongoing compliance.", "Review documentation and change logs to verify compliance and regular updates for regulations.", "PRS_0110", "1.0"
+    "A4IM_FR_220", "The software shall ensure strong data encryption and role-based access control for securing patient data.", "Test the encryption and access control features to verify compliance with security standards.", "PRS_0120", "1.0"
+    "A4IM_FR_230", "The software shall implement Risk Mitigation Measures (RMM) in adherence to ISO 14971:2019.", "Evaluate the implementation of RMM and verify adherence to ISO 14971:2019.", "PRS_0130", "1.0"
 
 
+Reliability and Resilience Needs
+--------------------------------
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_210", "The software shall ensure system stability with minimum downtime, aiming for 99.99% uptime.", "Monitor the system over a defined period to verify that the uptime meets or exceeds 99.99%.", "PRS_0210", "1.0"
 
 
+Performance Requirements
+========================
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_810", "The software shall initialize and be ready for use within 60 seconds of system startup, ensuring quick readiness for medical operations.", "Measure the time from system startup to when the software is fully operational and ready for use, verifying it does not exceed 60 seconds.", "Startup Performance", "1.0"
+    "A4IM_FR_820", "The software shall shut down properly within 30 seconds, ensuring data integrity and system safety.", "Verify the shutdown process from initiation to completion, ensuring it occurs within 30 seconds without data loss or system issues.", "Shutdown Performance", "1.0"
+    "A4IM_FR_830", "The software must respond to user inputs within 2 seconds under normal operating conditions, providing a responsive user experience.", "Conduct user interaction tests to verify response times for various commands under normal operating conditions.", "User Input Response", "1.0"
+    "A4IM_FR_840", "The software shall provide real-time monitoring with a reaction time not exceeding 1 second, ensuring timely feedback during MRI scans.", "Test the real-time monitoring feature by simulating MRI scans and measuring the reaction time to changes in scan parameters.", "Real-Time Monitoring Performance", "1.0"
+    "A4IM_FR_850", "The software must recover from common errors or crashes and restore operation within 60 seconds, minimizing downtime during critical operations.", "Simulate common software errors or crashes and measure the time taken for the software to recover and become operational again.", "Error Recovery Performance", "1.0"
 
 
+System Interfaces
+=================
 
+Interoperability Needs
+----------------------
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_410", "The software shall ensure compatibility with various DICOM systems for seamless integration with existing healthcare systems.", "Test interoperability with multiple DICOM systems to validate compatibility and seamless integration.", "PRS_0410", "1.0"
+    "A4IM_FR_420", "The software shall support data storage using the XNAT platform, ensuring compatibility with widely used medical imaging data storage formats.", "Demonstrate the software's ability to store and retrieve data using the XNAT platform, verifying compatibility.", "PRS_0420", "1.0"
+    "A4IM_FR_430", "The software shall support the NIFTI file format for facilitating diverse data representation and interoperability.", "Validate the software's capability to process and manage NIFTI file format data through testing and user feedback.", "PRS_0430", "1.0"
+    "A4IM_FR_440", "The software shall support the ISMRMRD file format, aiding in diverse data representation and interoperability for research purposes.", "Ensure the software can handle ISMRMRD file format data seamlessly, facilitating research and development activities.", "PRS_0440", "1.0"
+    "A4IM_FR_450", "The software shall support the RAW MR file format, enabling researchers to work with unprocessed MRI data.", "Confirm the software's ability to import, export, and utilize RAW MR file format data for advanced research applications.", "PRS_0450", "1.0"
+
+
+External Interfaces
+===================
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_610", "The software shall ensure seamless interaction with patient monitoring systems to enable real-time data exchange, thereby ensuring patient safety.", "Demonstrate real-time data exchange with a patient monitoring system and verify seamless interaction without delays or errors.", "PRS_0610", "1.0"
+
+
+Warnings, Messages, and Alerts
+==============================
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_710", "The software shall implement a system for warnings, messages, and alerts in compliance with IEC 60601-1-8, ensuring clear and effective communication of critical information to users.", "Conduct testing to ensure that all warnings, messages, and alerts comply with the specifications of IEC 60601-1-8, including the clarity of communication and the effectiveness of alerting users to critical issues.", "IEC 60601-1-8", "1.0"
+
+
+Usability
+=========
+
+Usability Requirements
+----------------------
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_310", "The software shall provide an intuitive UI for scan setup and patient management, including comprehensive user manuals and guides, with quick access to frequently used features.", "Conduct usability testing with medical professionals to ensure they can effectively use the system for scan setup and patient management within 30 minutes of initial training.", "PRS_0310", "1.0"
+    "A4IM_FR_320", "The software shall provide access to raw MRI data and experimental sequence options for scientists.", "Verify through user feedback and testing that scientists can access and utilize raw MRI data and experimental sequences for their research.", "PRS_0320", "1.0"
+
+Maintenance and Service
+=======================
+
+Maintainability Requirements
+----------------------------
+
+.. csv-table::
+    :header: "ID", "Description of Requirement", "Verification Idea", "Reference/Traceability", "A4IM Version"
+    :widths: 10, 60, 80, 30, 10
+
+    "A4IM_FR_510", "The software shall have a scalable architecture to accommodate increasing data and users, featuring a modular design for easy updates and enhancements, and efficient data management and storage solutions.", "Test the system's performance under doubled data and user load to ensure less than 10% degradation.", "PRS_0510", "1.0"
 
 
 

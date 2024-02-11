@@ -761,6 +761,8 @@ Note: The document numbers and versions will be finalized and added to this sect
 <section id="functional-requirements">
 <h2>Functional Requirements<a class="headerlink" href="#functional-requirements" title="Link to this heading">#</a></h2>
 <p>The functional requirements of the MRI acquisition software are derived from the scenarios and use cases outlined in the previous section. These requirements define the specific capabilities and behaviors that the software must exhibit to fulfill the needs of the stakeholders and ensure the successful operation of the MRI system. The functional requirements are organized into categories based on the primary functionalities they address, including acquisition, processing, user interaction, system management, and safety monitoring.</p>
+<section id="general-requirements">
+<h3>General Requirements<a class="headerlink" href="#general-requirements" title="Link to this heading">#</a></h3>
 <table class="table">
 <colgroup>
 <col style="width: 5.3%" />
@@ -840,6 +842,351 @@ Note: The document numbers and versions will be finalized and added to this sect
 </tr>
 </tbody>
 </table>
+</section>
+<section id="operational-requirements">
+<h3>Operational Requirements<a class="headerlink" href="#operational-requirements" title="Link to this heading">#</a></h3>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_110</p></td>
+<td><p>The software must continuously monitor and display MRI scan data in real-time, providing feedback on scan quality and progress with instant notification upon scan completion.</p></td>
+<td><p>Verify real-time monitoring during an MRI scan, including feedback on scan quality and instant notification at completion.</p></td>
+<td><p>PRS_0010</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_120</p></td>
+<td><p>The software shall provide real-time alerts for scan anomalies or issues, with a response time of less than 5 minutes.</p></td>
+<td><p>Simulate a scan anomaly and verify that the software provides an alert within 5 minutes.</p></td>
+<td><p>PRS_0020</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_130</p></td>
+<td><p>The software shall support on-prem setups with 100% compatibility.</p></td>
+<td><p>Set up the software in an on-prem environment and verify full functionality and compatibility.</p></td>
+<td><p>PRS_0030</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_140</p></td>
+<td><p>The software shall support cloud setups, accommodating environments without local compute workstations.</p></td>
+<td><p>Deploy the software in a cloud environment and verify functionality without local compute dependencies.</p></td>
+<td><p>PRS_0040</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="regulatory-needs">
+<h3>Regulatory Needs<a class="headerlink" href="#regulatory-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_210</p></td>
+<td><p>The software must comply with HIPAA, GDPR, FDA regulations, and undergo regular updates for ongoing compliance.</p></td>
+<td><p>Review documentation and change logs to verify compliance and regular updates for regulations.</p></td>
+<td><p>PRS_0110</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_220</p></td>
+<td><p>The software shall ensure strong data encryption and role-based access control for securing patient data.</p></td>
+<td><p>Test the encryption and access control features to verify compliance with security standards.</p></td>
+<td><p>PRS_0120</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_230</p></td>
+<td><p>The software shall implement Risk Mitigation Measures (RMM) in adherence to ISO 14971:2019.</p></td>
+<td><p>Evaluate the implementation of RMM and verify adherence to ISO 14971:2019.</p></td>
+<td><p>PRS_0130</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reliability-and-resilience-needs">
+<h3>Reliability and Resilience Needs<a class="headerlink" href="#reliability-and-resilience-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_210</p></td>
+<td><p>The software shall ensure system stability with minimum downtime, aiming for 99.99% uptime.</p></td>
+<td><p>Monitor the system over a defined period to verify that the uptime meets or exceeds 99.99%.</p></td>
+<td><p>PRS_0210</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="performance-requirements">
+<h2>Performance Requirements<a class="headerlink" href="#performance-requirements" title="Link to this heading">#</a></h2>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_810</p></td>
+<td><p>The software shall initialize and be ready for use within 60 seconds of system startup, ensuring quick readiness for medical operations.</p></td>
+<td><p>Measure the time from system startup to when the software is fully operational and ready for use, verifying it does not exceed 60 seconds.</p></td>
+<td><p>Startup Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_820</p></td>
+<td><p>The software shall shut down properly within 30 seconds, ensuring data integrity and system safety.</p></td>
+<td><p>Verify the shutdown process from initiation to completion, ensuring it occurs within 30 seconds without data loss or system issues.</p></td>
+<td><p>Shutdown Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_830</p></td>
+<td><p>The software must respond to user inputs within 2 seconds under normal operating conditions, providing a responsive user experience.</p></td>
+<td><p>Conduct user interaction tests to verify response times for various commands under normal operating conditions.</p></td>
+<td><p>User Input Response</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_840</p></td>
+<td><p>The software shall provide real-time monitoring with a reaction time not exceeding 1 second, ensuring timely feedback during MRI scans.</p></td>
+<td><p>Test the real-time monitoring feature by simulating MRI scans and measuring the reaction time to changes in scan parameters.</p></td>
+<td><p>Real-Time Monitoring Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_850</p></td>
+<td><p>The software must recover from common errors or crashes and restore operation within 60 seconds, minimizing downtime during critical operations.</p></td>
+<td><p>Simulate common software errors or crashes and measure the time taken for the software to recover and become operational again.</p></td>
+<td><p>Error Recovery Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="system-interfaces">
+<h2>System Interfaces<a class="headerlink" href="#system-interfaces" title="Link to this heading">#</a></h2>
+<section id="interoperability-needs">
+<h3>Interoperability Needs<a class="headerlink" href="#interoperability-needs" title="Link to this heading">#</a></h3>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_410</p></td>
+<td><p>The software shall ensure compatibility with various DICOM systems for seamless integration with existing healthcare systems.</p></td>
+<td><p>Test interoperability with multiple DICOM systems to validate compatibility and seamless integration.</p></td>
+<td><p>PRS_0410</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_420</p></td>
+<td><p>The software shall support data storage using the XNAT platform, ensuring compatibility with widely used medical imaging data storage formats.</p></td>
+<td><p>Demonstrate the software’s ability to store and retrieve data using the XNAT platform, verifying compatibility.</p></td>
+<td><p>PRS_0420</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_430</p></td>
+<td><p>The software shall support the NIFTI file format for facilitating diverse data representation and interoperability.</p></td>
+<td><p>Validate the software’s capability to process and manage NIFTI file format data through testing and user feedback.</p></td>
+<td><p>PRS_0430</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_440</p></td>
+<td><p>The software shall support the ISMRMRD file format, aiding in diverse data representation and interoperability for research purposes.</p></td>
+<td><p>Ensure the software can handle ISMRMRD file format data seamlessly, facilitating research and development activities.</p></td>
+<td><p>PRS_0440</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_450</p></td>
+<td><p>The software shall support the RAW MR file format, enabling researchers to work with unprocessed MRI data.</p></td>
+<td><p>Confirm the software’s ability to import, export, and utilize RAW MR file format data for advanced research applications.</p></td>
+<td><p>PRS_0450</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="external-interfaces">
+<h2>External Interfaces<a class="headerlink" href="#external-interfaces" title="Link to this heading">#</a></h2>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_610</p></td>
+<td><p>The software shall ensure seamless interaction with patient monitoring systems to enable real-time data exchange, thereby ensuring patient safety.</p></td>
+<td><p>Demonstrate real-time data exchange with a patient monitoring system and verify seamless interaction without delays or errors.</p></td>
+<td><p>PRS_0610</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="warnings-messages-and-alerts">
+<h2>Warnings, Messages, and Alerts<a class="headerlink" href="#warnings-messages-and-alerts" title="Link to this heading">#</a></h2>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_710</p></td>
+<td><p>The software shall implement a system for warnings, messages, and alerts in compliance with IEC 60601-1-8, ensuring clear and effective communication of critical information to users.</p></td>
+<td><p>Conduct testing to ensure that all warnings, messages, and alerts comply with the specifications of IEC 60601-1-8, including the clarity of communication and the effectiveness of alerting users to critical issues.</p></td>
+<td><p>IEC 60601-1-8</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="usability">
+<h2>Usability<a class="headerlink" href="#usability" title="Link to this heading">#</a></h2>
+<section id="usability-requirements">
+<h3>Usability Requirements<a class="headerlink" href="#usability-requirements" title="Link to this heading">#</a></h3>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_310</p></td>
+<td><p>The software shall provide an intuitive UI for scan setup and patient management, including comprehensive user manuals and guides, with quick access to frequently used features.</p></td>
+<td><p>Conduct usability testing with medical professionals to ensure they can effectively use the system for scan setup and patient management within 30 minutes of initial training.</p></td>
+<td><p>PRS_0310</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_320</p></td>
+<td><p>The software shall provide access to raw MRI data and experimental sequence options for scientists.</p></td>
+<td><p>Verify through user feedback and testing that scientists can access and utilize raw MRI data and experimental sequences for their research.</p></td>
+<td><p>PRS_0320</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="maintenance-and-service">
+<h2>Maintenance and Service<a class="headerlink" href="#maintenance-and-service" title="Link to this heading">#</a></h2>
+<section id="maintainability-requirements">
+<h3>Maintainability Requirements<a class="headerlink" href="#maintainability-requirements" title="Link to this heading">#</a></h3>
+<table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_510</p></td>
+<td><p>The software shall have a scalable architecture to accommodate increasing data and users, featuring a modular design for easy updates and enhancements, and efficient data management and storage solutions.</p></td>
+<td><p>Test the system’s performance under doubled data and user load to ensure less than 10% degradation.</p></td>
+<td><p>PRS_0510</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>ID</p></th>
@@ -866,6 +1213,7 @@ Note: The document numbers and versions will be finalized and added to this sect
 </tr>
 </tbody>
 </table>
+</section>
 </section>
 <section id="device-communication">
 <h2>Device Communication<a class="headerlink" href="#device-communication" title="Link to this heading">#</a></h2>
@@ -1072,7 +1420,28 @@ Another set of parameters may vary over time and may be set from a workflow/work
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-requirements">Functional Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-requirements">Functional Requirements</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-requirements">General Requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operational-requirements">Operational Requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regulatory-needs">Regulatory Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reliability-and-resilience-needs">Reliability and Resilience Needs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-requirements">Performance Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-interfaces">System Interfaces</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperability-needs">Interoperability Needs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#external-interfaces">External Interfaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warnings-messages-and-alerts">Warnings, Messages, and Alerts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usability">Usability</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usability-requirements">Usability Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance-and-service">Maintenance and Service</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintainability-requirements">Maintainability Requirements</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-communication">Device Communication</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-request">Acquisition Request</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-monitor">Device Monitor</a></li>
