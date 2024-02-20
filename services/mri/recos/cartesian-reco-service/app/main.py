@@ -8,7 +8,7 @@ import json
 import logging
 import os
 from random import randint
-from typing import Set
+from typing import Optional, Set
 
 from aiokafka import AIOKafkaConsumer  # type: ignore
 from fastapi import FastAPI
@@ -21,8 +21,8 @@ from api.worker import init, run
 app = FastAPI()
 
 # global variables
-CONSUMER_TASK = None
-CONSUMER = None
+CONSUMER_TASK: Optional[asyncio.Task] = None
+CONSUMER: Optional[AIOKafkaConsumer] = None
 
 # env variables
 KAFKA_TOPIC = os.getenv("KAFKA_TOPIC_SUBSCRIPTION")
@@ -46,8 +46,10 @@ async def startup_event():
 async def shutdown_event():
     """Shutdown event for the API."""
     log.info("Shutting down API")
-    CONSUMER_TASK.cancel()
-    await CONSUMER.stop()
+    if CONSUMER_TASK:
+        CONSUMER_TASK.cancel()
+    if CONSUMER:
+        await CONSUMER.stop()
 
 
 @app.get("/")
@@ -89,45 +91,47 @@ async def initialize():
             print(f"Attempt {i+1}: Group Coordinator not available. Retrying...")
             await asyncio.sleep(5)
 
-    # get cluster layout and join group
-    partitions: Set[TopicPartition] = CONSUMER.assignment()
-    nr_partitions = len(partitions)
-    if nr_partitions != 1:
-        # pylint: disable=logging-fstring-interpolation
-        log.warning(
-            f"Found {nr_partitions} partitions for topic {KAFKA_TOPIC}. "
-            f"Expecting only one, remaining partitions will be ignored!"
-        )
-    for topic in partitions:
-        # get the log_end_offset
-        end_offset_dict = await CONSUMER.end_offsets([topic])
-        end_offset = end_offset_dict[topic]
-
-        if end_offset == 0:
+    if CONSUMER:
+        # get cluster layout and join group
+        partitions: Set[TopicPartition] = CONSUMER.assignment()
+        nr_partitions = len(partitions)
+        if nr_partitions != 1:
             # pylint: disable=logging-fstring-interpolation
             log.warning(
-                f"Topic {KAFKA_TOPIC} has no messages (log_end_offset: " f"{end_offset}), skipping initialization ..."
+                f"Found {nr_partitions} partitions for topic {KAFKA_TOPIC}. "
+                f"Expecting only one, remaining partitions will be ignored!"
             )
-            return
+        for topic in partitions:
+            # get the log_end_offset
+            end_offset_dict = await CONSUMER.end_offsets([topic])
+            end_offset = end_offset_dict[topic]
 
-        # pylint: disable=logging-fstring-interpolation
-        log.debug(f"Found log_end_offset: {end_offset} seeking to {end_offset - 1}")
-        CONSUMER.seek(topic, end_offset - 1)
-        msg = await CONSUMER.getone()
-        log.info("Initializing API with data from msg: %s", msg)
+            if end_offset == 0:
+                # pylint: disable=logging-fstring-interpolation
+                log.warning(
+                    f"Topic {KAFKA_TOPIC} has no messages (log_end_offset: " f"{end_offset}), skipping initialization ..."
+                )
+                return
 
-        # run worker initialization
-        init(msg)
-        return
+            # pylint: disable=logging-fstring-interpolation
+            log.debug(f"Found log_end_offset: {end_offset} seeking to {end_offset - 1}")
+            CONSUMER.seek(topic, end_offset - 1)
+            msg = await CONSUMER.getone()
+            log.info("Initializing API with data from msg: %s", msg)
+
+            # run worker initialization
+            init(msg)
+            # return
 
 
 async def consume():
     """Consume messages from the Kafka topic."""
     global CONSUMER_TASK # pylint: disable=global-statement
-    CONSUMER_TASK = asyncio.create_task(send_consumer_message(CONSUMER))
+    if CONSUMER:
+        CONSUMER_TASK = asyncio.create_task(send_consumer_message(CONSUMER))
 
 
-async def send_consumer_message(consumer):
+async def send_consumer_message(consumer: AIOKafkaConsumer):
     """Send consumer message to the worker.
 
     Parameters
