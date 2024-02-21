@@ -23,6 +23,7 @@
     "dicom-parser": "^1.8.21",
     "hammerjs": "^2.0.8",
     "node-sass": "^9.0.0",
+    "openapi-typescript-codegen": "^0.25.0",
     "parcel": "^2.9.3",
     "plotly.js": "^2.24.3",
     "react": "^18.2.0",
@@ -59,7 +60,11 @@
     "build": "parcel build ./src/index.html",
     "lint": "eslint ./src/**/*.tsx",
     "lint:fix": "eslint --fix './src/**/*.tsx'",
-    "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc"
+    "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc",
+    "generate-patient-client": "openapi --input http://localhost:8100/openapi.json --output ./src/generated-clients/patient --client axios --useOptions --useUnionTypes",
+    "generate-exam-client": "openapi --input http://localhost:8080/api/v1/exam/openapi.json --output ./src/generated-clients/exam --client axios --useOptions --useUnionTypes",
+    "generate-sequence-client": "openapi --input http://localhost:8080/api/v1/mri/sequences/openapi.json --output ./src/generated-clients/sequence --client axios --useOptions --useUnionTypes",
+    "generate-all-clients": "yarn generate-sequence-client & yarn generate-exam-client & yarn generate-patient-client"
   },
   "browserslist": {
     "production": [
