@@ -19,7 +19,7 @@ export abstract class ApiService<T> {
     })
   }
 
-  async getAll(parentId?: number): Promise<T[] | []> {
+  async getAll(parentId?: number | string): Promise<T[] | []> {
     try {
       // Parent id parameter is optional, if provided it is used in an "/all/<parent_id>"" endpoint
       // Otherwise the default case endpoint "/" is used
@@ -35,7 +35,7 @@ export abstract class ApiService<T> {
     }
   }
 
-  async get(id: number): Promise<T> {
+  async get(id: number | string): Promise<T> {
     try {
       const response = await this.axiosInstance.get<T>(`/${id}`)
       return response.data
@@ -59,7 +59,7 @@ export abstract class ApiService<T> {
     }
   }
 
-  async update(id: number, data: T): Promise<T> {
+  async update(id: number | string, data: T): Promise<T> {
     try {
       const response = await this.axiosInstance.put<T>(`/${id}`, data)
       return response.data
@@ -71,7 +71,7 @@ export abstract class ApiService<T> {
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number | string): Promise<void> {
     try {
       await this.axiosInstance.delete(`/${id}`)
     } catch (error: unknown) {

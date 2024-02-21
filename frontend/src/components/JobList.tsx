@@ -43,21 +43,22 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
     queryFn: () => deviceClient.getAll(),
   })
 
-  const {
-    data: workflows,
-    // isLoading: workflowsLoading,
-    // isError: workflowsError,
-  } = useQuery<Workflow[], Error>({
-    queryKey: ['workflows'],
-    queryFn: () => client.workflowService.getAll(),
-  })
+  // TODO: Workflow API is currently not working
+  // const {
+  //   data: workflows,
+  //   // isLoading: workflowsLoading,
+  //   // isError: workflowsError,
+  // } = useQuery<Workflow[], Error>({
+  //   queryKey: ['workflows'],
+  //   queryFn: () => client.workflowService.getAll(),
+  // })
 
-  React.useEffect(() => {
-    console.log('Workflows: ', workflows)
-    if (workflows) {
-      console.log('Definition type: ', typeof workflows[0].definition)
-    }
-  }, [workflows])
+  // React.useEffect(() => {
+  //   console.log('Workflows: ', workflows)
+  //   if (workflows) {
+  //     console.log('Definition type: ', typeof workflows[0].definition)
+  //   }
+  // }, [workflows])
 
   const {
     data: sequences,

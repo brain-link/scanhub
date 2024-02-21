@@ -28,20 +28,16 @@ import ProcedureModal from '../components/ProcedureModal'
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface'
 import { Exam } from '../interfaces/data.interface'
-import { Procedure } from '../interfaces/data.interface'
 import { Job } from '../interfaces/data.interface'
 import { navigation, patientView } from '../utils/size_vars'
 
 function PatientIndex() {
   const params = useParams()
-
-  const [sidePanelOpen, setSidePanelOpen] = React.useState(true)
-
-  // Modal states for exam and procedure
+  // Visibility of side panel containing patient info and exam list
+  // const [sidePanelOpen, setSidePanelOpen] = React.useState(true)
+  // Modal states for exam
   const [examModalOpen, setExamModalOpen] = React.useState(false)
-  const [procedureModalOpen, setProcedureModalOpen] = React.useState(false)
-
-  const [procedures, setProcedures] = React.useState<Procedure[] | undefined>(undefined)
+  // List of jobs
   const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined)
 
   // useQuery for caching the fetched data
@@ -70,27 +66,15 @@ function PatientIndex() {
   React.useEffect(() => {
     if (params.examId && exams) {
       // Get the selected exam
-      const exam = exams.filter((exam) => exam.id === Number(params.examId))[0]
-      // Set procedures if exam exists
+      const exam = exams.filter((exam) => exam.id === String(params.examId))[0]
+      // Set jobs if exam exists
       if (exam) {
-        setProcedures(exam.procedures)
+        setJobs(exam.jobs)
       }
     }
   }, [exams, params.examId])
 
-  // This useEffect hook is executed when either exams or params.procedureId change
-  React.useEffect(() => {
-    if (params.procedureId && procedures) {
-      // Get the selected exam
-      const procedure = procedures.filter((procedure) => procedure.id === Number(params.procedureId))[0]
-      // Set procedures if exam exists
-      if (procedure) {
-        setJobs(procedure.jobs)
-      }
-    }
-  }, [procedures, params.procedureId])
-
-  // Mutations to create exam and procedure
+  // Mutations to create a new exam
   const createExam = useMutation(async (data: Exam) => {
     await client.examService
       .create(data)
@@ -102,23 +86,12 @@ function PatientIndex() {
       })
   })
 
-  const createProcedure = useMutation(async (data: Procedure) => {
-    await client.procedureService
-      .create(data)
-      .then(() => {
-        refetchExams()
-      })
-      .catch((err) => {
-        console.log('Error on procedure creation: ', err)
-      })
-  })
-
   return (
     <Stack direction='row' sx={{ height: `calc(100vh - ${navigation.height})`, width: '100%' }}>
       <Box
         sx={{
-          minWidth: sidePanelOpen ? patientView.drawerWidth : 0,
-          width: sidePanelOpen ? patientView.drawerWidth : 0,
+          // minWidth: sidePanelOpen ? patientView.drawerWidth : 0,
+          // width: sidePanelOpen ? patientView.drawerWidth : 0,
           overflow: 'auto',
           bgcolor: 'background.componentBg',
           borderRight: '1px solid',
@@ -174,100 +147,23 @@ function PatientIndex() {
           {// Check if exams are loading
           exams?.map((exam, index) => (
             <React.Fragment key={index}>
-              <ExamItem data={exam} refetchParentData={refetchExams} isSelected={exam.id === Number(params.examId)} />
+              <ExamItem data={exam} refetchParentData={refetchExams} isSelected={exam.id === String(params.examId)} />
               <ListDivider sx={{ m: 0 }} />
             </React.Fragment>
           ))}
         </List>
       </Box>
 
-      <Stack direction='row' sx={{ width: '100%' }}>
-        {/* List of procedures */}
-        <Box
-          sx={{
-            overflow: 'auto',
-            minWidth: patientView.procedureListWidth,
-            bgcolor: 'background.componentBg',
-            borderRight: '1px solid',
-            borderColor: 'divider',
-          }}
-        >
-          {/* Procedure header */}
-          <Box
-            sx={{
-              p: 1.5,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              <IconButton
-                variant='soft'
-                sx={{ '--IconButton-size': patientView.iconButtonSize }}
-                onClick={() => {
-                  setSidePanelOpen(!sidePanelOpen)
-                }}
-              >
-                {sidePanelOpen ? <KeyboardArrowLeftSharpIcon /> : <KeyboardArrowRightSharpIcon />}
-              </IconButton>
+      {/* job view controller */}
+      <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
+        <JobList
+          // Implementation of new interface may be required
+          data={jobs ? jobs : []}
+          refetchParentData={refetchExams}
+          isSelected={params.examId ? true : false}
+        />
+      </Box>
 
-              <Typography level='title-md'> Procedures </Typography>
-
-              <Badge badgeContent={procedures?.length} color='primary' />
-            </Box>
-
-            <IconButton
-              variant='soft'
-              sx={{ '--IconButton-size': patientView.iconButtonSize }}
-              onClick={() => {
-                setProcedureModalOpen(true)
-              }}
-              disabled={params.examId === undefined}
-            >
-              <AddSharpIcon />
-            </IconButton>
-
-            <ProcedureModal
-              // When data is null, modal fills data in new empty procedure
-              data={null}
-              dialogOpen={procedureModalOpen}
-              setDialogOpen={setProcedureModalOpen}
-              handleModalSubmit={(data: Procedure) => {
-                createProcedure.mutate(data)
-              }}
-            />
-          </Box>
-
-          <ListDivider />
-
-          {/* List of procedures */}
-          <List sx={{ pt: 0 }}>
-            {procedures?.map((procedure, index) => (
-              <React.Fragment key={index}>
-                <ProcedureItem
-                  data={procedure}
-                  refetchParentData={refetchExams}
-                  isSelected={procedure.id === Number(params.procedureId)}
-                />
-                <ListDivider sx={{ m: 0 }} />
-              </React.Fragment>
-            ))}
-          </List>
-        </Box>
-
-        {/* job view controller */}
-        <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-          <JobList
-            // Implementation of new interface may be required
-            data={jobs ? jobs : []}
-            refetchParentData={refetchExams}
-            isSelected={params.procedureId ? true : false}
-          />
-        </Box>
-      </Stack>
     </Stack>
   )
 }

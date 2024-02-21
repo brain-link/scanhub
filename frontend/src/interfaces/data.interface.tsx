@@ -41,7 +41,7 @@ export interface Device {
 }
 
 export interface Record {
-  id: number
+  id: string
   data_path?: string | null
   comment?: string | null
   datetime_created: Date
@@ -66,8 +66,8 @@ export interface SequenceParameters {
 }
 
 export interface Job {
-  id: number
-  procedure_id: number
+  id: string
+  exam_id: string
   type: string
   comment?: string | null
   is_acquired?: boolean
@@ -81,21 +81,11 @@ export interface Job {
   sequence_parameters: SequenceParameters
 }
 
-export interface Procedure {
-  id: number
-  exam_id: number
-  name: string
-  status: string
-  jobs?: [Job] | []
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
-
 export interface Exam {
-  id: number
+  id: string
   patient_id: number
   name: string
-  procedures?: [Procedure] | []
+  jobs?: [Job] | []
   country: string | null
   site: string | null
   address: string | null
