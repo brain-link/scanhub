@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientIndex.tsx is responsible for rendering the patient view. It is the entry point for the patient view.
 import AddSharpIcon from '@mui/icons-material/AddSharp'
-import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp'
-import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp'
+// import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp'
+// import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp'
 import Badge from '@mui/joy/Badge'
 // Mui Joy
 import Box from '@mui/joy/Box'
@@ -23,8 +23,6 @@ import ExamModal from '../components/ExamModal'
 import JobList from '../components/JobList'
 // Import sub components
 import PatientInfo from '../components/PatientInfo'
-import ProcedureItem from '../components/ProcedureItem'
-import ProcedureModal from '../components/ProcedureModal'
 // Import interfaces, api services and global variables
 import { Patient } from '../interfaces/data.interface'
 import { Exam } from '../interfaces/data.interface'

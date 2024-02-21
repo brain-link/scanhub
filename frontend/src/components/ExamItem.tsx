@@ -38,7 +38,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
     setContextOpen(null)
   }
 
-  const handleContextOpen = (e: any, examId: string) => {
+  const handleContextOpen = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, examId: string) => {
     e.preventDefault()
     setAnchorEl(e.currentTarget)
     setContextOpen(examId)
