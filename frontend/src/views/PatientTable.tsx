@@ -26,6 +26,8 @@ import { useNavigate } from 'react-router-dom'
 import client from '../client/exam-tree-queries'
 import { Patient } from '../interfaces/data.interface'
 
+// import { PatientsService, PatientOut } from '../generated-clients/patient';
+
 // Patient form items, order is row wise
 const createPatientFormContent = [
   { key: 'name', label: 'Patient Name', placeholder: 'Last name, first name' },
@@ -63,6 +65,20 @@ export default function PatientTable() {
     queryKey: ['patients'],
     queryFn: () => client.patientService.getAll(),
   })
+
+
+  // Get all patients using generated client
+  // const gcPatients = await PatientsService.getPatientListGet()
+
+  // const getGCPatient = async () => {
+  //   const request = await PatientsService.getPatientListGet();
+  //   console.log("Generated client response: ", request)
+  // }
+
+  // React.useEffect(() => {
+  //   getGCPatient()
+  // }, [])
+
 
   // Post a new record and refetch records table
   const mutation = useMutation(async () => {
@@ -217,6 +233,7 @@ export default function PatientTable() {
           </tbody>
         </Table>
       </Sheet>
+
     </Box>
   )
 }
