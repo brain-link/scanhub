@@ -182,7 +182,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
             onClick={() => {
               setJobModalOpen(true)
             }}
-            disabled={params.procedureId === undefined}
+            disabled={params.examId === undefined}
           >
             <AddSharpIcon />
           </IconButton>
@@ -226,7 +226,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
             >
               <AlertItem
                 title='Nothing to show...'
-                info='Please select an exam and a procedure to view the jobs.'
+                info='Please select an exam to view the jobs.'
                 type={Alerts.Neutral}
               />
             </Stack>
