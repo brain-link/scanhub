@@ -41,9 +41,12 @@ System Context
 ==============
 
 
+Key Scenarios 
+-------------
 
+The following key scenarios focus on the basic functionality of the device from both the user’s and system’s perspectives. This includes user interactions, as well as essential system procedures like start up, shutdown, and service functionality. These scenarios are crucial for ensuring the software architecture supports seamless operation and maintenance of the MRI system.
 
-
+TBD - Add Key Scenarios
 
 System Decomposition
 ====================
@@ -55,15 +58,16 @@ System Decomposition
   Figure 1: ScanHub Development View
 
 
-+---------------+-----------+-----------------------+--------------+ 
-| ID            | Component | Description           | Safety Class | 
-+===============+===========+=======================+==============+ 
-| SWAD_CMP_0001 | column 2  | column 3              |              | 
-+---------------+-----------+-----------------------+--------------+ 
-| SWAD_CMP_0002 |           |                       |              | 
-+---------------+-----------+-----------------------+--------------+ 
++---------------+---------------------+-----------------------------------------------------------+--------------+ 
+| ID            | Component           | Description                                               | Safety Class | 
++===============+=====================+===========================================================+==============+ 
+| SWAD_CMP_0001 | Device Manager      | Manages connected devices, before and during acquisition. | A            | 
++---------------+---------------------+-----------------------------------------------------------+--------------+ 
+| SWAD_CMP_0002 | Acquisition Control |                                                           |              | 
++---------------+---------------------+-----------------------------------------------------------+--------------+ 
+| SWAD_CMP_0003 | Workflow Engine     |                                                           |              |
++---------------+---------------------+-----------------------------------------------------------+--------------+
 
- 
 
 .. figure:: _static/images/swad/ScanHub_Component_Connected_Device.drawio.png
     :width: 800
