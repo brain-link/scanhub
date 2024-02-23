@@ -5,7 +5,7 @@
 
 import logging
 
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
 
 from core.config import settings
 
@@ -23,8 +23,9 @@ class Database:
         The MongoDB collection.
     """
 
-    client: AsyncIOMotorClient | None = None
-    collection = None
+    # TODO: Can the client really take two different types?
+    client: AsyncIOMotorClient | AsyncIOMotorDatabase | None = None
+    collection: AsyncIOMotorCollection | None = None
 
 
 # Create a global database handle.
@@ -39,7 +40,7 @@ async def connect_to_mongo():
 
     connection_string = f"mongodb://{settings.MONGODB_HOST}:{settings.MONGODB_PORT}"
 
-    client = AsyncIOMotorClient(connection_string)
+    client: AsyncIOMotorClient = AsyncIOMotorClient(connection_string)
 
     if client_info := await client.server_info():
         logger.info(client_info)
@@ -54,5 +55,5 @@ async def close_mongo_connection():
     """Close the connection to MongoDB."""
     logger.info("Closing MongoDB connection...")
 
-    client = db.client
-    client.close()
+    if isinstance(db.client, AsyncIOMotorClient):
+        db.client.close()

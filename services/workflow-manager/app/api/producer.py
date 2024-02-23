@@ -5,6 +5,7 @@
 
 import json
 import logging
+from typing import Optional
 
 from aiokafka import AIOKafkaProducer  # type: ignore
 
@@ -14,7 +15,8 @@ from aiokafka import AIOKafkaProducer  # type: ignore
 class Producer:
     """Producer Singleton class for Kafka producer."""
 
-    _instance = None  # Keep instance reference
+    _instance: Optional['Producer'] = None  # Keep instance reference
+    _producer: AIOKafkaProducer  # Explicitly declare the producer attribute
 
     def __new__(cls):
         """Create new instance of Producer.
@@ -26,18 +28,18 @@ class Producer:
         """
         if cls._instance is None:
             cls._instance = super(Producer, cls).__new__(cls)
-            cls._instance.producer = AIOKafkaProducer(
+            cls._instance._producer = AIOKafkaProducer(
                 bootstrap_servers="kafka:9092", value_serializer=lambda v: json.dumps(v).encode("utf-8")
             )
         return cls._instance
 
     async def start(self):
         """Start producer."""
-        await self.producer.start()
+        await self._producer.start()
 
     async def stop(self):
         """Stop producer."""
-        await self.producer.stop()
+        await self._producer.stop()
 
     async def send(self, topic, message):
         """Send message to Kafka topic.
@@ -49,7 +51,7 @@ class Producer:
         message
             Message to be sent
         """
-        result = await self.producer.send_and_wait(topic, message)
+        result = await self._producer.send_and_wait(topic, message)
         return result
 
     @classmethod

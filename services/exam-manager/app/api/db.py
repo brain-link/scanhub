@@ -6,9 +6,9 @@
 import datetime
 import os
 import uuid
-from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from scanhub_libraries.models import AcquisitionLimits, SequenceParameters
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -18,11 +18,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 # Create base for exam and job table
 class Base(DeclarativeBase):
     """Declarative base class."""
-
-    # def __init__(self, **kwargs):
-    #     if 'id' not in kwargs:
-    #         kwargs['id'] = uuid.uuid4()
-    #     super().__init__(**kwargs)
 
     def update(self, data: BaseModel) -> None:
         """Update a exam entry.
@@ -46,40 +41,6 @@ else:
 def init_db() -> None:
     """Initialize the database."""
     Base.metadata.create_all(engine)
-
-
-class XYZ(BaseModel):
-    """XYZ model."""
-
-    X: float
-    Y: float
-    Z: float
-
-
-class SequenceParameters(BaseModel):
-    """SequenceParameters model."""
-
-    fov: XYZ
-    fov_offset: XYZ
-
-
-class Gender(str, Enum):
-    """Gender model."""
-
-    MALE = "MALE"
-    FEMALE = "FEMALE"
-    OTHER = "OTHER"
-    NOT_GIVEN = "NOT_GIVEN"
-
-
-class AcquisitionLimits(BaseModel):
-    """AcquisitionLimits models."""
-
-    patient_height: float
-    patient_weight: float
-    patient_gender: Gender = Field(None, alias="Gender")
-    patient_age: int
-
 
 class Exam(Base):
     """Exam ORM model."""
@@ -119,7 +80,7 @@ class Job(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     # Relations and references
-    exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
+    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"))
     workflow_id: Mapped[int] = mapped_column(nullable=True)
     device_id: Mapped[str] = mapped_column(nullable=True)
     sequence_id: Mapped[str] = mapped_column(nullable=False)
@@ -149,7 +110,7 @@ class Record(Base):
     # Use uuid here
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     # Relations and references
-    job_id: Mapped[int] = mapped_column(ForeignKey("job.id"))
+    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job.id"))
     data_path: Mapped[str] = mapped_column(nullable=True)
     # Fields
     comment: Mapped[str] = mapped_column(nullable=True)

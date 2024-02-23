@@ -28,7 +28,7 @@ def init_db() -> None:
     Base.metadata.create_all(engine)
 
 
-class Workflow(Base):
+class Workflow(Base): # type: ignore
     """Device ORM model."""
 
     __tablename__ = "workflow"

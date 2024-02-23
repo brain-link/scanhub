@@ -102,7 +102,7 @@ async def post_device_task(url, device_task):
     """
     async with httpx.AsyncClient() as client:
         data = json.dumps(device_task, default=pydantic_encoder)
-        response = await client.post(url, data=data)
+        response = await client.post(url, content=data)
         return response.status_code
 
 

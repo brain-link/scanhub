@@ -17,7 +17,6 @@ packages = [{include = "app"}]
 python = ">=3.10,<3.11"
 fastapi = "^0.95.2"
 uvicorn = "^0.15.0"
-motor = "^2.5.1"
 pydantic = "^1.10.9"
 python-dotenv = "^0.19.1"
 python-multipart = "^0.0.6"
@@ -25,8 +24,8 @@ aiofiles = "^0.7.0"
 numpy = "1.23.0"    # pypulseq release 1.4 incompatible with numpy 1.25
 pypulseq = "^1.4.0"
 plotly = "^5.15.0"
-pymongo-stubs = "^0.2.0"
-motor-stubs = "^1.7.1"
+motor = "^3.3.2"
+motor-types = "^1.0.0b4"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
@@ -40,6 +39,7 @@ sphinx_rtd_theme = "*"
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.1.11"
+mypy = "^1.8.0"
 
 
 [tool.ruff]
@@ -58,3 +58,12 @@ strict = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.mypy]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+python_version = "3.10"
+ignore_missing_imports = true
+mypy_path = "app"

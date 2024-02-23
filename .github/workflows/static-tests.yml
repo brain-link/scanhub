@@ -52,6 +52,10 @@ jobs:
           virtualenvs-create: false
           virtualenvs-in-project: false
 
+      - name: Update pip
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry run pip install --upgrade pip
+
       - name: Cache poetry dependencies
         uses: actions/cache@v3
         id: cached-poetry-dependencies
@@ -77,6 +81,10 @@ jobs:
       - name: Install shared-library
         run: pip install ./base/shared_libs/
 
-      - name: Run linter
+      - name: Run ruff linter
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
         run: poetry run ruff check
+
+      - name: Run mypy type checker
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry run mypy app/ --install-types --non-interactive
