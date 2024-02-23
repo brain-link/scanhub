@@ -5,8 +5,7 @@ ScanHub
 Synopsis
 ========
 
-ScanHub functions as a cloud-based, open-source multimodal acquisition platform, with a pronounced emphasis on MRI technology. Developed to address extant limitations of traditional MRI infrastructures—including restricted scalability, elevated operational costs, and barriers to effective interprofessional collaboration—ScanHub facilitates a shift towards cloud computing for the purposes of image reconstruction, processing, and storage. By decentralizing these processes away from on-site systems, ScanHub not only mitigates costs but also augments scalability and fosters cooperative endeavors in MRI research and clinical practice. Inherently open-source, the platform upholds transparency, standardization, and innovation within the MRI community, offering a set of features such as resource utilization, data sharing capabilities, stringent security, and integration with simulation devices. Thus, ScanHub reconfigures methodologies related to MRI data management, potentially facilitating further breakthroughs in the field of medical imaging.
-
+ScanHub is an innovative cloud-based, open-source platform that transforms how MRI data is processed, stored, and shared. Leveraging the power of cloud computing, ScanHub offers an array of features, such as efficient resource utilization, enhanced data sharing, rigorous security measures, and integration of advanced simulation devices. 
 
 Introduction
 ============

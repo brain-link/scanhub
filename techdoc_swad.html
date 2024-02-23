@@ -28,8 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -44,7 +43,6 @@
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Code Documentation" href="autoapi/index.html" />
     <link rel="prev" title="Software Requirement Specification (SWRS)" href="techdoc_swrs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -147,7 +145,7 @@
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -155,13 +153,6 @@
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="scanhub_techdoc.html">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -295,7 +286,7 @@ document.write(`
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
+                        API
                       </a>
                     </li>
                 
@@ -303,13 +294,6 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="scanhub_techdoc.html">
                         Technical Documentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
                       </a>
                     </li>
                 
@@ -383,8 +367,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Description (DD)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirement Specification (PRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_dd.html">Device Descritpion (DD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_di.html">Design Input (DI)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="techdoc_swrs.html">Software Requirement Specification (SWRS)</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Software Architecture Design Description (SWAD)</a></li>
 </ul>
@@ -484,11 +468,6 @@ For additional details and specifications, refer to the design input documentati
 </section>
 <section id="system-context">
 <h2>System Context<a class="headerlink" href="#system-context" title="Link to this heading">#</a></h2>
-<section id="key-scenarios">
-<h3>Key Scenarios<a class="headerlink" href="#key-scenarios" title="Link to this heading">#</a></h3>
-<p>The following key scenarios focus on the basic functionality of the device from both the user’s and system’s perspectives. This includes user interactions, as well as essential system procedures like start up, shutdown, and service functionality. These scenarios are crucial for ensuring the software architecture supports seamless operation and maintenance of the MRI system.</p>
-<p>TBD - Add Key Scenarios</p>
-</section>
 </section>
 <section id="system-decomposition">
 <h2>System Decomposition<a class="headerlink" href="#system-decomposition" title="Link to this heading">#</a></h2>
@@ -508,17 +487,12 @@ For additional details and specifications, refer to the design input documentati
 </thead>
 <tbody>
 <tr class="row-even"><td><p>SWAD_CMP_0001</p></td>
-<td><p>Device Manager</p></td>
-<td><p>Manages connected devices, before and during acquisition.</p></td>
-<td><p>A</p></td>
+<td><p>column 2</p></td>
+<td><p>column 3</p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>SWAD_CMP_0002</p></td>
-<td><p>Acquisition Control</p></td>
 <td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>SWAD_CMP_0003</p></td>
-<td><p>Workflow Engine</p></td>
 <td></td>
 <td></td>
 </tr>
@@ -558,15 +532,6 @@ For additional details and specifications, refer to the design input documentati
         <p class="prev-next-title">Software Requirement Specification (SWRS)</p>
       </div>
     </a>
-    <a class="right-next"
-       href="autoapi/index.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Code Documentation</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -594,10 +559,7 @@ For additional details and specifications, refer to the design input documentati
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figures">Figures</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-context">System Context</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-scenarios">Key Scenarios</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-context">System Context</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-decomposition">System Decomposition</a></li>
 </ul>
   </nav></div>
