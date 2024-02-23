@@ -3,10 +3,11 @@
 
 """Patient manager main file."""
 
-from api.db import init_db
-from api.routes import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from api.db import init_db
+from api.routes import router
 
 app = FastAPI(
     title="ScanHub-UI"

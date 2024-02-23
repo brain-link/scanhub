@@ -29,7 +29,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
   const navigate = useNavigate()
 
   // Context: Delete and edit options, anchor for context location
-  const [contextOpen, setContextOpen] = React.useState<number | null>(null)
+  const [contextOpen, setContextOpen] = React.useState<string | null>(null)
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
   const [examModalOpen, setExamModalOpen] = React.useState(false)
 
@@ -38,7 +38,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
     setContextOpen(null)
   }
 
-  const handleContextOpen = (e, examId) => {
+  const handleContextOpen = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, examId: string) => {
     e.preventDefault()
     setAnchorEl(e.currentTarget)
     setContextOpen(examId)
@@ -46,7 +46,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
 
   const deleteExam = useMutation(async () => {
     await client.examService.delete(exam.id).then(() => {
-      if (Number(params.examId) === exam.id) {
+      if (String(params.examId) === exam.id) {
         // Reset router path if this exam id is in the path
         navigate(`/patients/${params.patientId}`)
       }

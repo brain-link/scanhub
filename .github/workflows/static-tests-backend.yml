@@ -58,19 +58,12 @@ jobs:
       - name: Poetry install
         working-directory: ${{env.working-directory}}
         run: poetry install --no-interaction --with lint
+      
+      - name: Run ruff linter
+        working-directory: ${{ env.working-directory }}
+        run: poetry run ruff check
 
-      - name: Run pylint
-        working-directory: ${{env.working-directory}}
-        run: poetry run pylint app/
-          
-      - name: Run flake8
-        working-directory: ${{env.working-directory}}
-        run: poetry run flake8 app/
-        
-      - name: Run mypy
-        working-directory: ${{env.working-directory}}
-        run: poetry run mypy app/
-          
-      - name: Run pydocstyle
-        working-directory: ${{env.working-directory}}
-        run: poetry run pydocstyle app
+      - name: Run mypy type checker
+        working-directory: ${{ env.working-directory }}
+        run: poetry run mypy app/ --install-types --non-interactive
+

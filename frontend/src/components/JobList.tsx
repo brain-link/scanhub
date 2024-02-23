@@ -21,7 +21,7 @@ import sequenceClient from '../client/sequence-api'
 import { Alerts, ComponentProps } from '../interfaces/components.interface'
 import { Job } from '../interfaces/data.interface'
 import { Device } from '../interfaces/data.interface'
-import { Workflow } from '../interfaces/data.interface'
+// import { Workflow } from '../interfaces/data.interface'
 import { MRISequence } from '../interfaces/mri-data.interface'
 import { patientView } from '../utils/size_vars'
 import AlertItem from './AlertItem'
@@ -43,21 +43,22 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
     queryFn: () => deviceClient.getAll(),
   })
 
-  const {
-    data: workflows,
-    // isLoading: workflowsLoading,
-    // isError: workflowsError,
-  } = useQuery<Workflow[], Error>({
-    queryKey: ['workflows'],
-    queryFn: () => client.workflowService.getAll(),
-  })
+  // TODO: Workflow API is currently not working
+  // const {
+  //   data: workflows,
+  //   // isLoading: workflowsLoading,
+  //   // isError: workflowsError,
+  // } = useQuery<Workflow[], Error>({
+  //   queryKey: ['workflows'],
+  //   queryFn: () => client.workflowService.getAll(),
+  // })
 
-  React.useEffect(() => {
-    console.log('Workflows: ', workflows)
-    if (workflows) {
-      console.log('Definition type: ', typeof workflows[0].definition)
-    }
-  }, [workflows])
+  // React.useEffect(() => {
+  //   console.log('Workflows: ', workflows)
+  //   if (workflows) {
+  //     console.log('Definition type: ', typeof workflows[0].definition)
+  //   }
+  // }, [workflows])
 
   const {
     data: sequences,
@@ -181,7 +182,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
             onClick={() => {
               setJobModalOpen(true)
             }}
-            disabled={params.procedureId === undefined}
+            disabled={params.examId === undefined}
           >
             <AddSharpIcon />
           </IconButton>
@@ -225,7 +226,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
             >
               <AlertItem
                 title='Nothing to show...'
-                info='Please select an exam and a procedure to view the jobs.'
+                info='Please select an exam to view the jobs.'
                 type={Alerts.Neutral}
               />
             </Stack>

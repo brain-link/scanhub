@@ -17,22 +17,9 @@ pydantic = "^1.10.0"
 python = ">=3.10,<3.11"
 uvicorn = {extras = ["standard"], version = "^0.17.5"}
 asyncpg = "^0.25.0"
-numpy = "^1.24.0"
-plotly = "^5.14.0"
 psycopg2-binary = "^2.9.6"
-scipy = "^1.10.0"
-pypulseq = "^1.4.0"
 async-sqlalchemy = "^1.0.0"
 fastapi = "^0.95.2"
-
-[tool.poetry.group.lint.dependencies]
-mypy = "*"
-flake8 = "*"
-Flake8-pyproject = "*"  # flake8 by deefault cannot be configured via this toml file, this package allows the configuration
-isort = "*"
-autopep8 = "*"
-pydocstyle = "*"
-pylint = "*"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
@@ -43,21 +30,35 @@ pytest = "*"
 sphinx = "*"
 sphinx_rtd_theme = "*"
 
-[tool.pydocstyle]
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.1.14"
+mypy = "^1.8.0"
+
+
+[tool.ruff]
+src = ["app"]
+line-length = 120
+indent-width = 4
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enable linters
+# W = pycodestyle, F = Pyflakes, S = flake8-bandit, I = isort, N = pep8-naming, D = pydocstyle
+select = ["W", "F", "S", "I", "N", "D"]
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
-
-[tool.pylint]
-py-version = "3.10"
-max-attributes = 20
-max-line-length = 120
-extension-pkg-allow-list = ["pydantic"]
-disable = ["too-few-public-methods"]    # suppress warning at pydantic BaseModel and sqlalchemy ORM model
-
-[tool.flake8]
-max-line-length = 120
 
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]
-
-[tool.poetry.scripts]
-lint = ""   # run all linting tools at once
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+python_version = "3.10"
+ignore_missing_imports = true
+mypy_path = "app"
