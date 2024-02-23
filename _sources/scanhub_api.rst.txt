@@ -1,7 +1,7 @@
-API
-===
+Web API
+=======
 
-API documentation for services.
+Web API documentation for services.
 
 .. toctree::
    :maxdepth: 1

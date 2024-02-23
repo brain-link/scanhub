@@ -1,0 +1,614 @@
+:py:mod:`exam-manager.app.api.models`
+=====================================
+
+.. py:module:: exam-manager.app.api.models
+
+.. autoapi-nested-parse::
+
+   Definitions of pydantic models and helper functions.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.api.models.XYZ
+   exam-manager.app.api.models.SequenceParameters
+   exam-manager.app.api.models.Gender
+   exam-manager.app.api.models.AcquisitionLimits
+   exam-manager.app.api.models.BaseDevice
+   exam-manager.app.api.models.BaseWorkflow
+   exam-manager.app.api.models.BaseExam
+   exam-manager.app.api.models.BaseJob
+   exam-manager.app.api.models.BaseRecord
+   exam-manager.app.api.models.RecordIn
+   exam-manager.app.api.models.DeviceOut
+   exam-manager.app.api.models.WorkflowOut
+   exam-manager.app.api.models.RecordOut
+   exam-manager.app.api.models.JobOut
+   exam-manager.app.api.models.ExamOut
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.api.models.get_workflow_out
+   exam-manager.app.api.models.get_device_out
+   exam-manager.app.api.models.get_record_out
+   exam-manager.app.api.models.get_job_out
+   exam-manager.app.api.models.get_exam_out
+
+
+
+.. py:class:: XYZ
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   XYZ model.
+
+   .. py:attribute:: X
+      :type: float
+
+      
+
+   .. py:attribute:: Y
+      :type: float
+
+      
+
+   .. py:attribute:: Z
+      :type: float
+
+      
+
+
+.. py:class:: SequenceParameters
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   SequenceParameters model.
+
+   .. py:attribute:: fov
+      :type: XYZ
+
+      
+
+   .. py:attribute:: fov_offset
+      :type: XYZ
+
+      
+
+
+.. py:class:: Gender
+
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+   Gender model.
+
+   .. py:attribute:: MALE
+      :value: 'MALE'
+
+      
+
+   .. py:attribute:: FEMALE
+      :value: 'FEMALE'
+
+      
+
+   .. py:attribute:: OTHER
+      :value: 'OTHER'
+
+      
+
+   .. py:attribute:: NOT_GIVEN
+      :value: 'NOT_GIVEN'
+
+      
+
+
+.. py:class:: AcquisitionLimits
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   AcquisitionLimits models.
+
+   .. py:attribute:: patient_height
+      :type: float
+
+      
+
+   .. py:attribute:: patient_weight
+      :type: float
+
+      
+
+   .. py:attribute:: patient_gender
+      :type: Gender
+
+      
+
+   .. py:attribute:: patient_age
+      :type: int
+
+      
+
+
+.. py:class:: BaseDevice
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Device base model.
+
+   .. py:class:: Config
+
+
+      Base class configuration.
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: manufacturer
+      :type: str
+
+      
+
+   .. py:attribute:: modality
+      :type: str
+
+      
+
+   .. py:attribute:: status
+      :type: str
+
+      
+
+   .. py:attribute:: site
+      :type: str | None
+
+      
+
+   .. py:attribute:: ip_address
+      :type: str
+
+      
+
+
+.. py:class:: BaseWorkflow
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Workflow base model.
+
+   .. py:class:: Config
+
+
+      Base class configuration.
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: host
+      :type: str
+
+      
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: manufacturer
+      :type: str
+
+      
+
+   .. py:attribute:: modality
+      :type: str
+
+      
+
+   .. py:attribute:: type
+      :type: str
+
+      
+
+   .. py:attribute:: status
+      :type: str
+
+      
+
+   .. py:attribute:: kafka_topic
+      :type: str
+
+      
+
+
+.. py:class:: BaseExam
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Exam base model.
+
+   .. py:class:: Config
+
+
+      Base class configuration.
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: patient_id
+      :type: int
+
+      
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: country
+      :type: str | None
+
+      
+
+   .. py:attribute:: site
+      :type: str | None
+
+      
+
+   .. py:attribute:: address
+      :type: str | None
+
+      
+
+   .. py:attribute:: creator
+      :type: str
+
+      
+
+   .. py:attribute:: status
+      :type: str
+
+      
+
+
+.. py:class:: BaseJob
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Job base model.
+
+   .. py:class:: Config
+
+
+      Base class configuration.
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: type
+      :type: str
+
+      
+
+   .. py:attribute:: comment
+      :type: str | None
+
+      
+
+   .. py:attribute:: exam_id
+      :type: uuid.UUID
+
+      
+
+   .. py:attribute:: sequence_id
+      :type: str
+
+      
+
+   .. py:attribute:: workflow_id
+      :type: int | None
+
+      
+
+   .. py:attribute:: device_id
+      :type: str
+
+      
+
+   .. py:attribute:: acquisition_limits
+      :type: AcquisitionLimits
+
+      
+
+   .. py:attribute:: sequence_parameters
+      :type: SequenceParameters
+
+      
+
+
+.. py:class:: BaseRecord
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Record base model.
+
+   .. py:class:: Config
+
+
+      Base class configuration.
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: data_path
+      :type: str | None
+
+      
+
+   .. py:attribute:: comment
+      :type: str | None
+
+      
+
+
+.. py:class:: RecordIn
+
+
+   Bases: :py:obj:`BaseRecord`
+
+   Record input model.
+
+   .. py:attribute:: job_id
+      :type: uuid.UUID
+
+      
+
+
+.. py:class:: DeviceOut
+
+
+   Bases: :py:obj:`BaseDevice`
+
+   Devicee output model.
+
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: datetime.datetime
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: datetime.datetime | None
+
+      
+
+
+.. py:class:: WorkflowOut
+
+
+   Bases: :py:obj:`BaseWorkflow`
+
+   Workflow output model.
+
+   .. py:attribute:: id
+      :type: int
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: datetime.datetime
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: datetime.datetime | None
+
+      
+
+
+.. py:class:: RecordOut
+
+
+   Bases: :py:obj:`BaseRecord`
+
+   Record output model.
+
+   .. py:attribute:: id
+      :type: uuid.UUID
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: datetime.datetime
+
+      
+
+
+.. py:class:: JobOut
+
+
+   Bases: :py:obj:`BaseJob`
+
+   Job output model.
+
+   .. py:attribute:: id
+      :type: uuid.UUID
+
+      
+
+   .. py:attribute:: is_acquired
+      :type: bool
+
+      
+
+   .. py:attribute:: device
+      :type: DeviceOut | None
+
+      
+
+   .. py:attribute:: workflow
+      :type: WorkflowOut | None
+
+      
+
+   .. py:attribute:: records
+      :type: list[RecordOut]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: datetime.datetime
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: datetime.datetime | None
+
+      
+
+
+.. py:class:: ExamOut
+
+
+   Bases: :py:obj:`BaseExam`
+
+   Exam output model.
+
+   .. py:attribute:: id
+      :type: uuid.UUID
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: datetime.datetime
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: datetime.datetime | None
+
+      
+
+   .. py:attribute:: jobs
+      :type: list[JobOut]
+
+      
+
+
+.. py:function:: get_workflow_out(data: exam-manager.app.api.db.Workflow) -> WorkflowOut
+   :async:
+
+   Workflow output helper function.
+
+   Parameters
+   ----------
+   data
+       Workflow database model
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+
+.. py:function:: get_device_out(data: exam-manager.app.api.db.Device) -> DeviceOut
+   :async:
+
+   Device output helper function.
+
+   Parameters
+   ----------
+   data
+       Device database model
+
+   Returns
+   -------
+       Device pydantic output model
+
+
+.. py:function:: get_record_out(data: exam-manager.app.api.db.Record) -> RecordOut
+   :async:
+
+   Record output helper function.
+
+   Parameters
+   ----------
+   data
+       Record database model
+
+   Returns
+   -------
+       Record pydantic output model
+
+
+.. py:function:: get_job_out(data: exam-manager.app.api.db.Job, device: exam-manager.app.api.db.Device = None, workflow: exam-manager.app.api.db.Workflow = None) -> JobOut
+   :async:
+
+   Job output helper function.
+
+   Parameters
+   ----------
+   data
+       Job database model
+   device, optional
+       Device database model, by default None
+   workflow, optional
+       Workflow database model, by default None
+
+   Returns
+   -------
+       Job pydantic output model
+
+
+.. py:function:: get_exam_out(data: exam-manager.app.api.db.Exam) -> ExamOut
+   :async:
+
+   Exam output helper function.
+
+   Parameters
+   ----------
+   data
+       Exam database model
+
+   Returns
+   -------
+       Exam pydantic output model
+
+

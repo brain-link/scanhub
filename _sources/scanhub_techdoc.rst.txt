@@ -9,7 +9,7 @@ Technical documentation of ScanHub.
    :maxdepth: 1
 
    techdoc_dd
-   techdoc_di
+   techdoc_prs
 
    techdoc_swrs
    techdoc_swad

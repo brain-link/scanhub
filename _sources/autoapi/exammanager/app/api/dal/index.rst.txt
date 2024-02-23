@@ -1,0 +1,270 @@
+:py:mod:`exam-manager.app.api.dal`
+==================================
+
+.. py:module:: exam-manager.app.api.dal
+
+.. autoapi-nested-parse::
+
+   Data access layer.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   exam-manager.app.api.dal.exam_add
+   exam-manager.app.api.dal.exam_get
+   exam-manager.app.api.dal.exam_get_all
+   exam-manager.app.api.dal.exam_delete
+   exam-manager.app.api.dal.update_exam
+   exam-manager.app.api.dal.add_job
+   exam-manager.app.api.dal.get_job
+   exam-manager.app.api.dal.get_all_jobs
+   exam-manager.app.api.dal.delete_job
+   exam-manager.app.api.dal.update_job
+   exam-manager.app.api.dal.add_record
+   exam-manager.app.api.dal.update_record
+   exam-manager.app.api.dal.get_record
+   exam-manager.app.api.dal.get_all_records
+   exam-manager.app.api.dal.delete_record
+
+
+
+.. py:function:: exam_add(payload: exam-manager.app.api.models.BaseExam) -> exam-manager.app.api.db.Exam
+   :async:
+
+   Create new exam.
+
+   Parameters
+   ----------
+   payload
+       Exam pydantic base model
+
+   Returns
+   -------
+       Database orm model of created exam
+
+
+.. py:function:: exam_get(exam_id: uuid.UUID) -> exam-manager.app.api.db.Exam | None
+   :async:
+
+   Get exam by id.
+
+   Parameters
+   ----------
+   exam_id
+       Id of requested exam
+
+   Returns
+   -------
+       Database orm model of exam or none
+
+
+.. py:function:: exam_get_all(patient_id: int) -> list[exam-manager.app.api.db.Exam]
+   :async:
+
+   Get a list of all exams assigned to a certain patient.
+
+   Parameters
+   ----------
+   patient_id
+       Id of the parent patient entry, exams are assigned to
+
+   Returns
+   -------
+       List of exam data base orm models
+
+
+.. py:function:: exam_delete(exam_id: uuid.UUID) -> bool
+   :async:
+
+   Delete exam by id.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the exam to be deleted
+
+   Returns
+   -------
+       Success of deletion
+
+
+.. py:function:: update_exam(exam_id: uuid.UUID, payload: exam-manager.app.api.models.BaseExam) -> exam-manager.app.api.db.Exam | None
+   :async:
+
+   Update existing exam entry.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the database entry to be updated
+
+   payload
+       Pydantic base exam model with data to be updated
+
+   Returns
+   -------
+       Database orm model of updated exam
+
+
+.. py:function:: add_job(payload: exam-manager.app.api.models.BaseJob) -> exam-manager.app.api.db.Job
+   :async:
+
+   Add new job.
+
+   Parameters
+   ----------
+   payload
+       Job pydantic base model with data for job creation
+
+   Returns
+   -------
+       Database orm model of created job
+
+
+.. py:function:: get_job(job_id: uuid.UUID) -> exam-manager.app.api.db.Job | None
+   :async:
+
+   Get job by id.
+
+   Parameters
+   ----------
+   job_id
+       Id of the requested job
+
+   Returns
+   -------
+       Database orm model with data of requested job
+
+
+.. py:function:: get_all_jobs(exam_id: uuid.UUID) -> list[exam-manager.app.api.db.Job]
+   :async:
+
+   Get a list of all jobs assigned to a certain exam.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the parent exam entry, jobs are assigned to
+
+   Returns
+   -------
+       List of job data base orm models
+
+
+.. py:function:: delete_job(job_id: uuid.UUID) -> bool
+   :async:
+
+   Delete a job by ID.
+
+   Parameters
+   ----------
+   job_id
+       ID of job to be deleted
+
+   Returns
+   -------
+       Success of delete event
+
+
+.. py:function:: update_job(job_id: uuid.UUID, payload: exam-manager.app.api.models.BaseJob) -> exam-manager.app.api.db.Job | None
+   :async:
+
+   Update existing job in database.
+
+   Parameters
+   ----------
+   job_id
+       Id of the job to be updateed
+   payload
+       Job pydantic base model with data to be updated
+
+   Returns
+   -------
+       Job database orm model of updated job
+
+
+.. py:function:: add_record(payload: exam-manager.app.api.models.RecordIn) -> exam-manager.app.api.db.Record
+   :async:
+
+   Add new record to database.
+
+   Parameters
+   ----------
+   payload
+       Record pydantic input model
+
+   Returns
+   -------
+       Database orm model of created record
+
+
+.. py:function:: update_record(record_id: uuid.UUID, payload: exam-manager.app.api.models.RecordIn) -> exam-manager.app.api.db.Record | None
+   :async:
+
+   Update existing record.
+
+   Parameters
+   ----------
+   record_id
+       Id of the record to be updated
+   payload
+       Dictionary with data to be updated
+
+   Returns
+   -------
+       Database orm model of updated record
+
+
+.. py:function:: get_record(record_id: uuid.UUID) -> exam-manager.app.api.db.Record | None
+   :async:
+
+   Get a record from database by id.
+
+   Parameters
+   ----------
+   record_id
+       Id of the requested record
+
+   Returns
+   -------
+       Database orm model of requested record
+
+
+.. py:function:: get_all_records(job_id: uuid.UUID) -> list[exam-manager.app.api.db.Record]
+   :async:
+
+   Get a list of all records assigned to a certain job.
+
+   Parameters
+   ----------
+   job_id
+       Id of the parent job entry, records are assigned to
+
+   Returns
+   -------
+       List of record data base orm models
+
+
+.. py:function:: delete_record(record_id: uuid.UUID) -> bool
+   :async:
+
+   Delete record by id.
+
+   Parameters
+   ----------
+   record_id
+       Id of the record to be deleted
+
+   Returns
+   -------
+       Success of deletion
+
+

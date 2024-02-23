@@ -1,0 +1,85 @@
+:py:mod:`workflow-manager.app.api.producer`
+===========================================
+
+.. py:module:: workflow-manager.app.api.producer
+
+.. autoapi-nested-parse::
+
+   Producer Singleton class definition for Kafka producer.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   workflow-manager.app.api.producer.Producer
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   workflow-manager.app.api.producer.main
+
+
+
+.. py:class:: Producer
+
+
+   Producer Singleton class for Kafka producer.
+
+   .. py:attribute:: _instance
+      :type: Optional[Producer]
+
+      
+
+   .. py:attribute:: _producer
+      :type: aiokafka.AIOKafkaProducer
+
+      
+
+   .. py:method:: start()
+      :async:
+
+      Start producer.
+
+
+   .. py:method:: stop()
+      :async:
+
+      Stop producer.
+
+
+   .. py:method:: send(topic, message)
+      :async:
+
+      Send message to Kafka topic.
+
+      Parameters
+      ----------
+      topic
+          Kafka topic to send message to
+      message
+          Message to be sent
+
+
+   .. py:method:: get_producer()
+      :classmethod:
+
+      Get producer.
+
+
+
+.. py:function:: main()
+   :async:
+
+   Define main test function.
+
+
