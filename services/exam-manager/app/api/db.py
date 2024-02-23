@@ -13,7 +13,7 @@ from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
+from scanhub_libraries.models import TaskType, TaskStatus
 
 # Create base for exam and job table
 class Base(DeclarativeBase):
@@ -109,7 +109,7 @@ class Exam(Base):
     )
 
 
-class Job(Base):
+class Job(Base): # TBD: rename to "Workflow"
     """Job ORM model."""
 
     __tablename__ = "job"
@@ -119,44 +119,60 @@ class Job(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     # Relations and references
-    exam_id: Mapped[int] = mapped_column(ForeignKey("exam.id"))
-    workflow_id: Mapped[int] = mapped_column(nullable=True)
-    device_id: Mapped[str] = mapped_column(nullable=True)
-    sequence_id: Mapped[str] = mapped_column(nullable=False)
-    records: Mapped[list["Record"]] = relationship(lazy="selectin")
+    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"))
+    # workflow_id: Mapped[int] = mapped_column(nullable=True)
+    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
 
     # Fields
-    type: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
-    is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
+    # is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
+    is_finished: Mapped[bool] = mapped_column(nullable=False, default=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
-    acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=False)
-    sequence_parameters: Mapped[SequenceParameters] = mapped_column(type_=JSON, nullable=False)
 
 
+class Task(Base):
+    """Task ORM model."""
 
-class Record(Base):
-    """Record ORM model."""
-
-    __tablename__ = "record"
+    __tablename__ = "task"
     __table_args__ = {"extend_existing": True}
 
     # Use uuid here
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    description: Mapped[str] = mapped_column(nullable=False)
+    type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
+
+    # Arguments and parameters
+    # Example: "args": {"arg1": "x", "arg2": "y"}
+    args: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
+    # acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=False)
+    # sequence_parameters: Mapped[SequenceParameters] = mapped_column(type_=JSON, nullable=False)
+    # device_parameters: Mapped[DeviceParameters] = mapped_column(type_=JSON, nullable=False)
+
+
+    # Input and output artifacts with export destination
+    # Example: {"input": [{"name": "env_HOLOSCAN_INPUT_PATH", "value": "{{ context.input.dicom }}"}]}
+    # https://github.com/Project-MONAI/monai-deploy/blob/main/deploy/monai-deploy-express/sample-workflows/hello-world.json
+    artifacts: Mapped[dict[str, list[dict[str, str]]]] = mapped_column(type_=JSON, nullable=True) # implemention of input and output artifacts for artifact types as replacement for string
+
+    # List of task destinations, which are for example used to create the chain of topics in the kafka message broker, i.e., target topics
+    task_destinations: Mapped[list[dict[str, str]]] = mapped_column(type_=JSON, nullable=True)
+
     # Relations and references
-    job_id: Mapped[int] = mapped_column(ForeignKey("job.id"))
-    data_path: Mapped[str] = mapped_column(nullable=True)
+    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job.id"))
+
+    status: Mapped[dict[TaskStatus, str]] = mapped_column(type_=JSON, nullable=False)
+
     # Fields
-    comment: Mapped[str] = mapped_column(nullable=True)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
 
+# TBD DeviceTask(Task):
 
 
 # Create automap base

@@ -19,6 +19,7 @@ from .models import (
     get_job_out,
     get_record_out,
 )
+from scanhub_libraries.models import BaseTask, TaskOut
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -160,6 +161,7 @@ async def job_create(payload: BaseJob) -> JobOut:
     """
     if not (job := await dal.add_job(payload)):
         raise HTTPException(status_code=404, detail="Could not create job")
+    print("NEW JOB:: ", job)
     return await get_job_out(data=job)
 
 
@@ -257,88 +259,162 @@ async def job_update(job_id: UUID | str, payload: BaseJob) -> JobOut:
     return await get_job_out(data=job)
 
 
-@router.post("/record", response_model=RecordOut, status_code=201, tags=["records"])
-async def record_create(payload: RecordIn) -> RecordOut:
-    """Create record endpoint.
+# @router.post("/record", response_model=RecordOut, status_code=201, tags=["records"])
+# async def record_create(payload: RecordIn) -> RecordOut:
+#     """Create record endpoint.
+
+#     Parameters
+#     ----------
+#     payload
+#         Record pydantic input model
+
+#     Returns
+#     -------
+#         Record pydantic output model
+
+#     Raises
+#     ------
+#     HTTPException
+#         404: Creation unsuccessful
+#     """
+#     if not (record := await dal.add_record(payload)):
+#         raise HTTPException(status_code=404, detail="Could not create record")
+#     return await get_record_out(data=record)
+
+
+# @router.put("/record/{record_id}/", response_model=RecordOut, status_code=200, tags=["records"])
+# async def update_record(record_id: UUID | str, payload: dict):
+#     """Update existing record.
+
+#     Parameters
+#     ----------
+#     record_id
+#         Id of the record to be updated
+#     payload
+#         Record pydantic input model
+
+#     Returns
+#     -------
+#         Record pydantic output model
+
+#     Raises
+#     ------
+#     HTTPException
+#         404: Not found
+#     """
+#     _id = UUID(record_id) if not isinstance(record_id, UUID) else record_id
+#     record = await dal.update_record(_id, payload)
+#     if not record:
+#         raise HTTPException(status_code=404, detail="Record not found")
+#     return await get_record_out(record)
+
+
+# @router.get("/record/{record_id}", response_model=RecordOut, status_code=200, tags=["records"])
+# async def record_get(record_id: UUID | str) -> RecordOut:
+#     """Get single record endpoint.
+
+#     Parameters
+#     ----------
+#     record_id
+#         Id of the record to return
+
+#     Returns
+#     -------
+#         Record pydantic output model
+
+#     Raises
+#     ------
+#     HTTPException
+#         404: Not found
+#     """
+#     _id = UUID(record_id) if not isinstance(record_id, UUID) else record_id
+#     if not (record := await dal.get_record(_id)):
+#         raise HTTPException(status_code=404, detail="Record not found")
+#     return await get_record_out(data=record)
+
+
+# @router.get(
+#     "/record/all/{job_id}",
+#     response_model=list[RecordOut],
+#     status_code=200,
+#     tags=["records"],
+# )
+# async def record_get_all(job_id: UUID | str) -> list[RecordOut]:
+#     """Get all records of a job endpoint.
+
+#     Parameters
+#     ----------
+#     job_id
+#         Id of parental job
+
+#     Returns
+#     -------
+#         List of record pydantic output model
+#     """
+#     _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
+#     if not (records := await dal.get_all_records(_id)):
+#         # Don't raise exception here, list might be empty.
+#         return []
+#     return [await get_record_out(data=record) for record in records]
+
+
+# @router.delete("/record/{record_id}", response_model={}, status_code=204, tags=["records"])
+# async def record_delete(record_id: UUID | str) -> None:
+#     """Delete record endpoint.
+
+#     Parameters
+#     ----------
+#     record_id
+#         Id of the record to be deleted
+
+#     Raises
+#     ------
+#     HTTPException
+#         404: Not found
+#     """
+#     _id = UUID(record_id) if not isinstance(record_id, UUID) else record_id
+#     if not await dal.delete_record(_id):
+#         raise HTTPException(status_code=404, detail="Record not found")
+
+
+
+
+
+
+
+
+
+@router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
+async def task_create(payload: BaseTask) -> TaskOut:
+    """Create task endpoint.
 
     Parameters
     ----------
     payload
-        Record pydantic input model
+        Task pydantic input model
 
     Returns
     -------
-        Record pydantic output model
+        Task pydantic output model
 
     Raises
     ------
     HTTPException
         404: Creation unsuccessful
     """
-    if not (record := await dal.add_record(payload)):
-        raise HTTPException(status_code=404, detail="Could not create record")
-    return await get_record_out(data=record)
-
-
-@router.put("/record/{record_id}/", response_model=RecordOut, status_code=200, tags=["records"])
-async def update_record(record_id: UUID | str, payload: dict):
-    """Update existing record.
-
-    Parameters
-    ----------
-    record_id
-        Id of the record to be updated
-    payload
-        Record pydantic input model
-
-    Returns
-    -------
-        Record pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    _id = UUID(record_id) if not isinstance(record_id, UUID) else record_id
-    record = await dal.update_record(_id, payload)
-    if not record:
-        raise HTTPException(status_code=404, detail="Record not found")
-    return await get_record_out(record)
-
-
-@router.get("/record/{record_id}", response_model=RecordOut, status_code=200, tags=["records"])
-async def record_get(record_id: UUID | str) -> RecordOut:
-    """Get single record endpoint.
-
-    Parameters
-    ----------
-    record_id
-        Id of the record to return
-
-    Returns
-    -------
-        Record pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    _id = UUID(record_id) if not isinstance(record_id, UUID) else record_id
-    if not (record := await dal.get_record(_id)):
-        raise HTTPException(status_code=404, detail="Record not found")
-    return await get_record_out(data=record)
+    if not (task := await dal.add_task(payload)):
+        raise HTTPException(status_code=404, detail="Could not create task")
+    return await TaskOut(**task)
 
 
 @router.get(
-    "/record/all/{job_id}",
-    response_model=list[RecordOut],
+    "/task/all/{job_id}",
+    response_model=list[TaskOut],
     status_code=200,
-    tags=["records"],
+    tags=["tasks"],
 )
-async def record_get_all(job_id: UUID | str) -> list[RecordOut]:
-    """Get all records of a job endpoint.
+async def task_get_all(job_id: UUID | str) -> list[TaskOut]:
+    """Get all tasks of a job endpoint.
 
     Parameters
     ----------
@@ -347,29 +423,29 @@ async def record_get_all(job_id: UUID | str) -> list[RecordOut]:
 
     Returns
     -------
-        List of record pydantic output model
+        List of task pydantic output model
     """
     _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (records := await dal.get_all_records(_id)):
+    if not (tasks := await dal.get_all_tasks(_id)):
         # Don't raise exception here, list might be empty.
         return []
-    return [await get_record_out(data=record) for record in records]
+    return [await TaskOut(**task) for task in tasks]
 
 
-@router.delete("/record/{record_id}", response_model={}, status_code=204, tags=["records"])
-async def record_delete(record_id: UUID | str) -> None:
-    """Delete record endpoint.
+@router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])
+async def task_delete(task_id: UUID | str) -> None:
+    """Delete task endpoint.
 
     Parameters
     ----------
-    record_id
-        Id of the record to be deleted
+    task_id
+        Id of the task to be deleted
 
     Raises
     ------
     HTTPException
         404: Not found
     """
-    _id = UUID(record_id) if not isinstance(record_id, UUID) else record_id
-    if not await dal.delete_record(_id):
-        raise HTTPException(status_code=404, detail="Record not found")
+    _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
+    if not await dal.delete_task(_id):
+        raise HTTPException(status_code=404, detail="Task not found")

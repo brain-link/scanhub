@@ -8,7 +8,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Extra
 
-from .db import AcquisitionLimits, Device, Exam, Job, Record, SequenceParameters, Workflow
+from .db import AcquisitionLimits, Device, Exam, Job, SequenceParameters, Workflow
 
 
 class BaseDevice(BaseModel):
@@ -192,7 +192,8 @@ async def get_device_out(data: Device) -> DeviceOut:
     )
 
 
-async def get_record_out(data: Record) -> RecordOut:
+# async def get_record_out(data: Record) -> RecordOut:
+async def get_record_out(data) -> RecordOut:
     """Record output helper function.
 
     Parameters

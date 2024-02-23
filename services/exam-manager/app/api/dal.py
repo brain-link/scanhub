@@ -9,9 +9,10 @@ from uuid import UUID
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from .db import Exam, Job, Record, async_session
+from .db import Exam, Job, Task, async_session
 from .models import BaseExam, BaseJob, RecordIn
 
+from scanhub_libraries.models import BaseTask, TaskOut
 
 async def exam_add(payload: BaseExam) -> Exam:
     """Create new exam.
@@ -216,100 +217,166 @@ async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
         return None
 
 
-async def add_record(payload: RecordIn) -> Record:
-    """Add new record to database.
+# async def add_record(payload: RecordIn) -> Record:
+#     """Add new record to database.
+
+#     Parameters
+#     ----------
+#     payload
+#         Record pydantic input model
+
+#     Returns
+#     -------
+#         Database orm model of created record
+#     """
+#     new_record = Record(**payload.dict())
+#     async with async_session() as session:
+#         session.add(new_record)
+#         await session.commit()
+#         await session.refresh(new_record)
+#     return new_record
+
+
+# async def update_record(record_id: UUID, payload: dict) -> (Record | None):
+#     """Update existing record.
+
+#     Parameters
+#     ----------
+#     record_id
+#         Id of the record to be updated
+#     payload
+#         Dictionary with data to be updated
+
+#     Returns
+#     -------
+#         Database orm model of updated record
+#     """
+#     async with async_session() as session:
+#         record = await session.get(Record, record_id)
+#         if record:
+#             record.update(payload)
+#             await session.commit()
+#             await session.refresh(record)
+#             return record
+#         return None
+
+
+# async def get_record(record_id: UUID) -> (Record | None):
+#     """Get a record from database by id.
+
+#     Parameters
+#     ----------
+#     record_id
+#         Id of the requested record
+
+#     Returns
+#     -------
+#         Database orm model of requested record
+#     """
+#     async with async_session() as session:
+#         record: (Record | None) = await session.get(Record, record_id)
+#     return record
+
+
+# async def get_all_records(job_id: UUID) -> list[Record]:
+#     """Get a list of all records assigned to a certain job.
+
+#     Parameters
+#     ----------
+#     job_id
+#         Id of the parent job entry, records are assigned to
+
+#     Returns
+#     -------
+#         List of record data base orm models
+#     """
+#     async with async_session() as session:
+#         result: Result = await session.execute(select(Record).where(Record.job_id == job_id))
+#         records = list(result.scalars().all())
+#     return records
+
+
+# async def delete_record(record_id: UUID) -> bool:
+#     """Delete record by id.
+
+#     Parameters
+#     ----------
+#     record_id
+#         Id of the record to be deleted
+
+#     Returns
+#     -------
+#         Success of deletion
+#     """
+#     async with async_session() as session:
+#         if record := await session.get(Record, record_id):
+#             await session.delete(record)
+#             await session.commit()
+#             return True
+#         return False
+
+
+
+
+
+
+
+
+
+
+async def add_task(payload: BaseTask) -> Task:
+    """Add new task to database.
 
     Parameters
     ----------
     payload
-        Record pydantic input model
+        Task pydantic base model
 
     Returns
     -------
-        Database orm model of created record
+        Database orm model of created task
     """
-    new_record = Record(**payload.dict())
+    new_task = Task(**payload.dict())
     async with async_session() as session:
-        session.add(new_record)
+        session.add(new_task)
         await session.commit()
-        await session.refresh(new_record)
-    return new_record
+        await session.refresh(new_task)
+    return new_task
 
 
-async def update_record(record_id: UUID, payload: dict) -> (Record | None):
-    """Update existing record.
-
-    Parameters
-    ----------
-    record_id
-        Id of the record to be updated
-    payload
-        Dictionary with data to be updated
-
-    Returns
-    -------
-        Database orm model of updated record
-    """
-    async with async_session() as session:
-        record = await session.get(Record, record_id)
-        if record:
-            record.update(payload)
-            await session.commit()
-            await session.refresh(record)
-            return record
-        return None
-
-
-async def get_record(record_id: UUID) -> (Record | None):
-    """Get a record from database by id.
-
-    Parameters
-    ----------
-    record_id
-        Id of the requested record
-
-    Returns
-    -------
-        Database orm model of requested record
-    """
-    async with async_session() as session:
-        record: (Record | None) = await session.get(Record, record_id)
-    return record
-
-
-async def get_all_records(job_id: UUID) -> list[Record]:
-    """Get a list of all records assigned to a certain job.
+async def get_all_tasks(job_id: UUID) -> list[Task]:
+    """Get a list of all tasks assigned to a certain job.
 
     Parameters
     ----------
     job_id
-        Id of the parent job entry, records are assigned to
+        Id of the parent job entry, tasks are assigned to
 
     Returns
     -------
-        List of record data base orm models
+        List of task data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Record).where(Record.job_id == job_id))
-        records = list(result.scalars().all())
-    return records
+        result: Result = await session.execute(select(Task).where(Task.job_id == job_id))
+        tasks = list(result.scalars().all())
+    return tasks
 
 
-async def delete_record(record_id: UUID) -> bool:
-    """Delete record by id.
+async def delete_task(task_id: UUID) -> bool:
+    """Delete task by id.
 
     Parameters
     ----------
-    record_id
-        Id of the record to be deleted
+    task_id
+        Id of the task to be deleted
 
     Returns
     -------
         Success of deletion
     """
     async with async_session() as session:
-        if record := await session.get(Record, record_id):
-            await session.delete(record)
+        if task := await session.get(Task, task_id):
+            await session.delete(task)
             await session.commit()
             return True
         return False

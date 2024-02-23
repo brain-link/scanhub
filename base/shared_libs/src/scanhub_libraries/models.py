@@ -35,7 +35,7 @@ class XYZ(BaseModel):
     Z: float
 
 
-class AcquisitionLimits(BaseModel):
+class AcquisitionLimits(BaseModel): # -> patient model
     """Pydantic definition of AcquisitionLimits."""
 
     patient_height: float
@@ -164,7 +164,7 @@ class BaseDevice(BaseModel):
     ip_address: str
 
 
-class BaseWorkflow(BaseModel):
+class BaseWorkflow(BaseModel): # obsolete
     """Workflow base model."""
 
     class Config:
@@ -198,7 +198,7 @@ class BaseExam(BaseModel):
     status: str
 
 
-class BaseProcedure(BaseModel):
+class BaseProcedure(BaseModel): # obsolete
     """Procedure base model."""
 
     class Config:
@@ -227,7 +227,7 @@ class BaseJob(BaseModel):
     sequence_parameters: SequenceParameters
 
 
-class BaseRecord(BaseModel):
+class BaseRecord(BaseModel):    # obsolete
     """Record base model."""
 
     class Config:
@@ -239,13 +239,13 @@ class BaseRecord(BaseModel):
     comment: str | None
 
 
-class ProcedureIn(BaseProcedure):
+class ProcedureIn(BaseProcedure): # obsolete
     """Procedure input model."""
 
     exam_id: UUID | str
 
 
-class RecordIn(BaseRecord):
+class RecordIn(BaseRecord): # obsolete
     """Record input model."""
 
     job_id: UUID
@@ -259,7 +259,7 @@ class DeviceOut(BaseDevice):
     datetime_updated: datetime | None
 
 
-class WorkflowOut(BaseWorkflow):
+class WorkflowOut(BaseWorkflow): # obsolete
     """Workflow output model."""
 
     id: int
@@ -267,8 +267,45 @@ class WorkflowOut(BaseWorkflow):
     datetime_updated: datetime | None
 
 
-class RecordOut(BaseRecord):
+class RecordOut(BaseRecord): # obsolete
     """Record output model."""
+
+    id: UUID
+    datetime_created: datetime
+
+
+class TaskType(Enum):
+    """Task type enum."""
+
+    PROCESSING_TASK = "PROCESSING_TASK"
+    DEVICE_TASK = "DEVICE_TASK"
+    CERTIFIED_DEVICE_TASK = "CERTIFIED_DEVICE_TASK"
+    CERTIFIED_PROCESSING_TASK = "CERTIFIED_PROCESSING_TASK"
+
+
+class TaskStatus(Enum):
+    """Task status enum."""
+
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    ERROR = "ERROR"
+
+class BaseTask(BaseModel):
+    """Task model."""
+
+    description: str
+    type: TaskType
+    args: dict[str, str]
+    artifacts: dict[str, list[dict[str, str]]]
+    task_destination: list[dict[str, str]]
+    job_id: UUID
+    status: dict[TaskStatus, str]
+
+
+class TaskOut(BaseTask):
+    """Task output model."""
 
     id: UUID
     datetime_created: datetime
@@ -293,3 +330,5 @@ class ExamOut(BaseExam):
     datetime_created: datetime
     datetime_updated: datetime | None
     jobs: list[JobOut]
+
+

@@ -83,7 +83,7 @@ async def readiness() -> dict:
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
-    required_tables = ["exam", "procedure", "job", "record"]
+    required_tables = ["exam", "job", "task"]
     # print("Existing tables: ", existing_tables)
 
     if not all(t in existing_tables for t in required_tables):
