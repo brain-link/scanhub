@@ -189,7 +189,8 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
     # TBD: On successful upload message kafka the correct topic to do reco
 
     # Send message to Kafka
-    await producer.send("mri_cartesian_reco", reco_job.dict())
+    # await producer.send("mri_cartesian_reco", reco_job.dict())
+    await producer.send("mri_gadgetron_reco", reco_job.dict())
 
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}

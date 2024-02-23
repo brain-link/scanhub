@@ -113,19 +113,41 @@ services:
 
 
   # MRI Reconstruction Services
-  cartesian-reco-service:
-    container_name: service-cartesian-reco
-    build: ./services/mri/recos/cartesian-reco-service
+  # cartesian-reco-service:
+  #   container_name: service-cartesian-reco
+  #   build: ./services/mri/recos/cartesian-reco-service
+  #   command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+  #   environment:
+  #     - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./services/mri/recos/cartesian-reco-service/app/:/app/
+  #     - data_lake:/app/data_lake/
+
+  gadgetron-reco-app:
+    container_name: app-gadgetron-reco
+    build: ./applications/mri/gadgetron_reco_app
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     environment:
-      - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
+      - KAFKA_TOPIC_SUBSCRIPTION=mri_gadgetron_reco
     depends_on:
       kafka:
         condition: service_healthy
     volumes:
-      - ./services/mri/recos/cartesian-reco-service/app/:/app/
+      - ./applications/mri/gadgetron_reco_app/app/:/app/
       - data_lake:/app/data_lake/
 
+  gadgetron:
+    image: "ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:20240131.2"
+    container_name: gadgetron
+    ports:
+      - "9002:9002" # Default port for Gadgetron
+      - "9112:9112" # Port for the storage server
+    command: ["gadgetron"]
+    volumes:
+      - data_lake:/app/data # For storing data
 
   # Databases
   # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
