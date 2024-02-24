@@ -42,8 +42,12 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # set latest tag for main branch
-            type=raw,value=dev-latest,enable=${{ github.ref == format('refs/heads/{0}', 'ghcr_base_image') }}
+            # # set latest tag for main branch
+            # type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            # set the latest tag always for now
+            type=raw,value=latest
+            # dynamically set the branch name and sha as a custom tag
+            type=raw,value=dev-{{branch}}-{{sha}}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
