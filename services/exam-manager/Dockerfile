@@ -1,4 +1,4 @@
-FROM scanhub-base
+FROM ghcr.io/brain-link/scanhub/scanhub-base:latest
 
 RUN pip install --upgrade pip
 RUN pip install poetry

@@ -16,5 +16,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build the stack
         run: |
-          docker build -t scanhub-base ./base && 
+          docker build -t scanhub-base ./services/base && 
           docker-compose up -d
