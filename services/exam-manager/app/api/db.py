@@ -146,6 +146,9 @@ class Task(Base):
     description: Mapped[str] = mapped_column(nullable=False)
     type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
 
+    # Relations and references
+    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job.id"))
+
     # Arguments and parameters
     # Example: "args": {"arg1": "x", "arg2": "y"}
     args: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
@@ -161,9 +164,6 @@ class Task(Base):
 
     # List of task destinations, which are for example used to create the chain of topics in the kafka message broker, i.e., target topics
     task_destinations: Mapped[list[dict[str, str]]] = mapped_column(type_=JSON, nullable=True)
-
-    # Relations and references
-    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job.id"))
 
     status: Mapped[dict[TaskStatus, str]] = mapped_column(type_=JSON, nullable=False)
 

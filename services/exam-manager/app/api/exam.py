@@ -7,19 +7,20 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
 
+# get_record_out,
+from scanhub_libraries.models import BaseTask, TaskOut
+
 from . import dal
 from .models import (
     BaseExam,
     BaseJob,
     ExamOut,
     JobOut,
-    RecordIn,
-    RecordOut,
+    # RecordIn,
+    # RecordOut,
     get_exam_out,
     get_job_out,
-    get_record_out,
 )
-from scanhub_libraries.models import BaseTask, TaskOut
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -93,7 +94,9 @@ async def exam_get_all(patient_id: int) -> list[ExamOut]:
     if not (exams := await dal.exam_get_all(patient_id)):
         # Don't raise exception here, list might be empty
         return []
-    return [await get_exam_out(data=exam) for exam in exams]
+    result = [await get_exam_out(data=exam) for exam in exams]
+    print("Exam list: ", result)
+    return result
 
 
 @router.delete("/{exam_id}", response_model={}, status_code=204, tags=["exams"])
@@ -159,9 +162,10 @@ async def job_create(payload: BaseJob) -> JobOut:
     HTTPException
         404: Creation unsuccessful
     """
+    print("Payload: ", payload.__dict__)
     if not (job := await dal.add_job(payload)):
         raise HTTPException(status_code=404, detail="Could not create job")
-    print("NEW JOB:: ", job)
+    print("New job: ", job)
     return await get_job_out(data=job)
 
 
@@ -404,7 +408,9 @@ async def task_create(payload: BaseTask) -> TaskOut:
     """
     if not (task := await dal.add_task(payload)):
         raise HTTPException(status_code=404, detail="Could not create task")
-    return await TaskOut(**task)
+    result = TaskOut(**task.__dict__)
+    print("Task created: ", result)
+    return result
 
 
 @router.get(
@@ -429,7 +435,9 @@ async def task_get_all(job_id: UUID | str) -> list[TaskOut]:
     if not (tasks := await dal.get_all_tasks(_id)):
         # Don't raise exception here, list might be empty.
         return []
-    return [await TaskOut(**task) for task in tasks]
+    result = [TaskOut(**task.__dict__) for task in tasks]
+    print("List of tasks: ", result)
+    return result
 
 
 @router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])

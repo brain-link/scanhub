@@ -4,11 +4,12 @@
 """Definitions of pydantic models and helper functions."""
 
 import uuid
+from enum import Enum
 from datetime import datetime
 
 from pydantic import BaseModel, Extra
 
-from .db import AcquisitionLimits, Device, Exam, Job, SequenceParameters, Workflow
+from .db import Device, Exam, Job, Workflow
 
 
 class BaseDevice(BaseModel):
@@ -42,6 +43,80 @@ class BaseWorkflow(BaseModel):
     type: str
     status: str
     kafka_topic: str
+    
+    
+class DeviceOut(BaseDevice):
+    """Devicee output model."""
+
+    id: str
+    datetime_created: datetime
+    datetime_updated: datetime | None
+
+
+class WorkflowOut(BaseWorkflow):
+    """Workflow output model."""
+
+    id: int
+    datetime_created: datetime
+    datetime_updated: datetime | None
+
+
+class TaskType(str, Enum):
+    """Task type enum."""
+
+    PROCESSING_TASK = "PROCESSING_TASK"
+    DEVICE_TASK = "DEVICE_TASK"
+    CERTIFIED_DEVICE_TASK = "CERTIFIED_DEVICE_TASK"
+    CERTIFIED_PROCESSING_TASK = "CERTIFIED_PROCESSING_TASK"
+
+
+class TaskStatus(str, Enum):
+    """Task status enum."""
+
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    ERROR = "ERROR"
+
+class BaseTask(BaseModel):
+    """Task model."""
+
+    job_id: uuid.UUID
+    description: str
+    type: TaskType
+    args: dict[str, str]
+    artifacts: dict[str, list[dict[str, str]]]
+    task_destinations: list[dict[str, str]]
+    status: dict[TaskStatus, str]
+
+
+class TaskOut(BaseTask):
+    """Task output model."""
+
+    id: uuid.UUID
+    datetime_created: datetime
+
+class BaseJob(BaseModel):
+    """Job base model."""
+
+    class Config:
+        """Base class configuration."""
+
+        extra = Extra.ignore
+
+    comment: str | None
+    exam_id: uuid.UUID
+    is_finished: bool
+
+
+class JobOut(BaseJob):
+    """Job output model."""
+
+    id: uuid.UUID
+    tasks: list[TaskOut]
+    datetime_created: datetime
+    datetime_updated: datetime | None
 
 
 class BaseExam(BaseModel):
@@ -59,77 +134,6 @@ class BaseExam(BaseModel):
     address: str | None
     creator: str
     status: str
-
-
-class BaseJob(BaseModel):
-    """Job base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    type: str
-    comment: str | None
-    exam_id: uuid.UUID
-    sequence_id: str
-    workflow_id: int | None
-    device_id: str
-    acquisition_limits: AcquisitionLimits
-    sequence_parameters: SequenceParameters
-
-
-class BaseRecord(BaseModel):
-    """Record base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    data_path: str | None
-    comment: str | None
-
-
-class RecordIn(BaseRecord):
-    """Record input model."""
-
-    job_id: uuid.UUID
-
-
-class DeviceOut(BaseDevice):
-    """Devicee output model."""
-
-    id: str
-    datetime_created: datetime
-    datetime_updated: datetime | None
-
-
-class WorkflowOut(BaseWorkflow):
-    """Workflow output model."""
-
-    id: int
-    datetime_created: datetime
-    datetime_updated: datetime | None
-
-
-class RecordOut(BaseRecord):
-    """Record output model."""
-
-    id: uuid.UUID
-    datetime_created: datetime
-
-
-class JobOut(BaseJob):
-    """Job output model."""
-
-    id: uuid.UUID
-    is_acquired: bool
-    device: DeviceOut | None
-    workflow: WorkflowOut | None
-    records: list[RecordOut]
-    datetime_created: datetime
-    datetime_updated: datetime | None
 
 
 class ExamOut(BaseExam):
@@ -192,26 +196,6 @@ async def get_device_out(data: Device) -> DeviceOut:
     )
 
 
-# async def get_record_out(data: Record) -> RecordOut:
-async def get_record_out(data) -> RecordOut:
-    """Record output helper function.
-
-    Parameters
-    ----------
-    data
-        Record database model
-
-    Returns
-    -------
-        Record pydantic output model
-    """
-    return RecordOut(
-        id=data.id,
-        data_path=data.data_path,
-        comment=data.comment,
-        datetime_created=data.datetime_created,
-    )
-
 
 async def get_job_out(data: Job, device: Device = None, workflow: Workflow = None) -> JobOut:
     """Job output helper function.
@@ -230,25 +214,26 @@ async def get_job_out(data: Job, device: Device = None, workflow: Workflow = Non
         Job pydantic output model
     """
     # Create records of the job
-    records = [await get_record_out(record) for record in data.records]
+    data.tasks = [await TaskOut(**task) for task in data.tasks]
+    return JobOut(**data.__dict__)
 
-    return JobOut(
-        id=data.id,
-        type=data.type,
-        comment=data.comment,
-        is_acquired=data.is_acquired,
-        exam_id=data.exam_id,
-        sequence_id=data.sequence_id,
-        device_id=data.device_id,
-        workflow_id=data.workflow_id,
-        device=await get_device_out(device) if device else None,
-        workflow=await get_workflow_out(workflow) if workflow else None,
-        records=records,
-        datetime_created=data.datetime_created,
-        datetime_updated=data.datetime_updated,
-        acquisition_limits=data.acquisition_limits,
-        sequence_parameters=data.sequence_parameters,
-    )
+    # return JobOut(
+    #     id=data.id,
+    #     type=data.type,
+    #     comment=data.comment,
+    #     is=data.is_acquired,
+    #     exam_id=data.exam_id,
+    #     sequence_id=data.sequence_id,
+    #     device_id=data.device_id,
+    #     workflow_id=data.workflow_id,
+    #     device=await get_device_out(device) if device else None,
+    #     workflow=await get_workflow_out(workflow) if workflow else None,
+    #     tasks=tasks,
+    #     datetime_created=data.datetime_created,
+    #     datetime_updated=data.datetime_updated,
+    #     acquisition_limits=data.acquisition_limits,
+    #     sequence_parameters=data.sequence_parameters,
+    # )
 
 
 async def get_exam_out(data: Exam) -> ExamOut:
@@ -264,18 +249,22 @@ async def get_exam_out(data: Exam) -> ExamOut:
         Exam pydantic output model
     """
     # Create procedures of the exam
-    exam_jobs = [await get_job_out(job) for job in data.jobs]
+    # exam_jobs = [await get_job_out(job) for job in data.jobs]
 
-    return ExamOut(
-        id=data.id,
-        patient_id=data.patient_id,
-        name=data.name,
-        country=data.country,
-        site=data.site,
-        address=data.address,
-        creator=data.creator,
-        status=data.status,
-        jobs=exam_jobs,
-        datetime_created=data.datetime_created,
-        datetime_updated=data.datetime_updated,
-    )
+    # return ExamOut(
+    #     id=data.id,
+    #     patient_id=data.patient_id,
+    #     name=data.name,
+    #     country=data.country,
+    #     site=data.site,
+    #     address=data.address,
+    #     creator=data.creator,
+    #     status=data.status,
+    #     jobs=exam_jobs,
+    #     datetime_created=data.datetime_created,
+    #     datetime_updated=data.datetime_updated,
+    # )
+    exam = data.__dict__
+    exam["jobs"] = [await get_job_out(job) for job in data.jobs]
+    return ExamOut(**exam)
+
