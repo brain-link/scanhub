@@ -10,9 +10,9 @@ from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from .db import Exam, Job, Task, async_session
-from .models import BaseExam, BaseJob, RecordIn
+from .models import BaseExam, BaseJob
 
-from scanhub_libraries.models import BaseTask, TaskOut
+from scanhub_libraries.models import BaseTask
 
 async def exam_add(payload: BaseExam) -> Exam:
     """Create new exam.
@@ -54,7 +54,7 @@ async def exam_get(exam_id: UUID) -> (Exam | None):
     return exam
 
 
-async def exam_get_all(patient_id: UUID) -> list[Exam]:
+async def exam_get_all(patient_id: int) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
