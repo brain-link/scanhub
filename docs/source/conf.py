@@ -18,8 +18,15 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-# basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
-# sys.path.insert(0, basedir)
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
+sys.path.insert(0, basedir)
+
+# Create __init__.py files in the given directories that they are recognized as packages by sphinx
+def create_init_files(directories):
+    for directory in directories:
+        fp = open(f'{directory}/__init__.py', 'w')
+        fp.write('"""Init file, that enables sphinx to detect this package."""')
+        fp.close()
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -40,13 +47,14 @@ version = '0.0.1'   # import this from scanhub package
 source_suffix = {".rst": "restructuredtext", ".txt": "restructuredtext", ".md": "markdown"}
 
 extensions = [
+    'autoapi.extension',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     # 'sphinx.ext.napoleon',  # support numpy and google style docstrings (at the moment only openapi)
-    "sphinx.ext.todo",
+    'sphinx.ext.todo',
     'sphinxcontrib.openapi',
-    "sphinx.ext.autosectionlabel",
-    "sphinx.ext.autosummary",
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.autosummary',
 ]
 
 autoclass_content = "class"
@@ -62,14 +70,28 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# -- Options for AutoAPI -----------------------------------------------------
+
+autoapi_dirs = ['../../services/acquisition-control',
+                '../../services/device-manager',
+                '../../services/exam-manager',
+                '../../services/workflow-manager',
+                ]
+
+autoapi_template_dir = '_templates/autoapi'
+
+init_dirs = []
+for autoapi_dir in autoapi_dirs:
+    init_dirs.append(autoapi_dir)
+    init_dirs.append(autoapi_dir + '/app')
+
+create_init_files(init_dirs)
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-
-pygments_style = "sphinx"
 
 html_theme = 'pydata_sphinx_theme'
 html_show_sphinx = False
@@ -122,8 +144,8 @@ html_theme_options = {
     "footer_end": [],
     "navbar_align": "content",
     "header_links_before_dropdown": 4,
-    # "pygment_light_style": "default",
-    # "pygment_dark_style": "github-dark",
+    "pygment_light_style": "default",
+    "pygment_dark_style": "github-dark",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

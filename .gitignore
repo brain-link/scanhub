@@ -9,3 +9,4 @@ services/workflow-manager/app/__pycache__
 
 *.seq
 */build
+/infrastructure/monai/.md/*
