@@ -1,19 +1,14 @@
-#
 name: Deploy to GHCR
-
-# Configures this workflow to run every time a change is pushed to the branch called `release`.
 on:
   workflow_dispatch:
   push:
-    branches: ['ghcr_base_image']
+    branches: ['main', 'ghcr_base_image']
 
-# Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/scanhub-base
   SERVICE_PATH: services/base
 
-# There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -42,8 +37,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # set latest tag for main branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            # # set latest tag for main branch
+            # type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            # set latest tag always for now
+            type=raw,value=latest,enable=true
             # dynamically set the sha as a custom tagif it is main
             type=raw,value={{sha}},enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
             # dynamically set the sha as a custom tag prefixed with dev if it's not main
