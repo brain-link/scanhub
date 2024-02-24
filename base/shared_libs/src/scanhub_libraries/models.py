@@ -35,7 +35,8 @@ class XYZ(BaseModel):
     Z: float
 
 
-class AcquisitionLimits(BaseModel): # -> patient model
+# TODO: Move these parameters to the patient model.
+class AcquisitionLimits(BaseModel):
     """Pydantic definition of AcquisitionLimits."""
 
     patient_height: float
@@ -51,6 +52,7 @@ class SequenceParameters(BaseModel):
     fov_offset: XYZ
 
 
+# Might be obsolete
 class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic model definition of a scanjob."""
 
@@ -126,6 +128,7 @@ class MRISequenceCreate(BaseModel):
     tags: list[str] | None = None
 
 
+# Might be obsolete, to be updated
 class DeviceTask(BaseModel):
     """Pydantic model definition of a device job."""
 
@@ -142,10 +145,12 @@ class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
     status_percent: int
 
 
+# Obsolete, to be removed
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive."""
 
     record_id: UUID
+
 
 
 class BaseDevice(BaseModel):
@@ -163,7 +168,17 @@ class BaseDevice(BaseModel):
     site: str | None
     ip_address: str
 
+class DeviceOut(BaseDevice):
+    """Devicee output model."""
 
+    id: str
+    datetime_created: datetime
+    datetime_updated: datetime | None
+    
+    
+
+
+# Obsolete, to be removed
 class BaseWorkflow(BaseModel): # obsolete
     """Workflow base model."""
 
@@ -179,13 +194,6 @@ class BaseWorkflow(BaseModel): # obsolete
     type: str
     status: str
     kafka_topic: str
-
-class DeviceOut(BaseDevice):
-    """Devicee output model."""
-
-    id: str
-    datetime_created: datetime
-    datetime_updated: datetime | None
 
 
 class WorkflowOut(BaseWorkflow): # obsolete
@@ -216,6 +224,7 @@ class TaskStatus(str, Enum):
     FAILED = "FAILED"
     ERROR = "ERROR"
 
+
 class BaseTask(BaseModel):
     """Task model."""
 
@@ -233,6 +242,7 @@ class TaskOut(BaseTask):
 
     id: UUID
     datetime_created: datetime
+
 
 
 class BaseJob(BaseModel):
@@ -257,6 +267,7 @@ class JobOut(BaseJob):
     datetime_updated: datetime | None
 
 
+
 class BaseExam(BaseModel):
     """Exam base model."""
 
@@ -265,13 +276,14 @@ class BaseExam(BaseModel):
 
         extra = Extra.ignore
 
-    patient_id: UUID
+    patient_id: int # TODO: replace by UUID
     name: str
     country: str | None
     site: str | None
     address: str | None
     creator: str
     status: str
+
 
 class ExamOut(BaseExam):
     """Exam output model."""
@@ -280,5 +292,3 @@ class ExamOut(BaseExam):
     datetime_created: datetime
     datetime_updated: datetime | None
     jobs: list[JobOut]
-
-
