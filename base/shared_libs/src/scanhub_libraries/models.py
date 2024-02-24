@@ -180,77 +180,6 @@ class BaseWorkflow(BaseModel): # obsolete
     status: str
     kafka_topic: str
 
-
-class BaseExam(BaseModel):
-    """Exam base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    patient_id: UUID
-    name: str
-    country: str | None
-    site: str | None
-    address: str | None
-    creator: str
-    status: str
-
-
-class BaseProcedure(BaseModel): # obsolete
-    """Procedure base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    name: str
-    status: str
-
-
-class BaseJob(BaseModel):
-    """Job base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    type: str
-    comment: str | None
-    sequence_id: str
-    workflow_id: int | None
-    device_id: str
-    acquisition_limits: AcquisitionLimits
-    sequence_parameters: SequenceParameters
-
-
-class BaseRecord(BaseModel):    # obsolete
-    """Record base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    data_path: str | None
-    comment: str | None
-
-
-class ProcedureIn(BaseProcedure): # obsolete
-    """Procedure input model."""
-
-    exam_id: UUID | str
-
-
-class RecordIn(BaseRecord): # obsolete
-    """Record input model."""
-
-    job_id: UUID
-
-
 class DeviceOut(BaseDevice):
     """Devicee output model."""
 
@@ -267,14 +196,9 @@ class WorkflowOut(BaseWorkflow): # obsolete
     datetime_updated: datetime | None
 
 
-class RecordOut(BaseRecord): # obsolete
-    """Record output model."""
-
-    id: UUID
-    datetime_created: datetime
 
 
-class TaskType(Enum):
+class TaskType(str, Enum):
     """Task type enum."""
 
     PROCESSING_TASK = "PROCESSING_TASK"
@@ -283,7 +207,7 @@ class TaskType(Enum):
     CERTIFIED_PROCESSING_TASK = "CERTIFIED_PROCESSING_TASK"
 
 
-class TaskStatus(Enum):
+class TaskStatus(str, Enum):
     """Task status enum."""
 
     PENDING = "PENDING"
@@ -295,12 +219,12 @@ class TaskStatus(Enum):
 class BaseTask(BaseModel):
     """Task model."""
 
+    job_id: UUID
     description: str
     type: TaskType
     args: dict[str, str]
     artifacts: dict[str, list[dict[str, str]]]
-    task_destination: list[dict[str, str]]
-    job_id: UUID
+    task_destinations: list[dict[str, str]]
     status: dict[TaskStatus, str]
 
 
@@ -311,17 +235,43 @@ class TaskOut(BaseTask):
     datetime_created: datetime
 
 
+class BaseJob(BaseModel):
+    """Job base model."""
+
+    class Config:
+        """Base class configuration."""
+
+        extra = Extra.ignore
+
+    comment: str | None
+    exam_id: UUID
+    is_finished: bool
+
+
 class JobOut(BaseJob):
     """Job output model."""
 
     id: UUID
-    is_acquired: bool
-    device: DeviceOut | None
-    workflow: WorkflowOut | None
-    records: list[RecordOut]
+    tasks: list[TaskOut]
     datetime_created: datetime
     datetime_updated: datetime | None
 
+
+class BaseExam(BaseModel):
+    """Exam base model."""
+
+    class Config:
+        """Base class configuration."""
+
+        extra = Extra.ignore
+
+    patient_id: UUID
+    name: str
+    country: str | None
+    site: str | None
+    address: str | None
+    creator: str
+    status: str
 
 class ExamOut(BaseExam):
     """Exam output model."""
