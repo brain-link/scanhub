@@ -42,12 +42,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # dynamically set the branch name as a prefix
-            type=sha,prefix={{branch}}-
-            # dynamically set the branch name and sha as a custom tag
-            type=raw,value=dev-{{branch}}-{{sha}}
             # set latest tag for main branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'ghcr_base_image') }}
+            type=raw,value=dev-latest,enable=${{ github.ref == format('refs/heads/{0}', 'ghcr_base_image') }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
