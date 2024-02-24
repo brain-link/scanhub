@@ -1,19 +1,19 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""Data access layer."""
+"""Data acess layer (DAL) between fastapi endpoint and sql database."""
 
 from pprint import pprint
 from uuid import UUID
 
+from scanhub_libraries.models import BaseExam, BaseJob, BaseTask
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from .db import Exam, Job, Task, async_session
-from .models import BaseExam, BaseJob
 
-from scanhub_libraries.models import BaseTask
 
+# ----- Exam data access layer
 async def exam_add(payload: BaseExam) -> Exam:
     """Create new exam.
 
@@ -116,6 +116,7 @@ async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
         return None
 
 
+# ----- Job data access layer
 async def add_job(payload: BaseJob) -> Job:
     """Add new job.
 
@@ -217,113 +218,8 @@ async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
         return None
 
 
-# async def add_record(payload: RecordIn) -> Record:
-#     """Add new record to database.
 
-#     Parameters
-#     ----------
-#     payload
-#         Record pydantic input model
-
-#     Returns
-#     -------
-#         Database orm model of created record
-#     """
-#     new_record = Record(**payload.dict())
-#     async with async_session() as session:
-#         session.add(new_record)
-#         await session.commit()
-#         await session.refresh(new_record)
-#     return new_record
-
-
-# async def update_record(record_id: UUID, payload: dict) -> (Record | None):
-#     """Update existing record.
-
-#     Parameters
-#     ----------
-#     record_id
-#         Id of the record to be updated
-#     payload
-#         Dictionary with data to be updated
-
-#     Returns
-#     -------
-#         Database orm model of updated record
-#     """
-#     async with async_session() as session:
-#         record = await session.get(Record, record_id)
-#         if record:
-#             record.update(payload)
-#             await session.commit()
-#             await session.refresh(record)
-#             return record
-#         return None
-
-
-# async def get_record(record_id: UUID) -> (Record | None):
-#     """Get a record from database by id.
-
-#     Parameters
-#     ----------
-#     record_id
-#         Id of the requested record
-
-#     Returns
-#     -------
-#         Database orm model of requested record
-#     """
-#     async with async_session() as session:
-#         record: (Record | None) = await session.get(Record, record_id)
-#     return record
-
-
-# async def get_all_records(job_id: UUID) -> list[Record]:
-#     """Get a list of all records assigned to a certain job.
-
-#     Parameters
-#     ----------
-#     job_id
-#         Id of the parent job entry, records are assigned to
-
-#     Returns
-#     -------
-#         List of record data base orm models
-#     """
-#     async with async_session() as session:
-#         result: Result = await session.execute(select(Record).where(Record.job_id == job_id))
-#         records = list(result.scalars().all())
-#     return records
-
-
-# async def delete_record(record_id: UUID) -> bool:
-#     """Delete record by id.
-
-#     Parameters
-#     ----------
-#     record_id
-#         Id of the record to be deleted
-
-#     Returns
-#     -------
-#         Success of deletion
-#     """
-#     async with async_session() as session:
-#         if record := await session.get(Record, record_id):
-#             await session.delete(record)
-#             await session.commit()
-#             return True
-#         return False
-
-
-
-
-
-
-
-
-
-
+# ----- Task data access layer
 async def add_task(payload: BaseTask) -> Task:
     """Add new task to database.
 
@@ -342,6 +238,23 @@ async def add_task(payload: BaseTask) -> Task:
         await session.commit()
         await session.refresh(new_task)
     return new_task
+
+
+async def get_task(task_id: UUID) -> (Task | None):
+    """Get task by id.
+
+    Parameters
+    ----------
+    task_id
+        Id of the requested task
+
+    Returns
+    -------
+        Database orm model with data of requested task
+    """
+    async with async_session() as session:
+        task: (Task | None) = await session.get(Task, task_id)
+    return task
 
 
 async def get_all_tasks(job_id: UUID) -> list[Task]:
@@ -380,3 +293,26 @@ async def delete_task(task_id: UUID) -> bool:
             await session.commit()
             return True
         return False
+
+
+async def update_task(task_id: UUID, payload: BaseTask) -> (Task | None):
+    """Update existing task in database.
+
+    Parameters
+    ----------
+    task_id
+        Id of the task to be updateed
+    payload
+        Task pydantic base model with data to be updated
+
+    Returns
+    -------
+        Database orm model of updated task
+    """
+    async with async_session() as session:
+        if task := await session.get(Task, task_id):
+            task.update(payload)
+            await session.commit()
+            await session.refresh(task)
+            return task
+        return None
