@@ -46,12 +46,14 @@ def init_db() -> None:
 class Exam(Base):
     """Abstract exam ORM model."""
 
-    __abstract__ = True
+    __tablename__ = "exam"
+    __table_args__ = {"extend_existing": True}
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    workflows: Mapped[list["Workflow"]] = relationship(lazy="selectin")
 
     # Relations and references
-    patient_id: Mapped[int] = mapped_column(nullable=False)
+    patient_id: Mapped[int] = mapped_column(nullable=True)
 
     # Fields
     name: Mapped[str] = mapped_column(nullable=False)
@@ -61,47 +63,35 @@ class Exam(Base):
     creator: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False)
 
+    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
-
-
-class ExamDefinitions(Exam):
-    """ORM model for exam definitions."""
-
-    __tablename__ = "exam-definitions"
-    __table_args__ = {"extend_existing": True}
-
-    workflows: Mapped[list["WorkflowDefinitions"]] = relationship(lazy="selectin")
-
-
-class ExamTemplates(Exam):
-    """ORM model for exam templates."""
-
-    __tablename__ = "exam-templates"
-    __table_args__ = {"extend_existing": True}
-
-    workflows: Mapped[list["WorkflowTemplates"]] = relationship(lazy="selectin")
 
 
 class Workflow(Base): # TBD: rename to "Workflow"
     """Workflow ORM model."""
 
-    __abstract__ = True
+    __tablename__ = "workflow"
+    __table_args__ = {"extend_existing": True}
 
-    # Use uuid here
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
-    # Relations and references
-    # workflow_id: Mapped[int] = mapped_column(nullable=True)
+    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
+    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
 
     # Fields
     comment: Mapped[str] = mapped_column(nullable=True)
-    # is_acquired: Mapped[bool] = mapped_column(nullable=False, default=False)
+
+    # Flags
     is_finished: Mapped[bool] = mapped_column(nullable=False, default=False)
+    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+
+    # Meta
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
@@ -110,34 +100,17 @@ class Workflow(Base): # TBD: rename to "Workflow"
     )
 
 
-class WorkflowDefinitions(Workflow):
-    """ORM model for workflow definitions."""
-
-    __tablename__ = "workflow-definitions"
-    __table_args__ = {"extend_existing": True}
-
-    tasks: Mapped[list["TaskDefinitions"]] = relationship(lazy="selectin")
-    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam-definitions.id"))
-
-
-class WorkflowTemplates(Workflow):
-    """ORM model for workflow templates."""
-
-    __tablename__ = "workflow-templates"
-    __table_args__ = {"extend_existing": True}
-
-    tasks: Mapped[list["TaskTemplates"]] = relationship(lazy="selectin")
-    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam-templates.id"))
-
-
 class Task(Base):
     """Abstract task ORM model."""
 
-    __abstract__ = True
+    __tablename__ = "task"
+    __table_args__ = {"extend_existing": True}
 
-    # Use uuid here
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    # Workflow id must be nullable, as a template must not have a relationship
+    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
 
+    # Fields
     description: Mapped[str] = mapped_column(nullable=False)
     type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
 
@@ -159,29 +132,14 @@ class Task(Base):
 
     status: Mapped[dict[TaskStatus, str]] = mapped_column(type_=JSON, nullable=False)
 
+    # Flags
+    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+
     # Fields
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
 
-
-class TaskDefinitions(Task):
-    """ORM model for task definitions."""
-
-    __tablename__ = "task-definitions"
-    __table_args__ = {"extend_existing": True}
-
-    # Workflow references
-    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow-definitions.id"))
-
-class TaskTemplates(Task):
-    """ORM model for task templates."""
-
-    __tablename__ = "task-templates"
-    __table_args__ = {"extend_existing": True}
-
-    # Workflow references
-    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow-templates.id"))
 
 # TBD DeviceTask(Task):
 
@@ -190,10 +148,9 @@ class TaskTemplates(Task):
 MappedBase = automap_base()
 MappedBase.prepare(autoload_with=engine, reflect=True)
 
-# Get existing models: device and workflow
+# Get existing device models
 try:
     Device = MappedBase.classes.device
-    Workflow = MappedBase.classes.workflow
 except AttributeError as error:
     raise AttributeError("Could not find device and/or workflow table(s).") from error
 
