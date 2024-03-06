@@ -4,7 +4,7 @@
 """Pydantic models of acquisition control."""
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Extra, Field, Json  # noqa
@@ -227,8 +227,38 @@ class TaskStatus(str, Enum):
 
 class BaseTask(BaseModel):
     """Task model."""
+    
+    class Config:
+        """Base class configuration."""
 
-    job_id: UUID
+        # extra = Extra.ignore
+        schema_extra = {
+            "examples": [
+                {
+                    "description": "task description",
+                    "type": TaskType.PROCESSING_TASK,
+                    "args": {"arg1": "val1"},
+                    "artifacts": {
+                        "input": [
+                            {
+                                "path": "/data",
+                                "name": "inputfile2"
+                            }
+                        ],
+                        "output": [
+                            {
+                                "path": "/data",
+                                "name": "outputfile1"
+                            }
+                        ]
+                    },
+                    "task_destinations": [],
+                    "status": {TaskStatus.PENDING: "additional status information"}
+                }
+            ]
+        }
+
+    job_id: Optional[UUID] = Field("", description="ID of the job the task belongs to.")
     description: str
     type: TaskType
     args: dict[str, str]
