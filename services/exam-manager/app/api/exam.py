@@ -6,7 +6,7 @@
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
-from scanhub_libraries.models import BaseExam, BaseWorkflow, BaseTask, ExamOut, WorkflowOut, TaskOut
+from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, WorkflowOut
 
 from . import dal
 from .db import Exam, Workflow
@@ -56,8 +56,8 @@ async def get_exam_out(data: Exam) -> ExamOut:
 
 
 # ----- Exam API endpoints
-@router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
-async def create_exam(payload: BaseExam, is_template: bool = False) -> ExamOut:
+@router.post("/template", response_model=ExamOut, status_code=201, tags=["exams"])
+async def create_exam_template(payload: BaseExam) -> ExamOut:
     """Create exam endpoint.
 
     Parameters
@@ -74,13 +74,42 @@ async def create_exam(payload: BaseExam, is_template: bool = False) -> ExamOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not (exam := await dal.add_exam(payload=payload, is_template=is_template)):
+    if not payload.is_template:
+        raise HTTPException(status_code=404, detail="Exam is not a template, cannot create.")
+    if not (exam := await dal.add_exam(payload=payload)):
         raise HTTPException(status_code=404, detail="Could not create exam")
     return await get_exam_out(data=exam)
 
 
+@router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
+async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamOut:
+    """Create exam endpoint.
+
+    Parameters
+    ----------
+    payload
+        Exam pydantic input model.
+
+    Returns
+    -------
+        Exam pydantic output moddel.
+
+    Raises
+    ------
+    HTTPException
+        404: Creation unsuccessful
+    """
+    template = await get_exam(exam_id=template_id)
+    instance = BaseExam(**template.__dict__)
+    instance.is_template = False
+    instance.patient_id = patient_id
+    if not (exam := await dal.add_exam(payload=instance)):
+        raise HTTPException(status_code=404, detail="Could not create exam instance")
+    return await get_exam_out(data=exam)
+
+
 @router.get("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
-async def get_exam(exam_id: UUID | str, is_template: bool) -> ExamOut:
+async def get_exam(exam_id: UUID | str) -> ExamOut:
     """Get exam endpoint.
 
     Parameters
@@ -98,13 +127,13 @@ async def get_exam(exam_id: UUID | str, is_template: bool) -> ExamOut:
         404: Not found
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (exam := await dal.get_exam(exam_id=_id, is_template=is_template)):
+    if not (exam := await dal.get_exam(exam_id=_id)):
         raise HTTPException(status_code=404, detail="Exam not found")
     return await get_exam_out(data=exam)
 
 
 @router.get("/all/{patient_id}", response_model=list[ExamOut], status_code=200, tags=["exams"])
-async def get_all_exams(patient_id: int, is_template: bool) -> list[ExamOut]:
+async def get_all_patient_exams(patient_id: int) -> list[ExamOut]:
     """Get all exams of a certain patient.
 
     Parameters
@@ -116,7 +145,28 @@ async def get_all_exams(patient_id: int, is_template: bool) -> list[ExamOut]:
     -------
         List of exam pydantic output models
     """
-    if not (exams := await dal.get_all_exams(patient_id=patient_id, is_template=is_template)):
+    if not (exams := await dal.get_all_exams(patient_id=patient_id)):
+        # Don't raise exception here, list might be empty
+        return []
+    result = [await get_exam_out(data=exam) for exam in exams]
+    print("Exam list: ", result)
+    return result
+
+
+@router.get("/templates", response_model=list[ExamOut], status_code=200, tags=["exams"])
+async def get_all_exam_templates() -> list[ExamOut]:
+    """Get all exams of a certain patient.
+
+    Parameters
+    ----------
+    patient_id
+        Id of parent
+
+    Returns
+    -------
+        List of exam pydantic output models
+    """
+    if not (exams := await dal.get_all_exam_templates()):
         # Don't raise exception here, list might be empty
         return []
     result = [await get_exam_out(data=exam) for exam in exams]
@@ -125,7 +175,7 @@ async def get_all_exams(patient_id: int, is_template: bool) -> list[ExamOut]:
 
 
 @router.delete("/{exam_id}", response_model={}, status_code=204, tags=["exams"])
-async def exam_delete(exam_id: UUID | str, is_template: bool) -> None:
+async def exam_delete(exam_id: UUID | str) -> None:
     """Delete an existing exam by id.
 
     Parameters
@@ -139,12 +189,15 @@ async def exam_delete(exam_id: UUID | str, is_template: bool) -> None:
         404: Not found
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not await dal.delete_exam(exam_id=_id, is_template=is_template):
+    exam = await get_exam(exam_id=_id)
+    if exam.is_frozen:
+        raise HTTPException(status_code=404, detail="Exam is frozen an cannot be deleted.")
+    if not await dal.delete_exam(exam_id=_id):
         raise HTTPException(status_code=404, detail="Exam not found")
 
 
 @router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
-async def exam_update(exam_id: UUID | str, payload: BaseExam, is_template: bool) -> ExamOut:
+async def exam_update(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
     """Update an existing exam.
 
     Parameters
@@ -164,14 +217,17 @@ async def exam_update(exam_id: UUID | str, payload: BaseExam, is_template: bool)
         404: Not found
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (exam := await dal.update_exam(exam_id=_id, payload=payload, is_template=is_template)):
+    exam = await get_exam(exam_id=_id)
+    if exam.is_frozen:
+        raise HTTPException(status_code=404, detail="Exam is frozen an cannot be edited.")
+    if not (exam := await dal.update_exam(exam_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Exam not found")
     return await get_exam_out(data=exam)
 
 
 # ----- Workflow API endpoints
 @router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
-async def workflow_create(payload: BaseWorkflow, is_template: bool) -> WorkflowOut:
+async def workflow_create(payload: BaseWorkflow) -> WorkflowOut:
     """Create new workflow.
 
     Parameters
@@ -189,14 +245,14 @@ async def workflow_create(payload: BaseWorkflow, is_template: bool) -> WorkflowO
         404: Creation unsuccessful
     """
     print("Payload: ", payload.__dict__)
-    if not (workflow := await dal.add_workflow(payload=payload, is_template=is_template)):
+    if not (workflow := await dal.add_workflow(payload=payload)):
         raise HTTPException(status_code=404, detail="Could not create workflow")
     print("New workflow: ", workflow)
     return await get_workflow_out(data=workflow)
 
 
 @router.get("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
-async def workflow_get(workflow_id: UUID | str, is_template: bool) -> WorkflowOut:
+async def workflow_get(workflow_id: UUID | str) -> WorkflowOut:
     """Get a workflow.
 
     Parameters
@@ -214,7 +270,7 @@ async def workflow_get(workflow_id: UUID | str, is_template: bool) -> WorkflowOu
         404: Not found
     """
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    if not (workflow := await dal.get_workflow(workflow_id=_id, is_template=is_template)):
+    if not (workflow := await dal.get_workflow(workflow_id=_id)):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(data=workflow)
 
@@ -225,7 +281,7 @@ async def workflow_get(workflow_id: UUID | str, is_template: bool) -> WorkflowOu
     status_code=200,
     tags=["workflows"],
 )
-async def workflow_get_all(exam_id: UUID | str, is_template: bool) -> list[WorkflowOut]:
+async def workflow_get_all(exam_id: UUID | str) -> list[WorkflowOut]:
     """Get all existing workflows of a certain exam.
 
     Parameters
@@ -238,14 +294,14 @@ async def workflow_get_all(exam_id: UUID | str, is_template: bool) -> list[Workf
         List of workflow pydantic output model
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (workflows := await dal.get_all_workflows(exam_id=_id, is_template=is_template)):
+    if not (workflows := await dal.get_all_workflows(exam_id=_id)):
         # Don't raise exception, list might be empty
         return []
     return [await get_workflow_out(data=workflow) for workflow in workflows]
 
 
 @router.delete("/workflow/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
-async def workflow_delete(workflow_id: UUID | str, is_template: bool) -> None:
+async def workflow_delete(workflow_id: UUID | str) -> None:
     """Delete an existing workflow.
 
     Parameters
@@ -259,12 +315,12 @@ async def workflow_delete(workflow_id: UUID | str, is_template: bool) -> None:
         404: Not found
     """
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    if not await dal.delete_workflow(workflow_id=_id, is_template=is_template):
+    if not await dal.delete_workflow(workflow_id=_id):
         raise HTTPException(status_code=404, detail="Workflow not found")
 
 
 @router.put("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
-async def workflow_update(workflow_id: UUID | str, payload: BaseWorkflow, is_template: bool) -> WorkflowOut:
+async def workflow_update(workflow_id: UUID | str, payload: BaseWorkflow) -> WorkflowOut:
     """Update an existing workflow.
 
     Parameters
@@ -284,14 +340,14 @@ async def workflow_update(workflow_id: UUID | str, payload: BaseWorkflow, is_tem
         404: Not found
     """
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    if not (workflow := await dal.update_workflow(workflow_id=_id, payload=payload, is_template=is_template)):
+    if not (workflow := await dal.update_workflow(workflow_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(data=workflow)
 
 
 # ----- Task API endpoints
 @router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def task_create(payload: BaseTask, is_template: bool) -> TaskOut:
+async def task_create(payload: BaseTask) -> TaskOut:
     """Create a new task.
 
     Parameters
@@ -308,7 +364,7 @@ async def task_create(payload: BaseTask, is_template: bool) -> TaskOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not (task := await dal.add_task(payload=payload, is_template=is_template)):
+    if not (task := await dal.add_task(payload=payload)):
         raise HTTPException(status_code=404, detail="Could not create task")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
@@ -316,7 +372,7 @@ async def task_create(payload: BaseTask, is_template: bool) -> TaskOut:
 
 
 @router.get("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def task_get(task_id: UUID | str, is_template: bool) -> TaskOut:
+async def task_get(task_id: UUID | str) -> TaskOut:
     """Get an existing task.
 
     Parameters
@@ -334,7 +390,7 @@ async def task_get(task_id: UUID | str, is_template: bool) -> TaskOut:
         404: Not found
     """
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await dal.get_task(task_id=_id, is_template=is_template)):
+    if not (task := await dal.get_task(task_id=_id)):
         raise HTTPException(status_code=404, detail="Task not found")
     return TaskOut(**task.__dict__)
 
@@ -345,7 +401,7 @@ async def task_get(task_id: UUID | str, is_template: bool) -> TaskOut:
     status_code=200,
     tags=["tasks"],
 )
-async def task_get_all(workflow_id: UUID | str, is_template: bool) -> list[TaskOut]:
+async def task_get_all(workflow_id: UUID | str) -> list[TaskOut]:
     """Get all existing tasks of a certain workflow.
 
     Parameters
@@ -358,7 +414,7 @@ async def task_get_all(workflow_id: UUID | str, is_template: bool) -> list[TaskO
         List of task pydantic output model
     """
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    if not (tasks := await dal.get_all_tasks(workflow_id=_id, is_template=is_template)):
+    if not (tasks := await dal.get_all_tasks(workflow_id=_id)):
         # Don't raise exception here, list might be empty.
         return []
     result = [TaskOut(**task.__dict__) for task in tasks]
@@ -367,7 +423,7 @@ async def task_get_all(workflow_id: UUID | str, is_template: bool) -> list[TaskO
 
 
 @router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])
-async def task_delete(task_id: UUID | str, is_template: bool) -> None:
+async def task_delete(task_id: UUID | str) -> None:
     """Delete an existing task.
 
     Parameters
@@ -381,12 +437,12 @@ async def task_delete(task_id: UUID | str, is_template: bool) -> None:
         404: Not found
     """
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not await dal.delete_task(task_id=_id, is_template=is_template):
+    if not await dal.delete_task(task_id=_id):
         raise HTTPException(status_code=404, detail="Task not found")
 
 
 @router.put("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def task_update(task_id: UUID | str, payload: BaseTask, is_template: bool) -> TaskOut:
+async def task_update(task_id: UUID | str, payload: BaseTask) -> TaskOut:
     """Update an existing task.
 
     Parameters
@@ -406,6 +462,6 @@ async def task_update(task_id: UUID | str, payload: BaseTask, is_template: bool)
         404: Not found
     """
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await dal.update_task(task_id=_id, payload=payload, is_template=is_template)):
+    if not (task := await dal.update_task(task_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Task not found")
     return TaskOut(**task.__dict__)
