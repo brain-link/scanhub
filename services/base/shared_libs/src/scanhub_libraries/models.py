@@ -235,6 +235,7 @@ class BaseTask(BaseModel):
     artifacts: dict[str, list[dict[str, str]]]
     task_destinations: list[dict[str, str]]
     status: dict[TaskStatus, str]
+    is_template: bool
 
 
 class TaskOut(BaseTask):
@@ -256,6 +257,7 @@ class BaseWorkflow(BaseModel):
     comment: str | None
     exam_id: UUID
     is_finished: bool
+    is_template: bool
 
 
 class WorkflowOut(BaseWorkflow):
@@ -283,6 +285,7 @@ class BaseExam(BaseModel):
     address: str | None
     creator: str
     status: str
+    is_template: bool
 
 
 class ExamOut(BaseExam):
