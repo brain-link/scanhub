@@ -59,7 +59,7 @@ async def get_exam_out(data: Exam) -> ExamOut:
 
 @router.post("/template", response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam_template(payload: BaseExam) -> ExamOut:
-    """Create exam endpoint.
+    """Create a new exam template.
 
     Parameters
     ----------
@@ -84,13 +84,12 @@ async def create_exam_template(payload: BaseExam) -> ExamOut:
 
 @router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamOut:
-    """Create exam endpoint.
+    """Create a new exam instance from template.
 
     Parameters
     ----------
     patient_id
         Id of the patient, the exam instance is related to
-
     template_id
         ID of the template, the exam is created from
 
@@ -161,11 +160,6 @@ async def get_all_patient_exams(patient_id: int) -> list[ExamOut]:
 async def get_all_exam_templates() -> list[ExamOut]:
     """Get all exams of a certain patient.
 
-    Parameters
-    ----------
-    patient_id
-        Id of parent
-
     Returns
     -------
         List of exam pydantic output models
@@ -201,7 +195,7 @@ async def exam_delete(exam_id: UUID | str) -> None:
 
 
 @router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
-async def exam_update(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
+async def update_exam(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
     """Update an existing exam.
 
     Parameters
@@ -231,9 +225,9 @@ async def exam_update(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
 
 # ----- Workflow API endpoints
 
-@router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
+@router.post("/workflow/template", response_model=WorkflowOut, status_code=201, tags=["workflows"])
 async def create_workflow_template(payload: BaseWorkflow) -> WorkflowOut:
-    """Create new workflow.
+    """Create new workflow template.
 
     Parameters
     ----------
@@ -257,8 +251,38 @@ async def create_workflow_template(payload: BaseWorkflow) -> WorkflowOut:
     return await get_workflow_out(data=workflow)
 
 
+@router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
+async def create_workflow_from_template(exam_id: UUID, template_id: UUID) -> WorkflowOut:
+    """Create new workflow instance from template.
+
+    Parameters
+    ----------
+    exam_id
+        Id of the exam, the workflow instance is related to
+    template_id
+        ID of the template, the workflow is created from
+
+    Returns
+    -------
+        Workflow pydantic output model
+
+    Raises
+    ------
+    HTTPException
+        404: Creation unsuccessful
+    """
+    template = await get_workflow(workflow_id=template_id)
+    instance = BaseWorkflow(**template.__dict__)
+    instance.is_template = False
+    instance.exam_id = exam_id
+    if not (workflow := await dal.add_workflow(payload=instance)):
+        raise HTTPException(status_code=404, detail="Could not create workflow")
+    print("New workflow: ", workflow)
+    return await get_workflow_out(data=workflow)
+
+
 @router.get("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
-async def workflow_get(workflow_id: UUID | str) -> WorkflowOut:
+async def get_workflow(workflow_id: UUID | str) -> WorkflowOut:
     """Get a workflow.
 
     Parameters
@@ -287,7 +311,7 @@ async def workflow_get(workflow_id: UUID | str) -> WorkflowOut:
     status_code=200,
     tags=["workflows"],
 )
-async def workflow_get_all(exam_id: UUID | str) -> list[WorkflowOut]:
+async def get_all_exam_workflows(exam_id: UUID | str) -> list[WorkflowOut]:
     """Get all existing workflows of a certain exam.
 
     Parameters
@@ -306,8 +330,27 @@ async def workflow_get_all(exam_id: UUID | str) -> list[WorkflowOut]:
     return [await get_workflow_out(data=workflow) for workflow in workflows]
 
 
+@router.get(
+    "/workflow/templates",
+    response_model=list[WorkflowOut],
+    status_code=200,
+    tags=["workflows"],
+)
+async def get_all_workflow_templates() -> list[WorkflowOut]:
+    """Get all workflow templates.
+
+    Returns
+    -------
+        List of workflow pydantic output model
+    """
+    if not (workflows := await dal.get_all_workflows_templates()):
+        # Don't raise exception, list might be empty
+        return []
+    return [await get_workflow_out(data=workflow) for workflow in workflows]
+
+
 @router.delete("/workflow/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
-async def workflow_delete(workflow_id: UUID | str) -> None:
+async def delete_workflow(workflow_id: UUID | str) -> None:
     """Delete an existing workflow.
 
     Parameters
@@ -321,12 +364,15 @@ async def workflow_delete(workflow_id: UUID | str) -> None:
         404: Not found
     """
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    workflow = await get_workflow(workflow_id=_id)
+    if workflow.is_frozen:
+        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
     if not await dal.delete_workflow(workflow_id=_id):
         raise HTTPException(status_code=404, detail="Workflow not found")
 
 
 @router.put("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
-async def workflow_update(workflow_id: UUID | str, payload: BaseWorkflow) -> WorkflowOut:
+async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow) -> WorkflowOut:
     """Update an existing workflow.
 
     Parameters
@@ -346,15 +392,19 @@ async def workflow_update(workflow_id: UUID | str, payload: BaseWorkflow) -> Wor
         404: Not found
     """
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    workflow = await get_workflow(workflow_id=_id)
+    if workflow.is_frozen:
+        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be updated")
     if not (workflow := await dal.update_workflow(workflow_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out(data=workflow)
 
 
 # ----- Task API endpoints
+
 @router.post("/task/template", response_model=TaskOut, status_code=201, tags=["tasks"])
 async def create_task_template(payload: BaseTask) -> TaskOut:
-    """Create a new task.
+    """Create a new task template.
 
     Parameters
     ----------
@@ -381,13 +431,12 @@ async def create_task_template(payload: BaseTask) -> TaskOut:
 
 @router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
 async def create_task_from_template(workflow_id: UUID, template_id: UUID) -> TaskOut:
-    """Create a new task.
+    """Create a new task instance from template.
 
     Parameters
     ----------
     workflow_id
         ID of the workflow, the task instance is related to
-
     template_id
         ID of the template, the exam is created from
 
@@ -468,12 +517,7 @@ async def get_all_workflow_tasks(workflow_id: UUID | str) -> list[TaskOut]:
     tags=["tasks"],
 )
 async def get_all_task_templates() -> list[TaskOut]:
-    """Get all existing tasks of a certain workflow.
-
-    Parameters
-    ----------
-    workflow_id
-        Id of parental workflow
+    """Get all existing task templates.
 
     Returns
     -------
@@ -488,7 +532,7 @@ async def get_all_task_templates() -> list[TaskOut]:
 
 
 @router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])
-async def task_delete(task_id: UUID | str) -> None:
+async def delete_task(task_id: UUID | str) -> None:
     """Delete an existing task.
 
     Parameters
@@ -510,8 +554,10 @@ async def task_delete(task_id: UUID | str) -> None:
 
 
 @router.put("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def task_update(task_id: UUID | str, payload: BaseTask) -> TaskOut:
+async def update_task(task_id: UUID | str, payload: BaseTask) -> TaskOut:
     """Update an existing task.
+
+    Requires that the task to be updated is not frozen
 
     Parameters
     ----------
