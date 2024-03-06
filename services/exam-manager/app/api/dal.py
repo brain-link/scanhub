@@ -10,11 +10,22 @@ from scanhub_libraries.models import BaseExam, BaseJob, BaseTask
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from .db import Exam, Job, Task, async_session
-
+from .db import (
+    Exam,
+    ExamDefinitions,
+    ExamTemplates,
+    Job,
+    JobDefinitions,
+    JobTemplates,
+    Task,
+    TaskDefinitions,
+    TaskTemplates,
+    async_session,
+)
 
 # ----- Exam data access layer
-async def exam_add(payload: BaseExam) -> Exam:
+
+async def add_exam(payload: BaseExam, is_template: bool = False) -> Exam:
     """Create new exam.
 
     Parameters
@@ -26,7 +37,7 @@ async def exam_add(payload: BaseExam) -> Exam:
     -------
         Database orm model of created exam
     """
-    new_exam = Exam(**payload.dict())
+    new_exam = ExamTemplates(**payload.dict()) if is_template else ExamDefinitions(**payload.dict())
     async with async_session() as session:
         session.add(new_exam)
         await session.commit()
@@ -37,7 +48,7 @@ async def exam_add(payload: BaseExam) -> Exam:
     return new_exam
 
 
-async def exam_get(exam_id: UUID) -> (Exam | None):
+async def get_exam(exam_id: UUID, is_template: bool = False) -> (Exam | None):
     """Get exam by id.
 
     Parameters
@@ -50,11 +61,11 @@ async def exam_get(exam_id: UUID) -> (Exam | None):
         Database orm model of exam or none
     """
     async with async_session() as session:
-        exam: (Exam | None) = await session.get(Exam, exam_id)
+        exam = await session.get(ExamTemplates if is_template else ExamDefinitions, exam_id)
     return exam
 
 
-async def exam_get_all(patient_id: int) -> list[Exam]:
+async def get_all_exams(patient_id: int, is_template: bool = False) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
@@ -67,12 +78,15 @@ async def exam_get_all(patient_id: int) -> list[Exam]:
         List of exam data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Exam).where(Exam.patient_id == patient_id))
+        if is_template:
+            result: Result = await session.execute(select(ExamTemplates).where(ExamTemplates.patient_id == patient_id))
+        else:
+            result: Result = await session.execute(select(ExamDefinitions).where(ExamDefinitions.patient_id == patient_id))
         exams = list(result.scalars().all())
     return exams
 
 
-async def exam_delete(exam_id: UUID) -> bool:
+async def delete_exam(exam_id: UUID, is_template: bool = False) -> bool:
     """Delete exam by id.
 
     Parameters
@@ -85,14 +99,14 @@ async def exam_delete(exam_id: UUID) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if exam := await session.get(Exam, exam_id):
+        if exam := await session.get(ExamTemplates if is_template else ExamDefinitions, exam_id):
             await session.delete(exam)
             await session.commit()
             return True
         return False
 
 
-async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
+async def update_exam(exam_id: UUID, payload: BaseExam, is_template: bool = False) -> (Exam | None):
     """Update existing exam entry.
 
     Parameters
@@ -108,7 +122,7 @@ async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
         Database orm model of updated exam
     """
     async with async_session() as session:
-        if exam := await session.get(Exam, exam_id):
+        if exam := await session.get(ExamTemplates if is_template else ExamDefinitions, exam_id):
             exam.update(payload)
             await session.commit()
             await session.refresh(exam)
@@ -117,7 +131,8 @@ async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
 
 
 # ----- Job data access layer
-async def add_job(payload: BaseJob) -> Job:
+
+async def add_job(payload: BaseJob, is_template: bool = False) -> Job:
     """Add new job.
 
     Parameters
@@ -129,7 +144,7 @@ async def add_job(payload: BaseJob) -> Job:
     -------
         Database orm model of created job
     """
-    new_job = Job(**payload.dict())
+    new_job = JobTemplates(**payload.dict()) if is_template else JobDefinitions(**payload.dict())
     async with async_session() as session:
         session.add(new_job)
         await session.commit()
@@ -140,7 +155,7 @@ async def add_job(payload: BaseJob) -> Job:
     return new_job
 
 
-async def get_job(job_id: UUID) -> (Job | None):
+async def get_job(job_id: UUID, is_template: bool = False) -> (Job | None):
     """Get job by id.
 
     Parameters
@@ -153,11 +168,11 @@ async def get_job(job_id: UUID) -> (Job | None):
         Database orm model with data of requested job
     """
     async with async_session() as session:
-        job: (Job | None) = await session.get(Job, job_id)
+        job = await session.get(JobTemplates if is_template else JobDefinitions, job_id)
     return job
 
 
-async def get_all_jobs(exam_id: UUID) -> list[Job]:
+async def get_all_jobs(exam_id: UUID, is_template: bool = False) -> list[Job]:
     """Get a list of all jobs assigned to a certain exam.
 
     Parameters
@@ -170,12 +185,15 @@ async def get_all_jobs(exam_id: UUID) -> list[Job]:
         List of job data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Job).where(Job.exam_id == exam_id))
+        if is_template:
+            result: Result = await session.execute(select(JobTemplates).where(JobTemplates.exam_id == exam_id))
+        else:
+            result: Result = await session.execute(select(JobDefinitions).where(JobDefinitions.exam_id == exam_id))
         jobs = list(result.scalars().all())
     return jobs
 
 
-async def delete_job(job_id: UUID) -> bool:
+async def delete_job(job_id: UUID, is_template: bool = False) -> bool:
     """Delete a job by ID.
 
     Parameters
@@ -188,14 +206,14 @@ async def delete_job(job_id: UUID) -> bool:
         Success of delete event
     """
     async with async_session() as session:
-        if job := await session.get(Job, job_id):
+        if job := await session.get(JobTemplates if is_template else JobDefinitions, job_id):
             await session.delete(job)
             await session.commit()
             return True
         return False
 
 
-async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
+async def update_job(job_id: UUID, payload: BaseJob, is_template: bool = False) -> (Job | None):
     """Update existing job in database.
 
     Parameters
@@ -210,7 +228,7 @@ async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
         Job database orm model of updated job
     """
     async with async_session() as session:
-        if job := await session.get(Job, job_id):
+        if job := await session.get(JobTemplates if is_template else JobDefinitions, job_id):
             job.update(payload)
             await session.commit()
             await session.refresh(job)
@@ -218,9 +236,9 @@ async def update_job(job_id: UUID, payload: BaseJob) -> (Job | None):
         return None
 
 
-
 # ----- Task data access layer
-async def add_task(payload: BaseTask) -> Task:
+
+async def add_task(payload: BaseTask, is_template: bool = False) -> Task:
     """Add new task to database.
 
     Parameters
@@ -232,7 +250,7 @@ async def add_task(payload: BaseTask) -> Task:
     -------
         Database orm model of created task
     """
-    new_task = Task(**payload.dict())
+    new_task = TaskTemplates(**payload.dict()) if is_template else TaskDefinitions(**payload.dict())
     async with async_session() as session:
         session.add(new_task)
         await session.commit()
@@ -240,7 +258,7 @@ async def add_task(payload: BaseTask) -> Task:
     return new_task
 
 
-async def get_task(task_id: UUID) -> (Task | None):
+async def get_task(task_id: UUID, is_template: bool = False) -> (Task | None):
     """Get task by id.
 
     Parameters
@@ -253,11 +271,11 @@ async def get_task(task_id: UUID) -> (Task | None):
         Database orm model with data of requested task
     """
     async with async_session() as session:
-        task: (Task | None) = await session.get(Task, task_id)
+        task = await session.get(TaskTemplates if is_template else TaskDefinitions, task_id)
     return task
 
 
-async def get_all_tasks(job_id: UUID) -> list[Task]:
+async def get_all_tasks(job_id: UUID, is_template: bool = False) -> list[Task]:
     """Get a list of all tasks assigned to a certain job.
 
     Parameters
@@ -270,12 +288,15 @@ async def get_all_tasks(job_id: UUID) -> list[Task]:
         List of task data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Task).where(Task.job_id == job_id))
+        if is_template:
+            result: Result = await session.execute(select(TaskTemplates).where(TaskTemplates.job_id == job_id))
+        else:
+            result: Result = await session.execute(select(TaskDefinitions).where(TaskDefinitions.job_id == job_id))
         tasks = list(result.scalars().all())
     return tasks
 
 
-async def delete_task(task_id: UUID) -> bool:
+async def delete_task(task_id: UUID, is_template: bool = False) -> bool:
     """Delete task by id.
 
     Parameters
@@ -288,14 +309,14 @@ async def delete_task(task_id: UUID) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if task := await session.get(Task, task_id):
+        if task := await session.get(TaskTemplates if is_template else TaskDefinitions, task_id):
             await session.delete(task)
             await session.commit()
             return True
         return False
 
 
-async def update_task(task_id: UUID, payload: BaseTask) -> (Task | None):
+async def update_task(task_id: UUID, payload: BaseTask, is_template: bool = False) -> (Task | None):
     """Update existing task in database.
 
     Parameters
@@ -310,7 +331,7 @@ async def update_task(task_id: UUID, payload: BaseTask) -> (Task | None):
         Database orm model of updated task
     """
     async with async_session() as session:
-        if task := await session.get(Task, task_id):
+        if task := await session.get(TaskTemplates if is_template else TaskDefinitions, task_id):
             task.update(payload)
             await session.commit()
             await session.refresh(task)

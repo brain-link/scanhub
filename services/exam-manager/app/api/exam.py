@@ -57,7 +57,7 @@ async def get_exam_out(data: Exam) -> ExamOut:
 
 # ----- Exam API endpoints
 @router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
-async def exam_create(payload: BaseExam) -> ExamOut:
+async def create_exam(payload: BaseExam, is_template: bool = False) -> ExamOut:
     """Create exam endpoint.
 
     Parameters
@@ -74,13 +74,13 @@ async def exam_create(payload: BaseExam) -> ExamOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not (exam := await dal.exam_add(payload)):
+    if not (exam := await dal.add_exam(payload=payload, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Could not create exam")
     return await get_exam_out(data=exam)
 
 
 @router.get("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
-async def exam_get(exam_id: UUID | str) -> ExamOut:
+async def get_exam(exam_id: UUID | str, is_template: bool) -> ExamOut:
     """Get exam endpoint.
 
     Parameters
@@ -98,13 +98,13 @@ async def exam_get(exam_id: UUID | str) -> ExamOut:
         404: Not found
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (exam := await dal.exam_get(_id)):
+    if not (exam := await dal.get_exam(exam_id=_id, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Exam not found")
     return await get_exam_out(data=exam)
 
 
 @router.get("/all/{patient_id}", response_model=list[ExamOut], status_code=200, tags=["exams"])
-async def exam_get_all(patient_id: int) -> list[ExamOut]:
+async def get_all_exams(patient_id: int, is_template: bool) -> list[ExamOut]:
     """Get all exams of a certain patient.
 
     Parameters
@@ -116,7 +116,7 @@ async def exam_get_all(patient_id: int) -> list[ExamOut]:
     -------
         List of exam pydantic output models
     """
-    if not (exams := await dal.exam_get_all(patient_id)):
+    if not (exams := await dal.get_all_exams(patient_id=patient_id, is_template=is_template)):
         # Don't raise exception here, list might be empty
         return []
     result = [await get_exam_out(data=exam) for exam in exams]
@@ -125,7 +125,7 @@ async def exam_get_all(patient_id: int) -> list[ExamOut]:
 
 
 @router.delete("/{exam_id}", response_model={}, status_code=204, tags=["exams"])
-async def exam_delete(exam_id: UUID | str) -> None:
+async def exam_delete(exam_id: UUID | str, is_template: bool) -> None:
     """Delete an existing exam by id.
 
     Parameters
@@ -139,12 +139,12 @@ async def exam_delete(exam_id: UUID | str) -> None:
         404: Not found
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not await dal.exam_delete(_id):
+    if not await dal.delete_exam(exam_id=_id, is_template=is_template):
         raise HTTPException(status_code=404, detail="Exam not found")
 
 
 @router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
-async def exam_update(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
+async def exam_update(exam_id: UUID | str, payload: BaseExam, is_template: bool) -> ExamOut:
     """Update an existing exam.
 
     Parameters
@@ -164,14 +164,14 @@ async def exam_update(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
         404: Not found
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (exam := await dal.update_exam(_id, payload)):
+    if not (exam := await dal.update_exam(exam_id=_id, payload=payload, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Exam not found")
     return await get_exam_out(data=exam)
 
 
 # ----- Job API endpoints
 @router.post("/job", response_model=JobOut, status_code=201, tags=["jobs"])
-async def job_create(payload: BaseJob) -> JobOut:
+async def job_create(payload: BaseJob, is_template: bool) -> JobOut:
     """Create new job.
 
     Parameters
@@ -189,14 +189,14 @@ async def job_create(payload: BaseJob) -> JobOut:
         404: Creation unsuccessful
     """
     print("Payload: ", payload.__dict__)
-    if not (job := await dal.add_job(payload)):
+    if not (job := await dal.add_job(payload=payload, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Could not create job")
     print("New job: ", job)
     return await get_job_out(data=job)
 
 
 @router.get("/job/{job_id}", response_model=JobOut, status_code=200, tags=["jobs"])
-async def job_get(job_id: UUID | str) -> JobOut:
+async def job_get(job_id: UUID | str, is_template: bool) -> JobOut:
     """Get a job.
 
     Parameters
@@ -214,7 +214,7 @@ async def job_get(job_id: UUID | str) -> JobOut:
         404: Not found
     """
     _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (job := await dal.get_job(_id)):
+    if not (job := await dal.get_job(job_id=_id, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Job not found")
     return await get_job_out(data=job)
 
@@ -225,7 +225,7 @@ async def job_get(job_id: UUID | str) -> JobOut:
     status_code=200,
     tags=["jobs"],
 )
-async def job_get_all(exam_id: UUID | str) -> list[JobOut]:
+async def job_get_all(exam_id: UUID | str, is_template: bool) -> list[JobOut]:
     """Get all existing jobs of a certain exam.
 
     Parameters
@@ -238,14 +238,14 @@ async def job_get_all(exam_id: UUID | str) -> list[JobOut]:
         List of job pydantic output model
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (jobs := await dal.get_all_jobs(_id)):
+    if not (jobs := await dal.get_all_jobs(exam_id=_id, is_template=is_template)):
         # Don't raise exception, list might be empty
         return []
     return [await get_job_out(data=job) for job in jobs]
 
 
 @router.delete("/job/{job_id}", response_model={}, status_code=204, tags=["jobs"])
-async def job_delete(job_id: UUID | str) -> None:
+async def job_delete(job_id: UUID | str, is_template: bool) -> None:
     """Delete an existing job.
 
     Parameters
@@ -259,12 +259,12 @@ async def job_delete(job_id: UUID | str) -> None:
         404: Not found
     """
     _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not await dal.delete_job(_id):
+    if not await dal.delete_job(job_id=_id, is_template=is_template):
         raise HTTPException(status_code=404, detail="Job not found")
 
 
 @router.put("/job/{job_id}", response_model=JobOut, status_code=200, tags=["jobs"])
-async def job_update(job_id: UUID | str, payload: BaseJob) -> JobOut:
+async def job_update(job_id: UUID | str, payload: BaseJob, is_template: bool) -> JobOut:
     """Update an existing job.
 
     Parameters
@@ -284,14 +284,14 @@ async def job_update(job_id: UUID | str, payload: BaseJob) -> JobOut:
         404: Not found
     """
     _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (job := await dal.update_job(_id, payload)):
+    if not (job := await dal.update_job(job_id=_id, payload=payload, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Job not found")
     return await get_job_out(data=job)
 
 
 # ----- Task API endpoints
 @router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def task_create(payload: BaseTask) -> TaskOut:
+async def task_create(payload: BaseTask, is_template: bool) -> TaskOut:
     """Create a new task.
 
     Parameters
@@ -308,7 +308,7 @@ async def task_create(payload: BaseTask) -> TaskOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not (task := await dal.add_task(payload)):
+    if not (task := await dal.add_task(payload=payload, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Could not create task")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
@@ -316,7 +316,7 @@ async def task_create(payload: BaseTask) -> TaskOut:
 
 
 @router.get("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def task_get(task_id: UUID | str) -> TaskOut:
+async def task_get(task_id: UUID | str, is_template: bool) -> TaskOut:
     """Get an existing task.
 
     Parameters
@@ -334,7 +334,7 @@ async def task_get(task_id: UUID | str) -> TaskOut:
         404: Not found
     """
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await dal.get_task(_id)):
+    if not (task := await dal.get_task(task_id=_id, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Task not found")
     return TaskOut(**task.__dict__)
 
@@ -345,7 +345,7 @@ async def task_get(task_id: UUID | str) -> TaskOut:
     status_code=200,
     tags=["tasks"],
 )
-async def task_get_all(job_id: UUID | str) -> list[TaskOut]:
+async def task_get_all(job_id: UUID | str, is_template: bool) -> list[TaskOut]:
     """Get all existing tasks of a certain job.
 
     Parameters
@@ -358,7 +358,7 @@ async def task_get_all(job_id: UUID | str) -> list[TaskOut]:
         List of task pydantic output model
     """
     _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (tasks := await dal.get_all_tasks(_id)):
+    if not (tasks := await dal.get_all_tasks(job_id=_id, is_template=is_template)):
         # Don't raise exception here, list might be empty.
         return []
     result = [TaskOut(**task.__dict__) for task in tasks]
@@ -367,7 +367,7 @@ async def task_get_all(job_id: UUID | str) -> list[TaskOut]:
 
 
 @router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])
-async def task_delete(task_id: UUID | str) -> None:
+async def task_delete(task_id: UUID | str, is_template: bool) -> None:
     """Delete an existing task.
 
     Parameters
@@ -381,12 +381,12 @@ async def task_delete(task_id: UUID | str) -> None:
         404: Not found
     """
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not await dal.delete_task(_id):
+    if not await dal.delete_task(task_id=_id, is_template=is_template):
         raise HTTPException(status_code=404, detail="Task not found")
 
 
 @router.put("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def task_update(task_id: UUID | str, payload: BaseTask) -> TaskOut:
+async def task_update(task_id: UUID | str, payload: BaseTask, is_template: bool) -> TaskOut:
     """Update an existing task.
 
     Parameters
@@ -406,6 +406,6 @@ async def task_update(task_id: UUID | str, payload: BaseTask) -> TaskOut:
         404: Not found
     """
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await dal.update_task(_id, payload)):
+    if not (task := await dal.update_task(task_id=_id, payload=payload, is_template=is_template)):
         raise HTTPException(status_code=404, detail="Task not found")
     return TaskOut(**task.__dict__)
