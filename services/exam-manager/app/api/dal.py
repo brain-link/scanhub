@@ -6,7 +6,7 @@
 from pprint import pprint
 from uuid import UUID
 
-from scanhub_libraries.models import BaseExam, BaseJob, BaseTask
+from scanhub_libraries.models import BaseExam, BaseWorkflow, BaseTask
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
@@ -14,9 +14,9 @@ from .db import (
     Exam,
     ExamDefinitions,
     ExamTemplates,
-    Job,
-    JobDefinitions,
-    JobTemplates,
+    Workflow,
+    WorkflowDefinitions,
+    WorkflowTemplates,
     Task,
     TaskDefinitions,
     TaskTemplates,
@@ -130,109 +130,109 @@ async def update_exam(exam_id: UUID, payload: BaseExam, is_template: bool = Fals
         return None
 
 
-# ----- Job data access layer
+# ----- Workflow data access layer
 
-async def add_job(payload: BaseJob, is_template: bool = False) -> Job:
-    """Add new job.
+async def add_workflow(payload: BaseWorkflow, is_template: bool = False) -> Workflow:
+    """Add new workflow.
 
     Parameters
     ----------
     payload
-        Job pydantic base model with data for job creation
+        Workflow pydantic base model with data for workflow creation
 
     Returns
     -------
-        Database orm model of created job
+        Database orm model of created workflow
     """
-    new_job = JobTemplates(**payload.dict()) if is_template else JobDefinitions(**payload.dict())
+    new_workflow = WorkflowTemplates(**payload.dict()) if is_template else WorkflowDefinitions(**payload.dict())
     async with async_session() as session:
-        session.add(new_job)
+        session.add(new_workflow)
         await session.commit()
-        await session.refresh(new_job)
+        await session.refresh(new_workflow)
     # Debugging
     print("***** NEW JOB *****")
-    pprint(new_job.__dict__)
-    return new_job
+    pprint(new_workflow.__dict__)
+    return new_workflow
 
 
-async def get_job(job_id: UUID, is_template: bool = False) -> (Job | None):
-    """Get job by id.
+async def get_workflow(workflow_id: UUID, is_template: bool = False) -> (Workflow | None):
+    """Get workflow by id.
 
     Parameters
     ----------
-    job_id
-        Id of the requested job
+    workflow_id
+        Id of the requested workflow
 
     Returns
     -------
-        Database orm model with data of requested job
+        Database orm model with data of requested workflow
     """
     async with async_session() as session:
-        job = await session.get(JobTemplates if is_template else JobDefinitions, job_id)
-    return job
+        workflow = await session.get(WorkflowTemplates if is_template else WorkflowDefinitions, workflow_id)
+    return workflow
 
 
-async def get_all_jobs(exam_id: UUID, is_template: bool = False) -> list[Job]:
-    """Get a list of all jobs assigned to a certain exam.
+async def get_all_workflows(exam_id: UUID, is_template: bool = False) -> list[Workflow]:
+    """Get a list of all workflows assigned to a certain exam.
 
     Parameters
     ----------
     exam_id
-        Id of the parent exam entry, jobs are assigned to
+        Id of the parent exam entry, workflows are assigned to
 
     Returns
     -------
-        List of job data base orm models
+        List of workflow data base orm models
     """
     async with async_session() as session:
         if is_template:
-            result: Result = await session.execute(select(JobTemplates).where(JobTemplates.exam_id == exam_id))
+            result: Result = await session.execute(select(WorkflowTemplates).where(WorkflowTemplates.exam_id == exam_id))
         else:
-            result: Result = await session.execute(select(JobDefinitions).where(JobDefinitions.exam_id == exam_id))
-        jobs = list(result.scalars().all())
-    return jobs
+            result: Result = await session.execute(select(WorkflowDefinitions).where(WorkflowDefinitions.exam_id == exam_id))
+        workflows = list(result.scalars().all())
+    return workflows
 
 
-async def delete_job(job_id: UUID, is_template: bool = False) -> bool:
-    """Delete a job by ID.
+async def delete_workflow(workflow_id: UUID, is_template: bool = False) -> bool:
+    """Delete a workflow by ID.
 
     Parameters
     ----------
-    job_id
-        ID of job to be deleted
+    workflow_id
+        ID of workflow to be deleted
 
     Returns
     -------
         Success of delete event
     """
     async with async_session() as session:
-        if job := await session.get(JobTemplates if is_template else JobDefinitions, job_id):
-            await session.delete(job)
+        if workflow := await session.get(WorkflowTemplates if is_template else WorkflowDefinitions, workflow_id):
+            await session.delete(workflow)
             await session.commit()
             return True
         return False
 
 
-async def update_job(job_id: UUID, payload: BaseJob, is_template: bool = False) -> (Job | None):
-    """Update existing job in database.
+async def update_workflow(workflow_id: UUID, payload: BaseWorkflow, is_template: bool = False) -> (Workflow | None):
+    """Update existing workflow in database.
 
     Parameters
     ----------
-    job_id
-        Id of the job to be updateed
+    workflow_id
+        Id of the workflow to be updateed
     payload
-        Job pydantic base model with data to be updated
+        Workflow pydantic base model with data to be updated
 
     Returns
     -------
-        Job database orm model of updated job
+        Workflow database orm model of updated workflow
     """
     async with async_session() as session:
-        if job := await session.get(JobTemplates if is_template else JobDefinitions, job_id):
-            job.update(payload)
+        if workflow := await session.get(WorkflowTemplates if is_template else WorkflowDefinitions, workflow_id):
+            workflow.update(payload)
             await session.commit()
-            await session.refresh(job)
-            return job
+            await session.refresh(workflow)
+            return workflow
         return None
 
 
@@ -275,13 +275,13 @@ async def get_task(task_id: UUID, is_template: bool = False) -> (Task | None):
     return task
 
 
-async def get_all_tasks(job_id: UUID, is_template: bool = False) -> list[Task]:
-    """Get a list of all tasks assigned to a certain job.
+async def get_all_tasks(workflow_id: UUID, is_template: bool = False) -> list[Task]:
+    """Get a list of all tasks assigned to a certain workflow.
 
     Parameters
     ----------
-    job_id
-        Id of the parent job entry, tasks are assigned to
+    workflow_id
+        Id of the parent workflow entry, tasks are assigned to
 
     Returns
     -------
@@ -289,9 +289,9 @@ async def get_all_tasks(job_id: UUID, is_template: bool = False) -> list[Task]:
     """
     async with async_session() as session:
         if is_template:
-            result: Result = await session.execute(select(TaskTemplates).where(TaskTemplates.job_id == job_id))
+            result: Result = await session.execute(select(TaskTemplates).where(TaskTemplates.workflow_id == workflow_id))
         else:
-            result: Result = await session.execute(select(TaskDefinitions).where(TaskDefinitions.job_id == job_id))
+            result: Result = await session.execute(select(TaskDefinitions).where(TaskDefinitions.workflow_id == workflow_id))
         tasks = list(result.scalars().all())
     return tasks
 

@@ -53,15 +53,15 @@ class SequenceParameters(BaseModel):
 
 
 # Might be obsolete
-class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic model definition of a scanjob."""
+class ScanWorkflow(BaseModel):  # pylint: disable=too-few-public-methods
+    """Pydantic model definition of a scan workflow."""
 
     class Config:
         """Pydantic configuration."""
 
         extra = Extra.ignore
 
-    job_id: UUID = Field(alias="id")
+    workflow_id: UUID = Field(alias="id")
     sequence_id: str
     workflow_id: int
     device_id: str
@@ -130,7 +130,7 @@ class MRISequenceCreate(BaseModel):
 
 # Might be obsolete, to be updated
 class DeviceTask(BaseModel):
-    """Pydantic model definition of a device job."""
+    """Pydantic model definition of a device workflow."""
 
     device_id: str
     record_id: UUID
@@ -139,7 +139,7 @@ class DeviceTask(BaseModel):
 
 
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic definition of a scanjob."""
+    """Pydantic definition of a scanworkflow."""
 
     record_id: UUID
     status_percent: int
@@ -174,36 +174,6 @@ class DeviceOut(BaseDevice):
     id: str
     datetime_created: datetime
     datetime_updated: datetime | None
-    
-    
-
-
-# Obsolete, to be removed
-class BaseWorkflow(BaseModel): # obsolete
-    """Workflow base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    host: str
-    name: str
-    manufacturer: str
-    modality: str
-    type: str
-    status: str
-    kafka_topic: str
-
-
-class WorkflowOut(BaseWorkflow): # obsolete
-    """Workflow output model."""
-
-    id: int
-    datetime_created: datetime
-    datetime_updated: datetime | None
-
-
 
 
 class TaskType(str, Enum):
@@ -258,7 +228,7 @@ class BaseTask(BaseModel):
             ]
         }
 
-    job_id: Optional[UUID] = Field("", description="ID of the job the task belongs to.")
+    workflow_id: Optional[UUID] = Field("", description="ID of the workflow the task belongs to.")
     description: str
     type: TaskType
     args: dict[str, str]
@@ -275,8 +245,8 @@ class TaskOut(BaseTask):
 
 
 
-class BaseJob(BaseModel):
-    """Job base model."""
+class BaseWorkflow(BaseModel):
+    """Workflow base model."""
 
     class Config:
         """Base class configuration."""
@@ -288,8 +258,8 @@ class BaseJob(BaseModel):
     is_finished: bool
 
 
-class JobOut(BaseJob):
-    """Job output model."""
+class WorkflowOut(BaseWorkflow):
+    """Workflow output model."""
 
     id: UUID
     tasks: list[TaskOut]
@@ -321,4 +291,4 @@ class ExamOut(BaseExam):
     id: UUID
     datetime_created: datetime
     datetime_updated: datetime | None
-    jobs: list[JobOut]
+    workflows: list[WorkflowOut]

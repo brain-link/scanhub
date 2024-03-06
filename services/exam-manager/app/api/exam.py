@@ -6,10 +6,10 @@
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
-from scanhub_libraries.models import BaseExam, BaseJob, BaseTask, ExamOut, JobOut, TaskOut
+from scanhub_libraries.models import BaseExam, BaseWorkflow, BaseTask, ExamOut, WorkflowOut, TaskOut
 
 from . import dal
-from .db import Exam, Job
+from .db import Exam, Workflow
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -20,22 +20,22 @@ from .db import Exam, Job
 router = APIRouter()
 
 
-# Helper methods for jobs and exam, require recursive model translation
-async def get_job_out(data: Job) -> JobOut:
+# Helper methods for workflows and exam, require recursive model translation
+async def get_workflow_out(data: Workflow) -> WorkflowOut:
     """Transform db model to pydantic model.
 
     Parameters
     ----------
     data
-        Job db model
+        Workflow db model
 
     Returns
     -------
-        Job pydantic model
+        Workflow pydantic model
     """
-    job = data.__dict__
-    job["tasks"] = [TaskOut(**task.__dict__) for task in data.tasks]
-    return JobOut(**job)
+    workflow = data.__dict__
+    workflow["tasks"] = [TaskOut(**task.__dict__) for task in data.tasks]
+    return WorkflowOut(**workflow)
 
 
 async def get_exam_out(data: Exam) -> ExamOut:
@@ -51,7 +51,7 @@ async def get_exam_out(data: Exam) -> ExamOut:
         Exam pydantic model
     """
     exam = data.__dict__
-    exam["jobs"] = [await get_job_out(job) for job in data.jobs]
+    exam["workflows"] = [await get_workflow_out(workflow) for workflow in data.workflows]
     return ExamOut(**exam)
 
 
@@ -169,19 +169,19 @@ async def exam_update(exam_id: UUID | str, payload: BaseExam, is_template: bool)
     return await get_exam_out(data=exam)
 
 
-# ----- Job API endpoints
-@router.post("/job", response_model=JobOut, status_code=201, tags=["jobs"])
-async def job_create(payload: BaseJob, is_template: bool) -> JobOut:
-    """Create new job.
+# ----- Workflow API endpoints
+@router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
+async def workflow_create(payload: BaseWorkflow, is_template: bool) -> WorkflowOut:
+    """Create new workflow.
 
     Parameters
     ----------
     payload
-        Job pydantic input model
+        Workflow pydantic input model
 
     Returns
     -------
-        Job pydantic output model
+        Workflow pydantic output model
 
     Raises
     ------
@@ -189,44 +189,44 @@ async def job_create(payload: BaseJob, is_template: bool) -> JobOut:
         404: Creation unsuccessful
     """
     print("Payload: ", payload.__dict__)
-    if not (job := await dal.add_job(payload=payload, is_template=is_template)):
-        raise HTTPException(status_code=404, detail="Could not create job")
-    print("New job: ", job)
-    return await get_job_out(data=job)
+    if not (workflow := await dal.add_workflow(payload=payload, is_template=is_template)):
+        raise HTTPException(status_code=404, detail="Could not create workflow")
+    print("New workflow: ", workflow)
+    return await get_workflow_out(data=workflow)
 
 
-@router.get("/job/{job_id}", response_model=JobOut, status_code=200, tags=["jobs"])
-async def job_get(job_id: UUID | str, is_template: bool) -> JobOut:
-    """Get a job.
+@router.get("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
+async def workflow_get(workflow_id: UUID | str, is_template: bool) -> WorkflowOut:
+    """Get a workflow.
 
     Parameters
     ----------
-    job_id
-        Id of the job to be returned
+    workflow_id
+        Id of the workflow to be returned
 
     Returns
     -------
-        Job pydantic output model
+        Workflow pydantic output model
 
     Raises
     ------
     HTTPException
         404: Not found
     """
-    _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (job := await dal.get_job(job_id=_id, is_template=is_template)):
-        raise HTTPException(status_code=404, detail="Job not found")
-    return await get_job_out(data=job)
+    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    if not (workflow := await dal.get_workflow(workflow_id=_id, is_template=is_template)):
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return await get_workflow_out(data=workflow)
 
 
 @router.get(
-    "/job/all/{exam_id}",
-    response_model=list[JobOut],
+    "/workflow/all/{exam_id}",
+    response_model=list[WorkflowOut],
     status_code=200,
-    tags=["jobs"],
+    tags=["workflows"],
 )
-async def job_get_all(exam_id: UUID | str, is_template: bool) -> list[JobOut]:
-    """Get all existing jobs of a certain exam.
+async def workflow_get_all(exam_id: UUID | str, is_template: bool) -> list[WorkflowOut]:
+    """Get all existing workflows of a certain exam.
 
     Parameters
     ----------
@@ -235,58 +235,58 @@ async def job_get_all(exam_id: UUID | str, is_template: bool) -> list[JobOut]:
 
     Returns
     -------
-        List of job pydantic output model
+        List of workflow pydantic output model
     """
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (jobs := await dal.get_all_jobs(exam_id=_id, is_template=is_template)):
+    if not (workflows := await dal.get_all_workflows(exam_id=_id, is_template=is_template)):
         # Don't raise exception, list might be empty
         return []
-    return [await get_job_out(data=job) for job in jobs]
+    return [await get_workflow_out(data=workflow) for workflow in workflows]
 
 
-@router.delete("/job/{job_id}", response_model={}, status_code=204, tags=["jobs"])
-async def job_delete(job_id: UUID | str, is_template: bool) -> None:
-    """Delete an existing job.
+@router.delete("/workflow/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
+async def workflow_delete(workflow_id: UUID | str, is_template: bool) -> None:
+    """Delete an existing workflow.
 
     Parameters
     ----------
-    job_id
-        Id of the job to be deleted
+    workflow_id
+        Id of the workflow to be deleted
 
     Raises
     ------
     HTTPException
         404: Not found
     """
-    _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not await dal.delete_job(job_id=_id, is_template=is_template):
-        raise HTTPException(status_code=404, detail="Job not found")
+    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    if not await dal.delete_workflow(workflow_id=_id, is_template=is_template):
+        raise HTTPException(status_code=404, detail="Workflow not found")
 
 
-@router.put("/job/{job_id}", response_model=JobOut, status_code=200, tags=["jobs"])
-async def job_update(job_id: UUID | str, payload: BaseJob, is_template: bool) -> JobOut:
-    """Update an existing job.
+@router.put("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
+async def workflow_update(workflow_id: UUID | str, payload: BaseWorkflow, is_template: bool) -> WorkflowOut:
+    """Update an existing workflow.
 
     Parameters
     ----------
-    job_id
-        Id of the job to be updated
+    workflow_id
+        Id of the workflow to be updated
     payload
-        Job pydantic indput model
+        Workflow pydantic indput model
 
     Returns
     -------
-        Job pydantic output model
+        Workflow pydantic output model
 
     Raises
     ------
     HTTPException
         404: Not found
     """
-    _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (job := await dal.update_job(job_id=_id, payload=payload, is_template=is_template)):
-        raise HTTPException(status_code=404, detail="Job not found")
-    return await get_job_out(data=job)
+    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    if not (workflow := await dal.update_workflow(workflow_id=_id, payload=payload, is_template=is_template)):
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return await get_workflow_out(data=workflow)
 
 
 # ----- Task API endpoints
@@ -340,25 +340,25 @@ async def task_get(task_id: UUID | str, is_template: bool) -> TaskOut:
 
 
 @router.get(
-    "/task/all/{job_id}",
+    "/task/all/{workflow_id}",
     response_model=list[TaskOut],
     status_code=200,
     tags=["tasks"],
 )
-async def task_get_all(job_id: UUID | str, is_template: bool) -> list[TaskOut]:
-    """Get all existing tasks of a certain job.
+async def task_get_all(workflow_id: UUID | str, is_template: bool) -> list[TaskOut]:
+    """Get all existing tasks of a certain workflow.
 
     Parameters
     ----------
-    job_id
-        Id of parental job
+    workflow_id
+        Id of parental workflow
 
     Returns
     -------
         List of task pydantic output model
     """
-    _id = UUID(job_id) if not isinstance(job_id, UUID) else job_id
-    if not (tasks := await dal.get_all_tasks(job_id=_id, is_template=is_template)):
+    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    if not (tasks := await dal.get_all_tasks(workflow_id=_id, is_template=is_template)):
         # Don't raise exception here, list might be empty.
         return []
     result = [TaskOut(**task.__dict__) for task in tasks]
@@ -392,7 +392,7 @@ async def task_update(task_id: UUID | str, payload: BaseTask, is_template: bool)
     Parameters
     ----------
     task_id
-        Id of the job to be updated
+        Id of the workflow to be updated
     payload
         Task pydantic base model
 

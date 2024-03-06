@@ -15,7 +15,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
-# Create base for exam and job table
+# Create base for exam and workflow table
 class Base(DeclarativeBase):
     """Declarative base class."""
 
@@ -75,7 +75,7 @@ class ExamDefinitions(Exam):
     __tablename__ = "exam-definitions"
     __table_args__ = {"extend_existing": True}
 
-    jobs: Mapped[list["JobDefinitions"]] = relationship(lazy="selectin")
+    workflows: Mapped[list["WorkflowDefinitions"]] = relationship(lazy="selectin")
 
 
 class ExamTemplates(Exam):
@@ -84,11 +84,11 @@ class ExamTemplates(Exam):
     __tablename__ = "exam-templates"
     __table_args__ = {"extend_existing": True}
 
-    jobs: Mapped[list["JobTemplates"]] = relationship(lazy="selectin")
+    workflows: Mapped[list["WorkflowTemplates"]] = relationship(lazy="selectin")
 
 
-class Job(Base): # TBD: rename to "Workflow"
-    """Job ORM model."""
+class Workflow(Base): # TBD: rename to "Workflow"
+    """Workflow ORM model."""
 
     __abstract__ = True
 
@@ -110,20 +110,20 @@ class Job(Base): # TBD: rename to "Workflow"
     )
 
 
-class JobDefinitions(Job):
-    """ORM model for job definitions."""
+class WorkflowDefinitions(Workflow):
+    """ORM model for workflow definitions."""
 
-    __tablename__ = "job-definitions"
+    __tablename__ = "workflow-definitions"
     __table_args__ = {"extend_existing": True}
 
     tasks: Mapped[list["TaskDefinitions"]] = relationship(lazy="selectin")
     exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam-definitions.id"))
 
 
-class JobTemplates(Job):
-    """ORM model for job templates."""
+class WorkflowTemplates(Workflow):
+    """ORM model for workflow templates."""
 
-    __tablename__ = "job-templates"
+    __tablename__ = "workflow-templates"
     __table_args__ = {"extend_existing": True}
 
     tasks: Mapped[list["TaskTemplates"]] = relationship(lazy="selectin")
@@ -171,8 +171,8 @@ class TaskDefinitions(Task):
     __tablename__ = "task-definitions"
     __table_args__ = {"extend_existing": True}
 
-    # Job references
-    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job-definitions.id"))
+    # Workflow references
+    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow-definitions.id"))
 
 class TaskTemplates(Task):
     """ORM model for task templates."""
@@ -180,8 +180,8 @@ class TaskTemplates(Task):
     __tablename__ = "task-templates"
     __table_args__ = {"extend_existing": True}
 
-    # Job references
-    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job-templates.id"))
+    # Workflow references
+    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow-templates.id"))
 
 # TBD DeviceTask(Task):
 
