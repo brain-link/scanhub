@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "workflow-manager"
+name = "workflow_manager"
 version = "0.0.1"
 description = "The Workflow Manager organizes the processing chains forming ScanHub Workflows."
 authors = [

@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "device-manager"
+name = "device_manager"
 version = "0.0.1"
 description = "The device manager service is responsible for managing the devices that are connected to scanhub."
 authors = [

@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "acquisition-control"
+name = "acquisition_control"
 version = "0.0.1"
 description = "Acquisition control. Receives control cmd from ui and controls scans on devices."
 authors = [
