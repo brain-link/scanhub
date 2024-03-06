@@ -6,26 +6,20 @@
 from pprint import pprint
 from uuid import UUID
 
-from scanhub_libraries.models import BaseExam, BaseWorkflow, BaseTask
+from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from .db import (
     Exam,
-    ExamDefinitions,
-    ExamTemplates,
-    Workflow,
-    WorkflowDefinitions,
-    WorkflowTemplates,
     Task,
-    TaskDefinitions,
-    TaskTemplates,
+    Workflow,
     async_session,
 )
 
 # ----- Exam data access layer
 
-async def add_exam(payload: BaseExam, is_template: bool = False) -> Exam:
+async def add_exam(payload: BaseExam) -> Exam:
     """Create new exam.
 
     Parameters
@@ -37,7 +31,7 @@ async def add_exam(payload: BaseExam, is_template: bool = False) -> Exam:
     -------
         Database orm model of created exam
     """
-    new_exam = ExamTemplates(**payload.dict()) if is_template else ExamDefinitions(**payload.dict())
+    new_exam = Exam(**payload.dict())
     async with async_session() as session:
         session.add(new_exam)
         await session.commit()
@@ -48,7 +42,7 @@ async def add_exam(payload: BaseExam, is_template: bool = False) -> Exam:
     return new_exam
 
 
-async def get_exam(exam_id: UUID, is_template: bool = False) -> (Exam | None):
+async def get_exam(exam_id: UUID) -> (Exam | None):
     """Get exam by id.
 
     Parameters
@@ -61,11 +55,11 @@ async def get_exam(exam_id: UUID, is_template: bool = False) -> (Exam | None):
         Database orm model of exam or none
     """
     async with async_session() as session:
-        exam = await session.get(ExamTemplates if is_template else ExamDefinitions, exam_id)
+        exam = await session.get(Exam, exam_id)
     return exam
 
 
-async def get_all_exams(patient_id: int, is_template: bool = False) -> list[Exam]:
+async def get_all_exams(patient_id: int) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
@@ -78,15 +72,30 @@ async def get_all_exams(patient_id: int, is_template: bool = False) -> list[Exam
         List of exam data base orm models
     """
     async with async_session() as session:
-        if is_template:
-            result: Result = await session.execute(select(ExamTemplates).where(ExamTemplates.patient_id == patient_id))
-        else:
-            result: Result = await session.execute(select(ExamDefinitions).where(ExamDefinitions.patient_id == patient_id))
+        result: Result = await session.execute(select(Exam).where(Exam.patient_id == patient_id))
         exams = list(result.scalars().all())
     return exams
 
 
-async def delete_exam(exam_id: UUID, is_template: bool = False) -> bool:
+async def get_all_exam_templates() -> list[Exam]:
+    """Get a list of all exams assigned to a certain patient.
+
+    Parameters
+    ----------
+    patient_id
+        Id of the parent patient entry, exams are assigned to
+
+    Returns
+    -------
+        List of exam data base orm models
+    """
+    async with async_session() as session:
+        result: Result = await session.execute(select(Exam).where(Exam.is_template))
+        exams = list(result.scalars().all())
+    return exams
+
+
+async def delete_exam(exam_id: UUID) -> bool:
     """Delete exam by id.
 
     Parameters
@@ -99,14 +108,14 @@ async def delete_exam(exam_id: UUID, is_template: bool = False) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if exam := await session.get(ExamTemplates if is_template else ExamDefinitions, exam_id):
+        if exam := await session.get(Exam, exam_id):
             await session.delete(exam)
             await session.commit()
             return True
         return False
 
 
-async def update_exam(exam_id: UUID, payload: BaseExam, is_template: bool = False) -> (Exam | None):
+async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
     """Update existing exam entry.
 
     Parameters
@@ -122,7 +131,7 @@ async def update_exam(exam_id: UUID, payload: BaseExam, is_template: bool = Fals
         Database orm model of updated exam
     """
     async with async_session() as session:
-        if exam := await session.get(ExamTemplates if is_template else ExamDefinitions, exam_id):
+        if exam := await session.get(Exam, exam_id):
             exam.update(payload)
             await session.commit()
             await session.refresh(exam)
@@ -132,7 +141,7 @@ async def update_exam(exam_id: UUID, payload: BaseExam, is_template: bool = Fals
 
 # ----- Workflow data access layer
 
-async def add_workflow(payload: BaseWorkflow, is_template: bool = False) -> Workflow:
+async def add_workflow(payload: BaseWorkflow) -> Workflow:
     """Add new workflow.
 
     Parameters
@@ -144,7 +153,7 @@ async def add_workflow(payload: BaseWorkflow, is_template: bool = False) -> Work
     -------
         Database orm model of created workflow
     """
-    new_workflow = WorkflowTemplates(**payload.dict()) if is_template else WorkflowDefinitions(**payload.dict())
+    new_workflow = Workflow(**payload.dict())
     async with async_session() as session:
         session.add(new_workflow)
         await session.commit()
@@ -155,7 +164,7 @@ async def add_workflow(payload: BaseWorkflow, is_template: bool = False) -> Work
     return new_workflow
 
 
-async def get_workflow(workflow_id: UUID, is_template: bool = False) -> (Workflow | None):
+async def get_workflow(workflow_id: UUID) -> (Workflow | None):
     """Get workflow by id.
 
     Parameters
@@ -168,11 +177,11 @@ async def get_workflow(workflow_id: UUID, is_template: bool = False) -> (Workflo
         Database orm model with data of requested workflow
     """
     async with async_session() as session:
-        workflow = await session.get(WorkflowTemplates if is_template else WorkflowDefinitions, workflow_id)
+        workflow = await session.get(Workflow, workflow_id)
     return workflow
 
 
-async def get_all_workflows(exam_id: UUID, is_template: bool = False) -> list[Workflow]:
+async def get_all_workflows(exam_id: UUID) -> list[Workflow]:
     """Get a list of all workflows assigned to a certain exam.
 
     Parameters
@@ -185,15 +194,30 @@ async def get_all_workflows(exam_id: UUID, is_template: bool = False) -> list[Wo
         List of workflow data base orm models
     """
     async with async_session() as session:
-        if is_template:
-            result: Result = await session.execute(select(WorkflowTemplates).where(WorkflowTemplates.exam_id == exam_id))
-        else:
-            result: Result = await session.execute(select(WorkflowDefinitions).where(WorkflowDefinitions.exam_id == exam_id))
+        result: Result = await session.execute(select(Workflow).where(Workflow.exam_id == exam_id))
         workflows = list(result.scalars().all())
     return workflows
 
 
-async def delete_workflow(workflow_id: UUID, is_template: bool = False) -> bool:
+async def get_all_workflows_templates() -> list[Workflow]:
+    """Get a list of all workflows assigned to a certain exam.
+
+    Parameters
+    ----------
+    exam_id
+        Id of the parent exam entry, workflows are assigned to
+
+    Returns
+    -------
+        List of workflow data base orm models
+    """
+    async with async_session() as session:
+        result: Result = await session.execute(select(Workflow).where(Workflow.is_template))
+        workflows = list(result.scalars().all())
+    return workflows
+
+
+async def delete_workflow(workflow_id: UUID) -> bool:
     """Delete a workflow by ID.
 
     Parameters
@@ -206,14 +230,14 @@ async def delete_workflow(workflow_id: UUID, is_template: bool = False) -> bool:
         Success of delete event
     """
     async with async_session() as session:
-        if workflow := await session.get(WorkflowTemplates if is_template else WorkflowDefinitions, workflow_id):
+        if workflow := await session.get(Workflow, workflow_id):
             await session.delete(workflow)
             await session.commit()
             return True
         return False
 
 
-async def update_workflow(workflow_id: UUID, payload: BaseWorkflow, is_template: bool = False) -> (Workflow | None):
+async def update_workflow(workflow_id: UUID, payload: BaseWorkflow) -> (Workflow | None):
     """Update existing workflow in database.
 
     Parameters
@@ -228,7 +252,7 @@ async def update_workflow(workflow_id: UUID, payload: BaseWorkflow, is_template:
         Workflow database orm model of updated workflow
     """
     async with async_session() as session:
-        if workflow := await session.get(WorkflowTemplates if is_template else WorkflowDefinitions, workflow_id):
+        if workflow := await session.get(Workflow, workflow_id):
             workflow.update(payload)
             await session.commit()
             await session.refresh(workflow)
@@ -238,7 +262,7 @@ async def update_workflow(workflow_id: UUID, payload: BaseWorkflow, is_template:
 
 # ----- Task data access layer
 
-async def add_task(payload: BaseTask, is_template: bool = False) -> Task:
+async def add_task(payload: BaseTask) -> Task:
     """Add new task to database.
 
     Parameters
@@ -250,7 +274,7 @@ async def add_task(payload: BaseTask, is_template: bool = False) -> Task:
     -------
         Database orm model of created task
     """
-    new_task = TaskTemplates(**payload.dict()) if is_template else TaskDefinitions(**payload.dict())
+    new_task = Task(**payload.dict())
     async with async_session() as session:
         session.add(new_task)
         await session.commit()
@@ -258,7 +282,7 @@ async def add_task(payload: BaseTask, is_template: bool = False) -> Task:
     return new_task
 
 
-async def get_task(task_id: UUID, is_template: bool = False) -> (Task | None):
+async def get_task(task_id: UUID) -> (Task | None):
     """Get task by id.
 
     Parameters
@@ -271,11 +295,11 @@ async def get_task(task_id: UUID, is_template: bool = False) -> (Task | None):
         Database orm model with data of requested task
     """
     async with async_session() as session:
-        task = await session.get(TaskTemplates if is_template else TaskDefinitions, task_id)
+        task = await session.get(Task, task_id)
     return task
 
 
-async def get_all_tasks(workflow_id: UUID, is_template: bool = False) -> list[Task]:
+async def get_all_tasks(workflow_id: UUID) -> list[Task]:
     """Get a list of all tasks assigned to a certain workflow.
 
     Parameters
@@ -288,15 +312,30 @@ async def get_all_tasks(workflow_id: UUID, is_template: bool = False) -> list[Ta
         List of task data base orm models
     """
     async with async_session() as session:
-        if is_template:
-            result: Result = await session.execute(select(TaskTemplates).where(TaskTemplates.workflow_id == workflow_id))
-        else:
-            result: Result = await session.execute(select(TaskDefinitions).where(TaskDefinitions.workflow_id == workflow_id))
+        result: Result = await session.execute(select(Task).where(Task.workflow_id == workflow_id))
         tasks = list(result.scalars().all())
     return tasks
 
 
-async def delete_task(task_id: UUID, is_template: bool = False) -> bool:
+async def get_all_task_templates() -> list[Task]:
+    """Get a list of all tasks assigned to a certain workflow.
+
+    Parameters
+    ----------
+    workflow_id
+        Id of the parent workflow entry, tasks are assigned to
+
+    Returns
+    -------
+        List of task data base orm models
+    """
+    async with async_session() as session:
+        result: Result = await session.execute(select(Task).where(Task.is_template))
+        tasks = list(result.scalars().all())
+    return tasks
+
+
+async def delete_task(task_id: UUID) -> bool:
     """Delete task by id.
 
     Parameters
@@ -309,14 +348,14 @@ async def delete_task(task_id: UUID, is_template: bool = False) -> bool:
         Success of deletion
     """
     async with async_session() as session:
-        if task := await session.get(TaskTemplates if is_template else TaskDefinitions, task_id):
+        if task := await session.get(Task, task_id):
             await session.delete(task)
             await session.commit()
             return True
         return False
 
 
-async def update_task(task_id: UUID, payload: BaseTask, is_template: bool = False) -> (Task | None):
+async def update_task(task_id: UUID, payload: BaseTask) -> (Task | None):
     """Update existing task in database.
 
     Parameters
@@ -331,7 +370,7 @@ async def update_task(task_id: UUID, payload: BaseTask, is_template: bool = Fals
         Database orm model of updated task
     """
     async with async_session() as session:
-        if task := await session.get(TaskTemplates if is_template else TaskDefinitions, task_id):
+        if task := await session.get(Task, task_id):
             task.update(payload)
             await session.commit()
             await session.refresh(task)
