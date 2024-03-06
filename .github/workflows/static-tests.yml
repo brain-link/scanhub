@@ -73,10 +73,10 @@ jobs:
         run: pip install --upgrade build
 
       - name: Build shared-library
-        run: python3 -m build ./base/shared_libs/
+        run: python3 -m build ./services/base/shared_libs/
 
       - name: Install shared-library
-        run: pip install ./base/shared_libs/
+        run: pip install ./services/base/shared_libs/
 
       - name: Run ruff linter
         working-directory: ${{ env.working-directory }}/${{ matrix.service }}
