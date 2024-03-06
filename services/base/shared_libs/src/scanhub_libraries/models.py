@@ -63,7 +63,6 @@ class ScanWorkflow(BaseModel):  # pylint: disable=too-few-public-methods
 
     workflow_id: UUID = Field(alias="id")
     sequence_id: str
-    workflow_id: int
     device_id: str
     acquisition_limits: AcquisitionLimits
     sequence_parameters: SequenceParameters
@@ -228,7 +227,7 @@ class BaseTask(BaseModel):
             ]
         }
 
-    workflow_id: Optional[UUID] = Field("", description="ID of the workflow the task belongs to.")
+    workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
     description: str
     type: TaskType
     args: dict[str, str]
@@ -236,6 +235,7 @@ class BaseTask(BaseModel):
     task_destinations: list[dict[str, str]]
     status: dict[TaskStatus, str]
     is_template: bool
+    is_frozen: bool
 
 
 class TaskOut(BaseTask):
@@ -255,9 +255,10 @@ class BaseWorkflow(BaseModel):
         extra = Extra.ignore
 
     comment: str | None
-    exam_id: UUID
+    exam_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
     is_finished: bool
     is_template: bool
+    is_frozen: bool
 
 
 class WorkflowOut(BaseWorkflow):
@@ -278,7 +279,7 @@ class BaseExam(BaseModel):
 
         extra = Extra.ignore
 
-    patient_id: int # TODO: replace by UUID
+    patient_id: Optional[int] = None # TODO: replace by UUID
     name: str
     country: str | None
     site: str | None
@@ -286,6 +287,7 @@ class BaseExam(BaseModel):
     creator: str
     status: str
     is_template: bool
+    is_frozen: bool
 
 
 class ExamOut(BaseExam):

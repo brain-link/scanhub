@@ -63,7 +63,9 @@ class Exam(Base):
     creator: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False)
 
+    # Flags
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+    is_frozen: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
@@ -90,6 +92,7 @@ class Workflow(Base): # TBD: rename to "Workflow"
     # Flags
     is_finished: Mapped[bool] = mapped_column(nullable=False, default=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+    is_frozen: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     # Meta
     datetime_created: Mapped[datetime.datetime] = mapped_column(
@@ -134,6 +137,7 @@ class Task(Base):
 
     # Flags
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+    is_frozen: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     # Fields
     datetime_created: Mapped[datetime.datetime] = mapped_column(
