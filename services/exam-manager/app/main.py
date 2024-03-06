@@ -7,8 +7,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from api.db import engine, init_db
-from api.exam import router
+from .db import engine, init_db
+from .exam import router
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
@@ -83,14 +83,7 @@ async def readiness() -> dict:
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
-    required_tables = [
-        "exam-definitions",
-        "exam-templates",
-        "job-definitions",
-        "job-templates",
-        "task-definitions",
-        "task-templates"
-    ]
+    required_tables = ["exam", "job", "task"]
     # required_tables = ["exam", "job", "task", "device", "workflow"]
 
     if not all(t in existing_tables for t in required_tables):
