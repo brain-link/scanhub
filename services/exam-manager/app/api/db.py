@@ -42,16 +42,15 @@ def init_db() -> None:
     """Initialize the database."""
     Base.metadata.create_all(engine)
 
-class Exam(Base):
-    """Exam ORM model."""
 
-    __tablename__ = "exam"
-    __table_args__ = {"extend_existing": True}
+class Exam(Base):
+    """Abstract exam ORM model."""
+
+    __abstract__ = True
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     # Relations and references
-    jobs: Mapped[list["Job"]] = relationship(lazy="selectin")
     patient_id: Mapped[int] = mapped_column(nullable=False)
 
     # Fields
@@ -70,19 +69,34 @@ class Exam(Base):
     )
 
 
+class ExamDefinitions(Exam):
+    """ORM model for exam definitions."""
+
+    __tablename__ = "exam-definitions"
+    __table_args__ = {"extend_existing": True}
+
+    jobs: Mapped[list["JobDefinitions"]] = relationship(lazy="selectin")
+
+
+class ExamTemplates(Exam):
+    """ORM model for exam templates."""
+
+    __tablename__ = "exam-templates"
+    __table_args__ = {"extend_existing": True}
+
+    jobs: Mapped[list["JobTemplates"]] = relationship(lazy="selectin")
+
+
 class Job(Base): # TBD: rename to "Workflow"
     """Job ORM model."""
 
-    __tablename__ = "job"
-    __table_args__ = {"extend_existing": True}
+    __abstract__ = True
 
     # Use uuid here
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     # Relations and references
-    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"))
     # workflow_id: Mapped[int] = mapped_column(nullable=True)
-    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
 
     # Fields
     comment: Mapped[str] = mapped_column(nullable=True)
@@ -96,19 +110,36 @@ class Job(Base): # TBD: rename to "Workflow"
     )
 
 
-class Task(Base):
-    """Task ORM model."""
+class JobDefinitions(Job):
+    """ORM model for job definitions."""
 
-    __tablename__ = "task"
+    __tablename__ = "job-definitions"
     __table_args__ = {"extend_existing": True}
+
+    tasks: Mapped[list["TaskDefinitions"]] = relationship(lazy="selectin")
+    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam-definitions.id"))
+
+
+class JobTemplates(Job):
+    """ORM model for job templates."""
+
+    __tablename__ = "job-templates"
+    __table_args__ = {"extend_existing": True}
+
+    tasks: Mapped[list["TaskTemplates"]] = relationship(lazy="selectin")
+    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam-templates.id"))
+
+
+class Task(Base):
+    """Abstract task ORM model."""
+
+    __abstract__ = True
 
     # Use uuid here
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+
     description: Mapped[str] = mapped_column(nullable=False)
     type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
-
-    # Relations and references
-    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job.id"))
 
     # Arguments and parameters
     # Example: "args": {"arg1": "x", "arg2": "y"}
@@ -132,6 +163,25 @@ class Task(Base):
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
+
+
+class TaskDefinitions(Task):
+    """ORM model for task definitions."""
+
+    __tablename__ = "task-definitions"
+    __table_args__ = {"extend_existing": True}
+
+    # Job references
+    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job-definitions.id"))
+
+class TaskTemplates(Task):
+    """ORM model for task templates."""
+
+    __tablename__ = "task-templates"
+    __table_args__ = {"extend_existing": True}
+
+    # Job references
+    job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("job-templates.id"))
 
 # TBD DeviceTask(Task):
 
