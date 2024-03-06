@@ -83,7 +83,14 @@ async def readiness() -> dict:
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
-    required_tables = ["exam", "job", "task"]
+    required_tables = [
+        "exam-definitions",
+        "exam-templates",
+        "job-definitions",
+        "job-templates",
+        "task-definitions",
+        "task-templates"
+    ]
     # required_tables = ["exam", "job", "task", "device", "workflow"]
 
     if not all(t in existing_tables for t in required_tables):
