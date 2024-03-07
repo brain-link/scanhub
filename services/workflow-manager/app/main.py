@@ -3,7 +3,7 @@
 
 """Workflow manager main."""
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.producer import Producer
