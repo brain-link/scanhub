@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "exam_manager"
+name = "exam-manager"
 version = "0.0.1"
 description = "The Exam Manager is responsible for managing the exam tree."
 authors = [
