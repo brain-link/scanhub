@@ -10,7 +10,7 @@ from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from .db import (
+from app.db import (
     Exam,
     Task,
     Workflow,
@@ -19,7 +19,7 @@ from .db import (
 
 # ----- Exam data access layer
 
-async def add_exam(payload: BaseExam) -> Exam:
+async def add_exam_data(payload: BaseExam) -> Exam:
     """Create new exam.
 
     Parameters
@@ -42,7 +42,7 @@ async def add_exam(payload: BaseExam) -> Exam:
     return new_exam
 
 
-async def get_exam(exam_id: UUID) -> (Exam | None):
+async def get_exam_data(exam_id: UUID) -> (Exam | None):
     """Get exam by id.
 
     Parameters
@@ -59,7 +59,7 @@ async def get_exam(exam_id: UUID) -> (Exam | None):
     return exam
 
 
-async def get_all_exams(patient_id: int) -> list[Exam]:
+async def get_all_exam_data(patient_id: int) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
@@ -77,7 +77,7 @@ async def get_all_exams(patient_id: int) -> list[Exam]:
     return exams
 
 
-async def get_all_exam_templates() -> list[Exam]:
+async def get_all_exam_template_data() -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters
@@ -90,12 +90,12 @@ async def get_all_exam_templates() -> list[Exam]:
         List of exam data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Exam).where(Exam.is_template))
+        result: Result = await session.execute(select(Exam).where(Exam.is_template == True))
         exams = list(result.scalars().all())
     return exams
 
 
-async def delete_exam(exam_id: UUID) -> bool:
+async def delete_exam_data(exam_id: UUID) -> bool:
     """Delete exam by id.
 
     Parameters
@@ -115,7 +115,7 @@ async def delete_exam(exam_id: UUID) -> bool:
         return False
 
 
-async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
+async def update_exam_data(exam_id: UUID, payload: BaseExam) -> (Exam | None):
     """Update existing exam entry.
 
     Parameters
@@ -141,7 +141,7 @@ async def update_exam(exam_id: UUID, payload: BaseExam) -> (Exam | None):
 
 # ----- Workflow data access layer
 
-async def add_workflow(payload: BaseWorkflow) -> Workflow:
+async def add_workflow_data(payload: BaseWorkflow) -> Workflow:
     """Add new workflow.
 
     Parameters
@@ -164,7 +164,7 @@ async def add_workflow(payload: BaseWorkflow) -> Workflow:
     return new_workflow
 
 
-async def get_workflow(workflow_id: UUID) -> (Workflow | None):
+async def get_workflow_data(workflow_id: UUID) -> (Workflow | None):
     """Get workflow by id.
 
     Parameters
@@ -181,7 +181,7 @@ async def get_workflow(workflow_id: UUID) -> (Workflow | None):
     return workflow
 
 
-async def get_all_workflows(exam_id: UUID) -> list[Workflow]:
+async def get_all_workflow_data(exam_id: UUID) -> list[Workflow]:
     """Get a list of all workflows assigned to a certain exam.
 
     Parameters
@@ -199,7 +199,7 @@ async def get_all_workflows(exam_id: UUID) -> list[Workflow]:
     return workflows
 
 
-async def get_all_workflows_templates() -> list[Workflow]:
+async def get_all_workflows_template_data() -> list[Workflow]:
     """Get a list of all workflows assigned to a certain exam.
 
     Parameters
@@ -217,7 +217,7 @@ async def get_all_workflows_templates() -> list[Workflow]:
     return workflows
 
 
-async def delete_workflow(workflow_id: UUID) -> bool:
+async def delete_workflow_data(workflow_id: UUID) -> bool:
     """Delete a workflow by ID.
 
     Parameters
@@ -237,7 +237,7 @@ async def delete_workflow(workflow_id: UUID) -> bool:
         return False
 
 
-async def update_workflow(workflow_id: UUID, payload: BaseWorkflow) -> (Workflow | None):
+async def update_workflow_data(workflow_id: UUID, payload: BaseWorkflow) -> (Workflow | None):
     """Update existing workflow in database.
 
     Parameters
@@ -262,7 +262,7 @@ async def update_workflow(workflow_id: UUID, payload: BaseWorkflow) -> (Workflow
 
 # ----- Task data access layer
 
-async def add_task(payload: BaseTask) -> Task:
+async def add_task_data(payload: BaseTask) -> Task:
     """Add new task to database.
 
     Parameters
@@ -282,7 +282,7 @@ async def add_task(payload: BaseTask) -> Task:
     return new_task
 
 
-async def get_task(task_id: UUID) -> (Task | None):
+async def get_task_data(task_id: UUID) -> (Task | None):
     """Get task by id.
 
     Parameters
@@ -299,7 +299,7 @@ async def get_task(task_id: UUID) -> (Task | None):
     return task
 
 
-async def get_all_tasks(workflow_id: UUID) -> list[Task]:
+async def get_all_task_data(workflow_id: UUID) -> list[Task]:
     """Get a list of all tasks assigned to a certain workflow.
 
     Parameters
@@ -317,7 +317,7 @@ async def get_all_tasks(workflow_id: UUID) -> list[Task]:
     return tasks
 
 
-async def get_all_task_templates() -> list[Task]:
+async def get_all_task_template_data() -> list[Task]:
     """Get a list of all tasks assigned to a certain workflow.
 
     Parameters
@@ -335,7 +335,7 @@ async def get_all_task_templates() -> list[Task]:
     return tasks
 
 
-async def delete_task(task_id: UUID) -> bool:
+async def delete_task_data(task_id: UUID) -> bool:
     """Delete task by id.
 
     Parameters
@@ -355,7 +355,7 @@ async def delete_task(task_id: UUID) -> bool:
         return False
 
 
-async def update_task(task_id: UUID, payload: BaseTask) -> (Task | None):
+async def update_task_data(task_id: UUID, payload: BaseTask) -> (Task | None):
     """Update existing task in database.
 
     Parameters
