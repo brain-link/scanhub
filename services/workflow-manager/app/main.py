@@ -5,9 +5,7 @@
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import inspect
 
-from api.db import engine, init_db
 from api.producer import Producer
 from api.workflow import router
 
@@ -31,7 +29,6 @@ producer = Producer()
 @app.on_event("startup")
 async def startup() -> None:
     """Call database initialization of startup."""
-    init_db()
     await producer.start()
 
 
@@ -56,12 +53,6 @@ async def readiness() -> dict:
     HTTPException
         500: Workflow table does not exist
     """
-    ins = inspect(engine)
-    # print(f"Found tables: {ins.get_table_names()}")
-
-    if "workflow" not in ins.get_table_names():
-        raise HTTPException(status_code=500, detail="Could not find workflow table, table not created.")
-    # print("Healthcheck: Endpoint is ready.")
     return {"status": "ok"}
 
 

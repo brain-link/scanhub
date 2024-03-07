@@ -12,8 +12,6 @@ from fastapi.responses import FileResponse, StreamingResponse
 # from scanhub import RecoJob # type: ignore
 from pydantic import BaseModel, StrictStr
 
-from . import dal
-from .models import BaseWorkflow, WorkflowIn, WorkflowMetaOut, WorkflowOut, get_workflow_meta_out, get_workflow_out
 from .producer import Producer
 
 # Http status codes
@@ -34,123 +32,6 @@ router = APIRouter()
 
 # Get the producer singleton instance
 producer = Producer()
-
-
-@router.post("/", response_model=WorkflowOut, status_code=201, tags=["workflow"])
-async def create_workflow(payload: WorkflowIn) -> WorkflowOut:
-    """Create new workflow endpoint.
-
-    Parameters
-    ----------
-    payload
-        Data to be added, workflow iutput model
-
-    Returns
-    -------
-        Workflow pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Creation unsuccessful
-    """
-    if not (workflow := await dal.add_workflow(payload)):
-        raise HTTPException(status_code=404, detail="Could not create workflow")
-    return await get_workflow_out(workflow)
-
-
-@router.get("/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflow"])
-async def get_workflow(workflow_id: int) -> WorkflowOut:
-    """Get workflow endpoint.
-
-    Parameters
-    ----------
-    workflow_id
-        Id of the workflow object to be returned
-
-    Returns
-    -------
-        Workflow pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    if not (workflow := await dal.get_workflow(workflow_id)):
-        raise HTTPException(status_code=404, detail="Workflow not found")
-    return await get_workflow_out(workflow)
-
-
-@router.get("/", response_model=list[WorkflowOut], status_code=200, tags=["workflow"])
-async def get_workflow_list() -> list[WorkflowOut]:
-    """Get all workflows endpoint.
-
-    Returns
-    -------
-        List of workflow meta pydantic output models, might be empty
-    """
-    if not (workflows := await dal.get_all_workflows()):
-        # raise HTTPException(status_code=404, detail="Workflows not found")
-        return []
-    return [await get_workflow_out(workflow) for workflow in workflows]
-
-
-@router.get("/meta/", response_model=list[WorkflowMetaOut], status_code=200, tags=["workflow"])
-async def get_workflow_meta_list() -> list[WorkflowMetaOut]:
-    """Get all workflow meta information endpoint.
-
-    Returns
-    -------
-        List of workflow meta pydantic output models, might be empty
-    """
-    if not (workflows := await dal.get_all_workflows()):
-        # raise HTTPException(status_code=404, detail="Workflows not found")
-        return []
-    return [await get_workflow_meta_out(workflow) for workflow in workflows]
-
-
-@router.delete("/{workflow_id}", response_model={}, status_code=204, tags=["workflow"])
-async def delete_workflow(workflow_id: int) -> None:
-    """Delete workflow endpoint.
-
-    Parameters
-    ----------
-    workflow_id
-        Id of workflow to be deleted
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    if not await dal.delete_workflow(workflow_id):
-        raise HTTPException(status_code=404, detail="Workflow not found")
-
-
-@router.put("/{workflow_id}/", response_model=WorkflowOut, status_code=200, tags=["workflow"])
-async def update_workflow(workflow_id: int, payload: BaseWorkflow) -> WorkflowOut:
-    """Update existing workflow endpoint.
-
-    Parameters
-    ----------
-    workflow_id
-        Id of the workflow to be updated
-    payload
-        Data to be updated, workflow pydantic base model
-
-    Returns
-    -------
-        Workflow pydantic output model.
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    if not (workflow := await dal.update_workflow(workflow_id, payload)):
-        raise HTTPException(status_code=404, detail="Workflow not found")
-    return await get_workflow_out(workflow)
 
 
 @router.post("/upload/{record_id}/")
