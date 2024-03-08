@@ -3,7 +3,6 @@ name: 'Build'
 on:
   workflow_run:
     workflows: ["Deploy to GHCR"]
-    branches: [main]
     types: 
       - completed
   # push:
