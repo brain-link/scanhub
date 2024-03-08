@@ -2,7 +2,12 @@ name: Deploy to GHCR
 on:
   workflow_dispatch:
   push:
-    branches: ['main', 'ghcr_base_image']
+    branches:
+      - 'main'
+      - 'ghcr_base_image'
+  pull_request:
+    branches:
+      - 'main'
 
 env:
   REGISTRY: ghcr.io
