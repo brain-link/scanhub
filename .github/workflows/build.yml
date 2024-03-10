@@ -1,12 +1,16 @@
 name: 'Build'
 
 on:
-  push:
-    branches:
-      - '*'
-  pull_request:
-    branches:
-      - '*'
+  workflow_run:
+    workflows: ["Deploy to GHCR"]
+    types: 
+      - completed
+  # push:
+  #   branches:
+  #     - '*'
+  # pull_request:
+  #   branches:
+  #     - '*'
 
 jobs:
   compose:

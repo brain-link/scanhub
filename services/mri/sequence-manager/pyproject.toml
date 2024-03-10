@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "mri-sequence-manager"
+name = "mri_sequence_manager"
 version = "0.0.1"
 description = "The MRI Sequence Manager is a CRUD service that manages MRI sequences."
 authors = [
