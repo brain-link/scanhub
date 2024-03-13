@@ -15,9 +15,6 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   dal/index.rst
-   db/index.rst
-   models/index.rst
    producer/index.rst
    workflow/index.rst
 

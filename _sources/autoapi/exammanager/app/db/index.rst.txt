@@ -1,7 +1,7 @@
-:py:mod:`exam-manager.app.api.db`
-=================================
+:py:mod:`exam-manager.app.db`
+=============================
 
-.. py:module:: exam-manager.app.api.db
+.. py:module:: exam-manager.app.db
 
 .. autoapi-nested-parse::
 
@@ -17,10 +17,10 @@ Classes
 
 .. autoapisummary::
 
-   exam-manager.app.api.db.Base
-   exam-manager.app.api.db.Exam
-   exam-manager.app.api.db.Job
-   exam-manager.app.api.db.Record
+   exam-manager.app.db.Base
+   exam-manager.app.db.Exam
+   exam-manager.app.db.Workflow
+   exam-manager.app.db.Task
 
 
 
@@ -29,7 +29,7 @@ Functions
 
 .. autoapisummary::
 
-   exam-manager.app.api.db.init_db
+   exam-manager.app.db.init_db
 
 
 
@@ -38,11 +38,11 @@ Attributes
 
 .. autoapisummary::
 
-   exam-manager.app.api.db.engine
-   exam-manager.app.api.db.MappedBase
-   exam-manager.app.api.db.Device
-   exam-manager.app.api.db.async_engine
-   exam-manager.app.api.db.async_session
+   exam-manager.app.db.engine
+   exam-manager.app.db.MappedBase
+   exam-manager.app.db.Device
+   exam-manager.app.db.async_engine
+   exam-manager.app.db.async_session
 
 
 .. py:class:: Base
@@ -77,7 +77,7 @@ Attributes
 
    Bases: :py:obj:`Base`
 
-   Exam ORM model.
+   Abstract exam ORM model.
 
    .. py:attribute:: __tablename__
       :value: 'exam'
@@ -93,8 +93,8 @@ Attributes
 
       
 
-   .. py:attribute:: jobs
-      :type: sqlalchemy.orm.Mapped[list[Job]]
+   .. py:attribute:: workflows
+      :type: sqlalchemy.orm.Mapped[list[Workflow]]
 
       
 
@@ -133,74 +133,12 @@ Attributes
 
       
 
-   .. py:attribute:: datetime_created
-      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+   .. py:attribute:: is_template
+      :type: sqlalchemy.orm.Mapped[bool]
 
       
 
-   .. py:attribute:: datetime_updated
-      :type: sqlalchemy.orm.Mapped[datetime.datetime]
-
-      
-
-
-.. py:class:: Job
-
-
-   Bases: :py:obj:`Base`
-
-   Job ORM model.
-
-   .. py:attribute:: __tablename__
-      :value: 'job'
-
-      
-
-   .. py:attribute:: __table_args__
-
-      
-
-   .. py:attribute:: id
-      :type: sqlalchemy.orm.Mapped[uuid.UUID]
-
-      
-
-   .. py:attribute:: exam_id
-      :type: sqlalchemy.orm.Mapped[uuid.UUID]
-
-      
-
-   .. py:attribute:: workflow_id
-      :type: sqlalchemy.orm.Mapped[int]
-
-      
-
-   .. py:attribute:: device_id
-      :type: sqlalchemy.orm.Mapped[str]
-
-      
-
-   .. py:attribute:: sequence_id
-      :type: sqlalchemy.orm.Mapped[str]
-
-      
-
-   .. py:attribute:: records
-      :type: sqlalchemy.orm.Mapped[list[Record]]
-
-      
-
-   .. py:attribute:: type
-      :type: sqlalchemy.orm.Mapped[str]
-
-      
-
-   .. py:attribute:: comment
-      :type: sqlalchemy.orm.Mapped[str]
-
-      
-
-   .. py:attribute:: is_acquired
+   .. py:attribute:: is_frozen
       :type: sqlalchemy.orm.Mapped[bool]
 
       
@@ -215,26 +153,16 @@ Attributes
 
       
 
-   .. py:attribute:: acquisition_limits
-      :type: sqlalchemy.orm.Mapped[scanhub_libraries.models.AcquisitionLimits]
 
-      
-
-   .. py:attribute:: sequence_parameters
-      :type: sqlalchemy.orm.Mapped[scanhub_libraries.models.SequenceParameters]
-
-      
-
-
-.. py:class:: Record
+.. py:class:: Workflow
 
 
    Bases: :py:obj:`Base`
 
-   Record ORM model.
+   Workflow ORM model.
 
    .. py:attribute:: __tablename__
-      :value: 'record'
+      :value: 'workflow'
 
       
 
@@ -247,18 +175,110 @@ Attributes
 
       
 
-   .. py:attribute:: job_id
-      :type: sqlalchemy.orm.Mapped[uuid.UUID]
+   .. py:attribute:: tasks
+      :type: sqlalchemy.orm.Mapped[list[Task]]
 
       
 
-   .. py:attribute:: data_path
-      :type: sqlalchemy.orm.Mapped[str]
+   .. py:attribute:: exam_id
+      :type: sqlalchemy.orm.Mapped[uuid.UUID]
 
       
 
    .. py:attribute:: comment
       :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: is_finished
+      :type: sqlalchemy.orm.Mapped[bool]
+
+      
+
+   .. py:attribute:: is_template
+      :type: sqlalchemy.orm.Mapped[bool]
+
+      
+
+   .. py:attribute:: is_frozen
+      :type: sqlalchemy.orm.Mapped[bool]
+
+      
+
+   .. py:attribute:: datetime_created
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+   .. py:attribute:: datetime_updated
+      :type: sqlalchemy.orm.Mapped[datetime.datetime]
+
+      
+
+
+.. py:class:: Task
+
+
+   Bases: :py:obj:`Base`
+
+   Abstract task ORM model.
+
+   .. py:attribute:: __tablename__
+      :value: 'task'
+
+      
+
+   .. py:attribute:: __table_args__
+
+      
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[uuid.UUID]
+
+      
+
+   .. py:attribute:: workflow_id
+      :type: sqlalchemy.orm.Mapped[uuid.UUID]
+
+      
+
+   .. py:attribute:: description
+      :type: sqlalchemy.orm.Mapped[str]
+
+      
+
+   .. py:attribute:: type
+      :type: sqlalchemy.orm.Mapped[scanhub_libraries.models.TaskType]
+
+      
+
+   .. py:attribute:: args
+      :type: sqlalchemy.orm.Mapped[dict[str, str]]
+
+      
+
+   .. py:attribute:: artifacts
+      :type: sqlalchemy.orm.Mapped[dict[str, list[dict[str, str]]]]
+
+      
+
+   .. py:attribute:: task_destinations
+      :type: sqlalchemy.orm.Mapped[list[dict[str, str]]]
+
+      
+
+   .. py:attribute:: status
+      :type: sqlalchemy.orm.Mapped[dict[scanhub_libraries.models.TaskStatus, str]]
+
+      
+
+   .. py:attribute:: is_template
+      :type: sqlalchemy.orm.Mapped[bool]
+
+      
+
+   .. py:attribute:: is_frozen
+      :type: sqlalchemy.orm.Mapped[bool]
 
       
 

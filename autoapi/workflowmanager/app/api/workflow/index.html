@@ -471,24 +471,6 @@ document.write(`
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.create_workflow" title="workflow-manager.app.api.workflow.create_workflow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_workflow</span></code></a>(...)</p></td>
-<td><p>Create new workflow endpoint.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.get_workflow" title="workflow-manager.app.api.workflow.get_workflow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_workflow</span></code></a>(→ workflow-manager.app.api.models.WorkflowOut)</p></td>
-<td><p>Get workflow endpoint.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.get_workflow_list" title="workflow-manager.app.api.workflow.get_workflow_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_workflow_list</span></code></a>(...)</p></td>
-<td><p>Get all workflows endpoint.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.get_workflow_meta_list" title="workflow-manager.app.api.workflow.get_workflow_meta_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_workflow_meta_list</span></code></a>(...)</p></td>
-<td><p>Get all workflow meta information endpoint.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.delete_workflow" title="workflow-manager.app.api.workflow.delete_workflow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_workflow</span></code></a>(→ None)</p></td>
-<td><p>Delete workflow endpoint.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.update_workflow" title="workflow-manager.app.api.workflow.update_workflow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_workflow</span></code></a>(...)</p></td>
-<td><p>Update existing workflow endpoint.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.upload_result" title="workflow-manager.app.api.workflow.upload_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_result</span></code></a>() → dict[str, str])</p></td>
 <td><p>Upload workflow result.</p></td>
 </tr>
@@ -544,135 +526,11 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.create_workflow">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">create_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">workflow</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.WorkflowIn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#workflow-manager.app.api.models.WorkflowOut" title="workflow-manager.app.api.models.WorkflowOut"><span class="pre">workflow-manager.app.api.models.WorkflowOut</span></a></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.create_workflow" title="Link to this definition">#</a></dt>
-<dd><p>Create new workflow endpoint.</p>
-<section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>payload</dt><dd><p>Data to be added, workflow iutput model</p>
-</dd>
-</dl>
-</section>
-<section id="returns">
-<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h4>
-<blockquote>
-<div><p>Workflow pydantic output model</p>
-</div></blockquote>
-</section>
-<section id="raises">
-<h4>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_workflow">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#workflow-manager.app.api.models.WorkflowOut" title="workflow-manager.app.api.models.WorkflowOut"><span class="pre">workflow-manager.app.api.models.WorkflowOut</span></a></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_workflow" title="Link to this definition">#</a></dt>
-<dd><p>Get workflow endpoint.</p>
-<section id="id1">
-<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>workflow_id</dt><dd><p>Id of the workflow object to be returned</p>
-</dd>
-</dl>
-</section>
-<section id="id2">
-<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
-<blockquote>
-<div><p>Workflow pydantic output model</p>
-</div></blockquote>
-</section>
-<section id="id3">
-<h4>Raises<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Not found</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_workflow_list">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_workflow_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[workflow-manager.app.api.models.WorkflowOut]</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_workflow_list" title="Link to this definition">#</a></dt>
-<dd><p>Get all workflows endpoint.</p>
-<section id="id4">
-<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
-<blockquote>
-<div><p>List of workflow meta pydantic output models, might be empty</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_workflow_meta_list">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_workflow_meta_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[workflow-manager.app.api.models.WorkflowMetaOut]</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_workflow_meta_list" title="Link to this definition">#</a></dt>
-<dd><p>Get all workflow meta information endpoint.</p>
-<section id="id5">
-<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
-<blockquote>
-<div><p>List of workflow meta pydantic output models, might be empty</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.delete_workflow">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">delete_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.delete_workflow" title="Link to this definition">#</a></dt>
-<dd><p>Delete workflow endpoint.</p>
-<section id="id6">
-<h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>workflow_id</dt><dd><p>Id of workflow to be deleted</p>
-</dd>
-</dl>
-</section>
-<section id="id7">
-<h4>Raises<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Not found</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.update_workflow">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">update_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">workflow</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.BaseWorkflow</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#workflow-manager.app.api.models.WorkflowOut" title="workflow-manager.app.api.models.WorkflowOut"><span class="pre">workflow-manager.app.api.models.WorkflowOut</span></a></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.update_workflow" title="Link to this definition">#</a></dt>
-<dd><p>Update existing workflow endpoint.</p>
-<section id="id8">
-<h4>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>workflow_id</dt><dd><p>Id of the workflow to be updated</p>
-</dd>
-<dt>payload</dt><dd><p>Data to be updated, workflow pydantic base model</p>
-</dd>
-</dl>
-</section>
-<section id="id9">
-<h4>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
-<blockquote>
-<div><p>Workflow pydantic output model.</p>
-</div></blockquote>
-</section>
-<section id="id10">
-<h4>Raises<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Not found</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_result" title="Link to this definition">#</a></dt>
 <dd><p>Upload workflow result.</p>
-<section id="id11">
-<h4>Parameters<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h4>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Id of the record, which is processed by workflow</p>
 </dd>
@@ -680,8 +538,8 @@ document.write(`
 </dd>
 </dl>
 </section>
-<section id="id12">
-<h4>Returns<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h4>
 <blockquote>
 <div><p>Notification</p>
 </div></blockquote>
@@ -692,15 +550,15 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.download_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">download_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.FileResponse</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.download_result" title="Link to this definition">#</a></dt>
 <dd><p>Download DICOM result.</p>
-<section id="id13">
-<h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
 <dl class="simple">
 <dt>record_id</dt><dd><p>ID of the record the DICOM file belongs to.</p>
 </dd>
 </dl>
 </section>
-<section id="id14">
-<h4>Returns<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<section id="id2">
+<h4>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
 <blockquote>
 <div><p>DICOM file response</p>
 </div></blockquote>
@@ -711,8 +569,8 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_data_from_file">
 <span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_data_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_data_from_file" title="Link to this definition">#</a></dt>
 <dd><p>Open a file and read the data.</p>
-<section id="id15">
-<h4>Parameters<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
 <dl class="simple">
 <dt>file_path</dt><dd><p>Path of the file to open</p>
 </dd>
@@ -730,21 +588,21 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_image_file">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_image_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.StreamingResponse</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_image_file" title="Link to this definition">#</a></dt>
 <dd><p>Read image file data and content as streaming response.</p>
-<section id="id16">
-<h4>Parameters<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Record ID the image should be read for</p>
 </dd>
 </dl>
 </section>
-<section id="id17">
-<h4>Returns<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
 <blockquote>
 <div><p>Image file content</p>
 </div></blockquote>
 </section>
-<section id="id18">
-<h4>Raises<a class="headerlink" href="#id18" title="Link to this heading">#</a></h4>
+<section id="raises">
+<h4>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h4>
 <dl class="simple">
 <dt>HTTPException</dt><dd><p>File not found</p>
 </dd>
@@ -813,12 +671,6 @@ document.write(`
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.producer"><code class="docutils literal notranslate"><span class="pre">producer</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.create_workflow"><code class="docutils literal notranslate"><span class="pre">create_workflow()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.get_workflow"><code class="docutils literal notranslate"><span class="pre">get_workflow()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.get_workflow_list"><code class="docutils literal notranslate"><span class="pre">get_workflow_list()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.get_workflow_meta_list"><code class="docutils literal notranslate"><span class="pre">get_workflow_meta_list()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.delete_workflow"><code class="docutils literal notranslate"><span class="pre">delete_workflow()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.update_workflow"><code class="docutils literal notranslate"><span class="pre">update_workflow()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.upload_result"><code class="docutils literal notranslate"><span class="pre">upload_result()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.download_result"><code class="docutils literal notranslate"><span class="pre">download_result()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.get_data_from_file"><code class="docutils literal notranslate"><span class="pre">get_data_from_file()</span></code></a></li>

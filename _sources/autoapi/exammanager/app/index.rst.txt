@@ -9,21 +9,15 @@
 
 
 
-Subpackages
------------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   api/index.rst
-
-
 Submodules
 ----------
 .. toctree::
    :titlesonly:
    :maxdepth: 1
 
+   dal/index.rst
+   db/index.rst
+   exam/index.rst
    main/index.rst
 
 
