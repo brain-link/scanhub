@@ -54,11 +54,6 @@ async def startup():
             status_code=500,
             detail="SQL-DB: Device table is required but does not exist.",
         )
-    # if "workflow" not in tables:
-    #     raise HTTPException(
-    #         status_code=500,
-    #         detail="SQL-DB: Workflow table is required but does not exist.",
-    #     )
     init_db()
 
 
