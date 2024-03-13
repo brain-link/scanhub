@@ -1,4 +1,5 @@
 version: "3.5"
+
 services:
 
   # Microservices
@@ -72,7 +73,8 @@ services:
       context: ./services/exam-manager
       args: 
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+        # - BASE_IMG=scanhub-base
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/exam-manager/app/:/app/
       - data_lake:/app/data_lake/

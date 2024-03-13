@@ -7,8 +7,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from api.db import engine, init_db
-from api.exam import router
+from app.db import engine, init_db
+from app.exam import router
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
@@ -54,11 +54,6 @@ async def startup():
             status_code=500,
             detail="SQL-DB: Device table is required but does not exist.",
         )
-    if "workflow" not in tables:
-        raise HTTPException(
-            status_code=500,
-            detail="SQL-DB: Workflow table is required but does not exist.",
-        )
     init_db()
 
 
@@ -83,7 +78,8 @@ async def readiness() -> dict:
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
-    required_tables = ["exam", "job", "record"]
+    required_tables = ["exam", "workflow", "task"]
+    # required_tables = ["exam", "workflow", "task", "device"]
 
     if not all(t in existing_tables for t in required_tables):
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")

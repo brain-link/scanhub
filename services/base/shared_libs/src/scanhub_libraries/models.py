@@ -4,7 +4,7 @@
 """Pydantic models of acquisition control."""
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Extra, Field, Json  # noqa
@@ -35,6 +35,7 @@ class XYZ(BaseModel):
     Z: float
 
 
+# TODO: Move these parameters to the patient model.
 class AcquisitionLimits(BaseModel):
     """Pydantic definition of AcquisitionLimits."""
 
@@ -51,17 +52,17 @@ class SequenceParameters(BaseModel):
     fov_offset: XYZ
 
 
-class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic model definition of a scanjob."""
+# Might be obsolete
+class ScanWorkflow(BaseModel):  # pylint: disable=too-few-public-methods
+    """Pydantic model definition of a scan workflow."""
 
     class Config:
         """Pydantic configuration."""
 
         extra = Extra.ignore
 
-    job_id: UUID = Field(alias="id")
+    workflow_id: UUID = Field(alias="id")
     sequence_id: str
-    workflow_id: int
     device_id: str
     acquisition_limits: AcquisitionLimits
     sequence_parameters: SequenceParameters
@@ -126,8 +127,9 @@ class MRISequenceCreate(BaseModel):
     tags: list[str] | None = None
 
 
+# Might be obsolete, to be updated
 class DeviceTask(BaseModel):
-    """Pydantic model definition of a device job."""
+    """Pydantic model definition of a device workflow."""
 
     device_id: str
     record_id: UUID
@@ -136,16 +138,18 @@ class DeviceTask(BaseModel):
 
 
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic definition of a scanjob."""
+    """Pydantic definition of a scanworkflow."""
 
     record_id: UUID
     status_percent: int
 
 
+# Obsolete, to be removed
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive."""
 
     record_id: UUID
+
 
 
 class BaseDevice(BaseModel):
@@ -163,6 +167,84 @@ class BaseDevice(BaseModel):
     site: str | None
     ip_address: str
 
+class DeviceOut(BaseDevice):
+    """Devicee output model."""
+
+    id: str
+    datetime_created: datetime
+    datetime_updated: datetime | None
+
+
+class TaskType(str, Enum):
+    """Task type enum."""
+
+    PROCESSING_TASK = "PROCESSING_TASK"
+    DEVICE_TASK = "DEVICE_TASK"
+    CERTIFIED_DEVICE_TASK = "CERTIFIED_DEVICE_TASK"
+    CERTIFIED_PROCESSING_TASK = "CERTIFIED_PROCESSING_TASK"
+
+
+class TaskStatus(str, Enum):
+    """Task status enum."""
+
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    ERROR = "ERROR"
+
+
+class BaseTask(BaseModel):
+    """Task model."""
+    
+    class Config:
+        """Base class configuration."""
+
+        # extra = Extra.ignore
+        schema_extra = {
+            "examples": [
+                {
+                    "description": "task description",
+                    "type": TaskType.PROCESSING_TASK,
+                    "args": {"arg1": "val1"},
+                    "artifacts": {
+                        "input": [
+                            {
+                                "path": "/data",
+                                "name": "inputfile2"
+                            }
+                        ],
+                        "output": [
+                            {
+                                "path": "/data",
+                                "name": "outputfile1"
+                            }
+                        ]
+                    },
+                    "task_destinations": [],
+                    "status": {TaskStatus.PENDING: "additional status information"}
+                }
+            ]
+        }
+
+    workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
+    description: str
+    type: TaskType
+    args: dict[str, str]
+    artifacts: dict[str, list[dict[str, str]]]
+    task_destinations: list[dict[str, str]]
+    status: dict[TaskStatus, str]
+    is_template: bool
+    is_frozen: bool
+
+
+class TaskOut(BaseTask):
+    """Task output model."""
+
+    id: UUID
+    datetime_created: datetime
+
+
 
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
@@ -172,13 +254,21 @@ class BaseWorkflow(BaseModel):
 
         extra = Extra.ignore
 
-    host: str
-    name: str
-    manufacturer: str
-    modality: str
-    type: str
-    status: str
-    kafka_topic: str
+    comment: str | None
+    exam_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
+    is_finished: bool
+    is_template: bool
+    is_frozen: bool
+
+
+class WorkflowOut(BaseWorkflow):
+    """Workflow output model."""
+
+    id: UUID
+    tasks: list[TaskOut]
+    datetime_created: datetime
+    datetime_updated: datetime | None
+
 
 
 class BaseExam(BaseModel):
@@ -189,101 +279,15 @@ class BaseExam(BaseModel):
 
         extra = Extra.ignore
 
-    patient_id: UUID
+    patient_id: Optional[int] = None # TODO: replace by UUID
     name: str
     country: str | None
     site: str | None
     address: str | None
     creator: str
     status: str
-
-
-class BaseProcedure(BaseModel):
-    """Procedure base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    name: str
-    status: str
-
-
-class BaseJob(BaseModel):
-    """Job base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    type: str
-    comment: str | None
-    sequence_id: str
-    workflow_id: int | None
-    device_id: str
-    acquisition_limits: AcquisitionLimits
-    sequence_parameters: SequenceParameters
-
-
-class BaseRecord(BaseModel):
-    """Record base model."""
-
-    class Config:
-        """Base class configuration."""
-
-        extra = Extra.ignore
-
-    data_path: str | None
-    comment: str | None
-
-
-class ProcedureIn(BaseProcedure):
-    """Procedure input model."""
-
-    exam_id: UUID | str
-
-
-class RecordIn(BaseRecord):
-    """Record input model."""
-
-    job_id: UUID
-
-
-class DeviceOut(BaseDevice):
-    """Devicee output model."""
-
-    id: str
-    datetime_created: datetime
-    datetime_updated: datetime | None
-
-
-class WorkflowOut(BaseWorkflow):
-    """Workflow output model."""
-
-    id: int
-    datetime_created: datetime
-    datetime_updated: datetime | None
-
-
-class RecordOut(BaseRecord):
-    """Record output model."""
-
-    id: UUID
-    datetime_created: datetime
-
-
-class JobOut(BaseJob):
-    """Job output model."""
-
-    id: UUID
-    is_acquired: bool
-    device: DeviceOut | None
-    workflow: WorkflowOut | None
-    records: list[RecordOut]
-    datetime_created: datetime
-    datetime_updated: datetime | None
+    is_template: bool
+    is_frozen: bool
 
 
 class ExamOut(BaseExam):
@@ -292,4 +296,4 @@ class ExamOut(BaseExam):
     id: UUID
     datetime_created: datetime
     datetime_updated: datetime | None
-    jobs: list[JobOut]
+    workflows: list[WorkflowOut]

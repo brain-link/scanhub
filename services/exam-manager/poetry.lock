@@ -926,20 +926,6 @@ files = [
 ]
 
 [[package]]
-name = "scanhub"
-version = "0.0.4"
-description = "ScanHub Tools"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "scanhub-0.0.4-py3-none-any.whl", hash = "sha256:b8951298b7c51d95bf87f7c8246b217193ad94926681dc4e1e9c6cbce3d530d9"},
-    {file = "scanhub-0.0.4.tar.gz", hash = "sha256:13cbba5463445ecffbfd2bc8fa12409ce3dea5ce51f3ceed7fb4c23394465f41"},
-]
-
-[package.dependencies]
-pydantic = "1.10.2"
-
-[[package]]
 name = "sniffio"
 version = "1.3.0"
 description = "Sniff out which async library your code is running under"
@@ -1295,4 +1281,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "6f6a604a3a98e8a138621bd44c5ee58124f42b558c7df83f0c5831c217c5b5ae"
+content-hash = "d8b6fb5c2c93ba248d627b1da30b364f4a7fe104a8942784fd10f8bebd019537"

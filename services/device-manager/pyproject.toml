@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "device-manager"
+name = "device_manager"
 version = "0.0.1"
 description = "The device manager service is responsible for managing the devices that are connected to scanhub."
 authors = [
@@ -64,3 +64,4 @@ warn_unreachable = true
 python_version = "3.10"
 ignore_missing_imports = true
 mypy_path = "app"
+explicit_package_bases = true   # TODO: Fix imports

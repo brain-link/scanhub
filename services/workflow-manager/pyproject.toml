@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "workflow-manager"
+name = "workflow_manager"
 version = "0.0.1"
 description = "The Workflow Manager organizes the processing chains forming ScanHub Workflows."
 authors = [
@@ -19,10 +19,8 @@ python = ">=3.10,<3.11"
 fastapi = "^0.96.0"
 asyncpg = "^0.27.0"
 uvicorn = "^0.22.0"
-scanhub = "^0.0.4.dev3"
 psycopg2-binary = "^2.9.6"
 python-multipart = "^0.0.6"
-async-sqlalchemy = "^1.0.0"
 python-dotenv = "^1.0.0"
 aiokafka = "^0.8.1"
 asyncio = "^3.4.3"
@@ -67,3 +65,4 @@ warn_unreachable = true
 python_version = "3.10"
 ignore_missing_imports = true
 mypy_path = "app"
+explicit_package_bases = true   # TODO: Fix imports
