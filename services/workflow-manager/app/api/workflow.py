@@ -6,8 +6,13 @@
 import os
 from typing import Generator
 
+from uuid import UUID
+
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
+from scanhub_libraries.models import TaskOut, WorkflowOut
+
+from app.api.db import Exam, Workflow
 
 # from scanhub import RecoJob # type: ignore
 from pydantic import BaseModel, StrictStr
@@ -32,6 +37,52 @@ router = APIRouter()
 
 # Get the producer singleton instance
 producer = Producer()
+
+
+# Helper methods for workflows and exam, require recursive model translation
+async def get_workflow_out_model(data: Workflow) -> WorkflowOut:
+    """Transform db model to pydantic model.
+
+    Parameters
+    ----------
+    data
+        Workflow db model
+
+    Returns
+    -------
+        Workflow pydantic model
+    """
+    workflow = data.__dict__
+    workflow["tasks"] = [TaskOut(**task.__dict__) for task in data.tasks]
+    return WorkflowOut(**workflow)
+
+
+@router.get("/trigger/{workflow_id}/")
+async def trigger(workflow_id: UUID | str):
+    """Trigger a workflow.
+
+    Parameters
+    ----------
+    workflow_id
+        UUID of the workflow to trigger
+
+    Returns
+    -------
+        Workflow trigger response
+    """
+
+    # Debugging
+    workflow_id = 'cec25959-c451-4faf-9093-97431aba41e6'
+    
+    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return await get_workflow_out_model(data=workflow)
+
+
+
+
+
 
 
 @router.post("/upload/{record_id}/")
