@@ -4,7 +4,9 @@
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 // Icons
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
+// import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
+import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp';
+import BuildSharpIcon from '@mui/icons-material/BuildSharp';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
 import PersonSharpIcon from '@mui/icons-material/PersonSharp'
@@ -25,9 +27,8 @@ import { navigation } from '../utils/size_vars'
 
 // Menu elements
 const menuItems = [
-  { id: 0, text: 'Home', link: '/' },
-  { id: 1, text: 'Patients', link: '/patients' },
-  // {id: 2, text: "Dicom Viewer", link: "/dcmview"},
+  { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon/> },
+  { id: 1, text: 'Configuration', link: '/templates', icon: <BuildSharpIcon/> },
 ]
 
 function ColorSchemeToggle() {
@@ -106,10 +107,11 @@ export default function Navigation() {
             to={item.link}
             size='sm'
             color='primary'
-            startDecorator={item.link === '/' ? <HomeRoundedIcon /> : null}
+            startDecorator={item.icon}
             disabled={loc.pathname === item.link}
             variant={loc.pathname === item.link ? 'soft' : 'plain'}
             key={item.id}
+            sx={{display: "inline-flex"}}
           >
             {item.text}
           </Button>

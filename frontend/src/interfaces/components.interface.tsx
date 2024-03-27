@@ -1,6 +1,8 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // Component interfaces: Pass data and functions between components
+import { PatientOut } from '../generated-client/patient'
+import { ExamOut } from '../generated-client/exam'
 import { Job } from './data.interface'
 import { Device } from './data.interface'
 // import { Workflow } from './data.interface';
@@ -42,8 +44,8 @@ export interface SequenceViewerProps {
 export enum Alerts {
   Success = 'success',
   Warning = 'warning',
-  Danger = 'danger',
-  Neutral = 'neutral',
+  Error = 'error',
+  Info = 'info',
 }
 
 export interface AlertProps {
@@ -60,4 +62,20 @@ export interface SequenceUploadModal {
   fetchSequences: () => void
   dialogOpen: boolean
   setDialogOpen: (open: boolean) => void
+}
+
+export interface ModalComponentProps<T> {
+  onSubmit: (data: T) => void
+  onClose: () => void
+  setOpen: (open: boolean) => void
+  isOpen: boolean
+}
+
+export interface PatientTableInterface {
+  patients: PatientOut[]
+}
+
+export interface TemplateItemInterface<T> {
+  item: T
+  onClicked: () => void
 }
