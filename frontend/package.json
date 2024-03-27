@@ -10,6 +10,7 @@
     "@mui/icons-material": "^5.14.1",
     "@mui/joy": "^5.0.0-beta.6",
     "@mui/material": "^5.14.10",
+    "@openapitools/openapi-generator-cli": "^2.12.0",
     "@types/plotly.js": "^2.12.24",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
@@ -23,7 +24,6 @@
     "dicom-parser": "^1.8.21",
     "hammerjs": "^2.0.8",
     "node-sass": "^9.0.0",
-    "openapi-typescript-codegen": "^0.25.0",
     "parcel": "^2.9.3",
     "plotly.js": "^2.24.3",
     "react": "^18.2.0",
@@ -61,10 +61,9 @@
     "lint": "eslint ./src/**/*.tsx",
     "lint:fix": "eslint --fix './src/**/*.tsx'",
     "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc",
-    "generate-patient-client": "openapi --input http://localhost:8100/openapi.json --output ./src/generated-clients/patient --client axios --useOptions --useUnionTypes",
-    "generate-exam-client": "openapi --input http://localhost:8080/api/v1/exam/openapi.json --output ./src/generated-clients/exam --client axios --useOptions --useUnionTypes",
-    "generate-sequence-client": "openapi --input http://localhost:8080/api/v1/mri/sequences/openapi.json --output ./src/generated-clients/sequence --client axios --useOptions --useUnionTypes",
-    "generate-all-clients": "yarn generate-sequence-client & yarn generate-exam-client & yarn generate-patient-client"
+    "generate-patient-client": "rm -rf src/generated-client/patient; openapi-generator-cli generate -i http://localhost:8100/openapi.json -g typescript-axios -o src/generated-client/patient --additional-properties=supportsES6=true",
+    "generate-exam-client": "rm -rf src/generated-client/exam; openapi-generator-cli generate -i http://localhost:8080/api/v1/exam/openapi.json -g typescript-axios -o src/generated-client/exam --additional-properties=supportsES6=true",
+    "generate-all-clients": "yarn generate-patient-client; yarn generate-exam-client"
   },
   "browserslist": {
     "production": [
