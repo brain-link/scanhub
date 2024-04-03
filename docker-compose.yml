@@ -7,7 +7,10 @@ services:
 
   workflow-manager:
     container_name: workflow-manager
-    build: ./services/workflow-manager
+    build: 
+      context: ./services/workflow-manager
+      args: 
+        - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/workflow-manager/app/:/app/
