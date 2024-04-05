@@ -7,6 +7,11 @@ import os
 from typing import Generator
 
 import httpx
+import pydantic
+import dataclasses
+import json
+
+
 from uuid import UUID
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
@@ -56,7 +61,7 @@ async def trigger(workflow_id: UUID | str):
     """
 
     # Debugging
-    workflow_id = 'cec25959-c451-4faf-9093-97431aba41e6'
+    workflow_id = '9c6d9b8d-c570-418e-9277-2b083f3f9825' #'cec25959-c451-4faf-9093-97431aba41e6'
     
     exam_manager_uri = EXAM_MANAGER_URI
 
@@ -65,8 +70,15 @@ async def trigger(workflow_id: UUID | str):
         # TODO: data_path, comment ? # pylint: disable=fixme
         response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
 
-        print(response)
-        print(response.text)
+        assert response.status_code == 200  # noqa: S101
+
+        workflow_raw = response.json()
+        workflow = WorkflowOut(**workflow_raw)
+        
+        # Debugging
+        print(workflow)
+        print("Workflow tasks: ")
+        print(workflow.tasks)
 
     return
 
