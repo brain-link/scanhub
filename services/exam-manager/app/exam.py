@@ -331,7 +331,7 @@ async def get_all_exam_workflows(exam_id: UUID | str) -> list[WorkflowOut]:
 
 
 @router.get(
-    "/workflow/templates",
+    "/workflow/templates/all",
     response_model=list[WorkflowOut],
     status_code=200,
     tags=["workflows"],
@@ -511,7 +511,7 @@ async def get_all_workflow_tasks(workflow_id: UUID | str) -> list[TaskOut]:
     return result
 
 @router.get(
-    "/task/templates",
+    "/task/templates/all",
     response_model=list[TaskOut],
     status_code=200,
     tags=["tasks"],
