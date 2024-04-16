@@ -14,8 +14,15 @@ export default function ExamTemplateItem(prop: TemplateItemInterface<ExamOut>) {
   return (
     <Card variant="outlined">
         <CardContent>
-        <Typography level="title-md">Exam</Typography>
-        <Typography>{ prop.item.id }</Typography>
+        <Typography level="title-md">Exam: { prop.item.name }</Typography>
+        
+        <Typography level='body-sm' textColor='text.tertiary'>ID: { prop.item.id }</Typography>
+        <Typography level='body-sm' textColor='text.tertiary'>Site: { prop.item.site }</Typography>
+        <Typography level='body-sm' textColor='text.tertiary'>Address: { prop.item.address }</Typography>
+        <Typography level='body-sm' textColor='text.tertiary'>Creator: { prop.item.creator }</Typography>
+        <Typography level='body-sm' textColor='text.tertiary'>Created: { new Date(prop.item.datetime_created).toDateString() }</Typography>
+        <Typography level='body-sm' textColor='text.tertiary'>Updated: { prop.item.datetime_updated ? new Date(prop.item.datetime_updated).toDateString() : '-'}</Typography>
+
         </CardContent>
     </Card>
   )
