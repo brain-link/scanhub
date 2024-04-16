@@ -1254,8 +1254,8 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/task/templates`;
+        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/exam/task/templates/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1442,10 +1442,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllTaskTemplatesApiV1ExamTaskTemplatesGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplatesApiV1ExamTaskTemplatesGet(options);
+        async getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplatesApiV1ExamTaskTemplatesGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1535,8 +1535,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesGet(options?: any): AxiosPromise<Array<TaskOut>> {
-            return localVarFp.getAllTaskTemplatesApiV1ExamTaskTemplatesGet(options).then((request) => request(axios, basePath));
+        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<TaskOut>> {
+            return localVarFp.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(axios, basePath));
         },
         /**
          * Get all existing tasks of a certain workflow.  Parameters ---------- workflow_id     Id of parental workflow  Returns -------     List of task pydantic output model
@@ -1623,8 +1623,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public getAllTaskTemplatesApiV1ExamTaskTemplatesGet(options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).getAllTaskTemplatesApiV1ExamTaskTemplatesGet(options).then((request) => request(this.axios, this.basePath));
+    public getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1827,8 +1827,8 @@ export const WorkflowsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/workflow/templates`;
+        getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/exam/workflow/templates/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1994,10 +1994,10 @@ export const WorkflowsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkflowOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet(options);
+        async getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkflowOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2084,8 +2084,8 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet(options?: any): AxiosPromise<Array<WorkflowOut>> {
-            return localVarFp.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet(options).then((request) => request(axios, basePath));
+        getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options?: any): AxiosPromise<Array<WorkflowOut>> {
+            return localVarFp.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options).then((request) => request(axios, basePath));
         },
         /**
          * Get a workflow.  Parameters ---------- workflow_id     Id of the workflow to be returned  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
@@ -2174,8 +2174,8 @@ export class WorkflowsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof WorkflowsApi
      */
-    public getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet(options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesGet(options).then((request) => request(this.axios, this.basePath));
+    public getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options?: RawAxiosRequestConfig) {
+        return WorkflowsApiFp(this.configuration).getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
