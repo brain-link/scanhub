@@ -16,6 +16,8 @@ export default function WorkflowTemplateItem(prop: TemplateItemInterface<Workflo
         <CardContent>
         <Typography level="title-md">Workflow</Typography>
 
+        <Typography level='body-sm' textColor='text.tertiary'>ID: { prop.item.id }</Typography>
+        <Typography level='body-sm' textColor='text.tertiary'>Exam ID: { prop.item.exam_id }</Typography>
         <Typography level='body-sm' textColor='text.tertiary'>Comment: { prop.item.comment }</Typography>
         <Typography level='body-sm' textColor='text.tertiary'>Created: { new Date(prop.item.datetime_created).toDateString() }</Typography>
         <Typography level='body-sm' textColor='text.tertiary'>Updated: { prop.item.datetime_updated ? new Date(prop.item.datetime_updated).toDateString() : '-'}</Typography>
