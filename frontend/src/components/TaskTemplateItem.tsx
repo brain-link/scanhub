@@ -7,8 +7,10 @@ import Typography from '@mui/joy/Typography'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Accordion from '@mui/joy/Accordion'
+import AccordionGroup from '@mui/joy/AccordionGroup'
 import AccordionSummary from '@mui/joy/AccordionSummary'
 import AccordionDetails from '@mui/joy/AccordionDetails'
+import AddIcon from '@mui/icons-material/Add';
 
 import { TaskOut } from "../generated-client/exam";
 import { TemplateItemInterface } from '../interfaces/components.interface'
@@ -17,7 +19,7 @@ import { TemplateItemInterface } from '../interfaces/components.interface'
 export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{ width: '100%' }}>
         <CardContent>
         <Typography level="title-md">Task</Typography>
 
@@ -50,36 +52,39 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             <Typography level='body-sm' textColor='text.tertiary'>Artifacts</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {
-              // Iterate outer dict
-              prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact) => (
-                <Accordion>
-                  <AccordionSummary>
-                    <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {
-                      // Iterate through list of outer dict
-                      artifact[1].map((artifact_entry, index) => (
-                        <Accordion>
-                          <AccordionSummary>
-                            <Typography level='body-sm' textColor='text.tertiary'>{index}</Typography>
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            {
-                              // Iterate inner dict
-                              artifact_entry && Object.entries(artifact_entry).map((desc) => (
-                                <Typography level='body-sm' textColor='text.tertiary'>{desc[0]}: {desc[1]}</Typography>
-                              ))
-                            }
-                          </AccordionDetails>
-                        </Accordion>
-                      ))
-                    }
-                  </AccordionDetails>
-                </Accordion>
-              ))
-            }
+            <AccordionGroup>
+              {
+                // Iterate outer dict
+                prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact) => (
+                
+                  <Accordion>
+                    <AccordionSummary>
+                      <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {
+                        // Iterate through list of outer dict
+                        artifact[1].map((artifact_entry, index) => (
+                          <Accordion>
+                            <AccordionSummary>
+                              <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]} {index+1}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              {
+                                // Iterate inner dict
+                                artifact_entry && Object.entries(artifact_entry).map((desc) => (
+                                  <Typography level='body-sm' textColor='text.tertiary'>{desc[0]}: {desc[1]}</Typography>
+                                ))
+                              }
+                            </AccordionDetails>
+                          </Accordion>
+                        ))
+                      }
+                    </AccordionDetails>
+                  </Accordion>
+                ))
+              }
+            </AccordionGroup>
           </AccordionDetails>
         </Accordion>
         
@@ -89,22 +94,24 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             <Typography level='body-sm' textColor='text.tertiary'>Destinations</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {
-              prop.item.task_destinations.map((destination, index) => (
-                <Accordion>
-                  <AccordionSummary>
-                    <Typography level='body-sm' textColor='text.tertiary'>{index}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {
-                      destination && Object.entries(destination).map((values) => (
-                        <Typography level='body-sm' textColor='text.tertiary'>{values[0]}: {values[1]}</Typography>
-                      ))
-                    }
-                  </AccordionDetails>
-                </Accordion>
-              ))
-            }
+            <AccordionGroup>
+              {
+                prop.item.task_destinations.map((destination, index) => (
+                  <Accordion>
+                    <AccordionSummary>
+                      <Typography level='body-sm' textColor='text.tertiary'>Destination {index+1}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {
+                        destination && Object.entries(destination).map((values) => (
+                          <Typography level='body-sm' textColor='text.tertiary'>{values[0]}: {values[1]}</Typography>
+                        ))
+                      }
+                    </AccordionDetails>
+                  </Accordion>
+                ))
+              }
+            </AccordionGroup>
           </AccordionDetails>
         </Accordion>
 

@@ -12,7 +12,7 @@ import { TemplateItemInterface } from '../interfaces/components.interface'
 export default function ExamTemplateItem(prop: TemplateItemInterface<ExamOut>) {
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{ width: '100%' }}>
         <CardContent>
         <Typography level="title-md">Exam: { prop.item.name }</Typography>
         

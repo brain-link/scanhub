@@ -12,7 +12,7 @@ import { TemplateItemInterface } from '../interfaces/components.interface'
 export default function WorkflowTemplateItem(prop: TemplateItemInterface<WorkflowOut>) {
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{ width: '100%' }}>
         <CardContent>
         <Typography level="title-md">Workflow</Typography>
 

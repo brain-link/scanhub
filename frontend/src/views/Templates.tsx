@@ -2,41 +2,44 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientTable.tsx is responsible for rendering the patient table view.
 import * as React from 'react'
-import Box from '@mui/joy/Box'
-import Divider from '@mui/joy/Divider'
-
-import Stack from '@mui/joy/Stack'
+import Grid from '@mui/joy/Grid'
 
 import ExamTemplateList from '../components/ExamTemplateList'
 import WorkflowTemplateList from '../components/WorkflowTemplateList'
 import TaskTemplateList from '../components/TaskTemplateList'
 
+import { navigation } from '../utils/size_vars'
+
 export default function Templates() {
 
-  
-
   return (
-    <Stack
-      direction="row"
-      divider={<Divider orientation="vertical" />}
-      spacing={2}
-      justifyContent="center"
+    <Grid 
+      container 
+      spacing={2} 
+      sx={{ 
+        flexGrow: 1,
+        m: 0,
+        height: `calc(100vh - ${navigation.height})`,
+        '--Grid-borderWidth': '1px',
+        '& > div': {
+          borderRight: 'var(--Grid-borderWidth) solid',
+          borderColor: 'divider',
+        },
+      }}
     >
 
-      <Box sx={{ p: 3 }}>
+      <Grid xs={4}>
         <ExamTemplateList/>
-      </Box>
+      </Grid>
 
-      <Box sx={{ p: 3 }}>
+      <Grid xs={4}>
         <WorkflowTemplateList/>
-      </Box>
+      </Grid>
 
-      <Box sx={{ p: 3 }}>
+      <Grid xs={4}>
         <TaskTemplateList/>
-      </Box>
+      </Grid>
 
-
-    </Stack>
-    
+    </Grid>
   )
 }

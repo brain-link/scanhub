@@ -60,7 +60,7 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
           Create New Exam Template
         </Typography>
 
-        <Stack>
+        <Stack spacing={1}>
 
           <Grid container rowSpacing={1.5} columnSpacing={5}>
             {formContent.map((item, index) => (

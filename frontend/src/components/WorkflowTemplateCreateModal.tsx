@@ -52,7 +52,7 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
           Create New Workflow Template
         </Typography>
 
-        <Stack>
+        <Stack spacing={1}>
 
           <FormLabel>Comment</FormLabel>
           <Input

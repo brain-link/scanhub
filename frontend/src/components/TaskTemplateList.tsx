@@ -7,6 +7,7 @@ import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
 
 import TaskTemplateItem from './TaskTemplateItem'
+import TaskTemplateCreateModal from './TaskTemplateCreateModal'
 import AlertItem from '../components/AlertItem'
 
 import { Alerts } from '../interfaces/components.interface'
@@ -29,6 +30,7 @@ export default function TaskTemplateList() {
       direction="column"
       alignItems="flex-start"
       spacing={2}
+      sx={{p: 2}}
     >
       <Button
         startDecorator={<Add />}
@@ -37,14 +39,14 @@ export default function TaskTemplateList() {
         Create Task Template
       </Button>
 
-      {/* <WorkflowTemplateCreateModal
+      <TaskTemplateCreateModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
         onSubmit={
           () => { refetch() }
         }
         onClose={() => {}}
-      /> */}
+      />
 
       {
         tasks?.map((task) => (

@@ -30,6 +30,7 @@ export default function ExamTemplateList() {
       direction="column"
       alignItems="flex-start"
       spacing={2}
+      sx={{p: 2}}
     >
       <Button
         startDecorator={<Add />}
