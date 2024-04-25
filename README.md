@@ -54,7 +54,10 @@ Each issue should have a detailed description including a description of the pro
 We appreciate it if the issue is updated with the actual solution approach during development.
 This documentation step might be helpful when working on similar or related issues.
 
-When you start working on an issue, please create a new branch which follows the naming convention `<ID>-short-name`.
+When you start working on an issue, please create a new branch according to the following naming convention.
+
+    Branch name: <ID>-short-name
+
 The `<ID>` refers to the ID of the related issue and `short-name` is a short expression for the title of the issue.
 Please link the branch to the issue, as soon as you start working on it.
 
