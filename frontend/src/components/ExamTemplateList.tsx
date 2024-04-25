@@ -13,7 +13,7 @@ import ExamTemplateCreateModal from '../components/ExamTemplateCreateModal'
 import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
 import { ExamOut } from "../generated-client/exam";
-import { examApi } from '../Api'
+import { examApi } from '../api'
 
 
 export default function ExamTemplateList() {

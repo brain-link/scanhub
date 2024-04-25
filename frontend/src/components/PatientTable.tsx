@@ -34,7 +34,7 @@ export default function PatientTable(props: PatientTableInterface) {
 
         <tbody>
           {props.patients.map((patient) => (
-            <tr key={patient.id} onClick={() => {navigate(`/patients/${patient.id}`)}}>
+            <tr key={patient.id} onClick={() => {navigate(`/${patient.id}`)}}>
               <td>{patient.id}</td>
               <td>{patient.name}</td>
               <td>{patient.sex}</td>

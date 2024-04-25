@@ -8,9 +8,10 @@ import Divider from '@mui/material/Divider'
 import * as React from 'react'
 
 // import client from '../client/queries';
-import { Patient } from '../interfaces/data.interface'
+// import { Patient } from '../interfaces/data.interface'
+import { PatientOut } from '../generated-client/patient'
 
-function PatientInfo(props: { patient: Patient; isLoading: boolean; isError: boolean }) {
+function PatientInfo(props: { patient: PatientOut; isLoading: boolean; isError: boolean }) {
   const { patient, isLoading, isError } = props
 
   if (isLoading) {

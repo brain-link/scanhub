@@ -22,9 +22,11 @@ import client from '../client/exam-tree-queries'
 import ExamModal from '../components/ExamModal'
 import { ComponentProps } from '../interfaces/components.interface'
 // Interfaces and api service
-import { Exam } from '../interfaces/data.interface'
+// import { Exam } from '../interfaces/data.interface'
+import { ExamOut } from '../generated-client/exam'
 
-function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<Exam>) {
+
+function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
   const params = useParams()
   const navigate = useNavigate()
 
@@ -54,17 +56,17 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
     })
   })
 
-  const updateExam = useMutation(async (data: Exam) => {
-    console.log('Updating exam data... ', data)
-    await client.examService
-      .update(data.id, data)
-      .then(() => {
-        refetchParentData()
-      })
-      .catch((err) => {
-        console.log('Error on exam update: ', err)
-      })
-  })
+  // const updateExam = useMutation(async (data: Exam) => {
+  //   console.log('Updating exam data... ', data)
+  //   await client.examService
+  //     .update(data.id, data)
+  //     .then(() => {
+  //       refetchParentData()
+  //     })
+  //     .catch((err) => {
+  //       console.log('Error on exam update: ', err)
+  //     })
+  // })
 
   return (
     <ListItem>
@@ -115,7 +117,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
           <MenuItem
             key='edit'
             onClick={() => {
-              setExamModalOpen(true)
+              // setExamModalOpen(true)
             }}
           >
             Edit
@@ -131,14 +133,14 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
           </MenuItem>
         </Menu>
 
-        <ExamModal
+        {/* <ExamModal
           data={exam}
           dialogOpen={examModalOpen}
           setDialogOpen={setExamModalOpen}
           handleModalSubmit={(data: Exam) => {
             updateExam.mutate(data)
           }}
-        />
+        /> */}
       </ListItemButton>
     </ListItem>
   )

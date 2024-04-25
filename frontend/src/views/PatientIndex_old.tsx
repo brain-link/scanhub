@@ -24,23 +24,19 @@ import JobList from '../components/JobList'
 // Import sub components
 import PatientInfo from '../components/PatientInfo'
 // Import interfaces, api services and global variables
+import { Patient } from '../interfaces/data.interface'
+import { Exam } from '../interfaces/data.interface'
+import { Job } from '../interfaces/data.interface'
 import { navigation, patientView } from '../utils/size_vars'
 
-import { examApi, patientApi } from '../api'
-import { ExamOut } from '../generated-client/exam'
-import { PatientOut } from '../generated-client/patient'
-import { WorkflowOut } from '../generated-client/exam'
-
 function PatientIndex() {
-
   const params = useParams()
-
   // Visibility of side panel containing patient info and exam list
   // const [sidePanelOpen, setSidePanelOpen] = React.useState(true)
   // Modal states for exam
   const [examModalOpen, setExamModalOpen] = React.useState(false)
   // List of jobs
-  const [workflows, setWorkflows] = React.useState<WorkflowOut[] | undefined>(undefined)
+  const [jobs, setJobs] = React.useState<Job[] | undefined>(undefined)
 
   // useQuery for caching the fetched data
   const {
@@ -48,14 +44,10 @@ function PatientIndex() {
     // refetch: refetchPatient,
     isLoading: patientLoading,
     isError: patientError,
-  } = useQuery<PatientOut, Error>({
+  } = useQuery<Patient, Error>({
     queryKey: ['patient', params.patientId],
-    queryFn: async () => { return await patientApi.getPatientPatientIdGet(Number(params.patientId)).then((result) => {return result.data})}
+    queryFn: () => client.patientService.get(Number(params.patientId)),
   })
-
-  React.useEffect(() => {
-    console.log("Patient ID: ", params.patientId)
-  }, [params.patientId])
 
   // Query all exams of the patient
   const {
@@ -63,9 +55,9 @@ function PatientIndex() {
     refetch: refetchExams,
     // isLoading: examsLoading,
     // isError: examsError,
-  } = useQuery<ExamOut[], Error>({
+  } = useQuery<Exam[], Error>({
     queryKey: ['exam', params.patientId],
-    queryFn: async () => { return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId)).then((result) => {return result.data})}
+    queryFn: () => client.examService.getAll(Number(params.patientId)),
   })
 
   // This useEffect hook is executed when either exams or params.examId change
@@ -75,11 +67,22 @@ function PatientIndex() {
       const exam = exams.filter((exam) => exam.id === String(params.examId))[0]
       // Set jobs if exam exists
       if (exam) {
-        setWorkflows(exam.workflows)
+        setJobs(exam.jobs)
       }
     }
   }, [exams, params.examId])
 
+  // Mutations to create a new exam
+  const createExam = useMutation(async (data: Exam) => {
+    await client.examService
+      .create(data)
+      .then(() => {
+        refetchExams()
+      })
+      .catch((err) => {
+        console.log('Error on exam creation: ', err)
+      })
+  })
 
   return (
     <Stack direction='row' sx={{ height: `calc(100vh - ${navigation.height})`, width: '100%' }}>
@@ -87,7 +90,6 @@ function PatientIndex() {
         sx={{
           // minWidth: sidePanelOpen ? patientView.drawerWidth : 0,
           // width: sidePanelOpen ? patientView.drawerWidth : 0,
-          width: patientView.drawerWidth,
           overflow: 'auto',
           bgcolor: 'background.componentBg',
           borderRight: '1px solid',
@@ -119,12 +121,21 @@ function PatientIndex() {
             <IconButton
               variant='soft'
               sx={{ '--IconButton-size': patientView.iconButtonSize }}
-              onClick={() => {}}
+              onClick={() => setExamModalOpen(true)}
             >
               <AddSharpIcon />
             </IconButton>
           </Box>
 
+          <ExamModal
+            // When data is null, modal fills data in new empty procedure
+            data={null}
+            dialogOpen={examModalOpen}
+            setDialogOpen={setExamModalOpen}
+            handleModalSubmit={(data: Exam) => {
+              createExam.mutate(data)
+            }}
+          />
         </Box>
 
         <ListDivider />
@@ -143,12 +154,12 @@ function PatientIndex() {
 
       {/* job view controller */}
       <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-        {/* <JobList
+        <JobList
           // Implementation of new interface may be required
-          data={workflows ? workflows : []}
+          data={jobs ? jobs : []}
           refetchParentData={refetchExams}
           isSelected={params.examId ? true : false}
-        /> */}
+        />
       </Box>
 
     </Stack>
