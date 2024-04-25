@@ -48,12 +48,14 @@ Contributor Guide
 
 We appreciate every contribution to ScanHub, if you would like to contribute to the project, pleaase contact us.
 Based on a stable main-branch, we are implementing features based on issues.
+
 Feel free to open a new issues for any feature that you are missing in the current main branch.
 Each issue should have a detailed description including a description of the problem, bug or feature and a potential solution approach.
 We appreciate it if the issue is updated with the actual solution approach during development.
 This documentation step might be helpful when working on similar or related issues.
+
 When you start working on an issue, please create a new branch which follows the naming convention `<ID>-short-name`.
-`<ID>` refers to the ID of the related issue and `short-name` is a short expression for the title of the issue.
+The `<ID>` refers to the ID of the related issue and `short-name` is a short expression for the title of the issue.
 Please link the branch to the issue, as soon as you start working on it.
 
 About
