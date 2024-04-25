@@ -79,3 +79,7 @@ export interface TemplateItemInterface<T> {
   item: T
   onClicked: () => void
 }
+
+export interface CreateInstanceModalInterface {
+  onSubmit: () => void
+}

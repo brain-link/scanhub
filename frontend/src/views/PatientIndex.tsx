@@ -21,6 +21,7 @@ import client from '../client/exam-tree-queries'
 import ExamItem from '../components/ExamItem'
 import ExamModal from '../components/ExamModal'
 import JobList from '../components/JobList'
+import ExamFromTemplateButton from '../components/ExamFromTemplateButton'
 // Import sub components
 import PatientInfo from '../components/PatientInfo'
 // Import interfaces, api services and global variables
@@ -82,13 +83,20 @@ function PatientIndex() {
 
 
   return (
-    <Stack direction='row' sx={{ height: `calc(100vh - ${navigation.height})`, width: '100%' }}>
+    <Stack 
+      direction='row' 
+      sx={{
+        height: `calc(100vh - ${navigation.height})`,
+        width: '100%',
+        overflow: 'clip'
+      }}
+    >
       <Box
         sx={{
           // minWidth: sidePanelOpen ? patientView.drawerWidth : 0,
           // width: sidePanelOpen ? patientView.drawerWidth : 0,
           width: patientView.drawerWidth,
-          overflow: 'auto',
+          overflow: 'clip',
           bgcolor: 'background.componentBg',
           borderRight: '1px solid',
           borderColor: 'divider',
@@ -108,6 +116,7 @@ function PatientIndex() {
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             alignItems: 'center',
+            overflow: 'scroll'
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
@@ -115,7 +124,7 @@ function PatientIndex() {
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          {/* <Box sx={{ display: 'flex', gap: 1 }}>
             <IconButton
               variant='soft'
               sx={{ '--IconButton-size': patientView.iconButtonSize }}
@@ -123,7 +132,10 @@ function PatientIndex() {
             >
               <AddSharpIcon />
             </IconButton>
-          </Box>
+          </Box> */}
+          <ExamFromTemplateButton 
+            onSubmit={() => {refetchExams()}}
+          />
 
         </Box>
 

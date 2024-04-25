@@ -24,6 +24,7 @@ import { ComponentProps } from '../interfaces/components.interface'
 // Interfaces and api service
 // import { Exam } from '../interfaces/data.interface'
 import { ExamOut } from '../generated-client/exam'
+import { examApi } from '../api'
 
 
 function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
@@ -47,10 +48,10 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
   }
 
   const deleteExam = useMutation(async () => {
-    await client.examService.delete(exam.id).then(() => {
+    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id).then(() => {
       if (String(params.examId) === exam.id) {
         // Reset router path if this exam id is in the path
-        navigate(`/patients/${params.patientId}`)
+        navigate(`/${params.patientId}`)
       }
       refetchParentData()
     })
@@ -73,7 +74,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
       <ListItemButton
         id='exam-item'
         component={RouterLink}
-        to={`/patients/${params.patientId}/${exam.id}`}
+        to={`/${params.patientId}/${exam.id}`}
         relative='path'
         selected={isSelected}
         variant={isSelected || exam.id === contextOpen ? 'soft' : 'plain'}
