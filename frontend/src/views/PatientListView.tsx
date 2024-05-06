@@ -11,7 +11,7 @@ import Container from '@mui/system/Container'
 import * as React from 'react'
 import { useQuery } from 'react-query'
 import { PatientOut } from "../generated-client/patient";
-import { patientApi } from '../Api'
+import { patientApi } from '../api'
 import PatientCreateModal from '../components/PatientCreateModal'
 import PatientTable from '../components/PatientTable'
 import AlertItem from '../components/AlertItem'

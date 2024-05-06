@@ -13,7 +13,7 @@ import WorkflowTemplateCreateModal from './WorkflowTemplateCreateModal'
 import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
 import { WorkflowOut } from "../generated-client/exam";
-import { workflowsApi } from '../Api'
+import { workflowsApi } from '../api'
 
 
 export default function WorkflowTemplateList() {

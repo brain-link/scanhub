@@ -13,7 +13,7 @@ import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
 import { TaskOut } from "../generated-client/exam";
-import { taskApi } from '../Api'
+import { taskApi } from '../api'
 
 
 export default function TaskTemplateList() {

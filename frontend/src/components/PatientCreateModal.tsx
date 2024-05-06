@@ -10,7 +10,7 @@ import FormLabel from '@mui/joy/FormLabel'
 import Grid from '@mui/joy/Grid'
 
 import { useMutation } from 'react-query'
-import { patientApi } from "../Api"
+import { patientApi } from "../api"
 import { BasePatient, PatientOut } from "../generated-client/patient";
 import { ModalComponentProps } from '../interfaces/components.interface'
 

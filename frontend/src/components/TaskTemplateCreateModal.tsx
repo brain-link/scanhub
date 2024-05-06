@@ -16,7 +16,7 @@ import Option from '@mui/joy/Option';
 
 import { useMutation } from 'react-query'
 import { BaseTask, TaskOut, TaskType } from "../generated-client/exam";
-import { taskApi } from '../Api';
+import { taskApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 
 

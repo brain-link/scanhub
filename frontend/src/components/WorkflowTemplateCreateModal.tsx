@@ -14,7 +14,7 @@ import * as React from 'react'
 
 import { useMutation } from 'react-query'
 import { BaseWorkflow, WorkflowOut } from "../generated-client/exam";
-import { workflowsApi } from '../Api';
+import { workflowsApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 
 
