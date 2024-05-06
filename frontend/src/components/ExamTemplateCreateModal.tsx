@@ -70,7 +70,6 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
                   name={item.key}
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
                   placeholder={item.placeholder}
-                  defaultValue={ exam[item.key] }
                   required
                 />
               </Grid>

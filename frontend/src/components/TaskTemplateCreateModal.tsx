@@ -82,7 +82,7 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
             {
               Object.keys(TaskType).map((key) => (
                 <Option key={key} value={key}>
-                  { TaskType[key] }
+                  { TaskType[key as keyof typeof TaskType] }
                 </Option>
               ))
             }

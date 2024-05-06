@@ -46,7 +46,7 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
       {isLoading ? (
         <CircularProgress />
       ) : isError ? (
-        <AlertItem title='Error loading exams' type={Alerts.Danger} />
+        <AlertItem title='Error loading exams' type={Alerts.Error} />
       ) : (
         <Card sx={{ p: 0 }}>
           <AccordionGroup>
@@ -69,18 +69,18 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                 <AccordionDetails>
                   <Typography level='title-md'> Procedures </Typography>
 
-                  <AccordionGroup variant='outlined' sx={{ maxWidth: 400, borderRadius: 'md' }}>
-                    {exam.procedures?.map((procedure) => (
-                      <Accordion key={`procedure-${procedure.id}`}>
+                  {/* <AccordionGroup variant='outlined' sx={{ maxWidth: 400, borderRadius: 'md' }}>
+                    {exam.jobs?.map((job) => (
+                      <Accordion key={`procedure-${job.id}`}>
                         <AccordionSummary>
                           <DescriptionSharpIcon />
                           <ListItemContent>
-                            <Typography level='title-sm'>{procedure.name}</Typography>
+                            <Typography level='title-sm'>{job.type}</Typography>
                             <Typography level='body-xs'>{`Created: ${new Date(
-                              procedure.datetime_created,
+                              job.datetime_created,
                             ).toDateString()}`}</Typography>
                             <Typography level='body-xs'>{`Updated: ${
-                              procedure.datetime_updated ? new Date(procedure.datetime_updated).toDateString() : '-'
+                              job.datetime_updated ? new Date(job.datetime_updated).toDateString() : '-'
                             }`}</Typography>
                           </ListItemContent>
                         </AccordionSummary>
@@ -88,17 +88,17 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                         <AccordionDetails>
                           <Typography level='title-md'> Records </Typography>
 
-                          {procedure.jobs?.map(
-                            (job) =>
+                          {job.records?.map(
+                            (record) =>
                               // Check if job has records
                               // Only display the last record for each job
-                              job.records &&
-                              job.records.length > 0 && (
-                                <ListItem key={`record-${job.records[job.records.length - 1].id}`}>
+                              record.records &&
+                              record.records.length > 0 && (
+                                <ListItem key={`record-${record.records[record.records.length - 1].id}`}>
                                   <ListItemButton
                                     id='record-entry'
                                     onClick={() => {
-                                      const datapath = job.records[job.records.length - 1].data_path
+                                      const datapath = record.records[record.records.length - 1].data_path
                                       setDataPath(datapath)
                                     }}
                                   >
@@ -107,15 +107,15 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                                     </ListItemDecorator>
 
                                     <ListItemContent>
-                                      <Typography level='title-sm'>{job.type}</Typography>
+                                      <Typography level='title-sm'>{record.type}</Typography>
                                       <Typography level='title-sm'>
-                                        {job.records[job.records.length - 1]
-                                          ? job.records[job.records.length - 1].comment
+                                        {record.records[record.records.length - 1]
+                                          ? record.records[record.records.length - 1].comment
                                           : '-'}
                                       </Typography>
                                       <Typography level='body-xs'>
                                         {`Created: ${new Date(
-                                          job.records[job.records.length - 1].datetime_created,
+                                          record.records[record.records.length - 1].datetime_created,
                                         ).toDateString()}`}
                                       </Typography>
                                     </ListItemContent>
@@ -126,7 +126,7 @@ function ExamTree({ setDataPath }: ExamTreeProps) {
                         </AccordionDetails>
                       </Accordion>
                     ))}
-                  </AccordionGroup>
+                  </AccordionGroup> */}
                 </AccordionDetails>
               </Accordion>
             ))}

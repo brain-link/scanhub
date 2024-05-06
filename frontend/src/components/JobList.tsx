@@ -100,7 +100,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
         <AlertItem
           title='Error loading sequences'
           info='Sequences could not be loaded, an error occured.'
-          type={Alerts.Danger}
+          type={Alerts.Error}
         />
       </Stack>
     )
@@ -121,7 +121,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
         <AlertItem
           title='Error: No devices'
           info='Devices could not be loaded, an error occured.'
-          type={Alerts.Danger}
+          type={Alerts.Error}
         />
       </Stack>
     )
@@ -227,7 +227,7 @@ function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: Compo
               <AlertItem
                 title='Nothing to show...'
                 info='Please select an exam to view the jobs.'
-                type={Alerts.Neutral}
+                type={Alerts.Info}
               />
             </Stack>
           )

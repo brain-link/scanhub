@@ -43,10 +43,10 @@ function JobModal(props: JobModalProps) {
   const [job, setJob] = props.data
     ? React.useState<Job>(props.data)
     : React.useState<Job>({
-        id: 0,
+        id: '',
         type: '',
         comment: '',
-        procedure_id: Number(params.procedureId),
+        exam_id: '',
         sequence_id: '',
         workflow_id: null,
         device_id: '',
@@ -55,9 +55,9 @@ function JobModal(props: JobModalProps) {
         sequence_parameters: seq_params
       })
 
-  React.useEffect(() => {
-    setJob({ ...job, procedure_id: Number(params.procedureId) })
-  }, [params.procedureId])
+  // React.useEffect(() => {
+  //   setJob({ ...job, procedure_id: Number(params.procedureId) })
+  // }, [params.procedureId])
 
   // To be replaced by devices and workflows from database
   // const devices = [{"id": 1, "name": "MRI Simulator"}]

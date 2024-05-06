@@ -3582,6 +3582,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cornerstone-core@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@types/cornerstone-core/-/cornerstone-core-2.3.3.tgz#e88a8db5d50a3b74b102f327525be847b6a80d05"
+  integrity sha512-Q7TL1Qwmxp7X9QUKD8SgHH/YEEqlgsls355uiCdbyN1/UVqcSVKojeKTX5QOf3oUXICF2jPEJYdDa9T6cUcnmQ==
+
 "@types/eslint-scope@^3.7.3":
   version "3.7.4"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.4.tgz#37fc1223f0786c39627068a12e94d6e6fc61de16"

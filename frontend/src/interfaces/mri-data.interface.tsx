@@ -9,7 +9,7 @@ export interface MRISequence {
   created_at?: Date | null
   updated_at?: Date | null
   tags?: [string] | []
-  file?: string | null
+  file?: File | null
   file_extension?: string
 }
 

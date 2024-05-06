@@ -101,7 +101,7 @@ function SequenceUpload(props: SequenceUploadModal) {
                 type='file'
                 onChange={(e) => {
                   e.preventDefault()
-                  setSequence({ ...sequence, file: e.target.files ? e.target.files[0] : null })
+                  setSequence({ ...sequence, file: (e.target.files ? e.target.files[0] : null) })
                 }}
               />
               Upload sequence
