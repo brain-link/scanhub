@@ -29,11 +29,11 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
 
   const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
     queryKey: ['exams'],
-    queryFn: async () => { return await examApi.getAllExamTemplatesApiV1ExamTemplatesAllGet().then((result) => {return result.data})}
+    queryFn: async () => { return await examApi.getAllExamTemplatesApiV1ExamTemplatesAllGet({headers: {Authorization: "Bearer Bitte"}}).then((result) => {return result.data})}
   })
 
   const mutation = useMutation(async (id: string) => {
-    await examApi.createExamFromTemplateApiV1ExamPost(Number(params.patientId), id)
+    await examApi.createExamFromTemplateApiV1ExamPost(Number(params.patientId), id, {headers: {Authorization: "Bearer Bitte"}})
     .then(() => { props.onSubmit() })
     .catch((err) => { console.log(err) })
   })

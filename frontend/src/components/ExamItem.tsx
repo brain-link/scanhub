@@ -48,7 +48,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
   }
 
   const deleteExam = useMutation(async () => {
-    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id).then(() => {
+    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id, {headers: {Authorization: "Bearer Bitte"}}).then(() => {
       if (String(params.examId) === exam.id) {
         // Reset router path if this exam id is in the path
         navigate(`/${params.patientId}`)

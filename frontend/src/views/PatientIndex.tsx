@@ -32,6 +32,7 @@ import { ExamOut } from '../generated-client/exam'
 import { PatientOut } from '../generated-client/patient'
 import { WorkflowOut } from '../generated-client/exam'
 
+
 function PatientIndex() {
 
   const params = useParams()
@@ -66,7 +67,7 @@ function PatientIndex() {
     // isError: examsError,
   } = useQuery<ExamOut[], Error>({
     queryKey: ['exam', params.patientId],
-    queryFn: async () => { return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId)).then((result) => {return result.data})}
+    queryFn: async () => { return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId), {headers: {Authorization: "Bearer Bitte"}}).then((result) => {return result.data})}
   })
 
   // This useEffect hook is executed when either exams or params.examId change
