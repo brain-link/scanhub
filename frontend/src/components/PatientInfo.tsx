@@ -38,7 +38,7 @@ function PatientInfo(props: { patient: PatientOut; isLoading: boolean; isError: 
             p: 2,
             display: 'grid',
             gridTemplateColumns: 'auto 1fr',
-            '& > *:nth-child(odd)': {
+            '& > *:nth-of-type(odd)': {
               color: 'text.secondary',
             },
           }}

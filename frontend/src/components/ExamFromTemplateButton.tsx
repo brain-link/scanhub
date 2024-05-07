@@ -62,8 +62,9 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
               }}
             >
               {
-                exams && exams.map((exam) => (
+                exams && exams.map((exam, idx) => (
                   <ListItemButton
+                    key={idx}
                     onClick={() => {
                       mutation.mutate(exam.id)
                       setModalOpen(false)
