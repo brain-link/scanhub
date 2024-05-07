@@ -3,16 +3,20 @@
 
 """Exam manager main file."""
 
-from fastapi import FastAPI, HTTPException
+from typing import Annotated
+
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
 from app.db import engine, init_db
 from app.exam import router
+from scanhub_libraries.security import get_current_user
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
     docs_url="/api/v1/exam/docs",
+    dependencies=[Depends(get_current_user)]
 )
 
 # To be done: Specify specific origins:

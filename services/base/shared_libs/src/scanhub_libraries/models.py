@@ -297,3 +297,10 @@ class ExamOut(BaseExam):
     datetime_created: datetime
     datetime_updated: datetime | None
     workflows: list[WorkflowOut]
+
+
+class User(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    email: str | None

@@ -35,7 +35,15 @@ Installation
 To install the package, you need install [Docker](https://docs.docker.com/engine/install/) first. 
 The installation of ScanHub-UI is as simple as using the following command.
 
-    docker-compose up -d --build
+    docker-compose up --detach --build
+
+By default this builds the services with a base docker imgage from ghcr.io/brain-link/scanhub/scanhub-base:latest. To incorporate the latest changes during development rebuild the scanhub-base image and use the build-arg BASE_IMG=scanhub-base:latest. To do this, build and start the project with the following commands:
+
+    cd services/base
+    docker build -t scanhub-base .
+    cd ../..
+    docker-compose build --build-arg BASE_IMG=scanhub-base:latest
+    docker-compose up --detach
 
 
 Documentation
