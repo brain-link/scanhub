@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-# from app.db import engine, init_db
+from app.db import init_db  #   ,engine
 from app.userlogin import router
 from scanhub_libraries.security import get_current_user
 
@@ -39,55 +39,54 @@ app.add_middleware(
 )
 
 
-# @app.on_event("startup")
-# async def startup():
-#     """Statup exam-tree microservice.
+@app.on_event("startup")
+async def startup():
+    """Statup exam-tree microservice.
 
-#     Raises
-#     ------
-#     HTTPException
-#         500: Device table does not exist
-#     HTTPException
-#         500: Workflow table does not exist
-#     """
-#     ins = inspect(engine)
-#     tables = ins.get_table_names()
-#     if "device" not in tables:
-#         raise HTTPException(
-#             status_code=500,
-#             detail="SQL-DB: Device table is required but does not exist.",
-#         )
-#     init_db()
-
-
-# @app.on_event("shutdown")
-# async def shutdown() -> None:
-#     """Shutdown function."""
-#     return None
+    Raises
+    ------
+    HTTPException
+        500: Device table does not exist
+    HTTPException
+        500: Workflow table does not exist
+    """
+    # ins = inspect(engine)
+    # tables = ins.get_table_names()
+    # if "device" not in tables:     # maybe we need some other table, lets see
+    #     raise HTTPException(
+    #         status_code=500,
+    #         detail="SQL-DB: Device table is required but does not exist.",
+    #     )
+    init_db()
 
 
-# @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
-# async def readiness() -> dict:
-#     """Readiness health endpoint.
+@app.on_event("shutdown")
+async def shutdown() -> None:
+    """Shutdown function."""
+    return None
 
-#     Returns
-#     -------
-#         Status dictionary
 
-#     Raises
-#     ------
-#     HTTPException
-#         500: Any of the exam-tree tables does not exist
-#     """
-#     ins = inspect(engine)
-#     existing_tables = ins.get_table_names()
-#     required_tables = ["exam", "workflow", "task"]
-#     # required_tables = ["exam", "workflow", "task", "device"]
+@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
+async def readiness() -> dict:
+    """Readiness health endpoint.
 
-#     if not all(t in existing_tables for t in required_tables):
-#         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
+    Returns
+    -------
+        Status dictionary
 
-#     return {"status": "ok"}
+    Raises
+    ------
+    HTTPException
+        500: User table does not exist
+    """
+    ins = inspect(engine)
+    existing_tables = ins.get_table_names()
+    required_tables = ["user"]
+
+    if not all(t in existing_tables for t in required_tables):
+        raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
+
+    return {"status": "ok"}
 
 
 app.include_router(router, prefix="/api/v1/userlogin")
