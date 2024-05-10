@@ -6,6 +6,7 @@
 const baseUrls = {
   patientService: 'http://localhost:8100',
   examService: 'http://localhost:8080',
+  loginService: 'http://localhost:8080'
 }
 
 export default baseUrls
