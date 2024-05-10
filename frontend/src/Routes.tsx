@@ -57,9 +57,10 @@ export function RouteConfiguration() {
         path='/login' 
         element={
           <Login onLogin={
-            (token) => {
-              console.log("Login success. Token:", token)
+            (token, user) => {
+              console.log("Login confirmed.")
               setToken(token);
+              setUser(user);
               setIsLoggedIn(true);
               navigate("/");
             }

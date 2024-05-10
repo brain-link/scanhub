@@ -47,7 +47,13 @@ function Login(props: {onLogin: (token: string, user: User) => void}) {
         .then((result) => {
           props.onLogin(result.data["access_token"], result.data.user)
         })
-        .catch((error) => {console.log("Error:", error)});
+        .catch((error) => {
+          if (error?.response?.data?.detail == "Invalid authentication credentials") {
+            console.log("Invalid authentication credentials");
+          } else {
+            console.log("Error at login:", error)
+          }
+        });
       }}>
         <Stack spacing={1}>
           <div>User:</div>
