@@ -20,8 +20,7 @@ function Login(props: {onLogin: (token: string, user: User) => void}) {
 
       <form onSubmit={(event) => {
         event.preventDefault()  // do not reload the page
-        console.log("Login submitted.", {"User": event.currentTarget.username_input.value, 
-                                         "Password": event.currentTarget.password_input.value})
+        console.log("Login submitted.")
 /*
         fetch("http://localhost:8080/api/v1/userlogin/login",
               {
@@ -38,12 +37,13 @@ function Login(props: {onLogin: (token: string, user: User) => void}) {
           }
           return response.json();
         })
-*/
+*/      
+        
+        // TODO consider sending a secure password hash like argon2 instead of the password itself
+        // on the server this hash could be hashed again, just like if it were the password
         loginApi.loginApiV1UserloginLoginPost(event.currentTarget.username_input.value, 
                                               event.currentTarget.password_input.value,
-                                              "password",
-                                              undefined, undefined, undefined,
-                                              {})
+                                              "password")
         .then((result) => {
           props.onLogin(result.data["access_token"], result.data.user)
         })
