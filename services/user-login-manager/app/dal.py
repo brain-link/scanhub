@@ -1,7 +1,66 @@
-# # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-# # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-# """Data acess layer (DAL) between fastapi endpoint and sql database."""
+"""Data acess layer (DAL) between fastapi endpoint and sql database."""
+
+
+# from pprint import pprint
+# from uuid import UUID
+
+# from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow
+# from sqlalchemy.engine import Result
+# from sqlalchemy.future import select
+
+
+
+from app.db import UserSQL, async_session
+from scanhub_libraries.models import User
+
+
+async def get_user_data(username: str) -> (UserSQL | None):
+    """Get user by username.
+
+    Parameters
+    ----------
+    username
+        Username as entered by the user. Primary key in db.
+
+    Returns
+    -------
+        Database orm model of User or none
+    """
+    async with async_session() as session:
+        user = await session.get(UserSQL, username)  # access by primary key "username"
+    return user
+
+
+async def update_user_data(username: str, data: dict) -> (UserSQL | None):
+    """Update existing user entry.
+
+    Parameters
+    ----------
+    username
+        Primary key of the entry in db to be updated.
+
+    data
+        Data to be written. Does not need to contain all columns.
+
+    Returns
+    -------
+        Database orm model of updated user
+    """
+    async with async_session() as session:
+        if user_sql := await session.get(UserSQL, username):
+            for key, value in data.items():
+                getattr(user_sql, key)  # check if that column exists
+                setattr(user_sql, key, value)
+            await session.commit()
+            await session.refresh(user_sql)
+            return user_sql
+        return None
+
+
+
 
 # from pprint import pprint
 # from uuid import UUID
@@ -16,6 +75,8 @@
 #     Workflow,
 #     async_session,
 # )
+
+
 
 # # ----- Exam data access layer
 

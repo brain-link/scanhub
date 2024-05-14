@@ -304,9 +304,5 @@ class User(BaseModel):
     first_name: str
     last_name: str
     email: str | None
-
-
-class UserOut(BaseModel):
-    access_token: str
+    token: str
     token_type: str     # token_type should always be "bearer"
-    user: User

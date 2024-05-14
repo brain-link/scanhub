@@ -116,7 +116,7 @@ services:
       - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: ["CMD", "curl", "http://user-login-manager:8000/api/v1/exam/health/readiness"]
+      test: ["CMD", "curl", "http://user-login-manager:8000/api/v1/userlogin/health/readiness"]
       interval: 5s
       timeout: 5s
       retries: 10

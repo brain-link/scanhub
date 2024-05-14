@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from app.db import init_db  #   ,engine
+from app.db import init_db, engine
 from app.userlogin import router
 from scanhub_libraries.security import get_current_user
 
