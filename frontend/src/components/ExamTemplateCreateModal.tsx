@@ -12,11 +12,13 @@ import FormLabel from '@mui/joy/FormLabel'
 import Modal from '@mui/joy/Modal'
 import Stack from '@mui/joy/Stack'
 import * as React from 'react'
+import { useContext } from 'react'
 
 import { useMutation } from 'react-query'
 import { BaseExam, ExamOut } from "../generated-client/exam";
 import { examApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext'
 
 const formContent = [
   { key: 'name', label: 'Exam Name', placeholder: 'Knee complaints' },
@@ -30,9 +32,16 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
 
   const [exam, setExam] = React.useState<BaseExam>({patient_id: undefined, name: '', country: 'germany', site: '', address: '', creator: '', status: '', is_template: true, is_frozen: false})
 
+  const [user, setUser] = useContext(LoginContext);
+
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
-    await examApi.createExamTemplateApiV1ExamTemplatesPost(exam).then((response) => { props.onSubmit(response.data) }).catch((err) => { console.log(err) })
+    await examApi.createExamTemplateApiV1ExamTemplatesPost(
+      exam,
+      {headers: {Authorization: "Bearer " + user?.access_token}}
+    )
+    .then((response) => { props.onSubmit(response.data) })
+    .catch((err) => { console.log(err) })
   })
 
   return (

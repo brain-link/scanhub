@@ -8,7 +8,7 @@ import { loginApi } from '../api'
 import { User } from '../generated-client/userlogin'
 
 
-function Login(props: {onLogin: (token: string, user: User) => void}) {
+function Login(props: {onLogin: (user: User) => void}) {
   return (
     <Box sx={{width: "20%", height: "20%", margin: "auto"}}>
       <h1 style={{textAlign: "center"}}>
@@ -45,7 +45,7 @@ function Login(props: {onLogin: (token: string, user: User) => void}) {
                                               event.currentTarget.password_input.value,
                                               "password")
         .then((result) => {
-          props.onLogin(result.data["access_token"], result.data.user)
+          props.onLogin(result.data);
         })
         .catch((error) => {
           if (error?.response?.data?.detail == "Invalid authentication credentials") {

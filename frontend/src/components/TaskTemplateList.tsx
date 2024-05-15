@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientTable.tsx is responsible for rendering the patient table view.
 import * as React from 'react'
+import { useContext } from 'react'
 import Stack from '@mui/joy/Stack'
 import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
@@ -14,15 +15,23 @@ import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
 import { TaskOut } from "../generated-client/exam";
 import { taskApi } from '../api'
+import LoginContext from '../LoginContext'
 
 
 export default function TaskTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
 
+  const [user, setUser] = useContext(LoginContext);
+
   const {data: tasks, isLoading, isError, refetch} = useQuery<TaskOut[]>({
     queryKey: ['tasks'],
-    queryFn: async () => { return await taskApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet().then((result) => {return result.data})}
+    queryFn: async () => {
+      return await taskApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(
+        {headers: {Authorization: "Bearer " + user?.access_token}}
+      )
+      .then((result) => {return result.data})
+    }
   })
 
   return (

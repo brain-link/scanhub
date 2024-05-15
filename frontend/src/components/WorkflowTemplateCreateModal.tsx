@@ -11,20 +11,29 @@ import FormLabel from '@mui/joy/FormLabel'
 import Modal from '@mui/joy/Modal'
 import Stack from '@mui/joy/Stack'
 import * as React from 'react'
+import { useContext } from 'react'
 
 import { useMutation } from 'react-query'
 import { BaseWorkflow, WorkflowOut } from "../generated-client/exam";
 import { workflowsApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext'
 
 
 export default function WorkflowTemplateCreateModal(props: ModalComponentProps<WorkflowOut>) {
 
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({comment: '', exam_id: undefined, is_finished: false, is_template: true, is_frozen: false})
 
+  const [user, setUser] = useContext(LoginContext);
+
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
-    await workflowsApi.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(workflow).then((response) => { props.onSubmit(response.data) }).catch((err) => { console.log(err) })
+    await workflowsApi.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(
+      workflow,
+      {headers: {Authorization: "Bearer " + user?.access_token}}
+    )
+    .then((response) => { props.onSubmit(response.data) })
+    .catch((err) => { console.log(err) })
   })
 
   return (

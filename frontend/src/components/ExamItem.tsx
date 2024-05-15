@@ -13,6 +13,7 @@ import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
+import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { Link as RouterLink } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
@@ -25,11 +26,13 @@ import { ComponentProps } from '../interfaces/components.interface'
 // import { Exam } from '../interfaces/data.interface'
 import { ExamOut } from '../generated-client/exam'
 import { examApi } from '../api'
+import LoginContext from '../LoginContext'
 
 
 function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
   const params = useParams()
   const navigate = useNavigate()
+  const [user, setUser] = useContext(LoginContext);
 
   // Context: Delete and edit options, anchor for context location
   const [contextOpen, setContextOpen] = React.useState<string | null>(null)
@@ -48,7 +51,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
   }
 
   const deleteExam = useMutation(async () => {
-    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id, {headers: {Authorization: "Bearer Bitte"}}).then(() => {
+    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id, {headers: {Authorization: "Bearer " + user?.access_token}}).then(() => {
       if (String(params.examId) === exam.id) {
         // Reset router path if this exam id is in the path
         navigate(`/${params.patientId}`)

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientTable.tsx is responsible for rendering the patient table view.
 import * as React from 'react'
+import { useContext } from 'react'
 import Typography from '@mui/joy/Typography'
 import Button from '@mui/joy/Button'
 import ModalDialog from '@mui/joy/ModalDialog'
@@ -18,6 +19,7 @@ import { useMutation } from 'react-query'
 import { BaseTask, TaskOut, TaskType } from "../generated-client/exam";
 import { taskApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext'
 
 
 export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskOut>) {
@@ -26,9 +28,16 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
     workflow_id: undefined, description: '', type: TaskType.ProcessingTask, status: {}, args: {}, artifacts: {}, task_destinations: [], is_template: true, is_frozen: false
   })
 
+  const [user, setUser] = useContext(LoginContext);
+
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
-    await taskApi.createTaskTemplateApiV1ExamTaskTemplatePost(task).then((response) => { props.onSubmit(response.data) }).catch((err) => { console.log(err) })
+    await taskApi.createTaskTemplateApiV1ExamTaskTemplatePost(
+      task,
+      {headers: {Authorization: "Bearer " + user?.access_token}}
+    )
+    .then((response) => { props.onSubmit(response.data) })
+    .catch((err) => { console.log(err) })
   })
 
   const getType = (str: keyof typeof TaskType) => {

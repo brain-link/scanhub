@@ -13,6 +13,7 @@ import ListDivider from '@mui/joy/ListDivider'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
+import { useContext } from 'react';
 import { useQuery } from 'react-query'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -31,6 +32,7 @@ import { examApi, patientApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
 import { PatientOut } from '../generated-client/patient'
 import { WorkflowOut } from '../generated-client/exam'
+import LoginContext from '../LoginContext'
 
 
 function PatientIndex() {
@@ -43,6 +45,8 @@ function PatientIndex() {
   const [examModalOpen, setExamModalOpen] = React.useState(false)
   // List of jobs
   const [workflows, setWorkflows] = React.useState<WorkflowOut[] | undefined>(undefined)
+
+  const [user, setUser] = useContext(LoginContext);
 
   // useQuery for caching the fetched data
   const {
@@ -67,7 +71,14 @@ function PatientIndex() {
     // isError: examsError,
   } = useQuery<ExamOut[], Error>({
     queryKey: ['exam', params.patientId],
-    queryFn: async () => { return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId), {headers: {Authorization: "Bearer Bitte"}}).then((result) => {return result.data})}
+    queryFn: async () => {
+      return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(
+        Number(
+          params.patientId),
+          {headers: {Authorization: "Bearer " + user?.access_token}}
+        ).then((result) => {return result.data}
+      )
+    }
   })
 
   // This useEffect hook is executed when either exams or params.examId change

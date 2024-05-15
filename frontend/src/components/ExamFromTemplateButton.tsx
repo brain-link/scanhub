@@ -1,5 +1,6 @@
 
 import * as React from 'react'
+import { useContext } from 'react';
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'react-query'
 
@@ -19,21 +20,33 @@ import { ExamOut } from "../generated-client/exam";
 import { examApi } from '../api'
 
 import { CreateInstanceModalInterface } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext';
 
 
 export default function ExamFromTemplateButton(props: CreateInstanceModalInterface) {
 
   const params = useParams()
 
+  const [user, setUser] = useContext(LoginContext);
+
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
     queryKey: ['exams'],
-    queryFn: async () => { return await examApi.getAllExamTemplatesApiV1ExamTemplatesAllGet({headers: {Authorization: "Bearer Bitte"}}).then((result) => {return result.data})}
+    queryFn: async () => {
+      return await examApi.getAllExamTemplatesApiV1ExamTemplatesAllGet(
+        {headers: {Authorization: "Bearer " + user?.access_token}}
+      )
+      .then((result) => {return result.data})
+    }
   })
 
   const mutation = useMutation(async (id: string) => {
-    await examApi.createExamFromTemplateApiV1ExamPost(Number(params.patientId), id, {headers: {Authorization: "Bearer Bitte"}})
+    await examApi.createExamFromTemplateApiV1ExamPost(
+      Number(params.patientId), 
+      id, 
+      {headers: {Authorization: "Bearer " + user?.access_token}}
+    )
     .then(() => { props.onSubmit() })
     .catch((err) => { console.log(err) })
   })

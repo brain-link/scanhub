@@ -73,31 +73,18 @@ export interface User {
      * @memberof User
      */
     'email'?: string;
-}
-/**
- * 
- * @export
- * @interface UserOut
- */
-export interface UserOut {
     /**
      * 
      * @type {string}
-     * @memberof UserOut
+     * @memberof User
      */
     'access_token': string;
     /**
      * 
      * @type {string}
-     * @memberof UserOut
+     * @memberof User
      */
     'token_type': string;
-    /**
-     * 
-     * @type {User}
-     * @memberof UserOut
-     */
-    'user': User;
 }
 /**
  * 
@@ -126,13 +113,114 @@ export interface ValidationError {
 }
 
 /**
+ * HealthApi - axios parameter creator
+ * @export
+ */
+export const HealthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: User table does not exist
+         * @summary Readiness
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        readinessApiV1UserloginHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/userlogin/health/readiness`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HealthApi - functional programming interface
+ * @export
+ */
+export const HealthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HealthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: User table does not exist
+         * @summary Readiness
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async readinessApiV1UserloginHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1UserloginHealthReadinessGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1UserloginHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * HealthApi - factory interface
+ * @export
+ */
+export const HealthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HealthApiFp(configuration)
+    return {
+        /**
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: User table does not exist
+         * @summary Readiness
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        readinessApiV1UserloginHealthReadinessGet(options?: any): AxiosPromise<any> {
+            return localVarFp.readinessApiV1UserloginHealthReadinessGet(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HealthApi - object-oriented interface
+ * @export
+ * @class HealthApi
+ * @extends {BaseAPI}
+ */
+export class HealthApi extends BaseAPI {
+    /**
+     * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: User table does not exist
+     * @summary Readiness
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HealthApi
+     */
+    public readinessApiV1UserloginHealthReadinessGet(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).readinessApiV1UserloginHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * LoginApi - axios parameter creator
  * @export
  */
 export const LoginApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Login endpoint.  Parameters ---------- form_data     Http form data for OAuth2 compliant login with username and password.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
          * @summary Login
          * @param {string} username 
          * @param {string} password 
@@ -210,7 +298,7 @@ export const LoginApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LoginApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Login endpoint.  Parameters ---------- form_data     Http form data for OAuth2 compliant login with username and password.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
          * @summary Login
          * @param {string} username 
          * @param {string} password 
@@ -221,7 +309,7 @@ export const LoginApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserOut>> {
+        async loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LoginApi.loginApiV1UserloginLoginPost']?.[localVarOperationServerIndex]?.url;
@@ -238,7 +326,7 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = LoginApiFp(configuration)
     return {
         /**
-         * 
+         * Login endpoint.  Parameters ---------- form_data     Http form data for OAuth2 compliant login with username and password.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
          * @summary Login
          * @param {string} username 
          * @param {string} password 
@@ -249,7 +337,7 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<UserOut> {
+        loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<User> {
             return localVarFp.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
         },
     };
@@ -263,7 +351,7 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
  */
 export class LoginApi extends BaseAPI {
     /**
-     * 
+     * Login endpoint.  Parameters ---------- form_data     Http form data for OAuth2 compliant login with username and password.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
      * @summary Login
      * @param {string} username 
      * @param {string} password 
