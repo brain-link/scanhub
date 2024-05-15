@@ -7,7 +7,10 @@ services:
 
   workflow-manager:
     container_name: workflow-manager
-    build: ./services/workflow-manager
+    build: 
+      context: ./services/workflow-manager
+      args: 
+        - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/workflow-manager/app/:/app/
@@ -32,7 +35,10 @@ services:
 
   device-manager:
     container_name: device-manager
-    build: ./services/device-manager
+    build:
+      context: ./services/device-manager
+      args: 
+        - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/device-manager/app/:/app/
@@ -128,7 +134,10 @@ services:
   # MRI Sequence Service
   sequence-manager:
     container_name: sequence-manager
-    build: ./services/mri/sequence-manager
+    build: 
+      context: ./services/mri/sequence-manager
+      args: 
+        - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/mri/sequence-manager/app/:/app/
@@ -150,7 +159,10 @@ services:
   # MRI Reconstruction Services
   cartesian-reco-service:
     container_name: service-cartesian-reco
-    build: ./services/mri/recos/cartesian-reco-service
+    build:
+      context: ./services/mri/recos/cartesian-reco-service
+      args: 
+        - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     environment:
       - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco

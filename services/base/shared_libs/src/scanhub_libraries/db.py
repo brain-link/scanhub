@@ -1,7 +1,7 @@
 # # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-# """Database file for the user-login-manager service."""
+"""Database file for the user-login-manager service, user authentication check and other general purpose tasks."""
 
 import os
 
@@ -40,7 +40,7 @@ class UserSQL(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
     salt: Mapped[str] = mapped_column(nullable=False)               # salt used to create the password_hash
-    token: Mapped[str] = mapped_column(nullable=True)               # token used to access backend while user is logged in, None if user is logged out
+    access_token: Mapped[str] = mapped_column(nullable=True, unique=True)          # token used to access backend while user is logged in, None if user is logged out
     last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)      # time of last activity, used for automatic logout
 
 

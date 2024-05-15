@@ -3,16 +3,18 @@
 
 """Main file for the device manager service."""
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
 from api.db import engine, init_db
 from api.devices import router
+from scanhub_libraries.security import get_current_user
 
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",
     docs_url="/api/v1/device/docs",
+    dependencies=[Depends(get_current_user)]
 )
 
 app.add_middleware(

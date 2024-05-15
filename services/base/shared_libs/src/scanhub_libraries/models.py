@@ -304,5 +304,5 @@ class User(BaseModel):
     first_name: str
     last_name: str
     email: str | None
-    token: str
-    token_type: str     # token_type should always be "bearer"
+    access_token: str   # access_token and token_type are standardized names in OAuth2, don't change them
+    token_type: str     # token_type should always be "bearer" as standardized in OAuth2
