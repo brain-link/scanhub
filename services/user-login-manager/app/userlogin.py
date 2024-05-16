@@ -13,7 +13,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from scanhub_libraries.models import User
-from scanhub_libraries.security import AUTOMATIC_LOGOUT_TIME_SECONDS
+from scanhub_libraries.db import UserSQL
+from scanhub_libraries.security import AUTOMATIC_LOGOUT_TIME_SECONDS, get_current_user
 from scanhub_libraries import dal
 
 
@@ -98,3 +99,12 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 access_token=newtoken, 
                 token_type="bearer"
             )
+
+
+@router.post("/logout", tags=["login"])
+async def login(user: Annotated[UserSQL, Depends(get_current_user)]) -> None:
+    """
+    Logout endpoint.
+    """
+    print("Logout. Username:", user.username)
+    await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
