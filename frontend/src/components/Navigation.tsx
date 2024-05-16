@@ -20,10 +20,14 @@ import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import { useColorScheme } from '@mui/joy/styles'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 
 import { navigation } from '../utils/size_vars'
+import LoginContext from '../LoginContext';
+import { SettingsInputSvideoRounded } from '@mui/icons-material';
+import { loginApi } from '../api'
+
 
 // Menu elements
 const menuItems = [
@@ -64,6 +68,7 @@ function ColorSchemeToggle() {
 export default function Navigation() {
   const loc = useLocation()
   const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null)
+  const [user, setUser] = useContext(LoginContext)
   const open = Boolean(anchorEl)
 
   return (
@@ -169,9 +174,15 @@ export default function Navigation() {
         <ListDivider />
         <MenuItem
           key='logout'
-          disabled
           onClick={() => {
-            setAnchorEl(null)
+            loginApi.loginApiV1UserloginLogoutPost({headers: {Authorization: "Bearer " + user?.access_token}})
+            .then(() => {
+              setAnchorEl(null)
+              setUser(null)
+            })
+            .catch((error) => {
+              console.log("Error at logout.")   // TODO inform user.
+            })
           }}
         >
           <ListItemDecorator>

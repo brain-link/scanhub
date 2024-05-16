@@ -287,6 +287,40 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Logout endpoint.
+         * @summary Login
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginApiV1UserloginLogoutPost: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/userlogin/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -315,6 +349,18 @@ export const LoginApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['LoginApi.loginApiV1UserloginLoginPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Logout endpoint.
+         * @summary Login
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginApiV1UserloginLogoutPost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginApiV1UserloginLogoutPost(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LoginApi.loginApiV1UserloginLogoutPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -339,6 +385,15 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          */
         loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<User> {
             return localVarFp.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Logout endpoint.
+         * @summary Login
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginApiV1UserloginLogoutPost(options?: any): AxiosPromise<any> {
+            return localVarFp.loginApiV1UserloginLogoutPost(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -365,6 +420,17 @@ export class LoginApi extends BaseAPI {
      */
     public loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: RawAxiosRequestConfig) {
         return LoginApiFp(this.configuration).loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Logout endpoint.
+     * @summary Login
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LoginApi
+     */
+    public loginApiV1UserloginLogoutPost(options?: RawAxiosRequestConfig) {
+        return LoginApiFp(this.configuration).loginApiV1UserloginLogoutPost(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
