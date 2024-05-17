@@ -46,6 +46,12 @@ By default this builds the services with a base docker imgage from ghcr.io/brain
     docker-compose up --detach
 
 
+Default Username and Password
+-----------------------------
+
+For now a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt
+
+
 Documentation
 -----------
 
