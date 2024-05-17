@@ -108,3 +108,94 @@ async def login(user: Annotated[UserSQL, Depends(get_current_user)]) -> None:
     """
     print("Logout. Username:", user.username)
     await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
+
+
+async def get_user_out(user_db: UserSQL):
+    """ Convert UserSQL to User, replace token with empty string. """
+    # UserSQL
+    # --------
+    # username: Mapped[str] = mapped_column(primary_key=True)
+    # first_name: Mapped[str] = mapped_column(nullable=False)
+    # last_name: Mapped[str] = mapped_column(nullable=False)
+    # email: Mapped[str] = mapped_column(nullable=False)
+    # password_hash: Mapped[str] = mapped_column(nullable=False)
+    # salt: Mapped[str] = mapped_column(nullable=False)               # salt used to create the password_hash
+    # access_token: Mapped[str] = mapped_column(nullable=True, unique=True)          # token used to access backend while user is logged in, None if user is logged out
+    # last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)      # time of last activity, used for automatic logout
+
+    # User
+    # ---------
+    # username: str
+    # first_name: str
+    # last_name: str
+    # email: str | None
+    # access_token: str   # access_token and token_type are standardized names in OAuth2, don't change them
+    # token_type: str     # token_type should always be "bearer" as standardized in OAuth2
+    return User(
+        username=user_db.username,
+        first_name=user_db.first_name,
+        last_name=user_db.last_name,
+        email=user_db.email,
+        access_token="",        # TODO could be removed here, would need to change the pydantic model
+        token_type=""           # TODO could be removed here, would need to change the pydantic model
+    )
+
+
+@router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])
+async def get_user_list(current_user: Annotated[UserSQL, Depends(get_current_user)]) -> list[User]:
+    """Get all users endpoint.
+
+    Returns
+    -------
+        List of all users. The access_token and token_type properties are set to "" for all of them.
+    """
+    users: list[UserSQL] = await dal.get_all_users()
+    if not (users):
+        # If return is none, list is empty
+        return []
+    return [await get_user_out(user) for user in users]
+
+
+@router.post("/createuser", status_code=201, tags=["user"])
+async def create_user(current_user: Annotated[UserSQL, Depends(get_current_user)], new_user: User):
+    """Create new patient database entry.
+
+    Parameters
+    ----------
+    new_user
+        pydantic base model of new user, token_type should be "password" and access_token should contain the password of the new user.
+        The password of the new user should at least be 12 characters long.
+
+    Returns
+    -------
+        Patient pydantic output model
+
+    """
+    user_db = await dal.get_user_data(new_user.username)
+    if user_db is not None:
+        print("Requested to create user that already exists.")
+        raise HTTPException(
+            status_code=500,
+            detail="User already exists.")
+    if new_user.token_type != "password":
+        raise HTTPException(
+            status_code=400,
+            detail="To create a new user, the token_type should be 'password'!")
+    if len(new_user.access_token) < 12:
+        raise HTTPException(
+            status_code=400,
+            detail="The password should at least be 12 characters long!")
+    print("Create new user! Username:", new_user.username)
+    salt = token_hex(1024)  # create new salt
+    hashed_received_password = compute_complex_password_hash(new_user.access_token, salt)
+    new_user_db = UserSQL(
+        username=new_user.username,
+        first_name=new_user.first_name,
+        last_name=new_user.last_name,
+        email=new_user.email,
+        password_hash=hashed_received_password,
+        salt=salt,
+        access_token=None,
+        last_activity_unixtime=None
+    )
+    await dal.add_user(new_user_db)

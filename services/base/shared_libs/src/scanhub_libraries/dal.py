@@ -71,3 +71,34 @@ async def get_user_from_token(access_token: str) -> (UserSQL | None):
         result: Result = await session.scalars(select(UserSQL).where(UserSQL.access_token == access_token))
         user = result.first()
     return user
+
+
+async def get_all_users() -> list[UserSQL]:
+    """Get a list of all existing users.
+
+    Returns
+    -------
+        List of database orm models
+    """
+    async with async_session() as session:
+        result = await session.execute(select(UserSQL))
+        users = list(result.scalars().all())
+    return users
+
+
+async def add_user(user: UserSQL):
+    """Create a new user entry in database.
+
+    Parameters
+    ----------
+    user
+        UserSQL ORM model.
+
+    Returns
+    -------
+        User database entry
+    """
+    async with async_session() as session:
+        session.add(user)
+        await session.commit()
+        await session.refresh(user)
