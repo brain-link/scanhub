@@ -15,7 +15,7 @@ import * as React from 'react'
 
 import { useMutation } from 'react-query'
 import { BaseExam, ExamOut } from "../generated-client/exam";
-import { examApi } from '../Api';
+import { examApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 
 const formContent = [
@@ -70,7 +70,6 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
                   name={item.key}
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
                   placeholder={item.placeholder}
-                  defaultValue={ exam[item.key] }
                   required
                 />
               </Grid>

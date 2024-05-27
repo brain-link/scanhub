@@ -52,6 +52,13 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             <Typography level='body-sm' textColor='text.tertiary'>Artifacts</Typography>
           </AccordionSummary>
           <AccordionDetails>
+            {
+              prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact) => (
+                <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}: {artifact[1]}</Typography>
+              ))
+            }
+          </AccordionDetails>
+          {/* <AccordionDetails>
             <AccordionGroup>
               {
                 // Iterate outer dict
@@ -61,6 +68,7 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
                     <AccordionSummary>
                       <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}</Typography>
                     </AccordionSummary>
+                    
                     <AccordionDetails>
                       {
                         // Iterate through list of outer dict
@@ -85,7 +93,7 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
                 ))
               }
             </AccordionGroup>
-          </AccordionDetails>
+          </AccordionDetails> */}
         </Accordion>
         
         {/* Destinations: list[dict[str, str]] */}
@@ -94,6 +102,13 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             <Typography level='body-sm' textColor='text.tertiary'>Destinations</Typography>
           </AccordionSummary>
           <AccordionDetails>
+            {
+              prop.item.destinations && Object.entries(prop.item.destinations).map((destination) => (
+                <Typography level='body-sm' textColor='text.tertiary'>{destination[0]}: {destination[1]}</Typography>
+              ))
+            }
+          </AccordionDetails>
+          {/* <AccordionDetails>
             <AccordionGroup>
               {
                 prop.item.task_destinations.map((destination, index) => (
@@ -112,7 +127,7 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
                 ))
               }
             </AccordionGroup>
-          </AccordionDetails>
+          </AccordionDetails> */}
         </Accordion>
 
       </CardContent>

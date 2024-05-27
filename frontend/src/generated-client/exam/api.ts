@@ -116,16 +116,16 @@ export interface BaseTask {
     'args': { [key: string]: string; };
     /**
      * 
-     * @type {{ [key: string]: Array<{ [key: string]: string; }>; }}
+     * @type {{ [key: string]: string; }}
      * @memberof BaseTask
      */
-    'artifacts': { [key: string]: Array<{ [key: string]: string; }>; };
+    'artifacts': { [key: string]: string; };
     /**
      * 
-     * @type {Array<{ [key: string]: string; }>}
+     * @type {{ [key: string]: string; }}
      * @memberof BaseTask
      */
-    'task_destinations': Array<{ [key: string]: string; }>;
+    'destinations': { [key: string]: string; };
     /**
      * 
      * @type {{ [key: string]: string; }}
@@ -335,16 +335,16 @@ export interface TaskOut {
     'args': { [key: string]: string; };
     /**
      * 
-     * @type {{ [key: string]: Array<{ [key: string]: string; }>; }}
+     * @type {{ [key: string]: string; }}
      * @memberof TaskOut
      */
-    'artifacts': { [key: string]: Array<{ [key: string]: string; }>; };
+    'artifacts': { [key: string]: string; };
     /**
      * 
-     * @type {Array<{ [key: string]: string; }>}
+     * @type {{ [key: string]: string; }}
      * @memberof TaskOut
      */
-    'task_destinations': Array<{ [key: string]: string; }>;
+    'destinations': { [key: string]: string; };
     /**
      * 
      * @type {{ [key: string]: string; }}

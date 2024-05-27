@@ -28,7 +28,7 @@ import { navigation } from '../utils/size_vars'
 // Menu elements
 const menuItems = [
   { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon/> },
-  { id: 1, text: 'Configuration', link: '/templates', icon: <BuildSharpIcon/> },
+  { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon/> },
 ]
 
 function ColorSchemeToggle() {
