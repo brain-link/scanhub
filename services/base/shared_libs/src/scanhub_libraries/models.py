@@ -201,31 +201,31 @@ class BaseTask(BaseModel):
         """Base class configuration."""
 
         # extra = Extra.ignore
-        schema_extra = {
-            "examples": [
-                {
-                    "description": "task description",
-                    "type": TaskType.PROCESSING_TASK,
-                    "args": {"arg1": "val1"},
-                    "artifacts": {
-                        "input": [
-                            {
-                                "path": "/data",
-                                "name": "inputfile2"
-                            }
-                        ],
-                        "output": [
-                            {
-                                "path": "/data",
-                                "name": "outputfile1"
-                            }
-                        ]
-                    },
-                    "task_destinations": [],
-                    "status": {TaskStatus.PENDING: "additional status information"}
-                }
-            ]
-        }
+        # schema_extra = {
+        #     "examples": [
+        #         {
+        #             "description": "task description",
+        #             "type": TaskType.PROCESSING_TASK,
+        #             "args": {"arg1": "val1"},
+        #             "artifacts": {
+        #                 "input": [
+        #                     {
+        #                         "path": "/data",
+        #                         "name": "inputfile2"
+        #                     }
+        #                 ],
+        #                 "output": [
+        #                     {
+        #                         "path": "/data",
+        #                         "name": "outputfile1"
+        #                     }
+        #                 ]
+        #             },
+        #             "task_destinations": [],
+        #             "status": {TaskStatus.PENDING: "additional status information"}
+        #         }
+        #     ]
+        # }
 
     workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
     description: str
