@@ -1,0 +1,186 @@
+workflow-manager.app.api.workflow
+=================================
+
+.. py:module:: workflow-manager.app.api.workflow
+
+.. autoapi-nested-parse::
+
+   Workflow manager endpoints.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   workflow-manager.app.api.workflow.router
+   workflow-manager.app.api.workflow.producer
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   workflow-manager.app.api.workflow.Producer
+   workflow-manager.app.api.workflow.RecoJob
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   workflow-manager.app.api.workflow.upload_result
+   workflow-manager.app.api.workflow.download_result
+   workflow-manager.app.api.workflow.get_data_from_file
+   workflow-manager.app.api.workflow.get_image_file
+
+
+Module Contents
+---------------
+
+.. py:class:: Producer
+
+   Producer Singleton class for Kafka producer.
+
+
+   .. py:attribute:: _instance
+      :type:  Optional[Producer]
+      :value: None
+
+
+
+   .. py:attribute:: _producer
+      :type:  aiokafka.AIOKafkaProducer
+
+
+   .. py:method:: start()
+      :async:
+
+
+      Start producer.
+
+
+
+   .. py:method:: stop()
+      :async:
+
+
+      Stop producer.
+
+
+
+   .. py:method:: send(topic, message)
+      :async:
+
+
+      Send message to Kafka topic.
+
+      Parameters
+      ----------
+      topic
+          Kafka topic to send message to
+      message
+          Message to be sent
+
+
+
+   .. py:method:: get_producer()
+      :classmethod:
+
+
+      Get producer.
+
+
+
+.. py:class:: RecoJob
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   RecoJob is a pydantic model for a reco job.
+
+
+   .. py:attribute:: record_id
+      :type:  int
+
+
+   .. py:attribute:: input
+      :type:  pydantic.StrictStr
+
+
+.. py:data:: router
+
+.. py:data:: producer
+
+.. py:function:: upload_result(record_id: int, file: fastapi.UploadFile = File(...)) -> dict[str, str]
+   :async:
+
+
+   Upload workflow result.
+
+   Parameters
+   ----------
+   record_id
+       Id of the record, which is processed by workflow
+   file, optional
+       Data upload, e.g. reconstruction result, by default File(...)
+
+   Returns
+   -------
+       Notification
+
+
+.. py:function:: download_result(record_id: int) -> fastapi.responses.FileResponse
+   :async:
+
+
+   Download DICOM result.
+
+   Parameters
+   ----------
+   record_id
+       ID of the record the DICOM file belongs to.
+
+   Returns
+   -------
+       DICOM file response
+
+
+.. py:function:: get_data_from_file(file_path: str) -> Generator
+
+   Open a file and read the data.
+
+   Parameters
+   ----------
+   file_path
+       Path of the file to open
+
+   Yields
+   ------
+       File content
+
+
+.. py:function:: get_image_file(record_id: int) -> fastapi.responses.StreamingResponse
+   :async:
+
+
+   Read image file data and content as streaming response.
+
+   Parameters
+   ----------
+   record_id
+       Record ID the image should be read for
+
+   Returns
+   -------
+       Image file content
+
+   Raises
+   ------
+   HTTPException
+       File not found
+
+

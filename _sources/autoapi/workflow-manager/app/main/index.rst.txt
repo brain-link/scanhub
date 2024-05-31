@@ -1,0 +1,69 @@
+workflow-manager.app.main
+=========================
+
+.. py:module:: workflow-manager.app.main
+
+.. autoapi-nested-parse::
+
+   Workflow manager main.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   workflow-manager.app.main.app
+   workflow-manager.app.main.producer
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   workflow-manager.app.main.startup
+   workflow-manager.app.main.shutdown
+   workflow-manager.app.main.readiness
+
+
+Module Contents
+---------------
+
+.. py:data:: app
+
+.. py:data:: producer
+
+.. py:function:: startup() -> None
+   :async:
+
+
+   Call database initialization of startup.
+
+
+.. py:function:: shutdown() -> None
+   :async:
+
+
+   Shutdown event for the API.
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Readiness health endpoint.
+
+   Inspects sqlalchemy engine and check if workflow table exists.
+
+   Returns
+   -------
+       Status docstring
+
+   Raises
+   ------
+   HTTPException
+       500: Workflow table does not exist
+
+

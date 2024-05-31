@@ -1,0 +1,262 @@
+device-manager.app.api.devices
+==============================
+
+.. py:module:: device-manager.app.api.devices
+
+.. autoapi-nested-parse::
+
+   Device api endpoints.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device-manager.app.api.devices.router
+   device-manager.app.api.devices.active_connections
+   device-manager.app.api.devices.dict_id_websocket
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   device-manager.app.api.devices.DeviceOut
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device-manager.app.api.devices.dal_create_device
+   device-manager.app.api.devices.dal_delete_device
+   device-manager.app.api.devices.dal_get_all_devices
+   device-manager.app.api.devices.dal_get_device
+   device-manager.app.api.devices.dal_update_device
+   device-manager.app.api.devices.get_device_out
+   device-manager.app.api.devices.readiness
+   device-manager.app.api.devices.get_devices
+   device-manager.app.api.devices.get_device_ip_address
+   device-manager.app.api.devices.get_device
+   device-manager.app.api.devices.get_device_status
+   device-manager.app.api.devices.delete_device
+   device-manager.app.api.devices.websocket_endpoint
+
+
+Module Contents
+---------------
+
+.. py:function:: dal_create_device(payload: api.models.BaseDevice) -> api.db.Device
+   :async:
+
+
+   Add a new device to the database.
+
+   Arguments
+   ---------
+       payload {BaseDevice} -- Pydantic base model to create a new database entry
+
+   Returns
+   -------
+       Device -- Database orm model
+
+
+.. py:function:: dal_delete_device(device_id: str) -> bool
+   :async:
+
+
+   Delete a device by identifier.
+
+   Parameters
+   ----------
+       device_id {str} -- Identifier of the device to be deleted
+
+   Returns
+   -------
+       bool -- Success of delete event
+
+
+.. py:function:: dal_get_all_devices() -> list[api.db.Device]
+   :async:
+
+
+   Get a list of all existing devices.
+
+   Returns
+   -------
+       List[Device] -- List of database orm models
+
+
+.. py:function:: dal_get_device(device_id: str) -> api.db.Device | None
+   :async:
+
+
+   Fetch a device from database.
+
+   Arguments
+   ---------
+       device_id {str} -- Identifier of the device
+
+   Returns
+   -------
+       Device -- Database orm model
+
+
+.. py:function:: dal_update_device(device_id: str, payload: api.models.DeviceOut) -> api.db.Device | None
+   :async:
+
+
+   Update an existing device in database.
+
+   Parameters
+   ----------
+       id {str} -- Identifier of device
+       payload {BaseDevice} -- Pydantic base model, data to be updated
+
+   Returns
+   -------
+       Device -- Updated database orm model
+
+
+.. py:class:: DeviceOut
+
+   Bases: :py:obj:`BaseDevice`
+
+
+   Device pydantic output model.
+
+
+   .. py:attribute:: id
+      :type:  str
+
+
+   .. py:attribute:: datetime_created
+      :type:  datetime.datetime
+
+
+   .. py:attribute:: datetime_updated
+      :type:  datetime.datetime
+
+
+.. py:function:: get_device_out(data: api.db.Device) -> DeviceOut
+   :async:
+
+
+   Get pydantic device output model helper function.
+
+   Parameters
+   ----------
+   data
+       Database model
+
+   Returns
+   -------
+       Pydantic output model
+
+
+.. py:data:: router
+
+.. py:data:: active_connections
+   :type:  list[fastapi.WebSocket]
+   :value: []
+
+
+.. py:data:: dict_id_websocket
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Readiness health endpoint.
+
+   Returns
+   -------
+       Status dictionary
+
+
+.. py:function:: get_devices() -> list[device-manager.app.api.models.DeviceOut]
+   :async:
+
+
+   Retrieve the list of registered devices.
+
+   Returns
+   -------
+       List[Device]: The list of registered devices.
+
+
+.. py:function:: get_device_ip_address(device_id: str)
+   :async:
+
+
+   Retrieve the IP address of a specific device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response containing the IP address of the device.
+
+
+.. py:function:: get_device(device_id: str)
+   :async:
+
+
+   Retrieve a specific device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response containing the information about the device
+
+
+.. py:function:: get_device_status(device_id: str)
+   :async:
+
+
+   Retrieve the status of a specific device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response containing the status of the device.
+
+
+.. py:function:: delete_device(device_id: str)
+   :async:
+
+
+   Delete a device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response indicating the success or failure of the deletion.
+
+
+.. py:function:: websocket_endpoint(websocket: fastapi.WebSocket)
+   :async:
+
+
+   Websocket endpoint for device communication.
+
+   Args
+   ----
+       websocket (WebSocket): The WebSocket connection object.
+
+

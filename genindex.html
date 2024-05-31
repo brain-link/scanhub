@@ -13,28 +13,28 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -52,27 +52,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -94,12 +90,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -135,33 +136,33 @@
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="introduction.html">
-                        ScanHub
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="introduction.html">
+    ScanHub
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="scanhub_techdoc.html">
-                        Technical Documentation
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="scanhub_api.html">
+    Web API
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
-                      </a>
-                    </li>
-                
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="scanhub_techdoc.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="autoapi/index.html">
+    Code Documentation
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -277,39 +278,42 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="introduction.html">
-                        ScanHub
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="introduction.html">
+    ScanHub
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="scanhub_api.html">
-                        Web API
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="scanhub_techdoc.html">
-                        Technical Documentation
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="scanhub_api.html">
+    Web API
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="autoapi/index.html">
-                        Code Documentation
-                      </a>
-                    </li>
-                
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="scanhub_techdoc.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="autoapi/index.html">
+    Code Documentation
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -381,13 +385,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article"></div>
+              <div class="bd-header-article d-print-none"></div>
               
               
               
@@ -422,30 +426,38 @@ document.write(`
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.__table_args__">__table_args__ (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.__table_args__">__table_args__ (exam-manager.app.db.Exam attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.__table_args__">(exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.__table_args__">(exam-manager.app.db.Task attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.__table_args__">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.__table_args__">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.__tablename__">__tablename__ (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.__tablename__">__tablename__ (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.__tablename__">(exam-manager.app.db.Exam attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.__tablename__">(exam-manager.app.db.Exam attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.__tablename__">(exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.__tablename__">(exam-manager.app.db.Task attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.__tablename__">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.__tablename__">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer._instance">_instance (workflow-manager.app.api.producer.Producer attribute)</a>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer._instance">_instance (workflow-manager.app.api.producer.Producer attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer._instance">(workflow-manager.app.api.workflow.Producer attribute)</a>
 </li>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer._producer">_producer (workflow-manager.app.api.producer.Producer attribute)</a>
+      </ul></li>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer._producer">_producer (workflow-manager.app.api.producer.Producer attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer._producer">(workflow-manager.app.api.workflow.Producer attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -456,73 +468,73 @@ document.write(`
     acquisition-control
 
       <ul>
-        <li><a href="autoapi/acquisitioncontrol/index.html#module-acquisition-control">module</a>
+        <li><a href="autoapi/acquisition-control/index.html#module-acquisition-control">module</a>
 </li>
       </ul></li>
       <li>
     acquisition-control.app
 
       <ul>
-        <li><a href="autoapi/acquisitioncontrol/app/index.html#module-acquisition-control.app">module</a>
+        <li><a href="autoapi/acquisition-control/app/index.html#module-acquisition-control.app">module</a>
 </li>
       </ul></li>
       <li>
     acquisition-control.app.api
 
       <ul>
-        <li><a href="autoapi/acquisitioncontrol/app/api/index.html#module-acquisition-control.app.api">module</a>
+        <li><a href="autoapi/acquisition-control/app/api/index.html#module-acquisition-control.app.api">module</a>
 </li>
       </ul></li>
       <li>
     acquisition-control.app.api.acquisitioncontrol
 
       <ul>
-        <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#module-acquisition-control.app.api.acquisitioncontrol">module</a>
+        <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#module-acquisition-control.app.api.acquisitioncontrol">module</a>
 </li>
       </ul></li>
       <li>
     acquisition-control.app.main
 
       <ul>
-        <li><a href="autoapi/acquisitioncontrol/app/main/index.html#module-acquisition-control.app.main">module</a>
+        <li><a href="autoapi/acquisition-control/app/main/index.html#module-acquisition-control.app.main">module</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.active_connections">active_connections (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.active_connections">active_connections (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.add_exam_data">add_exam_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.add_exam_data">add_exam_data() (in module exam-manager.app.dal)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.add_task_data">add_task_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.add_task_data">add_task_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.add_workflow_data">add_workflow_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.add_workflow_data">add_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.address">address (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.address">address (exam-manager.app.db.Exam attribute)</a>
 </li>
-      <li><a href="autoapi/acquisitioncontrol/app/main/index.html#acquisition-control.app.main.app">app (in module acquisition-control.app.main)</a>
+      <li><a href="autoapi/acquisition-control/app/main/index.html#acquisition-control.app.main.app">app (in module acquisition-control.app.main)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/main/index.html#device-manager.app.main.app">(in module device-manager.app.main)</a>
+        <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.app">(in module device-manager.app.main)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/main/index.html#exam-manager.app.main.app">(in module exam-manager.app.main)</a>
+        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.app">(in module exam-manager.app.main)</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#workflow-manager.app.main.app">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.app">(in module workflow-manager.app.main)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.args">args (exam-manager.app.db.Task attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.args">args (exam-manager.app.db.Task attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.artifacts">artifacts (exam-manager.app.db.Task attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.artifacts">artifacts (exam-manager.app.db.Task attribute)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.async_engine">async_engine (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.async_engine">async_engine (in module device-manager.app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.async_engine">(in module exam-manager.app.db)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.async_engine">(in module exam-manager.app.db)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.async_session">async_session (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.async_session">async_session (in module device-manager.app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.async_session">(in module exam-manager.app.db)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.async_session">(in module exam-manager.app.db)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -531,15 +543,15 @@ document.write(`
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Base">Base (class in exam-manager.app.db)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Base">Base (class in exam-manager.app.db)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Base">(in module device-manager.app.api.db)</a>
+        <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Base">(in module device-manager.app.api.db)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice">BaseDevice (class in device-manager.app.api.models)</a>
+      <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice">BaseDevice (class in device-manager.app.api.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -547,27 +559,27 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.comment">comment (exam-manager.app.db.Workflow attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.comment">comment (exam-manager.app.db.Workflow attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.country">country (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.country">country (exam-manager.app.db.Exam attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.create_exam_from_template">create_exam_from_template() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam_from_template">create_exam_from_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.create_exam_template">create_exam_template() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam_template">create_exam_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.create_record">create_record() (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.create_record">create_record() (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.create_task_from_template">create_task_from_template() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task_from_template">create_task_from_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.create_task_template">create_task_template() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task_template">create_task_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.create_workflow_from_template">create_workflow_from_template() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow_from_template">create_workflow_from_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.create_workflow_template">create_workflow_template() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow_template">create_workflow_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.creator">creator (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.creator">creator (exam-manager.app.db.Exam attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -575,123 +587,151 @@ document.write(`
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/dal/index.html#device-manager.app.api.dal.dal_create_device">dal_create_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/devicemanager/app/api/dal/index.html#device-manager.app.api.dal.dal_delete_device">dal_delete_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/devicemanager/app/api/dal/index.html#device-manager.app.api.dal.dal_get_all_devices">dal_get_all_devices() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/devicemanager/app/api/dal/index.html#device-manager.app.api.dal.dal_get_device">dal_get_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/devicemanager/app/api/dal/index.html#device-manager.app.api.dal.dal_update_device">dal_update_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.datetime_created">datetime_created (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_create_device">dal_create_device() (in module device-manager.app.api.dal)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.DeviceOut.datetime_created">(device-manager.app.api.models.DeviceOut attribute)</a>
-</li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.datetime_created">(exam-manager.app.db.Exam attribute)</a>
-</li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.datetime_created">(exam-manager.app.db.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.datetime_created">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dal_create_device">(in module device-manager.app.api.devices)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.datetime_updated">datetime_updated (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_delete_device">dal_delete_device() (in module device-manager.app.api.dal)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.DeviceOut.datetime_updated">(device-manager.app.api.models.DeviceOut attribute)</a>
-</li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.datetime_updated">(exam-manager.app.db.Exam attribute)</a>
-</li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.datetime_updated">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dal_delete_device">(in module device-manager.app.api.devices)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.delete_device">delete_device() (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_get_all_devices">dal_get_all_devices() (in module device-manager.app.api.dal)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dal_get_all_devices">(in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.delete_exam_data">delete_exam_data() (in module exam-manager.app.dal)</a>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_get_device">dal_get_device() (in module device-manager.app.api.dal)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dal_get_device">(in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.delete_task">delete_task() (in module exam-manager.app.exam)</a>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_update_device">dal_update_device() (in module device-manager.app.api.dal)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dal_update_device">(in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.delete_task_data">delete_task_data() (in module exam-manager.app.dal)</a>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.datetime_created">datetime_created (device-manager.app.api.db.Device attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.DeviceOut.datetime_created">(device-manager.app.api.devices.DeviceOut attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.delete_workflow">delete_workflow() (in module exam-manager.app.exam)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.DeviceOut.datetime_created">(device-manager.app.api.models.DeviceOut attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.delete_workflow_data">delete_workflow_data() (in module exam-manager.app.dal)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.datetime_created">(exam-manager.app.db.Exam attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.description">description (exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.datetime_created">(exam-manager.app.db.Task attribute)</a>
+</li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.datetime_created">(exam-manager.app.db.Workflow attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.datetime_updated">datetime_updated (device-manager.app.api.db.Device attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.DeviceOut.datetime_updated">(device-manager.app.api.devices.DeviceOut attribute)</a>
+</li>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.DeviceOut.datetime_updated">(device-manager.app.api.models.DeviceOut attribute)</a>
+</li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.datetime_updated">(exam-manager.app.db.Exam attribute)</a>
+</li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.datetime_updated">(exam-manager.app.db.Workflow attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.delete_device">delete_device() (in module device-manager.app.api.devices)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.delete_exam_data">delete_exam_data() (in module exam-manager.app.dal)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.delete_task">delete_task() (in module exam-manager.app.exam)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.delete_task_data">delete_task_data() (in module exam-manager.app.dal)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device">Device (class in device-manager.app.api.db)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.delete_workflow">delete_workflow() (in module exam-manager.app.exam)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.delete_workflow_data">delete_workflow_data() (in module exam-manager.app.dal)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.description">description (exam-manager.app.db.Task attribute)</a>
+</li>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device">Device (class in device-manager.app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Device">(in module exam-manager.app.db)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Device">(in module exam-manager.app.db)</a>
 </li>
       </ul></li>
       <li>
     device-manager
 
       <ul>
-        <li><a href="autoapi/devicemanager/index.html#module-device-manager">module</a>
+        <li><a href="autoapi/device-manager/index.html#module-device-manager">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/index.html#module-device-manager.app">module</a>
+        <li><a href="autoapi/device-manager/app/index.html#module-device-manager.app">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app.api
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/index.html#module-device-manager.app.api">module</a>
+        <li><a href="autoapi/device-manager/app/api/index.html#module-device-manager.app.api">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app.api.dal
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/dal/index.html#module-device-manager.app.api.dal">module</a>
+        <li><a href="autoapi/device-manager/app/api/dal/index.html#module-device-manager.app.api.dal">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app.api.db
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/db/index.html#module-device-manager.app.api.db">module</a>
+        <li><a href="autoapi/device-manager/app/api/db/index.html#module-device-manager.app.api.db">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app.api.devices
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/devices/index.html#module-device-manager.app.api.devices">module</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#module-device-manager.app.api.devices">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app.api.models
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#module-device-manager.app.api.models">module</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#module-device-manager.app.api.models">module</a>
 </li>
       </ul></li>
       <li>
     device-manager.app.main
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/main/index.html#module-device-manager.app.main">module</a>
+        <li><a href="autoapi/device-manager/app/main/index.html#module-device-manager.app.main">module</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.device_location_request">device_location_request() (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.device_location_request">device_location_request() (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.DeviceOut">DeviceOut (class in device-manager.app.api.models)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.DeviceOut">DeviceOut (class in device-manager.app.api.devices)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.DeviceOut">(class in device-manager.app.api.models)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.dict_id_websocket">dict_id_websocket (in module device-manager.app.api.devices)</a>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dict_id_websocket">dict_id_websocket (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.download_result">download_result() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.download_result">download_result() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -699,33 +739,33 @@ document.write(`
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.engine">engine (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.engine">engine (in module device-manager.app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.engine">(in module exam-manager.app.db)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.engine">(in module exam-manager.app.db)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam">Exam (class in exam-manager.app.db)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam">Exam (class in exam-manager.app.db)</a>
 </li>
       <li>
     exam-manager
 
       <ul>
-        <li><a href="autoapi/exammanager/index.html#module-exam-manager">module</a>
+        <li><a href="autoapi/exam-manager/index.html#module-exam-manager">module</a>
 </li>
       </ul></li>
       <li>
     exam-manager.app
 
       <ul>
-        <li><a href="autoapi/exammanager/app/index.html#module-exam-manager.app">module</a>
+        <li><a href="autoapi/exam-manager/app/index.html#module-exam-manager.app">module</a>
 </li>
       </ul></li>
       <li>
     exam-manager.app.dal
 
       <ul>
-        <li><a href="autoapi/exammanager/app/dal/index.html#module-exam-manager.app.dal">module</a>
+        <li><a href="autoapi/exam-manager/app/dal/index.html#module-exam-manager.app.dal">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -734,28 +774,28 @@ document.write(`
     exam-manager.app.db
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#module-exam-manager.app.db">module</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#module-exam-manager.app.db">module</a>
 </li>
       </ul></li>
       <li>
     exam-manager.app.exam
 
       <ul>
-        <li><a href="autoapi/exammanager/app/exam/index.html#module-exam-manager.app.exam">module</a>
+        <li><a href="autoapi/exam-manager/app/exam/index.html#module-exam-manager.app.exam">module</a>
 </li>
       </ul></li>
       <li>
     exam-manager.app.main
 
       <ul>
-        <li><a href="autoapi/exammanager/app/main/index.html#module-exam-manager.app.main">module</a>
+        <li><a href="autoapi/exam-manager/app/main/index.html#module-exam-manager.app.main">module</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.exam_delete">exam_delete() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.exam_delete">exam_delete() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.exam_id">exam_id (exam-manager.app.db.Workflow attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.exam_id">exam_id (exam-manager.app.db.Workflow attribute)</a>
 </li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.EXAM_MANAGER_URI">EXAM_MANAGER_URI (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.EXAM_MANAGER_URI">EXAM_MANAGER_URI (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -763,7 +803,7 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.forward_status">forward_status() (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.forward_status">forward_status() (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -771,63 +811,71 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_all_exam_data">get_all_exam_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_exam_data">get_all_exam_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_all_exam_template_data">get_all_exam_template_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_exam_template_data">get_all_exam_template_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_all_exam_templates">get_all_exam_templates() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_all_exam_templates">get_all_exam_templates() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_all_exam_workflows">get_all_exam_workflows() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_all_exam_workflows">get_all_exam_workflows() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_all_patient_exams">get_all_patient_exams() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_all_patient_exams">get_all_patient_exams() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_all_task_data">get_all_task_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_task_data">get_all_task_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_all_task_template_data">get_all_task_template_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_task_template_data">get_all_task_template_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_all_task_templates">get_all_task_templates() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_all_task_templates">get_all_task_templates() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_all_workflow_data">get_all_workflow_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_workflow_data">get_all_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_all_workflow_tasks">get_all_workflow_tasks() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_all_workflow_tasks">get_all_workflow_tasks() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_all_workflow_templates">get_all_workflow_templates() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_all_workflow_templates">get_all_workflow_templates() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_all_workflows_template_data">get_all_workflows_template_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_workflows_template_data">get_all_workflows_template_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_data_from_file">get_data_from_file() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_data_from_file">get_data_from_file() (in module workflow-manager.app.api.workflow)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.get_device">get_device() (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.get_device">get_device() (in module device-manager.app.api.devices)</a>
+</li>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.get_device_ip_address">get_device_ip_address() (in module device-manager.app.api.devices)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.get_device_ip_address">get_device_ip_address() (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.get_device_out">get_device_out() (in module device-manager.app.api.devices)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.get_device_out">(in module device-manager.app.api.models)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.get_device_out">get_device_out() (in module device-manager.app.api.models)</a>
+      </ul></li>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.get_device_status">get_device_status() (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.get_device_status">get_device_status() (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.get_devices">get_devices() (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.get_devices">get_devices() (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_exam">get_exam() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_exam">get_exam() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_exam_data">get_exam_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_exam_data">get_exam_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_exam_out_model">get_exam_out_model() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_exam_out_model">get_exam_out_model() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_image_file">get_image_file() (in module workflow-manager.app.api.workflow)</a>
 </li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_image_file">get_image_file() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.get_producer">get_producer() (workflow-manager.app.api.producer.Producer class method)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer.get_producer">(workflow-manager.app.api.workflow.Producer class method)</a>
 </li>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.get_producer">get_producer() (workflow-manager.app.api.producer.Producer class method)</a>
+      </ul></li>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_task">get_task() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_task">get_task() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_task_data">get_task_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_task_data">get_task_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_workflow">get_workflow() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_workflow">get_workflow() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_workflow_data">get_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.get_workflow_data">get_workflow_data() (in module exam-manager.app.dal)</a>
-</li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.get_workflow_out_model">get_workflow_out_model() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_workflow_out_model">get_workflow_out_model() (in module exam-manager.app.exam)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -835,50 +883,52 @@ document.write(`
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.id">id (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.id">id (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.DeviceOut.id">(device-manager.app.api.models.DeviceOut attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.DeviceOut.id">(device-manager.app.api.devices.DeviceOut attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.id">(exam-manager.app.db.Exam attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.DeviceOut.id">(device-manager.app.api.models.DeviceOut attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.id">(exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.id">(exam-manager.app.db.Exam attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.id">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.id">(exam-manager.app.db.Task attribute)</a>
+</li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.id">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.init_db">init_db() (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.init_db">init_db() (in module device-manager.app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.init_db">(in module exam-manager.app.db)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.init_db">(in module exam-manager.app.db)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.RecoJob.input">input (workflow-manager.app.api.workflow.RecoJob attribute)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.RecoJob.input">input (workflow-manager.app.api.workflow.RecoJob attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.ip_address">ip_address (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.ip_address">ip_address (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.ip_address">(device-manager.app.api.models.BaseDevice attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.ip_address">(device-manager.app.api.models.BaseDevice attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.is_finished">is_finished (exam-manager.app.db.Workflow attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.is_finished">is_finished (exam-manager.app.db.Workflow attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.is_frozen">is_frozen (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.is_frozen">is_frozen (exam-manager.app.db.Exam attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.is_frozen">(exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.is_frozen">(exam-manager.app.db.Task attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.is_frozen">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.is_frozen">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.is_template">is_template (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.is_template">is_template (exam-manager.app.db.Exam attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.is_template">(exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.is_template">(exam-manager.app.db.Task attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.is_template">(exam-manager.app.db.Workflow attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.is_template">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -887,75 +937,75 @@ document.write(`
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.main">main() (in module workflow-manager.app.api.producer)</a>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.main">main() (in module workflow-manager.app.api.producer)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.manufacturer">manufacturer (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.manufacturer">manufacturer (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.manufacturer">(device-manager.app.api.models.BaseDevice attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.manufacturer">(device-manager.app.api.models.BaseDevice attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.MappedBase">MappedBase (in module exam-manager.app.db)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.MappedBase">MappedBase (in module exam-manager.app.db)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.modality">modality (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.modality">modality (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.modality">(device-manager.app.api.models.BaseDevice attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.modality">(device-manager.app.api.models.BaseDevice attribute)</a>
 </li>
       </ul></li>
       <li>
     module
 
       <ul>
-        <li><a href="autoapi/acquisitioncontrol/index.html#module-acquisition-control">acquisition-control</a>
+        <li><a href="autoapi/acquisition-control/index.html#module-acquisition-control">acquisition-control</a>
 </li>
-        <li><a href="autoapi/acquisitioncontrol/app/index.html#module-acquisition-control.app">acquisition-control.app</a>
+        <li><a href="autoapi/acquisition-control/app/index.html#module-acquisition-control.app">acquisition-control.app</a>
 </li>
-        <li><a href="autoapi/acquisitioncontrol/app/api/index.html#module-acquisition-control.app.api">acquisition-control.app.api</a>
+        <li><a href="autoapi/acquisition-control/app/api/index.html#module-acquisition-control.app.api">acquisition-control.app.api</a>
 </li>
-        <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#module-acquisition-control.app.api.acquisitioncontrol">acquisition-control.app.api.acquisitioncontrol</a>
+        <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#module-acquisition-control.app.api.acquisitioncontrol">acquisition-control.app.api.acquisitioncontrol</a>
 </li>
-        <li><a href="autoapi/acquisitioncontrol/app/main/index.html#module-acquisition-control.app.main">acquisition-control.app.main</a>
+        <li><a href="autoapi/acquisition-control/app/main/index.html#module-acquisition-control.app.main">acquisition-control.app.main</a>
 </li>
-        <li><a href="autoapi/devicemanager/index.html#module-device-manager">device-manager</a>
+        <li><a href="autoapi/device-manager/index.html#module-device-manager">device-manager</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/index.html#module-device-manager.app">device-manager.app</a>
+        <li><a href="autoapi/device-manager/app/index.html#module-device-manager.app">device-manager.app</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/api/index.html#module-device-manager.app.api">device-manager.app.api</a>
+        <li><a href="autoapi/device-manager/app/api/index.html#module-device-manager.app.api">device-manager.app.api</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/api/dal/index.html#module-device-manager.app.api.dal">device-manager.app.api.dal</a>
+        <li><a href="autoapi/device-manager/app/api/dal/index.html#module-device-manager.app.api.dal">device-manager.app.api.dal</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/api/db/index.html#module-device-manager.app.api.db">device-manager.app.api.db</a>
+        <li><a href="autoapi/device-manager/app/api/db/index.html#module-device-manager.app.api.db">device-manager.app.api.db</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/api/devices/index.html#module-device-manager.app.api.devices">device-manager.app.api.devices</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#module-device-manager.app.api.devices">device-manager.app.api.devices</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#module-device-manager.app.api.models">device-manager.app.api.models</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#module-device-manager.app.api.models">device-manager.app.api.models</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/main/index.html#module-device-manager.app.main">device-manager.app.main</a>
+        <li><a href="autoapi/device-manager/app/main/index.html#module-device-manager.app.main">device-manager.app.main</a>
 </li>
-        <li><a href="autoapi/exammanager/index.html#module-exam-manager">exam-manager</a>
+        <li><a href="autoapi/exam-manager/index.html#module-exam-manager">exam-manager</a>
 </li>
-        <li><a href="autoapi/exammanager/app/index.html#module-exam-manager.app">exam-manager.app</a>
+        <li><a href="autoapi/exam-manager/app/index.html#module-exam-manager.app">exam-manager.app</a>
 </li>
-        <li><a href="autoapi/exammanager/app/dal/index.html#module-exam-manager.app.dal">exam-manager.app.dal</a>
+        <li><a href="autoapi/exam-manager/app/dal/index.html#module-exam-manager.app.dal">exam-manager.app.dal</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#module-exam-manager.app.db">exam-manager.app.db</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#module-exam-manager.app.db">exam-manager.app.db</a>
 </li>
-        <li><a href="autoapi/exammanager/app/exam/index.html#module-exam-manager.app.exam">exam-manager.app.exam</a>
+        <li><a href="autoapi/exam-manager/app/exam/index.html#module-exam-manager.app.exam">exam-manager.app.exam</a>
 </li>
-        <li><a href="autoapi/exammanager/app/main/index.html#module-exam-manager.app.main">exam-manager.app.main</a>
+        <li><a href="autoapi/exam-manager/app/main/index.html#module-exam-manager.app.main">exam-manager.app.main</a>
 </li>
-        <li><a href="autoapi/workflowmanager/index.html#module-workflow-manager">workflow-manager</a>
+        <li><a href="autoapi/workflow-manager/index.html#module-workflow-manager">workflow-manager</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/index.html#module-workflow-manager.app">workflow-manager.app</a>
+        <li><a href="autoapi/workflow-manager/app/index.html#module-workflow-manager.app">workflow-manager.app</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/api/index.html#module-workflow-manager.app.api">workflow-manager.app.api</a>
+        <li><a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api">workflow-manager.app.api</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/api/producer/index.html#module-workflow-manager.app.api.producer">workflow-manager.app.api.producer</a>
+        <li><a href="autoapi/workflow-manager/app/api/producer/index.html#module-workflow-manager.app.api.producer">workflow-manager.app.api.producer</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#module-workflow-manager.app.api.workflow">workflow-manager.app.api.workflow</a>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#module-workflow-manager.app.api.workflow">workflow-manager.app.api.workflow</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#module-workflow-manager.app.main">workflow-manager.app.main</a>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#module-workflow-manager.app.main">workflow-manager.app.main</a>
 </li>
       </ul></li>
   </ul></td>
@@ -964,12 +1014,12 @@ document.write(`
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.name">name (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.name">name (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.name">(device-manager.app.api.models.BaseDevice attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.name">(device-manager.app.api.models.BaseDevice attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.name">(exam-manager.app.db.Exam attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.name">(exam-manager.app.db.Exam attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -978,10 +1028,10 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/acquisitioncontrol/app/main/index.html#acquisition-control.app.main.origins">origins (in module acquisition-control.app.main)</a>
+      <li><a href="autoapi/acquisition-control/app/main/index.html#acquisition-control.app.main.origins">origins (in module acquisition-control.app.main)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/main/index.html#exam-manager.app.main.origins">(in module exam-manager.app.main)</a>
+        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.origins">(in module exam-manager.app.main)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -990,18 +1040,22 @@ document.write(`
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.patient_id">patient_id (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.patient_id">patient_id (exam-manager.app.db.Exam attribute)</a>
 </li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.post_device_task">post_device_task() (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.post_device_task">post_device_task() (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer">Producer (class in workflow-manager.app.api.producer)</a>
-</li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.producer">producer (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer">Producer (class in workflow-manager.app.api.producer)</a>
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#workflow-manager.app.main.producer">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer">(class in workflow-manager.app.api.workflow)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.producer">producer (in module workflow-manager.app.api.workflow)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.producer">(in module workflow-manager.app.main)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1010,34 +1064,34 @@ document.write(`
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/acquisitioncontrol/app/main/index.html#acquisition-control.app.main.readiness">readiness() (in module acquisition-control.app.main)</a>
+      <li><a href="autoapi/acquisition-control/app/main/index.html#acquisition-control.app.main.readiness">readiness() (in module acquisition-control.app.main)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.readiness">(in module device-manager.app.api.devices)</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.readiness">(in module device-manager.app.api.devices)</a>
 </li>
-        <li><a href="autoapi/devicemanager/app/main/index.html#device-manager.app.main.readiness">(in module device-manager.app.main)</a>
+        <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.readiness">(in module device-manager.app.main)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/main/index.html#exam-manager.app.main.readiness">(in module exam-manager.app.main)</a>
+        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.readiness">(in module exam-manager.app.main)</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#workflow-manager.app.main.readiness">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.readiness">(in module workflow-manager.app.main)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.RecoJob">RecoJob (class in workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.RecoJob">RecoJob (class in workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.RecoJob.record_id">record_id (workflow-manager.app.api.workflow.RecoJob attribute)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.RecoJob.record_id">record_id (workflow-manager.app.api.workflow.RecoJob attribute)</a>
 </li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.retrieve_sequence">retrieve_sequence() (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.retrieve_sequence">retrieve_sequence() (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.router">router (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.router">router (in module acquisition-control.app.api.acquisitioncontrol)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.router">(in module device-manager.app.api.devices)</a>
+        <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.router">(in module device-manager.app.api.devices)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.router">(in module exam-manager.app.exam)</a>
+        <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.router">(in module exam-manager.app.exam)</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.router">(in module workflow-manager.app.api.workflow)</a>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.router">(in module workflow-manager.app.api.workflow)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1046,65 +1100,77 @@ document.write(`
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.send">send() (workflow-manager.app.api.producer.Producer method)</a>
-</li>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.SEQUENCE_MANAGER_URI">SEQUENCE_MANAGER_URI (in module acquisition-control.app.api.acquisitioncontrol)</a>
-</li>
-      <li><a href="autoapi/exammanager/app/main/index.html#exam-manager.app.main.shutdown">shutdown() (in module exam-manager.app.main)</a>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.send">send() (workflow-manager.app.api.producer.Producer method)</a>
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#workflow-manager.app.main.shutdown">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer.send">(workflow-manager.app.api.workflow.Producer method)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.site">site (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.SEQUENCE_MANAGER_URI">SEQUENCE_MANAGER_URI (in module acquisition-control.app.api.acquisitioncontrol)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.shutdown">shutdown() (in module exam-manager.app.main)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.site">(device-manager.app.api.models.BaseDevice attribute)</a>
-</li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.site">(exam-manager.app.db.Exam attribute)</a>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.shutdown">(in module workflow-manager.app.main)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.start">start() (workflow-manager.app.api.producer.Producer method)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.site">site (device-manager.app.api.db.Device attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.site">(device-manager.app.api.models.BaseDevice attribute)</a>
 </li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.site">(exam-manager.app.db.Exam attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.start">start() (workflow-manager.app.api.producer.Producer method)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer.start">(workflow-manager.app.api.workflow.Producer method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/acquisitioncontrol/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.start_scan">start_scan() (in module acquisition-control.app.api.acquisitioncontrol)</a>
+      <li><a href="autoapi/acquisition-control/app/api/acquisitioncontrol/index.html#acquisition-control.app.api.acquisitioncontrol.start_scan">start_scan() (in module acquisition-control.app.api.acquisitioncontrol)</a>
 </li>
-      <li><a href="autoapi/devicemanager/app/main/index.html#device-manager.app.main.startup">startup() (in module device-manager.app.main)</a>
+      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.startup">startup() (in module device-manager.app.main)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/main/index.html#exam-manager.app.main.startup">(in module exam-manager.app.main)</a>
+        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.startup">(in module exam-manager.app.main)</a>
 </li>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#workflow-manager.app.main.startup">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.startup">(in module workflow-manager.app.main)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.status">status (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.status">status (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
-        <li><a href="autoapi/devicemanager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.status">(device-manager.app.api.models.BaseDevice attribute)</a>
+        <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.BaseDevice.status">(device-manager.app.api.models.BaseDevice attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.status">(exam-manager.app.db.Exam attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.status">(exam-manager.app.db.Exam attribute)</a>
 </li>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.status">(exam-manager.app.db.Task attribute)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.status">(exam-manager.app.db.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflowmanager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.stop">stop() (workflow-manager.app.api.producer.Producer method)</a>
+      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.stop">stop() (workflow-manager.app.api.producer.Producer method)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.Producer.stop">(workflow-manager.app.api.workflow.Producer method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task">Task (class in exam-manager.app.db)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task">Task (class in exam-manager.app.db)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.task_destinations">task_destinations (exam-manager.app.db.Task attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.task_destinations">task_destinations (exam-manager.app.db.Task attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow.tasks">tasks (exam-manager.app.db.Workflow attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.tasks">tasks (exam-manager.app.db.Workflow attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.type">type (exam-manager.app.db.Task attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.type">type (exam-manager.app.db.Task attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1112,27 +1178,27 @@ document.write(`
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/db/index.html#device-manager.app.api.db.Device.update">update() (device-manager.app.api.db.Device method)</a>
+      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.update">update() (device-manager.app.api.db.Device method)</a>
 
       <ul>
-        <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Base.update">(exam-manager.app.db.Base method)</a>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Base.update">(exam-manager.app.db.Base method)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.update_exam">update_exam() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.update_exam">update_exam() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.update_exam_data">update_exam_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_exam_data">update_exam_data() (in module exam-manager.app.dal)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.update_task">update_task() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.update_task">update_task() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.update_task_data">update_task_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_task_data">update_task_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/exam/index.html#exam-manager.app.exam.update_workflow">update_workflow() (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.update_workflow">update_workflow() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/dal/index.html#exam-manager.app.dal.update_workflow_data">update_workflow_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_workflow_data">update_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#workflow-manager.app.api.workflow.upload_result">upload_result() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.upload_result">upload_result() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1140,29 +1206,29 @@ document.write(`
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/devicemanager/app/api/devices/index.html#device-manager.app.api.devices.websocket_endpoint">websocket_endpoint() (in module device-manager.app.api.devices)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.websocket_endpoint">websocket_endpoint() (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Workflow">Workflow (class in exam-manager.app.db)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow">Workflow (class in exam-manager.app.db)</a>
 </li>
       <li>
     workflow-manager
 
       <ul>
-        <li><a href="autoapi/workflowmanager/index.html#module-workflow-manager">module</a>
+        <li><a href="autoapi/workflow-manager/index.html#module-workflow-manager">module</a>
 </li>
       </ul></li>
       <li>
     workflow-manager.app
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/index.html#module-workflow-manager.app">module</a>
+        <li><a href="autoapi/workflow-manager/app/index.html#module-workflow-manager.app">module</a>
 </li>
       </ul></li>
       <li>
     workflow-manager.app.api
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/api/index.html#module-workflow-manager.app.api">module</a>
+        <li><a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1171,26 +1237,26 @@ document.write(`
     workflow-manager.app.api.producer
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/api/producer/index.html#module-workflow-manager.app.api.producer">module</a>
+        <li><a href="autoapi/workflow-manager/app/api/producer/index.html#module-workflow-manager.app.api.producer">module</a>
 </li>
       </ul></li>
       <li>
     workflow-manager.app.api.workflow
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/api/workflow/index.html#module-workflow-manager.app.api.workflow">module</a>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#module-workflow-manager.app.api.workflow">module</a>
 </li>
       </ul></li>
       <li>
     workflow-manager.app.main
 
       <ul>
-        <li><a href="autoapi/workflowmanager/app/main/index.html#module-workflow-manager.app.main">module</a>
+        <li><a href="autoapi/workflow-manager/app/main/index.html#module-workflow-manager.app.main">module</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Task.workflow_id">workflow_id (exam-manager.app.db.Task attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.workflow_id">workflow_id (exam-manager.app.db.Task attribute)</a>
 </li>
-      <li><a href="autoapi/exammanager/app/db/index.html#exam-manager.app.db.Exam.workflows">workflows (exam-manager.app.db.Exam attribute)</a>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.workflows">workflows (exam-manager.app.db.Exam attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1203,7 +1269,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
 </div>
@@ -1212,8 +1278,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -1226,8 +1290,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

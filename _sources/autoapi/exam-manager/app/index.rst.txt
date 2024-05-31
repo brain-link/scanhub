@@ -1,0 +1,23 @@
+exam-manager.app
+================
+
+.. py:module:: exam-manager.app
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/exam-manager/app/dal/index
+   /autoapi/exam-manager/app/db/index
+   /autoapi/exam-manager/app/exam/index
+   /autoapi/exam-manager/app/main/index
+
+

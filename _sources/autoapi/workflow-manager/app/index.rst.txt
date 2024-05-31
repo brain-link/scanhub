@@ -1,0 +1,29 @@
+workflow-manager.app
+====================
+
+.. py:module:: workflow-manager.app
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/workflow-manager/app/api/index
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/workflow-manager/app/main/index
+
+

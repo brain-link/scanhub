@@ -6,9 +6,5 @@ This page contains the references to ScanHub's detailed code documentation [#f1]
 .. toctree::
    :titlesonly:
 
-   /autoapi/acquisitioncontrol/index
-   /autoapi/devicemanager/index
-   /autoapi/exammanager/index
-   /autoapi/workflowmanager/index
 
 .. [#f1] The documentation is restricted to the main `ScanHub services <https://github.com/brain-link/scanhub>`_. 

@@ -1,0 +1,58 @@
+device-manager.app.main
+=======================
+
+.. py:module:: device-manager.app.main
+
+.. autoapi-nested-parse::
+
+   Main file for the device manager service.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device-manager.app.main.app
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device-manager.app.main.startup
+   device-manager.app.main.readiness
+
+
+Module Contents
+---------------
+
+.. py:data:: app
+
+.. py:function:: startup()
+   :async:
+
+
+   Inititalize database on startup.
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Readiness health endpoint.
+
+   Inspects sqlalchemy engine and check if workflow table exists.
+
+   Returns
+   -------
+       Status docstring
+
+   Raises
+   ------
+   HTTPException
+       500: Workflow table not found
+
+

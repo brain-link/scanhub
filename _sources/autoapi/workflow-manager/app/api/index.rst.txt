@@ -1,0 +1,21 @@
+workflow-manager.app.api
+========================
+
+.. py:module:: workflow-manager.app.api
+
+.. autoapi-nested-parse::
+
+   Init file.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/workflow-manager/app/api/producer/index
+   /autoapi/workflow-manager/app/api/workflow/index
+
+
