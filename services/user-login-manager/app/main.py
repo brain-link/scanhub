@@ -5,12 +5,11 @@
 
 from typing import Annotated
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from scanhub_libraries.db import init_db, engine
-from scanhub_libraries.security import get_current_user
+from app.db import init_db, engine
 from app.userlogin import router
 
 app = FastAPI(

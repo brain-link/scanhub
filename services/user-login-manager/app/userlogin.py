@@ -13,12 +13,48 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from scanhub_libraries.models import User
-from scanhub_libraries.db import UserSQL
-from scanhub_libraries.security import AUTOMATIC_LOGOUT_TIME_SECONDS, get_current_user
-from scanhub_libraries import dal
+from scanhub_libraries.security import oauth2_scheme
+from app.db import UserSQL
+from app import dal
+
+
+AUTOMATIC_LOGOUT_TIME_SECONDS = 3600  # time until a login token gets invalid (1 hour)
 
 
 router = APIRouter()
+
+
+@router.get("/getcurrentuser", status_code=200, tags=["user"])
+async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+    """Get current user endpoint.
+
+    Parameters
+    ----------
+    access_token 
+        User token (HTTP Header: "Authorization: Bearer <access_token>")
+
+    Returns
+    -------
+        User pydantic model, the user data of the current user.
+
+    Raises
+    ------
+    HTTPException
+        401: Unauthorized if the token is invalid.
+    """
+    user_db: UserSQL = await dal.get_user_from_token(access_token)
+    if user_db is not None and user_db.access_token is not None and user_db.last_activity_unixtime is not None \
+            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:              # auto-logout time 1 hour
+        await dal.update_user_data(user_db.username, {"last_activity_unixtime": time.time()})         # reset last_activity timer
+        user = await get_user_out(user_db)
+        return user
+
+    print("Received invalid token.")
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid token.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
 
 
 def compute_complex_password_hash(password: str, salt: str) -> str:
@@ -102,7 +138,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
 
 
 @router.post("/logout", tags=["login"])
-async def login(user: Annotated[UserSQL, Depends(get_current_user)]) -> None:
+async def login(user: Annotated[User, Depends(get_current_user)]) -> None:
     """
     Logout endpoint.
     """
@@ -110,7 +146,7 @@ async def login(user: Annotated[UserSQL, Depends(get_current_user)]) -> None:
     await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
 
 
-async def get_user_out(user_db: UserSQL):
+async def get_user_out(user_db: UserSQL) -> User:
     """ Convert UserSQL to User, replace token with empty string. """
     # UserSQL
     # --------
@@ -142,7 +178,7 @@ async def get_user_out(user_db: UserSQL):
 
 
 @router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])
-async def get_user_list(current_user: Annotated[UserSQL, Depends(get_current_user)]) -> list[User]:
+async def get_user_list(current_user: Annotated[User, Depends(get_current_user)]) -> list[User]:
     """Get all users endpoint.
 
     Returns
@@ -157,7 +193,7 @@ async def get_user_list(current_user: Annotated[UserSQL, Depends(get_current_use
 
 
 @router.post("/createuser", status_code=201, tags=["user"])
-async def create_user(current_user: Annotated[UserSQL, Depends(get_current_user)], new_user: User):
+async def create_user(current_user: Annotated[User, Depends(get_current_user)], new_user: User):
     """Create new patient database entry.
 
     Parameters

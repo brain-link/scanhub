@@ -7,7 +7,7 @@
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from scanhub_libraries.db import UserSQL, async_session
+from app.db import UserSQL, async_session
 
 
 async def get_user_data(username: str) -> (UserSQL | None):
