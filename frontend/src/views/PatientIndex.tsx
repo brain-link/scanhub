@@ -12,15 +12,23 @@ import List from '@mui/joy/List'
 import ListDivider from '@mui/joy/ListDivider'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import Accordion from '@mui/joy/Accordion'
+import Tooltip from '@mui/joy/Tooltip'
+import AccordionDetails from '@mui/joy/AccordionDetails'
+import AccordionGroup from '@mui/joy/AccordionGroup'
+import AccordionSummary from '@mui/joy/AccordionSummary'
 import * as React from 'react'
 import { useQuery } from 'react-query'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 import client from '../client/exam-tree-queries'
-import ExamItem from '../components/ExamItem'
+import ExamItem from '../components/ExamInstanceItem'
+import WorkflowItem from '../components/WorkflowInstanceItem'
 import ExamModal from '../components/ExamModal'
 import JobList from '../components/JobList'
+import ExamInstanceInfo from '../components/ExamInstanceInfo'
+import WorkflowInstanceInfo from '../components/WorkflowInstanceInfo'
 import ExamFromTemplateButton from '../components/ExamFromTemplateButton'
 // Import sub components
 import PatientInfo from '../components/PatientInfo'
@@ -123,33 +131,72 @@ function PatientIndex() {
             <Typography level='title-md'> Exams </Typography>
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
-
-          {/* <Box sx={{ display: 'flex', gap: 1 }}>
-            <IconButton
-              variant='soft'
-              sx={{ '--IconButton-size': patientView.iconButtonSize }}
-              onClick={() => {}}
-            >
-              <AddSharpIcon />
-            </IconButton>
-          </Box> */}
-          <ExamFromTemplateButton 
-            onSubmit={() => {refetchExams()}}
-          />
-
         </Box>
 
         <ListDivider />
 
         {/* List of exams */}
         <List sx={{ pt: 0 }}>
-          {// Check if exams are loading
-          exams?.map((exam, index) => (
-            <React.Fragment key={index}>
-              <ExamItem data={exam} refetchParentData={refetchExams} isSelected={exam.id === String(params.examId)} />
-              <ListDivider sx={{ m: 0 }} />
-            </React.Fragment>
-          ))}
+          {
+            exams?.map((exam) => (
+
+              <Tooltip
+                placement="right"
+                variant="outlined"
+                arrow
+                title={<ExamInstanceInfo exam={exam} />}
+              >
+
+                <Accordion key={`exam-${exam.id}`}>
+
+                  <AccordionSummary>
+                    <ExamItem data={exam} refetchParentData={refetchExams} isSelected={false} />
+                  </AccordionSummary>
+
+                  <AccordionDetails>
+                    {
+                      exam.workflows?.map(workflow => (
+
+                        <Tooltip
+                          placement="right"
+                          variant="outlined"
+                          arrow
+                          title={<WorkflowInstanceInfo workflow={workflow} />}
+                        >
+
+                          <Accordion key={`workflow-${workflow.id}`}>
+
+                            <AccordionSummary>
+                              <WorkflowItem data={workflow} refetchParentData={refetchExams} isSelected={false} />
+                            </AccordionSummary>
+
+                            <AccordionDetails>
+                              <Typography>Task 1</Typography>
+                            </AccordionDetails>
+
+                          </Accordion>
+
+                        </Tooltip>
+
+                      ))
+                    }
+
+                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', pt: 1 }}>
+                      {/* TODO: Workflow from template button */}
+                    </Box>
+
+                  </AccordionDetails>
+                </Accordion>
+
+              </Tooltip>
+
+            ))
+          }
+
+          <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', pt: 1 }}>
+            <ExamFromTemplateButton onSubmit={() => {refetchExams()}}/>
+          </Box>
+          
         </List>
       </Box>
 

@@ -18,7 +18,7 @@ import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 import client from '../client/exam-tree-queries'
-import ExamItem from '../components/ExamItem'
+import ExamItem from '../components/ExamInstanceItem'
 import ExamModal from '../components/ExamModal'
 import JobList from '../components/JobList'
 // Import sub components
