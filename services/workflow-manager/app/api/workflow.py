@@ -36,9 +36,8 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 class RecoJob(BaseModel):
     """RecoJob is a pydantic model for a reco job."""  # noqa: E501
 
-    record_id: int
-    input: StrictStr
-
+    record_id: UUID
+    input: dict[str, str] #StrictStr
 
 router = APIRouter()
 
@@ -46,22 +45,22 @@ router = APIRouter()
 producer = Producer()
 
 
-@router.get("/trigger/{workflow_id}/")
-async def trigger(workflow_id: UUID | str):
-    """Trigger a workflow.
+@router.get("/process/{workflow_id}/")
+async def process(workflow_id: UUID | str):
+    """Process a workflow.
 
     Parameters
     ----------
     workflow_id
-        UUID of the workflow to trigger
+        UUID of the workflow to process
 
     Returns
     -------
-        Workflow trigger response
+        Workflow process response
     """
 
     # Debugging
-    workflow_id = '9c6d9b8d-c570-418e-9277-2b083f3f9825' #'cec25959-c451-4faf-9093-97431aba41e6'
+    workflow_id = 'ae7d4105-8312-436f-bc48-98f57c2fe86d' #'cec25959-c451-4faf-9093-97431aba41e6'
     
     exam_manager_uri = EXAM_MANAGER_URI
 
@@ -76,9 +75,64 @@ async def trigger(workflow_id: UUID | str):
         workflow = WorkflowOut(**workflow_raw)
         
         # Debugging
-        print(workflow)
+        # print(workflow)
         print("Workflow tasks: ")
-        print(workflow.tasks)
+        print(len(workflow.tasks))
+
+        task: TaskOut
+        for task in workflow.tasks:
+            # Debugging
+            print("Task: ")
+            # print(task.id, end="\n")
+            # print(task.type, end="\n")
+            # print(task.description if task.description else "No description", end="\n")
+
+
+            if task.type == "DEVICE_TASK":
+                print("Device task:") 
+                print(task.destinations.get("device"), end="\n")
+                # reco_job = RecoJob(record_id=task.id, input=task.args["input"])
+                # # Send message to Kafka
+                # await producer.send("mri_cartesian_reco", reco_job.dict())
+
+
+            if task.type == "PROCESSING_TASK":
+                # print(task.destinations, end="\n")
+                print("Processing task:")
+
+                topic = task.destinations.get("topic")
+                print(topic, end="\n")
+
+                reco_job = RecoJob(record_id=task.id, input=task.args)
+
+                print(task, end="\n")
+
+                # # Send message to Kafka
+                # await producer.send("mri_cartesian_reco", reco_job.dict())
+                await producer.send(topic, reco_job)
+
+
+
+            # workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
+            # description: str
+            # type: TaskType
+            # args: dict[str, str]
+            # artifacts: dict[str, str]
+            # destinations: dict[str, str]
+            # # artifacts: dict[str, list[dict[str, str]]]
+            # # task_destinations: list[dict[str, str]]
+            # status: dict[TaskStatus, str]
+            # is_template: bool
+            # is_frozen: bool
+
+
+            # id: UUID
+            # datetime_created: datetime
+
+          
+
+            # Send message to Kafka
+            # await producer.send("mri_cartesian_reco", RecoJob(record_id=task.task_id, input=task.task_input).dict())
 
     return
 
