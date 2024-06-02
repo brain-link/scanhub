@@ -1,5 +1,5 @@
 import baseUrls from './client/urls'
-import { PatientsApi } from "./generated-client/patient"
+import { PatientsApi } from './generated-client/patient'
 import { ExamsApi } from './generated-client/exam'
 import { WorkflowsApi } from './generated-client/exam'
 import { TasksApi } from './generated-client/exam'

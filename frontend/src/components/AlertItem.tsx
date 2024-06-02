@@ -28,13 +28,13 @@ function AlertItem({ title, type, info }: AlertProps) {
   function getColor(alertType: Alerts) {
     switch (alertType) {
       case Alerts.Error:
-        return "danger"
+        return 'danger'
       case Alerts.Warning:
-        return "warning"
+        return 'warning'
       case Alerts.Success:
-        return "success"
+        return 'success'
       default:
-        return "neutral"
+        return 'neutral'
     }
   }
 

@@ -57,9 +57,9 @@ export function RouteConfiguration() {
         element={
           <Login onLogin={
             (newuser) => {
-              console.log("Login confirmed.")
+              console.log('Login confirmed.')
               setUser(newuser);
-              navigate("/");
+              navigate('/');
             }
           }/>
         } 

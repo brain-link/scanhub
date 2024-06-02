@@ -1,5 +1,5 @@
-import CenterFocusWeakSharpIcon from '@mui/icons-material/CenterFocusWeakSharp'
-import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp'
+// import CenterFocusWeakSharpIcon from '@mui/icons-material/CenterFocusWeakSharp'
+// import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp'
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
 import { Typography } from '@mui/joy'
 import Accordion from '@mui/joy/Accordion'
@@ -8,10 +8,10 @@ import AccordionGroup from '@mui/joy/AccordionGroup'
 import AccordionSummary from '@mui/joy/AccordionSummary'
 import Card from '@mui/joy/Card'
 import CircularProgress from '@mui/joy/CircularProgress'
-import ListItem from '@mui/joy/ListItem'
-import ListItemButton from '@mui/joy/ListItemButton'
+// import ListItem from '@mui/joy/ListItem'
+// import ListItemButton from '@mui/joy/ListItemButton'
 import ListItemContent from '@mui/joy/ListItemContent'
-import ListItemDecorator from '@mui/joy/ListItemDecorator'
+// import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import Stack from '@mui/joy/Stack'
 import * as React from 'react'
 import { useQuery } from 'react-query'
@@ -19,11 +19,12 @@ import { useParams } from 'react-router-dom'
 
 import client from '../client/exam-tree-queries'
 import { Alerts } from '../interfaces/components.interface'
-import { ExamTreeProps } from '../interfaces/components.interface'
+// import { ExamTreeProps } from '../interfaces/components.interface'
 import { Exam } from '../interfaces/data.interface'
 import AlertItem from './AlertItem'
 
-function ExamTree({ setDataPath }: ExamTreeProps) {
+// function ExamTree({ setDataPath }: ExamTreeProps) {
+function ExamTree() {
   const params = useParams()
 
   const {

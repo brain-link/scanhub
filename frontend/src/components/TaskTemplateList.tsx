@@ -9,11 +9,11 @@ import Button from '@mui/joy/Button'
 
 import TaskTemplateItem from './TaskTemplateItem'
 import TaskTemplateCreateModal from './TaskTemplateCreateModal'
-import AlertItem from '../components/AlertItem'
+// import AlertItem from '../components/AlertItem'
 
-import { Alerts } from '../interfaces/components.interface'
+// import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
-import { TaskOut } from "../generated-client/exam";
+import { TaskOut } from '../generated-client/exam';
 import { taskApi } from '../api'
 import LoginContext from '../LoginContext'
 
@@ -22,13 +22,15 @@ export default function TaskTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
 
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
-  const {data: tasks, isLoading, isError, refetch} = useQuery<TaskOut[]>({
+  // const {data: tasks, isLoading, isError, refetch} = useQuery<TaskOut[]>({
+  const {data: tasks, refetch} = useQuery<TaskOut[]>({
     queryKey: ['tasks'],
     queryFn: async () => {
       return await taskApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(
-        {headers: {Authorization: "Bearer " + user?.access_token}}
+        {headers: {Authorization: 'Bearer ' + user?.access_token}}
       )
       .then((result) => {return result.data})
     }
@@ -58,8 +60,9 @@ export default function TaskTemplateList() {
       />
 
       {
-        tasks?.map((task) => (
+        tasks?.map((task, index) => (
           <TaskTemplateItem
+            key={index}
             item={task}
             onClicked={() => {}}
           />

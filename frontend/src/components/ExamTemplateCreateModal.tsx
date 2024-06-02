@@ -15,7 +15,7 @@ import * as React from 'react'
 import { useContext } from 'react'
 
 import { useMutation } from 'react-query'
-import { BaseExam, ExamOut } from "../generated-client/exam";
+import { BaseExam, ExamOut } from '../generated-client/exam';
 import { examApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 import LoginContext from '../LoginContext'
@@ -32,13 +32,14 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
 
   const [exam, setExam] = React.useState<BaseExam>({patient_id: undefined, name: '', country: 'germany', site: '', address: '', creator: '', status: '', is_template: true, is_frozen: false})
 
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await examApi.createExamTemplateApiV1ExamTemplatesPost(
       exam,
-      {headers: {Authorization: "Bearer " + user?.access_token}}
+      {headers: {Authorization: 'Bearer ' + user?.access_token}}
     )
     .then((response) => { props.onSubmit(response.data) })
     .catch((err) => { console.log(err) })

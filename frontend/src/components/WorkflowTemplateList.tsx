@@ -8,12 +8,12 @@ import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
 
 import WorkflowTemplateItem from './WorkflowTemplateItem'
-import AlertItem from '../components/AlertItem'
+// import AlertItem from '../components/AlertItem'
 import WorkflowTemplateCreateModal from './WorkflowTemplateCreateModal'
 
-import { Alerts } from '../interfaces/components.interface'
+// import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
-import { WorkflowOut } from "../generated-client/exam";
+import { WorkflowOut } from '../generated-client/exam';
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
 
@@ -22,13 +22,15 @@ export default function WorkflowTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
 
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
-  const {data: workflows, isLoading, isError, refetch} = useQuery<WorkflowOut[]>({
+  // const {data: workflows, isLoading, isError, refetch} = useQuery<WorkflowOut[]>({
+  const {data: workflows, refetch} = useQuery<WorkflowOut[]>({
     queryKey: ['workflows'],
     queryFn: async () => {
       return await workflowsApi.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(
-        {headers: {Authorization: "Bearer " + user?.access_token}}
+        {headers: {Authorization: 'Bearer ' + user?.access_token}}
       )
       .then((result) => {return result.data})
     }
@@ -58,8 +60,9 @@ export default function WorkflowTemplateList() {
       />
 
       {
-        workflows?.map((workflow) => (
+        workflows?.map((workflow, index) => (
           <WorkflowTemplateItem
+            key={index}
             item={workflow}
             onClicked={() => {}}
           />

@@ -5,7 +5,7 @@ import Typography from '@mui/joy/Typography'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import * as React from 'react'
-import { ExamOut } from "../generated-client/exam";
+import { ExamOut } from '../generated-client/exam';
 import { TemplateItemInterface } from '../interfaces/components.interface'
 
 

@@ -10,9 +10,9 @@ import Accordion from '@mui/joy/Accordion'
 import AccordionGroup from '@mui/joy/AccordionGroup'
 import AccordionSummary from '@mui/joy/AccordionSummary'
 import AccordionDetails from '@mui/joy/AccordionDetails'
-import AddIcon from '@mui/icons-material/Add';
+// import AddIcon from '@mui/icons-material/Add';
 
-import { TaskOut } from "../generated-client/exam";
+import { TaskOut } from '../generated-client/exam';
 import { TemplateItemInterface } from '../interfaces/components.interface'
 
 
@@ -39,8 +39,8 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
           </AccordionSummary>
           <AccordionDetails>
             {
-              prop.item.args && Object.entries(prop.item.args).map((arg) => (
-                <Typography level='body-sm' textColor='text.tertiary'>{arg[0]}: {arg[1]}</Typography>
+              prop.item.args && Object.entries(prop.item.args).map((arg, index) => (
+                <Typography key={index} level='body-sm' textColor='text.tertiary'>{arg[0]}: {arg[1]}</Typography>
               ))
             }
           </AccordionDetails>
@@ -55,9 +55,9 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             <AccordionGroup>
               {
                 // Iterate outer dict
-                prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact) => (
+                prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact, index) => (
                 
-                  <Accordion>
+                  <Accordion key={index}>
                     <AccordionSummary>
                       <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}</Typography>
                     </AccordionSummary>
@@ -65,15 +65,15 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
                       {
                         // Iterate through list of outer dict
                         artifact[1].map((artifact_entry, index) => (
-                          <Accordion>
+                          <Accordion key={index}>
                             <AccordionSummary>
                               <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]} {index+1}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                               {
                                 // Iterate inner dict
-                                artifact_entry && Object.entries(artifact_entry).map((desc) => (
-                                  <Typography level='body-sm' textColor='text.tertiary'>{desc[0]}: {desc[1]}</Typography>
+                                artifact_entry && Object.entries(artifact_entry).map((desc, index2) => (
+                                  <Typography key={index2} level='body-sm' textColor='text.tertiary'>{desc[0]}: {desc[1]}</Typography>
                                 ))
                               }
                             </AccordionDetails>
@@ -97,14 +97,14 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             <AccordionGroup>
               {
                 prop.item.task_destinations.map((destination, index) => (
-                  <Accordion>
+                  <Accordion key={index}>
                     <AccordionSummary>
                       <Typography level='body-sm' textColor='text.tertiary'>Destination {index+1}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       {
-                        destination && Object.entries(destination).map((values) => (
-                          <Typography level='body-sm' textColor='text.tertiary'>{values[0]}: {values[1]}</Typography>
+                        destination && Object.entries(destination).map((values, index2) => (
+                          <Typography key={index2} level='body-sm' textColor='text.tertiary'>{values[0]}: {values[1]}</Typography>
                         ))
                       }
                     </AccordionDetails>

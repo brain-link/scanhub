@@ -16,7 +16,7 @@ import Option from '@mui/joy/Option';
 
 
 import { useMutation } from 'react-query'
-import { BaseTask, TaskOut, TaskType } from "../generated-client/exam";
+import { BaseTask, TaskOut, TaskType } from '../generated-client/exam';
 import { taskApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 import LoginContext from '../LoginContext'
@@ -28,21 +28,18 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
     workflow_id: undefined, description: '', type: TaskType.ProcessingTask, status: {}, args: {}, artifacts: {}, task_destinations: [], is_template: true, is_frozen: false
   })
 
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await taskApi.createTaskTemplateApiV1ExamTaskTemplatePost(
       task,
-      {headers: {Authorization: "Bearer " + user?.access_token}}
+      {headers: {Authorization: 'Bearer ' + user?.access_token}}
     )
     .then((response) => { props.onSubmit(response.data) })
     .catch((err) => { console.log(err) })
   })
-
-  const getType = (str: keyof typeof TaskType) => {
-    return TaskType[str]
-  }
 
   return (
     <Modal

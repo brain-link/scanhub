@@ -16,7 +16,7 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ExamTemplateItem from './ExamTemplateItem'
 
 import { useQuery } from 'react-query'
-import { ExamOut } from "../generated-client/exam";
+import { ExamOut } from '../generated-client/exam';
 import { examApi } from '../api'
 
 import { CreateInstanceModalInterface } from '../interfaces/components.interface'
@@ -27,15 +27,17 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
 
   const params = useParams()
 
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
   const [modalOpen, setModalOpen] = React.useState(false)
 
-  const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
+  // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
+  const {data: exams} = useQuery<ExamOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
       return await examApi.getAllExamTemplatesApiV1ExamTemplatesAllGet(
-        {headers: {Authorization: "Bearer " + user?.access_token}}
+        {headers: {Authorization: 'Bearer ' + user?.access_token}}
       )
       .then((result) => {return result.data})
     }
@@ -45,7 +47,7 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
     await examApi.createExamFromTemplateApiV1ExamPost(
       Number(params.patientId), 
       id, 
-      {headers: {Authorization: "Bearer " + user?.access_token}}
+      {headers: {Authorization: 'Bearer ' + user?.access_token}}
     )
     .then(() => { props.onSubmit() })
     .catch((err) => { console.log(err) })

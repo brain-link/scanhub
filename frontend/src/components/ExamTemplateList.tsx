@@ -8,12 +8,12 @@ import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
 
 import ExamTemplateItem from '../components/ExamTemplateItem'
-import AlertItem from '../components/AlertItem'
+// import AlertItem from '../components/AlertItem'
 import ExamTemplateCreateModal from '../components/ExamTemplateCreateModal'
 
-import { Alerts } from '../interfaces/components.interface'
+// import { Alerts } from '../interfaces/components.interface'
 import { useQuery } from 'react-query'
-import { ExamOut } from "../generated-client/exam";
+import { ExamOut } from '../generated-client/exam';
 import { examApi } from '../api'
 import LoginContext from '../LoginContext'
 
@@ -22,13 +22,15 @@ export default function ExamTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
 
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
-  const {data: exams, isLoading, isError, refetch} = useQuery<ExamOut[]>({
+  // const {data: exams, isLoading, isError, refetch} = useQuery<ExamOut[]>({
+  const {data: exams, refetch} = useQuery<ExamOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
       return await examApi.getAllExamTemplatesApiV1ExamTemplatesAllGet(
-        {headers: {Authorization: "Bearer " + user?.access_token}}
+        {headers: {Authorization: 'Bearer ' + user?.access_token}}
       )
       .then((result) => {return result.data})
     }

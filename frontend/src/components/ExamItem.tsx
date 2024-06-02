@@ -19,8 +19,6 @@ import { Link as RouterLink } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import client from '../client/exam-tree-queries'
-import ExamModal from '../components/ExamModal'
 import { ComponentProps } from '../interfaces/components.interface'
 // Interfaces and api service
 // import { Exam } from '../interfaces/data.interface'
@@ -32,12 +30,13 @@ import LoginContext from '../LoginContext'
 function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
   const params = useParams()
   const navigate = useNavigate()
-  const [user, setUser] = useContext(LoginContext);
+  // const [user, setUser] = useContext(LoginContext);
+  const user = useContext(LoginContext);
 
   // Context: Delete and edit options, anchor for context location
   const [contextOpen, setContextOpen] = React.useState<string | null>(null)
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  // const [examModalOpen, setExamModalOpen] = React.useState(false)
 
   const handleContextClose = () => {
     setAnchorEl(null)
@@ -51,7 +50,7 @@ function ExamItem({ data: exam, refetchParentData, isSelected }: ComponentProps<
   }
 
   const deleteExam = useMutation(async () => {
-    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id, {headers: {Authorization: "Bearer " + user?.access_token}}).then(() => {
+    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id, {headers: {Authorization: 'Bearer ' + user?.access_token}}).then(() => {
       if (String(params.examId) === exam.id) {
         // Reset router path if this exam id is in the path
         navigate(`/${params.patientId}`)

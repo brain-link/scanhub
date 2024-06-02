@@ -22,8 +22,8 @@ function Login(props: {onLogin: (user: User) => void}) {
   const [loginRequestInProgress, setLoginRequestInProgress] = useState<boolean>(false);
 
   return (
-    <Box sx={{width: "20%", height: "20%", margin: "auto"}}>
-      <h1 style={{textAlign: "center"}}>
+    <Box sx={{width: '20%', height: '20%', margin: 'auto'}}>
+      <h1 style={{textAlign: 'center'}}>
         Welcome to Scanhub!
       </h1>
       <h2>
@@ -32,31 +32,31 @@ function Login(props: {onLogin: (user: User) => void}) {
 
       <form onSubmit={(event) => {
         event.preventDefault()  // do not reload the page
-        if (event.currentTarget.username_input.value == "" || event.currentTarget.password_input.value == "") {
+        if (event.currentTarget.username_input.value == '' || event.currentTarget.password_input.value == '') {
           setLoginErrorState(LoginErrorState.EmptyUsernameOrPassword)
-          console.log("Username or password must not be empty.")
+          console.log('Username or password must not be empty.')
         }
         else {
           setLoginRequestInProgress(true)
           setLoginErrorState(LoginErrorState.NoError)
-          console.log("Submit login.")
+          console.log('Submit login.')
           
           // TODO consider sending a secure password hash like argon2 instead of the password itself
           // on the server this hash could be hashed again, just like if it were the password
           loginApi.loginApiV1UserloginLoginPost(event.currentTarget.username_input.value, 
                                                 event.currentTarget.password_input.value,
-                                                "password")
+                                                'password')
           .then((result) => {
             setLoginRequestInProgress(false)
             props.onLogin(result.data);
           })
           .catch((error) => {
             setLoginRequestInProgress(false)
-            if (error?.response?.data?.detail == "Invalid authentication credentials") {
-              console.log("Invalid authentication credentials");
+            if (error?.response?.data?.detail == 'Invalid authentication credentials') {
+              console.log('Invalid authentication credentials');
               setLoginErrorState(LoginErrorState.InvalidCredentials)
             } else {
-              console.log("Error at login:", error)
+              console.log('Error at login:', error)
               setLoginErrorState(LoginErrorState.OtherError)
             }
           });

@@ -25,7 +25,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom'
 
 import { navigation } from '../utils/size_vars'
 import LoginContext from '../LoginContext';
-import { SettingsInputSvideoRounded } from '@mui/icons-material';
+// import { SettingsInputSvideoRounded } from '@mui/icons-material';
 import { loginApi } from '../api'
 
 
@@ -116,7 +116,7 @@ export default function Navigation() {
             disabled={loc.pathname === item.link}
             variant={loc.pathname === item.link ? 'soft' : 'plain'}
             key={item.id}
-            sx={{display: "inline-flex"}}
+            sx={{display: 'inline-flex'}}
           >
             {item.text}
           </Button>
@@ -175,13 +175,13 @@ export default function Navigation() {
         <MenuItem
           key='logout'
           onClick={() => {
-            loginApi.loginApiV1UserloginLogoutPost({headers: {Authorization: "Bearer " + user?.access_token}})
+            loginApi.loginApiV1UserloginLogoutPost({headers: {Authorization: 'Bearer ' + user?.access_token}})
             .then(() => {
               setAnchorEl(null)
               setUser(null)
             })
             .catch((error) => {
-              console.log("Error at logout.")   // TODO inform user.
+              console.log('Error at logout: ', error)   // TODO inform user.
             })
           }}
         >

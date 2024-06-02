@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // Component interfaces: Pass data and functions between components
 import { PatientOut } from '../generated-client/patient'
-import { ExamOut } from '../generated-client/exam'
 import { Job } from './data.interface'
 import { Device } from './data.interface'
 // import { Workflow } from './data.interface';

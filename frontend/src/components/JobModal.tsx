@@ -13,14 +13,12 @@ import Stack from '@mui/joy/Stack'
 // Import mui joy components
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
 
 import { JobModalProps } from '../interfaces/components.interface'
 // Import api service and interfaces
 import { Job, AcquisitonLimits, SequenceParameters, XYZ } from '../interfaces/data.interface'
 
 function JobModal(props: JobModalProps) {
-  const params = useParams()
 
   const acq_limits: AcquisitonLimits = {
     patient_age: 18,
