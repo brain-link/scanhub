@@ -297,3 +297,13 @@ class ExamOut(BaseExam):
     datetime_created: datetime
     datetime_updated: datetime | None
     workflows: list[WorkflowOut]
+
+
+class User(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    email: str | None
+    access_token: str   # access_token and token_type are standardized names in OAuth2, don't change them...
+    token_type: str     # ... also token_type should be "bearer" as standardized in OAuth2. Exception: when adding a new user...
+                        # ... the token_type is "password" and access_token contains the password.

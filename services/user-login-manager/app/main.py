@@ -1,22 +1,20 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""Exam manager main file."""
+""" User login manager main file."""
 
 from typing import Annotated
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from app.db import engine, init_db
-from app.exam import router
-from scanhub_libraries.security import get_current_user
+from app.db import init_db, engine
+from app.userlogin import router
 
 app = FastAPI(
-    openapi_url="/api/v1/exam/openapi.json",
-    docs_url="/api/v1/exam/docs",
-    dependencies=[Depends(get_current_user)]
+    openapi_url="/api/v1/userlogin/openapi.json",
+    docs_url="/api/v1/userlogin/docs"
 )
 
 # To be done: Specify specific origins:
@@ -51,13 +49,13 @@ async def startup():
     HTTPException
         500: Workflow table does not exist
     """
-    ins = inspect(engine)
-    tables = ins.get_table_names()
-    if "device" not in tables:
-        raise HTTPException(
-            status_code=500,
-            detail="SQL-DB: Device table is required but does not exist.",
-        )
+    # ins = inspect(engine)
+    # tables = ins.get_table_names()
+    # if "device" not in tables:     # maybe we need some other table, lets see
+    #     raise HTTPException(
+    #         status_code=500,
+    #         detail="SQL-DB: Device table is required but does not exist.",
+    #     )
     init_db()
 
 
@@ -78,12 +76,11 @@ async def readiness() -> dict:
     Raises
     ------
     HTTPException
-        500: Any of the exam-tree tables does not exist
+        500: User table does not exist
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
-    required_tables = ["exam", "workflow", "task"]
-    # required_tables = ["exam", "workflow", "task", "device"]
+    required_tables = ["user"]
 
     if not all(t in existing_tables for t in required_tables):
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
@@ -91,4 +88,4 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
-app.include_router(router, prefix="/api/v1/exam")
+app.include_router(router, prefix="/api/v1/userlogin")
