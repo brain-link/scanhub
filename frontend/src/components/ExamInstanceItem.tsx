@@ -10,9 +10,11 @@ import IconButton from '@mui/joy/IconButton'
 import ListItem from '@mui/joy/ListItem'
 import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import ListItemContent from '@mui/joy/ListItemContent'
-import Menu from '@mui/joy/Menu'
-import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
+import Dropdown from '@mui/joy/Dropdown';
+import MenuButton from '@mui/joy/MenuButton';
+import MenuItem from '@mui/joy/MenuItem';
+import Menu from '@mui/joy/Menu'
 
 // Icons
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
@@ -20,32 +22,24 @@ import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
 
 // Sub-components, interfaces, client
 // import ExamModal from './ExamModal'
-import { ComponentProps } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext';
+import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
+import { InstanceInterface } from '../interfaces/components.interface'
 import { ExamOut } from '../generated-client/exam'
 import { examApi } from '../api'
 
 
 // function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
-function ExamInstanceItem({data: exam, refetchParentData}: ComponentProps<ExamOut>) {
+function ExamInstanceItem({data: exam, refetchParentData}: InstanceInterface<ExamOut>) {
 
-  // Context: Delete and edit options, anchor for context location
-  const [contextOpen, setContextOpen] = React.useState<string | null>(null)
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
+  const [user, ] = React.useContext(LoginContext);
   // const [examModalOpen, setExamModalOpen] = React.useState(false)
-
-  const handleContextClose = () => {
-    setAnchorEl(null)
-    setContextOpen(null)
-  }
-
-  const handleContextOpen = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, examId: string) => {
-    e.preventDefault()
-    setAnchorEl(e.currentTarget)
-    setContextOpen(examId)
-  }
+  const [modalOpen, setModalOpen] = React.useState(false)
 
   const deleteExam = useMutation(async () => {
-    await examApi.examDeleteApiV1ExamExamIdDelete(exam.id).then(() => {
+    await examApi.examDeleteApiV1ExamExamIdDelete(
+      exam.id, {headers: {Authorization: 'Bearer ' + user?.access_token}}
+    ).then(() => {
       refetchParentData()
     })
   })
@@ -82,40 +76,22 @@ function ExamInstanceItem({data: exam, refetchParentData}: ComponentProps<ExamOu
 
       </ListItemContent>
 
-      <IconButton
-        variant='plain'
-        sx={{ '--IconButton-size': '25px' }}
-        onClick={(e) => handleContextOpen(e, exam.id)}
-      >
-        <MoreHorizIcon />
-      </IconButton>
-
-      <Menu
-        id='context-menu'
-        variant='plain'
-        anchorEl={anchorEl}
-        open={exam.id === contextOpen}
-        onClose={() => handleContextClose()}
-        sx={{ zIndex: 'snackbar' }}
-      >
-        <MenuItem
-          key='edit'
-          onClick={() => {
-            // setExamModalOpen(true)
-          }}
+      <Dropdown>
+        <MenuButton variant='plain' sx={{zIndex: 'snackbar', '--IconButton-size': '25px'}} slots={{root: IconButton}}>
+          <MoreHorizIcon />
+        </MenuButton>
+        <Menu
+          id='context-menu'
+          variant='plain'
+          sx={{ zIndex: 'snackbar' }}
         >
-          Edit
-        </MenuItem>
+          <MenuItem key='edit' onClick={() => {}}>Edit</MenuItem>
+          <MenuItem key='delete' onClick={() => {deleteExam.mutate()}}>Delete</MenuItem>
+          <MenuItem key="add" onClick={() => {setModalOpen(true)}}>Add Workflow</MenuItem>
+        </Menu>
+      </Dropdown>
 
-        <MenuItem
-          key='delete'
-          onClick={() => {
-            deleteExam.mutate()
-          }}
-        >
-          Delete
-        </MenuItem>
-      </Menu>
+      <WorkflowFromTemplateModal isOpen={modalOpen} setOpen={setModalOpen} parentId={exam.id} onSubmit={refetchParentData}/>
 
       {/* <ExamModal
         data={exam}

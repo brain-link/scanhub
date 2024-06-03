@@ -1,11 +1,10 @@
 
 import * as React from 'react'
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom'
 import { useMutation } from 'react-query'
 
-import IconButton from '@mui/joy/IconButton'
-import AddSharpIcon from '@mui/icons-material/AddSharp'
+// import IconButton from '@mui/joy/IconButton'
+// import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import ModalClose from '@mui/joy/ModalClose'
@@ -23,12 +22,10 @@ import { CreateInstanceModalInterface } from '../interfaces/components.interface
 import LoginContext from '../LoginContext';
 
 
-export default function ExamFromTemplateButton(props: CreateInstanceModalInterface) {
+export default function ExamFromTemplateModal(props: CreateInstanceModalInterface) {
 
-  const params = useParams()
-
-  const [user, setUser] = useContext(LoginContext);
-  const [modalOpen, setModalOpen] = React.useState(false)
+  const [user, ] = useContext(LoginContext);
+  // const [modalOpen, setModalOpen] = React.useState(false)
 
   // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
   const {data: exams} = useQuery<ExamOut[]>({
@@ -43,7 +40,7 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
 
   const mutation = useMutation(async (id: string) => {
     await examApi.createExamFromTemplateApiV1ExamPost(
-      Number(params.patientId), 
+      Number(props.parentId), 
       id, 
       {headers: {Authorization: 'Bearer ' + user?.access_token}}
     )
@@ -53,16 +50,16 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
 
   return (
     <>
-      <IconButton 
+      {/* <IconButton 
         variant='soft'
         onClick={() => {setModalOpen(true)}}
       >
         <AddSharpIcon />
-      </IconButton>
+      </IconButton> */}
 
       <Modal
-          open={modalOpen}
-          onClose={() => {setModalOpen(false)}}
+          open={props.isOpen}
+          onClose={() => {props.setOpen(false)}}
         >
           <ModalDialog sx={{width: '50vw', p: 5}}>
             <ModalClose />
@@ -80,12 +77,13 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
                     key={idx}
                     onClick={() => {
                       mutation.mutate(exam.id)
-                      setModalOpen(false)
+                      props.setOpen(false)
                     }}
                   >
                     <ExamTemplateItem
                       item={exam}
                       onClicked={() => {}}
+                      onDeleted={() => {}}
                     />
                   </ListItemButton>
                 ))
