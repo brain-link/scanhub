@@ -15,7 +15,7 @@ import * as React from 'react'
 import { useContext } from 'react'
 
 import { useMutation } from 'react-query'
-import { BaseExam, ExamOut } from '../generated-client/exam';
+import { BaseExam, ExamOut } from "../generated-client/exam";
 import { examApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 import LoginContext from '../LoginContext'

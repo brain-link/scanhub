@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientTable.tsx is responsible for rendering the patient table view.
 import * as React from 'react'
-import { useContext } from 'react'
 import Stack from '@mui/joy/Stack'
 import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
@@ -23,7 +22,7 @@ export default function TaskTemplateList() {
   const [modalOpen, setModalOpen] = React.useState(false)
 
   // const [user, setUser] = useContext(LoginContext);
-  const user = useContext(LoginContext);
+  const user = React.useContext(LoginContext);
 
   // const {data: tasks, isLoading, isError, refetch} = useQuery<TaskOut[]>({
   const {data: tasks, refetch} = useQuery<TaskOut[]>({
