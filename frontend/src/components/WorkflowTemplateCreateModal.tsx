@@ -23,7 +23,7 @@ import LoginContext from '../LoginContext'
 export default function WorkflowTemplateCreateModal(props: ModalComponentProps<WorkflowOut>) {
 
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({comment: '', exam_id: undefined, is_finished: false, is_template: true, is_frozen: false})
-  const [user, setUser] = useContext(LoginContext);
+  const [user, ] = useContext(LoginContext);
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {

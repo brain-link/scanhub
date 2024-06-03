@@ -30,7 +30,7 @@ const formContent = [
 export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamOut>) {
 
   const [exam, setExam] = React.useState<BaseExam>({patient_id: undefined, name: '', country: 'germany', site: '', address: '', creator: '', status: '', is_template: true, is_frozen: false})
-  const [user, setUser] = React.useContext(LoginContext);
+  const [user, ] = React.useContext(LoginContext);
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {

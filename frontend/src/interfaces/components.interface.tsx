@@ -86,7 +86,7 @@ export interface InstanceInterface<T> {
 }
 
 export interface CreateInstanceModalInterface {
-  parentId: Number | String
+  parentId: number | string
   onSubmit: () => void
   isOpen: boolean
   setOpen: (open: boolean) => void

@@ -8,7 +8,6 @@ import { useMutation } from 'react-query'
 // Mui joy components
 import IconButton from '@mui/joy/IconButton'
 import ListItem from '@mui/joy/ListItem'
-import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import ListItemContent from '@mui/joy/ListItemContent'
 import Typography from '@mui/joy/Typography'
@@ -50,7 +49,7 @@ function TaskInstanceItem({data: task, refetchParentData}: InstanceInterface<Tas
 
       <ListItemContent>
         
-        <Typography>{task.description ? task.description : "Task"}</Typography>
+        <Typography>{task.description ? task.description : 'Task'}</Typography>
 
         <Typography level='body-sm' textColor='text.tertiary'>
           {

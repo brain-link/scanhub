@@ -4,7 +4,6 @@ import Stack from '@mui/joy/Stack';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
-import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 
 import { loginApi } from '../api'
@@ -24,8 +23,8 @@ function Login(props: {onLogin: (user: User) => void}) {
   const [loginErrorState, setLoginErrorState] = useState<LoginErrorState>(LoginErrorState.NoError);
   const [loginRequestInProgress, setLoginRequestInProgress] = useState<boolean>(false);
 
-  const [username, setUsername] = React.useState("")
-  const [password, setPassword] = React.useState("")
+  const [username, setUsername] = React.useState('')
+  const [password, setPassword] = React.useState('')
 
   return (
     <Stack
@@ -40,7 +39,7 @@ function Login(props: {onLogin: (user: User) => void}) {
       </Typography>
 
       <form onSubmit={(event) => {
-        console.log("User: ", username, "; Password", password)
+        console.log('User: ', username, '; Password', password)
         event.preventDefault()  // do not reload the page
         if (username == '' || password == '') {
           setLoginErrorState(LoginErrorState.EmptyUsernameOrPassword)
