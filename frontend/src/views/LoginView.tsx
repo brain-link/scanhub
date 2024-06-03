@@ -1,8 +1,11 @@
-import Box from '@mui/joy/Box';
+import React, { useState } from 'react';
+
 import Stack from '@mui/joy/Stack';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
-import React, { useState } from 'react';
+import Typography from '@mui/joy/Typography';
+import FormControl from '@mui/joy/FormControl';
+import FormLabel from '@mui/joy/FormLabel';
 
 import { loginApi } from '../api'
 import { User } from '../generated-client/userlogin'
@@ -21,18 +24,25 @@ function Login(props: {onLogin: (user: User) => void}) {
   const [loginErrorState, setLoginErrorState] = useState<LoginErrorState>(LoginErrorState.NoError);
   const [loginRequestInProgress, setLoginRequestInProgress] = useState<boolean>(false);
 
+  const [username, setUsername] = React.useState("")
+  const [password, setPassword] = React.useState("")
+
   return (
-    <Box sx={{width: '20%', height: '20%', margin: 'auto'}}>
-      <h1 style={{textAlign: 'center'}}>
-        Welcome to Scanhub!
-      </h1>
-      <h2>
-        Login
-      </h2>
+    <Stack
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+      sx={{height: '70vh'}}
+    >
+      <Typography level="title-lg" style={{textAlign: 'center'}}>
+        ScanHub
+      </Typography>
 
       <form onSubmit={(event) => {
+        console.log("User: ", username, "; Password", password)
         event.preventDefault()  // do not reload the page
-        if (event.currentTarget.username_input.value == '' || event.currentTarget.password_input.value == '') {
+        if (username == '' || password == '') {
           setLoginErrorState(LoginErrorState.EmptyUsernameOrPassword)
           console.log('Username or password must not be empty.')
         }
@@ -43,9 +53,7 @@ function Login(props: {onLogin: (user: User) => void}) {
           
           // TODO consider sending a secure password hash like argon2 instead of the password itself
           // on the server this hash could be hashed again, just like if it were the password
-          loginApi.loginApiV1UserloginLoginPost(event.currentTarget.username_input.value, 
-                                                event.currentTarget.password_input.value,
-                                                'password')
+          loginApi.loginApiV1UserloginLoginPost(username, password, 'password')
           .then((result) => {
             setLoginRequestInProgress(false)
             props.onLogin(result.data);
@@ -62,20 +70,41 @@ function Login(props: {onLogin: (user: User) => void}) {
           });
         }
       }}>
-        <Stack spacing={1}>
-          <div>User:</div>
-          <Input id="username_input" />
-          <div>Password:</div>
-          <Input type="password" id="password_input" />
+        <Stack gap={1.5} sx={{width: 250}}>
+
+          <Stack>
+            <FormLabel>Username</FormLabel>
+            <Input 
+              placeholder="user"
+              onChange={(e) => {
+                e.preventDefault()
+                setUsername(e.target.value)
+              }}
+            />
+          </Stack>
+          
+          <Stack>
+            <FormLabel>Password</FormLabel>
+            <Input 
+              type="password"
+              placeholder="password"
+              onChange={(e) => {
+                e.preventDefault()
+                setPassword(e.target.value)
+              }}
+            />
+          </Stack>
+
           <Button type="submit" loading={loginRequestInProgress} fullWidth={true}>
             Login
           </Button>
-          {loginErrorState == LoginErrorState.InvalidCredentials ? <Alert color="warning">Invallid username or password.</Alert> : null}
-          {loginErrorState == LoginErrorState.OtherError ? <Alert color="warning">Other error at login, please talk to the developer.</Alert> : null}
-          {loginErrorState == LoginErrorState.EmptyUsernameOrPassword ? <Alert color="warning">Username or password must not be empty.</Alert> : null}
+
         </Stack>
       </form>
-    </Box>
+      {loginErrorState == LoginErrorState.InvalidCredentials ? <Alert color="warning">Invallid username or password.</Alert> : null}
+      {loginErrorState == LoginErrorState.OtherError ? <Alert color="warning">Other error at login, please talk to the developer.</Alert> : null}
+      {loginErrorState == LoginErrorState.EmptyUsernameOrPassword ? <Alert color="warning">Username or password must not be empty.</Alert> : null}
+    </Stack>
   )
 }
 
