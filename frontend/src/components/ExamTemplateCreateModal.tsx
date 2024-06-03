@@ -1,8 +1,9 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientTable.tsx is responsible for rendering the patient table view.
-import Typography from '@mui/joy/Typography'
+import * as React from 'react'
 
+import Typography from '@mui/joy/Typography'
 import Button from '@mui/joy/Button'
 import ModalDialog from '@mui/joy/ModalDialog'
 import ModalClose from '@mui/joy/ModalClose'
@@ -11,8 +12,6 @@ import Input from '@mui/joy/Input'
 import FormLabel from '@mui/joy/FormLabel'
 import Modal from '@mui/joy/Modal'
 import Stack from '@mui/joy/Stack'
-import * as React from 'react'
-import { useContext } from 'react'
 
 import { useMutation } from 'react-query'
 import { BaseExam, ExamOut } from '../generated-client/exam';
@@ -31,15 +30,13 @@ const formContent = [
 export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamOut>) {
 
   const [exam, setExam] = React.useState<BaseExam>({patient_id: undefined, name: '', country: 'germany', site: '', address: '', creator: '', status: '', is_template: true, is_frozen: false})
-
-  // const [user, setUser] = useContext(LoginContext);
-  const user = useContext(LoginContext);
+  const [user, setUser] = React.useContext(LoginContext);
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
+
     await examApi.createExamTemplateApiV1ExamTemplatesPost(
-      exam,
-      {headers: {Authorization: 'Bearer ' + user?.access_token}}
+      exam, {headers: {Authorization: 'Bearer ' + user?.access_token}}
     )
     .then((response) => { props.onSubmit(response.data) })
     .catch((err) => { console.log(err) })

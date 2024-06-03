@@ -50,7 +50,7 @@ export function RouteConfiguration() {
         <Route path=':patientId' element={<PatientIndex />}>
           <Route path=':examId' element={<PatientIndex />} />
         </Route>
-        <Route path='/templates' element={<Templates />} />
+        <Route path='/templates/:examId/:workflowId' element={<Templates />} />
       </Route>
       <Route 
         path='/login' 

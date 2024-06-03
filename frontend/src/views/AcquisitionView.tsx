@@ -1,6 +1,8 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // PatientIndex.tsx is responsible for rendering the patient view. It is the entry point for the patient view.
+
+import * as React from 'react'
 // import AddSharpIcon from '@mui/icons-material/AddSharp'
 // import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp'
 // import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp'
@@ -16,8 +18,7 @@ import Accordion from '@mui/joy/Accordion'
 import Tooltip from '@mui/joy/Tooltip'
 import AccordionDetails from '@mui/joy/AccordionDetails'
 import AccordionSummary from '@mui/joy/AccordionSummary'
-import * as React from 'react'
-import { useContext } from 'react';
+
 import { useQuery } from 'react-query'
 // import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -50,8 +51,7 @@ function PatientIndex() {
   // List of jobs
   // const [workflows, setWorkflows] = React.useState<WorkflowOut[] | undefined>(undefined)
 
-  // const [user, setUser] = useContext(LoginContext);
-  const user = useContext(LoginContext);
+  const [user, ] = React.useContext(LoginContext);
 
   // useQuery for caching the fetched data
   const {

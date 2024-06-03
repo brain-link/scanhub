@@ -77,6 +77,7 @@ export interface PatientTableInterface {
 export interface TemplateItemInterface<T> {
   item: T
   onClicked: () => void
+  onDeleted: () => void
 }
 
 export interface CreateInstanceModalInterface {

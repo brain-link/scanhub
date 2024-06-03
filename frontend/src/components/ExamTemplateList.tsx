@@ -21,9 +21,7 @@ import LoginContext from '../LoginContext'
 export default function ExamTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
-
-  // const [user, setUser] = useContext(LoginContext);
-  const user = useContext(LoginContext);
+  const [user, ] = useContext(LoginContext);
 
   // const {data: exams, isLoading, isError, refetch} = useQuery<ExamOut[]>({
   const {data: exams, refetch} = useQuery<ExamOut[]>({
@@ -66,6 +64,7 @@ export default function ExamTemplateList() {
             key={idx}
             item={exam}
             onClicked={() => {}}
+            onDeleted={() => {refetch()}}
           />
         ))
       }

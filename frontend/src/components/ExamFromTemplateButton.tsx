@@ -27,9 +27,7 @@ export default function ExamFromTemplateButton(props: CreateInstanceModalInterfa
 
   const params = useParams()
 
-  // const [user, setUser] = useContext(LoginContext);
-  const user = useContext(LoginContext);
-
+  const [user, setUser] = useContext(LoginContext);
   const [modalOpen, setModalOpen] = React.useState(false)
 
   // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({

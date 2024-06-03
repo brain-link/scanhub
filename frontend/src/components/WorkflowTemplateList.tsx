@@ -22,8 +22,7 @@ export default function WorkflowTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
 
-  // const [user, setUser] = useContext(LoginContext);
-  const user = useContext(LoginContext);
+  const [user, ] = useContext(LoginContext);
 
   // const {data: workflows, isLoading, isError, refetch} = useQuery<WorkflowOut[]>({
   const {data: workflows, refetch} = useQuery<WorkflowOut[]>({
@@ -53,9 +52,7 @@ export default function WorkflowTemplateList() {
       <WorkflowTemplateCreateModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
-        onSubmit={
-          () => { refetch() }
-        }
+        onSubmit={() => {refetch()}}
         onClose={() => {}}
       />
 
@@ -65,6 +62,7 @@ export default function WorkflowTemplateList() {
             key={index}
             item={workflow}
             onClicked={() => {}}
+            onDeleted={() => {refetch()}}
           />
         ))
       }

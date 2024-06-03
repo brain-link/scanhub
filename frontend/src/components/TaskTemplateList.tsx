@@ -20,9 +20,7 @@ import LoginContext from '../LoginContext'
 export default function TaskTemplateList() {
 
   const [modalOpen, setModalOpen] = React.useState(false)
-
-  // const [user, setUser] = useContext(LoginContext);
-  const user = React.useContext(LoginContext);
+  const [user, ] = React.useContext(LoginContext);
 
   // const {data: tasks, isLoading, isError, refetch} = useQuery<TaskOut[]>({
   const {data: tasks, refetch} = useQuery<TaskOut[]>({
@@ -64,6 +62,7 @@ export default function TaskTemplateList() {
             key={index}
             item={task}
             onClicked={() => {}}
+            onDeleted={() => {refetch()}}
           />
         ))
       }
