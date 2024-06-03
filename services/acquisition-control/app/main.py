@@ -3,14 +3,16 @@
 
 """Main file for the acquisition control service."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.acquisitioncontrol import router
+from scanhub_libraries.security import get_current_user
 
 app = FastAPI(
     openapi_url="/api/v1/mri/acquisitioncontrol/openapi.json",
     docs_url="/api/v1/mri/acquisitioncontrol/docs",
+    dependencies=[Depends(get_current_user)]
 )
 
 # Wildcard ["*"] excludes eeverything that involves credentials

@@ -1,9 +1,9 @@
-FROM python:3.10-slim-bullseye
+ARG BASE_IMG=ghcr.io/brain-link/scanhub/scanhub-base:latest
+FROM $BASE_IMG
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install --upgrade pip
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 

@@ -5,12 +5,13 @@
 
 import logging
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from database.mongodb import close_mongo_connection, connect_to_mongo
 from endpoints import health, mri_sequence_endpoints
+from scanhub_libraries.security import get_current_user
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -20,6 +21,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     openapi_url="/api/v1/mri/sequences/openapi.json",
     docs_url="/api/v1/mri/sequences/docs",
+    dependencies=[Depends(get_current_user)]
 )
 
 #   Wildcard ["*"] excludes eeverything that involves credentials

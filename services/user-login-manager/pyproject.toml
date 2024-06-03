@@ -1,0 +1,67 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "exam-manager"
+version = "0.0.1"
+description = "Provides functionality for user login and user management."
+authors = [
+    "David Schote <david.schote@brain-link.de>", 
+    "Christoph Dinh <christoph.dinh@brain-link.de>",
+    "Ben Wilhelm <ben.wilhelm@uniklinik-freiburg.de>"
+]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+pydantic = "^1.10.0"
+python = ">=3.10,<3.11"
+fastapi = "^0.96.0"
+asyncpg = "^0.27.0"
+uvicorn = "^0.22.0"
+kafka-python = "^2.0.2"
+psycopg2-binary = "^2.9.6"
+python-multipart = "^0.0.6"
+async-sqlalchemy = "^1.0.0"
+passlib = {extras = ["argon2"], version = "^1.7.4"}
+
+[tool.poetry.group.test.dependencies]
+coverage = "*"
+codecov = "*"
+pytest = "*"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+sphinx_rtd_theme = "*"
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.1.11"
+mypy = "^1.8.0"
+
+
+[tool.ruff]
+src = ["app"]
+line-length = 120
+indent-width = 4
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enable linters
+# W = pycodestyle, F = Pyflakes, S = flake8-bandit, I = isort, N = pep8-naming, D = pydocstyle
+select = ["W", "F", "S", "I", "N", "D"]
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.mypy]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+python_version = "3.10"
+ignore_missing_imports = true
+mypy_path = "app"
