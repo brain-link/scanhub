@@ -9,11 +9,11 @@ import { Route, Routes, Navigate, useNavigate } from 'react-router-dom'
 import LoginContext from './LoginContext';
 // Import views
 import App from './views/App'
-import PatientIndex from './views/PatientIndex'
+import PatientIndex from './views/AcquisitionView'
 import PatientListView from './views/PatientListView'
-import Login from './views/Login'
+import Login from './views/LoginView'
 // import RecordViewer from './views/RecordViewer'
-import Templates from './views/Templates'
+import Templates from './views/TemplatesView'
 // import models
 
 export function RouteConfiguration() {
