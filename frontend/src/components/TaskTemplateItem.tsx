@@ -7,7 +7,6 @@ import Typography from '@mui/joy/Typography'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import Accordion from '@mui/joy/Accordion'
-import AccordionGroup from '@mui/joy/AccordionGroup'
 import AccordionSummary from '@mui/joy/AccordionSummary'
 import AccordionDetails from '@mui/joy/AccordionDetails'
 // import AddIcon from '@mui/icons-material/Add';
@@ -53,8 +52,8 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
           </AccordionSummary>
           <AccordionDetails>
             {
-              prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact) => (
-                <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}: {artifact[1]}</Typography>
+              prop.item.artifacts && Object.entries(prop.item.artifacts).map((artifact, index) => (
+                <Typography key={index} level='body-sm' textColor='text.tertiary'>{artifact[0]}: {artifact[1]}</Typography>
               ))
             }
           </AccordionDetails>
@@ -103,8 +102,8 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
           </AccordionSummary>
           <AccordionDetails>
             {
-              prop.item.destinations && Object.entries(prop.item.destinations).map((destination) => (
-                <Typography level='body-sm' textColor='text.tertiary'>{destination[0]}: {destination[1]}</Typography>
+              prop.item.destinations && Object.entries(prop.item.destinations).map((destination, index) => (
+                <Typography key={index} level='body-sm' textColor='text.tertiary'>{destination[0]}: {destination[1]}</Typography>
               ))
             }
           </AccordionDetails>

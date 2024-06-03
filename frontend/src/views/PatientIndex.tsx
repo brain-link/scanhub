@@ -15,7 +15,6 @@ import Typography from '@mui/joy/Typography'
 import Accordion from '@mui/joy/Accordion'
 import Tooltip from '@mui/joy/Tooltip'
 import AccordionDetails from '@mui/joy/AccordionDetails'
-import AccordionGroup from '@mui/joy/AccordionGroup'
 import AccordionSummary from '@mui/joy/AccordionSummary'
 import * as React from 'react'
 import { useContext } from 'react';
@@ -148,16 +147,17 @@ function PatientIndex() {
         {/* List of exams */}
         <List sx={{ pt: 0 }}>
           {
-            exams?.map((exam) => (
+            exams?.map((exam, examIndex) => (
 
               <Tooltip
+                key={examIndex}
                 placement="right"
                 variant="outlined"
                 arrow
                 title={<ExamInstanceInfo exam={exam} />}
               >
 
-                <Accordion key={`exam-${exam.id}`}>
+                <Accordion>
 
                   <AccordionSummary>
                     <ExamItem data={exam} refetchParentData={refetchExams} isSelected={false} />
@@ -165,9 +165,10 @@ function PatientIndex() {
 
                   <AccordionDetails>
                     {
-                      exam.workflows?.map(workflow => (
+                      exam.workflows?.map((workflow, workflowIndex) => (
 
                         <Tooltip
+                          key={workflowIndex}
                           placement="right"
                           variant="outlined"
                           arrow

@@ -59,8 +59,8 @@ function ExamInstanceInfo(props: {exam: ExamOut}) {
 
       <Typography fontSize="sm">Status</Typography>
       <Stack direction="row" spacing={0.5}>
-        <Chip size="sm" color={props.exam.is_template ? "success" : "danger"} sx={{ fontWeight: 'lg' }}>Template</Chip>
-        <Chip size="sm" color={props.exam.is_frozen ? "success" : "danger"} sx={{ fontWeight: 'lg' }}>Frozen</Chip>
+        <Chip size="sm" color={props.exam.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>Template</Chip>
+        <Chip size="sm" color={props.exam.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>Frozen</Chip>
       </Stack>
 
     </Box>

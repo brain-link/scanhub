@@ -4,8 +4,6 @@
 
 import * as React from 'react'
 import { useMutation } from 'react-query'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 
 // Mui joy components
 import IconButton from '@mui/joy/IconButton'
@@ -21,20 +19,19 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
 
 // Sub-components, interfaces, client
-import ExamModal from './ExamModal'
+// import ExamModal from './ExamModal'
 import { ComponentProps } from '../interfaces/components.interface'
 import { ExamOut } from '../generated-client/exam'
 import { examApi } from '../api'
 
 
-function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
-  const params = useParams()
-  const navigate = useNavigate()
+// function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
+function ExamInstanceItem({data: exam, refetchParentData}: ComponentProps<ExamOut>) {
 
   // Context: Delete and edit options, anchor for context location
   const [contextOpen, setContextOpen] = React.useState<string | null>(null)
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  // const [examModalOpen, setExamModalOpen] = React.useState(false)
 
   const handleContextClose = () => {
     setAnchorEl(null)
@@ -49,10 +46,6 @@ function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: Compone
 
   const deleteExam = useMutation(async () => {
     await examApi.examDeleteApiV1ExamExamIdDelete(exam.id).then(() => {
-      if (String(params.examId) === exam.id) {
-        // Reset router path if this exam id is in the path
-        navigate(`/${params.patientId}`)
-      }
       refetchParentData()
     })
   })
@@ -71,7 +64,7 @@ function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: Compone
 
   return (
 
-    <ListItem sx={{width: "100%"}}>
+    <ListItem sx={{width: '100%'}}>
 
       <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
         <SnippetFolderSharpIcon />

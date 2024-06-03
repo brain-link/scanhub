@@ -44,9 +44,9 @@ function WorkflowInstanceInfo(props: {workflow: WorkflowOut}) {
 
       <Typography fontSize="sm">Status</Typography>
       <Stack direction="row" spacing={0.5}>
-        <Chip size="sm" color={props.workflow.is_template ? "success" : "danger"} sx={{ fontWeight: 'lg' }}>Template</Chip>
-        <Chip size="sm" color={props.workflow.is_frozen ? "success" : "danger"} sx={{ fontWeight: 'lg' }}>Frozen</Chip>
-        <Chip size="sm" color={props.workflow.is_finished ? "success" : "danger"} sx={{ fontWeight: 'lg' }}>Finished</Chip>
+        <Chip size="sm" color={props.workflow.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>Template</Chip>
+        <Chip size="sm" color={props.workflow.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>Frozen</Chip>
+        <Chip size="sm" color={props.workflow.is_finished ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>Finished</Chip>
       </Stack>
       
     </Box>

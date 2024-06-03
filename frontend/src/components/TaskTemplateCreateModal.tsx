@@ -21,7 +21,7 @@ import Option from '@mui/joy/Option';
 
 
 import { useMutation } from 'react-query'
-import { BaseTask, TaskOut, TaskType } from "../generated-client/exam";
+import { BaseTask, TaskOut, TaskType } from '../generated-client/exam';
 import { taskApi } from '../api';
 import { ModalComponentProps } from '../interfaces/components.interface'
 import LoginContext from '../LoginContext'
@@ -34,16 +34,16 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
   })
   
   // New argument
-  const [argKey, setArgKey] = React.useState<string>("")
-  const [argVal, setArgVal] = React.useState<string>("")
+  const [argKey, setArgKey] = React.useState<string>('')
+  const [argVal, setArgVal] = React.useState<string>('')
 
   // New Destination
-  const [destinationKey, setDestinationKey] = React.useState<string>("")
-  const [destinationVal, setDestinationVal] = React.useState<string>("")
+  const [destinationKey, setDestinationKey] = React.useState<string>('')
+  const [destinationVal, setDestinationVal] = React.useState<string>('')
 
   // New Artifact
-  const [artifactKey, setArtifactKey] = React.useState<string>("")
-  const [artifactVal, setArtifactVal] = React.useState<string>("")
+  const [artifactKey, setArtifactKey] = React.useState<string>('')
+  const [artifactVal, setArtifactVal] = React.useState<string>('')
 
   // const [user, setUser] = useContext(LoginContext);
   const user = useContext(LoginContext);
@@ -154,8 +154,8 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
             </Stack>
 
             {
-              task && Object.entries(task.args).map((arg) => (
-                <Stack direction="row" spacing={2} alignItems="center">
+              task && Object.entries(task.args).map((arg, index) => (
+                <Stack direction="row" spacing={2} alignItems="center" key={index}>
                   <Typography level='body-sm' textColor='text.tertiary'>{arg[0]}: {arg[1]}</Typography>
                   <IconButton
                     size="sm"
@@ -204,8 +204,8 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
             </Stack>
 
             {
-              task && Object.entries(task.destinations).map((destination) => (
-                <Stack direction="row" spacing={2} alignItems="center">
+              task && Object.entries(task.destinations).map((destination, index) => (
+                <Stack direction="row" spacing={2} alignItems="center" key={index}>
                   <Typography level='body-sm' textColor='text.tertiary'>{destination[0]}: {destination[1]}</Typography>
                   <IconButton
                     size="sm"
@@ -255,8 +255,8 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
             </Stack>
 
             {
-              task && Object.entries(task.artifacts).map((artifact) => (
-                <Stack direction="row" spacing={2} alignItems="center">
+              task && Object.entries(task.artifacts).map((artifact, index) => (
+                <Stack direction="row" spacing={2} alignItems="center" key={index}>
                   <Typography level='body-sm' textColor='text.tertiary'>{artifact[0]}: {artifact[1]}</Typography>
                   <IconButton
                     size="sm"

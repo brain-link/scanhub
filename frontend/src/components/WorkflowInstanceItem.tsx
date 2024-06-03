@@ -4,8 +4,6 @@
 
 import * as React from 'react'
 import { useMutation } from 'react-query'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 
 // Mui joy components
 import IconButton from '@mui/joy/IconButton'
@@ -26,7 +24,7 @@ import { WorkflowOut } from '../generated-client/exam'
 import { workflowsApi } from '../api'
 
 
-function WorkflowInstanceItem({ data: workflow, refetchParentData, isSelected }: ComponentProps<WorkflowOut>) {
+function WorkflowInstanceItem({data: workflow, refetchParentData}: ComponentProps<WorkflowOut>) {
 
   // Context: Delete and edit options, anchor for context location
   const [contextOpen, setContextOpen] = React.useState<string | null>(null)
@@ -54,7 +52,7 @@ function WorkflowInstanceItem({ data: workflow, refetchParentData, isSelected }:
 
   return (
 
-    <ListItem sx={{width: "100%"}}>
+    <ListItem sx={{width: '100%'}}>
 
       <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
         <SnippetFolderSharpIcon />
