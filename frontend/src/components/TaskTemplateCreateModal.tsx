@@ -87,7 +87,15 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
             />
 
             <FormLabel>Type</FormLabel>
-            <Select defaultValue={task.type} placeholder={task.type} size="sm">
+            <Select 
+              defaultValue={task.type} 
+              placeholder={task.type} 
+              size="sm"
+              onChange={(e: React.SyntheticEvent | null, key: TaskType | null) => {
+                // Only set type if key is not null
+                key ? setTask({ ...task, ['type']: TaskType[key as keyof typeof TaskType] }) : () => {}
+              }}
+            >
               {
                 Object.keys(TaskType).map((key) => (
                   <Option key={key} value={key}>
