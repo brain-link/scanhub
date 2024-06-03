@@ -226,11 +226,11 @@ Module Contents
 
 
    .. py:attribute:: artifacts
-      :type:  sqlalchemy.orm.Mapped[dict[str, list[dict[str, str]]]]
+      :type:  sqlalchemy.orm.Mapped[dict[str, str]]
 
 
-   .. py:attribute:: task_destinations
-      :type:  sqlalchemy.orm.Mapped[list[dict[str, str]]]
+   .. py:attribute:: destinations
+      :type:  sqlalchemy.orm.Mapped[dict[str, str]]
 
 
    .. py:attribute:: status
