@@ -74,12 +74,20 @@ export interface PatientTableInterface {
   patients: PatientOut[]
 }
 
-export interface TemplateItemInterface<T> {
-  item: T
+export interface TemplateInterface<T> {
+  data: T
   onClicked: () => void
   onDeleted: () => void
 }
 
+export interface InstanceInterface<T> {
+  data: T
+  refetchParentData: () => void
+}
+
 export interface CreateInstanceModalInterface {
+  parentId: Number | String
   onSubmit: () => void
+  isOpen: boolean
+  setOpen: (open: boolean) => void
 }
