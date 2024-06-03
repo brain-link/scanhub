@@ -25,8 +25,8 @@ import client from '../client/exam-tree-queries'
 import { JobComponentProps } from '../interfaces/components.interface'
 import { Job } from '../interfaces/data.interface'
 import { navigation } from '../utils/size_vars'
-import DeviceItem from './Device'
-import JobModal from './JobModal'
+import DeviceItem from './_Device'
+import JobModal from './_JobModal'
 import SequenceViewer from './SequencePlot'
 
 function JobItem({ data: job, devices, sequences, refetchParentData }: JobComponentProps) {

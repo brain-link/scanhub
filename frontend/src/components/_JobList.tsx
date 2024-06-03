@@ -25,8 +25,8 @@ import { Device } from '../interfaces/data.interface'
 import { MRISequence } from '../interfaces/mri-data.interface'
 import { patientView } from '../utils/size_vars'
 import AlertItem from './AlertItem'
-import JobItem from './JobItem'
-import JobModal from './JobModal'
+import JobItem from './_JobItem'
+import JobModal from './_JobModal'
 import SequenceUpload from './SequenceUpload'
 
 function JobList({ data: jobs, refetchParentData, isSelected: isVisible }: ComponentProps<Job[]>) {

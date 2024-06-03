@@ -11,7 +11,7 @@ import * as React from 'react'
 import CornerstoneViewport from 'react-cornerstone-viewport'
 
 import DicomViewerToolbar, { tools } from '../components/DicomViewerTools'
-import ExamTree from '../components/ExamTree'
+import ExamTree from '../components/_ExamTree'
 import initCornerstone from '../utils/InitCornerstone'
 import { navigation } from '../utils/size_vars'
 
