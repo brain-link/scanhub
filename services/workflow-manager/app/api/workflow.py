@@ -14,6 +14,11 @@ import json
 
 from uuid import UUID
 
+from datetime import datetime
+
+import operator
+import json
+
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
 from scanhub_libraries.models import TaskOut, WorkflowOut
@@ -33,10 +38,10 @@ from .producer import Producer
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
 
-class RecoJob(BaseModel):
-    """RecoJob is a pydantic model for a reco job."""  # noqa: E501
+class TaskEvent(BaseModel):
+    """Task Event"""  # noqa: E501
 
-    record_id: UUID
+    task_id: str
     input: dict[str, str] #StrictStr
 
 router = APIRouter()
@@ -74,19 +79,17 @@ async def process(workflow_id: UUID | str):
         workflow_raw = response.json()
         workflow = WorkflowOut(**workflow_raw)
         
-        # Debugging
-        # print(workflow)
         print("Workflow tasks: ")
-        print(len(workflow.tasks))
+
+        # Sort the tasks by datetime_created
+        workflow.tasks.sort(key=operator.attrgetter('datetime_created'))
 
         task: TaskOut
         for task in workflow.tasks:
             # Debugging
-            print("Task: ")
             # print(task.id, end="\n")
             # print(task.type, end="\n")
             # print(task.description if task.description else "No description", end="\n")
-
 
             if task.type == "DEVICE_TASK":
                 print("Device task:") 
@@ -95,21 +98,21 @@ async def process(workflow_id: UUID | str):
                 # # Send message to Kafka
                 # await producer.send("mri_cartesian_reco", reco_job.dict())
 
-
             if task.type == "PROCESSING_TASK":
                 # print(task.destinations, end="\n")
                 print("Processing task:")
 
                 topic = task.destinations.get("topic")
+
                 print(topic, end="\n")
 
-                reco_job = RecoJob(record_id=task.id, input=task.args)
+                # task_event = TaskEvent(task_id=str(task.id), input=task.args)
 
-                print(task, end="\n")
+                # print(task_event, end="\n")
 
                 # # Send message to Kafka
                 # await producer.send("mri_cartesian_reco", reco_job.dict())
-                await producer.send(topic, reco_job)
+                await producer.send(topic, str(task.id))
 
 
 
