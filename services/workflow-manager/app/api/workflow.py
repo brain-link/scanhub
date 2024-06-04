@@ -42,7 +42,7 @@ class TaskEvent(BaseModel):
     """Task Event"""  # noqa: E501
 
     task_id: str
-    input: dict[str, str] #StrictStr
+    input: dict[str, str] 
 
 router = APIRouter()
 
@@ -104,15 +104,17 @@ async def process(workflow_id: UUID | str):
 
                 topic = task.destinations.get("topic")
 
+                task_event = TaskEvent(task_id=str(task.id), input=task.args)
+
+                print("Task event", end="\n")
+                print(task_event, end="\n")
+
+                print("Send to topic", end="\n")
                 print(topic, end="\n")
-
-                # task_event = TaskEvent(task_id=str(task.id), input=task.args)
-
-                # print(task_event, end="\n")
 
                 # # Send message to Kafka
                 # await producer.send("mri_cartesian_reco", reco_job.dict())
-                await producer.send(topic, str(task.id))
+                await producer.send(topic, task_event.dict())
 
 
 
