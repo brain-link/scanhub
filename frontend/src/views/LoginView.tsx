@@ -100,7 +100,7 @@ function Login(props: {onLogin: (user: User) => void}) {
 
         </Stack>
       </form>
-      {loginErrorState == LoginErrorState.InvalidCredentials ? <Alert color="warning">Invallid username or password.</Alert> : null}
+      {loginErrorState == LoginErrorState.InvalidCredentials ? <Alert color="warning">Invalid username or password.</Alert> : null}
       {loginErrorState == LoginErrorState.OtherError ? <Alert color="warning">Other error at login, please talk to the developer.</Alert> : null}
       {loginErrorState == LoginErrorState.EmptyUsernameOrPassword ? <Alert color="warning">Username or password must not be empty.</Alert> : null}
     </Stack>

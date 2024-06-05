@@ -7,6 +7,7 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 // import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp';
 import BuildSharpIcon from '@mui/icons-material/BuildSharp';
+import Person2SharpIcon from '@mui/icons-material/Person2Sharp';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
 import PersonSharpIcon from '@mui/icons-material/PersonSharp'
@@ -33,6 +34,7 @@ import { loginApi } from '../api'
 const menuItems = [
   { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon/> },
   { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon/> },
+  { id: 2, text: 'Users', link: '/users', icon: <Person2SharpIcon/> },
 ]
 
 function ColorSchemeToggle() {

@@ -14,6 +14,7 @@ import PatientListView from './views/PatientListView'
 import Login from './views/LoginView'
 // import RecordViewer from './views/RecordViewer'
 import Templates from './views/TemplatesView'
+import UserManagement from './components/UserManagement';
 // import models
 
 export function RouteConfiguration() {
@@ -41,29 +42,22 @@ export function RouteConfiguration() {
     // </Routes>
 
     <Routes>
-      <Route 
-        path='/'
-        element={user ? <App /> : <Navigate to="/login" />}
-      >
-        <Route index element={<PatientListView />} />
-        {/* Using multiple optional parameters in patient path, denoted by the question mark */}
-        <Route path=':patientId' element={<PatientIndex />}>
-          <Route path=':examId' element={<PatientIndex />} />
+      <Route path='/'          element={user ? <App /> : <Navigate to="/login" />} >
+        <Route index             element={<PatientListView />} />
+        <Route path=':patientId' element={<PatientIndex />} >
+          <Route path=':examId'    element={<PatientIndex />} />
         </Route>
         <Route path='/templates' element={<Templates />} />
+        <Route path='/users'     element={<UserManagement />} />
       </Route>
-      <Route 
-        path='/login' 
-        element={
-          <Login onLogin={
-            (newuser) => {
-              console.log('Login confirmed.')
-              setUser(newuser);
-              navigate('/');
-            }
-          }/>
-        } 
-      />
+
+      <Route path='/login'     element={<Login onLogin={
+        (newuser) => {
+          console.log('Login confirmed.');
+          setUser(newuser);
+          navigate('/');
+        }
+      } /> } />
     </Routes>
   )
 }
