@@ -68,6 +68,7 @@ export interface ModalComponentProps<T> {
   onClose: () => void
   setOpen: (open: boolean) => void
   isOpen: boolean
+  setAlert?: (alert: string | null) => void
 }
 
 export interface PatientTableInterface {
