@@ -34,6 +34,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
                     first_name=responsebody_json["first_name"],
                     last_name=responsebody_json["last_name"],
                     email=responsebody_json["email"],
+                    role=responsebody_json["role"],
                     access_token="",
                     token_type="",
                     last_activity_unixtime=None)

@@ -12,7 +12,7 @@ import time
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from scanhub_libraries.models import User
+from scanhub_libraries.models import User, UserRole
 from scanhub_libraries.security import oauth2_scheme
 from app.db import UserSQL
 from app import dal
@@ -31,7 +31,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     Parameters
     ----------
     access_token 
-        User token (HTTP Header: "Authorization: Bearer <access_token>")
+        User token (From HTTP Header: "Authorization: Bearer <access_token>")
 
     Returns
     -------
@@ -53,6 +53,35 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid token.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+# @router.get("/getcurrentuseradmin", status_code=200, tags=["user"])
+async def get_current_user_admin(current_user: Annotated[str, Depends(get_current_user)]) -> User:
+    """Get current user, only if user is admin.
+
+    Parameters
+    ----------
+    access_token 
+        User token (From HTTP Header: "Authorization: Bearer <access_token>")
+
+    Returns
+    -------
+        User pydantic model, the user data of the current user (admin).
+
+    Raises
+    ------
+    HTTPException
+        401: Unauthorized if the token is invalid or user is not admin.
+    """
+    if current_user.role == UserRole.admin:
+        return current_user
+
+    print("User is not admin.")
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="User is not admin.",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
@@ -119,6 +148,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 first_name=user_db.first_name, 
                 last_name=user_db.last_name, 
                 email=user_db.email,
+                role=user_db.role,
                 access_token=user_db.access_token, 
                 token_type="bearer",
                 last_activity_unixtime=None
@@ -133,6 +163,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 first_name=user_db.first_name, 
                 last_name=user_db.last_name, 
                 email=user_db.email,
+                role=user_db.role,
                 access_token=newtoken, 
                 token_type="bearer",
                 last_activity_unixtime=None
@@ -174,6 +205,7 @@ async def get_user_out(user_db: UserSQL) -> User:
         first_name=user_db.first_name,
         last_name=user_db.last_name,
         email=user_db.email,
+        role=user_db.role,
         access_token="",
         token_type="",
         last_activity_unixtime=user_db.last_activity_unixtime
@@ -181,8 +213,10 @@ async def get_user_out(user_db: UserSQL) -> User:
 
 
 @router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])
-async def get_user_list(current_user: Annotated[User, Depends(get_current_user)]) -> list[User]:
-    """Get all users endpoint.
+async def get_user_list(current_user: Annotated[User, Depends(get_current_user_admin)]) -> list[User]:
+    """
+    Get all users endpoint.
+    Only for admins.
 
     Returns
     -------
@@ -196,8 +230,10 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user)]
 
 
 @router.post("/createuser", status_code=201, tags=["user"])
-async def create_user(current_user: Annotated[User, Depends(get_current_user)], new_user: User):
-    """Create new patient database entry.
+async def create_user(current_user: Annotated[User, Depends(get_current_user_admin)], new_user: User):
+    """
+    Create new patient database entry.
+    Only for admins.
 
     Parameters
     ----------
@@ -232,6 +268,7 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user)], 
         first_name=new_user.first_name,
         last_name=new_user.last_name,
         email=new_user.email,
+        role=new_user.role.value,
         password_hash=hashed_received_password,
         salt=salt,
         access_token=None,
@@ -241,20 +278,34 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user)], 
 
 
 @router.delete("/deleteuser", response_model={}, status_code=204, tags=["user"])
-async def user_delete(current_user: Annotated[User, Depends(get_current_user)], username_to_delete: str) -> None:
-    """Delete an existing user.
+async def user_delete(current_user: Annotated[User, Depends(get_current_user_admin)], username_to_delete: str) -> None:
+    """
+    Delete an existing user.
+    Only for admins.
 
     Parameters
     ----------
-    user_to_delete
-        User to delete.
+    username_to_delete
+        Name of the user to delete.
 
     Raises
     ------
     HTTPException
         404: Not found
     """
-    if len(await get_user_list(current_user)) == 1:
+    userlist = await get_user_list(current_user)
+    if len(userlist) == 1:
         raise HTTPException(status_code=403, detail="Cannot delete last user.")
+    if (await dal.get_user_data(username_to_delete)).role == UserRole.admin.value:
+        at_least_two_admins = 0
+        for user in userlist:
+            if user.role == UserRole.admin:
+                at_least_two_admins += 1
+                if at_least_two_admins >= 2:
+                    break
+        if at_least_two_admins < 2:
+            raise HTTPException(status_code=403, detail="Cannot delete last admin.")
+    if current_user.username == username_to_delete:
+        raise HTTPException(status_code=403, detail="Cannot delete the user you are logged in with.")
     if not await dal.delete_user_data(username=username_to_delete):
         raise HTTPException(status_code=404, detail="User not found")
