@@ -120,7 +120,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 last_name=user_db.last_name, 
                 email=user_db.email,
                 access_token=user_db.access_token, 
-                token_type="bearer"
+                token_type="bearer",
+                last_activity_unixtime=None
             )
         else:
             # user not logged in anymore, create new token
@@ -133,7 +134,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 last_name=user_db.last_name, 
                 email=user_db.email,
                 access_token=newtoken, 
-                token_type="bearer"
+                token_type="bearer",
+                last_activity_unixtime=None
             )
 
 
@@ -172,8 +174,9 @@ async def get_user_out(user_db: UserSQL) -> User:
         first_name=user_db.first_name,
         last_name=user_db.last_name,
         email=user_db.email,
-        access_token="",        # TODO could be removed here, would need to change the pydantic model
-        token_type=""           # TODO could be removed here, would need to change the pydantic model
+        access_token="",
+        token_type="",
+        last_activity_unixtime=user_db.last_activity_unixtime
     )
 
 
@@ -235,3 +238,23 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user)], 
         last_activity_unixtime=None
     )
     await dal.add_user(new_user_db)
+
+
+@router.delete("/deleteuser", response_model={}, status_code=204, tags=["user"])
+async def user_delete(current_user: Annotated[User, Depends(get_current_user)], username_to_delete: str) -> None:
+    """Delete an existing user.
+
+    Parameters
+    ----------
+    user_to_delete
+        User to delete.
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    if len(await get_user_list(current_user)) == 1:
+        raise HTTPException(status_code=403, detail="Cannot delete last user.")
+    if not await dal.delete_user_data(username=username_to_delete):
+        raise HTTPException(status_code=404, detail="User not found")
