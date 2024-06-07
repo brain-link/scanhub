@@ -293,12 +293,9 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found
     """
-    userlist = await get_user_list(current_user)
-    if len(userlist) == 1:
-        raise HTTPException(status_code=403, detail="Cannot delete last user.")
     if (await dal.get_user_data(username_to_delete)).role == UserRole.admin.value:
         at_least_two_admins = 0
-        for user in userlist:
+        for user in await get_user_list(current_user):
             if user.role == UserRole.admin:
                 at_least_two_admins += 1
                 if at_least_two_admins >= 2:
@@ -309,3 +306,42 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
         raise HTTPException(status_code=403, detail="Cannot delete the user you are logged in with.")
     if not await dal.delete_user_data(username=username_to_delete):
         raise HTTPException(status_code=404, detail="User not found")
+
+
+@router.put("/updateuser", response_model={}, status_code=200, tags=["user"])
+async def update_user(current_user: Annotated[User, Depends(get_current_user_admin)], updated_user: User) -> None:
+    """
+    Update an existing user.
+
+    Parameters
+    ----------
+    updated_user
+        Updated user data.
+
+    Returns
+    -------
+        None
+
+    Raises
+    ------
+    HTTPException
+        404: Not found if user not found.
+    """
+    if updated_user.role != UserRole.admin and (await dal.get_user_data(updated_user.username)).role == UserRole.admin.value:
+        at_least_two_admins = 0
+        for user in await get_user_list(current_user):
+            if user.role == UserRole.admin:
+                at_least_two_admins += 1
+                if at_least_two_admins >= 2:
+                    break
+        if at_least_two_admins < 2:
+            raise HTTPException(status_code=403, detail="Cannot change role of last admin.")
+    await dal.update_user_data(
+        updated_user.username, 
+        {
+            "first_name": updated_user.first_name,
+            "last_name": updated_user.last_name,
+            "email": updated_user.email,
+            "role": updated_user.role.value,
+        }
+    )
