@@ -13,7 +13,6 @@ import { userApi } from '../api'
 import { ModalComponentProps } from '../interfaces/components.interface'
 import { User } from '../generated-client/userlogin'
 import LoginContext from '../LoginContext'
-import { setDefaultViewport } from 'cornerstone-core'
 
 
 
@@ -30,6 +29,7 @@ const createUserFormContent = [
 export default function UserCreateModal(props: ModalComponentProps<User>) {
 
   const [currentuser, ] = React.useContext(LoginContext)
+  // eslint-disable-next-line camelcase
   const [user, setUser] = React.useState({username: '', first_name: '', last_name: '', email: '', password: '', token_type: 'password', access_token: ''})
 
   // Post a new record and refetch records table
@@ -37,21 +37,21 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
     mutationKey: ['users'],
     mutationFn: async () => {
       await userApi.createUserApiV1UserloginCreateuserPost(user, {headers: {Authorization: 'Bearer ' + currentuser?.access_token}})
-      .then((_) => {
+      .then(() => {
         props.onSubmit(user)
         if (props.setAlert) { props.setAlert(null) } 
       })
       .catch((err) => { 
-        let error_message = null;
+        let errorMessage = null;
         if (err?.response?.data?.detail) {
-          error_message = "Error at creating new user. Detail: " + err.response.data.detail
+          errorMessage = 'Error at creating new user. Detail: ' + err.response.data.detail
         }
         else {
-          error_message = "Error at creating new user."
+          errorMessage = 'Error at creating new user.'
         }
-        console.log(error_message)
+        console.log(errorMessage)
         if (props.setAlert) {
-          props.setAlert(error_message)
+          props.setAlert(errorMessage)
         }
       })
     }

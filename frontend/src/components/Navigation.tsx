@@ -21,6 +21,7 @@ import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import { useColorScheme } from '@mui/joy/styles'
+import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles';
 import React, { useContext } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 
@@ -39,6 +40,7 @@ const menuItems = [
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
+  const { setMode: setMuiMode } = useMaterialColorScheme()
   const [mounted, setMounted] = React.useState(true)
   React.useEffect(() => {
     setMounted(true)
@@ -57,8 +59,10 @@ function ColorSchemeToggle() {
       onClick={() => {
         if (mode === 'light') {
           setMode('dark')
+          setMuiMode('dark')
         } else {
           setMode('light')
+          setMuiMode('light')
         }
       }}
     >

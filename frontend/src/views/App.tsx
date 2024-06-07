@@ -19,9 +19,9 @@ const materialTheme = materialExtendTheme();
 
 export default function App() {
   return (
-    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+    <MaterialCssVarsProvider defaultMode="system" theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider
-        // defaultMode="dark"
+        defaultMode="system"
         disableTransitionOnChange
       >
         <CssBaseline />

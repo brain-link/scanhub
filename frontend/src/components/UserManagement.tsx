@@ -38,23 +38,23 @@ export default function UserManagement() {
       )}
   })
 
-  const delte_mutation = useMutation<unknown, unknown, string>(async (username) => {
+  const delteMutation = useMutation<unknown, unknown, string>(async (username) => {
     await userApi.userDeleteApiV1UserloginDeleteuserDelete(username, {headers: {Authorization: 'Bearer ' + currentuser?.access_token}})
-    .then((_) => {
-      console.log("Deleted user:", username)
+    .then(() => {
+      console.log('Deleted user:', username)
       setAlert(null);
       refetch();
     })
     .catch((err) => { 
-      let error_message = null;
+      let errorMessage = null;
       if (err?.response?.data?.detail) {
-        error_message = "Could not delete user. Detail: " + err.response.data.detail
+        errorMessage = 'Could not delete user. Detail: ' + err.response.data.detail
       }
       else {
-        error_message = "Could not delete user."
+        errorMessage = 'Could not delete user.'
       }
-      console.log(error_message)
-      setAlert(error_message)
+      console.log(errorMessage)
+      setAlert(errorMessage)
     })
   })
 
@@ -86,11 +86,11 @@ export default function UserManagement() {
     { field: 'email',       headerName: 'e-Mail',       width: 200,   editable: true },
     { 
       field: 'last_activity_unixtime', headerName: 'Last Activity Time', width: 200, editable: false, 
-      filterable: false, valueFormatter: (value) => value ? new Date(value * 1000).toLocaleString() : ""
+      filterable: false, valueFormatter: (value) => value ? new Date(value * 1000).toLocaleString() : ''
     },
     { field: 'actions', type: 'actions', headerName: 'Delete', width: 100, cellClassName: 'actions', getActions: (row) => {
-      return [<GridActionsCellItem icon={<DeleteIcon />} label="Delete" color="inherit" onClick={() => {
-        delte_mutation.mutate(row.id.toString())
+      return [<GridActionsCellItem key='1' icon={<DeleteIcon />} label="Delete" color="inherit" onClick={() => {
+        delteMutation.mutate(row.id.toString())
       }}/>];
     }}
   ];
@@ -102,7 +102,7 @@ export default function UserManagement() {
       <UserCreateModal
         isOpen={dialogOpen}
         setOpen={setDialogOpen}
-        onSubmit={(_: User) => { refetch() }}
+        onSubmit={() => { refetch() }}
         onClose={() => {}}
         setAlert={setAlert}
       />
@@ -135,7 +135,7 @@ export default function UserManagement() {
           getRowId={(user) => user.username} 
           style={{width: 1100}} 
           hideFooterSelectedRowCount
-          editMode={"row"}
+          editMode={'row'}
         />
       </Sheet>
 
