@@ -11,17 +11,18 @@ import Grid from '@mui/joy/Grid'
 import { useMutation } from 'react-query'
 import { userApi } from '../api'
 import { ModalComponentProps } from '../interfaces/components.interface'
-import { User } from '../generated-client/userlogin'
+import { User, UserRole } from '../generated-client/userlogin'
 import LoginContext from '../LoginContext'
 
 
 
 // User form items, order is row wise
 const createUserFormContent = [
-  { key: 'username',    label: 'Username',  placeholder: 'Username' },
+  { key: 'username',     label: 'Username',  placeholder: 'Username' },
   { key: 'first_name',   label: 'First name', placeholder: 'First name' },
   { key: 'last_name',    label: 'Last name', placeholder: 'Last name' },
-  { key: 'email',       label: 'e-Mail',    placeholder: 'e-Mail' },
+  { key: 'email',        label: 'e-Mail',    placeholder: 'e-Mail' },
+  { key: 'role',         label: 'Role',      placeholder: 'admin | medical | scientist | engineer' },
   { key: 'access_token', label: 'Password',  placeholder: 'At least 12 characters.' },
 ]
 
@@ -30,7 +31,9 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
 
   const [currentuser, ] = React.useContext(LoginContext)
   // eslint-disable-next-line camelcase
-  const [user, setUser] = React.useState({username: '', first_name: '', last_name: '', email: '', password: '', token_type: 'password', access_token: ''})
+  const [user, setUser] = React.useState({username: '', first_name: '', last_name: '', email: '', role: UserRole.Medical,   // eslint-disable-next-line camelcase
+                                          password: '', token_type: 'password', access_token: ''})
+
 
   // Post a new record and refetch records table
   const mutation = useMutation({
@@ -43,7 +46,10 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
       })
       .catch((err) => { 
         let errorMessage = null;
-        if (err?.response?.data?.detail) {
+        if (err?.response?.data?.detail?.[0]?.msg) {
+          errorMessage = 'Error at creating new user. Detail: ' + err.response.data.detail[0].msg
+        }
+        else if (err?.response?.data?.detail) {
           errorMessage = 'Error at creating new user. Detail: ' + err.response.data.detail
         }
         else {

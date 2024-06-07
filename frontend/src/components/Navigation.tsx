@@ -24,19 +24,14 @@ import { useColorScheme } from '@mui/joy/styles'
 import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles';
 import React, { useContext } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
 
 import { navigation } from '../utils/size_vars'
 import LoginContext from '../LoginContext';
 // import { SettingsInputSvideoRounded } from '@mui/icons-material';
 import { loginApi } from '../api'
+import { UserRole } from '../generated-client/userlogin';
 
-
-// Menu elements
-const menuItems = [
-  { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon/> },
-  { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon/> },
-  { id: 2, text: 'Users', link: '/users', icon: <Person2SharpIcon/> },
-]
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
@@ -71,11 +66,22 @@ function ColorSchemeToggle() {
   )
 }
 
+
 export default function Navigation() {
   const loc = useLocation()
   const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null)
   const [user, setUser] = useContext(LoginContext)
   const open = Boolean(anchorEl)
+  const queryClient = useQueryClient()
+
+  // Menu elements
+  const menuItems = [
+    { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon/> },
+    { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon/> },
+  ]  
+  if (user && user.role == UserRole.Admin) {
+    menuItems.push(  {id: 2, text: 'Users', link: '/users', icon: <Person2SharpIcon/> })
+  }
 
   return (
     <Box
@@ -183,6 +189,7 @@ export default function Navigation() {
           onClick={() => {
             loginApi.loginApiV1UserloginLogoutPost({headers: {Authorization: 'Bearer ' + user?.access_token}})
             .then(() => {
+              queryClient.invalidateQueries()  // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
               setAnchorEl(null)
               setUser(null)
             })

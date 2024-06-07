@@ -75,6 +75,12 @@ export interface User {
     'email'?: string;
     /**
      * 
+     * @type {UserRole}
+     * @memberof User
+     */
+    'role': UserRole;
+    /**
+     * 
      * @type {string}
      * @memberof User
      */
@@ -92,6 +98,24 @@ export interface User {
      */
     'last_activity_unixtime'?: number;
 }
+
+
+/**
+ * An enumeration.
+ * @export
+ * @enum {string}
+ */
+
+export const UserRole = {
+    Admin: 'admin',
+    Medical: 'medical',
+    Scientist: 'scientist',
+    Engineer: 'engineer'
+} as const;
+
+export type UserRole = typeof UserRole[keyof typeof UserRole];
+
+
 /**
  * 
  * @export

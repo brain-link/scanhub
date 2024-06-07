@@ -12,7 +12,7 @@ import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
 import * as React from 'react'
 import { useMutation, useQuery } from 'react-query'
-import { User } from '../generated-client/userlogin';
+import { User, UserRole } from '../generated-client/userlogin';
 import { userApi } from '../api'
 import Sheet from '@mui/joy/Sheet'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
@@ -84,6 +84,7 @@ export default function UserManagement() {
     { field: 'first_name',  headerName: 'First name',   width: 200,   editable: true },
     { field: 'last_name',   headerName: 'Last name',    width: 200,   editable: true },
     { field: 'email',       headerName: 'e-Mail',       width: 200,   editable: true },
+    { field: 'role', type: 'singleSelect', headerName: 'Role', width: 200, editable: true, valueOptions: Object.values(UserRole) },
     { 
       field: 'last_activity_unixtime', headerName: 'Last Activity Time', width: 200, editable: false, 
       filterable: false, valueFormatter: (value) => value ? new Date(value * 1000).toLocaleString() : ''
@@ -133,7 +134,7 @@ export default function UserManagement() {
           rows={users} 
           columns={columns} 
           getRowId={(user) => user.username} 
-          style={{width: 1100}} 
+          style={{width: 1300}} 
           hideFooterSelectedRowCount
           editMode={'row'}
         />
