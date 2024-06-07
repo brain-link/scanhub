@@ -39,7 +39,6 @@ function Login(props: {onLogin: (user: User) => void}) {
       </Typography>
 
       <form onSubmit={(event) => {
-        console.log('User: ', username, '; Password', password)
         event.preventDefault()  // do not reload the page
         if (username == '' || password == '') {
           setLoginErrorState(LoginErrorState.EmptyUsernameOrPassword)
@@ -50,8 +49,9 @@ function Login(props: {onLogin: (user: User) => void}) {
           setLoginErrorState(LoginErrorState.NoError)
           console.log('Submit login.')
           
-          // TODO consider sending a secure password hash like argon2 instead of the password itself
-          // on the server this hash could be hashed again, just like if it were the password
+          // Consider sending a secure password hash like argon2 instead of the password itself.
+          // On the server this hash could be hashed again, just like if it were the password.
+          // Disadvantage is, that the swagger-UI would not work, because it strictly follows OAuth2 which requires the non-hashed password.
           loginApi.loginApiV1UserloginLoginPost(username, password, 'password')
           .then((result) => {
             setLoginRequestInProgress(false)

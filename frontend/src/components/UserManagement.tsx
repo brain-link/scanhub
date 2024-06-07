@@ -27,6 +27,7 @@ export default function UserManagement() {
   const [currentuser, ] = React.useContext(LoginContext)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
   const [alert, setAlert] = React.useState<string | null>(null)
+  const [isUpdating, setIsUpdating] = React.useState<boolean>(false);
 
   const {data: users, isLoading, isError, refetch} = useQuery<User[]>({
     queryKey: ['users'],
@@ -58,6 +59,31 @@ export default function UserManagement() {
     })
   })
 
+
+  const updateMutation = useMutation<unknown, unknown, User>(async (user) => {
+    await userApi.updateUserApiV1UserloginUpdateuserPut(user, {headers: {Authorization: 'Bearer ' + currentuser?.access_token}})
+    .then(() => {
+      console.log('Modified user:', user.username)
+      setAlert(null);
+      setIsUpdating(false);
+      refetch();
+    })
+    .catch((err) => { 
+      let errorMessage = null;
+      if (err?.response?.data?.detail) {
+        errorMessage = 'Could not update user. Detail: ' + err.response.data.detail
+      }
+      else {
+        errorMessage = 'Could not update user.'
+      }
+      setIsUpdating(false);
+      refetch()
+      console.log(errorMessage)
+      setAlert(errorMessage)
+    })
+  })
+
+
   if (isLoading) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
@@ -80,7 +106,7 @@ export default function UserManagement() {
 
 
   const columns: GridColDef<User>[] = [
-    { field: 'username',    headerName: 'Username',     width: 200,   editable: true },
+    { field: 'username',    headerName: 'Username',     width: 200,   editable: false },  // username is primary key, if you want to change it, use delete and create
     { field: 'first_name',  headerName: 'First name',   width: 200,   editable: true },
     { field: 'last_name',   headerName: 'Last name',    width: 200,   editable: true },
     { field: 'email',       headerName: 'e-Mail',       width: 200,   editable: true },
@@ -137,6 +163,12 @@ export default function UserManagement() {
           style={{width: 1300}} 
           hideFooterSelectedRowCount
           editMode={'row'}
+          loading={isUpdating}
+          processRowUpdate={(updatedUser) => {
+            setIsUpdating(true);
+            updateMutation.mutate(updatedUser);
+            return updatedUser;
+          }}
         />
       </Sheet>
 

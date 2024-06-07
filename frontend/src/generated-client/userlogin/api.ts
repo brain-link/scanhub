@@ -473,7 +473,7 @@ export class LoginApi extends BaseAPI {
 export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create new patient database entry.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+         * Create new patient database entry. Only for admins.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
          * @summary Create User
          * @param {User} user 
          * @param {*} [options] Override http request option.
@@ -513,7 +513,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Get current user endpoint.  Parameters ---------- access_token      User token (HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+         * Get current user endpoint.  Parameters ---------- access_token      User token (From HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -547,7 +547,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Get all users endpoint.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+         * Get all users endpoint. Only for admins.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
          * @summary Get User List
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -581,7 +581,47 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Delete an existing user.  Parameters ---------- user_to_delete     User to delete.  Raises ------ HTTPException     404: Not found
+         * Update an existing user.  Parameters ---------- updated_user     Updated user data.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+         * @summary Update User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserApiV1UserloginUpdateuserPut: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'user' is not null or undefined
+            assertParamExists('updateUserApiV1UserloginUpdateuserPut', 'user', user)
+            const localVarPath = `/api/v1/userlogin/updateuser`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(user, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete an existing user. Only for admins.  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
          * @summary User Delete
          * @param {string} usernameToDelete 
          * @param {*} [options] Override http request option.
@@ -632,7 +672,7 @@ export const UserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create new patient database entry.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+         * Create new patient database entry. Only for admins.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
          * @summary Create User
          * @param {User} user 
          * @param {*} [options] Override http request option.
@@ -645,7 +685,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get current user endpoint.  Parameters ---------- access_token      User token (HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+         * Get current user endpoint.  Parameters ---------- access_token      User token (From HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -657,7 +697,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all users endpoint.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+         * Get all users endpoint. Only for admins.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
          * @summary Get User List
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -669,7 +709,20 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete an existing user.  Parameters ---------- user_to_delete     User to delete.  Raises ------ HTTPException     404: Not found
+         * Update an existing user.  Parameters ---------- updated_user     Updated user data.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+         * @summary Update User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUserApiV1UserloginUpdateuserPut(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserApiV1UserloginUpdateuserPut(user, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.updateUserApiV1UserloginUpdateuserPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete an existing user. Only for admins.  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
          * @summary User Delete
          * @param {string} usernameToDelete 
          * @param {*} [options] Override http request option.
@@ -692,7 +745,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = UserApiFp(configuration)
     return {
         /**
-         * Create new patient database entry.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+         * Create new patient database entry. Only for admins.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
          * @summary Create User
          * @param {User} user 
          * @param {*} [options] Override http request option.
@@ -702,7 +755,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.createUserApiV1UserloginCreateuserPost(user, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get current user endpoint.  Parameters ---------- access_token      User token (HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+         * Get current user endpoint.  Parameters ---------- access_token      User token (From HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -711,7 +764,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.getCurrentUserApiV1UserloginGetcurrentuserGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all users endpoint.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+         * Get all users endpoint. Only for admins.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
          * @summary Get User List
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -720,7 +773,17 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.getUserListApiV1UserloginGetallusersGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing user.  Parameters ---------- user_to_delete     User to delete.  Raises ------ HTTPException     404: Not found
+         * Update an existing user.  Parameters ---------- updated_user     Updated user data.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+         * @summary Update User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserApiV1UserloginUpdateuserPut(user: User, options?: any): AxiosPromise<any> {
+            return localVarFp.updateUserApiV1UserloginUpdateuserPut(user, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete an existing user. Only for admins.  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
          * @summary User Delete
          * @param {string} usernameToDelete 
          * @param {*} [options] Override http request option.
@@ -740,7 +803,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
  */
 export class UserApi extends BaseAPI {
     /**
-     * Create new patient database entry.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+     * Create new patient database entry. Only for admins.  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
      * @summary Create User
      * @param {User} user 
      * @param {*} [options] Override http request option.
@@ -752,7 +815,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Get current user endpoint.  Parameters ---------- access_token      User token (HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+     * Get current user endpoint.  Parameters ---------- access_token      User token (From HTTP Header: \"Authorization: Bearer <access_token>\")  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
      * @summary Get Current User
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -763,7 +826,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Get all users endpoint.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+     * Get all users endpoint. Only for admins.  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
      * @summary Get User List
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -774,7 +837,19 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing user.  Parameters ---------- user_to_delete     User to delete.  Raises ------ HTTPException     404: Not found
+     * Update an existing user.  Parameters ---------- updated_user     Updated user data.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+     * @summary Update User
+     * @param {User} user 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public updateUserApiV1UserloginUpdateuserPut(user: User, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).updateUserApiV1UserloginUpdateuserPut(user, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete an existing user. Only for admins.  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
      * @summary User Delete
      * @param {string} usernameToDelete 
      * @param {*} [options] Override http request option.
