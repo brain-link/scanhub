@@ -9,10 +9,16 @@ import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Badge from '@mui/joy/Badge'
 // Mui Joy
 import Box from '@mui/joy/Box'
+import Sheet from '@mui/joy/Sheet'
+import Card from '@mui/joy/Card'
+import Avatar from '@mui/joy/Avatar'
 import IconButton from '@mui/joy/IconButton'
 import ListItemButton from '@mui/joy/ListItemButton'
 import List from '@mui/joy/List'
 import ListDivider from '@mui/joy/ListDivider'
+import Divider from '@mui/joy/Divider'
+import Button from '@mui/joy/Button'
+import LinearProgress from '@mui/joy/LinearProgress'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Accordion from '@mui/joy/Accordion'
@@ -34,6 +40,8 @@ import WorkflowInstanceInfo from '../components/WorkflowInstanceInfo'
 import TaskInstanceInfo from '../components/TaskInstanceInfo'
 
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
+import DicomViewer from '../components/DicomViewer'
+import AcquisitionControl from '../components/AcquisitionControl'
 
 
 // Import interfaces, api services and global variables
@@ -91,140 +99,142 @@ function PatientIndex() {
 
 
   return (
-    <Stack 
-      direction='row' 
-      sx={{
-        height: `calc(100vh - ${navigation.height})`,
-        width: '100%',
-        overflow: 'clip'
-      }}
-    >
-      <Box
+
+    <Box sx={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100dvh'
+    }}>
+
+      <Sheet
+        className="Sidebar"
         sx={{
-          width: patientView.drawerWidth,
-          overflow: 'clip',
-          bgcolor: 'background.componentBg',
+          position: { xs: 'fixed', md: 'sticky' },
+          height: 'calc(100dvh - var(--Navigation-height))',
+          width: 'var(--Sidebar-width)',
+          top: 0,
+          p: 2,
+          flexShrink: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1.5,
           borderRight: '1px solid',
           borderColor: 'divider',
         }}
       >
-        {/* Conditional rendering: Only rendered if patient exists */}
-        {patient && <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError} />}
 
-        <ListDivider />
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center'}}>
+          <Typography level='title-md'>Patient Info</Typography>
+        </Box>
+        <Divider />
+        <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError} />
 
-        {/* Exam list header */}
-        <Box
-          sx={{
-            p: 1.5,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            overflow: 'scroll'
-          }}
-        >
+        {/* <ListDivider /> */}
+        <Divider />
+
+        {/* Exam header */}
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between'}}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-            <Typography level='title-md'> Exams </Typography>
+            <Typography level="title-md">Exams</Typography>
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
-
-          <IconButton
-            variant='soft'
-            sx={{ '--IconButton-size': patientView.iconButtonSize }}
-            onClick={() => setExamModalOpen(true)}
-          >
+          
+          <IconButton size="sm" variant="plain" color="neutral" onClick={() => setExamModalOpen(true)}>
             <AddSharpIcon />
           </IconButton>
 
           <ExamFromTemplateModal isOpen={examModalOpen} setOpen={setExamModalOpen} parentId={String(params.patientId)} onSubmit={refetchExams}/>
-
         </Box>
 
-        <ListDivider />
+        <Divider />
 
-        {/* List of exams */}
-        <List sx={{ pt: 0 }}>
-          {
-            exams?.map(exam => (
+        <Box
+          sx={{
+            minHeight: 0,
+            overflow: 'hidden auto',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
 
-              <Accordion key={`exam-${exam.id}`}>
+          <List size="sm" sx={{ pt: 0, overflow: 'scroll', '--ListItem-radius': (theme) => theme.vars.radius.sm}}>
+            {
+              exams?.map(exam => (
 
-                <Tooltip
-                  placement="right"
-                  variant="outlined"
-                  describeChild={false}
-                  arrow
-                  title={<ExamInstanceInfo exam={exam} />}
-                >
-                  <AccordionSummary>
-                    <ExamItem data={exam} refetchParentData={refetchExams}/>
-                  </AccordionSummary>
+                <Accordion key={`exam-${exam.id}`}>
 
-                </Tooltip>
-                
-                <AccordionDetails>
-                  {
-                    exam.workflows?.map(workflow => (
+                  <Tooltip
+                    placement="right"
+                    variant="outlined"
+                    describeChild={false}
+                    arrow
+                    title={<ExamInstanceInfo exam={exam} />}
+                  >
+                    <AccordionSummary>
+                      <ExamItem data={exam} refetchParentData={refetchExams}/>
+                    </AccordionSummary>
 
-                      <Accordion key={`workflow-${workflow.id}`}>
+                  </Tooltip>
+                  
+                  <AccordionDetails>
+                    {
+                      exam.workflows?.map(workflow => (
 
-                        <Tooltip
-                          placement="right"
-                          variant="outlined"
-                          describeChild={false}
-                          arrow
-                          title={<WorkflowInstanceInfo workflow={workflow} />}
-                        >
-                          <AccordionSummary>
-                            <WorkflowItem data={workflow} refetchParentData={refetchExams} />
-                          </AccordionSummary>
-                        </Tooltip>
+                        <Accordion key={`workflow-${workflow.id}`}>
 
-                        <AccordionDetails>
-                          <List>
-                            {
-                              workflow.tasks?.map(task => (
-                                <Tooltip
-                                  key={`task-${task.id}`}
-                                  placement="right"
-                                  variant="outlined"
-                                  arrow
-                                  title={<TaskInstanceInfo task={task} />}
-                                >
-                                  <ListItemButton>
-                                    <TaskItem data={task} refetchParentData={refetchExams}/>
-                                  </ListItemButton>
-                                </Tooltip>
-                              ))
-                            }
-                          </List>
-                        </AccordionDetails>
+                          <Tooltip
+                            placement="right"
+                            variant="outlined"
+                            describeChild={false}
+                            arrow
+                            title={<WorkflowInstanceInfo workflow={workflow} />}
+                          >
+                            <AccordionSummary>
+                              <WorkflowItem data={workflow} refetchParentData={refetchExams} />
+                            </AccordionSummary>
+                          </Tooltip>
 
-                      </Accordion>
+                          <AccordionDetails>
+                            <List size="sm" sx={{ pt: 0, '--ListItem-radius': (theme) => theme.vars.radius.sm}}>
+                              {
+                                workflow.tasks?.map(task => (
+                                  <Tooltip
+                                    key={`task-${task.id}`}
+                                    placement="right"
+                                    variant="outlined"
+                                    arrow
+                                    title={<TaskInstanceInfo task={task} />}
+                                  >
+                                    <ListItemButton>
+                                      <TaskItem data={task} refetchParentData={refetchExams}/>
+                                    </ListItemButton>
+                                  </Tooltip>
+                                ))
+                              }
+                            </List>
+                          </AccordionDetails>
+                        </Accordion>
+                      ))
+                    }
+                  </AccordionDetails>
+                </Accordion>
+              ))
+            }
+          </List> 
+        </Box>
 
-                    ))
-                  }
-                </AccordionDetails>
-              </Accordion>
-            ))
-          }
+        {/* Trigger workflow engine */}
+        <Divider />
+        <AcquisitionControl />
+        
+      </Sheet>
 
-        </List>
-      </Box>
+      <DicomViewer />
 
-      {/* job view controller */}
-      <Box sx={{ width: '100%', bgcolor: 'background.componentBg' }}>
-        {/* <JobList
-          // Implementation of new interface may be required
-          data={workflows ? workflows : []}
-          refetchParentData={refetchExams}
-          isSelected={params.examId ? true : false}
-        /> */}
-      </Box>
-
-    </Stack>
+    </Box>
+  
   )
 }
 

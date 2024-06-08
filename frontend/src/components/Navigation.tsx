@@ -88,7 +88,8 @@ export default function Navigation() {
       component='header'
       className='Header'
       sx={{
-        height: navigation.height,
+        // height: navigation.height,
+        height: 'var(--Navigation-height)',
         p: 2,
         gap: 2,
         bgcolor: 'background.surface',
