@@ -9,22 +9,37 @@ import * as React from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { BrowserRouter } from 'react-router-dom'
+import { StyledEngineProvider } from '@mui/joy/styles';
 
 import { RouteConfiguration } from './Routes'
 import LoginContextProvider from './LoginContextProvider'
 
 
 const queryClient = new QueryClient()
-const root = ReactDOM.createRoot(document.getElementById('root')!)
+// const root = ReactDOM.createRoot(document.getElementById('root')!)
 
-root.render(
+// root.render(
+//   <React.StrictMode>
+//     <QueryClientProvider client={queryClient}>
+//       <BrowserRouter>
+//         <LoginContextProvider>
+//           <RouteConfiguration />
+//         </LoginContextProvider>
+//       </BrowserRouter>
+//     </QueryClientProvider>
+//   </React.StrictMode>,
+// )
+
+ReactDOM.createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <LoginContextProvider>
-          <RouteConfiguration />
-        </LoginContextProvider>
+        <StyledEngineProvider injectFirst>
+          <LoginContextProvider>
+            <RouteConfiguration />
+          </LoginContextProvider>
+        </StyledEngineProvider>
       </BrowserRouter>
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )

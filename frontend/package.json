@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "license": "SEE LICENSE IN LICENSE",
-  "source": "/src/index.html",
+  "source": "index.html",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -59,8 +59,8 @@
     "typescript": "*"
   },
   "scripts": {
-    "start": "parcel ./src/index.html -p 3000 && parcel watch ./src/index.html",
-    "build": "parcel build ./src/index.html",
+    "start": "parcel index.html -p 3000 && parcel watch index.html",
+    "build": "parcel build index.html",
     "lint": "eslint ./src/**/*.tsx",
     "lint:fix": "eslint --fix './src/**/*.tsx'",
     "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc",
