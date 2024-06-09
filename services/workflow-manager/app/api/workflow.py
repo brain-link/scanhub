@@ -7,10 +7,6 @@ import os
 from typing import Generator
 
 import httpx
-import pydantic
-import dataclasses
-import json
-
 
 from uuid import UUID
 
@@ -18,6 +14,7 @@ from datetime import datetime
 
 import operator
 import json
+import logging
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
@@ -35,6 +32,7 @@ from .producer import Producer
 # 404 = Not found
 
 
+SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
 
@@ -117,7 +115,6 @@ async def process(workflow_id: UUID | str):
                 await producer.send(topic, task_event.dict())
 
 
-
             # workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
             # description: str
             # type: TaskType
@@ -140,11 +137,6 @@ async def process(workflow_id: UUID | str):
             # await producer.send("mri_cartesian_reco", RecoJob(record_id=task.task_id, input=task.task_input).dict())
 
     return
-
-
-
-
-
 
 
 @router.post("/upload/{record_id}/")
@@ -254,3 +246,133 @@ async def get_image_file(record_id: int) -> StreamingResponse:
         return response
     except FileNotFoundError as exc:
         raise HTTPException(detail="File not found.", status_code=status.HTTP_404_NOT_FOUND) from exc
+
+## Formerly acquisition control
+
+async def device_location_request(device_id):
+    """Retrieve ip from device-manager.
+
+    Parameters
+    ----------
+    device_id
+        Id of device
+
+    Returns
+    -------
+        ip_address of device
+    """
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address")
+        return response.json()["ip_address"]
+
+
+async def retrieve_sequence(sequence_manager_uri, sequence_id):
+    """Retrieve sequence and sequence-type from sequence-manager.
+
+    Parameters
+    ----------
+    sequence_manager_uri
+        uri of sequence manager
+
+    sequence_id
+        id of sequence
+
+    Returns
+    -------
+        sequence
+    """
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"http://{sequence_manager_uri}/api/v1/mri/sequences/{sequence_id}")
+        return response.json()
+
+
+async def create_record(exam_manager_uri, job_id):
+    """Create new record at exam_manager and retrieve record_id.
+
+    Parameters
+    ----------
+    exam_manager_uri
+        uri of sequence manager
+
+    job_id
+        id of job
+
+    Returns
+    -------
+        id of newly created record
+    """
+    async with httpx.AsyncClient() as client:
+        # TODO: data_path, comment ? # pylint: disable=fixme
+        data = {
+            "data_path": "unknown",
+            "comment": "Created in Acquisition Control",
+            "job_id": str(job_id),
+        }
+        response = await client.post(f"http://{exam_manager_uri}/api/v1/exam/record", json=data)
+        return response.json()["id"]
+
+
+async def post_device_task(url, device_task):
+    """Send task do device.
+
+    Parameters
+    ----------
+    url
+        url of the device
+
+    device_task
+        task
+
+    Returns
+    -------
+        response of device
+    """
+    async with httpx.AsyncClient() as client:
+        data = json.dumps(device_task, default=pydantic_encoder)
+        response = await client.post(url, content=data)
+        return response.status_code
+
+
+@router.post("/start-scan")
+async def start_scan(scan_job: ScanJob):
+    """Receives a job. Create a record id, trigger scan with it and returns it."""
+    device_id = scan_job.device_id
+    record_id = ""
+    command = Commands.START
+
+    device_ip = await device_location_request(device_id)
+    url = f"http://{device_ip}/api/start-scan"
+
+    print("Start-scan endpoint, device ip: ", device_ip)
+
+    # get sequence
+    sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.sequence_id)
+
+    # create record
+    record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
+    parametrized_sequence = ParametrizedSequence(
+        acquisition_limits=scan_job.acquisition_limits,
+        sequence_parameters=scan_job.sequence_parameters,
+        sequence=json.dumps(sequence_json),
+    )
+
+    # start scan and forward sequence, workflow, record_id
+    logging.debug("Received job: %s, Generated record id: %s", scan_job.job_id, record_id)
+
+    device_task = DeviceTask(
+        device_id=device_id, record_id=record_id, command=command, parametrized_sequence=parametrized_sequence
+    )
+    status_code = await post_device_task(url, device_task)
+
+    if status_code == 200:
+        print("Scan started successfully.")
+    else:
+        print("Failed to start scan.")
+    return {"record_id": record_id}
+
+
+@router.post("/forward-status")
+async def forward_status(scan_status: ScanStatus):
+    """Receives status for a job. Forwards it to the ui and returns ok."""
+    print("Received status: %s", scan_status)
+    return {"message": "Status submitted"}
