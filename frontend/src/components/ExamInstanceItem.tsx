@@ -7,6 +7,7 @@ import { useMutation } from 'react-query'
 
 // Mui joy components
 import IconButton from '@mui/joy/IconButton'
+import ListItemButton from '@mui/joy/ListItemButton'
 import ListItem from '@mui/joy/ListItem'
 import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import ListItemContent from '@mui/joy/ListItemContent'
@@ -19,6 +20,7 @@ import Menu from '@mui/joy/Menu'
 // Icons
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
+import ListAltIcon from '@mui/icons-material/ListAlt'
 
 // Sub-components, interfaces, client
 // import ExamModal from './ExamModal'
@@ -58,50 +60,51 @@ function ExamInstanceItem({data: exam, refetchParentData}: InstanceInterface<Exa
 
   return (
 
-    <ListItem sx={{width: '100%'}}>
+    <ListItem sx={{ width: '100%', p: 0.5}}>
 
-      <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
-        <SnippetFolderSharpIcon />
-      </ListItemDecorator>
+        {/* <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
+          <SnippetFolderSharpIcon />
+        </ListItemDecorator> */}
+      <ListItemButton>
 
-      <ListItemContent>
-        
-        <Typography>{exam.name}</Typography>
+        <ListAltIcon fontSize='small'/>
 
-        <Typography level='body-sm' textColor='text.tertiary'>
-          {
-            `Created: ${new Date(exam.datetime_created).toDateString()}`
-          }
-        </Typography>
+        <ListItemContent>
+          
+          <Typography level="title-sm">{exam.name}</Typography>
 
-      </ListItemContent>
+          <Typography level='body-xs' textColor='text.tertiary'>
+            {`Created: ${new Date(exam.datetime_created).toDateString()}`}
+          </Typography>
 
-      <Dropdown>
-        <MenuButton variant='plain' sx={{zIndex: 'snackbar', '--IconButton-size': '25px'}} slots={{root: IconButton}}>
-          <MoreHorizIcon />
-        </MenuButton>
-        <Menu
-          id='context-menu'
-          variant='plain'
-          sx={{ zIndex: 'snackbar' }}
-        >
-          <MenuItem key='edit' onClick={() => {}}>Edit</MenuItem>
-          <MenuItem key='delete' onClick={() => {deleteExam.mutate()}}>Delete</MenuItem>
-          <MenuItem key="add" onClick={() => {setModalOpen(true)}}>Add Workflow</MenuItem>
-        </Menu>
-      </Dropdown>
+        </ListItemContent>
 
-      <WorkflowFromTemplateModal isOpen={modalOpen} setOpen={setModalOpen} parentId={exam.id} onSubmit={refetchParentData}/>
+        <Dropdown>
+          <MenuButton variant='plain' sx={{zIndex: 'snackbar', size: 'xs'}} slots={{root: IconButton}}>
+            <MoreHorizIcon fontSize='small'/>
+          </MenuButton>
+          <Menu
+            id='context-menu'
+            variant='plain'
+            sx={{ zIndex: 'snackbar' }}
+          >
+            <MenuItem key='edit' onClick={() => {}}>Edit</MenuItem>
+            <MenuItem key='delete' onClick={() => {deleteExam.mutate()}}>Delete</MenuItem>
+            <MenuItem key="add" onClick={() => {setModalOpen(true)}}>Add Workflow</MenuItem>
+          </Menu>
+        </Dropdown>
 
-      {/* <ExamModal
-        data={exam}
-        dialogOpen={examModalOpen}
-        setDialogOpen={setExamModalOpen}
-        handleModalSubmit={(data: Exam) => {
-          updateExam.mutate(data)
-        }}
-      /> */}
+        <WorkflowFromTemplateModal isOpen={modalOpen} setOpen={setModalOpen} parentId={exam.id} onSubmit={refetchParentData}/>
 
+        {/* <ExamModal
+          data={exam}
+          dialogOpen={examModalOpen}
+          setDialogOpen={setExamModalOpen}
+          handleModalSubmit={(data: Exam) => {
+            updateExam.mutate(data)
+          }}
+        /> */}
+      </ListItemButton>
     </ListItem>
 
   )

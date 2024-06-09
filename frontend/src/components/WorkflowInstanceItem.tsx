@@ -19,6 +19,7 @@ import Menu from '@mui/joy/Menu'
 // Icons
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
+import SchemaIcon from '@mui/icons-material/Schema'
 
 // Sub-components, interfaces, client
 import LoginContext from '../LoginContext';
@@ -45,27 +46,25 @@ function WorkflowInstanceItem({data: workflow, refetchParentData}: InstanceInter
 
   return (
 
-    <ListItem sx={{width: '100%'}}>
+    <ListItem sx={{ width: '100%', p: 0.5 }}>
 
       <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
-        <SnippetFolderSharpIcon />
+        <SchemaIcon fontSize='small' />
       </ListItemDecorator>
 
       <ListItemContent>
         
-        <Typography>{workflow.comment}</Typography>
+        <Typography level="title-sm">{workflow.comment}</Typography>
 
-        <Typography level='body-sm' textColor='text.tertiary'>
-          {
-            `Created: ${new Date(workflow.datetime_created).toDateString()}`
-          }
+        <Typography level='body-xs' textColor='text.tertiary'>
+          { `Created: ${new Date(workflow.datetime_created).toDateString()}` }
         </Typography>
 
       </ListItemContent>
 
       <Dropdown>
-        <MenuButton variant='plain' sx={{zIndex: 'snackbar', '--IconButton-size': '25px'}} slots={{root: IconButton}}>
-          <MoreHorizIcon />
+        <MenuButton variant='plain' sx={{zIndex: 'snackbar', size: 'xs'}} slots={{root: IconButton}}>
+          <MoreHorizIcon fontSize='small'/>
         </MenuButton>
         <Menu
           id='context-menu'

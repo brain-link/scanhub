@@ -19,6 +19,7 @@ import Menu from '@mui/joy/Menu'
 // Icons
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
+import AssignmentIcon from '@mui/icons-material/Assignment'
 
 // Sub-components, interfaces, client
 import LoginContext from '../LoginContext';
@@ -41,27 +42,25 @@ function TaskInstanceItem({data: task, refetchParentData}: InstanceInterface<Tas
 
   return (
 
-    <ListItem sx={{width: '100%'}}>
+    <ListItem sx={{width: '100%', p: 0.5}}>
 
       <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
-        <SnippetFolderSharpIcon />
+        <AssignmentIcon fontSize='small' />
       </ListItemDecorator>
 
       <ListItemContent>
         
-        <Typography>{task.description ? task.description : 'Task'}</Typography>
+        <Typography level="title-sm">{task.description ? task.description : 'Task'}</Typography>
 
-        <Typography level='body-sm' textColor='text.tertiary'>
-          {
-            `Created: ${new Date(task.datetime_created).toDateString()}`
-          }
+        <Typography level='body-xs' textColor='text.tertiary'>
+          { `Created: ${new Date(task.datetime_created).toDateString()}` }
         </Typography>
 
       </ListItemContent>
 
       <Dropdown>
-        <MenuButton variant='plain' sx={{zIndex: 'snackbar', '--IconButton-size': '25px'}} slots={{root: IconButton}}>
-          <MoreHorizIcon />
+        <MenuButton variant='plain' sx={{zIndex: 'snackbar', size: 'xs'}} slots={{root: IconButton}}>
+          <MoreHorizIcon fontSize='small'/>
         </MenuButton>
         <Menu
           id='context-menu'
