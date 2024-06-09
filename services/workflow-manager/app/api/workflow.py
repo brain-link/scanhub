@@ -18,7 +18,7 @@ import logging
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
-from scanhub_libraries.models import TaskOut, WorkflowOut
+from scanhub_libraries.models import TaskOut, WorkflowOut, Commands, DeviceTask, ParametrizedSequence, ScanJob, ScanStatus
 
 # from scanhub import RecoJob # type: ignore
 from pydantic import BaseModel, StrictStr
