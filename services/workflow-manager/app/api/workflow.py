@@ -89,14 +89,27 @@ async def process(workflow_id: UUID | str):
             # print(task.type, end="\n")
             # print(task.description if task.description else "No description", end="\n")
 
-            if task.type == "DEVICE_TASK":
+            if task.type == "DEVICE_TASK" and task.status == "PENDING":
                 print("Device task:") 
                 print(task.destinations.get("device"), end="\n")
                 # reco_job = RecoJob(record_id=task.id, input=task.args["input"])
                 # # Send message to Kafka
                 # await producer.send("mri_cartesian_reco", reco_job.dict())
 
-            if task.type == "PROCESSING_TASK":
+                job = ScanJob(  job_id=task.id,
+                                sequence_id=task.args["sequence_id"],
+                                workflow_id=task.args["workflow_id"],
+                                device_id=task.destinations["device"],
+                                acquisition_limits=task.args["acquisition_limits"],
+                                sequence_parameters=task.args["sequence_parameters"])
+
+                start_scan(job)
+
+                # TBD set task status to "IN_PROGRESS"
+
+                break
+
+            if task.type == "PROCESSING_TASK" and task.status == "PENDING":
                 # print(task.destinations, end="\n")
                 print("Processing task:")
 
@@ -110,10 +123,13 @@ async def process(workflow_id: UUID | str):
                 print("Send to topic", end="\n")
                 print(topic, end="\n")
 
-                # # Send message to Kafka
+                # Send message to Kafka
                 # await producer.send("mri_cartesian_reco", reco_job.dict())
                 await producer.send(topic, task_event.dict())
 
+                # TBD set task status to "IN_PROGRESS"
+
+                break
 
             # workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
             # description: str
