@@ -18,7 +18,6 @@ import Menu from '@mui/joy/Menu'
 
 // Icons
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import SnippetFolderSharpIcon from '@mui/icons-material/SnippetFolderSharp'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 
 // Sub-components, interfaces, client

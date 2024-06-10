@@ -10,16 +10,11 @@ import Badge from '@mui/joy/Badge'
 // Mui Joy
 import Box from '@mui/joy/Box'
 import Sheet from '@mui/joy/Sheet'
-import Card from '@mui/joy/Card'
-import Avatar from '@mui/joy/Avatar'
 import IconButton from '@mui/joy/IconButton'
 import ListItemButton from '@mui/joy/ListItemButton'
 import List from '@mui/joy/List'
-import ListDivider from '@mui/joy/ListDivider'
+// import ListDivider from '@mui/joy/ListDivider'
 import Divider from '@mui/joy/Divider'
-import Button from '@mui/joy/Button'
-import LinearProgress from '@mui/joy/LinearProgress'
-import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Accordion from '@mui/joy/Accordion'
 import Tooltip from '@mui/joy/Tooltip'
@@ -42,10 +37,6 @@ import TaskInstanceInfo from '../components/TaskInstanceInfo'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import DicomViewer from '../components/DicomViewer'
 import AcquisitionControl from '../components/AcquisitionControl'
-
-
-// Import interfaces, api services and global variables
-import { navigation, patientView } from '../utils/size_vars'
 
 import { examApi, patientApi } from '../api'
 import { ExamOut } from '../generated-client/exam'

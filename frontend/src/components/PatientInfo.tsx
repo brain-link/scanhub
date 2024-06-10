@@ -4,7 +4,6 @@
 import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 // import { useParams } from 'react-router-dom';
-import Divider from '@mui/material/Divider'
 import * as React from 'react'
 
 // import client from '../client/queries';

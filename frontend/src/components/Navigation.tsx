@@ -26,7 +26,6 @@ import React, { useContext } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
 
-import { navigation } from '../utils/size_vars'
 import LoginContext from '../LoginContext';
 // import { SettingsInputSvideoRounded } from '@mui/icons-material';
 import { loginApi } from '../api'
