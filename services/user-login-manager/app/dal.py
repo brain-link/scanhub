@@ -102,3 +102,23 @@ async def add_user(user: UserSQL):
         session.add(user)
         await session.commit()
         await session.refresh(user)
+
+
+async def delete_user_data(username: str) -> bool:
+    """Delete user by username.
+
+    Parameters
+    ----------
+    username
+        Username of the user to be deleted
+
+    Returns
+    -------
+        Success of deletion
+    """
+    async with async_session() as session:
+        if user := await session.get(UserSQL, username):
+            await session.delete(user)
+            await session.commit()
+            return True
+        return False
