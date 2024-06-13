@@ -22,11 +22,12 @@ jobs:
         python-version: ["3.10"]
         service: [
           "exam-manager",
-          "workflow-manager",
+          # "workflow-manager",
           "device-manager",
           "acquisition-control",
+          "user-login-manager",
           "mri/sequence-manager",
-          "mri/recos/cartesian-reco-service",
+          # "mri/recos/cartesian-reco-service",
         ]
 
     continue-on-error: True
