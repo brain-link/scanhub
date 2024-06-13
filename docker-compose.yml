@@ -1,17 +1,19 @@
 version: "3"
 services:
 
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: ./Dockerfile
-    depends_on:
-      - patient-manager
-    volumes:
-      - ./frontend/src:/app/src
-    ports:
-      - 3000:3000
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       NODE_ENV: "development" # use "development" or "production"
+  #   depends_on:
+  #     - patient-manager
+  #   volumes:
+  #     - ./frontend/src:/app/src
+  #   ports:
+  #     - 3000:3000
 
   patient-manager:
     container_name: patient-manager
@@ -46,7 +48,7 @@ services:
       test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
       start_period: 5s 
 
 volumes:

@@ -69,6 +69,9 @@ function SequencePlot({ sequence_id }: SequenceViewerProps) {
         ) : // Check for errors if sequence has been loaded
         sequencePlotIsError ? (
           <div>No sequence...</div>
+        ) : 
+        sequencePlot?.data == undefined ? (
+          <div>No data for sequence plot...</div>
         ) : (
           <Plot data={sequencePlot?.data} layout={sequencePlot?.layout} useResizeHandler={true} />
         )

@@ -33,10 +33,9 @@ function ExamModal(props: ModalProps<Exam>) {
   const [exam, setExam] = props.data
     ? React.useState<Exam>(props.data)
     : React.useState<Exam>({
-        id: NaN,
+        id: '',
         patient_id: Number(params.patientId),
         name: '',
-        procedures: [],
         country: 'D',
         site: '',
         address: '',
@@ -80,7 +79,6 @@ function ExamModal(props: ModalProps<Exam>) {
                   name={item.key}
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
                   placeholder={item.placeholder}
-                  defaultValue={exam[item.key]}
                   required
                 />
               </Grid>
