@@ -90,7 +90,7 @@ async def get_all_exam_template_data() -> list[Exam]:
         List of exam data base orm models
     """
     async with async_session() as session:
-        result: Result = await session.execute(select(Exam).where(Exam.is_template == True))
+        result: Result = await session.execute(select(Exam).where(Exam.is_template))
         exams = list(result.scalars().all())
     return exams
 
