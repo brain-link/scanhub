@@ -3,20 +3,19 @@
 
 """Definition of the user management and login API endpoints (accessible through swagger UI)."""
 
-from typing import Annotated
-from hashlib import sha256, scrypt
-from secrets import compare_digest, token_hex
-from passlib.hash import argon2
 import time
+from hashlib import scrypt, sha256
+from secrets import compare_digest, token_hex
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-
+from passlib.hash import argon2
 from scanhub_libraries.models import User, UserRole
 from scanhub_libraries.security import oauth2_scheme
-from app.db import UserSQL
-from app import dal
 
+from app import dal
+from app.db import UserSQL
 
 AUTOMATIC_LOGOUT_TIME_SECONDS = 3600  # time until a login token gets invalid (1 hour)
 
@@ -30,7 +29,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
 
     Parameters
     ----------
-    access_token 
+    access_token
         User token (From HTTP Header: "Authorization: Bearer <access_token>")
 
     Returns
@@ -43,9 +42,11 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
         401: Unauthorized if the token is invalid.
     """
     user_db: UserSQL = await dal.get_user_from_token(access_token)
+    # auto-logout time 1 hour
     if user_db is not None and user_db.access_token is not None and user_db.last_activity_unixtime is not None \
-            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:              # auto-logout time 1 hour
-        await dal.update_user_data(user_db.username, {"last_activity_unixtime": time.time()})         # reset last_activity timer
+            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:
+        # reset last_activity timer
+        await dal.update_user_data(user_db.username, {"last_activity_unixtime": time.time()})
         user = await get_user_out(user_db)
         return user
 
@@ -63,7 +64,7 @@ async def get_current_user_admin(current_user: Annotated[str, Depends(get_curren
 
     Parameters
     ----------
-    access_token 
+    access_token
         User token (From HTTP Header: "Authorization: Bearer <access_token>")
 
     Returns
@@ -87,19 +88,25 @@ async def get_current_user_admin(current_user: Annotated[str, Depends(get_curren
 
 
 def compute_complex_password_hash(password: str, salt: str) -> str:
-    """ 
-        Function to compute a complex password hash with salt. 
-        It should take quite a bit of computation to guard against brute force attacks. 
+    """
+    Compute a complex password hash with salt.
+
+    It should take quite a bit of computation to guard against brute force attacks.
     """
     start_time = time.time()
-    password_plain_hash = sha256(bytes(password, 'utf8')).hexdigest()               # plain sha256 hash from python standard library (not enough for brute force attack)
-    password_scrypt_hash = scrypt(password=bytes(password_plain_hash, 'utf8'), 
+    # plain sha256 hash from python standard library (not enough for brute force attack)
+    password_plain_hash = sha256(bytes(password, 'utf8')).hexdigest()
+    # scrypt from python standard library function (designed for password digestion)
+    password_scrypt_hash = scrypt(password=bytes(password_plain_hash, 'utf8'),
                                   salt=bytes(salt, 'utf8'),
-                                  n=256, r=128, p=32)                               # scrypt from python standard library function (designed for password digestion)
-    password_argon2_hash = argon2.using(salt=bytes(salt, 'utf8')).hash(secret=password_scrypt_hash)    # argon2 from passlib (recommended memory intensive password digest, current year is 2024)
-    password_final_hash = sha256(bytes(password_argon2_hash, 'utf-8')).hexdigest()      # another round of plain sha256 from python standard library, why not
+                                  n=256, r=128, p=32)
+    # argon2 from passlib (recommended memory intensive password digest, current year is 2024)
+    password_argon2_hash = argon2.using(salt=bytes(salt, 'utf8')).hash(secret=password_scrypt_hash)
+    # another round of plain sha256 from python standard library, why not
+    password_final_hash = sha256(bytes(password_argon2_hash, 'utf-8')).hexdigest()
     if (time.time() - start_time < 0.1):
-        print("WARNING: compute_complex_password_hash is faster than 0.1 sec, consider increasing the parameters to ensure security of password hashes.")
+        print("WARNING: compute_complex_password_hash is faster than 0.1 sec, \
+              consider increasing the parameters to ensure security of password hashes.")
     return password_final_hash
 
 
@@ -122,7 +129,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
         401: Unauthorized if the username or password is wrong.
     """
     user_db = await dal.get_user_data(form_data.username)
-    if user_db == None:
+    if user_db is None:
         print("Login try by unknown user. Username:", form_data.username)
         dummy_hash = compute_complex_password_hash(form_data.password, token_hex(1024))     # avoid timing attack
         compare_digest(dummy_hash, dummy_hash)                                              # avoid timing attack
@@ -139,48 +146,51 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid authentication credentials",
                 headers={"WWW-Authenticate": "Bearer"})
-        elif user_db.access_token is not None and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:  # auto-logout time 1 hour
+        # auto-logout time 1 hour
+        elif user_db.access_token is not None and \
+            time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:
             # user still logged in, return the current token
             print("Login while user is already logged in. Username:", form_data.username)
             await dal.update_user_data(form_data.username, {"last_activity_unixtime": time.time()})
             return User(
-                username=user_db.username, 
-                first_name=user_db.first_name, 
-                last_name=user_db.last_name, 
+                username=user_db.username,
+                first_name=user_db.first_name,
+                last_name=user_db.last_name,
                 email=user_db.email,
                 role=user_db.role,
-                access_token=user_db.access_token, 
-                token_type="bearer",
+                access_token=user_db.access_token,
+                token_type="bearer",    # noqa: S106
                 last_activity_unixtime=None
             )
         else:
             # user not logged in anymore, create new token
             print("Login. Username:", form_data.username)
             newtoken = token_hex(256)
-            await dal.update_user_data(form_data.username, {"access_token": newtoken, "last_activity_unixtime": time.time()})
+            await dal.update_user_data(
+                form_data.username,
+                {"access_token": newtoken, "last_activity_unixtime": time.time()}
+            )
             return User(
-                username=user_db.username, 
-                first_name=user_db.first_name, 
-                last_name=user_db.last_name, 
+                username=user_db.username,
+                first_name=user_db.first_name,
+                last_name=user_db.last_name,
                 email=user_db.email,
                 role=user_db.role,
-                access_token=newtoken, 
-                token_type="bearer",
+                access_token=newtoken,
+                token_type="bearer",    # noqa: S106
                 last_activity_unixtime=None
             )
 
 
 @router.post("/logout", tags=["login"])
-async def login(user: Annotated[User, Depends(get_current_user)]) -> None:
-    """
-    Logout endpoint.
-    """
+async def logout(user: Annotated[User, Depends(get_current_user)]) -> None:
+    """Logout endpoint."""
     print("Logout. Username:", user.username)
     await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
 
 
 async def get_user_out(user_db: UserSQL) -> User:
-    """ Convert UserSQL to User, replace token with empty string. """
+    """Convert UserSQL to User, replace token with empty string."""
     # UserSQL
     # --------
     # username: Mapped[str] = mapped_column(primary_key=True)
@@ -188,9 +198,12 @@ async def get_user_out(user_db: UserSQL) -> User:
     # last_name: Mapped[str] = mapped_column(nullable=False)
     # email: Mapped[str] = mapped_column(nullable=False)
     # password_hash: Mapped[str] = mapped_column(nullable=False)
-    # salt: Mapped[str] = mapped_column(nullable=False)               # salt used to create the password_hash
-    # access_token: Mapped[str] = mapped_column(nullable=True, unique=True)          # token used to access backend while user is logged in, None if user is logged out
-    # last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)      # time of last activity, used for automatic logout
+    # salt used to create the password_hash
+    # salt: Mapped[str] = mapped_column(nullable=False)
+    # token used to access backend while user is logged in, None if user is logged out
+    # access_token: Mapped[str] = mapped_column(nullable=True, unique=True)
+    # time of last activity, used for automatic logout
+    # last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)
 
     # User
     # ---------
@@ -215,8 +228,7 @@ async def get_user_out(user_db: UserSQL) -> User:
 @router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])
 async def get_user_list(current_user: Annotated[User, Depends(get_current_user_admin)]) -> list[User]:
     """
-    Get all users endpoint.
-    Only for admins.
+    Get all users endpoint (only admins).
 
     Returns
     -------
@@ -232,13 +244,13 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user_a
 @router.post("/createuser", status_code=201, tags=["user"])
 async def create_user(current_user: Annotated[User, Depends(get_current_user_admin)], new_user: User):
     """
-    Create new patient database entry.
-    Only for admins.
+    Create new patient database entry (only admins).
 
     Parameters
     ----------
     new_user
-        pydantic base model of new user, token_type should be "password" and access_token should contain the password of the new user.
+        pydantic base model of new user, token_type should be "password" and
+        access_token should contain the password of the new user.
         The password of the new user should at least be 12 characters long.
 
     Returns
@@ -252,7 +264,7 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         raise HTTPException(
             status_code=500,
             detail="User already exists.")
-    if new_user.token_type != "password":
+    if new_user.token_type != "password":   # noqa: S105
         raise HTTPException(
             status_code=400,
             detail="To create a new user, the token_type should be 'password'!")
@@ -280,8 +292,7 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
 @router.delete("/deleteuser", response_model={}, status_code=204, tags=["user"])
 async def user_delete(current_user: Annotated[User, Depends(get_current_user_admin)], username_to_delete: str) -> None:
     """
-    Delete an existing user.
-    Only for admins.
+    Delete an existing user (requires admin priviledges).
 
     Parameters
     ----------
@@ -327,7 +338,8 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found if user not found.
     """
-    if updated_user.role != UserRole.admin and (await dal.get_user_data(updated_user.username)).role == UserRole.admin.value:
+    user_role = (await dal.get_user_data(updated_user.username)).role
+    if updated_user.role != UserRole.admin and user_role == UserRole.admin.value:
         at_least_two_admins = 0
         for user in await get_user_list(current_user):
             if user.role == UserRole.admin:
@@ -337,7 +349,7 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
         if at_least_two_admins < 2:
             raise HTTPException(status_code=403, detail="Cannot change role of last admin.")
     await dal.update_user_data(
-        updated_user.username, 
+        updated_user.username,
         {
             "first_name": updated_user.first_name,
             "last_name": updated_user.last_name,

@@ -66,7 +66,6 @@ async def get_user_from_token(access_token: str) -> (UserSQL | None):
     -------
         The user as read from database or None if the token is not found.
     """
-
     async with async_session() as session:
         result: Result = await session.scalars(select(UserSQL).where(UserSQL.access_token == access_token))
         user = result.first()

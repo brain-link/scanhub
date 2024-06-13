@@ -1,15 +1,14 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-""" User login manager main file."""
+"""User login manager main file."""
 
-from typing import Annotated
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from app.db import init_db, engine
+from app.db import engine, init_db
 from app.userlogin import router
 
 app = FastAPI(
