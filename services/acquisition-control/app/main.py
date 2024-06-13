@@ -3,11 +3,11 @@
 
 """Main file for the acquisition control service."""
 
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from scanhub_libraries.security import get_current_user
 
 from api.acquisitioncontrol import router
-from scanhub_libraries.security import get_current_user
 
 app = FastAPI(
     openapi_url="/api/v1/mri/acquisitioncontrol/openapi.json",

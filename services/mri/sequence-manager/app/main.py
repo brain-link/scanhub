@@ -5,13 +5,13 @@
 
 import logging
 
-from fastapi import FastAPI, Request, Depends
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from scanhub_libraries.security import get_current_user
 
 from database.mongodb import close_mongo_connection, connect_to_mongo
 from endpoints import health, mri_sequence_endpoints
-from scanhub_libraries.security import get_current_user
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
