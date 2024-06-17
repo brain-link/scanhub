@@ -300,11 +300,19 @@ class ExamOut(BaseExam):
     workflows: list[WorkflowOut]
 
 
+class UserRole(Enum):
+    admin = "admin"
+    medical = "medical"
+    scientist = "scientist"
+    engineer = "engineer"
+
+
 class User(BaseModel):
     username: str
     first_name: str
     last_name: str
     email: str | None
+    role: UserRole
     access_token: str   # access_token and token_type are standardized names in OAuth2, don't change them...
     token_type: str     # ... also token_type should be "bearer" as standardized in OAuth2. Exception: when adding a new user...
                         # ... the token_type is "password" and access_token contains the password.

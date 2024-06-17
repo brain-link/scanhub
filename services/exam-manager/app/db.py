@@ -143,9 +143,6 @@ class Task(Base):
     )
 
 
-# TBD DeviceTask(Task):
-
-
 # Create automap base
 MappedBase = automap_base()
 MappedBase.prepare(autoload_with=engine, reflect=True)

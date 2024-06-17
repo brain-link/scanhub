@@ -47,8 +47,14 @@ target-version = "py310"
 
 [tool.ruff.lint]
 # Enable linters
-# W = pycodestyle, F = Pyflakes, S = flake8-bandit, I = isort, N = pep8-naming, D = pydocstyle
-select = ["W", "F", "S", "I", "N", "D"]
+# E = pycodestyle (error)
+# W = pycodestyle (warning)
+# F = Pyflakes
+# S = flake8-bandit
+# I = isort
+# N = pep8-naming
+# D = pydocstyle
+select = ["E", "W", "F", "S", "I", "N", "D"]
 
 [tool.ruff.lint.flake8-type-checking]
 strict = true

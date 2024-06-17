@@ -5,15 +5,20 @@
 
 import os
 
-from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+
 # from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
-    # DeclarativeBase cannot be used directly
+    """
+    Define base class.
+
+    DeclarativeBase cannot be used directly.
+    """
+
     pass
 
 
@@ -29,7 +34,7 @@ def init_db() -> None:
 
 
 class UserSQL(Base):
-    """ User ORM model. """
+    """User ORM model."""
 
     __tablename__ = "user"
     __table_args__ = {"extend_existing": True}
@@ -38,10 +43,14 @@ class UserSQL(Base):
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
+    role: Mapped[str] = mapped_column(nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
-    salt: Mapped[str] = mapped_column(nullable=False)               # salt used to create the password_hash
-    access_token: Mapped[str] = mapped_column(nullable=True, unique=True)          # token used to access backend while user is logged in, None if user is logged out
-    last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)      # time of last activity, used for automatic logout
+    # salt used to create the password_hash
+    salt: Mapped[str] = mapped_column(nullable=False)
+    # token used to access backend while user is logged in, None if user is logged out
+    access_token: Mapped[str] = mapped_column(nullable=True, unique=True)
+    # time of last activity, used for automatic logout
+    last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)
 
 
 
