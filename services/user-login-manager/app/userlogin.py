@@ -25,12 +25,14 @@ router = APIRouter()
 
 @router.get("/getcurrentuser", status_code=200, tags=["user"])
 async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> User:
-    """Get current user endpoint.
+    """
+    Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.
 
     Parameters
     ----------
     access_token
-        User token (From HTTP Header: "Authorization: Bearer <access_token>")
+        User token as previously obtained trough a call to /login
+        Submit via HTTP header "Authorization: Bearer <access_token>"
 
     Returns
     -------
@@ -41,7 +43,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     HTTPException
         401: Unauthorized if the token is invalid.
     """
-    user_db: UserSQL = await dal.get_user_from_token(access_token)
+    user_db: UserSQL | None = await dal.get_user_from_token(access_token)
     # auto-logout time 1 hour
     if user_db is not None and user_db.access_token is not None and user_db.last_activity_unixtime is not None \
             and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:
@@ -59,17 +61,19 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
 
 
 # @router.get("/getcurrentuseradmin", status_code=200, tags=["user"])
-async def get_current_user_admin(current_user: Annotated[str, Depends(get_current_user)]) -> User:
-    """Get current user, only if user is admin.
+async def get_current_user_admin(current_user: Annotated[User, Depends(get_current_user)]) -> User:
+    """
+    Check if the current_user has the role admin. May be (called as an endpoint or) used in FastAPI with Depends.
 
     Parameters
     ----------
-    access_token
-        User token (From HTTP Header: "Authorization: Bearer <access_token>")
+    current_user
+        The current_user as determined by get_current_user from the access_token.
+        Submit the access_token via HTTP header "Authorization: Bearer <access_token>"
 
     Returns
     -------
-        User pydantic model, the user data of the current user (admin).
+        User pydantic model, the user data of the current user, who needs to have the role admin.
 
     Raises
     ------
@@ -304,7 +308,9 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found
     """
-    if (await dal.get_user_data(username_to_delete)).role == UserRole.admin.value:
+    # check if the this would delete the last user with admin role
+    sql_user_to_delete = await dal.get_user_data(username_to_delete)
+    if sql_user_to_delete is not None and sql_user_to_delete.role == UserRole.admin.value:
         at_least_two_admins = 0
         for user in await get_user_list(current_user):
             if user.role == UserRole.admin:
@@ -313,8 +319,10 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
                     break
         if at_least_two_admins < 2:
             raise HTTPException(status_code=403, detail="Cannot delete last admin.")
+    # check if this deletes the current user
     if current_user.username == username_to_delete:
         raise HTTPException(status_code=403, detail="Cannot delete the user you are logged in with.")
+    # try to delete if the user exists
     if not await dal.delete_user_data(username=username_to_delete):
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -322,12 +330,13 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
 @router.put("/updateuser", response_model={}, status_code=200, tags=["user"])
 async def update_user(current_user: Annotated[User, Depends(get_current_user_admin)], updated_user: User) -> None:
     """
-    Update an existing user.
+    Update the first_name, last_name, email and role of an existing user.
 
     Parameters
     ----------
     updated_user
-        Updated user data.
+        The attribute username identifies the user to modify.
+        The attributes first_name, last_name, email and role are set for this user.
 
     Returns
     -------
@@ -338,8 +347,12 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found if user not found.
     """
-    user_role = (await dal.get_user_data(updated_user.username)).role
-    if updated_user.role != UserRole.admin and user_role == UserRole.admin.value:
+    # check if the user exists
+    sql_user_to_modify = await dal.get_user_data(updated_user.username)
+    if sql_user_to_modify is None:
+        raise HTTPException(status_code=403, detail="User does not exist.")
+    # check if this would change the role of the last user with admin role
+    if updated_user.role != UserRole.admin and sql_user_to_modify.role == UserRole.admin.value:
         at_least_two_admins = 0
         for user in await get_user_list(current_user):
             if user.role == UserRole.admin:
@@ -348,6 +361,7 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
                     break
         if at_least_two_admins < 2:
             raise HTTPException(status_code=403, detail="Cannot change role of last admin.")
+    # do the update
     await dal.update_user_data(
         updated_user.username,
         {
