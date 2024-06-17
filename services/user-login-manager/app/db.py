@@ -43,7 +43,7 @@ class UserSQL(Base):
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
-    role: Mapped[str] = mapped_column(nullable=True)
+    role: Mapped[str] = mapped_column(nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
     # salt used to create the password_hash
     salt: Mapped[str] = mapped_column(nullable=False)
