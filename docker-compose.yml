@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
 
   # SERVICES
@@ -328,5 +326,6 @@ volumes:
   data_lake:
   mongodb_data_sequence:
   postgres_data_scanhub:
+  postgres_data_patient:
   kafka_data:
     driver: local
