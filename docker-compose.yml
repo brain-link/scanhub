@@ -2,7 +2,8 @@ version: "3.5"
 
 services:
 
-  # Microservices
+  # SERVICES
+  
   # Workflow manager, device manager and exam manager create data tables in postgres DB
 
   workflow-manager:
@@ -104,6 +105,25 @@ services:
         condition: service_healthy
 
 
+
+  patient-manager:
+    container_name: patient-manager
+    build: 
+      context: ./services/patient-manager
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8100
+    volumes:
+    - ./services/patient-manager/app:/app/
+    ports:
+      - 8100:8100
+    environment:
+      - DB_URI=postgresql://brainlink:data@patient-database/patients-data
+      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
+    depends_on:
+      patient-database:
+        condition: service_healthy
+
+
+
   user-login-manager:
     container_name: user-login-manager
     build: 
@@ -174,7 +194,8 @@ services:
       - data_lake:/app/data_lake/
 
 
-  # Databases
+  # DATABASES
+
   # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
   scanhub-database:
     container_name: db-scanhub
@@ -195,6 +216,27 @@ services:
       start_period: 5s 
     ports:
       - "5433:5432"
+
+  # Patient database
+  patient-database:
+    container_name: patient-db
+    image: postgres:15.2-bullseye
+    restart: always
+    volumes:
+      - postgres_data_patient:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: brainlink
+      POSTGRES_DB: patients-data
+      POSTGRES_PASSWORD: data
+    ports:
+      - "5432:5432"
+    healthcheck:  
+      # init-db container is started, after health check passed
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s 
 
 
   # MRI Sequence mongo database: Contains (pulseq) mri sequence files
@@ -263,6 +305,23 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+
+  # FRONTEND
+
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       NODE_ENV: "development" # use "development" or "production"
+  #   depends_on:
+  #     - patient-manager
+  #   volumes:
+  #     - ./frontend/src:/app/src
+  #   ports:
+  #     - 3000:3000
 
 
 volumes:
