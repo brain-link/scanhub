@@ -13,7 +13,7 @@ jobs:
     name: 'docker-compose'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build the stack
         run: |
           docker build -t scanhub-base ./services/base && 
