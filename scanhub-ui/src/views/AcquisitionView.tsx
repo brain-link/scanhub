@@ -1,6 +1,12 @@
-// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-// PatientIndex.tsx is responsible for rendering the patient view. It is the entry point for the patient view.
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ * 
+ * AcquisitionView.tsx is responsible for rendering the acquisition view.
+ * The acquisition view is the main interaction point and contains instances of
+ * exams, workflows and tasks of a certain patients. 
+ * It allows to execute them and view results, i.e. dicom images.
+ */
 
 import * as React from 'react'
 import AddSharpIcon from '@mui/icons-material/AddSharp'

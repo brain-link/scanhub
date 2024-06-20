@@ -1,6 +1,10 @@
-// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-// PatientTable.tsx is responsible for rendering the patient table view.
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ * 
+ * PatientListView.tsx is responsible for rendering the patient table view.
+ */
+
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'

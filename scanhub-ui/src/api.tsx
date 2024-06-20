@@ -1,4 +1,10 @@
-import baseUrls from './client/urls'
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ * 
+ * api.tsx contains instances of the different apis.
+ */
+import baseUrls from './utils/Urls'
 import { PatientsApi } from './generated-client/patient'
 import { ExamsApi } from './generated-client/exam'
 import { WorkflowsApi } from './generated-client/exam'

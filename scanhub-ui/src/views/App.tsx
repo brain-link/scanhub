@@ -1,6 +1,10 @@
-// Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-// SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-// App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ * 
+ * App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
+ */
+
 import Box from '@mui/joy/Box'
 import CssBaseline from '@mui/material/CssBaseline';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';

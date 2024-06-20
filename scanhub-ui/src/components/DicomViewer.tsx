@@ -19,7 +19,7 @@ import CornerstoneViewport from 'react-cornerstone-viewport'
 
 import DicomViewerToolbar, { tools } from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
-import { navigation } from '../utils/size_vars'
+import { navigation } from '../utils/SizeVars'
 
 
 function DicomViewer() {

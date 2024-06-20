@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ * 
+ * LoginView.tsx is responsible for rendering the user log in screen.
+ */
+
 import React, { useState } from 'react';
 
 import Stack from '@mui/joy/Stack';

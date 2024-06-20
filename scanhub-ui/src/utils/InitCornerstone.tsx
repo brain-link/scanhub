@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ * 
+ * InitCornerstone.tsx initializes the cornerstone viewport.
+ */
+
 import * as cornerstone from 'cornerstone-core'
 import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstoneTools from 'cornerstone-tools'
