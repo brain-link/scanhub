@@ -1,19 +1,17 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * PatientTable.tsx is responsible for rendering the patient table view.
  */
-
 import Sheet from '@mui/joy/Sheet'
 import Table from '@mui/joy/Table'
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { PatientTableInterface } from '../interfaces/components.interface'
 
-
 export default function PatientTable(props: PatientTableInterface) {
-
   const navigate = useNavigate()
 
   return (
@@ -35,7 +33,12 @@ export default function PatientTable(props: PatientTableInterface) {
 
         <tbody>
           {props.patients.map((patient) => (
-            <tr key={patient.id} onClick={() => {navigate(`/${patient.id}`)}}>
+            <tr
+              key={patient.id}
+              onClick={() => {
+                navigate(`/${patient.id}`)
+              }}
+            >
               <td>{patient.id}</td>
               <td>{patient.name}</td>
               <td>{patient.sex}</td>

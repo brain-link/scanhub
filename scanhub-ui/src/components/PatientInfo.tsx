@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * PatientInfo.tsx is responsible for displaying patient information in the patient view.
  */
-
 import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 // import { useParams } from 'react-router-dom';
@@ -45,32 +44,32 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
         <Typography level='body-sm' textColor='text.primary'>
           {patient.id}
         </Typography>
-  
+
         <Typography level='body-sm'>Sex</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.sex}
         </Typography>
-  
+
         <Typography level='body-sm'>Birthday</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.birth_date}
         </Typography>
-  
+
         <Typography level='body-sm'>Admission</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {new Date(patient.datetime_created).toDateString()}
         </Typography>
-  
+
         <Typography level='body-sm'>Updated</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-'}
         </Typography>
-  
+
         <Typography level='body-sm'>Status</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.status}
         </Typography>
-  
+
         <Typography level='body-sm'>Concern</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.issuer}

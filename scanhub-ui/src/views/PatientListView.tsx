@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * PatientListView.tsx is responsible for rendering the patient table view.
  */
-
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
@@ -14,21 +13,29 @@ import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
 import * as React from 'react'
 import { useQuery } from 'react-query'
-import { PatientOut } from '../generated-client/patient';
+
 import { patientApi } from '../api'
+import AlertItem from '../components/AlertItem'
 import PatientCreateModal from '../components/PatientCreateModal'
 import PatientTable from '../components/PatientTable'
-import AlertItem from '../components/AlertItem'
+import { PatientOut } from '../generated-client/patient'
 import { Alerts } from '../interfaces/components.interface'
 
 export default function PatientListView() {
-
   // const [patients, setPatients] = React.useState<Patient[]>([]);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
 
-  const {data: patients, isLoading, isError} = useQuery<PatientOut[]>({
+  const {
+    data: patients,
+    isLoading,
+    isError,
+  } = useQuery<PatientOut[]>({
     queryKey: ['patients'],
-    queryFn: async () => { return await patientApi.getPatientListGet().then((result) => {return result.data})}
+    queryFn: async () => {
+      return await patientApi.getPatientListGet().then((result) => {
+        return result.data
+      })
+    },
   })
 
   if (isLoading) {
@@ -43,10 +50,7 @@ export default function PatientListView() {
   if (isError) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <AlertItem
-          title="Error Loading Patients"
-          type={Alerts.Error}
-        />
+        <AlertItem title='Error Loading Patients' type={Alerts.Error} />
       </Container>
     )
   }
@@ -75,11 +79,12 @@ export default function PatientListView() {
 
   return (
     <Box sx={{ m: 3 }}>
-      
       <PatientCreateModal
         isOpen={dialogOpen}
         setOpen={setDialogOpen}
-        onSubmit={(newPatient: PatientOut) => {patients?.push(newPatient)}}
+        onSubmit={(newPatient: PatientOut) => {
+          patients?.push(newPatient)
+        }}
         onClose={() => {}}
       />
 
@@ -90,10 +95,7 @@ export default function PatientListView() {
         </IconButton>
       </Stack>
 
-      <PatientTable
-        patients={patients ? patients : []}
-      />
-
+      <PatientTable patients={patients ? patients : []} />
     </Box>
   )
 }

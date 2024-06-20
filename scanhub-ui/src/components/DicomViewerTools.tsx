@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * DicomViewerTools.tsx is responsible for rendering a toolbar for the dicom viewer.
  */
-
 import AutoFixNormalSharpIcon from '@mui/icons-material/AutoFixNormalSharp'
 import ContrastSharpIcon from '@mui/icons-material/ContrastSharp'
 import HighlightAltSharpIcon from '@mui/icons-material/HighlightAltSharp'

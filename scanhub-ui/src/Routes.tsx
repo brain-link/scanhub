@@ -1,30 +1,29 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * Routes.tsx is responsible for defining the routes of the react app.
  */
-
-import React from 'react';
-import { useContext } from 'react';
-import { Route, Routes, Navigate, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { useContext } from 'react'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
 // import Context
-import LoginContext from './LoginContext';
+import LoginContext from './LoginContext'
+import UserManagement from './components/UserManagement'
+import PatientIndex from './views/AcquisitionView'
 // Import views
 import App from './views/App'
-import PatientIndex from './views/AcquisitionView'
-import PatientListView from './views/PatientListView'
 import Login from './views/LoginView'
+import PatientListView from './views/PatientListView'
 // import RecordViewer from './views/RecordViewer'
 import Templates from './views/TemplatesView'
-import UserManagement from './components/UserManagement';
+
 // import models
 
 export function RouteConfiguration() {
-
-  const navigate = useNavigate();
-  const [user, setUser] = useContext(LoginContext);
+  const navigate = useNavigate()
+  const [user, setUser] = useContext(LoginContext)
 
   return (
     // <Routes>
@@ -46,22 +45,27 @@ export function RouteConfiguration() {
     // </Routes>
 
     <Routes>
-      <Route path='/'          element={user ? <App /> : <Navigate to="/login" />} >
-        <Route index             element={<PatientListView />} />
-        <Route path=':patientId' element={<PatientIndex />} >
-          <Route path=':examId'    element={<PatientIndex />} />
+      <Route path='/' element={user ? <App /> : <Navigate to='/login' />}>
+        <Route index element={<PatientListView />} />
+        <Route path=':patientId' element={<PatientIndex />}>
+          <Route path=':examId' element={<PatientIndex />} />
         </Route>
         <Route path='/templates' element={<Templates />} />
-        <Route path='/users'     element={<UserManagement />} />
+        <Route path='/users' element={<UserManagement />} />
       </Route>
 
-      <Route path='/login'     element={<Login onLogin={
-        (newuser) => {
-          console.log('Login confirmed.');
-          setUser(newuser);
-          navigate('/');
+      <Route
+        path='/login'
+        element={
+          <Login
+            onLogin={(newuser) => {
+              console.log('Login confirmed.')
+              setUser(newuser)
+              navigate('/')
+            }}
+          />
         }
-      } /> } />
+      />
     </Routes>
   )
 }

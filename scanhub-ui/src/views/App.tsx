@@ -1,17 +1,16 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
  */
-
 import Box from '@mui/joy/Box'
-import CssBaseline from '@mui/material/CssBaseline';
-import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
+import CssBaseline from '@mui/material/CssBaseline'
 import {
-  experimental_extendTheme as materialExtendTheme,
-  Experimental_CssVarsProvider as MaterialCssVarsProvider,
   THEME_ID as MATERIAL_THEME_ID,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  experimental_extendTheme as materialExtendTheme,
 } from '@mui/material/styles'
 import { GlobalStyles } from '@mui/system'
 import * as React from 'react'
@@ -19,15 +18,12 @@ import { Outlet } from 'react-router-dom'
 
 import Navigation from '../components/Navigation'
 
-const materialTheme = materialExtendTheme();
+const materialTheme = materialExtendTheme()
 
 export default function App() {
   return (
-    <MaterialCssVarsProvider defaultMode="system" theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-      <JoyCssVarsProvider
-        defaultMode="system"
-        disableTransitionOnChange
-      >
+    <MaterialCssVarsProvider defaultMode='system' theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider defaultMode='system' disableTransitionOnChange>
         <CssBaseline />
         <GlobalStyles
           styles={{

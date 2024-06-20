@@ -1,20 +1,19 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
  */
-
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
+import BuildSharpIcon from '@mui/icons-material/BuildSharp'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
-// Icons
-// import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
-import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp';
-import BuildSharpIcon from '@mui/icons-material/BuildSharp';
-import Person2SharpIcon from '@mui/icons-material/Person2Sharp';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
+import Person2SharpIcon from '@mui/icons-material/Person2Sharp'
 import PersonSharpIcon from '@mui/icons-material/PersonSharp'
+// Icons
+// import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
+import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp'
 import Avatar from '@mui/joy/Avatar'
 import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
@@ -25,16 +24,15 @@ import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import { useColorScheme } from '@mui/joy/styles'
-import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles';
+import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
 import React, { useContext } from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
 
-import LoginContext from '../LoginContext';
+import LoginContext from '../LoginContext'
 // import { SettingsInputSvideoRounded } from '@mui/icons-material';
 import { loginApi } from '../api'
-import { UserRole } from '../generated-client/userlogin';
-
+import { UserRole } from '../generated-client/userlogin'
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
@@ -69,7 +67,6 @@ function ColorSchemeToggle() {
   )
 }
 
-
 export default function Navigation() {
   const loc = useLocation()
   const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null)
@@ -79,11 +76,11 @@ export default function Navigation() {
 
   // Menu elements
   const menuItems = [
-    { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon/> },
-    { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon/> },
-  ]  
+    { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon /> },
+    { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon /> },
+  ]
   if (user && user.role == UserRole.Admin) {
-    menuItems.push(  {id: 2, text: 'Users', link: '/users', icon: <Person2SharpIcon/> })
+    menuItems.push({ id: 2, text: 'Users', link: '/users', icon: <Person2SharpIcon /> })
   }
 
   return (
@@ -132,7 +129,7 @@ export default function Navigation() {
             disabled={loc.pathname === item.link}
             variant={loc.pathname === item.link ? 'soft' : 'plain'}
             key={item.id}
-            sx={{display: 'inline-flex'}}
+            sx={{ display: 'inline-flex' }}
           >
             {item.text}
           </Button>
@@ -191,15 +188,16 @@ export default function Navigation() {
         <MenuItem
           key='logout'
           onClick={() => {
-            loginApi.logoutApiV1UserloginLogoutPost({headers: {Authorization: 'Bearer ' + user?.access_token}})
-            .then(() => {
-              queryClient.invalidateQueries()  // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
-              setAnchorEl(null)
-              setUser(null)
-            })
-            .catch((error) => {
-              console.log('Error at logout: ', error)   // TODO inform user.
-            })
+            loginApi
+              .logoutApiV1UserloginLogoutPost({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+              .then(() => {
+                queryClient.invalidateQueries() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
+                setAnchorEl(null)
+                setUser(null)
+              })
+              .catch((error) => {
+                console.log('Error at logout: ', error) // TODO inform user.
+              })
           }}
         >
           <ListItemDecorator>

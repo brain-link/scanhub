@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * SequenceUpload.tsx is responsible for rendering an interface to upload a new sequence.
  */
-
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
 import Input from '@mui/joy/Input'
@@ -18,12 +17,11 @@ import * as React from 'react'
 import { useMutation } from 'react-query'
 
 import mriSequenceService from '../client/sequence-api'
+import { SequenceUploadModal } from '../interfaces/components.interface'
 // Import api service and interfaces
 import { MRISequence } from '../interfaces/mri-data.interface'
-import { SequenceUploadModal } from '../interfaces/components.interface'
 
 function SequenceUpload(props: SequenceUploadModal) {
-
   const [sequence, setSequence] = React.useState<MRISequence>({
     _id: '',
     name: '',
@@ -105,7 +103,7 @@ function SequenceUpload(props: SequenceUploadModal) {
                 type='file'
                 onChange={(e) => {
                   e.preventDefault()
-                  setSequence({ ...sequence, file: (e.target.files ? e.target.files[0] : null) })
+                  setSequence({ ...sequence, file: e.target.files ? e.target.files[0] : null })
                 }}
               />
               Upload sequence

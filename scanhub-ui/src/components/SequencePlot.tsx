@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * SequencePlot.tsx is responsible for rendering an mri sequence.
  */
-
 import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
@@ -17,7 +16,6 @@ import { SequenceViewerProps } from '../interfaces/components.interface'
 import { MRISequence, PlotData } from '../interfaces/mri-data.interface'
 
 function SequencePlot({ sequence_id }: SequenceViewerProps) {
-
   const {
     data: sequencePlot,
     isLoading: sequencePlotIsLoading,
@@ -73,8 +71,7 @@ function SequencePlot({ sequence_id }: SequenceViewerProps) {
         ) : // Check for errors if sequence has been loaded
         sequencePlotIsError ? (
           <div>No sequence...</div>
-        ) : 
-        sequencePlot?.data == undefined ? (
+        ) : sequencePlot?.data == undefined ? (
           <div>No data for sequence plot...</div>
         ) : (
           <Plot data={sequencePlot?.data} layout={sequencePlot?.layout} useResizeHandler={true} />

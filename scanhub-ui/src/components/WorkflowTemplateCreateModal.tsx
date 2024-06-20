@@ -1,43 +1,49 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * WorkflowTemplateCreateModal.tsx is responsible for rendering a modal with an interface
  * to create a new workflow template.
  */
-
-import Typography from '@mui/joy/Typography'
-
 import Button from '@mui/joy/Button'
-import ModalDialog from '@mui/joy/ModalDialog'
-import ModalClose from '@mui/joy/ModalClose'
-import Input from '@mui/joy/Input'
 import FormLabel from '@mui/joy/FormLabel'
+import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
+import ModalClose from '@mui/joy/ModalClose'
+import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useContext } from 'react'
-
 import { useMutation } from 'react-query'
-import { BaseWorkflow, WorkflowOut } from '../generated-client/exam';
-import { workflowsApi } from '../api';
-import { ModalComponentProps } from '../interfaces/components.interface'
-import LoginContext from '../LoginContext'
 
+import LoginContext from '../LoginContext'
+import { workflowsApi } from '../api'
+import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
+import { ModalComponentProps } from '../interfaces/components.interface'
 
 export default function WorkflowTemplateCreateModal(props: ModalComponentProps<WorkflowOut>) {
-
-  const [workflow, setWorkflow] = React.useState<BaseWorkflow>({comment: '', exam_id: undefined, is_finished: false, is_template: true, is_frozen: false})
-  const [user, ] = useContext(LoginContext);
+  const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
+    comment: '',
+    exam_id: undefined,
+    is_finished: false,
+    is_template: true,
+    is_frozen: false,
+  })
+  const [user] = useContext(LoginContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
-    await workflowsApi.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(
-      workflow,
-      {headers: {Authorization: 'Bearer ' + user?.access_token}}
-    )
-    .then((response) => { props.onSubmit(response.data) })
-    .catch((err) => { console.log(err) })
+    await workflowsApi
+      .createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(workflow, {
+        headers: { Authorization: 'Bearer ' + user?.access_token },
+      })
+      .then((response) => {
+        props.onSubmit(response.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   })
 
   return (
@@ -45,7 +51,7 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
       open={props.isOpen}
       color='neutral'
       onClose={() => props.setOpen(false)}
-      sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <ModalDialog
         aria-labelledby='basic-modal-dialog-title'
@@ -66,12 +72,11 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
         </Typography>
 
         <Stack spacing={1}>
-
           <FormLabel>Comment</FormLabel>
           <Input
             name={'comment'}
             onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-            defaultValue={ workflow.comment }
+            defaultValue={workflow.comment}
           />
 
           {/* TODO: Drop-down menu to select exam template */}
@@ -79,7 +84,7 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
           <Input
             name={'exam_id'}
             onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-            defaultValue={ workflow.exam_id }
+            defaultValue={workflow.exam_id}
           />
 
           <Button
@@ -93,7 +98,6 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
           >
             Save
           </Button>
-
         </Stack>
       </ModalDialog>
     </Modal>

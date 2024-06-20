@@ -1,27 +1,25 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * PatientCreateModal.tsx is responsible for rendering a modal with an interface
  * to create a new patient.
  */
-
-import * as React from 'react'
+import Button from '@mui/joy/Button'
+import FormLabel from '@mui/joy/FormLabel'
+import Grid from '@mui/joy/Grid'
 import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import Button from '@mui/joy/Button'
-import FormLabel from '@mui/joy/FormLabel'
-import Grid from '@mui/joy/Grid'
-
+import * as React from 'react'
 import { useMutation } from 'react-query'
-import { patientApi } from '../api'
-import { BasePatient, PatientOut } from '../generated-client/patient';
-import { ModalComponentProps } from '../interfaces/components.interface'
 
+import { patientApi } from '../api'
+import { BasePatient, PatientOut } from '../generated-client/patient'
+import { ModalComponentProps } from '../interfaces/components.interface'
 
 // Patient form items, order is row wise
 const createPatientFormContent = [
@@ -33,14 +31,26 @@ const createPatientFormContent = [
   { key: 'comment', label: 'Comment', placeholder: '' },
 ]
 
-
 export default function PatientCreateModal(props: ModalComponentProps<PatientOut>) {
-
-  const [patient, setPatient] = React.useState<BasePatient>({sex: '', name: '', issuer: '', status: '', comment: '', birth_date: ''})
+  const [patient, setPatient] = React.useState<BasePatient>({
+    sex: '',
+    name: '',
+    issuer: '',
+    status: '',
+    comment: '',
+    birth_date: '',
+  })
 
   // Post a new record and refetch records table
   const mutation = useMutation(async () => {
-    await patientApi.createPatientPost(patient).then((response) => { props.onSubmit(response.data) }).catch((err) => { console.log(err) })
+    await patientApi
+      .createPatientPost(patient)
+      .then((response) => {
+        props.onSubmit(response.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   })
 
   return (
@@ -56,9 +66,9 @@ export default function PatientCreateModal(props: ModalComponentProps<PatientOut
         aria-describedby='basic-modal-dialog-description'
         size='sm'
         sx={{
-          width: '50vw', 
-          borderRadius: 'md', 
-          p: 5
+          width: '50vw',
+          borderRadius: 'md',
+          p: 5,
         }}
       >
         <ModalClose

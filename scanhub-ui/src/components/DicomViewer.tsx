@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
-
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import Card from '@mui/joy/Card'
@@ -21,27 +20,35 @@ import DicomViewerToolbar, { tools } from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
 import { navigation } from '../utils/SizeVars'
 
-
 function DicomViewer() {
-
   // Initialize cornerstone only once, when component is rendered for the first time
   React.useEffect(() => {
-      initCornerstone()
+    initCornerstone()
   }, [])
 
   // Set state variables
   const [viewportIds, setViewportIds] = React.useState<number[]>([0])
   const [activeViewportIndex, setActiveViewportIndex] = React.useState<number>(0)
   // const [viewportData, setViewportData] = React.useState<string[]>(['', '', ''])
-  
+
   // Set default viewport data for debugging
   const viewportData = [
     'https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm',
-    'https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
+    'https://marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm',
   ]
 
   return (
-      <Stack gap={1} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: `calc(100vh - ${navigation.height})`, p: 1}}>
+    <Stack
+      gap={1}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        width: '100%',
+        height: `calc(100vh - ${navigation.height})`,
+        p: 1,
+      }}
+    >
       <Card sx={{ display: 'flex', flexDirection: 'row', p: 0.4, pl: 1 }}>
         <Select
           variant='plain'
@@ -125,4 +132,4 @@ function DicomViewer() {
   )
 }
 
-export default DicomViewer;
+export default DicomViewer

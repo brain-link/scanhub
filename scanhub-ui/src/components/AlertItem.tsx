@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * AlertItem.tsx is responsible for rendering alerts.
  */
-
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import InfoIcon from '@mui/icons-material/Info'
 import ReportIcon from '@mui/icons-material/Report'
@@ -16,7 +15,6 @@ import * as React from 'react'
 import { AlertProps, Alerts } from '../interfaces/components.interface'
 
 function AlertItem({ title, type, info }: AlertProps) {
-  
   function getIcon(alertType: Alerts) {
     switch (alertType) {
       case Alerts.Error:
@@ -46,7 +44,13 @@ function AlertItem({ title, type, info }: AlertProps) {
   }
 
   return (
-    <Alert key={title} sx={{ alignItems: 'flex-start' }} startDecorator={getIcon(type)} variant='soft' color={getColor(type)}>
+    <Alert
+      key={title}
+      sx={{ alignItems: 'flex-start' }}
+      startDecorator={getIcon(type)}
+      variant='soft'
+      color={getColor(type)}
+    >
       <div>
         <Typography level='title-md'>{title}</Typography>
         {

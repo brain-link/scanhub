@@ -1,10 +1,9 @@
 /**
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
- * 
+ *
  * ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
  */
-
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
 import Grid from '@mui/joy/Grid'
