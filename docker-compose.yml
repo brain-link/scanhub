@@ -305,19 +305,19 @@ services:
       retries: 10
 
 
-  # FRONTEND
+  # FRONTEND/SCANHUB-UI
 
-  # frontend:
-  #   container_name: frontend
+  # scanhub-ui:
+  #   container_name: scanhub-ui
   #   build:
-  #     context: ./frontend
+  #     context: ./scanhub-ui
   #     dockerfile: ./Dockerfile
   #     args:
   #       NODE_ENV: "development" # use "development" or "production"
   #   depends_on:
   #     - patient-manager
   #   volumes:
-  #     - ./frontend/src:/app/src
+  #     - ./scanhub-ui/src:/app/src
   #   ports:
   #     - 3000:3000
 
