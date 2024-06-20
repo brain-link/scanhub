@@ -1,10 +1,6 @@
 # FROM node:bullseye-slim AS BUILD_IMAGE
 FROM node:20.5.0-slim AS BUILD_IMAGE
 
-# Install python, required for node-gyp
-# RUN apt-get update || : && apt-get install python -y
-
-# RUN apt-get --no-cache python3 g++ make
 
 RUN apt-get update || : && apt-get install -y python3 build-essential \
     && apt-get clean
@@ -12,10 +8,6 @@ RUN apt-get update || : && apt-get install -y python3 build-essential \
 WORKDIR /app
 COPY package.json yarn.lock ./
 
-# RUN apt update && apk --no-cache --virtual build-dependencies add \
-#     python3 \
-#     make \
-#     g++
 
 # Install dependencies, network timeout flag for slow network connection
 # Without frozen lockfile
