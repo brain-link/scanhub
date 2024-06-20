@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      working-directory: ./frontend
+      working-directory: ./scanhub-ui
 
     continue-on-error: True
 
