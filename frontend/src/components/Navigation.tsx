@@ -187,7 +187,7 @@ export default function Navigation() {
         <MenuItem
           key='logout'
           onClick={() => {
-            loginApi.loginApiV1UserloginLogoutPost({headers: {Authorization: 'Bearer ' + user?.access_token}})
+            loginApi.logoutApiV1UserloginLogoutPost({headers: {Authorization: 'Bearer ' + user?.access_token}})
             .then(() => {
               queryClient.invalidateQueries()  // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
               setAnchorEl(null)
