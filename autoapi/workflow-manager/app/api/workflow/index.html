@@ -464,10 +464,7 @@ document.write(`
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.Producer" title="workflow-manager.app.api.workflow.Producer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Producer</span></code></a></p></td>
-<td><p>Producer Singleton class for Kafka producer.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.RecoJob" title="workflow-manager.app.api.workflow.RecoJob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecoJob</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.RecoJob" title="workflow-manager.app.api.workflow.RecoJob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecoJob</span></code></a></p></td>
 <td><p>RecoJob is a pydantic model for a reco job.</p></td>
 </tr>
 </tbody>
@@ -496,55 +493,6 @@ document.write(`
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">Producer</span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer" title="Link to this definition">#</a></dt>
-<dd><p>Producer Singleton class for Kafka producer.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer._instance">
-<span class="sig-name descname"><span class="pre">_instance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#workflow-manager.app.api.workflow.Producer" title="workflow-manager.app.api.workflow.Producer"><span class="pre">Producer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer._instance" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer._producer">
-<span class="sig-name descname"><span class="pre">_producer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">aiokafka.AIOKafkaProducer</span></em><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer._producer" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer.start">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer.start" title="Link to this definition">#</a></dt>
-<dd><p>Start producer.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer.stop">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer.stop" title="Link to this definition">#</a></dt>
-<dd><p>Stop producer.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer.send">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer.send" title="Link to this definition">#</a></dt>
-<dd><p>Send message to Kafka topic.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>topic</dt><dd><p>Kafka topic to send message to</p>
-</dd>
-<dt>message</dt><dd><p>Message to be sent</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.Producer.get_producer">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_producer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.Producer.get_producer" title="Link to this definition">#</a></dt>
-<dd><p>Get producer.</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.RecoJob">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">RecoJob</span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.RecoJob" title="Link to this definition">#</a></dt>
@@ -576,8 +524,8 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_result" title="Link to this definition">#</a></dt>
 <dd><p>Upload workflow result.</p>
-<section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Id of the record, which is processed by workflow</p>
 </dd>
@@ -597,15 +545,15 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.download_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">download_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.FileResponse</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.download_result" title="Link to this definition">#</a></dt>
 <dd><p>Download DICOM result.</p>
-<section id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>ID of the record the DICOM file belongs to.</p>
 </dd>
 </dl>
 </section>
-<section id="id3">
-<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>DICOM file response</p>
 </div></blockquote>
@@ -616,8 +564,8 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_data_from_file">
 <span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_data_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_data_from_file" title="Link to this definition">#</a></dt>
 <dd><p>Open a file and read the data.</p>
-<section id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>file_path</dt><dd><p>Path of the file to open</p>
 </dd>
@@ -635,15 +583,15 @@ document.write(`
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_image_file">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_image_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.StreamingResponse</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_image_file" title="Link to this definition">#</a></dt>
 <dd><p>Read image file data and content as streaming response.</p>
-<section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Record ID the image should be read for</p>
 </dd>
 </dl>
 </section>
-<section id="id6">
-<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Image file content</p>
 </div></blockquote>
@@ -692,15 +640,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer"><code class="docutils literal notranslate"><span class="pre">Producer</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer._instance"><code class="docutils literal notranslate"><span class="pre">Producer._instance</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer._producer"><code class="docutils literal notranslate"><span class="pre">Producer._producer</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer.start"><code class="docutils literal notranslate"><span class="pre">Producer.start()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer.stop"><code class="docutils literal notranslate"><span class="pre">Producer.stop()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer.send"><code class="docutils literal notranslate"><span class="pre">Producer.send()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.Producer.get_producer"><code class="docutils literal notranslate"><span class="pre">Producer.get_producer()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.RecoJob"><code class="docutils literal notranslate"><span class="pre">RecoJob</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.RecoJob.record_id"><code class="docutils literal notranslate"><span class="pre">RecoJob.record_id</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.RecoJob.input"><code class="docutils literal notranslate"><span class="pre">RecoJob.input</span></code></a></li>

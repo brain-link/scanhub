@@ -463,39 +463,10 @@ document.write(`
 </table>
 </div>
 </section>
-<section id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.DeviceOut" title="device-manager.app.api.devices.DeviceOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceOut</span></code></a></p></td>
-<td><p>Device pydantic output model.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dal_create_device" title="device-manager.app.api.devices.dal_create_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dal_create_device</span></code></a>(→ api.db.Device)</p></td>
-<td><p>Add a new device to the database.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dal_delete_device" title="device-manager.app.api.devices.dal_delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dal_delete_device</span></code></a>(→ bool)</p></td>
-<td><p>Delete a device by identifier.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dal_get_all_devices" title="device-manager.app.api.devices.dal_get_all_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dal_get_all_devices</span></code></a>(→ list[api.db.Device])</p></td>
-<td><p>Get a list of all existing devices.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dal_get_device" title="device-manager.app.api.devices.dal_get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dal_get_device</span></code></a>(→ api.db.Device | None)</p></td>
-<td><p>Fetch a device from database.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dal_update_device" title="device-manager.app.api.devices.dal_update_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dal_update_device</span></code></a>(→ api.db.Device | None)</p></td>
-<td><p>Update an existing device in database.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device_out" title="device-manager.app.api.devices.get_device_out"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device_out</span></code></a>(→ DeviceOut)</p></td>
-<td><p>Get pydantic device output model helper function.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.readiness" title="device-manager.app.api.devices.readiness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readiness</span></code></a>(→ dict)</p></td>
 <td><p>Readiness health endpoint.</p></td>
 </tr>
@@ -523,132 +494,6 @@ document.write(`
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.dal_create_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dal_create_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../models/index.html#device-manager.app.api.models.BaseDevice" title="device-manager.app.api.models.BaseDevice"><span class="pre">api.models.BaseDevice</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#device-manager.app.api.db.Device" title="device-manager.app.api.db.Device"><span class="pre">api.db.Device</span></a></span></span><a class="headerlink" href="#device-manager.app.api.devices.dal_create_device" title="Link to this definition">#</a></dt>
-<dd><p>Add a new device to the database.</p>
-<section id="arguments">
-<h3>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>payload {BaseDevice} – Pydantic base model to create a new database entry</p>
-</div></blockquote>
-</section>
-<section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Device – Database orm model</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.dal_delete_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dal_delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.dal_delete_device" title="Link to this definition">#</a></dt>
-<dd><p>Delete a device by identifier.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>device_id {str} – Identifier of the device to be deleted</p>
-</div></blockquote>
-</section>
-<section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>bool – Success of delete event</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.dal_get_all_devices">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dal_get_all_devices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../db/index.html#device-manager.app.api.db.Device" title="device-manager.app.api.db.Device"><span class="pre">api.db.Device</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#device-manager.app.api.devices.dal_get_all_devices" title="Link to this definition">#</a></dt>
-<dd><p>Get a list of all existing devices.</p>
-<section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>List[Device] – List of database orm models</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.dal_get_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dal_get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#device-manager.app.api.db.Device" title="device-manager.app.api.db.Device"><span class="pre">api.db.Device</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.dal_get_device" title="Link to this definition">#</a></dt>
-<dd><p>Fetch a device from database.</p>
-<section id="id3">
-<h3>Arguments<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>device_id {str} – Identifier of the device</p>
-</div></blockquote>
-</section>
-<section id="id4">
-<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Device – Database orm model</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.dal_update_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dal_update_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../models/index.html#device-manager.app.api.models.DeviceOut" title="device-manager.app.api.models.DeviceOut"><span class="pre">api.models.DeviceOut</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#device-manager.app.api.db.Device" title="device-manager.app.api.db.Device"><span class="pre">api.db.Device</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.dal_update_device" title="Link to this definition">#</a></dt>
-<dd><p>Update an existing device in database.</p>
-<section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>id {str} – Identifier of device
-payload {BaseDevice} – Pydantic base model, data to be updated</p>
-</div></blockquote>
-</section>
-<section id="id6">
-<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Device – Updated database orm model</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.DeviceOut">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">DeviceOut</span></span><a class="headerlink" href="#device-manager.app.api.devices.DeviceOut" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseDevice</span></code></p>
-<p>Device pydantic output model.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.DeviceOut.id">
-<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.devices.DeviceOut.id" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.DeviceOut.datetime_created">
-<span class="sig-name descname"><span class="pre">datetime_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><a class="headerlink" href="#device-manager.app.api.devices.DeviceOut.datetime_created" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.DeviceOut.datetime_updated">
-<span class="sig-name descname"><span class="pre">datetime_updated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><a class="headerlink" href="#device-manager.app.api.devices.DeviceOut.datetime_updated" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.get_device_out">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_device_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../db/index.html#device-manager.app.api.db.Device" title="device-manager.app.api.db.Device"><span class="pre">api.db.Device</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#device-manager.app.api.devices.DeviceOut" title="device-manager.app.api.devices.DeviceOut"><span class="pre">DeviceOut</span></a></span></span><a class="headerlink" href="#device-manager.app.api.devices.get_device_out" title="Link to this definition">#</a></dt>
-<dd><p>Get pydantic device output model helper function.</p>
-<section id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>data</dt><dd><p>Database model</p>
-</dd>
-</dl>
-</section>
-<section id="id8">
-<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Pydantic output model</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
 <dl class="py data">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.router">
 <span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#device-manager.app.api.devices.router" title="Link to this definition">#</a></dt>
@@ -668,8 +513,8 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.readiness">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">readiness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.readiness" title="Link to this definition">#</a></dt>
 <dd><p>Readiness health endpoint.</p>
-<section id="id9">
-<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Status dictionary</p>
 </div></blockquote>
@@ -680,8 +525,8 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.get_devices">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_devices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[device-manager.app.api.models.DeviceOut]</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.get_devices" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve the list of registered devices.</p>
-<section id="id10">
-<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>List[Device]: The list of registered devices.</p>
 </div></blockquote>
@@ -698,8 +543,8 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id11">
-<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: The response containing the IP address of the device.</p>
 </div></blockquote>
@@ -710,14 +555,14 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.get_device">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.get_device" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve a specific device.</p>
-<section id="id12">
-<h3>Args<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>Args<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id13">
-<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: The response containing the information about the device</p>
 </div></blockquote>
@@ -728,14 +573,14 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.get_device_status">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_device_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.get_device_status" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve the status of a specific device.</p>
-<section id="id14">
-<h3>Args<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Args<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id15">
-<h3>Returns<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: The response containing the status of the device.</p>
 </div></blockquote>
@@ -746,14 +591,14 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.delete_device">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.delete_device" title="Link to this definition">#</a></dt>
 <dd><p>Delete a device.</p>
-<section id="id16">
-<h3>Args<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>Args<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id17">
-<h3>Returns<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: The response indicating the success or failure of the deletion.</p>
 </div></blockquote>
@@ -764,8 +609,8 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.websocket_endpoint">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">websocket_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.websocket_endpoint" title="Link to this definition">#</a></dt>
 <dd><p>Websocket endpoint for device communication.</p>
-<section id="id18">
-<h3>Args<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>Args<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>websocket (WebSocket): The WebSocket connection object.</p>
 </div></blockquote>
@@ -804,21 +649,8 @@ payload {BaseDevice} – Pydantic base model, data to be updated</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dal_create_device"><code class="docutils literal notranslate"><span class="pre">dal_create_device()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dal_delete_device"><code class="docutils literal notranslate"><span class="pre">dal_delete_device()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dal_get_all_devices"><code class="docutils literal notranslate"><span class="pre">dal_get_all_devices()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dal_get_device"><code class="docutils literal notranslate"><span class="pre">dal_get_device()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dal_update_device"><code class="docutils literal notranslate"><span class="pre">dal_update_device()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.DeviceOut"><code class="docutils literal notranslate"><span class="pre">DeviceOut</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.DeviceOut.id"><code class="docutils literal notranslate"><span class="pre">DeviceOut.id</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.DeviceOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">DeviceOut.datetime_created</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.DeviceOut.datetime_updated"><code class="docutils literal notranslate"><span class="pre">DeviceOut.datetime_updated</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_device_out"><code class="docutils literal notranslate"><span class="pre">get_device_out()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.active_connections"><code class="docutils literal notranslate"><span class="pre">active_connections</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dict_id_websocket"><code class="docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></li>
