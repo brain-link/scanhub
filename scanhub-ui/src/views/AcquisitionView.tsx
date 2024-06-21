@@ -31,7 +31,7 @@ import { useParams } from 'react-router-dom'
 
 // import { WorkflowOut } from '../generated-client/exam'
 import LoginContext from '../LoginContext'
-import { examApi, patientApi } from '../api'
+import { examApi, getPatientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
@@ -55,7 +55,8 @@ function PatientIndex() {
   // List of jobs
   // const [workflows, setWorkflows] = React.useState<WorkflowOut[] | undefined>(undefined)
 
-  const [user] = React.useContext(LoginContext)
+  const [user, ] = React.useContext(LoginContext)
+  const patientApi = getPatientApi(user ? user.access_token : '')
 
   // useQuery for caching the fetched data
   const {

@@ -14,7 +14,8 @@ import Container from '@mui/system/Container'
 import * as React from 'react'
 import { useQuery } from 'react-query'
 
-import { patientApi } from '../api'
+import { getPatientApi } from '../api'
+import LoginContext from '../LoginContext'
 import AlertItem from '../components/AlertItem'
 import PatientCreateModal from '../components/PatientCreateModal'
 import PatientTable from '../components/PatientTable'
@@ -24,6 +25,8 @@ import { Alerts } from '../interfaces/components.interface'
 export default function PatientListView() {
   // const [patients, setPatients] = React.useState<Patient[]>([]);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
+  const [user, ] = React.useContext(LoginContext)
+  const patientApi = getPatientApi(user ? user.access_token : '')
 
   const {
     data: patients,

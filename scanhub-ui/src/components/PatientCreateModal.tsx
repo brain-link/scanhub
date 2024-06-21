@@ -17,7 +17,8 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import { patientApi } from '../api'
+import { getPatientApi } from '../api'
+import LoginContext from '../LoginContext'
 import { BasePatient, PatientOut } from '../generated-client/patient'
 import { ModalComponentProps } from '../interfaces/components.interface'
 
@@ -32,6 +33,9 @@ const createPatientFormContent = [
 ]
 
 export default function PatientCreateModal(props: ModalComponentProps<PatientOut>) {
+  const [user, ] = React.useContext(LoginContext)
+  const patientApi = getPatientApi(user ? user.access_token : '')
+
   const [patient, setPatient] = React.useState<BasePatient>({
     sex: '',
     name: '',
