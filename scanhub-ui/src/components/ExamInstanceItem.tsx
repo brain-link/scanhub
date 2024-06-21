@@ -7,42 +7,41 @@
  */
 import ListAltIcon from '@mui/icons-material/ListAlt'
 // Icons
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import Dropdown from '@mui/joy/Dropdown'
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+// import Dropdown from '@mui/joy/Dropdown'
 // Mui joy components
-import IconButton from '@mui/joy/IconButton'
+// import IconButton from '@mui/joy/IconButton'
 import ListItem from '@mui/joy/ListItem'
-import ListItemButton from '@mui/joy/ListItemButton'
 // import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import ListItemContent from '@mui/joy/ListItemContent'
-import Menu from '@mui/joy/Menu'
-import MenuButton from '@mui/joy/MenuButton'
-import MenuItem from '@mui/joy/MenuItem'
+// import Menu from '@mui/joy/Menu'
+// import MenuButton from '@mui/joy/MenuButton'
+// import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
+// import { useMutation } from 'react-query'
 
 // Sub-components, interfaces, client
 // import ExamModal from './ExamModal'
-import LoginContext from '../LoginContext'
-import { examApi } from '../api'
+// import LoginContext from '../LoginContext'
+// import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
 import { InstanceInterface } from '../interfaces/components.interface'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
 
 // function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
 function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
-  const [user] = React.useContext(LoginContext)
+  // const [user] = React.useContext(LoginContext)
   // const [examModalOpen, setExamModalOpen] = React.useState(false)
   const [modalOpen, setModalOpen] = React.useState(false)
 
-  const deleteExam = useMutation(async () => {
-    await examApi
-      .examDeleteApiV1ExamExamIdDelete(exam.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then(() => {
-        refetchParentData()
-      })
-  })
+  // const deleteExam = useMutation(async () => {
+  //   await examApi
+  //     .examDeleteApiV1ExamExamIdDelete(exam.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+  //     .then(() => {
+  //       refetchParentData()
+  //     })
+  // })
 
   // const updateExam = useMutation(async (data: Exam) => {
   //   await client.examService
@@ -60,7 +59,6 @@ function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<E
       {/* <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
           <SnippetFolderSharpIcon />
         </ListItemDecorator> */}
-      <ListItemButton>
         <ListAltIcon fontSize='small' />
 
         <ListItemContent>
@@ -71,7 +69,7 @@ function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<E
           </Typography>
         </ListItemContent>
 
-        <Dropdown>
+        {/* <Dropdown>
           <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
             <MoreHorizIcon fontSize='small' />
           </MenuButton>
@@ -96,7 +94,7 @@ function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<E
               Add Workflow
             </MenuItem>
           </Menu>
-        </Dropdown>
+        </Dropdown> */}
 
         <WorkflowFromTemplateModal
           isOpen={modalOpen}
@@ -113,7 +111,6 @@ function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<E
             updateExam.mutate(data)
           }}
         /> */}
-      </ListItemButton>
     </ListItem>
   )
 }

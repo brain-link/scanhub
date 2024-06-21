@@ -20,6 +20,8 @@ import Button from '@mui/joy/Button'
 import IconButton from '@mui/joy/IconButton'
 import ListDivider from '@mui/joy/ListDivider'
 import ListItemDecorator from '@mui/joy/ListItemDecorator'
+import Dropdown from '@mui/joy/Dropdown'
+import MenuButton from '@mui/joy/MenuButton'
 import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
@@ -33,6 +35,8 @@ import LoginContext from '../LoginContext'
 // import { SettingsInputSvideoRounded } from '@mui/icons-material';
 import { loginApi } from '../api'
 import { UserRole } from '../generated-client/userlogin'
+import ScanhubLogo from '../media/ScanhubLogo.png'
+
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
@@ -69,9 +73,7 @@ function ColorSchemeToggle() {
 
 export default function Navigation() {
   const loc = useLocation()
-  const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement | null>(null)
   const [user, setUser] = useContext(LoginContext)
-  const open = Boolean(anchorEl)
   const queryClient = useQueryClient()
 
   // Menu elements
@@ -105,13 +107,15 @@ export default function Navigation() {
         zIndex: 'snackbar',
       }}
     >
-      <IconButton variant='plain' href='https://www.brain-link.de/'>
-        <img
-          src='https://avatars.githubusercontent.com/u/27105562?s=200&v=4'
-          alt=''
-          height='40'
-          className='d-inline-block'
-        />
+      <IconButton variant='plain'>
+        <a href='https://www.brain-link.de/' target='_blank' rel="noreferrer noopener">
+          <img
+            src={ScanhubLogo}
+            alt=''
+            height='40'
+            className='d-inline-block'
+          />
+        </a>
       </IconButton>
 
       <Typography level='h4' sx={{ mr: 5 }}>
@@ -141,71 +145,69 @@ export default function Navigation() {
       </Box>
 
       {/* User menu */}
-      <IconButton
-        variant='plain'
-        onClick={(event) => {
-          setAnchorEl(event.currentTarget)
-        }}
-      >
-        <Avatar variant='soft' color='primary' />
-      </IconButton>
+      <Dropdown>
+        <MenuButton
+          slots={{root: IconButton}}
+        >
+          <Avatar variant='soft' color='primary' />
+        </MenuButton>
 
-      <Menu
-        id='positioned-demo-menu'
-        anchorEl={anchorEl}
-        open={open}
-        size='sm'
-        onClose={() => {
-          setAnchorEl(null)
-        }}
-        aria-labelledby='positioned-demo-button'
-        placement='bottom-end'
-        sx={{ zIndex: 'tooltip' }}
-      >
-        <MenuItem
-          key='profile'
-          onClick={() => {
-            setAnchorEl(null)
+        <Menu
+          id='positioned-demo-menu'
+          size='sm'
+          onClose={() => {
+
           }}
+          aria-labelledby='positioned-demo-button'
+          placement='bottom-end'
+          sx={{ zIndex: 'tooltip' }}
         >
-          <ListItemDecorator>
-            <PersonSharpIcon />
-          </ListItemDecorator>{' '}
-          Profile
-        </MenuItem>
-        <MenuItem
-          key='settings'
-          onClick={() => {
-            setAnchorEl(null)
-          }}
-        >
-          <ListItemDecorator>
-            <AdminPanelSettingsSharpIcon />
-          </ListItemDecorator>{' '}
-          Settings
-        </MenuItem>
-        <ListDivider />
-        <MenuItem
-          key='logout'
-          onClick={() => {
-            loginApi
-              .logoutApiV1UserloginLogoutPost({ headers: { Authorization: 'Bearer ' + user?.access_token } })
-              .then(() => {
-                queryClient.invalidateQueries() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
-                setAnchorEl(null)
-                setUser(null)
-              })
-              .catch((error) => {
-                console.log('Error at logout: ', error) // TODO inform user.
-              })
-          }}
-        >
-          <ListItemDecorator>
-            <LogoutSharpIcon />
-          </ListItemDecorator>{' '}
-          Logout
-        </MenuItem>
-      </Menu>
+          <MenuItem
+            key='profile'
+            disabled
+            onClick={() => {
+
+            }}
+          >
+            <ListItemDecorator>
+              <PersonSharpIcon />
+            </ListItemDecorator>{' '}
+            Profile
+          </MenuItem>
+          <MenuItem
+            key='settings'
+            disabled
+            onClick={() => {
+
+            }}
+          >
+            <ListItemDecorator>
+              <AdminPanelSettingsSharpIcon />
+            </ListItemDecorator>{' '}
+            Settings
+          </MenuItem>
+          <ListDivider />
+          <MenuItem
+            key='logout'
+            onClick={() => {
+              loginApi
+                .logoutApiV1UserloginLogoutPost({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+                .then(() => {
+                  queryClient.invalidateQueries() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
+                  setUser(null)
+                })
+                .catch((error) => {
+                  console.log('Error at logout: ', error) // TODO inform user.
+                })
+            }}
+          >
+            <ListItemDecorator>
+              <LogoutSharpIcon />
+            </ListItemDecorator>{' '}
+            Logout
+          </MenuItem>
+        </Menu>
+      </Dropdown>
     </Box>
   )
 }

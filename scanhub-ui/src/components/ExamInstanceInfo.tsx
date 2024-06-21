@@ -22,7 +22,7 @@ function ExamInstanceInfo(props: { exam: ExamOut }) {
         p: 2,
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
-        '& > *:nth-child(odd)': {
+        '& > *:nth-of-type(odd)': {
           color: 'text.secondary',
         },
       }}

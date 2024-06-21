@@ -56,7 +56,7 @@ export default function WorkflowTemplateList() {
       {workflows?.map((workflow, index) => (
         <WorkflowTemplateItem
           key={index}
-          item={workflow}
+          data={workflow}
           onClicked={() => {}}
           onDeleted={() => {
             refetch()

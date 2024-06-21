@@ -19,14 +19,14 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
-import { TemplateItemInterface } from '../interfaces/components.interface'
+import { TemplateInterface } from '../interfaces/components.interface'
 
-export default function WorkflowTemplateItem(prop: TemplateItemInterface<WorkflowOut>) {
+export default function WorkflowTemplateItem(prop: TemplateInterface<WorkflowOut>) {
   const [user] = React.useContext(LoginContext)
 
   const deleteWorkflowTemplate = useMutation(async () => {
     await workflowsApi
-      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(prop.item.id, {
+      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(prop.data.id, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {
@@ -66,19 +66,19 @@ export default function WorkflowTemplateItem(prop: TemplateItemInterface<Workflo
         <Typography level='title-md'>Workflow</Typography>
 
         <Typography level='body-sm' textColor='text.tertiary'>
-          ID: {prop.item.id}
+          ID: {prop.data.id}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Exam ID: {prop.item.exam_id}
+          Exam ID: {prop.data.exam_id}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Comment: {prop.item.comment}
+          Comment: {prop.data.comment}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Created: {new Date(prop.item.datetime_created).toDateString()}
+          Created: {new Date(prop.data.datetime_created).toDateString()}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Updated: {prop.item.datetime_updated ? new Date(prop.item.datetime_updated).toDateString() : '-'}
+          Updated: {prop.data.datetime_updated ? new Date(prop.data.datetime_updated).toDateString() : '-'}
         </Typography>
       </CardContent>
     </Card>
