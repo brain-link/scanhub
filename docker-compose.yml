@@ -57,21 +57,6 @@ services:
       scanhub-database:
         condition: service_healthy
 
-
-  acquisition-control:
-    container_name: acquisition-control
-    build: 
-      context: ./services/acquisition-control
-      args: 
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./services/acquisition-control/app/:/app/
-    ports:
-      # TODO: Order of ports, 8001 - 8005 for exam, device, workflow, sequence and acqisition
-      - 8111:8000
-
-
   exam-manager:
     container_name: exam-manager
     build: 
@@ -273,8 +258,6 @@ services:
       exam-manager: 
         condition: service_healthy
       sequence-manager:
-        condition: service_started
-      acquisition-control:
         condition: service_started
 
 

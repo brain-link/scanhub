@@ -72,8 +72,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for AutoAPI -----------------------------------------------------
 
-autoapi_dirs = ['../../services/acquisition-control',
-                '../../services/device-manager',
+autoapi_dirs = ['../../services/device-manager',
                 '../../services/exam-manager',
                 '../../services/workflow-manager',
                 ]
