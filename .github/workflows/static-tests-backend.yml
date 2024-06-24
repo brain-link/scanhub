@@ -1,9 +1,9 @@
 name: 'Static Tests'
 
 on:
-  push:
+  pull_request:
     branches:
-      - '*'
+      - main
 
 jobs:
 
@@ -21,15 +21,17 @@ jobs:
           "exam-manager",
           "workflow-manager",
           "device-manager",
+          "user-login-manager",
           "mri/sequence-manager",
           "mri/recos/cartesian-reco-service",
+          "patient-manager",
         ]
 
     continue-on-error: True
 
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4

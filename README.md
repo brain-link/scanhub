@@ -29,13 +29,36 @@ ScanHub represents the backbone of our acquisition platform. In parallel we are 
 
 We welcome anyone who would like to join our mission, just [get in touch](mailto:info@brain-link.de) :email:.
 
+
+Demo :clapper:
+--------------
+
+The following video shows a short demonstration of the ScanHub UI (September 2023). You will see how to navigate through the acquisition planner, inspect an MRI sequence and start an MRI simulation on a virtual MRI scanner. In the end we are demonstrating how to view the DICOM image, reconstructed by our workflow engine subsequently to the acquisition.
+
+https://github.com/brain-link/scanhub-ui/assets/42237900/beb8edc9-04c4-4f96-83d7-d8134bd2840e
+
 Installation
 ------------
 
-To install the package, you need install [Docker](https://docs.docker.com/engine/install/) first. 
-The installation of ScanHub-UI is as simple as using the following command.
+The installation including scanhub-ui can be achieved using the following docker-compose command inside the scanhub repository:
 
-    docker-compose up -d --build
+
+    docker-compose up --detach --build
+
+
+By default this builds the services with a base docker imgage from ghcr.io/brain-link/scanhub/scanhub-base:latest. To incorporate the latest changes during development rebuild the scanhub-base image and use the build-arg BASE_IMG=scanhub-base:latest. To do this, build and start the project with the following commands:
+
+    cd services/base
+    docker build -t scanhub-base .
+    cd ../..
+    docker-compose build --build-arg BASE_IMG=scanhub-base:latest
+    docker-compose up --detach
+
+
+Default Username and Password
+-----------------------------
+
+For now a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt
 
 
 Documentation
