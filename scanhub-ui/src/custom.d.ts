@@ -1,1 +1,5 @@
 declare module '*.png'
+declare module 'react-cornerstone-viewport'
+declare module 'cornerstone-tools'
+declare module 'cornerstone-math'
+declare module 'cornerstone-wado-image-loader'

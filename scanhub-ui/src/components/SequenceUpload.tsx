@@ -33,8 +33,8 @@ function SequenceUpload(props: SequenceUploadModal) {
   })
 
   const uploadSequence = useMutation(async () => {
-    await mriSequenceService.uploadSequenceFile(sequence).catch((err) => {
-      console.log('Error on sequence upload: ', err)
+    await mriSequenceService.uploadSequenceFile(sequence).catch(() => {
+      console.log('Error on sequence upload.')
     })
     // check if upload was successful
   })

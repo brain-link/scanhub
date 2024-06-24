@@ -27,7 +27,7 @@ function DicomViewer() {
   }, [])
 
   // Set state variables
-  const [viewportIds, setViewportIds] = React.useState<number[]>([0])
+  const [numberViewports, setNumberViewports] = React.useState<number>(1)
   const [activeViewportIndex, setActiveViewportIndex] = React.useState<number>(0)
   // const [viewportData, setViewportData] = React.useState<string[]>(['', '', ''])
 
@@ -54,14 +54,16 @@ function DicomViewer() {
           variant='plain'
           indicator={<KeyboardArrowDown />}
           startDecorator={<GridViewSharpIcon />}
-          defaultValue={[0]}
+          defaultValue={1}
           onChange={(event, ids) => {
-            ids ? setViewportIds(ids) : [0]
+            if (ids) {
+              setNumberViewports(ids)
+            }
           }}
         >
-          <Option value={[0]}>1 view</Option>
-          <Option value={[0, 1]}>2 views</Option>
-          {/* <Option value={[0, 1, 2]}>3 views</Option> */}
+          <Option value={1}>1 view</Option>
+          <Option value={2}>2 views</Option>
+          {/* <Option value={3}>3 views</Option> */}
         </Select>
         <Divider orientation='vertical' />
         <DicomViewerToolbar />
@@ -69,8 +71,8 @@ function DicomViewer() {
 
       {/* Cornerstone viewports */}
       <Grid container spacing={1} alignItems='stretch' direction='row' sx={{ height: '100%' }}>
-        {viewportIds.map((index) => (
-          <Grid xs={12 / viewportIds.length} key={index}>
+        {Array.from(Array(numberViewports).keys()).map((index) => (
+          <Grid xs={12 / numberViewports} key={index}>
             <Card
               variant={index === activeViewportIndex ? 'outlined' : 'plain'}
               color={index === activeViewportIndex ? 'primary' : 'neutral'}
