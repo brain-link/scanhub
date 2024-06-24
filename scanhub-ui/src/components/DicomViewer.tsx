@@ -20,11 +20,11 @@ import DicomViewerToolbar, { tools } from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
 import { navigation } from '../utils/SizeVars'
 
+
+initCornerstone()  // initialize cornerstone before first render cycle
+
+
 function DicomViewer() {
-  // Initialize cornerstone only once, when component is rendered for the first time
-  React.useEffect(() => {
-    initCornerstone()
-  }, [])
 
   // Set state variables
   const [numberViewports, setNumberViewports] = React.useState<number>(1)
