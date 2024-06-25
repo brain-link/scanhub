@@ -1,0 +1,1330 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>acquisition-control.app.api.test_model &#8212; ScanHub Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css?v=7e2203eb" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/acquisition-control/app/api/test_model/index';</script>
+    <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../../_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
+    <script>document.write(`<img src="../../../../../_static/logo_brainlink.svg" class="logo__image only-dark" alt="ScanHub Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../introduction.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../scanhub_api.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../scanhub_techdoc.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../index.html">
+    Code Documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../introduction.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../scanhub_api.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../scanhub_techdoc.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../index.html">
+    Code Documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="reference internal" href="../index.html">acquisition-control.app.api</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../main/index.html">acquisition-control.app.main</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">acquisition-...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-acquisition-control.app.api.test_model">
+<span id="acquisition-control-app-api-test-model"></span><h1>acquisition-control.app.api.test_model<a class="headerlink" href="#module-acquisition-control.app.api.test_model" title="Link to this heading">#</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.MatrixSize" title="acquisition-control.app.api.test_model.MatrixSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatrixSize</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.FieldOfView" title="acquisition-control.app.api.test_model.FieldOfView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldOfView</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.EncodingSpace" title="acquisition-control.app.api.test_model.EncodingSpace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EncodingSpace</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.LimitType" title="acquisition-control.app.api.test_model.LimitType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LimitType</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.EncodingLimits" title="acquisition-control.app.api.test_model.EncodingLimits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EncodingLimits</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.Trajectories" title="acquisition-control.app.api.test_model.Trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trajectories</span></code></a></p></td>
+<td><p>Pydantic definition of Trajectories</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.DiffusionDimensions" title="acquisition-control.app.api.test_model.DiffusionDimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiffusionDimensions</span></code></a></p></td>
+<td><p>Pydantic definition of diffusion dimensions</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.Encoding" title="acquisition-control.app.api.test_model.Encoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Encoding</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.ExperimentalConditions" title="acquisition-control.app.api.test_model.ExperimentalConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExperimentalConditions</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.GradientDirection" title="acquisition-control.app.api.test_model.GradientDirection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GradientDirection</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.DiffusionType" title="acquisition-control.app.api.test_model.DiffusionType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiffusionType</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.SequenceParameters" title="acquisition-control.app.api.test_model.SequenceParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SequenceParameters</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.PatientPositions" title="acquisition-control.app.api.test_model.PatientPositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PatientPositions</span></code></a></p></td>
+<td><p>Pydantic definition of patient postions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.MeasurementInformation" title="acquisition-control.app.api.test_model.MeasurementInformation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeasurementInformation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.AcquisitionSystemInformation" title="acquisition-control.app.api.test_model.AcquisitionSystemInformation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AcquisitionSystemInformation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParametersLong" title="acquisition-control.app.api.test_model.UserParametersLong"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserParametersLong</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParametersDouble" title="acquisition-control.app.api.test_model.UserParametersDouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserParametersDouble</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParametersString" title="acquisition-control.app.api.test_model.UserParametersString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserParametersString</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParameters" title="acquisition-control.app.api.test_model.UserParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserParameters</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.ISMRMRDHeader" title="acquisition-control.app.api.test_model.ISMRMRDHeader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ISMRMRDHeader</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.NewCommands" title="acquisition-control.app.api.test_model.NewCommands"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NewCommands</span></code></a></p></td>
+<td><p>Pydantic definition of a commands.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.test_model.NewDeviceTask" title="acquisition-control.app.api.test_model.NewDeviceTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NewDeviceTask</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MatrixSize">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">MatrixSize</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.MatrixSize" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MatrixSize.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.MatrixSize.x" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MatrixSize.y">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.MatrixSize.y" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MatrixSize.z">
+<span class="sig-name descname"><span class="pre">z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.MatrixSize.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.FieldOfView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">FieldOfView</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.FieldOfView" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.FieldOfView.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.FieldOfView.x" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.FieldOfView.y">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.FieldOfView.y" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.FieldOfView.z">
+<span class="sig-name descname"><span class="pre">z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.FieldOfView.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingSpace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">EncodingSpace</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingSpace" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingSpace.matrixSize">
+<span class="sig-name descname"><span class="pre">matrixSize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.MatrixSize" title="acquisition-control.app.api.test_model.MatrixSize"><span class="pre">MatrixSize</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingSpace.matrixSize" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingSpace.fieldOfView_mm">
+<span class="sig-name descname"><span class="pre">fieldOfView_mm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.FieldOfView" title="acquisition-control.app.api.test_model.FieldOfView"><span class="pre">FieldOfView</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingSpace.fieldOfView_mm" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.LimitType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">LimitType</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.LimitType" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.LimitType.minimum">
+<span class="sig-name descname"><span class="pre">minimum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.LimitType.minimum" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.LimitType.maximum">
+<span class="sig-name descname"><span class="pre">maximum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.LimitType.maximum" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.LimitType.center">
+<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.LimitType.center" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingLimits">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">EncodingLimits</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingLimits" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_0">
+<span class="sig-name descname"><span class="pre">kspace_encoding_step_0</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.LimitType" title="acquisition-control.app.api.test_model.LimitType"><span class="pre">LimitType</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_1">
+<span class="sig-name descname"><span class="pre">kspace_encoding_step_1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.LimitType" title="acquisition-control.app.api.test_model.LimitType"><span class="pre">LimitType</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_2">
+<span class="sig-name descname"><span class="pre">kspace_encoding_step_2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.LimitType" title="acquisition-control.app.api.test_model.LimitType"><span class="pre">LimitType</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">Trajectories</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of Trajectories</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories.CARTESIAN">
+<span class="sig-name descname"><span class="pre">CARTESIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cartesian'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories.CARTESIAN" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories.EPI">
+<span class="sig-name descname"><span class="pre">EPI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'epi'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories.EPI" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories.RADIAL">
+<span class="sig-name descname"><span class="pre">RADIAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'radial'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories.RADIAL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories.GOLDENANGLE">
+<span class="sig-name descname"><span class="pre">GOLDENANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'goldenangle'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories.GOLDENANGLE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories.SPIRAL">
+<span class="sig-name descname"><span class="pre">SPIRAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'spiral'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories.SPIRAL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Trajectories.OTHER">
+<span class="sig-name descname"><span class="pre">OTHER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'other'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Trajectories.OTHER" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">DiffusionDimensions</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of diffusion dimensions</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.AVERAGE">
+<span class="sig-name descname"><span class="pre">AVERAGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'average'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.AVERAGE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.CONTRAST">
+<span class="sig-name descname"><span class="pre">CONTRAST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'contrast'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.CONTRAST" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.PHASE">
+<span class="sig-name descname"><span class="pre">PHASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'phase'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.PHASE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.REPETITION">
+<span class="sig-name descname"><span class="pre">REPETITION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'repetition'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.REPETITION" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.SET">
+<span class="sig-name descname"><span class="pre">SET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'set'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.SET" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.SEGMENT">
+<span class="sig-name descname"><span class="pre">SEGMENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'segment'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.SEGMENT" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_0">
+<span class="sig-name descname"><span class="pre">USER_0</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_0'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_1">
+<span class="sig-name descname"><span class="pre">USER_1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_1'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_2">
+<span class="sig-name descname"><span class="pre">USER_2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_2'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_3">
+<span class="sig-name descname"><span class="pre">USER_3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_3'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_3" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_4">
+<span class="sig-name descname"><span class="pre">USER_4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_4'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_4" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_5">
+<span class="sig-name descname"><span class="pre">USER_5</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_5'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_5" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_6">
+<span class="sig-name descname"><span class="pre">USER_6</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_6'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_6" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionDimensions.USER_7">
+<span class="sig-name descname"><span class="pre">USER_7</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'user_7'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_7" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Encoding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">Encoding</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.Encoding" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Encoding.encodedSpace">
+<span class="sig-name descname"><span class="pre">encodedSpace</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.EncodingSpace" title="acquisition-control.app.api.test_model.EncodingSpace"><span class="pre">EncodingSpace</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Encoding.encodedSpace" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Encoding.reconSpace">
+<span class="sig-name descname"><span class="pre">reconSpace</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.EncodingSpace" title="acquisition-control.app.api.test_model.EncodingSpace"><span class="pre">EncodingSpace</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Encoding.reconSpace" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Encoding.encodingLimits">
+<span class="sig-name descname"><span class="pre">encodingLimits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.EncodingLimits" title="acquisition-control.app.api.test_model.EncodingLimits"><span class="pre">EncodingLimits</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Encoding.encodingLimits" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.Encoding.trajectory">
+<span class="sig-name descname"><span class="pre">trajectory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.Trajectories" title="acquisition-control.app.api.test_model.Trajectories"><span class="pre">Trajectories</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.Encoding.trajectory" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ExperimentalConditions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">ExperimentalConditions</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.ExperimentalConditions" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ExperimentalConditions.H1resonanceFrequency_Hz">
+<span class="sig-name descname"><span class="pre">H1resonanceFrequency_Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ExperimentalConditions.H1resonanceFrequency_Hz" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.GradientDirection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">GradientDirection</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.GradientDirection" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.GradientDirection.rl">
+<span class="sig-name descname"><span class="pre">rl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.GradientDirection.rl" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.GradientDirection.ap">
+<span class="sig-name descname"><span class="pre">ap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.GradientDirection.ap" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.GradientDirection.fh">
+<span class="sig-name descname"><span class="pre">fh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.GradientDirection.fh" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">DiffusionType</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionType" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionType.gradientDirection">
+<span class="sig-name descname"><span class="pre">gradientDirection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.GradientDirection" title="acquisition-control.app.api.test_model.GradientDirection"><span class="pre">GradientDirection</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionType.gradientDirection" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.DiffusionType.bvalue">
+<span class="sig-name descname"><span class="pre">bvalue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.DiffusionType.bvalue" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">SequenceParameters</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.TR">
+<span class="sig-name descname"><span class="pre">TR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.TR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.TE">
+<span class="sig-name descname"><span class="pre">TE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.TE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.TI">
+<span class="sig-name descname"><span class="pre">TI</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.TI" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.flipAngle_deg">
+<span class="sig-name descname"><span class="pre">flipAngle_deg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.flipAngle_deg" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.sequence_type">
+<span class="sig-name descname"><span class="pre">sequence_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.sequence_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.echo_spacing">
+<span class="sig-name descname"><span class="pre">echo_spacing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.echo_spacing" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.diffusionDimension">
+<span class="sig-name descname"><span class="pre">diffusionDimension</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.DiffusionDimensions" title="acquisition-control.app.api.test_model.DiffusionDimensions"><span class="pre">DiffusionDimensions</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.diffusionDimension" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.diffusion">
+<span class="sig-name descname"><span class="pre">diffusion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#acquisition-control.app.api.test_model.DiffusionType" title="acquisition-control.app.api.test_model.DiffusionType"><span class="pre">DiffusionType</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.diffusion" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.SequenceParameters.diffusionScheme">
+<span class="sig-name descname"><span class="pre">diffusionScheme</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.SequenceParameters.diffusionScheme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">PatientPositions</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of patient postions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.HFP">
+<span class="sig-name descname"><span class="pre">HFP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'HFP'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.HFP" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.HFS">
+<span class="sig-name descname"><span class="pre">HFS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'HFS'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.HFS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.HFDR">
+<span class="sig-name descname"><span class="pre">HFDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'HFDR'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.HFDR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.HFDL">
+<span class="sig-name descname"><span class="pre">HFDL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'HFDL'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.HFDL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.FFP">
+<span class="sig-name descname"><span class="pre">FFP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FFP'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.FFP" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.FFS">
+<span class="sig-name descname"><span class="pre">FFS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FFS'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.FFS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.FFDR">
+<span class="sig-name descname"><span class="pre">FFDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FFDR'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.FFDR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.PatientPositions.FFDL">
+<span class="sig-name descname"><span class="pre">FFDL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FFDL'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.PatientPositions.FFDL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MeasurementInformation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">MeasurementInformation</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.MeasurementInformation" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MeasurementInformation.measurementID">
+<span class="sig-name descname"><span class="pre">measurementID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.MeasurementInformation.measurementID" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MeasurementInformation.patientPosition">
+<span class="sig-name descname"><span class="pre">patientPosition</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.PatientPositions" title="acquisition-control.app.api.test_model.PatientPositions"><span class="pre">PatientPositions</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.MeasurementInformation.patientPosition" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.MeasurementInformation.sequenceName">
+<span class="sig-name descname"><span class="pre">sequenceName</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.MeasurementInformation.sequenceName" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.AcquisitionSystemInformation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">AcquisitionSystemInformation</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.AcquisitionSystemInformation" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.AcquisitionSystemInformation.deviceID">
+<span class="sig-name descname"><span class="pre">deviceID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.AcquisitionSystemInformation.deviceID" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersLong">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">UserParametersLong</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersLong" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersLong.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersLong.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersLong.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersLong.value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersDouble">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">UserParametersDouble</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersDouble" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersDouble.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersDouble.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersDouble.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersDouble.value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersString">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">UserParametersString</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersString" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersString.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersString.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParametersString.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParametersString.value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">UserParameters</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParameters" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParameters.userParameterLong">
+<span class="sig-name descname"><span class="pre">userParameterLong</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParametersLong" title="acquisition-control.app.api.test_model.UserParametersLong"><span class="pre">UserParametersLong</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParameters.userParameterLong" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParameters.userParameterDouble">
+<span class="sig-name descname"><span class="pre">userParameterDouble</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParametersDouble" title="acquisition-control.app.api.test_model.UserParametersDouble"><span class="pre">UserParametersDouble</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParameters.userParameterDouble" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.UserParameters.userParameterString">
+<span class="sig-name descname"><span class="pre">userParameterString</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParametersString" title="acquisition-control.app.api.test_model.UserParametersString"><span class="pre">UserParametersString</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.UserParameters.userParameterString" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">ISMRMRDHeader</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader.measurementInformation">
+<span class="sig-name descname"><span class="pre">measurementInformation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.MeasurementInformation" title="acquisition-control.app.api.test_model.MeasurementInformation"><span class="pre">MeasurementInformation</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.measurementInformation" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader.acquisitionSystemInformation">
+<span class="sig-name descname"><span class="pre">acquisitionSystemInformation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.AcquisitionSystemInformation" title="acquisition-control.app.api.test_model.AcquisitionSystemInformation"><span class="pre">AcquisitionSystemInformation</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.acquisitionSystemInformation" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader.experimentalConditions">
+<span class="sig-name descname"><span class="pre">experimentalConditions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.ExperimentalConditions" title="acquisition-control.app.api.test_model.ExperimentalConditions"><span class="pre">ExperimentalConditions</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.experimentalConditions" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader.encoding">
+<span class="sig-name descname"><span class="pre">encoding</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#acquisition-control.app.api.test_model.Encoding" title="acquisition-control.app.api.test_model.Encoding"><span class="pre">Encoding</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.encoding" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader.sequenceParameters">
+<span class="sig-name descname"><span class="pre">sequenceParameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.SequenceParameters" title="acquisition-control.app.api.test_model.SequenceParameters"><span class="pre">SequenceParameters</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.sequenceParameters" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.ISMRMRDHeader.userParameters">
+<span class="sig-name descname"><span class="pre">userParameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.UserParameters" title="acquisition-control.app.api.test_model.UserParameters"><span class="pre">UserParameters</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.userParameters" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewCommands">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">NewCommands</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.NewCommands" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of a commands.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewCommands.START">
+<span class="sig-name descname"><span class="pre">START</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'START'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.NewCommands.START" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewCommands.STOP">
+<span class="sig-name descname"><span class="pre">STOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'STOP'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.NewCommands.STOP" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewCommands.PAUSE">
+<span class="sig-name descname"><span class="pre">PAUSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PAUSE'</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.NewCommands.PAUSE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewDeviceTask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.test_model.</span></span><span class="sig-name descname"><span class="pre">NewDeviceTask</span></span><a class="headerlink" href="#acquisition-control.app.api.test_model.NewDeviceTask" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewDeviceTask.ismrmrd_header">
+<span class="sig-name descname"><span class="pre">ismrmrd_header</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.NewDeviceTask.ismrmrd_header" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewDeviceTask.command">
+<span class="sig-name descname"><span class="pre">command</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#acquisition-control.app.api.test_model.NewCommands" title="acquisition-control.app.api.test_model.NewCommands"><span class="pre">NewCommands</span></a></em><a class="headerlink" href="#acquisition-control.app.api.test_model.NewDeviceTask.command" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="acquisition-control.app.api.test_model.NewDeviceTask.sequence">
+<span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#acquisition-control.app.api.test_model.NewDeviceTask.sequence" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MatrixSize"><code class="docutils literal notranslate"><span class="pre">MatrixSize</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MatrixSize.x"><code class="docutils literal notranslate"><span class="pre">MatrixSize.x</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MatrixSize.y"><code class="docutils literal notranslate"><span class="pre">MatrixSize.y</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MatrixSize.z"><code class="docutils literal notranslate"><span class="pre">MatrixSize.z</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.FieldOfView"><code class="docutils literal notranslate"><span class="pre">FieldOfView</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.FieldOfView.x"><code class="docutils literal notranslate"><span class="pre">FieldOfView.x</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.FieldOfView.y"><code class="docutils literal notranslate"><span class="pre">FieldOfView.y</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.FieldOfView.z"><code class="docutils literal notranslate"><span class="pre">FieldOfView.z</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingSpace"><code class="docutils literal notranslate"><span class="pre">EncodingSpace</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingSpace.matrixSize"><code class="docutils literal notranslate"><span class="pre">EncodingSpace.matrixSize</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingSpace.fieldOfView_mm"><code class="docutils literal notranslate"><span class="pre">EncodingSpace.fieldOfView_mm</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.LimitType"><code class="docutils literal notranslate"><span class="pre">LimitType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.LimitType.minimum"><code class="docutils literal notranslate"><span class="pre">LimitType.minimum</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.LimitType.maximum"><code class="docutils literal notranslate"><span class="pre">LimitType.maximum</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.LimitType.center"><code class="docutils literal notranslate"><span class="pre">LimitType.center</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingLimits"><code class="docutils literal notranslate"><span class="pre">EncodingLimits</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_0"><code class="docutils literal notranslate"><span class="pre">EncodingLimits.kspace_encoding_step_0</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_1"><code class="docutils literal notranslate"><span class="pre">EncodingLimits.kspace_encoding_step_1</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.EncodingLimits.kspace_encoding_step_2"><code class="docutils literal notranslate"><span class="pre">EncodingLimits.kspace_encoding_step_2</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories"><code class="docutils literal notranslate"><span class="pre">Trajectories</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories.CARTESIAN"><code class="docutils literal notranslate"><span class="pre">Trajectories.CARTESIAN</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories.EPI"><code class="docutils literal notranslate"><span class="pre">Trajectories.EPI</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories.RADIAL"><code class="docutils literal notranslate"><span class="pre">Trajectories.RADIAL</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories.GOLDENANGLE"><code class="docutils literal notranslate"><span class="pre">Trajectories.GOLDENANGLE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories.SPIRAL"><code class="docutils literal notranslate"><span class="pre">Trajectories.SPIRAL</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Trajectories.OTHER"><code class="docutils literal notranslate"><span class="pre">Trajectories.OTHER</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.AVERAGE"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.AVERAGE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.CONTRAST"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.CONTRAST</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.PHASE"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.PHASE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.REPETITION"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.REPETITION</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.SET"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.SET</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.SEGMENT"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.SEGMENT</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_0"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_0</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_1"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_1</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_2"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_3"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_3</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_4"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_4</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_5"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_5</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_6"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_6</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionDimensions.USER_7"><code class="docutils literal notranslate"><span class="pre">DiffusionDimensions.USER_7</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Encoding"><code class="docutils literal notranslate"><span class="pre">Encoding</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Encoding.encodedSpace"><code class="docutils literal notranslate"><span class="pre">Encoding.encodedSpace</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Encoding.reconSpace"><code class="docutils literal notranslate"><span class="pre">Encoding.reconSpace</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Encoding.encodingLimits"><code class="docutils literal notranslate"><span class="pre">Encoding.encodingLimits</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.Encoding.trajectory"><code class="docutils literal notranslate"><span class="pre">Encoding.trajectory</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ExperimentalConditions"><code class="docutils literal notranslate"><span class="pre">ExperimentalConditions</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ExperimentalConditions.H1resonanceFrequency_Hz"><code class="docutils literal notranslate"><span class="pre">ExperimentalConditions.H1resonanceFrequency_Hz</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.GradientDirection"><code class="docutils literal notranslate"><span class="pre">GradientDirection</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.GradientDirection.rl"><code class="docutils literal notranslate"><span class="pre">GradientDirection.rl</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.GradientDirection.ap"><code class="docutils literal notranslate"><span class="pre">GradientDirection.ap</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.GradientDirection.fh"><code class="docutils literal notranslate"><span class="pre">GradientDirection.fh</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionType"><code class="docutils literal notranslate"><span class="pre">DiffusionType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionType.gradientDirection"><code class="docutils literal notranslate"><span class="pre">DiffusionType.gradientDirection</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.DiffusionType.bvalue"><code class="docutils literal notranslate"><span class="pre">DiffusionType.bvalue</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters"><code class="docutils literal notranslate"><span class="pre">SequenceParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.TR"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.TR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.TE"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.TE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.TI"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.TI</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.flipAngle_deg"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.flipAngle_deg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.sequence_type"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.sequence_type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.echo_spacing"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.echo_spacing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.diffusionDimension"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.diffusionDimension</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.diffusion"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.diffusion</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.SequenceParameters.diffusionScheme"><code class="docutils literal notranslate"><span class="pre">SequenceParameters.diffusionScheme</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions"><code class="docutils literal notranslate"><span class="pre">PatientPositions</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.HFP"><code class="docutils literal notranslate"><span class="pre">PatientPositions.HFP</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.HFS"><code class="docutils literal notranslate"><span class="pre">PatientPositions.HFS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.HFDR"><code class="docutils literal notranslate"><span class="pre">PatientPositions.HFDR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.HFDL"><code class="docutils literal notranslate"><span class="pre">PatientPositions.HFDL</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.FFP"><code class="docutils literal notranslate"><span class="pre">PatientPositions.FFP</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.FFS"><code class="docutils literal notranslate"><span class="pre">PatientPositions.FFS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.FFDR"><code class="docutils literal notranslate"><span class="pre">PatientPositions.FFDR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.PatientPositions.FFDL"><code class="docutils literal notranslate"><span class="pre">PatientPositions.FFDL</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MeasurementInformation"><code class="docutils literal notranslate"><span class="pre">MeasurementInformation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MeasurementInformation.measurementID"><code class="docutils literal notranslate"><span class="pre">MeasurementInformation.measurementID</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MeasurementInformation.patientPosition"><code class="docutils literal notranslate"><span class="pre">MeasurementInformation.patientPosition</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.MeasurementInformation.sequenceName"><code class="docutils literal notranslate"><span class="pre">MeasurementInformation.sequenceName</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.AcquisitionSystemInformation"><code class="docutils literal notranslate"><span class="pre">AcquisitionSystemInformation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.AcquisitionSystemInformation.deviceID"><code class="docutils literal notranslate"><span class="pre">AcquisitionSystemInformation.deviceID</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersLong"><code class="docutils literal notranslate"><span class="pre">UserParametersLong</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersLong.name"><code class="docutils literal notranslate"><span class="pre">UserParametersLong.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersLong.value"><code class="docutils literal notranslate"><span class="pre">UserParametersLong.value</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersDouble"><code class="docutils literal notranslate"><span class="pre">UserParametersDouble</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersDouble.name"><code class="docutils literal notranslate"><span class="pre">UserParametersDouble.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersDouble.value"><code class="docutils literal notranslate"><span class="pre">UserParametersDouble.value</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersString"><code class="docutils literal notranslate"><span class="pre">UserParametersString</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersString.name"><code class="docutils literal notranslate"><span class="pre">UserParametersString.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParametersString.value"><code class="docutils literal notranslate"><span class="pre">UserParametersString.value</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParameters"><code class="docutils literal notranslate"><span class="pre">UserParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParameters.userParameterLong"><code class="docutils literal notranslate"><span class="pre">UserParameters.userParameterLong</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParameters.userParameterDouble"><code class="docutils literal notranslate"><span class="pre">UserParameters.userParameterDouble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.UserParameters.userParameterString"><code class="docutils literal notranslate"><span class="pre">UserParameters.userParameterString</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.measurementInformation"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader.measurementInformation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.acquisitionSystemInformation"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader.acquisitionSystemInformation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.experimentalConditions"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader.experimentalConditions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.encoding"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader.encoding</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.sequenceParameters"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader.sequenceParameters</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.ISMRMRDHeader.userParameters"><code class="docutils literal notranslate"><span class="pre">ISMRMRDHeader.userParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewCommands"><code class="docutils literal notranslate"><span class="pre">NewCommands</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewCommands.START"><code class="docutils literal notranslate"><span class="pre">NewCommands.START</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewCommands.STOP"><code class="docutils literal notranslate"><span class="pre">NewCommands.STOP</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewCommands.PAUSE"><code class="docutils literal notranslate"><span class="pre">NewCommands.PAUSE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewDeviceTask"><code class="docutils literal notranslate"><span class="pre">NewDeviceTask</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewDeviceTask.ismrmrd_header"><code class="docutils literal notranslate"><span class="pre">NewDeviceTask.ismrmrd_header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewDeviceTask.command"><code class="docutils literal notranslate"><span class="pre">NewDeviceTask.command</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.test_model.NewDeviceTask.sequence"><code class="docutils literal notranslate"><span class="pre">NewDeviceTask.sequence</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../../../_sources/autoapi/acquisition-control/app/api/test_model/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>
