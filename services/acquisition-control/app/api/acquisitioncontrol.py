@@ -12,7 +12,13 @@ import logging
 import httpx
 from fastapi import APIRouter
 from pydantic.json import pydantic_encoder
-from scanhub_libraries.models import Commands, DeviceTask, ParametrizedSequence, ScanJob, ScanStatus
+from pydantic import BaseModel
+from scanhub_libraries.models import Commands, DeviceTask, ParametrizedSequence, ScanStatus
+from .test_model import ISMRMRDHeader, NewDeviceTask, UserParametersString
+from xml.etree.ElementTree import Element, SubElement, tostring
+import xml.etree.ElementTree as ET
+from lxml import etree
+from enum import Enum
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
@@ -20,6 +26,45 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 router = APIRouter()
 
 logging.basicConfig(level=logging.DEBUG)
+
+
+# Namespaces
+ns = {
+    'ismrmrd': 'http://www.ismrm.org/ISMRMRD',
+    'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+}
+
+
+def pydantic_to_xml(element: Element, obj: BaseModel):
+    """
+    Convert a Pydantic model to XML format recursively.
+    """
+    for field, value in obj:
+        if isinstance(value, BaseModel):
+            sub_element = SubElement(element, field)
+            pydantic_to_xml(sub_element, value)
+        elif isinstance(value, list):
+            for item in value:
+                sub_element = SubElement(element, field)
+                if isinstance(item, BaseModel):
+                    pydantic_to_xml(sub_element, item)
+                else:
+                    sub_element.text = str(item)
+        elif isinstance(value, Enum):
+            sub_element = SubElement(element, field)
+            sub_element.text = value.value
+        else:
+            sub_element = SubElement(element, field)
+            sub_element.text = str(value)
+
+def generate_xml_from_model(model: ISMRMRDHeader):
+    """
+    Generate an XML string from the Pydantic model.
+    """
+    root = Element('ismrmrdHeader', xmlns=ns['ismrmrd'], **{'xmlns:xsi': ns['xsi']})
+    pydantic_to_xml(root, model)
+    return tostring(root, encoding='unicode')
+
 
 
 async def device_location_request(device_id):
@@ -107,9 +152,9 @@ async def post_device_task(url, device_task):
 
 
 @router.post("/start-scan")
-async def start_scan(scan_job: ScanJob):
+async def start_scan(scan_job: ISMRMRDHeader):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
-    device_id = scan_job.device_id
+    device_id = scan_job.acquisitionSystemInformation.deviceID
     record_id = ""
     command = Commands.START
 
@@ -119,21 +164,28 @@ async def start_scan(scan_job: ScanJob):
     print("Start-scan endpoint, device ip: ", device_ip)
 
     # get sequence
-    sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.sequence_id)
+    sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.measurementInformation.sequenceName)
 
     # create record
-    record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
-    parametrized_sequence = ParametrizedSequence(
-        acquisition_limits=scan_job.acquisition_limits,
-        sequence_parameters=scan_job.sequence_parameters,
-        sequence=json.dumps(sequence_json),
-    )
+    record_id = "blub" # await create_record(EXAM_MANAGER_URI, scan_job.measurementInformation.measurementID)
+    scan_job.userParameters.userParameterString.append(UserParametersString(name="record_id", value=record_id))
 
     # start scan and forward sequence, workflow, record_id
-    logging.debug("Received job: %s, Generated record id: %s", scan_job.job_id, record_id)
+    logging.debug("Received job: %s, Generated record id: %s", scan_job.measurementInformation.measurementID, record_id)
 
-    device_task = DeviceTask(
-        device_id=device_id, record_id=record_id, command=command, parametrized_sequence=parametrized_sequence
+    
+
+    xml_data = generate_xml_from_model(scan_job)
+
+    xsd_path = "ismrmrd.xsd"
+    schema = etree.XMLSchema(file=xsd_path)
+    parser = etree.XMLParser(schema = schema)
+    xml_root = etree.fromstring(xml_data, parser)
+
+    # fill record id
+    print(sequence_json)
+    device_task = NewDeviceTask(
+        ismrmrd_header=xml_data, command=command, sequence=sequence_json["file"]
     )
     status_code = await post_device_task(url, device_task)
 
