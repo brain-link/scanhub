@@ -16,11 +16,18 @@ import { GlobalStyles } from '@mui/system'
 import * as React from 'react'
 import { Outlet } from 'react-router-dom'
 
+import Snackbar from '@mui/joy/Snackbar'
+import NotificationContext from '../NotificationContext'
+
 import Navigation from '../components/Navigation'
 
 const materialTheme = materialExtendTheme()
 
 export default function App() {
+
+  const [messageObj, setMessageObject] = React.useContext(NotificationContext)
+  
+
   return (
     <MaterialCssVarsProvider defaultMode='system' theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider defaultMode='system' disableTransitionOnChange>
@@ -42,6 +49,16 @@ export default function App() {
           }}
         />
         <Navigation />
+
+        <Snackbar 
+          open={messageObj.open} 
+          variant={'soft'} 
+          color={messageObj.type}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          onClose={() => setMessageObject({ ...messageObj, open: false})}
+        >
+          {messageObj.message}
+        </Snackbar>
 
         {/* Main content */}
         <Box

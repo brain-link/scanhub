@@ -5,9 +5,7 @@
  * UserManagement.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
-import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import Alert from '@mui/joy/Alert'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
@@ -20,6 +18,8 @@ import * as React from 'react'
 import { useMutation, useQuery } from 'react-query'
 
 import LoginContext from '../LoginContext'
+import NotificationContext from '../NotificationContext'
+import { useContext } from 'react'
 import { userApi } from '../api'
 import AlertItem from '../components/AlertItem'
 import { User, UserRole } from '../generated-client/userlogin'
@@ -28,8 +28,8 @@ import UserCreateModal from './UserCreateModal'
 
 export default function UserManagement() {
   const [currentuser] = React.useContext(LoginContext)
+  const [, setMessageObject] = useContext(NotificationContext)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
-  const [alert, setAlert] = React.useState<string | null>(null)
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
   const {
@@ -55,7 +55,7 @@ export default function UserManagement() {
       })
       .then(() => {
         console.log('Deleted user:', username)
-        setAlert(null)
+        setMessageObject({message: 'Deleted user ' + username, type: 'success', open: true})
         refetch()
       })
       .catch((err) => {
@@ -66,7 +66,7 @@ export default function UserManagement() {
           errorMessage = 'Could not delete user.'
         }
         console.log(errorMessage)
-        setAlert(errorMessage)
+        setMessageObject({message: errorMessage, type: 'warning', open: true})
       })
   })
 
@@ -77,7 +77,6 @@ export default function UserManagement() {
       })
       .then(() => {
         console.log('Modified user:', user.username)
-        setAlert(null)
         setIsUpdating(false)
         refetch()
       })
@@ -91,7 +90,7 @@ export default function UserManagement() {
         setIsUpdating(false)
         refetch()
         console.log(errorMessage)
-        setAlert(errorMessage)
+        setMessageObject({message: errorMessage, type: 'warning', open: true})
       })
   })
 
@@ -164,24 +163,10 @@ export default function UserManagement() {
           refetch()
         }}
         onClose={() => {}}
-        setAlert={setAlert}
       />
 
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}>
         <Typography level='title-md'>List of Users</Typography>
-        {alert ? (
-          <Alert
-            variant='soft'
-            color='warning'
-            endDecorator={
-              <IconButton variant='soft' size='sm' color='warning' onClick={() => setAlert(null)}>
-                <CloseIcon />
-              </IconButton>
-            }
-          >
-            {alert}
-          </Alert>
-        ) : null}
         <IconButton size='sm' variant='outlined'>
           <AddSharpIcon onClick={() => setDialogOpen(true)} />
         </IconButton>
