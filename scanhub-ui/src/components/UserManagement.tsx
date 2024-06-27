@@ -133,7 +133,7 @@ export default function UserManagement() {
       field: 'actions',
       type: 'actions',
       headerName: 'Delete',
-      width: 100,
+      width: 150,
       cellClassName: 'actions',
       getActions: (row) => {
         return [
@@ -174,9 +174,10 @@ export default function UserManagement() {
           rows={users}
           columns={columns}
           getRowId={(user) => user.username}
-          style={{ width: 1300 }}
+          style={{ width: 1400 }}
           hideFooterSelectedRowCount
           editMode={'row'}
+          rowHeight={40}  // MUI default is 52
           loading={isUpdating}
           processRowUpdate={(updatedUser) => {
             setIsUpdating(true)

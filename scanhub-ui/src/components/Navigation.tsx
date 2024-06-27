@@ -8,6 +8,7 @@ import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsS
 import BuildSharpIcon from '@mui/icons-material/BuildSharp'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
+import BrightnessAutoIcon from '@mui/icons-material/BrightnessAuto';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
 import Person2SharpIcon from '@mui/icons-material/Person2Sharp'
 import PersonSharpIcon from '@mui/icons-material/PersonSharp'
@@ -43,14 +44,23 @@ function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
   const { setMode: setMuiMode } = useMaterialColorScheme()
   const [mounted, setMounted] = React.useState(true)
-  React.useEffect(() => {
-    setMounted(true)
+
+  React.useEffect(() => {  // this effect is somehow needed for server side rendering according to the docs.
+    setMounted(true)       // probably not needed in our case.
   }, [])
+
 
   if (!mounted) {
     return <IconButton size='sm' variant='outlined' color='primary' />
   }
 
+  let modeicon = <BrightnessAutoIcon />
+  if (mode === 'light') {
+    modeicon = <LightModeRoundedIcon />
+  } else if (mode === 'dark') {
+    modeicon = <DarkModeRoundedIcon />
+  }
+  
   return (
     <IconButton
       id='toggle-mode'
@@ -58,16 +68,19 @@ function ColorSchemeToggle() {
       color='primary'
       size='sm'
       onClick={() => {
-        if (mode === 'light') {
+        if (mode === 'system') {
           setMode('dark')
           setMuiMode('dark')
-        } else {
+        } else if (mode === 'dark') {
           setMode('light')
           setMuiMode('light')
+        } else {
+          setMode('system')
+          setMuiMode('system')
         }
       }}
     >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+      {modeicon}
     </IconButton>
   )
 }
