@@ -5,53 +5,49 @@
  * PatientTable.tsx is responsible for rendering the patient table view.
  */
 import Sheet from '@mui/joy/Sheet'
-import Table from '@mui/joy/Table'
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid'
 import { PatientTableInterface } from '../interfaces/components.interface'
+import { PatientOut } from '../generated-client/patient'
+
 
 export default function PatientTable(props: PatientTableInterface) {
+
   const navigate = useNavigate()
+
+  const columns: GridColDef<PatientOut>[] = [
+    { field: 'id', headerName: 'ID', width: 200, editable: false },
+    { field: 'name', headerName: 'Name', width: 200, editable: false },
+    {
+      field: 'sex',
+      type: 'singleSelect',
+      headerName: 'Sex',
+      width: 200,
+      editable: false,
+      valueOptions: ['m', 'w', 'o'],
+    },
+    { field: 'birth_date', headerName: 'Birthday', width: 200, editable: false },
+    { field: 'status', headerName: 'Status', width: 200, editable: false },
+  ]
 
   return (
     <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
-      <Table hoverRow borderAxis='xBetween' color='neutral' size='sm' stickyHeader variant='plain'>
-        <thead>
-          <tr>
-            <th style={{ width: '4%' }}>ID</th>
-            <th>Name</th>
-            <th style={{ width: '4%' }}>Sex</th>
-            <th style={{ width: '8%' }}>Birthday</th>
-            <th>Issuer</th>
-            <th>Status</th>
-            <th>Comment</th>
-            <th style={{ width: '8%' }}>Admission</th>
-            <th style={{ width: '8%' }}>Updated</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {props.patients.map((patient) => (
-            <tr
-              key={patient.id}
-              onClick={() => {
-                navigate(`/${patient.id}`)
-              }}
-            >
-              <td>{patient.id}</td>
-              <td>{patient.name}</td>
-              <td>{patient.sex}</td>
-              <td>{patient.birth_date}</td>
-              <td>{patient.issuer}</td>
-              <td>{patient.status}</td>
-              <td>{patient.comment}</td>
-              <td>{new Date(patient.datetime_created).toDateString()}</td>
-              <td>{patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <DataGrid
+        rows={props.patients}
+        columns={columns}
+        style={{ width: 1300 }}
+        hideFooterSelectedRowCount
+        editMode={'row'}
+        rowHeight={40}  // MUI default is 52
+        // loading={isUpdating}
+        processRowUpdate={(updatedUser) => {    // TODO enable udpates
+          // setIsUpdating(true)
+          // updateMutation.mutate(updatedUser)
+          return updatedUser
+        }}
+        onRowClick={(params: GridRowParams<PatientOut>) => navigate(`/${params.row.id}`)}
+      />
     </Sheet>
   )
 }

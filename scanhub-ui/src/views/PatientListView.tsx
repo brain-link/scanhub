@@ -30,6 +30,7 @@ export default function PatientListView() {
 
   const {
     data: patients,
+    refetch,
     isLoading,
     isError,
   } = useQuery<PatientOut[]>({
@@ -85,8 +86,8 @@ export default function PatientListView() {
       <PatientCreateModal
         isOpen={dialogOpen}
         setOpen={setDialogOpen}
-        onSubmit={(newPatient: PatientOut) => {
-          patients?.push(newPatient)
+        onSubmit={() => {
+          refetch()
         }}
         onClose={() => {}}
       />
