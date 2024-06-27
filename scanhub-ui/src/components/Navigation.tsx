@@ -207,8 +207,7 @@ export default function Navigation() {
                   setUser(null)
                 })
                 .catch((error) => {
-                  console.log('Error at logout: ', error)
-                  setMessageObject({message: 'Error at logout: ' + error, type: 'warning', open: true})
+                  setMessageObject({message: 'Error at logout: ' + error, type: 'warning'})
                 })
             }}
           >

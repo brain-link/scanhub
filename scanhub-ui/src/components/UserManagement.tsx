@@ -28,7 +28,7 @@ import UserCreateModal from './UserCreateModal'
 
 export default function UserManagement() {
   const [currentuser] = React.useContext(LoginContext)
-  const [, setMessageObject] = useContext(NotificationContext)
+  const [, showNotification] = useContext(NotificationContext)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
@@ -54,8 +54,7 @@ export default function UserManagement() {
         headers: { Authorization: 'Bearer ' + currentuser?.access_token },
       })
       .then(() => {
-        console.log('Deleted user:', username)
-        setMessageObject({message: 'Deleted user ' + username, type: 'success', open: true})
+        showNotification({message: 'Deleted user ' + username, type: 'success'})
         refetch()
       })
       .catch((err) => {
@@ -65,8 +64,7 @@ export default function UserManagement() {
         } else {
           errorMessage = 'Could not delete user.'
         }
-        console.log(errorMessage)
-        setMessageObject({message: errorMessage, type: 'warning', open: true})
+        showNotification({message: errorMessage, type: 'warning'})
       })
   })
 
@@ -89,8 +87,7 @@ export default function UserManagement() {
         }
         setIsUpdating(false)
         refetch()
-        console.log(errorMessage)
-        setMessageObject({message: errorMessage, type: 'warning', open: true})
+        showNotification({message: errorMessage, type: 'warning'})
       })
   })
 

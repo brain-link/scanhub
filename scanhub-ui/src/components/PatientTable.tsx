@@ -48,35 +48,6 @@ export default function PatientTable(props: PatientTableInterface) {
               <td>{patient.comment}</td>
               <td>{new Date(patient.datetime_created).toDateString()}</td>
               <td>{patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-'}</td>
-
-              {/* <td>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <Button
-                    size='sm'
-                    sx={{ zIndex: 'snackbar' }}
-                    variant='soft'
-                    endDecorator={<KeyboardArrowRight />}
-                    color='neutral'
-                    onClick={() => {
-                      navigate(`/patients/dcmview/${patient.id}`)
-                    }}
-                  >
-                    View
-                  </Button>
-                  <Button
-                    size='sm'
-                    sx={{ zIndex: 'snackbar' }}
-                    variant='soft'
-                    endDecorator={<KeyboardArrowRight />}
-                    color='neutral'
-                    onClick={() => {
-                      navigate(`/patients/${patient.id}`)
-                    }}
-                  >
-                    Acquire
-                  </Button>
-                </Box>
-              </td> */}
             </tr>
           ))}
         </tbody>

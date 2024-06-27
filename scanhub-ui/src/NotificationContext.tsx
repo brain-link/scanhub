@@ -6,12 +6,12 @@
  */
 import { createContext } from 'react'
 
-export type MessageObject = {
+export type NotificationObject = {
     message: string, 
     type: 'warning' | 'success',
-    open: boolean
+    visible?: boolean
 }
 
-const NotificationContext = createContext<[MessageObject, (messageObj: MessageObject) => void]>([{message: '', type: 'success', open: true}, () => {}])
+const NotificationContext = createContext<[NotificationObject, (messageObj: NotificationObject) => void]>([{message: '', type: 'success', visible: true}, () => {}])
 
 export default NotificationContext

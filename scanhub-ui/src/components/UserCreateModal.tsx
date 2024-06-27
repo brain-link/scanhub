@@ -35,7 +35,7 @@ const createUserFormContent = [
 
 export default function UserCreateModal(props: ModalComponentProps<User>) {
   const [currentuser] = React.useContext(LoginContext)
-  const [, setMessageObject] = React.useContext(NotificationContext)
+  const [, showNotification] = React.useContext(NotificationContext)
   // eslint-disable-next-line camelcase
   const [user, setUser] = React.useState({
     username: '',
@@ -58,7 +58,7 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
         })
         .then(() => {
           props.onSubmit(user)
-          setMessageObject({message: 'Created user ' + user.username, type: 'success', open: true})
+          showNotification({message: 'Created user ' + user.username, type: 'success'})
         })
         .catch((err) => {
           let errorMessage = null
@@ -69,8 +69,7 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
           } else {
             errorMessage = 'Error at creating new user.'
           }
-          console.log(errorMessage)
-          setMessageObject({message: errorMessage, type: 'warning', open: true})
+          showNotification({message: errorMessage, type: 'warning'})
         })
     },
   })

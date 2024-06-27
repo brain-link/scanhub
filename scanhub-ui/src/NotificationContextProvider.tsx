@@ -8,12 +8,22 @@ import { PropsWithChildren, useState } from 'react'
 import React from 'react'
 
 import NotificationContext from './NotificationContext'
-import { MessageObject } from './NotificationContext'
+import { NotificationObject } from './NotificationContext'
 
 
 
 export default function LoginContextProvider(props: PropsWithChildren) {
-  const [messageObject, setMessageObject] = useState<MessageObject>({message: '', type: 'warning', open: false})
+  const [notificationObject, setNotificationObject] = useState<NotificationObject>({message: '', type: 'warning', visible: false})
 
-  return <NotificationContext.Provider value={[messageObject, setMessageObject]}>{props.children}</NotificationContext.Provider>
+  function showNotification(notificationObject: NotificationObject) {
+    if (notificationObject.type == 'warning') {
+      console.log('Warning:', notificationObject.message);
+    }
+    else if (notificationObject.type == 'success') {
+      console.log(notificationObject.message);
+    }
+    setNotificationObject(notificationObject);
+  }
+
+  return <NotificationContext.Provider value={[notificationObject, showNotification]}>{props.children}</NotificationContext.Provider>
 }

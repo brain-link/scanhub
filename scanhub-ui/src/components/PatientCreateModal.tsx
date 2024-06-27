@@ -21,6 +21,7 @@ import { getPatientApi } from '../api'
 import LoginContext from '../LoginContext'
 import { BasePatient, PatientOut } from '../generated-client/patient'
 import { ModalComponentProps } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
 // Patient form items, order is row wise
 const createPatientFormContent = [
@@ -34,6 +35,7 @@ const createPatientFormContent = [
 
 export default function PatientCreateModal(props: ModalComponentProps<PatientOut>) {
   const [user, ] = React.useContext(LoginContext)
+  const [, showNotification] = React.useContext(NotificationContext)
   const patientApi = getPatientApi(user ? user.access_token : '')
 
   const [patient, setPatient] = React.useState<BasePatient>({
@@ -51,9 +53,10 @@ export default function PatientCreateModal(props: ModalComponentProps<PatientOut
       .createPatientPost(patient)
       .then((response) => {
         props.onSubmit(response.data)
+        showNotification({message: 'Created user ' + response.data.name, type: 'success'})
       })
       .catch((err) => {
-        console.log(err)
+        showNotification({message: err, type: 'warning'})
       })
   })
 

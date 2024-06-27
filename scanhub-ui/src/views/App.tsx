@@ -51,11 +51,11 @@ export default function App() {
         <Navigation />
 
         <Snackbar 
-          open={messageObj.open} 
+          open={messageObj.visible === true || messageObj.visible === undefined} 
           variant={'soft'} 
           color={messageObj.type}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          onClose={() => setMessageObject({ ...messageObj, open: false})}
+          onClose={() => setMessageObject({ ...messageObj, visible: false})}
         >
           {messageObj.message}
         </Snackbar>
