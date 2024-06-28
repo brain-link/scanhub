@@ -11,12 +11,8 @@ import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Accordion from '@mui/joy/Accordion'
 import AccordionDetails from '@mui/joy/AccordionDetails'
 import AccordionSummary from '@mui/joy/AccordionSummary'
-// import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp'
-// import KeyboardArrowRightSharpIcon from '@mui/icons-material/KeyboardArrowRightSharp'
 import Badge from '@mui/joy/Badge'
-// Mui Joy
 import Box from '@mui/joy/Box'
-// import ListDivider from '@mui/joy/ListDivider'
 import Divider from '@mui/joy/Divider'
 import IconButton from '@mui/joy/IconButton'
 import List from '@mui/joy/List'
@@ -26,7 +22,6 @@ import Tooltip from '@mui/joy/Tooltip'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useQuery } from 'react-query'
-// import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 // import { WorkflowOut } from '../generated-client/exam'
@@ -35,6 +30,7 @@ import { examApi, getPatientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
+import TaskFromTemplateModal from '../components/TaskFromTemplateModal'
 import ExamInstanceInfo from '../components/ExamInstanceInfo'
 import ExamItem from '../components/ExamInstanceItem'
 import PatientInfo from '../components/PatientInfo'
@@ -44,6 +40,8 @@ import WorkflowInstanceInfo from '../components/WorkflowInstanceInfo'
 import WorkflowItem from '../components/WorkflowInstanceItem'
 import { ExamOut } from '../generated-client/exam'
 import { PatientOut } from '../generated-client/patient'
+import Button from '@mui/joy/Button'
+import WorkflowFromTemplateModal from '../components/WorkflowFromTemplateModal'
 
 function PatientIndex() {
   const params = useParams()
@@ -52,6 +50,11 @@ function PatientIndex() {
   // const [sidePanelOpen, setSidePanelOpen] = React.useState(true)
   // Modal states for exam
   const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
+  const [examIdForWorkflowCreation, setExamIdForWorkflowCreation] = React.useState('')
+  const [taskModalOpen, setTaskModalOpen] = React.useState(false)
+  const [workflowIdForTaskCreation, setWorkflowIdForTaskCreation] = React.useState('')
+  
   // List of jobs
   // const [workflows, setWorkflows] = React.useState<WorkflowOut[] | undefined>(undefined)
 
@@ -136,13 +139,6 @@ function PatientIndex() {
           <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamModalOpen(true)}>
             <AddSharpIcon />
           </IconButton>
-
-          <ExamFromTemplateModal
-            isOpen={examModalOpen}
-            setOpen={setExamModalOpen}
-            parentId={String(params.patientId)}
-            onSubmit={refetchExams}
-          />
         </Box>
 
         <Divider />
@@ -156,7 +152,7 @@ function PatientIndex() {
             flexDirection: 'column',
           }}
         >
-          <List size='sm' sx={{ pt: 0, overflow: 'scroll', '--ListItem-radius': (theme) => theme.vars.radius.sm }}>
+          <List size='sm' sx={{ pt: 0, '--ListItem-radius': (theme) => theme.vars.radius.sm }}>
             {exams?.map((exam) => (
               <Accordion key={`exam-${exam.id}`}>
                 <Tooltip
@@ -164,7 +160,7 @@ function PatientIndex() {
                   variant='outlined'
                   describeChild={false}
                   arrow
-                  title={<ExamInstanceInfo exam={exam} />}
+                  title={<ExamInstanceInfo data={exam} refetchParentData={refetchExams} />}
                 >
                   <AccordionSummary>
                     <ExamItem data={exam} refetchParentData={refetchExams} />
@@ -172,6 +168,17 @@ function PatientIndex() {
                 </Tooltip>
 
                 <AccordionDetails>
+                  <Button
+                    key='add'
+                    onClick={() => {
+                      setWorkflowModalOpen(true)
+                      setExamIdForWorkflowCreation(exam.id)
+                    }}
+                    variant='outlined'
+                    color='neutral'
+                  >
+                    Add Workflow
+                  </Button>
                   {exam.workflows?.map((workflow) => (
                     <Accordion key={`workflow-${workflow.id}`}>
                       <Tooltip
@@ -179,7 +186,7 @@ function PatientIndex() {
                         variant='outlined'
                         describeChild={false}
                         arrow
-                        title={<WorkflowInstanceInfo workflow={workflow} />}
+                        title={<WorkflowInstanceInfo data={workflow} refetchParentData={refetchExams} />}
                       >
                         <AccordionSummary>
                           <WorkflowItem data={workflow} refetchParentData={refetchExams} />
@@ -187,6 +194,17 @@ function PatientIndex() {
                       </Tooltip>
 
                       <AccordionDetails>
+                        <Button
+                          key='add'
+                          onClick={() => {
+                            setTaskModalOpen(true)
+                            setWorkflowIdForTaskCreation(workflow.id)
+                          }}
+                          variant='outlined'
+                          color='neutral'
+                        >
+                          Add Task
+                        </Button>
                         <List size='sm' sx={{ pt: 0, '--ListItem-radius': (theme) => theme.vars.radius.sm }}>
                           {workflow.tasks?.map((task) => (
                             <Tooltip
@@ -194,7 +212,7 @@ function PatientIndex() {
                               placement='right'
                               variant='outlined'
                               arrow
-                              title={<TaskInstanceInfo task={task} />}
+                              title={<TaskInstanceInfo data={task} refetchParentData={refetchExams}/>}
                             >
                               <ListItemButton>
                                 <TaskItem data={task} refetchParentData={refetchExams} />
@@ -215,6 +233,27 @@ function PatientIndex() {
         <Divider />
         <AcquisitionControl />
       </Sheet>
+
+      <ExamFromTemplateModal
+        isOpen={examModalOpen}
+        setOpen={setExamModalOpen}
+        parentId={String(params.patientId)}
+        onSubmit={refetchExams}
+      />
+
+      <WorkflowFromTemplateModal
+        isOpen={workflowModalOpen}
+        setOpen={setWorkflowModalOpen}
+        parentId={examIdForWorkflowCreation}
+        onSubmit={refetchExams}
+      />
+
+      <TaskFromTemplateModal
+        isOpen={taskModalOpen}
+        setOpen={setTaskModalOpen}
+        parentId={workflowIdForTaskCreation}
+        onSubmit={refetchExams}
+      />
 
       <DicomViewer />
     </Box>
