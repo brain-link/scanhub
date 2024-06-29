@@ -19,14 +19,14 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import { TemplateItemInterface } from '../interfaces/components.interface'
+import { TemplateInterface } from '../interfaces/components.interface'
 
-export default function ExamTemplateItem(prop: TemplateItemInterface<ExamOut>) {
+export default function ExamTemplateItem(prop: TemplateInterface<ExamOut>) {
   const [user] = React.useContext(LoginContext)
 
   const deleteExamTemplate = useMutation(async () => {
     await examApi
-      .examDeleteApiV1ExamExamIdDelete(prop.item.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .examDeleteApiV1ExamExamIdDelete(prop.data.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
       .then(() => {
         prop.onDeleted()
       })
@@ -61,25 +61,25 @@ export default function ExamTemplateItem(prop: TemplateItemInterface<ExamOut>) {
           </Menu>
         </Dropdown>
 
-        <Typography level='title-md'>Exam: {prop.item.name}</Typography>
+        <Typography level='title-md'>Exam: {prop.data.name}</Typography>
 
         <Typography level='body-sm' textColor='text.tertiary'>
-          ID: {prop.item.id}
+          ID: {prop.data.id}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Site: {prop.item.site}
+          Site: {prop.data.site}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Address: {prop.item.address}
+          Address: {prop.data.address}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Creator: {prop.item.creator}
+          Creator: {prop.data.creator}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Created: {new Date(prop.item.datetime_created).toDateString()}
+          Created: {new Date(prop.data.datetime_created).toDateString()}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Updated: {prop.item.datetime_updated ? new Date(prop.item.datetime_updated).toDateString() : '-'}
+          Updated: {prop.data.datetime_updated ? new Date(prop.data.datetime_updated).toDateString() : '-'}
         </Typography>
       </CardContent>
     </Card>

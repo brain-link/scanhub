@@ -8,11 +8,22 @@ import { ExamsApi } from './generated-client/exam'
 import { WorkflowsApi } from './generated-client/exam'
 import { TasksApi } from './generated-client/exam'
 import { PatientsApi } from './generated-client/patient'
+import { Configuration as PatientApiConfiguration } from './generated-client/patient/configuration'
 import { LoginApi } from './generated-client/userlogin'
 import { UserApi } from './generated-client/userlogin'
 import baseUrls from './utils/Urls'
 
-export const patientApi = new PatientsApi(undefined, baseUrls.patientService)
+
+let patientApi: PatientsApi;
+let patientApiAccessToken = '';
+export function getPatientApi(accessToken: string) {
+    if ((patientApi === undefined) || (patientApiAccessToken != accessToken)) {
+        patientApiAccessToken = accessToken;
+        patientApi = new PatientsApi(new PatientApiConfiguration({accessToken: accessToken}), baseUrls.patientService)
+    }
+    return patientApi
+}
+
 export const examApi = new ExamsApi(undefined, baseUrls.examService)
 export const workflowsApi = new WorkflowsApi(undefined, baseUrls.examService)
 export const taskApi = new TasksApi(undefined, baseUrls.examService)

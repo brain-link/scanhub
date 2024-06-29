@@ -305,21 +305,20 @@ services:
       retries: 10
 
 
-  # FRONTEND/SCANHUB-UI
-
-  # scanhub-ui:
-  #   container_name: scanhub-ui
-  #   build:
-  #     context: ./scanhub-ui
-  #     dockerfile: ./Dockerfile
-  #     args:
-  #       NODE_ENV: "development" # use "development" or "production"
-  #   depends_on:
-  #     - patient-manager
-  #   volumes:
-  #     - ./scanhub-ui/src:/app/src
-  #   ports:
-  #     - 3000:3000
+  # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
+  scanhub-ui:
+    container_name: scanhub-ui
+    build:
+      context: ./scanhub-ui
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: "development" # use "development" or "production"
+    depends_on:
+      - patient-manager
+    volumes:
+      - ./scanhub-ui/src:/app/src
+    ports:
+      - 3000:3000
 
 
 volumes:

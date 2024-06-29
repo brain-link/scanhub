@@ -61,6 +61,15 @@ export const tools = [
 function DicomViewerToolbar() {
   const [activeTool, setActiveTool] = React.useState<string | null>(null)
 
+
+  // TODO access setToolActive trough toolGroup like shown here: https://www.cornerstonejs.org/docs/tutorials/basic-manipulation-tool
+  // this should avoid the warning: "setToolMode call for tool not available globally"
+
+  // also the useEffect might not be necessary unless setToolActive takes a long time
+  // if (activeTool) {
+  //   cornerstoneTools.setToolActive(activeTool, { mouseButtonMask: 1 })
+  // }
+
   React.useEffect(() => {
     if (activeTool) {
       cornerstoneTools.setToolActive(activeTool, { mouseButtonMask: 1 })

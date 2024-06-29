@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { BrowserRouter } from 'react-router-dom'
 
 import LoginContextProvider from './LoginContextProvider'
+import NotificationContextProvider from './NotificationContextProvider'
 import { RouteConfiguration } from './Routes'
 
 const queryClient = new QueryClient()
@@ -38,7 +39,9 @@ ReactDOM.createRoot(document.querySelector('#root')!).render(
       <BrowserRouter>
         <StyledEngineProvider injectFirst>
           <LoginContextProvider>
-            <RouteConfiguration />
+            <NotificationContextProvider>
+              <RouteConfiguration />
+            </NotificationContextProvider>
           </LoginContextProvider>
         </StyledEngineProvider>
       </BrowserRouter>

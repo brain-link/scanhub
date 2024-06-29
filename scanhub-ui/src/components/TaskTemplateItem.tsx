@@ -22,14 +22,14 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { TaskOut } from '../generated-client/exam'
-import { TemplateItemInterface } from '../interfaces/components.interface'
+import { TemplateInterface } from '../interfaces/components.interface'
 
-export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
+export default function TaskTemplateItem(prop: TemplateInterface<TaskOut>) {
   const [user] = React.useContext(LoginContext)
 
   const deleteTaskTemplate = useMutation(async () => {
     await taskApi
-      .deleteTaskApiV1ExamTaskTaskIdDelete(prop.item.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .deleteTaskApiV1ExamTaskTaskIdDelete(prop.data.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
       .then(() => {
         prop.onDeleted()
       })
@@ -66,19 +66,19 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
         <Typography level='title-md'>Task</Typography>
 
         <Typography level='body-sm' textColor='text.tertiary'>
-          ID: {prop.item.id}
+          ID: {prop.data.id}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Workflow ID: {prop.item.workflow_id}
+          Workflow ID: {prop.data.workflow_id}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Type: {prop.item.type}
+          Type: {prop.data.type}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Description: {prop.item.description}
+          Description: {prop.data.description}
         </Typography>
         <Typography level='body-sm' textColor='text.tertiary'>
-          Created: {new Date(prop.item.datetime_created).toDateString()}
+          Created: {new Date(prop.data.datetime_created).toDateString()}
         </Typography>
 
         {/* TODO: Add updated datetime to tasks? */}
@@ -92,8 +92,8 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {prop.item.args &&
-              Object.entries(prop.item.args).map((arg, index) => (
+            {prop.data.args &&
+              Object.entries(prop.data.args).map((arg, index) => (
                 <Typography key={index} level='body-sm' textColor='text.tertiary'>
                   {arg[0]}: {arg[1]}
                 </Typography>
@@ -109,8 +109,8 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {prop.item.artifacts &&
-              Object.entries(prop.item.artifacts).map((artifact, index) => (
+            {prop.data.artifacts &&
+              Object.entries(prop.data.artifacts).map((artifact, index) => (
                 <Typography key={index} level='body-sm' textColor='text.tertiary'>
                   {artifact[0]}: {artifact[1]}
                 </Typography>
@@ -162,8 +162,8 @@ export default function TaskTemplateItem(prop: TemplateItemInterface<TaskOut>) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {prop.item.destinations &&
-              Object.entries(prop.item.destinations).map((destination, index) => (
+            {prop.data.destinations &&
+              Object.entries(prop.data.destinations).map((destination, index) => (
                 <Typography key={index} level='body-sm' textColor='text.tertiary'>
                   {destination[0]}: {destination[1]}
                 </Typography>

@@ -86,7 +86,7 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
                     props.setOpen(false)
                   }}
                 >
-                  <WorkflowTemplateItem item={workflow} onClicked={() => {}} onDeleted={() => {}} />
+                  <WorkflowTemplateItem data={workflow} onClicked={() => {}} onDeleted={() => {}} />
                 </ListItemButton>
               ))}
           </List>

@@ -76,7 +76,7 @@ export default function TaskFromTemplateModal(props: CreateInstanceModalInterfac
                     props.setOpen(false)
                   }}
                 >
-                  <TaskTemplateItem item={task} onClicked={() => {}} onDeleted={() => {}} />
+                  <TaskTemplateItem data={task} onClicked={() => {}} onDeleted={() => {}} />
                 </ListItemButton>
               ))}
           </List>

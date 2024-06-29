@@ -6,8 +6,8 @@
 <a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
     <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build"/>
 </a>
-<a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests.yml/badge.svg" alt="Static Tests"/>
+<a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests-backend.yml" target="_blank">
+    <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests-backend.yml/badge.svg" alt="Static Tests Backend"/>
 </a>
 
 <a href="https://scanhub.brain-link.de/" target="_blank">
@@ -25,7 +25,7 @@ The greatest novalty of ScanHub is the cross-manufacturer and multi-modality asp
 
 Currently we are focussing on the development of an acquisition solution for the open-source MRI [OSI2One](https://www.opensourceimaging.org/2023/01/09/first-open-source-mri-scanner-presented-the-osii-one/).
 
-ScanHub represents the backbone of our acquisition platform. In parallel we are working on a web-based frontend :arrow_right: [scanhub-ui](https://github.com/brain-link/scanhub-ui).
+ScanHub is designed as a client-server application. It consists of several services that form the backbone of the acquisition platform and a web-based frontend called scanhub-ui. (The [scanhub-ui](https://github.com/brain-link/scanhub-ui) repository was incorporated into the subfolder scanhub-ui of this repository to facilitate the joint development).
 
 We welcome anyone who would like to join our mission, just [get in touch](mailto:info@brain-link.de) :email:.
 
@@ -40,13 +40,14 @@ https://github.com/brain-link/scanhub-ui/assets/42237900/beb8edc9-04c4-4f96-83d7
 Installation
 ------------
 
-The installation including scanhub-ui can be achieved using the following docker-compose command inside the scanhub repository:
+Scanhub is deployed using docker and docker-compose. Make sure they are installed first. To build scanhub, make sure that there is an internet connection.
 
+Building and running scanhub can be achieved using the following docker-compose command inside the scanhub repository:
 
     docker-compose up --detach --build
 
 
-By default this builds the services with a base docker imgage from ghcr.io/brain-link/scanhub/scanhub-base:latest. To incorporate the latest changes during development rebuild the scanhub-base image and use the build-arg BASE_IMG=scanhub-base:latest. To do this, build and start the project with the following commands:
+By default this builds the services with a base docker image from ghcr.io/brain-link/scanhub/scanhub-base:latest. To incorporate the latest changes, as during development, rebuild the scanhub-base image and use the build-arg BASE_IMG=scanhub-base:latest. To do this, build and start the project with the following commands:
 
     cd services/base
     docker build -t scanhub-base .
@@ -55,10 +56,15 @@ By default this builds the services with a base docker imgage from ghcr.io/brain
     docker-compose up --detach
 
 
+During development you may start scanhub and the tools for development using the development-launcher.sh script. It has an option --full-rebuild. For details, have a look in the script.
+
+    development-launcher.sh --full-rebuild
+
+
 Default Username and Password
 -----------------------------
 
-For now a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt
+For now a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt and defaultuser.csv
 
 
 Documentation
@@ -69,7 +75,7 @@ See our dedicated [Documentation](https://scanhub.brain-link.de/) web page to ge
 Contributor Guide
 -----------
 
-We appreciate every contribution to ScanHub, if you would like to contribute to the project, pleaase contact us.
+We appreciate every contribution to ScanHub, if you would like to contribute to the project, please contact us.
 Based on a stable main-branch, we are implementing features based on issues.
 
 Feel free to open a new issues for any feature that you are missing in the current main branch.
