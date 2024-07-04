@@ -461,9 +461,6 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.acquisitioncontrol.router" title="acquisition-control.app.api.acquisitioncontrol.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.acquisitioncontrol.ns" title="acquisition-control.app.api.acquisitioncontrol.ns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ns</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -472,12 +469,6 @@ document.write(`
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.acquisitioncontrol.pydantic_to_xml" title="acquisition-control.app.api.acquisitioncontrol.pydantic_to_xml"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic_to_xml</span></code></a>(element, obj)</p></td>
-<td><p>Convert a Pydantic model to XML format recursively.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#acquisition-control.app.api.acquisitioncontrol.generate_xml_from_model" title="acquisition-control.app.api.acquisitioncontrol.generate_xml_from_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_xml_from_model</span></code></a>(model)</p></td>
-<td><p>Generate an XML string from the Pydantic model.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#acquisition-control.app.api.acquisitioncontrol.device_location_request" title="acquisition-control.app.api.acquisitioncontrol.device_location_request"><code class="xref py py-obj docutils literal notranslate"><span class="pre">device_location_request</span></code></a>(device_id)</p></td>
 <td><p>Retrieve ip from device-manager.</p></td>
 </tr>
@@ -516,23 +507,6 @@ document.write(`
 <dt class="sig sig-object py" id="acquisition-control.app.api.acquisitioncontrol.router">
 <span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.acquisitioncontrol.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#acquisition-control.app.api.acquisitioncontrol.router" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="acquisition-control.app.api.acquisitioncontrol.ns">
-<span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.acquisitioncontrol.</span></span><span class="sig-name descname"><span class="pre">ns</span></span><a class="headerlink" href="#acquisition-control.app.api.acquisitioncontrol.ns" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="acquisition-control.app.api.acquisitioncontrol.pydantic_to_xml">
-<span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.acquisitioncontrol.</span></span><span class="sig-name descname"><span class="pre">pydantic_to_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xml.etree.ElementTree.Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pydantic.BaseModel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acquisition-control.app.api.acquisitioncontrol.pydantic_to_xml" title="Link to this definition">#</a></dt>
-<dd><p>Convert a Pydantic model to XML format recursively.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="acquisition-control.app.api.acquisitioncontrol.generate_xml_from_model">
-<span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.acquisitioncontrol.</span></span><span class="sig-name descname"><span class="pre">generate_xml_from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">acquisition</span> <span class="pre">-</span> <span class="pre">control.app.api.test_model.ISMRMRDHeader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acquisition-control.app.api.acquisitioncontrol.generate_xml_from_model" title="Link to this definition">#</a></dt>
-<dd><p>Generate an XML string from the Pydantic model.</p>
-</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="acquisition-control.app.api.acquisitioncontrol.device_location_request">
@@ -618,7 +592,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="acquisition-control.app.api.acquisitioncontrol.start_scan">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.acquisitioncontrol.</span></span><span class="sig-name descname"><span class="pre">start_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scan_job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">acquisition</span> <span class="pre">-</span> <span class="pre">control.app.api.test_model.ISMRMRDHeader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acquisition-control.app.api.acquisitioncontrol.start_scan" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acquisition-control.app.api.acquisitioncontrol.</span></span><span class="sig-name descname"><span class="pre">start_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scan_job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.ScanJob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acquisition-control.app.api.acquisitioncontrol.start_scan" title="Link to this definition">#</a></dt>
 <dd><p>Receives a job. Create a record id, trigger scan with it and returns it.</p>
 </dd></dl>
 
@@ -665,9 +639,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.SEQUENCE_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">SEQUENCE_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.ns"><code class="docutils literal notranslate"><span class="pre">ns</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.pydantic_to_xml"><code class="docutils literal notranslate"><span class="pre">pydantic_to_xml()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.generate_xml_from_model"><code class="docutils literal notranslate"><span class="pre">generate_xml_from_model()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.device_location_request"><code class="docutils literal notranslate"><span class="pre">device_location_request()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.retrieve_sequence"><code class="docutils literal notranslate"><span class="pre">retrieve_sequence()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-control.app.api.acquisitioncontrol.create_record"><code class="docutils literal notranslate"><span class="pre">create_record()</span></code></a></li>
