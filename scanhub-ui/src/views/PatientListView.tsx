@@ -82,7 +82,7 @@ export default function PatientListView() {
   // }
 
   return (
-    <Box sx={{ m: 3 }}>
+    <Box sx={{ m: 3, width: '100%' }}>
       <PatientCreateModal
         isOpen={dialogOpen}
         setOpen={setDialogOpen}

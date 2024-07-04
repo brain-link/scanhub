@@ -6,45 +6,140 @@
  * in the exam instance list of a patient.
  */
 import ListAltIcon from '@mui/icons-material/ListAlt'
-// Mui joy components
-import ListItem from '@mui/joy/ListItem'
-// import ListItemDecorator from '@mui/joy/ListItemDecorator'
-import ListItemContent from '@mui/joy/ListItemContent'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
+import { useMutation } from 'react-query'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import Dropdown from '@mui/joy/Dropdown'
+import Menu from '@mui/joy/Menu'
+import MenuButton from '@mui/joy/MenuButton'
+import IconButton from '@mui/joy/IconButton'
+import MenuItem from '@mui/joy/MenuItem'
+import Tooltip from '@mui/joy/Tooltip'
 
 // Sub-components, interfaces, client
 import { ExamOut } from '../generated-client/exam'
 import { InstanceInterface } from '../interfaces/components.interface'
-import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
+import Box from '@mui/joy/Box'
+import { examApi } from '../api'
+import LoginContext from '../LoginContext'
+import WorkflowFromTemplateModal from '../components/WorkflowFromTemplateModal'
+import ExamInstanceInfo from '../components/ExamInstanceInfo'
+// import ExamModal from './ExamModal'
 
-// function ExamInstanceItem({ data: exam, refetchParentData, isSelected }: ComponentProps<ExamOut>) {
-function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
-  const [modalOpen, setModalOpen] = React.useState(false)
+
+export default function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
 
   return (
-    <ListItem sx={{ width: '100%', p: 0.5 }}>
-      {/* <ListItemDecorator sx={{ align: 'center', justify: 'center' }}>
-          <SnippetFolderSharpIcon />
-        </ListItemDecorator> */}
+    <Tooltip
+      placement='right'
+      variant='outlined'
+      describeChild={false}
+      arrow
+      title={<ExamInstanceInfo data={exam} refetchParentData={refetchParentData} />}
+    >
+      <Box
+        sx={{ 
+          width: '100%', 
+          p: 0.5, 
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <ListAltIcon fontSize='small' />
-
-        <ListItemContent>
-          <Typography level='title-sm'>{exam.name}</Typography>
+        <Box 
+          sx={{
+            marginLeft: 0.5,
+            p: 0.5, 
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'start',
+          }}
+        >
+          <Typography level='title-sm'>
+            {exam.name}
+          </Typography>
 
           <Typography level='body-xs' textColor='text.tertiary'>
             {`Created: ${new Date(exam.datetime_created).toDateString()}`}
           </Typography>
-        </ListItemContent>
-
-        <WorkflowFromTemplateModal
-          isOpen={modalOpen}
-          setOpen={setModalOpen}
-          parentId={exam.id}
-          onSubmit={refetchParentData}
-        />
-    </ListItem>
+        </Box>
+      </Box>
+    </Tooltip>
   )
 }
 
-export default ExamInstanceItem
+
+export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
+
+  const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
+  // const [examModalOpen, setExamModalOpen] = React.useState(false)
+
+  const [user] = React.useContext(LoginContext)
+
+  // const updateExam = useMutation(async (data: Exam) => {
+  //   await client.examService
+  //     .update(data.id, data)
+  //     .then(() => {
+  //       refetchParentData()
+  //     })
+  //     .catch((err) => {
+  //       console.log('Error on exam update: ', err)
+  //     })
+  // })
+
+  const deleteExam = useMutation(async () => {
+    await examApi
+      .examDeleteApiV1ExamExamIdDelete(exam.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .then(() => {
+        refetchParentData()
+      })
+  })
+
+  return (
+    <>
+      <Dropdown>
+        <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
+          <MoreHorizIcon fontSize='small' />
+        </MenuButton>
+        <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
+          <MenuItem key='edit' onClick={() => {}}>
+            Edit
+          </MenuItem>
+          <MenuItem
+            key='delete'
+            onClick={() => {
+              deleteExam.mutate()
+            }}
+          >
+            Delete
+          </MenuItem>
+          <MenuItem
+            key='add'
+            onClick={() => {
+              setWorkflowFromTemplateModalOpen(true)
+            }}
+          >
+            Add Workflow
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+
+      {/* <ExamModal   // TODO use ExamOut instead of Exam type
+        data={exam}
+        dialogOpen={examModalOpen}
+        setDialogOpen={setExamModalOpen}
+        handleModalSubmit={(data: Exam) => {
+          updateExam.mutate(data)
+        }}
+      /> */}
+
+      <WorkflowFromTemplateModal
+        isOpen={workflowFromTemplateModalOpen}
+        setOpen={setWorkflowFromTemplateModalOpen}
+        parentId={exam.id}
+        onSubmit={refetchParentData}
+      />
+    </>
+  )
+}

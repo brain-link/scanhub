@@ -10,44 +10,15 @@ import Chip from '@mui/joy/Chip'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { Button } from '@mui/joy'
-import { useMutation } from 'react-query'
 
 import { WorkflowOut } from '../generated-client/exam'
-import { workflowsApi } from '../api'
-import LoginContext from '../LoginContext'
 import { InstanceInterface } from '../interfaces/components.interface'
 
 
-
-function WorkflowInstanceInfo({ data: workflow, refetchParentData }: InstanceInterface<WorkflowOut>) {
-
-  const [user] = React.useContext(LoginContext)
-
-  const deleteWorkflow = useMutation(async () => {
-    await workflowsApi
-      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then(() => {
-        refetchParentData()
-      })
-  })
+function WorkflowInstanceInfo({ data: workflow }: InstanceInterface<WorkflowOut>) {
 
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
-      <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-        <Button key='edit' onClick={() => {}} variant='outlined'>
-          Edit
-        </Button>
-        <Button 
-          key='delete' 
-          onClick={() => {
-            deleteWorkflow.mutate()
-          }}
-          variant='outlined'
-        >
-          Delete
-        </Button>
-      </Box>
       <Box
         sx={{
           rowGap: 0.4,
@@ -60,7 +31,6 @@ function WorkflowInstanceInfo({ data: workflow, refetchParentData }: InstanceInt
           },
         }}
       >
-
         <Typography fontSize='sm'>ID</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {workflow.id}

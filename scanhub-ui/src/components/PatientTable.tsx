@@ -36,7 +36,6 @@ export default function PatientTable(props: PatientTableInterface) {
       <DataGrid
         rows={props.patients}
         columns={columns}
-        style={{ width: 1300 }}
         hideFooterSelectedRowCount
         editMode={'row'}
         rowHeight={40}  // MUI default is 52

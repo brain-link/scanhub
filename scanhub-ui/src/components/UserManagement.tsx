@@ -152,7 +152,7 @@ export default function UserManagement() {
   ]
 
   return (
-    <Box sx={{ m: 3 }}>
+    <Box sx={{ m: 3, width: '100%'}}>
       <UserCreateModal
         isOpen={dialogOpen}
         setOpen={setDialogOpen}
@@ -162,8 +162,8 @@ export default function UserManagement() {
         onClose={() => {}}
       />
 
-      <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}>
-        <Typography level='title-md'>List of Users</Typography>
+      <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 
+        <Typography level='title-md'>List of Users</Typography> 
         <IconButton size='sm' variant='outlined'>
           <AddSharpIcon onClick={() => setDialogOpen(true)} />
         </IconButton>
@@ -174,8 +174,7 @@ export default function UserManagement() {
           rows={users}
           columns={columns}
           getRowId={(user) => user.username}
-          style={{ width: 1400 }}
-          hideFooterSelectedRowCount
+          hideFooterSelectedRowCount 
           editMode={'row'}
           rowHeight={40}  // MUI default is 52
           loading={isUpdating}

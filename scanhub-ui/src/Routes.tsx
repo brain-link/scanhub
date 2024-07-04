@@ -7,7 +7,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import CssBaseline from '@mui/material/CssBaseline'
+import CssBaseline from '@mui/joy/CssBaseline';
 import { GlobalStyles } from '@mui/system'
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
 import {

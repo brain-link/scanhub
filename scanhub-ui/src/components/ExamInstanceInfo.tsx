@@ -10,60 +10,15 @@ import Chip from '@mui/joy/Chip'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-// import IconButton from '@mui/joy/IconButton'
-// import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-// import Dropdown from '@mui/joy/Dropdown'
-// import Menu from '@mui/joy/Menu'
-// import MenuButton from '@mui/joy/MenuButton'
-// import MenuItem from '@mui/joy/MenuItem'
-import { useMutation } from 'react-query'
 
 import { ExamOut } from '../generated-client/exam'
-// import ExamModal from './ExamModal'
-import LoginContext from '../LoginContext'
-import { examApi } from '../api'
 import { InstanceInterface } from '../interfaces/components.interface'
-import { Button } from '@mui/joy'
 
-function ExamInstanceInfo({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
-  const [user] = React.useContext(LoginContext)
-  // const [examModalOpen, setExamModalOpen] = React.useState(false)
 
-  const deleteExam = useMutation(async () => {
-    await examApi
-      .examDeleteApiV1ExamExamIdDelete(exam.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then(() => {
-        refetchParentData()
-      })
-  })
-
-  // const updateExam = useMutation(async (data: Exam) => {
-  //   await client.examService
-  //     .update(data.id, data)
-  //     .then(() => {
-  //       refetchParentData()
-  //     })
-  //     .catch((err) => {
-  //       console.log('Error on exam update: ', err)
-  //     })
-  // })
+function ExamInstanceInfo({ data: exam }: InstanceInterface<ExamOut>) {
 
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
-      <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-        <Button key='edit' onClick={() => {}} variant='outlined'>
-          Edit
-        </Button>
-        <Button
-          key='delete'
-          onClick={() => {
-            deleteExam.mutate()
-          }}
-          variant='outlined'
-        >
-          Delete
-        </Button>
-      </Box>
       <Box
         sx={{
           rowGap: 0.4,
@@ -121,15 +76,6 @@ function ExamInstanceInfo({ data: exam, refetchParentData }: InstanceInterface<E
           </Chip>
         </Stack>
       </Box>
-
-      {/* <ExamModal
-        data={exam}
-        dialogOpen={examModalOpen}
-        setDialogOpen={setExamModalOpen}
-        handleModalSubmit={(data: Exam) => {
-          updateExam.mutate(data)
-        }}
-      /> */}
     </Box>
   )
 }

@@ -5,48 +5,20 @@
  * TaskInstanceInfo.tsx is responsible for rendering additional information
  * of a task instance item.
  */
+import * as React from 'react'
+
 import Box from '@mui/joy/Box'
 import Chip from '@mui/joy/Chip'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
-import Button from '@mui/joy/Button'
-import { useMutation } from 'react-query'
 
 import { TaskOut } from '../generated-client/exam'
-import { taskApi } from '../api'
 import { InstanceInterface } from '../interfaces/components.interface'
-import LoginContext from '../LoginContext'
 
 
-function TaskInstanceInfo({ data: task, refetchParentData }: InstanceInterface<TaskOut>) {
-
-  const [user] = React.useContext(LoginContext)
-
-  const deleteTask = useMutation(async () => {
-    await taskApi
-      .deleteTaskApiV1ExamTaskTaskIdDelete(task.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then(() => {
-        refetchParentData()
-      })
-  })
-
+function TaskInstanceInfo({ data: task }: InstanceInterface<TaskOut>) {
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
-      <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-        <Button key='edit' onClick={() => {}} variant='outlined'>
-          Edit
-        </Button>
-        <Button 
-          key='delete' 
-          onClick={() => {
-            deleteTask.mutate()
-          }}
-          variant='outlined'
-        >
-          Delete
-        </Button>
-      </Box>
       <Box
         sx={{
           rowGap: 0.4,
