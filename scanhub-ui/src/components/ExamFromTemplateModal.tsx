@@ -87,7 +87,7 @@ export default function ExamFromTemplateModal(props: CreateInstanceModalInterfac
                     props.setOpen(false)
                   }}
                 >
-                  <ExamTemplateItem item={exam} onClicked={() => {}} onDeleted={() => {}} />
+                  <ExamTemplateItem data={exam} onClicked={() => {}} onDeleted={() => {}} />
                 </ListItemButton>
               ))}
           </List>

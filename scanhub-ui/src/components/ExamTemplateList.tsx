@@ -56,7 +56,7 @@ export default function ExamTemplateList() {
       {exams?.map((exam, idx) => (
         <ExamTemplateItem
           key={idx}
-          item={exam}
+          data={exam}
           onClicked={() => {}}
           onDeleted={() => {
             refetch()

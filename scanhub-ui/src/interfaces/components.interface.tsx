@@ -1,6 +1,7 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // Component interfaces: Pass data and functions between components
+import {  ReactNode } from 'react'
 import { PatientOut } from '../generated-client/patient'
 import { Job } from './data.interface'
 import { Device } from './data.interface'
@@ -68,7 +69,6 @@ export interface ModalComponentProps<T> {
   onClose: () => void
   setOpen: (open: boolean) => void
   isOpen: boolean
-  setAlert?: (alert: string | null) => void
 }
 
 export interface PatientTableInterface {
@@ -91,4 +91,10 @@ export interface CreateInstanceModalInterface {
   onSubmit: () => void
   isOpen: boolean
   setOpen: (open: boolean) => void
+}
+
+export interface AccordionWithMenuInterface {
+  accordionSummary?: ReactNode    // the summary that is always shown
+  children?: ReactNode            // the details to expand
+  accordionMenu?: ReactNode       // the element/menu that is displayed next to the summary
 }
