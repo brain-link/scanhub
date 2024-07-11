@@ -29,7 +29,7 @@ jobs:
           path-to-document: 'https://github.com/brain-link/scanhub/blob/main/LICENSE'
           # branch should not be protected
           branch: 'main'
-          allowlist: dependabot
+          allowlist: schote,jobehrens,chdinh,dependabot
           remote-organization-name: brain-link
           remote-repository-name: 'licence-agreements'
 
