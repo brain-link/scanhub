@@ -34,19 +34,25 @@ export interface BasePatient {
      * @type {string}
      * @memberof BasePatient
      */
-    'sex': string;
+    'first_name': string;
     /**
      * 
      * @type {string}
      * @memberof BasePatient
      */
-    'name': string;
+    'last_name': string;
     /**
      * 
      * @type {string}
      * @memberof BasePatient
      */
     'birth_date': string;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof BasePatient
+     */
+    'sex': Gender;
     /**
      * 
      * @type {string}
@@ -58,14 +64,39 @@ export interface BasePatient {
      * @type {string}
      * @memberof BasePatient
      */
-    'status': string;
+    'status': BasePatientStatusEnum;
     /**
      * 
      * @type {string}
      * @memberof BasePatient
      */
-    'comment': string;
+    'comment'?: string;
 }
+
+export const BasePatientStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type BasePatientStatusEnum = typeof BasePatientStatusEnum[keyof typeof BasePatientStatusEnum];
+
+/**
+ * Pydantic definition of genders.
+ * @export
+ * @enum {string}
+ */
+
+export const Gender = {
+    Male: 'MALE',
+    Female: 'FEMALE',
+    Other: 'OTHER',
+    NotGiven: 'NOT_GIVEN'
+} as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
+
+
 /**
  * 
  * @export
@@ -97,19 +128,25 @@ export interface PatientOut {
      * @type {string}
      * @memberof PatientOut
      */
-    'sex': string;
+    'first_name': string;
     /**
      * 
      * @type {string}
      * @memberof PatientOut
      */
-    'name': string;
+    'last_name': string;
     /**
      * 
      * @type {string}
      * @memberof PatientOut
      */
     'birth_date': string;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof PatientOut
+     */
+    'sex': Gender;
     /**
      * 
      * @type {string}
@@ -121,13 +158,13 @@ export interface PatientOut {
      * @type {string}
      * @memberof PatientOut
      */
-    'status': string;
+    'status': PatientOutStatusEnum;
     /**
      * 
      * @type {string}
      * @memberof PatientOut
      */
-    'comment': string;
+    'comment'?: string;
     /**
      * 
      * @type {number}
@@ -147,6 +184,15 @@ export interface PatientOut {
      */
     'datetime_updated'?: string;
 }
+
+export const PatientOutStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type PatientOutStatusEnum = typeof PatientOutStatusEnum[keyof typeof PatientOutStatusEnum];
+
 /**
  * 
  * @export

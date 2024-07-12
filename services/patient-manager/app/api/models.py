@@ -4,9 +4,11 @@
 """Patient pydantic models."""
 
 # from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
+from typing import Literal
 
 from pydantic import BaseModel, Extra, Field
+from scanhub_libraries.models import Gender
 
 from . import db
 
@@ -22,12 +24,13 @@ class BasePatient(BaseModel):
         extra = Extra.ignore
         allow_population_by_field_name = True
 
-    sex: str
-    name: str
-    birth_date: str
+    first_name: str
+    last_name: str
+    birth_date: date
+    sex: Gender
     issuer: str
-    status: str
-    comment: str
+    status: Literal["NEW", "UPDATED", "DELETED"]
+    comment: str | None
 
 
 # @dataclass
@@ -53,12 +56,13 @@ async def get_patient_out(data: db.Patient) -> PatientOut:
     """
     return PatientOut(
         id=data.patient_id,
+        first_name=data.first_name,
+        last_name=data.last_name,
+        birth_date=data.birth_date,
         sex=data.sex,
-        name=data.name,
+        issuer=data.issuer,
         status=data.status,
         comment=data.comment,
-        issuer=data.issuer,
-        birth_date=data.birth_date,
         datetime_created=data.datetime_created,
         datetime_updated=data.datetime_updated
     )

@@ -39,13 +39,13 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
   // eslint-disable-next-line camelcase
   const [user, setUser] = React.useState({
     username: '',
-    first_name: '',
-    last_name: '',
+    first_name: '',   // eslint-disable-line camelcase
+    last_name: '',    // eslint-disable-line camelcase
     email: '',
     role: UserRole.Medical, // eslint-disable-next-line camelcase
     password: '',
-    token_type: 'password',
-    access_token: '',
+    token_type: 'password',   // eslint-disable-line camelcase
+    access_token: '',         // eslint-disable-line camelcase
   })
 
   // Post a new record and refetch records table
