@@ -16,6 +16,5 @@ Submodules
    :maxdepth: 1
 
    /autoapi/acquisition-control/app/api/acquisitioncontrol/index
-   /autoapi/acquisition-control/app/api/test_model/index
 
 

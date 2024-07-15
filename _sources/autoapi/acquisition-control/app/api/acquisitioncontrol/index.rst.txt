@@ -55,7 +55,7 @@ Module Contents
    Convert a Pydantic model to XML format recursively.
 
 
-.. py:function:: generate_xml_from_model(model: acquisition-control.app.api.test_model.ISMRMRDHeader)
+.. py:function:: generate_xml_from_model(model: scanhub_libraries.scan_task_models.ISMRMRDHeader)
 
    Generate an XML string from the Pydantic model.
 
@@ -133,7 +133,7 @@ Module Contents
        response of device
 
 
-.. py:function:: start_scan(scan_job: acquisition-control.app.api.test_model.ISMRMRDHeader)
+.. py:function:: start_scan(scan_job: scanhub_libraries.scan_task_models.ISMRMRDHeader)
    :async:
 
 
