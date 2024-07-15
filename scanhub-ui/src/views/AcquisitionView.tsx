@@ -1,0 +1,173 @@
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ *
+ * AcquisitionView.tsx is responsible for rendering the acquisition view.
+ * The acquisition view is the main interaction point and contains instances of
+ * exams, workflows and tasks of a certain patients.
+ * It allows to execute them and view results, i.e. dicom images.
+ */
+import AddSharpIcon from '@mui/icons-material/AddSharp'
+import Badge from '@mui/joy/Badge'
+import Box from '@mui/joy/Box'
+import Divider from '@mui/joy/Divider'
+import IconButton from '@mui/joy/IconButton'
+import Sheet from '@mui/joy/Sheet'
+import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
+
+import LoginContext from '../LoginContext'
+import { examApi, getPatientApi } from '../api'
+import AcquisitionControl from '../components/AcquisitionControl'
+import DicomViewer from '../components/DicomViewer'
+import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
+import ExamItem, { ExamInstanceMenu } from '../components/ExamInstanceItem'
+import PatientInfo from '../components/PatientInfo'
+
+import TaskItem from '../components/TaskInstanceItem'
+import WorkflowItem, { WorkflowInstanceMenu } from '../components/WorkflowInstanceItem'
+import { ExamOut } from '../generated-client/exam'
+import { PatientOut } from '../generated-client/patient'
+import AccordionWithMenu from '../components/AccordionWithMenu'
+
+
+function PatientIndex() {
+  const params = useParams()
+
+  // Modal states for exam
+  const [examModalOpen, setExamModalOpen] = React.useState(false)
+
+  const [user, ] = React.useContext(LoginContext)
+  const patientApi = getPatientApi(user ? user.access_token : '')
+
+  // useQuery for caching the fetched data
+  const {
+    data: patient,
+    // refetch: refetchPatient,
+    isLoading: patientLoading,
+    isError: patientError,
+  } = useQuery<PatientOut, Error>({
+    queryKey: ['patient', params.patientId],
+    queryFn: async () => {
+      return await patientApi.getPatientPatientIdGet(Number(params.patientId)).then((result) => {
+        return result.data
+      })
+    },
+  })
+
+  // Query all exams of the patient
+  const {
+    data: exams,
+    refetch: refetchExams,
+    // isLoading: examsLoading,
+    // isError: examsError,
+  } = useQuery<ExamOut[], Error>({
+    queryKey: ['exam', params.patientId],
+    queryFn: async () => {
+      return await examApi
+        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId), {
+          headers: { Authorization: 'Bearer ' + user?.access_token },
+        })
+        .then((result) => {
+          return result.data
+        })
+    },
+  })
+
+  return (
+    <Box
+      sx={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100dvh',
+      }}
+    >
+      <Sheet
+        className='Sidebar'
+        sx={{
+          position: { xs: 'fixed', md: 'sticky' },
+          height: 'calc(100dvh - var(--Navigation-height))',
+          width: 'var(--Sidebar-width)',
+          top: 0,
+          p: 2,
+          flexShrink: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1.5,
+          borderRight: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Typography level='title-md'>Patient Info</Typography>
+        </Box>
+        <Divider />
+        <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError} />
+
+        {/* <ListDivider /> */}
+        <Divider />
+
+        {/* Exam header */}
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+            <Typography level='title-md'>Exams</Typography>
+            <Badge badgeContent={exams?.length} color='primary' />
+          </Box>
+
+          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamModalOpen(true)}>
+            <AddSharpIcon />
+          </IconButton>
+        </Box>
+
+        <Divider />
+
+        <Box
+          sx={{
+            minHeight: 0,
+            overflow: 'hidden auto',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {exams?.map((exam) => (
+            <AccordionWithMenu 
+              key={`exam-${exam.id}`}
+              accordionSummary={<ExamItem data={exam} refetchParentData={refetchExams} />}
+              accordionMenu={<ExamInstanceMenu data={exam} refetchParentData={refetchExams} />}
+            >
+              {exam.workflows?.map((workflow) => (
+                <AccordionWithMenu 
+                  key={`workflow-${workflow.id}`}
+                  accordionSummary={<WorkflowItem data={workflow} refetchParentData={refetchExams} />}
+                  accordionMenu={<WorkflowInstanceMenu data={workflow} refetchParentData={refetchExams} />}
+                >
+                  {workflow.tasks?.map((task) => (
+                    <TaskItem key={`task-${task.id}`} data={task} refetchParentData={refetchExams} />
+                  ))}
+                </AccordionWithMenu>
+              ))}
+            </AccordionWithMenu>
+          ))}
+        </Box>
+
+        <Divider />
+        <AcquisitionControl />
+      </Sheet>
+
+      <ExamFromTemplateModal
+        isOpen={examModalOpen}
+        setOpen={setExamModalOpen}
+        parentId={String(params.patientId)}
+        onSubmit={refetchExams}
+      />
+
+      <DicomViewer />
+    </Box>
+  )
+}
+
+export default PatientIndex

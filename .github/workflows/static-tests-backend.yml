@@ -1,0 +1,90 @@
+name: 'Static Tests'
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  Linting:
+    name: 'Linting service'
+
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./services
+
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+        service: [
+          "exam-manager",
+          # "workflow-manager",
+          "device-manager",
+          "acquisition-control",
+          "user-login-manager",
+          "mri/sequence-manager",
+          # "mri/recos/cartesian-reco-service",
+          "patient-manager",
+        ]
+
+    continue-on-error: True
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache poetry install
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: poetry
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: false
+          virtualenvs-in-project: false
+
+      - name: Update pip
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry run pip install --upgrade pip
+
+      - name: Cache poetry dependencies
+        uses: actions/cache@v3
+        id: cached-poetry-dependencies
+        with:
+          path: .venv
+          key: pydeps-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Check cached dependencies
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry install --no-interaction --with lint --no-root
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
+      - name: Poetry install
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry install --no-interaction --with lint
+
+      - name: Install build tools
+        run: pip install --upgrade build
+
+      - name: Build shared-library
+        run: python3 -m build ./services/base/shared_libs/
+
+      - name: Install shared-library
+        run: pip install ./services/base/shared_libs/
+
+      - name: Run ruff linter
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        run: poetry run ruff check
+
+      - name: Run mypy type checker
+        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        # run: poetry run mypy app/ --install-types --non-interactive
+        run: poetry run mypy app/

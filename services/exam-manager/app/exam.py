@@ -106,8 +106,14 @@ async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamO
     instance = BaseExam(**template.__dict__)
     instance.is_template = False
     instance.patient_id = patient_id
+
     if not (exam := await dal.add_exam_data(payload=instance)):
         raise HTTPException(status_code=404, detail="Could not create exam instance")
+
+    # Create all the sub-instances for the workflow templates in an exam template
+    for workflow in template.workflows:
+        _ = await create_workflow_from_template(exam_id=exam.id, template_id=workflow.id)
+
     return await get_exam_out_model(data=exam)
 
 
@@ -275,9 +281,14 @@ async def create_workflow_from_template(exam_id: UUID, template_id: UUID) -> Wor
     instance = BaseWorkflow(**template.__dict__)
     instance.is_template = False
     instance.exam_id = exam_id
+
     if not (workflow := await dal.add_workflow_data(payload=instance)):
         raise HTTPException(status_code=404, detail="Could not create workflow")
-    print("New workflow: ", workflow)
+
+    # Create all the sub-instances for the task templates in a workflow template
+    for task in template.tasks:
+        _ = await create_task_from_template(workflow_id=workflow.id, template_id=task.id)
+
     return await get_workflow_out_model(data=workflow)
 
 
@@ -331,7 +342,7 @@ async def get_all_exam_workflows(exam_id: UUID | str) -> list[WorkflowOut]:
 
 
 @router.get(
-    "/workflow/templates",
+    "/workflow/templates/all",
     response_model=list[WorkflowOut],
     status_code=200,
     tags=["workflows"],
@@ -511,7 +522,7 @@ async def get_all_workflow_tasks(workflow_id: UUID | str) -> list[TaskOut]:
     return result
 
 @router.get(
-    "/task/templates",
+    "/task/templates/all",
     response_model=list[TaskOut],
     status_code=200,
     tags=["tasks"],

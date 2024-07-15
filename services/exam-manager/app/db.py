@@ -120,18 +120,16 @@ class Task(Base):
     # Arguments and parameters
     # Example: "args": {"arg1": "x", "arg2": "y"}
     args: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
-    # acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=False)
-    # sequence_parameters: Mapped[SequenceParameters] = mapped_column(type_=JSON, nullable=False)
-    # device_parameters: Mapped[DeviceParameters] = mapped_column(type_=JSON, nullable=False)
-
 
     # Input and output artifacts with export destination
     # Example: {"input": [{"name": "env_HOLOSCAN_INPUT_PATH", "value": "{{ context.input.dicom }}"}]}
     # https://github.com/Project-MONAI/monai-deploy/blob/main/deploy/monai-deploy-express/sample-workflows/hello-world.json
-    artifacts: Mapped[dict[str, list[dict[str, str]]]] = mapped_column(type_=JSON, nullable=True) # implemention of input and output artifacts for artifact types as replacement for string
+    # implemention of input and output artifacts for artifact types as replacement for string
+    artifacts: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
 
-    # List of task destinations, which are for example used to create the chain of topics in the kafka message broker, i.e., target topics
-    task_destinations: Mapped[list[dict[str, str]]] = mapped_column(type_=JSON, nullable=True)
+    # List of task destinations, which are for example used to create the chain of topics in the kafka message broker,
+    # i.e., target topics
+    destinations: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
 
     status: Mapped[dict[TaskStatus, str]] = mapped_column(type_=JSON, nullable=False)
 
@@ -143,9 +141,6 @@ class Task(Base):
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
-
-
-# TBD DeviceTask(Task):
 
 
 # Create automap base
