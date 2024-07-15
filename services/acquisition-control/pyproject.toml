@@ -21,6 +21,7 @@ scanhub = "^0.0.4.dev3"
 types-requests = "^2.31.0.1"
 httpx = "^0.25.0"
 lxml = "^5.2.1"
+defusedxml = "^0.7.1"
 xmlschema = "^3.3.1"
 
 [tool.poetry.group.lint.dependencies]

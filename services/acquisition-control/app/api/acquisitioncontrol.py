@@ -12,14 +12,13 @@ from enum import Enum
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 import httpx
+from defusedxml import lxml as dlxml
 from fastapi import APIRouter
 from lxml import etree
 from pydantic import BaseModel
 from pydantic.json import pydantic_encoder
 from scanhub_libraries.models import ScanStatus
-from scanhub_libraries.scan_task_models import (Commands, DeviceTask,
-                                                ISMRMRDHeader,
-                                                UserParametersString)
+from scanhub_libraries.scan_task_models import Commands, DeviceTask, ISMRMRDHeader, UserParametersString
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
@@ -37,9 +36,7 @@ ns = {
 
 
 def pydantic_to_xml(element: Element, obj: BaseModel):
-    """
-    Convert a Pydantic model to XML format recursively.
-    """
+    """Convert a Pydantic model to XML format recursively."""
     for field, value in obj:
         if isinstance(value, BaseModel):
             sub_element = SubElement(element, field)
@@ -59,9 +56,7 @@ def pydantic_to_xml(element: Element, obj: BaseModel):
             sub_element.text = str(value)
 
 def generate_xml_from_model(model: ISMRMRDHeader):
-    """
-    Generate an XML string from the Pydantic model.
-    """
+    """Generate an XML string from the Pydantic model."""
     root = Element('ismrmrdHeader', xmlns=ns['ismrmrd'], **{'xmlns:xsi': ns['xsi']})
     pydantic_to_xml(root, model)
     return tostring(root, encoding='unicode')
@@ -174,14 +169,14 @@ async def start_scan(scan_job: ISMRMRDHeader):
     # start scan and forward sequence, workflow, record_id
     logging.debug("Received job: %s, Generated record id: %s", scan_job.measurementInformation.measurementID, record_id)
 
-    
+
 
     xml_data = generate_xml_from_model(scan_job)
 
     xsd_path = "ismrmrd.xsd"
     schema = etree.XMLSchema(file=xsd_path)
     parser = etree.XMLParser(schema = schema)
-    ___ = etree.fromstring(xml_data, parser)
+    ___ = dlxml.fromstring(xml_data, parser)
 
     # fill record id
     print(sequence_json)
