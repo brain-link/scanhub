@@ -8,17 +8,18 @@
 
 import json
 import logging
+from enum import Enum
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 import httpx
 from fastapi import APIRouter
-from pydantic.json import pydantic_encoder
-from pydantic import BaseModel
-from scanhub_libraries.models import Commands, DeviceTask, ParametrizedSequence, ScanStatus
-from .test_model import ISMRMRDHeader, NewDeviceTask, UserParametersString
-from xml.etree.ElementTree import Element, SubElement, tostring
-import xml.etree.ElementTree as ET
 from lxml import etree
-from enum import Enum
+from pydantic import BaseModel
+from pydantic.json import pydantic_encoder
+from scanhub_libraries.models import ScanStatus
+from scanhub_libraries.scan_task_models import (Commands, DeviceTask,
+                                                ISMRMRDHeader,
+                                                UserParametersString)
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
@@ -180,11 +181,11 @@ async def start_scan(scan_job: ISMRMRDHeader):
     xsd_path = "ismrmrd.xsd"
     schema = etree.XMLSchema(file=xsd_path)
     parser = etree.XMLParser(schema = schema)
-    xml_root = etree.fromstring(xml_data, parser)
+    ___ = etree.fromstring(xml_data, parser)
 
     # fill record id
     print(sequence_json)
-    device_task = NewDeviceTask(
+    device_task = DeviceTask(
         ismrmrd_header=xml_data, command=command, sequence=sequence_json["file"]
     )
     status_code = await post_device_task(url, device_task)

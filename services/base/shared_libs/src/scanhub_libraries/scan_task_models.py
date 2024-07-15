@@ -1,39 +1,63 @@
-from typing import List
-from pydantic import BaseModel, Field
+# Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
+This module contains a set of Pydantic models designed to facilitate 
+the creation of an MRI scan job,including a minimal ISMRMRD header.
+These models help structure and validate the data necessary for 
+defining MRI scans, sequences, and associated parameters.
+"""
+
 from enum import Enum
+from typing import List
+
+from pydantic import BaseModel, Field
 
 
 class MatrixSize(BaseModel):
+    """Represents the dimensions of the matrix size in the encoding space."""
+
     x: int = Field(1, description="Matrix size in the x dimension")
     y: int = Field(1, description="Matrix size in the y dimension")
     z: int = Field(1, description="Matrix size in the z dimension")
 
 
 class FieldOfView(BaseModel):
+    """Represents the field of view in millimeters in each dimension."""
+
     x: float = Field(..., description="Field of view in the x dimension in mm")
     y: float = Field(..., description="Field of view in the y dimension in mm")
     z: float = Field(..., description="Field of view in the z dimension in mm")
 
 
 class EncodingSpace(BaseModel):
+    """Represents the encoding space parameters, including matrix size and field of view."""
+
     matrixSize: MatrixSize = Field(..., description="Matrix size of the encoding space")
     fieldOfView_mm: FieldOfView = Field(..., description="Field of view of the encoding space")
 
 
 class LimitType(BaseModel):
+    """Defines the encoding limits."""
+
     minimum: int = Field(0, description="Minimum value")
     maximum: int = Field(0, description="Maximum value")
     center: int = Field(0, description="Center value")
 
 
 class EncodingLimits(BaseModel):
-    kspace_encoding_step_0: LimitType = Field(..., description="Encoding limits for k-space encoding step 0")
-    kspace_encoding_step_1: LimitType = Field(..., description="Encoding limits for k-space encoding step 1")
-    kspace_encoding_step_2: LimitType = Field(..., description="Encoding limits for k-space encoding step 2")
+    """Defines the encoding limits for k-space encoding steps."""
+
+    kspace_encoding_step_0: LimitType = \
+        Field(..., description="Encoding limits for k-space encoding step 0")
+    kspace_encoding_step_1: LimitType = \
+        Field(..., description="Encoding limits for k-space encoding step 1")
+    kspace_encoding_step_2: LimitType = \
+        Field(..., description="Encoding limits for k-space encoding step 2")
 
 
 class Trajectories(str, Enum):
-    """Pydantic definition of Trajectories"""
+    """Enumeration of possible trajectory types."""
+
     CARTESIAN = "cartesian"
     EPI = "epi"
     RADIAL = "radial"
@@ -43,7 +67,8 @@ class Trajectories(str, Enum):
 
 
 class DiffusionDimensions(str, Enum):
-    """Pydantic definition of diffusion dimensions"""
+    """Enumeration of possible diffusion dimensions."""
+
     AVERAGE = "average"
     CONTRAST = "contrast"
     PHASE = "phase"
@@ -61,6 +86,8 @@ class DiffusionDimensions(str, Enum):
 
 
 class Encoding(BaseModel):
+    """Defines the encoding parameters for the scan."""
+
     encodedSpace: EncodingSpace = Field(..., description="Encoded space")
     reconSpace: EncodingSpace = Field(..., description="Reconstruction space")
     encodingLimits: EncodingLimits = Field(..., description="Encoding limits")
@@ -68,26 +95,34 @@ class Encoding(BaseModel):
 
 
 class ExperimentalConditions(BaseModel):
+    """Defines the experimental conditions."""
+
     H1resonanceFrequency_Hz: int = Field(..., description="H1 resonance frequency in Hz")
 
 
 class GradientDirection(BaseModel):
+    """Defines the gradient direction in each dimension."""
+
     rl: float = Field(..., description="Gradient direction in the right-left dimension")
     ap: float = Field(..., description="Gradient direction in the anterior-posterior dimension")
     fh: float = Field(..., description="Gradient direction in the foot-head dimension")
 
 
 class DiffusionType(BaseModel):
+    """Defines the diffusion parameters."""
+
     gradientDirection: GradientDirection = Field(..., description="Gradient direction")
     bvalue: float = Field(..., description="b-value")
 
 
 class SequenceParameters(BaseModel):
+    """Defines the sequence parameters for the scan."""
+
     TR: List[float] = Field(..., description="Repetition time in seconds")
     TE: List[float] = Field(..., description="Echo time in seconds")
     TI: List[float] = Field(..., description="Inversion time in seconds")
     flipAngle_deg: List[float] = Field(..., description="Flip angle in degrees")
-    sequence_type: str = Field(..., description="sequence type")
+    sequence_type: str = Field(..., description="Sequence type")
     echo_spacing: List[float] = Field(..., description="Echo spacing in seconds")
     diffusionDimension: DiffusionDimensions = Field(..., description="Diffusion Dimensions")
     diffusion: List[DiffusionType] = Field(..., description="Diffusion information")
@@ -95,7 +130,8 @@ class SequenceParameters(BaseModel):
 
 
 class PatientPositions(str, Enum):
-    """Pydantic definition of patient postions."""
+    """Enumeration of possible patient positions."""
+
     HFP = "HFP"
     HFS = "HFS"
     HFDR = "HFDR"
@@ -107,98 +143,76 @@ class PatientPositions(str, Enum):
 
 
 class MeasurementInformation(BaseModel):
+    """Defines the measurement information."""
+
     measurementID: str = Field(..., description="Measurement ID")
     patientPosition: PatientPositions = Field(..., description="Patient position")
     sequenceName: str = Field(..., description="Sequence ID")
 
 
 class AcquisitionSystemInformation(BaseModel):
-    deviceID: str = Field(..., description="device ID")
+    """Defines the acquisition system information."""
+
+    deviceID: str = Field(..., description="Device ID")
 
 
 class UserParametersLong(BaseModel):
-    name: str
-    value: int
+    """Defines a user parameter with a long value."""
+
+    name: str = Field(..., description="Parameter name")
+    value: int = Field(..., description="Parameter value")
+
 
 class UserParametersDouble(BaseModel):
-    name: str
-    value: float
+    """Defines a user parameter with a double value."""
+
+    name: str = Field(..., description="Parameter name")
+    value: float = Field(..., description="Parameter value")
+
 
 class UserParametersString(BaseModel):
-    name: str
-    value: str
+    """Defines a user parameter with a string value."""
+
+    name: str = Field(..., description="Parameter name")
+    value: str = Field(..., description="Parameter value")
+
 
 class UserParameters(BaseModel):
-    userParameterLong: List[UserParametersLong] = Field(..., description="user parameter long")
-    userParameterDouble: List[UserParametersDouble] = Field(..., description="user parameter double")
-    userParameterString: List[UserParametersString] = Field(..., description="user parameter string")
+    """Defines a collection of user parameters."""
+
+    userParameterLong: List[UserParametersLong] = \
+        Field(..., description="User parameters with long values")
+    userParameterDouble: List[UserParametersDouble] = \
+        Field(..., description="User parameters with double values")
+    userParameterString: List[UserParametersString] = \
+        Field(..., description="User parameters with string values")
 
 
 class ISMRMRDHeader(BaseModel):
-    measurementInformation: MeasurementInformation = Field(..., description="Measurement information")
-    acquisitionSystemInformation: AcquisitionSystemInformation = Field(None, description="Acquisition system information")
-    experimentalConditions: ExperimentalConditions = Field(..., description="Experimental conditions")
+    """Defines the ISMRMRD header for the MRI scan job."""
+
+    measurementInformation: MeasurementInformation = \
+        Field(..., description="Measurement information")
+    acquisitionSystemInformation: AcquisitionSystemInformation = \
+        Field(None, description="Acquisition system information")
+    experimentalConditions: ExperimentalConditions = \
+        Field(..., description="Experimental conditions")
     encoding: List[Encoding] = Field(..., description="Encoding information")
     sequenceParameters: SequenceParameters = Field(..., description="Sequence parameters")
     userParameters: UserParameters = Field(..., description="User Parameters")
 
-class NewCommands(str, Enum):
-    """Pydantic definition of a commands."""
+
+class Commands(str, Enum):
+    """Enumeration of possible commands."""
 
     START = "START"
     STOP = "STOP"
     PAUSE = "PAUSE"
 
 
-class NewDeviceTask(BaseModel):
-    ismrmrd_header: str
-    command: NewCommands
-    sequence: str
+class DeviceTask(BaseModel):
+    """Defines a new device task with an ISMRMRD header and a command."""
 
-# Example data
-# example_data = ISMRMRDHeader(
-#     version=2,
-#     measurementInformation=MeasurementInformation(
-#         measurementID="12345",
-#         seriesDate="2024-04-15",
-#         seriesTime="12:00:00",
-#         patientPosition="HFP",
-#         protocolName="TSE",
-#         seriesDescription="Head T2",
-#         seriesInstanceUIDRoot="urn:uuid:12345678-abcd-1234-efgh-0123456789ab",
-#         sequenceParameters=SequenceParameters(
-#             TR=[1.0, 2.0, 3.0],
-#             TE=[1.0, 2.0, 3.0],
-#             TI=[1.0, 2.0, 3.0],
-#             flipAngle_deg=[90.0, 90.0, 90.0],
-#             echo_spacing=[0.001, 0.001, 0.001],
-#             diffusionDimension="average",
-#             diffusion=[
-#                 DiffusionType(
-#                     gradientDirection=GradientDirection(rl=1.0, ap=0.0, fh=0.0),
-#                     bvalue=1000.0
-#                 )
-#             ],
-#             diffusionScheme="DTI"
-#         )
-#     ),
-#     experimentalConditions=ExperimentalConditions(H1resonanceFrequency_Hz=123),
-#     encoding=[
-#         Encoding(
-#             encodedSpace=EncodingSpace(
-#                 matrixSize=MatrixSize(x=128, y=128, z=1),
-#                 fieldOfView_mm=FieldOfView(x=200, y=200, z=100)
-#             ),
-#             reconSpace=EncodingSpace(
-#                 matrixSize=MatrixSize(x=128, y=128, z=1),
-#                 fieldOfView_mm=FieldOfView(x=200, y=200, z=100)
-#             ),
-#             encodingLimits=EncodingLimits(
-#                 kspace_encoding_step_0=LimitType(minimum=0, maximum=127, center=63),
-#                 kspace_encoding_step_1=LimitType(minimum=0, maximum=127, center=63),
-#                 kspace_encoding_step_2=LimitType(minimum=0, maximum=127, center=63)
-#             ),
-#             trajectory=TrajectoryType(trajectory="cartesian")
-#         )
-#     ]
-# )
+    ismrmrd_header: str = Field(..., description="ISMRMRD header in JSON format")
+    command: Commands = Field(..., description="Command")
+    sequence: str = Field(..., description="Sequence")
