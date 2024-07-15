@@ -95,7 +95,7 @@ async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamO
 
     Returns
     -------
-        Exam pydantic output moddel.
+        Exam pydantic output model.
 
     Raises
     ------
@@ -178,9 +178,33 @@ async def get_all_exam_templates() -> list[ExamOut]:
     return result
 
 
+@router.delete("/templates/{exam_id}", response_model={}, status_code=204, tags=["exams"])
+async def exam_template_delete(exam_id: UUID | str) -> None:
+    """Delete an existing exam template by id.
+
+    Parameters
+    ----------
+    exam_id
+        Id of the exam template to be deleted
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
+    exam = await get_exam(exam_id=_id)
+    if exam.is_frozen:
+        raise HTTPException(status_code=404, detail="Exam template is frozen and cannot be deleted.")
+    if not exam.is_template:
+        raise HTTPException(status_code=404, detail="Exam is not a template so it cannot be deleted with this function.")
+    if not await dal.delete_exam_template_data(exam_id=_id):
+        raise HTTPException(status_code=404, detail="Exam not found")
+
+
 @router.delete("/{exam_id}", response_model={}, status_code=204, tags=["exams"])
 async def exam_delete(exam_id: UUID | str) -> None:
-    """Delete an existing exam by id.
+    """Delete an existing exam by id. Cascade deletes the associated workflow and tasks.
 
     Parameters
     ----------
@@ -195,7 +219,9 @@ async def exam_delete(exam_id: UUID | str) -> None:
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
     exam = await get_exam(exam_id=_id)
     if exam.is_frozen:
-        raise HTTPException(status_code=404, detail="Exam is frozen and cannot be deleted.")
+        raise HTTPException(status_code=404, detail="Exam template is frozen and cannot be deleted.")
+    if exam.is_template:
+        raise HTTPException(status_code=404, detail="Exam is a template, which cannot be deleted with this function.")
     if not await dal.delete_exam_data(exam_id=_id):
         raise HTTPException(status_code=404, detail="Exam not found")
 
@@ -360,8 +386,8 @@ async def get_all_workflow_templates() -> list[WorkflowOut]:
     return [await get_workflow_out_model(data=workflow) for workflow in workflows]
 
 
-@router.delete("/workflow/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
-async def delete_workflow(workflow_id: UUID | str) -> None:
+@router.delete("/workflow/templates/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
+async def delete_workflow_template(workflow_id: UUID | str) -> None:
     """Delete an existing workflow.
 
     Parameters
@@ -378,6 +404,32 @@ async def delete_workflow(workflow_id: UUID | str) -> None:
     workflow = await get_workflow(workflow_id=_id)
     if workflow.is_frozen:
         raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
+    if not workflow.is_template:
+        raise HTTPException(status_code=404, detail="Workflow is not a template so it cannot be deleted with this function")
+    if not await dal.delete_workflow_template_data(workflow_id=_id):
+        raise HTTPException(status_code=404, detail="Workflow not found")
+
+
+@router.delete("/workflow/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
+async def delete_workflow(workflow_id: UUID | str) -> None:
+    """Delete an existing workflow. Cascade delete the associated tasks.
+
+    Parameters
+    ----------
+    workflow_id
+        Id of the workflow to be deleted
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    workflow = await get_workflow(workflow_id=_id)
+    if workflow.is_frozen:
+        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
+    if workflow.is_template:
+        raise HTTPException(status_code=404, detail="Workflow is a template which cannot be deleted with this function")
     if not await dal.delete_workflow_data(workflow_id=_id):
         raise HTTPException(status_code=404, detail="Workflow not found")
 

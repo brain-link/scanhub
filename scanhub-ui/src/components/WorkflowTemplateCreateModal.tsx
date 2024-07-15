@@ -25,10 +25,10 @@ import { ModalComponentProps } from '../interfaces/components.interface'
 export default function WorkflowTemplateCreateModal(props: ModalComponentProps<WorkflowOut>) {
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
     comment: '',
-    exam_id: undefined,
-    is_finished: false,
-    is_template: true,
-    is_frozen: false,
+    exam_id: undefined,     // eslint-disable-line camelcase
+    is_finished: false,     // eslint-disable-line camelcase
+    is_template: true,      // eslint-disable-line camelcase
+    is_frozen: false,       // eslint-disable-line camelcase
   })
   const [user] = useContext(LoginContext)
 

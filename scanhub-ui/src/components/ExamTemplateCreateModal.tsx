@@ -26,23 +26,23 @@ const formContent = [
   { key: 'name', label: 'Exam Name', placeholder: 'Knee complaints' },
   { key: 'site', label: 'Site', placeholder: 'Berlin' },
   { key: 'address', label: 'Site Address', placeholder: 'Street name, number' },
-  { key: 'creator', label: 'Name of Exam Creater', placeholder: 'Last name, first name' },
   { key: 'status', label: 'Status', placeholder: 'Exam created' },
 ]
 
 export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamOut>) {
+  const [user] = React.useContext(LoginContext)
+
   const [exam, setExam] = React.useState<BaseExam>({
-    patient_id: undefined,
+    patient_id: undefined,    // eslint-disable-line camelcase
     name: '',
     country: 'germany',
     site: '',
     address: '',
-    creator: '',
+    creator: user?.username != undefined ? user.username : '',
     status: '',
-    is_template: true,
-    is_frozen: false,
+    is_template: true,        // eslint-disable-line camelcase
+    is_frozen: false,         // eslint-disable-line camelcase
   })
-  const [user] = React.useContext(LoginContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {

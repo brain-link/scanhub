@@ -26,7 +26,7 @@ export default function ExamTemplateItem(prop: TemplateInterface<ExamOut>) {
 
   const deleteExamTemplate = useMutation(async () => {
     await examApi
-      .examDeleteApiV1ExamExamIdDelete(prop.data.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .examTemplateDeleteApiV1ExamTemplatesExamIdDelete(prop.data.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
       .then(() => {
         prop.onDeleted()
       })

@@ -26,7 +26,7 @@ export default function WorkflowTemplateItem(prop: TemplateInterface<WorkflowOut
 
   const deleteWorkflowTemplate = useMutation(async () => {
     await workflowsApi
-      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(prop.data.id, {
+      .deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(prop.data.id, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {
