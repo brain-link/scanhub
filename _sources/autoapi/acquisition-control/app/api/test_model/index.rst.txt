@@ -1,0 +1,535 @@
+acquisition-control.app.api.test_model
+======================================
+
+.. py:module:: acquisition-control.app.api.test_model
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   acquisition-control.app.api.test_model.MatrixSize
+   acquisition-control.app.api.test_model.FieldOfView
+   acquisition-control.app.api.test_model.EncodingSpace
+   acquisition-control.app.api.test_model.LimitType
+   acquisition-control.app.api.test_model.EncodingLimits
+   acquisition-control.app.api.test_model.Trajectories
+   acquisition-control.app.api.test_model.DiffusionDimensions
+   acquisition-control.app.api.test_model.Encoding
+   acquisition-control.app.api.test_model.ExperimentalConditions
+   acquisition-control.app.api.test_model.GradientDirection
+   acquisition-control.app.api.test_model.DiffusionType
+   acquisition-control.app.api.test_model.SequenceParameters
+   acquisition-control.app.api.test_model.PatientPositions
+   acquisition-control.app.api.test_model.MeasurementInformation
+   acquisition-control.app.api.test_model.AcquisitionSystemInformation
+   acquisition-control.app.api.test_model.UserParametersLong
+   acquisition-control.app.api.test_model.UserParametersDouble
+   acquisition-control.app.api.test_model.UserParametersString
+   acquisition-control.app.api.test_model.UserParameters
+   acquisition-control.app.api.test_model.ISMRMRDHeader
+   acquisition-control.app.api.test_model.NewCommands
+   acquisition-control.app.api.test_model.NewDeviceTask
+
+
+Module Contents
+---------------
+
+.. py:class:: MatrixSize
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: x
+      :type:  int
+
+
+   .. py:attribute:: y
+      :type:  int
+
+
+   .. py:attribute:: z
+      :type:  int
+
+
+.. py:class:: FieldOfView
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: x
+      :type:  float
+
+
+   .. py:attribute:: y
+      :type:  float
+
+
+   .. py:attribute:: z
+      :type:  float
+
+
+.. py:class:: EncodingSpace
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: matrixSize
+      :type:  MatrixSize
+
+
+   .. py:attribute:: fieldOfView_mm
+      :type:  FieldOfView
+
+
+.. py:class:: LimitType
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: minimum
+      :type:  int
+
+
+   .. py:attribute:: maximum
+      :type:  int
+
+
+   .. py:attribute:: center
+      :type:  int
+
+
+.. py:class:: EncodingLimits
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: kspace_encoding_step_0
+      :type:  LimitType
+
+
+   .. py:attribute:: kspace_encoding_step_1
+      :type:  LimitType
+
+
+   .. py:attribute:: kspace_encoding_step_2
+      :type:  LimitType
+
+
+.. py:class:: Trajectories
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of Trajectories
+
+
+   .. py:attribute:: CARTESIAN
+      :value: 'cartesian'
+
+
+
+   .. py:attribute:: EPI
+      :value: 'epi'
+
+
+
+   .. py:attribute:: RADIAL
+      :value: 'radial'
+
+
+
+   .. py:attribute:: GOLDENANGLE
+      :value: 'goldenangle'
+
+
+
+   .. py:attribute:: SPIRAL
+      :value: 'spiral'
+
+
+
+   .. py:attribute:: OTHER
+      :value: 'other'
+
+
+
+.. py:class:: DiffusionDimensions
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of diffusion dimensions
+
+
+   .. py:attribute:: AVERAGE
+      :value: 'average'
+
+
+
+   .. py:attribute:: CONTRAST
+      :value: 'contrast'
+
+
+
+   .. py:attribute:: PHASE
+      :value: 'phase'
+
+
+
+   .. py:attribute:: REPETITION
+      :value: 'repetition'
+
+
+
+   .. py:attribute:: SET
+      :value: 'set'
+
+
+
+   .. py:attribute:: SEGMENT
+      :value: 'segment'
+
+
+
+   .. py:attribute:: USER_0
+      :value: 'user_0'
+
+
+
+   .. py:attribute:: USER_1
+      :value: 'user_1'
+
+
+
+   .. py:attribute:: USER_2
+      :value: 'user_2'
+
+
+
+   .. py:attribute:: USER_3
+      :value: 'user_3'
+
+
+
+   .. py:attribute:: USER_4
+      :value: 'user_4'
+
+
+
+   .. py:attribute:: USER_5
+      :value: 'user_5'
+
+
+
+   .. py:attribute:: USER_6
+      :value: 'user_6'
+
+
+
+   .. py:attribute:: USER_7
+      :value: 'user_7'
+
+
+
+.. py:class:: Encoding
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: encodedSpace
+      :type:  EncodingSpace
+
+
+   .. py:attribute:: reconSpace
+      :type:  EncodingSpace
+
+
+   .. py:attribute:: encodingLimits
+      :type:  EncodingLimits
+
+
+   .. py:attribute:: trajectory
+      :type:  Trajectories
+
+
+.. py:class:: ExperimentalConditions
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: H1resonanceFrequency_Hz
+      :type:  int
+
+
+.. py:class:: GradientDirection
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: rl
+      :type:  float
+
+
+   .. py:attribute:: ap
+      :type:  float
+
+
+   .. py:attribute:: fh
+      :type:  float
+
+
+.. py:class:: DiffusionType
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: gradientDirection
+      :type:  GradientDirection
+
+
+   .. py:attribute:: bvalue
+      :type:  float
+
+
+.. py:class:: SequenceParameters
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: TR
+      :type:  List[float]
+
+
+   .. py:attribute:: TE
+      :type:  List[float]
+
+
+   .. py:attribute:: TI
+      :type:  List[float]
+
+
+   .. py:attribute:: flipAngle_deg
+      :type:  List[float]
+
+
+   .. py:attribute:: sequence_type
+      :type:  str
+
+
+   .. py:attribute:: echo_spacing
+      :type:  List[float]
+
+
+   .. py:attribute:: diffusionDimension
+      :type:  DiffusionDimensions
+
+
+   .. py:attribute:: diffusion
+      :type:  List[DiffusionType]
+
+
+   .. py:attribute:: diffusionScheme
+      :type:  str
+
+
+.. py:class:: PatientPositions
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of patient postions.
+
+
+   .. py:attribute:: HFP
+      :value: 'HFP'
+
+
+
+   .. py:attribute:: HFS
+      :value: 'HFS'
+
+
+
+   .. py:attribute:: HFDR
+      :value: 'HFDR'
+
+
+
+   .. py:attribute:: HFDL
+      :value: 'HFDL'
+
+
+
+   .. py:attribute:: FFP
+      :value: 'FFP'
+
+
+
+   .. py:attribute:: FFS
+      :value: 'FFS'
+
+
+
+   .. py:attribute:: FFDR
+      :value: 'FFDR'
+
+
+
+   .. py:attribute:: FFDL
+      :value: 'FFDL'
+
+
+
+.. py:class:: MeasurementInformation
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: measurementID
+      :type:  str
+
+
+   .. py:attribute:: patientPosition
+      :type:  PatientPositions
+
+
+   .. py:attribute:: sequenceName
+      :type:  str
+
+
+.. py:class:: AcquisitionSystemInformation
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: deviceID
+      :type:  str
+
+
+.. py:class:: UserParametersLong
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: value
+      :type:  int
+
+
+.. py:class:: UserParametersDouble
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: value
+      :type:  float
+
+
+.. py:class:: UserParametersString
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: value
+      :type:  str
+
+
+.. py:class:: UserParameters
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: userParameterLong
+      :type:  List[UserParametersLong]
+
+
+   .. py:attribute:: userParameterDouble
+      :type:  List[UserParametersDouble]
+
+
+   .. py:attribute:: userParameterString
+      :type:  List[UserParametersString]
+
+
+.. py:class:: ISMRMRDHeader
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: measurementInformation
+      :type:  MeasurementInformation
+
+
+   .. py:attribute:: acquisitionSystemInformation
+      :type:  AcquisitionSystemInformation
+
+
+   .. py:attribute:: experimentalConditions
+      :type:  ExperimentalConditions
+
+
+   .. py:attribute:: encoding
+      :type:  List[Encoding]
+
+
+   .. py:attribute:: sequenceParameters
+      :type:  SequenceParameters
+
+
+   .. py:attribute:: userParameters
+      :type:  UserParameters
+
+
+.. py:class:: NewCommands
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of a commands.
+
+
+   .. py:attribute:: START
+      :value: 'START'
+
+
+
+   .. py:attribute:: STOP
+      :value: 'STOP'
+
+
+
+   .. py:attribute:: PAUSE
+      :value: 'PAUSE'
+
+
+
+.. py:class:: NewDeviceTask
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: ismrmrd_header
+      :type:  str
+
+
+   .. py:attribute:: command
+      :type:  NewCommands
+
+
+   .. py:attribute:: sequence
+      :type:  str
+
+

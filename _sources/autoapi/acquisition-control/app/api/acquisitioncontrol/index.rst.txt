@@ -17,6 +17,7 @@ Attributes
    acquisition-control.app.api.acquisitioncontrol.SEQUENCE_MANAGER_URI
    acquisition-control.app.api.acquisitioncontrol.EXAM_MANAGER_URI
    acquisition-control.app.api.acquisitioncontrol.router
+   acquisition-control.app.api.acquisitioncontrol.ns
 
 
 Functions
@@ -24,6 +25,8 @@ Functions
 
 .. autoapisummary::
 
+   acquisition-control.app.api.acquisitioncontrol.pydantic_to_xml
+   acquisition-control.app.api.acquisitioncontrol.generate_xml_from_model
    acquisition-control.app.api.acquisitioncontrol.device_location_request
    acquisition-control.app.api.acquisitioncontrol.retrieve_sequence
    acquisition-control.app.api.acquisitioncontrol.create_record
@@ -44,6 +47,18 @@ Module Contents
 
 
 .. py:data:: router
+
+.. py:data:: ns
+
+.. py:function:: pydantic_to_xml(element: xml.etree.ElementTree.Element, obj: pydantic.BaseModel)
+
+   Convert a Pydantic model to XML format recursively.
+
+
+.. py:function:: generate_xml_from_model(model: acquisition-control.app.api.test_model.ISMRMRDHeader)
+
+   Generate an XML string from the Pydantic model.
+
 
 .. py:function:: device_location_request(device_id)
    :async:
@@ -118,7 +133,7 @@ Module Contents
        response of device
 
 
-.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob)
+.. py:function:: start_scan(scan_job: acquisition-control.app.api.test_model.ISMRMRDHeader)
    :async:
 
 
