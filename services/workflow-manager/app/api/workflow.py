@@ -12,10 +12,11 @@ from uuid import UUID
 
 import httpx
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, StreamingResponse
 
 # from scanhub import RecoJob # type: ignore
-from pydantic import BaseModel
+from pydantic import BaseModel, StrictStr
 from scanhub_libraries.models import (
     Commands,
     DeviceTask,
@@ -39,8 +40,15 @@ SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
 
+class RecoJob(BaseModel):
+    """RecoJob is a pydantic model for a reco job."""  # noqa: E501
+
+    record_id: int
+    input: StrictStr
+
+
 class TaskEvent(BaseModel):
-    """Task Event"""  # noqa: E501
+    """Task Event."""  # noqa: E501
 
     task_id: str
     input: dict[str, str]
@@ -346,7 +354,7 @@ async def post_device_task(url, device_task):
         response of device
     """
     async with httpx.AsyncClient() as client:
-        data = json.dumps(device_task, default=pydantic_encoder)
+        data = json.dumps(device_task, default=jsonable_encoder)
         response = await client.post(url, content=data)
         return response.status_code
 
