@@ -141,27 +141,8 @@ async def process(workflow_id: UUID | str):
 
                 break
 
-            # workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
-            # description: str
-            # type: TaskType
-            # args: dict[str, str]
-            # artifacts: dict[str, str]
-            # destinations: dict[str, str]
-            # # artifacts: dict[str, list[dict[str, str]]]
-            # # task_destinations: list[dict[str, str]]
-            # status: dict[TaskStatus, str]
-            # is_template: bool
-            # is_frozen: bool
-
-
-            # id: UUID
-            # datetime_created: datetime
-
-
-
             # Send message to Kafka
             # await producer.send("mri_cartesian_reco", RecoJob(record_id=task.task_id, input=task.task_input).dict())
-
     return
 
 
