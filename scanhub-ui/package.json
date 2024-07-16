@@ -11,13 +11,6 @@
     "@mui/joy": "^5.0.0-beta.6",
     "@mui/material": "^5.15.19",
     "@mui/x-data-grid": "^7.6.1",
-    "@openapitools/openapi-generator-cli": "^2.12.0",
-    "@types/plotly.js": "^2.12.24",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/websocket": "^1.0.5",
-    "@typescript-eslint/parser": "^7.12.0",
     "axios": "^1.4.0",
     "cornerstone-core": "^2.6.1",
     "cornerstone-math": "^0.1.10",
@@ -34,15 +27,27 @@
     "react-plotly.js": "^2.6.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.14.2",
-    "react-scripts": "^5.0.1",
     "websocket": "^1.0.34"
   },
   "devDependencies": {
+    "react-scripts": "^5.0.1",
+    "typescript": "*",
+    "@types/plotly.js": "^2.12.24",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/websocket": "^1.0.5",
+    "@typescript-eslint/parser": "^7.12.0",
+    "@types/cornerstone-core": "^2.3.3",
+    "@types/hammerjs": "^2.0.45",
+    "@types/react-plotly.js": "^2.6.3",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "ts-unused-exports": "^10.1.0",
+    "@openapitools/openapi-generator-cli": "^2.12.0",
     "@parcel/transformer-sass": "^2.9.3",
     "@parcel/transformer-typescript-tsc": "^2.9.3",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
-    "@types/cornerstone-core": "^2.3.3",
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "process": "^0.11.10",
     "buffer": "^6.0.3",
     "eslint": "^8.0.1",
     "eslint-config-google": "^0.14.0",
@@ -54,9 +59,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^3.0.3",
-    "process": "^0.11.10",
-    "typescript": "*"
+    "prettier": "^3.0.3"
   },
   "scripts": {
     "start": "parcel index.html -p 3000 && parcel watch index.html",
@@ -67,7 +70,8 @@
     "generate-patient-client": "rm -rf src/generated-client/patient; openapi-generator-cli generate -i http://localhost:8100/openapi.json -g typescript-axios -o src/generated-client/patient --additional-properties=supportsES6=true",
     "generate-exam-client": "rm -rf src/generated-client/exam; openapi-generator-cli generate -i http://localhost:8080/api/v1/exam/openapi.json -g typescript-axios -o src/generated-client/exam --additional-properties=supportsES6=true",
     "generate-userlogin-client": "rm -rf src/generated-client/userlogin; openapi-generator-cli generate -i http://localhost:8080/api/v1/userlogin/openapi.json -g typescript-axios -o src/generated-client/userlogin --additional-properties=supportsES6=true",
-    "generate-all-clients": "yarn generate-patient-client; yarn generate-exam-client; yarn generate-userlogin-client;"
+    "generate-all-clients": "yarn generate-patient-client; yarn generate-exam-client; yarn generate-userlogin-client;",
+    "ts-unused-exports": "ts-unused-exports tsconfig.json"
   },
   "browserslist": {
     "production": [

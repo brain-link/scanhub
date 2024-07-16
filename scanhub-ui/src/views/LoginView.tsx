@@ -77,6 +77,7 @@ function Login(props: { onLogin: (user: User) => void }) {
                 e.preventDefault()
                 setUsername(e.target.value)
               }}
+              autoFocus
             />
           </Stack>
 

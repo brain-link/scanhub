@@ -52,7 +52,7 @@ export default function TaskTemplateList() {
       {tasks?.map((task, index) => (
         <TaskTemplateItem
           key={index}
-          item={task}
+          data={task}
           onClicked={() => {}}
           onDeleted={() => {
             refetch()

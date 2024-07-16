@@ -7,6 +7,15 @@
 import React from 'react'
 import { useContext } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import CssBaseline from '@mui/joy/CssBaseline';
+import { GlobalStyles } from '@mui/system'
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
+import {
+  THEME_ID as MATERIAL_THEME_ID,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  experimental_extendTheme as materialExtendTheme,
+} from '@mui/material/styles'
+const materialTheme = materialExtendTheme()
 
 // import Context
 import LoginContext from './LoginContext'
@@ -26,46 +35,50 @@ export function RouteConfiguration() {
   const [user, setUser] = useContext(LoginContext)
 
   return (
-    // <Routes>
-    //   <Route path='/' element={<App />}>
-    //     <Route path='/' element={<Dashboard />} />
+    <MaterialCssVarsProvider defaultMode='system' theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider defaultMode='system' disableTransitionOnChange>
+        <CssBaseline />
+        <GlobalStyles
+          styles={{
+            ':root': {
+              '--Collapsed-breakpoint': '769px', // form will stretch when viewport is below `769px`
+              '--Cover-width': '40vw', // must be `vw` only
+              '--Form-maxWidth': '700px',
+              '--Transition-duration': '0.4s', // set to `none` to disable transition
+              '--Sidebar-width': '320px',
+              '--Navigation-height': '60px',
+              // '--Navigation-height': '64px',  // set height of navigation bar
+              // '--PatientView-toolbarHeight': '54px',
+              // '--PatientView-drawerWidth': '300px',
+              // '--PatientView-recordWidth': '300px',
+            },
+          }}
+        />
 
-    //     <Route path='/patients'>
-    //       <Route index element={<PatientTable />} />
-    //       {/* Using multiple optional parameters in patient path, denoted by the question mark */}
-    //       <Route path=':patientId' element={<PatientIndex />}>
-    //         <Route path=':examId' element={<PatientIndex />}>
-    //           <Route path=':procedureId' element={<PatientIndex />} />
-    //         </Route>
-    //       </Route>
+        <Routes>
+          <Route path='/' element={user ? <App /> : <Navigate to='/login' />}>
+            <Route index element={<PatientListView />} />
+            <Route path=':patientId' element={<PatientIndex />}>
+              <Route path=':examId' element={<PatientIndex />} />
+            </Route>
+            <Route path='/templates' element={<Templates />} />
+            <Route path='/users' element={<UserManagement />} />
+          </Route>
 
-    //       <Route path='dcmview/:patientId' element={<RecordViewer />} />
-    //     </Route>
-    //   </Route>
-    // </Routes>
-
-    <Routes>
-      <Route path='/' element={user ? <App /> : <Navigate to='/login' />}>
-        <Route index element={<PatientListView />} />
-        <Route path=':patientId' element={<PatientIndex />}>
-          <Route path=':examId' element={<PatientIndex />} />
-        </Route>
-        <Route path='/templates' element={<Templates />} />
-        <Route path='/users' element={<UserManagement />} />
-      </Route>
-
-      <Route
-        path='/login'
-        element={
-          <Login
-            onLogin={(newuser) => {
-              console.log('Login confirmed.')
-              setUser(newuser)
-              navigate('/')
-            }}
+          <Route
+            path='/login'
+            element={
+              <Login
+                onLogin={(newuser) => {
+                  console.log('Login confirmed.')
+                  setUser(newuser)
+                  navigate('/')
+                }}
+              />
+            }
           />
-        }
-      />
-    </Routes>
+        </Routes>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   )
 }
