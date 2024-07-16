@@ -5,11 +5,10 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException
-from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, WorkflowOut
-
 from app import dal
 from app.db import Exam, Workflow
+from fastapi import APIRouter, HTTPException
+from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, WorkflowOut
 
 # Http status codes
 # 200 = Ok: GET, PUT

@@ -3,25 +3,28 @@
 
 """Workflow manager endpoints."""
 
-import os
-from typing import Generator
-
-import httpx
-
-from uuid import UUID
-
-from datetime import datetime
-
-import operator
 import json
 import logging
+import operator
+import os
+from typing import Generator
+from uuid import UUID
 
+import httpx
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
-from scanhub_libraries.models import TaskOut, WorkflowOut, Commands, DeviceTask, ParametrizedSequence, ScanJob, ScanStatus
 
 # from scanhub import RecoJob # type: ignore
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel
+from scanhub_libraries.models import (
+    Commands,
+    DeviceTask,
+    ParametrizedSequence,
+    ScanJob,
+    ScanStatus,
+    TaskOut,
+    WorkflowOut,
+)
 
 from .producer import Producer
 
@@ -40,7 +43,7 @@ class TaskEvent(BaseModel):
     """Task Event"""  # noqa: E501
 
     task_id: str
-    input: dict[str, str] 
+    input: dict[str, str]
 
 router = APIRouter()
 
@@ -61,10 +64,9 @@ async def process(workflow_id: UUID | str):
     -------
         Workflow process response
     """
-
     # Debugging
     workflow_id = 'ae7d4105-8312-436f-bc48-98f57c2fe86d' #'cec25959-c451-4faf-9093-97431aba41e6'
-    
+
     exam_manager_uri = EXAM_MANAGER_URI
 
 
@@ -76,7 +78,7 @@ async def process(workflow_id: UUID | str):
 
         workflow_raw = response.json()
         workflow = WorkflowOut(**workflow_raw)
-        
+
         print("Workflow tasks: ")
 
         # Sort the tasks by datetime_created
@@ -90,7 +92,7 @@ async def process(workflow_id: UUID | str):
             # print(task.description if task.description else "No description", end="\n")
 
             if task.type == "DEVICE_TASK" and task.status == "PENDING":
-                print("Device task:") 
+                print("Device task:")
                 print(task.destinations.get("device"), end="\n")
                 # reco_job = RecoJob(record_id=task.id, input=task.args["input"])
                 # # Send message to Kafka
@@ -147,7 +149,7 @@ async def process(workflow_id: UUID | str):
             # id: UUID
             # datetime_created: datetime
 
-          
+
 
             # Send message to Kafka
             # await producer.send("mri_cartesian_reco", RecoJob(record_id=task.task_id, input=task.task_input).dict())
