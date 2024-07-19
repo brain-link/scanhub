@@ -1,0 +1,29 @@
+acquisition-control.app
+=======================
+
+.. py:module:: acquisition-control.app
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/acquisition-control/app/api/index
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/acquisition-control/app/main/index
+
+
