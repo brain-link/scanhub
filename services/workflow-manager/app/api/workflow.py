@@ -77,7 +77,6 @@ async def process(workflow_id: UUID | str):
 
     exam_manager_uri = EXAM_MANAGER_URI
 
-
     async with httpx.AsyncClient() as client:
         # TODO: data_path, comment ? # pylint: disable=fixme
         response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
@@ -113,7 +112,7 @@ async def process(workflow_id: UUID | str):
                                 acquisition_limits=task.args["acquisition_limits"],
                                 sequence_parameters=task.args["sequence_parameters"])
 
-                start_scan(job)
+                await start_scan(job)
 
                 # TBD set task status to "IN_PROGRESS"
 
