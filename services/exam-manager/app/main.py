@@ -3,8 +3,10 @@
 
 """Exam manager main file."""
 
-from fastapi import FastAPI, HTTPException
+
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from scanhub_libraries.security import get_current_user
 from sqlalchemy import inspect
 
 from app.db import engine, init_db
@@ -13,6 +15,7 @@ from app.exam import router
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
     docs_url="/api/v1/exam/docs",
+    dependencies=[Depends(get_current_user)]
 )
 
 # To be done: Specify specific origins:
@@ -54,11 +57,6 @@ async def startup():
             status_code=500,
             detail="SQL-DB: Device table is required but does not exist.",
         )
-    # if "workflow" not in tables:
-    #     raise HTTPException(
-    #         status_code=500,
-    #         detail="SQL-DB: Workflow table is required but does not exist.",
-    #     )
     init_db()
 
 

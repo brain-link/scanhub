@@ -11,14 +11,17 @@ from random import randint
 from typing import Optional, Set
 
 from aiokafka import AIOKafkaConsumer  # type: ignore
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from kafka import TopicPartition  # type: ignore
 from kafka.errors import GroupCoordinatorNotAvailableError, KafkaConnectionError, NoBrokersAvailable  # type: ignore
+from scanhub_libraries.security import get_current_user
 
 from api.worker import init, run
 
 # instantiate the API
-app = FastAPI()
+app = FastAPI(
+    dependencies=[Depends(get_current_user)]
+)
 
 # global variables
 CONSUMER_TASK: Optional[asyncio.Task] = None

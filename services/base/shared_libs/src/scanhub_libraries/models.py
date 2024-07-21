@@ -137,8 +137,22 @@ class DeviceTask(BaseModel):
     parametrized_sequence: ParametrizedSequence
 
 
+class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
+    """Pydantic model definition of a scanjob."""
+
+    class Config:
+        """Pydantic configuration."""
+
+        extra = Extra.ignore
+
+    job_id: int = Field(alias="id")
+    sequence_id: str
+    workflow_id: int
+    device_id: str
+
+
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic definition of a scanworkflow."""
+    """Pydantic definition of a scanstatus."""
 
     record_id: UUID
     status_percent: int
@@ -166,6 +180,7 @@ class BaseDevice(BaseModel):
     status: str
     site: str | None
     ip_address: str
+
 
 class DeviceOut(BaseDevice):
     """Devicee output model."""
@@ -201,38 +216,38 @@ class BaseTask(BaseModel):
         """Base class configuration."""
 
         # extra = Extra.ignore
-        schema_extra = {
-            "examples": [
-                {
-                    "description": "task description",
-                    "type": TaskType.PROCESSING_TASK,
-                    "args": {"arg1": "val1"},
-                    "artifacts": {
-                        "input": [
-                            {
-                                "path": "/data",
-                                "name": "inputfile2"
-                            }
-                        ],
-                        "output": [
-                            {
-                                "path": "/data",
-                                "name": "outputfile1"
-                            }
-                        ]
-                    },
-                    "task_destinations": [],
-                    "status": {TaskStatus.PENDING: "additional status information"}
-                }
-            ]
-        }
+        # schema_extra = {
+        #     "examples": [
+        #         {
+        #             "description": "task description",
+        #             "type": TaskType.PROCESSING_TASK,
+        #             "args": {"arg1": "val1"},
+        #             "artifacts": {
+        #                 "input": [
+        #                     {
+        #                         "path": "/data",
+        #                         "name": "inputfile2"
+        #                     }
+        #                 ],
+        #                 "output": [
+        #                     {
+        #                         "path": "/data",
+        #                         "name": "outputfile1"
+        #                     }
+        #                 ]
+        #             },
+        #             "task_destinations": [],
+        #             "status": {TaskStatus.PENDING: "additional status information"}
+        #         }
+        #     ]
+        # }
 
     workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
     description: str
     type: TaskType
     args: dict[str, str]
-    artifacts: dict[str, list[dict[str, str]]]
-    task_destinations: list[dict[str, str]]
+    artifacts: dict[str, str]
+    destinations: dict[str, str]
     status: dict[TaskStatus, str]
     is_template: bool
     is_frozen: bool
@@ -297,3 +312,22 @@ class ExamOut(BaseExam):
     datetime_created: datetime
     datetime_updated: datetime | None
     workflows: list[WorkflowOut]
+
+
+class UserRole(Enum):
+    admin = "admin"
+    medical = "medical"
+    scientist = "scientist"
+    engineer = "engineer"
+
+
+class User(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    email: str | None
+    role: UserRole
+    access_token: str   # access_token and token_type are standardized names in OAuth2, don't change them...
+    token_type: str     # ... also token_type should be "bearer" as standardized in OAuth2. Exception: when adding a new user...
+                        # ... the token_type is "password" and access_token contains the password.
+    last_activity_unixtime: int | None

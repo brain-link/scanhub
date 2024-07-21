@@ -30,4 +30,5 @@ class Mri(Device):
         """steps to do after the scan was executed"""
         return
 
+## TBD: This shall be replaced with the workflow-manager's API
 mri = Mri("127.0.0.1:8080/api/v1/mri/acquisitioncontrol", "./records/", app)

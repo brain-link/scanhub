@@ -1,23 +1,19 @@
 name: 'Build'
 
 on:
-  workflow_run:
-    workflows: ["Deploy to GHCR"]
-    types: 
-      - completed
-  # push:
-  #   branches:
-  #     - '*'
-  # pull_request:
-  #   branches:
-  #     - '*'
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
 
 jobs:
   compose:
     name: 'docker-compose'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build the stack
         run: |
           docker build -t scanhub-base ./services/base && 

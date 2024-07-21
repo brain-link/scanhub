@@ -1,14 +1,8 @@
 name: Deploy to GHCR
-
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'main'
-      - 'ghcr_base_image'
-  pull_request:
-    branches:
-      - 'main'
+    branches: ['main', 'ghcr_base_image']
 
 env:
   REGISTRY: ghcr.io

@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - docu
+  pull_request:
+    branches:
+      - main
 
 jobs:
   Documentation:
@@ -14,7 +17,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4

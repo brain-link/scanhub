@@ -3,8 +3,9 @@
 
 """Workflow manager main."""
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from scanhub_libraries.security import get_current_user
 
 from api.producer import Producer
 from api.workflow import router
@@ -12,6 +13,7 @@ from api.workflow import router
 app = FastAPI(
     openapi_url="/api/v1/workflow/openapi.json",
     docs_url="/api/v1/workflow/docs",
+    dependencies=[Depends(get_current_user)]
 )
 
 app.add_middleware(

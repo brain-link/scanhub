@@ -1,6 +1,5 @@
 import json
 from kafka import KafkaProducer
-from datetime import datetime
 from time import sleep
 
 from AcquisitionEvent import AcquisitionEvent
