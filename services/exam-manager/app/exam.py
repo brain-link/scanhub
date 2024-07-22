@@ -83,7 +83,7 @@ async def create_exam_template(payload: BaseExam) -> ExamOut:
 
 
 @router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
-async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamOut:
+async def create_exam_from_template(patient_id: int, template_id: UUID, new_exam_is_template: bool) -> ExamOut:
     """Create a new exam instance from template.
 
     Parameters
@@ -92,6 +92,8 @@ async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamO
         Id of the patient, the exam instance is related to
     template_id
         ID of the template, the exam is created from
+    new_exam_is_template
+        set is_template on the new exam and its workflows and tasks
 
     Returns
     -------
@@ -104,7 +106,7 @@ async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamO
     """
     template = await get_exam(exam_id=template_id)
     instance = BaseExam(**template.__dict__)
-    instance.is_template = False
+    instance.is_template = new_exam_is_template
     instance.patient_id = patient_id
 
     if not (exam := await dal.add_exam_data(payload=instance)):
@@ -112,7 +114,7 @@ async def create_exam_from_template(patient_id: int, template_id: UUID) -> ExamO
 
     # Create all the sub-instances for the workflow templates in an exam template
     for workflow in template.workflows:
-        _ = await create_workflow_from_template(exam_id=exam.id, template_id=workflow.id)
+        await create_workflow_from_template(exam_id=exam.id, template_id=workflow.id, new_workflow_is_template=new_exam_is_template)
 
     return await get_exam_out_model(data=exam)
 
@@ -178,33 +180,9 @@ async def get_all_exam_templates() -> list[ExamOut]:
     return result
 
 
-@router.delete("/templates/{exam_id}", response_model={}, status_code=204, tags=["exams"])
-async def exam_template_delete(exam_id: UUID | str) -> None:
-    """Delete an existing exam template by id.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the exam template to be deleted
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    exam = await get_exam(exam_id=_id)
-    if exam.is_frozen:
-        raise HTTPException(status_code=404, detail="Exam template is frozen and cannot be deleted.")
-    if not exam.is_template:
-        raise HTTPException(status_code=404, detail="Exam is not a template so it cannot be deleted with this function.")
-    if not await dal.delete_exam_template_data(exam_id=_id):
-        raise HTTPException(status_code=404, detail="Exam not found")
-
-
 @router.delete("/{exam_id}", response_model={}, status_code=204, tags=["exams"])
 async def exam_delete(exam_id: UUID | str) -> None:
-    """Delete an existing exam by id. Cascade deletes the associated workflow and tasks.
+    """Delete an exam by id. Cascade deletes the associated workflow and tasks.
 
     Parameters
     ----------
@@ -220,8 +198,6 @@ async def exam_delete(exam_id: UUID | str) -> None:
     exam = await get_exam(exam_id=_id)
     if exam.is_frozen:
         raise HTTPException(status_code=404, detail="Exam template is frozen and cannot be deleted.")
-    if exam.is_template:
-        raise HTTPException(status_code=404, detail="Exam is a template, which cannot be deleted with this function.")
     if not await dal.delete_exam_data(exam_id=_id):
         raise HTTPException(status_code=404, detail="Exam not found")
 
@@ -284,7 +260,7 @@ async def create_workflow_template(payload: BaseWorkflow) -> WorkflowOut:
 
 
 @router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
-async def create_workflow_from_template(exam_id: UUID, template_id: UUID) -> WorkflowOut:
+async def create_workflow_from_template(exam_id: UUID, template_id: UUID, new_workflow_is_template: bool) -> WorkflowOut:
     """Create new workflow instance from template.
 
     Parameters
@@ -293,6 +269,8 @@ async def create_workflow_from_template(exam_id: UUID, template_id: UUID) -> Wor
         Id of the exam, the workflow instance is related to
     template_id
         ID of the template, the workflow is created from
+    new_workflow_is_template
+        set the is_template property of the new workflow and its tasks
 
     Returns
     -------
@@ -305,7 +283,7 @@ async def create_workflow_from_template(exam_id: UUID, template_id: UUID) -> Wor
     """
     template = await get_workflow(workflow_id=template_id)
     instance = BaseWorkflow(**template.__dict__)
-    instance.is_template = False
+    instance.is_template = new_workflow_is_template
     instance.exam_id = exam_id
 
     if not (workflow := await dal.add_workflow_data(payload=instance)):
@@ -313,7 +291,7 @@ async def create_workflow_from_template(exam_id: UUID, template_id: UUID) -> Wor
 
     # Create all the sub-instances for the task templates in a workflow template
     for task in template.tasks:
-        _ = await create_task_from_template(workflow_id=workflow.id, template_id=task.id)
+        _ = await create_task_from_template(workflow_id=workflow.id, template_id=task.id, new_task_is_template=new_workflow_is_template)
 
     return await get_workflow_out_model(data=workflow)
 
@@ -386,33 +364,9 @@ async def get_all_workflow_templates() -> list[WorkflowOut]:
     return [await get_workflow_out_model(data=workflow) for workflow in workflows]
 
 
-@router.delete("/workflow/templates/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
-async def delete_workflow_template(workflow_id: UUID | str) -> None:
-    """Delete an existing workflow.
-
-    Parameters
-    ----------
-    workflow_id
-        Id of the workflow to be deleted
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
-    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    workflow = await get_workflow(workflow_id=_id)
-    if workflow.is_frozen:
-        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
-    if not workflow.is_template:
-        raise HTTPException(status_code=404, detail="Workflow is not a template so it cannot be deleted with this function")
-    if not await dal.delete_workflow_template_data(workflow_id=_id):
-        raise HTTPException(status_code=404, detail="Workflow not found")
-
-
 @router.delete("/workflow/{workflow_id}", response_model={}, status_code=204, tags=["workflows"])
 async def delete_workflow(workflow_id: UUID | str) -> None:
-    """Delete an existing workflow. Cascade delete the associated tasks.
+    """Delete a workflow. Cascade delete the associated tasks.
 
     Parameters
     ----------
@@ -428,8 +382,6 @@ async def delete_workflow(workflow_id: UUID | str) -> None:
     workflow = await get_workflow(workflow_id=_id)
     if workflow.is_frozen:
         raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
-    if workflow.is_template:
-        raise HTTPException(status_code=404, detail="Workflow is a template which cannot be deleted with this function")
     if not await dal.delete_workflow_data(workflow_id=_id):
         raise HTTPException(status_code=404, detail="Workflow not found")
 
@@ -493,7 +445,7 @@ async def create_task_template(payload: BaseTask) -> TaskOut:
 
 
 @router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def create_task_from_template(workflow_id: UUID, template_id: UUID) -> TaskOut:
+async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_task_is_template: boolean) -> TaskOut:
     """Create a new task instance from template.
 
     Parameters
@@ -502,6 +454,8 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID) -> Tas
         ID of the workflow, the task instance is related to
     template_id
         ID of the template, the exam is created from
+    new_task_is_template
+        set the is_template property on the new task
 
     Returns
     -------
@@ -514,7 +468,7 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID) -> Tas
     """
     template = await get_task(task_id=template_id)
     instance = BaseTask(**template.__dict__)
-    instance.is_template = False
+    instance.is_template = new_task_is_template
     instance.workflow_id = workflow_id
     if not (task := await dal.add_task_data(payload=instance)):
         raise HTTPException(status_code=404, detail="Could not create task instance")
@@ -596,7 +550,7 @@ async def get_all_task_templates() -> list[TaskOut]:
 
 @router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])
 async def delete_task(task_id: UUID | str) -> None:
-    """Delete an existing task.
+    """Delete a task.
 
     Parameters
     ----------

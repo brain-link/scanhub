@@ -12,10 +12,10 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
 import { ExamOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
+import { ItemInterface } from '../interfaces/components.interface'
 
 
-function ExamInstanceInfo({ data: exam }: InstanceInterface<ExamOut>) {
+function ExamInstanceInfo({ exam }: { exam: ExamOut }) {
 
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>

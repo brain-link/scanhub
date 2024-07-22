@@ -20,12 +20,12 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { CreateItemModalInterface } from '../interfaces/components.interface'
 
-export default function WorkflowTemplateCreateModal(props: ModalComponentProps<WorkflowOut>) {
+export default function WorkflowCreateNewModal(props: CreateItemModalInterface) {
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
     comment: '',
-    exam_id: undefined,     // eslint-disable-line camelcase
+    exam_id: props.parentId,     // eslint-disable-line camelcase
     is_finished: false,     // eslint-disable-line camelcase
     is_template: true,      // eslint-disable-line camelcase
     is_frozen: false,       // eslint-disable-line camelcase
@@ -39,7 +39,7 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then((response) => {
-        props.onSubmit(response.data)
+        props.onSubmit()
       })
       .catch((err) => {
         console.log(err)
@@ -77,14 +77,6 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
             name={'comment'}
             onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
             defaultValue={workflow.comment}
-          />
-
-          {/* TODO: Drop-down menu to select exam template */}
-          <FormLabel>Exam ID</FormLabel>
-          <Input
-            name={'exam_id'}
-            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-            defaultValue={workflow.exam_id}
           />
 
           <Button

@@ -19,16 +19,17 @@ import Tooltip from '@mui/joy/Tooltip'
 
 // Sub-components, interfaces, client
 import { ExamOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
+import { ItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { examApi } from '../api'
 import LoginContext from '../LoginContext'
-import WorkflowFromTemplateModal from '../components/WorkflowFromTemplateModal'
-import ExamInstanceInfo from '../components/ExamInstanceInfo'
+import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
+import ExamInstanceInfo from './ExamInstanceInfo'
+import WorkflowCreateNewModal from './WorkflowCreateNewModal'
 // import ExamModal from './ExamModal'
 
 
-export default function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
+export default function ExamItem({ data: exam, refetchParentData }: ItemInterface<ExamOut>) {
 
   return (
     <Tooltip
@@ -36,7 +37,7 @@ export default function ExamInstanceItem({ data: exam, refetchParentData }: Inst
       variant='outlined'
       describeChild={false}
       arrow
-      title={<ExamInstanceInfo data={exam} refetchParentData={refetchParentData} />}
+      title={<ExamInstanceInfo exam={exam} />}
     >
       <Box
         sx={{ 
@@ -70,9 +71,10 @@ export default function ExamInstanceItem({ data: exam, refetchParentData }: Inst
 }
 
 
-export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
+export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOut>) {
 
   const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
+  const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)
   // const [examModalOpen, setExamModalOpen] = React.useState(false)
 
   const [user] = React.useContext(LoginContext)
@@ -99,7 +101,7 @@ export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInte
   return (
     <>
       <Dropdown>
-        <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
+        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
@@ -115,12 +117,20 @@ export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInte
             Delete
           </MenuItem>
           <MenuItem
-            key='add'
+            key='addFromTemplate'
             onClick={() => {
               setWorkflowFromTemplateModalOpen(true)
             }}
           >
-            Add Workflow
+            Add Workflow from Template
+          </MenuItem>
+          <MenuItem
+            key='addNew'
+            onClick={() => {
+              setWorkflowCreateNewModalOpen(true)
+            }}
+          >
+            Add new Workflow
           </MenuItem>
         </Menu>
       </Dropdown>
@@ -139,6 +149,15 @@ export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInte
         setOpen={setWorkflowFromTemplateModalOpen}
         parentId={exam.id}
         onSubmit={refetchParentData}
+        createTemplate={exam.is_template}
+      />
+
+      <WorkflowCreateNewModal
+        isOpen={workflowCreateNewModalOpen}
+        setOpen={setWorkflowCreateNewModalOpen}
+        parentId={exam.id}
+        onSubmit={refetchParentData}
+        createTemplate={exam.is_template}
       />
     </>
   )

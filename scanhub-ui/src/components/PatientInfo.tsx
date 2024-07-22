@@ -77,6 +77,7 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
       </Box>
     )
   }
+  return null;
 }
 
 export default PatientInfo

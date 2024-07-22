@@ -22,15 +22,14 @@ import LoginContext from '../LoginContext'
 import { examApi, getPatientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
-import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
-import ExamItem, { ExamInstanceMenu } from '../components/ExamInstanceItem'
 import PatientInfo from '../components/PatientInfo'
-
-import TaskItem from '../components/TaskInstanceItem'
-import WorkflowItem, { WorkflowInstanceMenu } from '../components/WorkflowInstanceItem'
-import { ExamOut } from '../generated-client/exam'
 import { PatientOut } from '../generated-client/patient'
+import { ExamOut } from '../generated-client/exam'
+import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
+import ExamItem, { ExamMenu } from '../components/ExamItem'
+import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
+import TaskItem from '../components/TaskItem'
 
 
 function PatientIndex() {
@@ -64,7 +63,7 @@ function PatientIndex() {
     // isLoading: examsLoading,
     // isError: examsError,
   } = useQuery<ExamOut[], Error>({
-    queryKey: ['exam', params.patientId],
+    queryKey: ['allExams', params.patientId],
     queryFn: async () => {
       return await examApi
         .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId), {
@@ -137,13 +136,13 @@ function PatientIndex() {
             <AccordionWithMenu 
               key={`exam-${exam.id}`}
               accordionSummary={<ExamItem data={exam} refetchParentData={refetchExams} />}
-              accordionMenu={<ExamInstanceMenu data={exam} refetchParentData={refetchExams} />}
+              accordionMenu={<ExamMenu data={exam} refetchParentData={refetchExams} />}
             >
               {exam.workflows?.map((workflow) => (
                 <AccordionWithMenu 
                   key={`workflow-${workflow.id}`}
                   accordionSummary={<WorkflowItem data={workflow} refetchParentData={refetchExams} />}
-                  accordionMenu={<WorkflowInstanceMenu data={workflow} refetchParentData={refetchExams} />}
+                  accordionMenu={<WorkflowMenu data={workflow} refetchParentData={refetchExams} />}
                 >
                   {workflow.tasks?.map((task) => (
                     <TaskItem key={`task-${task.id}`} data={task} refetchParentData={refetchExams} />
@@ -163,6 +162,7 @@ function PatientIndex() {
         setOpen={setExamModalOpen}
         parentId={String(params.patientId)}
         onSubmit={refetchExams}
+        createTemplate={false}
       />
 
       <DicomViewer />

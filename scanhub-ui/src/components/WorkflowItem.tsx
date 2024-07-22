@@ -20,14 +20,14 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SchemaIcon from '@mui/icons-material/Schema'
 
 import { WorkflowOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
-import WorkflowInstanceInfo from '../components/WorkflowInstanceInfo'
+import { ItemInterface } from '../interfaces/components.interface'
+import WorkflowInstanceInfo from './WorkflowInstanceInfo'
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
-import TaskFromTemplateModal from '../components/TaskFromTemplateModal'
+import TaskFromTemplateModal from './TaskFromTemplateModal'
 
 
-export default function WorkflowInstanceItem({ data: workflow, refetchParentData }: InstanceInterface<WorkflowOut>) {
+export default function WorkflowItem({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
   return (
     <Tooltip
       placement='right'
@@ -66,7 +66,7 @@ export default function WorkflowInstanceItem({ data: workflow, refetchParentData
 }
 
 
-export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: InstanceInterface<WorkflowOut>) {
+export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
 
   const [taskFromTemplateModalOpen, setTaskFromTemplateModalOpen] = React.useState(false)
   // const [examModalOpen, setExamModalOpen] = React.useState(false)
@@ -84,7 +84,7 @@ export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: Inst
   return (
     <>
       <Dropdown>
-        <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
+        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
@@ -115,6 +115,7 @@ export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: Inst
         setOpen={setTaskFromTemplateModalOpen}
         parentId={workflow.id}
         onSubmit={refetchParentData}
+        createTemplate={workflow.is_template}
       />
     </>
   )

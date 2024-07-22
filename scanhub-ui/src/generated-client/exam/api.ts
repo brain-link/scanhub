@@ -583,7 +583,7 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Delete an existing exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Exam Delete
          * @param {ExamId} examId 
          * @param {*} [options] Override http request option.
@@ -593,44 +593,6 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'examId' is not null or undefined
             assertParamExists('examDeleteApiV1ExamExamIdDelete', 'examId', examId)
             const localVarPath = `/api/v1/exam/{exam_id}`
-                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Delete an existing exam template by id.  Parameters ---------- exam_id     Id of the exam template to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Exam Template Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        examTemplateDeleteApiV1ExamTemplatesExamIdDelete: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('examTemplateDeleteApiV1ExamTemplatesExamIdDelete', 'examId', examId)
-            const localVarPath = `/api/v1/exam/templates/{exam_id}`
                 .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -850,7 +812,7 @@ export const ExamsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete an existing exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Exam Delete
          * @param {ExamId} examId 
          * @param {*} [options] Override http request option.
@@ -860,19 +822,6 @@ export const ExamsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.examDeleteApiV1ExamExamIdDelete(examId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ExamsApi.examDeleteApiV1ExamExamIdDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete an existing exam template by id.  Parameters ---------- exam_id     Id of the exam template to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Exam Template Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async examTemplateDeleteApiV1ExamTemplatesExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.examTemplateDeleteApiV1ExamTemplatesExamIdDelete(examId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.examTemplateDeleteApiV1ExamTemplatesExamIdDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -959,7 +908,7 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createExamTemplateApiV1ExamTemplatesPost(baseExam, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Exam Delete
          * @param {ExamId} examId 
          * @param {*} [options] Override http request option.
@@ -967,16 +916,6 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
          */
         examDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: any): AxiosPromise<void> {
             return localVarFp.examDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Delete an existing exam template by id.  Parameters ---------- exam_id     Id of the exam template to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Exam Template Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        examTemplateDeleteApiV1ExamTemplatesExamIdDelete(examId: ExamId, options?: any): AxiosPromise<void> {
-            return localVarFp.examTemplateDeleteApiV1ExamTemplatesExamIdDelete(examId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
@@ -1054,7 +993,7 @@ export class ExamsApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+     * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
      * @summary Exam Delete
      * @param {ExamId} examId 
      * @param {*} [options] Override http request option.
@@ -1063,18 +1002,6 @@ export class ExamsApi extends BaseAPI {
      */
     public examDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig) {
         return ExamsApiFp(this.configuration).examDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Delete an existing exam template by id.  Parameters ---------- exam_id     Id of the exam template to be deleted  Raises ------ HTTPException     404: Not found
-     * @summary Exam Template Delete
-     * @param {ExamId} examId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public examTemplateDeleteApiV1ExamTemplatesExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).examTemplateDeleteApiV1ExamTemplatesExamIdDelete(examId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1328,7 +1255,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -1557,7 +1484,7 @@ export const TasksApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -1653,7 +1580,7 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createTaskTemplateApiV1ExamTaskTemplatePost(baseTask, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -1738,7 +1665,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+     * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
      * @summary Delete Task
      * @param {TaskId} taskId 
      * @param {*} [options] Override http request option.
@@ -1807,18 +1734,21 @@ export class TasksApi extends BaseAPI {
 export const WorkflowsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Workflow From Template
          * @param {string} examId 
          * @param {string} templateId 
+         * @param {boolean} newWorkflowIsTemplate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkflowFromTemplateApiV1ExamWorkflowPost: async (examId: string, templateId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createWorkflowFromTemplateApiV1ExamWorkflowPost: async (examId: string, templateId: string, newWorkflowIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'examId' is not null or undefined
             assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'examId', examId)
             // verify required parameter 'templateId' is not null or undefined
             assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'templateId', templateId)
+            // verify required parameter 'newWorkflowIsTemplate' is not null or undefined
+            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'newWorkflowIsTemplate', newWorkflowIsTemplate)
             const localVarPath = `/api/v1/exam/workflow`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1841,6 +1771,10 @@ export const WorkflowsApiAxiosParamCreator = function (configuration?: Configura
 
             if (templateId !== undefined) {
                 localVarQueryParameter['template_id'] = templateId;
+            }
+
+            if (newWorkflowIsTemplate !== undefined) {
+                localVarQueryParameter['new_workflow_is_template'] = newWorkflowIsTemplate;
             }
 
 
@@ -1895,7 +1829,7 @@ export const WorkflowsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Delete an existing workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Workflow
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -1905,44 +1839,6 @@ export const WorkflowsApiAxiosParamCreator = function (configuration?: Configura
             // verify required parameter 'workflowId' is not null or undefined
             assertParamExists('deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete', 'workflowId', workflowId)
             const localVarPath = `/api/v1/exam/workflow/{workflow_id}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Delete Workflow Template
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete', 'workflowId', workflowId)
-            const localVarPath = `/api/v1/exam/workflow/templates/{workflow_id}`
                 .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2135,15 +2031,16 @@ export const WorkflowsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WorkflowsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Workflow From Template
          * @param {string} examId 
          * @param {string} templateId 
+         * @param {boolean} newWorkflowIsTemplate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, options);
+        async createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.createWorkflowFromTemplateApiV1ExamWorkflowPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2162,7 +2059,7 @@ export const WorkflowsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete an existing workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Workflow
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -2172,19 +2069,6 @@ export const WorkflowsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Delete Workflow Template
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(workflowId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2250,15 +2134,16 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
     const localVarFp = WorkflowsApiFp(configuration)
     return {
         /**
-         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Workflow From Template
          * @param {string} examId 
          * @param {string} templateId 
+         * @param {boolean} newWorkflowIsTemplate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, options).then((request) => request(axios, basePath));
+        createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: any): AxiosPromise<WorkflowOut> {
+            return localVarFp.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new workflow template.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
@@ -2271,7 +2156,7 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
             return localVarFp.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Workflow
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -2279,16 +2164,6 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
          */
         deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId: WorkflowId, options?: any): AxiosPromise<void> {
             return localVarFp.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Delete Workflow Template
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(workflowId: WorkflowId, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(workflowId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all existing workflows of a certain exam.  Parameters ---------- exam_id     Id of parent exam  Returns -------     List of workflow pydantic output model
@@ -2341,16 +2216,17 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
  */
 export class WorkflowsApi extends BaseAPI {
     /**
-     * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
      * @summary Create Workflow From Template
      * @param {string} examId 
      * @param {string} templateId 
+     * @param {boolean} newWorkflowIsTemplate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowsApi
      */
-    public createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, options).then((request) => request(this.axios, this.basePath));
+    public createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: RawAxiosRequestConfig) {
+        return WorkflowsApiFp(this.configuration).createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2366,7 +2242,7 @@ export class WorkflowsApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+     * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
      * @summary Delete Workflow
      * @param {WorkflowId} workflowId 
      * @param {*} [options] Override http request option.
@@ -2375,18 +2251,6 @@ export class WorkflowsApi extends BaseAPI {
      */
     public deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
         return WorkflowsApiFp(this.configuration).deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-     * @summary Delete Workflow Template
-     * @param {WorkflowId} workflowId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).deleteWorkflowTemplateApiV1ExamWorkflowTemplatesWorkflowIdDelete(workflowId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

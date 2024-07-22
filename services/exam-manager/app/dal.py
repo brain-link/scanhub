@@ -95,26 +95,6 @@ async def get_all_exam_template_data() -> list[Exam]:
     return exams
 
 
-async def delete_exam_template_data(exam_id: UUID) -> bool:
-    """Delete exam template by id.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the exam to be deleted
-
-    Returns
-    -------
-        Success of deletion
-    """
-    async with async_session() as session:
-        if exam := await session.get(Exam, exam_id):
-            await session.delete(exam)
-            await session.commit()
-            return True
-        return False
-
-
 async def delete_exam_data(exam_id: UUID) -> bool:
     """Delete exam by id. Also deletes associated workflows and tasks.
 
@@ -239,26 +219,6 @@ async def get_all_workflows_template_data() -> list[Workflow]:
         result: Result = await session.execute(select(Workflow).where(Workflow.is_template))
         workflows = list(result.scalars().all())
     return workflows
-
-
-async def delete_workflow_template_data(workflow_id: UUID) -> bool:
-    """Delete a workflow template by ID.
-
-    Parameters
-    ----------
-    workflow_id
-        ID of workflow to be deleted
-
-    Returns
-    -------
-        Success of delete event
-    """
-    async with async_session() as session:
-        if workflow := await session.get(Workflow, workflow_id):
-            await session.delete(workflow)
-            await session.commit()
-            return True
-        return False
 
 
 async def delete_workflow_data(workflow_id: UUID) -> bool:

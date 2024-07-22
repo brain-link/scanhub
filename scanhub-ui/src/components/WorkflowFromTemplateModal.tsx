@@ -19,15 +19,15 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
-import { CreateInstanceModalInterface } from '../interfaces/components.interface'
-import WorkflowTemplateItem from './WorkflowTemplateItem'
+import { CreateItemModalInterface } from '../interfaces/components.interface'
+import WorkflowItem from './WorkflowItem'
 
-export default function WorkflowFromTemplateModal(props: CreateInstanceModalInterface) {
+export default function WorkflowFromTemplateModal(props: CreateItemModalInterface) {
   const [user] = useContext(LoginContext)
 
   // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
   const { data: workflows } = useQuery<WorkflowOut[]>({
-    queryKey: ['workflows'],
+    queryKey: ['allWorkflowTemplates'],
     queryFn: async () => {
       return await workflowsApi
         .getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet({
@@ -41,7 +41,7 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
 
   const mutation = useMutation(async (id: string) => {
     await workflowsApi
-      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, {
+      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, props.createTemplate, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {
@@ -86,7 +86,7 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
                     props.setOpen(false)
                   }}
                 >
-                  <WorkflowTemplateItem data={workflow} onClicked={() => {}} onDeleted={() => {}} />
+                  <WorkflowItem data={workflow} refetchParentData={() => {}} />
                 </ListItemButton>
               ))}
           </List>

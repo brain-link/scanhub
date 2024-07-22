@@ -21,10 +21,10 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import { CreateInstanceModalInterface } from '../interfaces/components.interface'
-import ExamTemplateItem from './ExamTemplateItem'
+import { CreateItemModalInterface } from '../interfaces/components.interface'
+import ExamItem from './ExamItem'
 
-export default function ExamFromTemplateModal(props: CreateInstanceModalInterface) {
+export default function ExamFromTemplateModal(props: CreateItemModalInterface) {
   const [user] = useContext(LoginContext)
   // const [modalOpen, setModalOpen] = React.useState(false)
 
@@ -87,7 +87,7 @@ export default function ExamFromTemplateModal(props: CreateInstanceModalInterfac
                     props.setOpen(false)
                   }}
                 >
-                  <ExamTemplateItem data={exam} onClicked={() => {}} onDeleted={() => {}} />
+                  <ExamItem data={exam} refetchParentData={() => {}} />
                 </ListItemButton>
               ))}
           </List>

@@ -20,13 +20,13 @@ import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 import { TaskOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
-import TaskInstanceInfo from '../components/TaskInstanceInfo'
+import { ItemInterface } from '../interfaces/components.interface'
+import TaskInstanceInfo from './TaskInstanceInfo'
 import { taskApi } from '../api'
 import LoginContext from '../LoginContext'
 
 
-export default function TaskInstanceItem({ data: task, refetchParentData }: InstanceInterface<TaskOut>) {
+export default function TaskItem({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
   return (
     <Tooltip
       placement='right'
@@ -58,14 +58,14 @@ export default function TaskInstanceItem({ data: task, refetchParentData }: Inst
             {`Created: ${new Date(task.datetime_created).toDateString()}`}
           </Typography>
         </Box>
-        <TaskInstanceMenu data={task} refetchParentData={refetchParentData} />
+        <TaskMenu data={task} refetchParentData={refetchParentData} />
       </Box>
     </Tooltip>
   )
 }
 
 
-export function TaskInstanceMenu({ data: task, refetchParentData }: InstanceInterface<TaskOut>) {
+function TaskMenu({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
   const [user] = React.useContext(LoginContext)
 
   const deleteTask = useMutation(async () => {
@@ -78,7 +78,7 @@ export function TaskInstanceMenu({ data: task, refetchParentData }: InstanceInte
 
   return (
     <Dropdown>
-      <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
+      <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
         <MoreHorizIcon fontSize='small' />
       </MenuButton>
       <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>

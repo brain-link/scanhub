@@ -19,14 +19,14 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { TaskOut } from '../generated-client/exam'
-import { CreateInstanceModalInterface } from '../interfaces/components.interface'
-import TaskTemplateItem from './TaskTemplateItem'
+import { CreateItemModalInterface } from '../interfaces/components.interface'
+import TaskTemplateItem from './TaskItem'
 
-export default function TaskFromTemplateModal(props: CreateInstanceModalInterface) {
+export default function TaskFromTemplateModal(props: CreateItemModalInterface) {
   const [user] = useContext(LoginContext)
 
   const { data: tasks } = useQuery<TaskOut[]>({
-    queryKey: ['exams'],
+    queryKey: ['allTaskTemplates'],
     queryFn: async () => {
       return await taskApi
         .getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet({ headers: { Authorization: 'Bearer ' + user?.access_token } })
@@ -76,7 +76,7 @@ export default function TaskFromTemplateModal(props: CreateInstanceModalInterfac
                     props.setOpen(false)
                   }}
                 >
-                  <TaskTemplateItem data={task} onClicked={() => {}} onDeleted={() => {}} />
+                  <TaskTemplateItem data={task} refetchParentData={() => {}} />
                 </ListItemButton>
               ))}
           </List>
