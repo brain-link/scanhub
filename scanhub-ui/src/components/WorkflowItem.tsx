@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * WorkflowInstanceItem.tsx is responsible for rendering additional information
- * of a workflow instance item.
+ * WorkflowItem.tsx is responsible for rendering additional information
+ * of a workflow item.
  */
 import * as React from 'react'
 import { useMutation } from 'react-query'
@@ -21,10 +21,11 @@ import SchemaIcon from '@mui/icons-material/Schema'
 
 import { WorkflowOut } from '../generated-client/exam'
 import { ItemInterface } from '../interfaces/components.interface'
-import WorkflowInstanceInfo from './WorkflowInstanceInfo'
+import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
 import TaskFromTemplateModal from './TaskFromTemplateModal'
+import TaskCreateNewModal from './TaskCreateNewModal'
 
 
 export default function WorkflowItem({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
@@ -34,7 +35,7 @@ export default function WorkflowItem({ data: workflow, refetchParentData }: Item
       variant='outlined'
       describeChild={false}
       arrow
-      title={<WorkflowInstanceInfo data={workflow} refetchParentData={refetchParentData} />}
+      title={<WorkflowInfo data={workflow} refetchParentData={refetchParentData} />}
     >
       <Box
         sx={{ 
@@ -69,7 +70,7 @@ export default function WorkflowItem({ data: workflow, refetchParentData }: Item
 export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
 
   const [taskFromTemplateModalOpen, setTaskFromTemplateModalOpen] = React.useState(false)
-  // const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)
 
   const [user] = React.useContext(LoginContext)
 
@@ -100,13 +101,25 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
             Delete
           </MenuItem>
           <MenuItem
-            key='add'
+            key='addFromTemplate'
             onClick={() => {
               setTaskFromTemplateModalOpen(true)
             }}
           >
-            Add Task
+            Add Task from Template
           </MenuItem>
+          {
+            workflow.is_template ?
+              <MenuItem
+                key='addNew'
+                onClick={() => {
+                  setTaskCreateNewModalOpen(true)
+                }}
+              >
+                Add new Task
+              </MenuItem>
+            : undefined
+          }
         </Menu>
       </Dropdown>
 
@@ -117,6 +130,18 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
         onSubmit={refetchParentData}
         createTemplate={workflow.is_template}
       />
+
+      {
+        workflow.is_template ?
+          <TaskCreateNewModal
+            isOpen={taskCreateNewModalOpen}
+            setOpen={setTaskCreateNewModalOpen}
+            parentId={workflow.id}
+            onSubmit={refetchParentData}
+            createTemplate={workflow.is_template}
+          />
+        : undefined
+      }
     </>
   )
 }

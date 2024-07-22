@@ -57,9 +57,9 @@ async def get_exam_out_model(data: Exam) -> ExamOut:
 
 # ----- Exam API endpoints
 
-@router.post("/templates", response_model=ExamOut, status_code=201, tags=["exams"])
-async def create_exam_template(payload: BaseExam) -> ExamOut:
-    """Create a new exam template.
+@router.post("/new", response_model=ExamOut, status_code=201, tags=["exams"])
+async def create_exam(payload: BaseExam) -> ExamOut:
+    """Create a new exam.
 
     Parameters
     ----------
@@ -75,8 +75,6 @@ async def create_exam_template(payload: BaseExam) -> ExamOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not payload.is_template:
-        raise HTTPException(status_code=404, detail="Exam is not a template.")
     if not (exam := await dal.add_exam_data(payload=payload)):
         raise HTTPException(status_code=404, detail="Could not create exam")
     return await get_exam_out_model(data=exam)
@@ -84,12 +82,12 @@ async def create_exam_template(payload: BaseExam) -> ExamOut:
 
 @router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam_from_template(patient_id: int, template_id: UUID, new_exam_is_template: bool) -> ExamOut:
-    """Create a new exam instance from template.
+    """Create a new exam from template.
 
     Parameters
     ----------
     patient_id
-        Id of the patient, the exam instance is related to
+        Id of the patient, the exam is related to
     template_id
         ID of the template, the exam is created from
     new_exam_is_template
@@ -105,14 +103,14 @@ async def create_exam_from_template(patient_id: int, template_id: UUID, new_exam
         404: Creation unsuccessful
     """
     template = await get_exam(exam_id=template_id)
-    instance = BaseExam(**template.__dict__)
-    instance.is_template = new_exam_is_template
-    instance.patient_id = patient_id
+    new_exam = BaseExam(**template.__dict__)
+    new_exam.is_template = new_exam_is_template
+    new_exam.patient_id = patient_id
 
-    if not (exam := await dal.add_exam_data(payload=instance)):
-        raise HTTPException(status_code=404, detail="Could not create exam instance")
+    if not (exam := await dal.add_exam_data(payload=new_exam)):
+        raise HTTPException(status_code=404, detail="Could not create exam.")
 
-    # Create all the sub-instances for the workflow templates in an exam template
+    # Create all the sub-items for the workflow templates in the exam template
     for workflow in template.workflows:
         await create_workflow_from_template(exam_id=exam.id, template_id=workflow.id, new_workflow_is_template=new_exam_is_template)
 
@@ -233,9 +231,9 @@ async def update_exam(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
 
 # ----- Workflow API endpoints
 
-@router.post("/workflow/templates", response_model=WorkflowOut, status_code=201, tags=["workflows"])
-async def create_workflow_template(payload: BaseWorkflow) -> WorkflowOut:
-    """Create new workflow template.
+@router.post("/workflow/new", response_model=WorkflowOut, status_code=201, tags=["workflows"])
+async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
+    """Create new workflow.
 
     Parameters
     ----------
@@ -251,8 +249,6 @@ async def create_workflow_template(payload: BaseWorkflow) -> WorkflowOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not payload.is_template:
-        raise HTTPException(status_code=404, detail="Workflow is not a template.")
     if not (workflow := await dal.add_workflow_data(payload=payload)):
         raise HTTPException(status_code=404, detail="Could not create workflow")
     print("New workflow: ", workflow)
@@ -261,12 +257,12 @@ async def create_workflow_template(payload: BaseWorkflow) -> WorkflowOut:
 
 @router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
 async def create_workflow_from_template(exam_id: UUID, template_id: UUID, new_workflow_is_template: bool) -> WorkflowOut:
-    """Create new workflow instance from template.
+    """Create new workflow from template.
 
     Parameters
     ----------
     exam_id
-        Id of the exam, the workflow instance is related to
+        Id of the exam, the workflow is related to
     template_id
         ID of the template, the workflow is created from
     new_workflow_is_template
@@ -282,14 +278,14 @@ async def create_workflow_from_template(exam_id: UUID, template_id: UUID, new_wo
         404: Creation unsuccessful
     """
     template = await get_workflow(workflow_id=template_id)
-    instance = BaseWorkflow(**template.__dict__)
-    instance.is_template = new_workflow_is_template
-    instance.exam_id = exam_id
+    new_workflow = BaseWorkflow(**template.__dict__)
+    new_workflow.is_template = new_workflow_is_template
+    new_workflow.exam_id = exam_id
 
-    if not (workflow := await dal.add_workflow_data(payload=instance)):
-        raise HTTPException(status_code=404, detail="Could not create workflow")
+    if not (workflow := await dal.add_workflow_data(payload=new_workflow)):
+        raise HTTPException(status_code=404, detail="Could not create workflow.")
 
-    # Create all the sub-instances for the task templates in a workflow template
+    # Create all the sub-items for the task templates in a workflow template
     for task in template.tasks:
         _ = await create_task_from_template(workflow_id=workflow.id, template_id=task.id, new_task_is_template=new_workflow_is_template)
 
@@ -417,9 +413,9 @@ async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow) -> Wor
 
 # ----- Task API endpoints
 
-@router.post("/task/template", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def create_task_template(payload: BaseTask) -> TaskOut:
-    """Create a new task template.
+@router.post("/task/new", response_model=TaskOut, status_code=201, tags=["tasks"])
+async def create_task(payload: BaseTask) -> TaskOut:
+    """Create a new task.
 
     Parameters
     ----------
@@ -435,8 +431,6 @@ async def create_task_template(payload: BaseTask) -> TaskOut:
     HTTPException
         404: Creation unsuccessful
     """
-    if not payload.is_template:
-        raise HTTPException(status_code=404, detail="Task is not a template.")
     if not (task := await dal.add_task_data(payload=payload)):
         raise HTTPException(status_code=404, detail="Could not create task")
     result = TaskOut(**task.__dict__)
@@ -445,15 +439,15 @@ async def create_task_template(payload: BaseTask) -> TaskOut:
 
 
 @router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_task_is_template: boolean) -> TaskOut:
-    """Create a new task instance from template.
+async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_task_is_template: bool) -> TaskOut:
+    """Create a new task from template.
 
     Parameters
     ----------
     workflow_id
-        ID of the workflow, the task instance is related to
+        ID of the workflow, the task is related to
     template_id
-        ID of the template, the exam is created from
+        ID of the template, the task is created from
     new_task_is_template
         set the is_template property on the new task
 
@@ -467,11 +461,11 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
         404: Creation unsuccessful
     """
     template = await get_task(task_id=template_id)
-    instance = BaseTask(**template.__dict__)
-    instance.is_template = new_task_is_template
-    instance.workflow_id = workflow_id
-    if not (task := await dal.add_task_data(payload=instance)):
-        raise HTTPException(status_code=404, detail="Could not create task instance")
+    new_task = BaseTask(**template.__dict__)
+    new_task.is_template = new_task_is_template
+    new_task.workflow_id = workflow_id
+    if not (task := await dal.add_task_data(payload=new_task)):
+        raise HTTPException(status_code=404, detail="Could not create task.")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
     return result

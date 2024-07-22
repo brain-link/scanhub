@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamInstanceItem.tsx is responsible for rendering a single exam instance item
- * in the exam instance list of a patient.
+ * ExamItem.tsx is responsible for rendering a single exam item.
  */
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import Typography from '@mui/joy/Typography'
@@ -24,12 +23,12 @@ import Box from '@mui/joy/Box'
 import { examApi } from '../api'
 import LoginContext from '../LoginContext'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
-import ExamInstanceInfo from './ExamInstanceInfo'
+import ExamInfo from './ExamInfo'
 import WorkflowCreateNewModal from './WorkflowCreateNewModal'
 // import ExamModal from './ExamModal'
 
 
-export default function ExamItem({ data: exam, refetchParentData }: ItemInterface<ExamOut>) {
+export default function ExamItem({ exam }: { exam: ExamOut }) {
 
   return (
     <Tooltip
@@ -37,7 +36,7 @@ export default function ExamItem({ data: exam, refetchParentData }: ItemInterfac
       variant='outlined'
       describeChild={false}
       arrow
-      title={<ExamInstanceInfo exam={exam} />}
+      title={<ExamInfo exam={exam} />}
     >
       <Box
         sx={{ 
@@ -124,14 +123,18 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
           >
             Add Workflow from Template
           </MenuItem>
-          <MenuItem
-            key='addNew'
-            onClick={() => {
-              setWorkflowCreateNewModalOpen(true)
-            }}
-          >
-            Add new Workflow
-          </MenuItem>
+          {
+            exam.is_template ?
+              <MenuItem
+                key='addNew'
+                onClick={() => {
+                  setWorkflowCreateNewModalOpen(true)
+                }}
+              >
+                Add new Workflow
+              </MenuItem>
+            : undefined
+          }
         </Menu>
       </Dropdown>
 
@@ -151,14 +154,18 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
         onSubmit={refetchParentData}
         createTemplate={exam.is_template}
       />
+      {
+        exam.is_template ?
+          <WorkflowCreateNewModal
+            isOpen={workflowCreateNewModalOpen}
+            setOpen={setWorkflowCreateNewModalOpen}
+            parentId={exam.id}
+            onSubmit={refetchParentData}
+            createTemplate={exam.is_template}
+          />
+        : undefined
+      }
 
-      <WorkflowCreateNewModal
-        isOpen={workflowCreateNewModalOpen}
-        setOpen={setWorkflowCreateNewModalOpen}
-        parentId={exam.id}
-        onSubmit={refetchParentData}
-        createTemplate={exam.is_template}
-      />
     </>
   )
 }

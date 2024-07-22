@@ -19,26 +19,26 @@ import { useMutation } from 'react-query'
 
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
-import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
+import { BaseWorkflow } from '../generated-client/exam'
 import { CreateItemModalInterface } from '../interfaces/components.interface'
 
 export default function WorkflowCreateNewModal(props: CreateItemModalInterface) {
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
     comment: '',
-    exam_id: props.parentId,     // eslint-disable-line camelcase
-    is_finished: false,     // eslint-disable-line camelcase
-    is_template: true,      // eslint-disable-line camelcase
-    is_frozen: false,       // eslint-disable-line camelcase
+    exam_id: props.parentId,                // eslint-disable-line camelcase
+    is_finished: false,                     // eslint-disable-line camelcase
+    is_template: props.createTemplate,      // eslint-disable-line camelcase
+    is_frozen: false,                       // eslint-disable-line camelcase
   })
   const [user] = useContext(LoginContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await workflowsApi
-      .createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(workflow, {
+      .createWorkflowApiV1ExamWorkflowNewPost(workflow, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
-      .then((response) => {
+      .then(() => {
         props.onSubmit()
       })
       .catch((err) => {

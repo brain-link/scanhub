@@ -58,7 +58,7 @@ export default function Templates() {
       {exams?.map((exam) => (
         <AccordionWithMenu 
           key={`exam-${exam.id}`}
-          accordionSummary={<ExamItem data={exam} refetchParentData={refetch} />}
+          accordionSummary={<ExamItem exam={exam} />}
           accordionMenu={<ExamMenu data={exam} refetchParentData={refetch} />}
         >
           {exam.workflows?.map((workflow) => (

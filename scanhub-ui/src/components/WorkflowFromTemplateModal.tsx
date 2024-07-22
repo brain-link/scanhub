@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * WorkflowFromTemplateModal.tsx is responsible for rendering a
- * workflow template selection interface to generate a new workflow instance.
+ * workflow template selection interface to generate a new workflow.
  */
 import List from '@mui/joy/List'
 import ListItemButton from '@mui/joy/ListItemButton'
@@ -25,7 +25,6 @@ import WorkflowItem from './WorkflowItem'
 export default function WorkflowFromTemplateModal(props: CreateItemModalInterface) {
   const [user] = useContext(LoginContext)
 
-  // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
   const { data: workflows } = useQuery<WorkflowOut[]>({
     queryKey: ['allWorkflowTemplates'],
     queryFn: async () => {
@@ -54,13 +53,6 @@ export default function WorkflowFromTemplateModal(props: CreateItemModalInterfac
 
   return (
     <>
-      {/* <IconButton 
-        variant='soft'
-        onClick={() => {setModalOpen(true)}}
-      >
-        <AddSharpIcon />
-      </IconButton> */}
-
       <Modal
         open={props.isOpen}
         onClose={() => {

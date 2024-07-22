@@ -47,7 +47,7 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await examApi
-      .createExamTemplateApiV1ExamTemplatesPost(exam, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .createExamApiV1ExamNewPost(exam, { headers: { Authorization: 'Bearer ' + user?.access_token } })
       .then((response) => {
         props.onSubmit(response.data)
       })

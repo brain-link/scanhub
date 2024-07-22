@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
+ * ExamModal.tsx is responsible for rendering the modal for creating a new exam.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -37,14 +37,14 @@ function ExamModal(props: ModalProps<Exam>) {
     ? React.useState<Exam>(props.data)
     : React.useState<Exam>({
         id: '',
-        patient_id: Number(params.patientId),
+        patient_id: Number(params.patientId),   // eslint-disable-line camelcase
         name: '',
         country: 'D',
         site: '',
         address: '',
         creator: '',
         status: '',
-        datetime_created: new Date(),
+        datetime_created: new Date(),           // eslint-disable-line camelcase
       })
 
   const title = props.data ? 'Update Exam' : 'Create Exam'

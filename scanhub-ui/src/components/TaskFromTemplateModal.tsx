@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * TaskFromTemplateModal.tsx is responsible for rendering a
- * task template selection interface to generate a new task instance.
+ * task template selection interface to generate a new task.
  */
 import List from '@mui/joy/List'
 import ListItemButton from '@mui/joy/ListItemButton'
@@ -38,7 +38,7 @@ export default function TaskFromTemplateModal(props: CreateItemModalInterface) {
 
   const mutation = useMutation(async (id: string) => {
     await taskApi
-      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, {
+      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, props.createTemplate, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {

@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * ExamFromTemplateModal.tsx is responsible for rendering a
- * exam template selection interface to generate a new exam instance.
+ * exam template selection interface to generate a new exam.
  */
 import List from '@mui/joy/List'
 import ListItemButton from '@mui/joy/ListItemButton'
-// import IconButton from '@mui/joy/IconButton'
-// import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
@@ -26,9 +24,7 @@ import ExamItem from './ExamItem'
 
 export default function ExamFromTemplateModal(props: CreateItemModalInterface) {
   const [user] = useContext(LoginContext)
-  // const [modalOpen, setModalOpen] = React.useState(false)
 
-  // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
   const { data: exams } = useQuery<ExamOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
@@ -42,7 +38,7 @@ export default function ExamFromTemplateModal(props: CreateItemModalInterface) {
 
   const mutation = useMutation(async (id: string) => {
     await examApi
-      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, {
+      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, props.createTemplate, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {
@@ -55,13 +51,6 @@ export default function ExamFromTemplateModal(props: CreateItemModalInterface) {
 
   return (
     <>
-      {/* <IconButton 
-        variant='soft'
-        onClick={() => {setModalOpen(true)}}
-      >
-        <AddSharpIcon />
-      </IconButton> */}
-
       <Modal
         open={props.isOpen}
         onClose={() => {
@@ -87,7 +76,7 @@ export default function ExamFromTemplateModal(props: CreateItemModalInterface) {
                     props.setOpen(false)
                   }}
                 >
-                  <ExamItem data={exam} refetchParentData={() => {}} />
+                  <ExamItem exam={exam} />
                 </ListItemButton>
               ))}
           </List>

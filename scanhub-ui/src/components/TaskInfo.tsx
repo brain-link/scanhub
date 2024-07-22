@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * TaskInstanceInfo.tsx is responsible for rendering additional information
- * of a task instance item.
+ * TaskInfo.tsx is responsible for rendering additional information of a task item.
  */
 import * as React from 'react'
 
@@ -16,7 +15,7 @@ import { TaskOut } from '../generated-client/exam'
 import { ItemInterface } from '../interfaces/components.interface'
 
 
-function TaskInstanceInfo({ data: task }: ItemInterface<TaskOut>) {
+function TaskInfo({ data: task }: ItemInterface<TaskOut>) {
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box
@@ -95,4 +94,4 @@ function TaskInstanceInfo({ data: task }: ItemInterface<TaskOut>) {
   )
 }
 
-export default TaskInstanceInfo
+export default TaskInfo

@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * TaskInstanceItem.tsx is responsible for rendering a single task instance item
- * in the task instance list of a workflow.
+ * TaskItem.tsx is responsible for rendering a single task item.
  */
 import * as React from 'react'
 import { useMutation } from 'react-query'
@@ -21,7 +20,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 import { TaskOut } from '../generated-client/exam'
 import { ItemInterface } from '../interfaces/components.interface'
-import TaskInstanceInfo from './TaskInstanceInfo'
+import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import LoginContext from '../LoginContext'
 
@@ -32,7 +31,7 @@ export default function TaskItem({ data: task, refetchParentData }: ItemInterfac
       placement='right'
       variant='outlined'
       arrow
-      title={<TaskInstanceInfo data={task} refetchParentData={refetchParentData}/>}
+      title={<TaskInfo data={task} refetchParentData={refetchParentData}/>}
     >
       <Box
         sx={{ 

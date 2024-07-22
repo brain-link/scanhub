@@ -135,7 +135,7 @@ function PatientIndex() {
           {exams?.map((exam) => (
             <AccordionWithMenu 
               key={`exam-${exam.id}`}
-              accordionSummary={<ExamItem data={exam} refetchParentData={refetchExams} />}
+              accordionSummary={<ExamItem exam={exam} />}
               accordionMenu={<ExamMenu data={exam} refetchParentData={refetchExams} />}
             >
               {exam.workflows?.map((workflow) => (
