@@ -57,7 +57,8 @@ def pydantic_to_xml(element: Element, obj: BaseModel):
 
 def generate_xml_from_model(model: ISMRMRDHeader):
     """Generate an XML string from the Pydantic model."""
-    root = Element('ismrmrdHeader', xmlns=ns['ismrmrd'], **{'xmlns:xsi': ns['xsi']})
+    # mypy errors has to be ignored due to special character in key of **extra
+    root = Element('ismrmrdHeader', xmlns=ns['ismrmrd'], **{'xmlns:xsi': ns['xsi']}) # type: ignore[arg-type]
     pydantic_to_xml(root, model)
     return tostring(root, encoding='unicode')
 
