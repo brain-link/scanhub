@@ -15,7 +15,7 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import ExamTemplateCreateModal from '../components/ExamTemplateCreateModal'
+import ExamModal from '../components/ExamModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'
@@ -38,12 +38,12 @@ export default function Templates() {
   })
 
   return (
-    <Stack direction='column' alignItems='flex-start' spacing={2} sx={{ p: 2 }}>
+    <Stack direction='column' alignContent='center' width='20%' margin='auto' spacing={2} sx={{ p: 2 }}>
       <Button startDecorator={<Add />} onClick={() => setModalOpen(true)}>
         Create Exam Template
       </Button>
 
-      <ExamTemplateCreateModal
+      <ExamModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
         onSubmit={

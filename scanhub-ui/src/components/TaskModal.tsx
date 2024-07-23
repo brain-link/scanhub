@@ -28,7 +28,7 @@ import { BaseTask, TaskType } from '../generated-client/exam'
 import { CreateItemModalInterface } from '../interfaces/components.interface'
 
 
-export default function TaskCreateNewModal(props: CreateItemModalInterface) {
+export default function TaskModal(props: CreateItemModalInterface) {
   const [task, setTask] = React.useState<BaseTask>({
     workflow_id: props.parentId,              // eslint-disable-line camelcase
     description: '',

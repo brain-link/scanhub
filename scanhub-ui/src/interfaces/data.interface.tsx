@@ -5,29 +5,6 @@
 
 // TODO: Could add constructors for interfaces, requires the definition of a class and a constructor() within
 
-export interface Patient {
-  id: number
-  sex: string
-  name: string
-  birth_date: string // TODO: change this to date...
-  issuer: string
-  status: string
-  comment: string
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
-
-export interface Workflow {
-  id: number
-  name: string
-  version: string
-  author?: string
-  description?: string
-  definition: object
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
-
 export interface Device {
   id: string
   name: string
@@ -40,20 +17,20 @@ export interface Device {
   datetime_updated?: Date | null
 }
 
-export interface Record {
+interface Record {
   id: string
   data_path?: string | null
   comment?: string | null
   datetime_created: Date
 }
 
-export interface XYZ {
+interface XYZ {
   X: number
   Y: number
   Z: number
 }
 
-export interface AcquisitonLimits {
+interface AcquisitonLimits {
   patient_height: number
   patient_weight: number
   patient_gender: string

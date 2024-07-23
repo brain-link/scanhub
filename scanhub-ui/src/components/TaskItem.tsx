@@ -17,6 +17,7 @@ import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { TaskOut } from '../generated-client/exam'
 import { ItemInterface } from '../interfaces/components.interface'
@@ -36,28 +37,40 @@ export default function TaskItem({ data: task, refetchParentData }: ItemInterfac
       <Box
         sx={{ 
           width: '100%', 
-          p: 0.5, 
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
-        <AssignmentIcon fontSize='small' />
         <Box 
-          sx={{
-            marginLeft: 0.5,
-            p: 0.5, 
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-          }}
+          display='flex'
+          alignItems='center'
+          p='0.5'
         >
-          <Typography level='title-sm'>{task.description ? task.description : 'Task'}</Typography>
-          
-          <Typography level='body-xs' textColor='text.tertiary'>
-            {`Created: ${new Date(task.datetime_created).toDateString()}`}
-          </Typography>
+          <AssignmentIcon fontSize='small' />
+          <Box 
+            sx={{
+              marginLeft: 0.5,
+              p: 0.5, 
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography level='title-sm'>{task.description ? task.description : 'Task'}</Typography>
+            
+            <Typography level='body-xs' textColor='text.tertiary'>
+              {`Created: ${new Date(task.datetime_created).toDateString()}`}
+            </Typography>
+          </Box>
         </Box>
-        <TaskMenu data={task} refetchParentData={refetchParentData} />
+        <Box
+          display='flex'
+          alignItems='center'
+        >
+          <TaskMenu data={task} refetchParentData={refetchParentData} />
+          <IconButton sx={{visibility: 'hidden'}} >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Box>
       </Box>
     </Tooltip>
   )

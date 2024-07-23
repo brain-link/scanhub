@@ -24,7 +24,7 @@ import { examApi } from '../api'
 import LoginContext from '../LoginContext'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
 import ExamInfo from './ExamInfo'
-import WorkflowCreateNewModal from './WorkflowCreateNewModal'
+import WorkflowModal from './WorkflowModal'
 // import ExamModal from './ExamModal'
 
 
@@ -156,7 +156,7 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
       />
       {
         exam.is_template ?
-          <WorkflowCreateNewModal
+          <WorkflowModal
             isOpen={workflowCreateNewModalOpen}
             setOpen={setWorkflowCreateNewModalOpen}
             parentId={exam.id}

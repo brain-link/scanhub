@@ -25,7 +25,7 @@ import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
 import TaskFromTemplateModal from './TaskFromTemplateModal'
-import TaskCreateNewModal from './TaskCreateNewModal'
+import TaskModal from './TaskModal'
 
 
 export default function WorkflowItem({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
@@ -133,7 +133,7 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
 
       {
         workflow.is_template ?
-          <TaskCreateNewModal
+          <TaskModal
             isOpen={taskCreateNewModalOpen}
             setOpen={setTaskCreateNewModalOpen}
             parentId={workflow.id}

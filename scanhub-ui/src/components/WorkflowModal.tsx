@@ -22,7 +22,7 @@ import { workflowsApi } from '../api'
 import { BaseWorkflow } from '../generated-client/exam'
 import { CreateItemModalInterface } from '../interfaces/components.interface'
 
-export default function WorkflowCreateNewModal(props: CreateItemModalInterface) {
+export default function WorkflowModal(props: CreateItemModalInterface) {
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
     comment: '',
     exam_id: props.parentId,                // eslint-disable-line camelcase

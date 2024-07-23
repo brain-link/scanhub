@@ -15,28 +15,6 @@ export interface ModalProps<T> {
   setDialogOpen: (open: boolean) => void
 }
 
-export interface ComponentProps<T> {
-  data: T
-  refetchParentData: () => void
-  isSelected: boolean
-}
-
-export interface JobComponentProps {
-  data: Job
-  devices: Device[]
-  sequences: MRISequence[]
-  // workflows: Workflow[];
-  refetchParentData: () => void
-}
-
-// Reuse JobComponentProps but omit data which can be null in case of the modal props
-export interface JobModalProps extends Omit<JobComponentProps, 'data'> {
-  data: Job | null
-  handleModalSubmit: (data: Job) => void
-  dialogOpen: boolean
-  setDialogOpen: (open: boolean) => void
-}
-
 export interface SequenceViewerProps {
   sequence_id: string
 }
@@ -52,10 +30,6 @@ export interface AlertProps {
   title: string
   info?: string
   type: Alerts
-}
-
-export interface ExamTreeProps {
-  setDataPath: (dataPath: string) => void
 }
 
 export interface SequenceUploadModal {

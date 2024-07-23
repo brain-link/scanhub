@@ -45,7 +45,7 @@ export function RouteConfiguration() {
               '--Cover-width': '40vw', // must be `vw` only
               '--Form-maxWidth': '700px',
               '--Transition-duration': '0.4s', // set to `none` to disable transition
-              '--Sidebar-width': '320px',
+              '--Sidebar-width': '330px',
               '--Navigation-height': '60px',
               // '--Navigation-height': '64px',  // set height of navigation bar
               // '--PatientView-toolbarHeight': '54px',
