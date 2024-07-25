@@ -34,6 +34,7 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
 
   const [task, setTask] = React.useState<BaseTask>({
     workflow_id: props.parentId,              // eslint-disable-line camelcase
+    name: '',
     description: '',
     type: TaskType.ProcessingTask,
     status: {},
@@ -92,10 +93,18 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Workflow Template
+          Create New Task
         </Typography>
 
         <Stack direction='row' spacing={4}>
+          <Stack spacing={1}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              name={'name'}
+              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+              value={task.name}
+            />
+          </Stack>
           <Stack spacing={1}>
             <FormLabel>Type</FormLabel>
             <Select
@@ -113,7 +122,8 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
                 </Option>
               ))}
             </Select>
-
+          </Stack>
+          <Stack spacing={1}>
             <FormLabel>Comment</FormLabel>
             <Textarea
               minRows={2}
@@ -122,10 +132,12 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
               defaultValue={task.description}
             />
           </Stack>
+        </Stack>
+
+        <Stack direction='row' spacing={4}>
 
           <Stack spacing={1}>
             <FormLabel>Arguments</FormLabel>
-
             <Stack direction='row' spacing={1}>
               <FormControl>
                 <FormLabel>Key</FormLabel>
@@ -270,8 +282,13 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
           sx={{ maxWidth: 120 }}
           onClick={(event) => {
             event.preventDefault()
-            mutation.mutate()
-            props.setOpen(false)
+            if (task.name == '') {
+              showNotification({message: 'Task name must not be empty.', type: 'warning'})
+            }
+            else {
+              mutation.mutate()
+              props.setOpen(false)
+            }
           }}
         >
           Save

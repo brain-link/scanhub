@@ -230,6 +230,7 @@ class BaseTask(BaseModel):
         # }
 
     workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
+    name: str
     description: str
     type: TaskType
     args: dict[str, str]
@@ -256,6 +257,7 @@ class BaseWorkflow(BaseModel):
 
         extra = Extra.ignore
 
+    name: str
     comment: str | None
     exam_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
     is_finished: bool

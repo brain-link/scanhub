@@ -5,8 +5,6 @@
  * WorkflowFromTemplateModal.tsx is responsible for rendering a
  * workflow template selection interface to generate a new workflow.
  */
-import List from '@mui/joy/List'
-import ListItemButton from '@mui/joy/ListItemButton'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
@@ -19,8 +17,9 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
-import { ModalPropsCreate } from '../interfaces/components.interface'
+import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import WorkflowItem from './WorkflowItem'
+import { Stack } from '@mui/material'
 
 export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
   const [user] = useContext(LoginContext)
@@ -61,8 +60,8 @@ export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
       >
         <ModalDialog sx={{ width: '50vw', p: 5 }}>
           <ModalClose />
-          <DialogTitle>Exam Templates</DialogTitle>
-          <List
+          <DialogTitle>Add Workflow from Template</DialogTitle>
+          <Stack
             sx={{
               overflow: 'scroll',
               mx: 'calc(-1 * var(--ModalDialog-padding))',
@@ -71,17 +70,17 @@ export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
           >
             {workflows &&
               workflows.map((workflow, idx) => (
-                <ListItemButton
+                <WorkflowItem 
                   key={idx}
+                  item={workflow} 
                   onClick={() => {
                     mutation.mutate(workflow.id)
                     props.setOpen(false)
                   }}
-                >
-                  <WorkflowItem data={workflow} refetchParentData={() => {}} />
-                </ListItemButton>
+                  selection={ITEM_UNSELECTED}
+                />
               ))}
-          </List>
+          </Stack>
         </ModalDialog>
       </Modal>
     </>

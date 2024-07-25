@@ -31,11 +31,23 @@ export interface PatientTableInterface {
   patients: PatientOut[]
 }
 
-export interface ItemInterface<T> {
-  data: T
+export interface RefetchableItemInterface<T> {
+  item: T
   refetchParentData: () => void
 }
 
+export interface ItemSelection {
+  type: 'exam' | 'workflow' | 'task' | undefined, 
+  itemId: string | undefined
+}
+
+export const ITEM_UNSELECTED = { type: undefined, itemId: undefined }
+
+export interface SelectableItemInterface<T> {
+  item: T
+  selection: ItemSelection
+  onClick: () => void
+}
 
 export interface ModalProps {
   onSubmit: () => void

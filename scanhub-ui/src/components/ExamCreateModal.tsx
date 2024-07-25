@@ -46,7 +46,6 @@ export default function ExamCreateModal(props: ModalProps) {
     is_template: true,        // eslint-disable-line camelcase
     is_frozen: false,         // eslint-disable-line camelcase
   })
-
   
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
@@ -59,20 +58,6 @@ export default function ExamCreateModal(props: ModalProps) {
       showNotification({message: 'Could not create exam!', type: 'warning'})
     })
   })
-
-  // const mutation = useMutation(async () => {
-  //   await examApi
-  //   .updateExamApiV1ExamExamIdPut(exam.id, 
-  //                                 exam, 
-  //                                 { headers: { Authorization: 'Bearer ' + user?.access_token } })
-  //   .then(() => {
-  //     props.onSubmit()
-  //   })
-  //   .catch(() => {
-  //     showNotification({message: 'Could not update exam', type: 'warning'})
-  //   })
-  // })
-
   
   return (
     <Modal
@@ -96,7 +81,7 @@ export default function ExamCreateModal(props: ModalProps) {
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Exam Template
+          Create New Exam
         </Typography>
 
         <Stack spacing={1}>

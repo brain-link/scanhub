@@ -18,7 +18,7 @@ import Tooltip from '@mui/joy/Tooltip'
 
 // Sub-components, interfaces, client
 import { ExamOut } from '../generated-client/exam'
-import { ItemInterface } from '../interfaces/components.interface'
+import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { examApi } from '../api'
 import LoginContext from '../LoginContext'
@@ -27,9 +27,10 @@ import ExamInfo from './ExamInfo'
 import WorkflowCreateModal from './WorkflowCreateModal'
 import NotificationContext from '../NotificationContext'
 import ExamModifyModal from './ExamModifyModal'
+import Button from '@mui/joy/Button'
 
 
-export default function ExamItem({ exam }: { exam: ExamOut }) {
+export default function ExamItem({ item: exam, selection, onClick }: SelectableItemInterface<ExamOut>) {
 
   return (
     <Tooltip
@@ -39,13 +40,15 @@ export default function ExamItem({ exam }: { exam: ExamOut }) {
       arrow
       title={<ExamInfo exam={exam} />}
     >
-      <Box
+      <Button
         sx={{ 
           width: '100%', 
           p: 0.5, 
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'flex-start'
         }}
+        variant={(selection.type == 'exam' && selection.itemId == exam.id) ? 'outlined' : 'plain'}
+        onClick={onClick}
       >
         <ListAltIcon fontSize='small' />
         <Box 
@@ -65,13 +68,13 @@ export default function ExamItem({ exam }: { exam: ExamOut }) {
             {`Created: ${new Date(exam.datetime_created).toDateString()}`}
           </Typography>
         </Box>
-      </Box>
+      </Button>
     </Tooltip>
   )
 }
 
 
-export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOut>) {
+export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInterface<ExamOut>) {
 
   const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
   const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)

@@ -18,9 +18,10 @@ import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SchemaIcon from '@mui/icons-material/Schema'
+import Button from '@mui/joy/Button'
 
 import { WorkflowOut } from '../generated-client/exam'
-import { ItemInterface } from '../interfaces/components.interface'
+import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
@@ -29,22 +30,24 @@ import TaskCreateModal from './TaskCreateModal'
 import WorkflowModifyModal from './WorkflowModifyModal'
 
 
-export default function WorkflowItem({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
+export default function WorkflowItem({ item: workflow, selection, onClick }: SelectableItemInterface<WorkflowOut>) {
   return (
     <Tooltip
       placement='right'
       variant='outlined'
       describeChild={false}
       arrow
-      title={<WorkflowInfo data={workflow} refetchParentData={refetchParentData} />}
+      title={<WorkflowInfo workflow={workflow} />}
     >
-      <Box
+      <Button
         sx={{ 
           width: '100%', 
           p: 0.5, 
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'flex-start'
         }}
+        variant={(selection.type == 'workflow' && selection.itemId == workflow.id) ? 'outlined' : 'plain'}
+        onClick={onClick}
       >
         <SchemaIcon fontSize='small' />
         <Box 
@@ -56,19 +59,19 @@ export default function WorkflowItem({ data: workflow, refetchParentData }: Item
             alignItems: 'start',
           }}
         >
-          <Typography level='title-sm'>{workflow.comment}</Typography>
+          <Typography level='title-sm'>{workflow.name}</Typography>
 
           <Typography level='body-xs' textColor='text.tertiary'>
             {`Created: ${new Date(workflow.datetime_created).toDateString()}`}
           </Typography>
         </Box>
-      </Box>
+      </Button>
     </Tooltip>
   )
 }
 
 
-export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
+export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableItemInterface<WorkflowOut>) {
 
   const [taskFromTemplateModalOpen, setTaskFromTemplateModalOpen] = React.useState(false)
   const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)

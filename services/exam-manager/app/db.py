@@ -87,6 +87,7 @@ class Workflow(Base): # TBD: rename to "Workflow"
     exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
 
     # Fields
+    name: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
 
     # Flags
@@ -114,7 +115,8 @@ class Task(Base):
     workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
 
     # Fields
-    description: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=True)
     type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
 
     # Arguments and parameters

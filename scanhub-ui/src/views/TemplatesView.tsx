@@ -20,6 +20,7 @@ import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
+import { ITEM_UNSELECTED } from '../interfaces/components.interface'
 
 export default function Templates() {
   const [modalOpen, setModalOpen] = React.useState(false)
@@ -55,17 +56,17 @@ export default function Templates() {
       {exams?.map((exam) => (
         <AccordionWithMenu 
           key={`exam-${exam.id}`}
-          accordionSummary={<ExamItem exam={exam} />}
-          accordionMenu={<ExamMenu data={exam} refetchParentData={refetch} />}
+          accordionSummary={<ExamItem item={exam} onClick={() => {}} selection={ITEM_UNSELECTED} />}
+          accordionMenu={<ExamMenu item={exam} refetchParentData={refetch} />}
         >
           {exam.workflows?.map((workflow) => (
             <AccordionWithMenu 
               key={`workflow-${workflow.id}`}
-              accordionSummary={<WorkflowItem data={workflow} refetchParentData={refetch} />}
-              accordionMenu={<WorkflowMenu data={workflow} refetchParentData={refetch} />}
+              accordionSummary={<WorkflowItem item={workflow} onClick={() => {}} selection={ITEM_UNSELECTED} />}
+              accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetch} />}
             >
               {workflow.tasks?.map((task) => (
-                <TaskItem key={`task-${task.id}`} data={task} refetchParentData={refetch} />
+                <TaskItem key={`task-${task.id}`} item={task} refetchParentData={refetch} onClick={() => {}} selection={ITEM_UNSELECTED} />
               ))}
             </AccordionWithMenu>
           ))}

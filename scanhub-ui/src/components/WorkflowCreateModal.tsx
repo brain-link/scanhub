@@ -21,16 +21,20 @@ import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { BaseWorkflow } from '../generated-client/exam'
 import { ModalPropsCreate } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
 export default function WorkflowCreateModal(props: ModalPropsCreate) {
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
-    comment: '',
+    name: '',
+    comment: undefined,
     exam_id: props.parentId,                // eslint-disable-line camelcase
     is_finished: false,                     // eslint-disable-line camelcase
     is_template: props.createTemplate,      // eslint-disable-line camelcase
     is_frozen: false,                       // eslint-disable-line camelcase
   })
   const [user] = useContext(LoginContext)
+
+  const [, showNotification] = React.useContext(NotificationContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
@@ -41,8 +45,8 @@ export default function WorkflowCreateModal(props: ModalPropsCreate) {
       .then(() => {
         props.onSubmit()
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        showNotification({message: 'Could not create workflow.', type: 'warning'})
       })
   })
 
@@ -68,10 +72,17 @@ export default function WorkflowCreateModal(props: ModalPropsCreate) {
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Workflow Template
+          Create New Workflow
         </Typography>
 
         <Stack spacing={1}>
+          <FormLabel>Name</FormLabel>
+          <Input
+            name={'name'}
+            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
+            defaultValue={workflow.name}
+          />
+
           <FormLabel>Comment</FormLabel>
           <Input
             name={'comment'}
@@ -84,8 +95,13 @@ export default function WorkflowCreateModal(props: ModalPropsCreate) {
             sx={{ maxWidth: 120 }}
             onClick={(event) => {
               event.preventDefault()
-              mutation.mutate()
-              props.setOpen(false)
+              if (workflow.name == '') {
+                showNotification({message: 'Workflow name must not be empty.', type: 'warning'})
+              }
+              else {
+                mutation.mutate()
+                props.setOpen(false)
+              }
             }}
           >
             Save

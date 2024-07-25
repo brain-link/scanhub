@@ -84,7 +84,7 @@ export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Exam Template
+          Update Exam
         </Typography>
 
         <Stack spacing={1}>

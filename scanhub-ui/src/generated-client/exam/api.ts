@@ -110,6 +110,12 @@ export interface BaseTask {
      * @type {string}
      * @memberof BaseTask
      */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseTask
+     */
     'description': string;
     /**
      * 
@@ -162,6 +168,12 @@ export interface BaseTask {
  * @interface BaseWorkflow
  */
 export interface BaseWorkflow {
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseWorkflow
+     */
+    'name': string;
     /**
      * 
      * @type {string}
@@ -338,6 +350,12 @@ export interface TaskOut {
      * @type {string}
      * @memberof TaskOut
      */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskOut
+     */
     'description': string;
     /**
      * 
@@ -450,6 +468,12 @@ export interface WorkflowId {
  * @interface WorkflowOut
  */
 export interface WorkflowOut {
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
+    'name': string;
     /**
      * 
      * @type {string}

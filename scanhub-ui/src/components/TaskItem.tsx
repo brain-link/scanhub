@@ -18,16 +18,24 @@ import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import Button from '@mui/joy/Button'
 
 import { TaskOut } from '../generated-client/exam'
-import { ItemInterface } from '../interfaces/components.interface'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import LoginContext from '../LoginContext'
 import TaskModifyModal from './TaskModifyModal'
+import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 
 
-export default function TaskItem({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
+export default function TaskItem(
+  {
+    item: task, 
+    refetchParentData, 
+    selection, 
+    onClick
+  }: RefetchableItemInterface<TaskOut> & SelectableItemInterface<TaskOut>
+) {
   return (
     <Box
       sx={{ 
@@ -40,12 +48,17 @@ export default function TaskItem({ data: task, refetchParentData }: ItemInterfac
         placement='right'
         variant='outlined'
         arrow
-        title={<TaskInfo data={task} refetchParentData={refetchParentData}/>}
+        title={<TaskInfo data={task} />}
       >
-        <Box 
-          display='flex'
-          alignItems='center'
-          p='0.5'
+        <Button 
+          sx={{
+            width: '100%', 
+            display: 'flex',
+            justifyContent: 'flex-start',
+            p: 0.5
+          }}
+          variant={(selection.type == 'task' && selection.itemId == task.id) ? 'outlined' : 'plain'}
+          onClick={onClick}
         >
           <AssignmentIcon fontSize='small' />
           <Box 
@@ -54,21 +67,24 @@ export default function TaskItem({ data: task, refetchParentData }: ItemInterfac
               p: 0.5, 
               display: 'flex',
               flexDirection: 'column',
+              alignItems: 'flex-start'
             }}
           >
-            <Typography level='title-sm'>{task.description ? task.description : 'Task'}</Typography>
+            <Typography level='title-sm' textAlign='left' sx={{overflowWrap: 'anywhere'}}>
+              {task.name}
+            </Typography>
             
-            <Typography level='body-xs' textColor='text.tertiary'>
+            <Typography level='body-xs' textColor='text.tertiary' textAlign='left'>
               {`Created: ${new Date(task.datetime_created).toDateString()}`}
             </Typography>
           </Box>
-        </Box>
+        </Button>
       </Tooltip>
       <Box
         display='flex'
         alignItems='center'
       >
-        <TaskMenu data={task} refetchParentData={refetchParentData} />
+        <TaskMenu item={task} refetchParentData={refetchParentData} />
         <IconButton sx={{visibility: 'hidden'}} >
           <ExpandMoreIcon />
         </IconButton>
@@ -78,7 +94,7 @@ export default function TaskItem({ data: task, refetchParentData }: ItemInterfac
 }
 
 
-function TaskMenu({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
+function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<TaskOut>) {
   const [user] = React.useContext(LoginContext)
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);

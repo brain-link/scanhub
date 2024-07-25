@@ -12,10 +12,9 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
 import { TaskOut } from '../generated-client/exam'
-import { ItemInterface } from '../interfaces/components.interface'
 
 
-function TaskInfo({ data: task }: ItemInterface<TaskOut>) {
+function TaskInfo({ data: task }: { data: TaskOut }) {
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box

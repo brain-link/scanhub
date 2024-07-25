@@ -11,10 +11,9 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
 import { WorkflowOut } from '../generated-client/exam'
-import { ItemInterface } from '../interfaces/components.interface'
 
 
-function WorkflowInfo({ data: workflow }: ItemInterface<WorkflowOut>) {
+function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
 
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>

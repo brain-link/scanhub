@@ -27,6 +27,7 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
   const [, showNotification] = React.useContext(NotificationContext)
   
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
+    name: props.item.name,
     comment: props.item.comment,
     exam_id: props.item.exam_id,              // eslint-disable-line camelcase
     is_finished: props.item.is_finished,      // eslint-disable-line camelcase
@@ -73,10 +74,17 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Workflow Template
+          Update Workflow
         </Typography>
 
         <Stack spacing={1}>
+          <FormLabel>Name</FormLabel>
+          <Input
+            name={'name'}
+            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
+            defaultValue={workflow.name}
+          />
+
           <FormLabel>Comment</FormLabel>
           <Input
             name={'comment'}
@@ -89,8 +97,13 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
             sx={{ maxWidth: 120 }}
             onClick={(event) => {
               event.preventDefault()
-              mutation.mutate()
-              props.setOpen(false)
+              if (workflow.name == '') {
+                showNotification({message: 'Workflow name must not be empty.', type: 'warning'})
+              }
+              else {
+                mutation.mutate()
+                props.setOpen(false)
+              }
             }}
           >
             Save
