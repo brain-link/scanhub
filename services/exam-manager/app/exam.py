@@ -112,7 +112,9 @@ async def create_exam_from_template(patient_id: int, template_id: UUID, new_exam
 
     # Create all the sub-items for the workflow templates in the exam template
     for workflow in template.workflows:
-        await create_workflow_from_template(exam_id=exam.id, template_id=workflow.id, new_workflow_is_template=new_exam_is_template)
+        await create_workflow_from_template(exam_id=exam.id,
+                                            template_id=workflow.id,
+                                            new_workflow_is_template=new_exam_is_template)
 
     return await get_exam_out_model(data=exam)
 
@@ -256,7 +258,9 @@ async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
 
 
 @router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
-async def create_workflow_from_template(exam_id: UUID, template_id: UUID, new_workflow_is_template: bool) -> WorkflowOut:
+async def create_workflow_from_template(exam_id: UUID,
+                                        template_id: UUID,
+                                        new_workflow_is_template: bool) -> WorkflowOut:
     """Create new workflow from template.
 
     Parameters
@@ -287,7 +291,9 @@ async def create_workflow_from_template(exam_id: UUID, template_id: UUID, new_wo
 
     # Create all the sub-items for the task templates in a workflow template
     for task in template.tasks:
-        _ = await create_task_from_template(workflow_id=workflow.id, template_id=task.id, new_task_is_template=new_workflow_is_template)
+        _ = await create_task_from_template(workflow_id=workflow.id,
+                                            template_id=task.id,
+                                            new_task_is_template=new_workflow_is_template)
 
     return await get_workflow_out_model(data=workflow)
 
