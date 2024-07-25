@@ -25,8 +25,8 @@ import { useMutation } from 'react-query'
 
 import { getPatientApi } from '../api'
 import LoginContext from '../LoginContext'
-import { BasePatient, PatientOut, Gender } from '../generated-client/patient'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { BasePatient, Gender } from '../generated-client/patient'
+import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
@@ -62,7 +62,7 @@ const createPatientFormContent: FormEntry[] = [
   { type: 'text', key: 'comment', label: 'Comment'},
 ]
 
-export default function PatientCreateModal(props: ModalComponentProps<PatientOut>) {
+export default function PatientCreateModal(props: ModalProps) {
   const [user, ] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
   const patientApi = getPatientApi(user ? user.access_token : '')
@@ -84,7 +84,7 @@ export default function PatientCreateModal(props: ModalComponentProps<PatientOut
     await patientApi
       .createPatientPost(patient)
       .then((response) => {
-        props.onSubmit(response.data)
+        props.onSubmit()
         showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})
       })
       .catch((err) => {

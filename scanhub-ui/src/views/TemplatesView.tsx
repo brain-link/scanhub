@@ -15,7 +15,7 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import ExamModal from '../components/ExamModal'
+import ExamCreateModal from '../components/ExamCreateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'
@@ -25,7 +25,6 @@ export default function Templates() {
   const [modalOpen, setModalOpen] = React.useState(false)
   const [user] = useContext(LoginContext)
 
-  // const {data: exams, isLoading, isError, refetch} = useQuery<ExamOut[]>({
   const { data: exams, refetch } = useQuery<ExamOut[]>({
     queryKey: ['allExamTemplates'],
     queryFn: async () => {
@@ -43,16 +42,14 @@ export default function Templates() {
         Create Exam Template
       </Button>
 
-      <ExamModal
+      <ExamCreateModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
         onSubmit={
-          // (newExam: ExamOut) => { exams?.push(newExam) }
           () => {
             refetch()
           }
         }
-        onClose={() => {}}
       />
 
       {exams?.map((exam) => (
@@ -74,17 +71,6 @@ export default function Templates() {
           ))}
         </AccordionWithMenu>
       ))}
-
-      {/* {exams?.map((exam, idx) => (
-        <ExamTemplateItem
-          key={idx}
-          data={exam}
-          onClicked={() => {}}
-          onDeleted={() => {
-            refetch()
-          }}
-        />
-      ))} */}
     </Stack>
   )
 }

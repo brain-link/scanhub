@@ -19,10 +19,10 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { TaskOut } from '../generated-client/exam'
-import { CreateItemModalInterface } from '../interfaces/components.interface'
+import { ModalPropsCreate } from '../interfaces/components.interface'
 import TaskTemplateItem from './TaskItem'
 
-export default function TaskFromTemplateModal(props: CreateItemModalInterface) {
+export default function TaskFromTemplateModal(props: ModalPropsCreate) {
   const [user] = useContext(LoginContext)
 
   const { data: tasks } = useQuery<TaskOut[]>({

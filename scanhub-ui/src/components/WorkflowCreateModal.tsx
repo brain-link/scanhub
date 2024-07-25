@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * WorkflowTemplateCreateModal.tsx is responsible for rendering a modal with an interface
- * to create a new workflow template.
+ * WorkflowCreateModal.tsx is responsible for rendering a modal with an interface
+ * to create a new workflow.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -20,9 +20,9 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { BaseWorkflow } from '../generated-client/exam'
-import { CreateItemModalInterface } from '../interfaces/components.interface'
+import { ModalPropsCreate } from '../interfaces/components.interface'
 
-export default function WorkflowModal(props: CreateItemModalInterface) {
+export default function WorkflowCreateModal(props: ModalPropsCreate) {
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
     comment: '',
     exam_id: props.parentId,                // eslint-disable-line camelcase

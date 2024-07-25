@@ -6,6 +6,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Optional
 from uuid import UUID
+from typing import Literal
 
 from pydantic import BaseModel, Extra, Field, Json  # noqa
 
@@ -286,7 +287,7 @@ class BaseExam(BaseModel):
     site: str | None
     address: str | None
     creator: str
-    status: str
+    status: Literal["NEW", "UPDATED", "DELETED"]
     is_template: bool
     is_frozen: bool
 

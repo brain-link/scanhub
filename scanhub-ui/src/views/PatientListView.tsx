@@ -89,7 +89,6 @@ export default function PatientListView() {
         onSubmit={() => {
           refetch()
         }}
-        onClose={() => {}}
       />
 
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}>

@@ -25,7 +25,8 @@ import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
 import TaskFromTemplateModal from './TaskFromTemplateModal'
-import TaskModal from './TaskModal'
+import TaskCreateModal from './TaskCreateModal'
+import WorkflowModifyModal from './WorkflowModifyModal'
 
 
 export default function WorkflowItem({ data: workflow, refetchParentData }: ItemInterface<WorkflowOut>) {
@@ -71,6 +72,7 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
 
   const [taskFromTemplateModalOpen, setTaskFromTemplateModalOpen] = React.useState(false)
   const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)
+  const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
 
   const [user] = React.useContext(LoginContext)
 
@@ -89,7 +91,7 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
-          <MenuItem key='edit' onClick={() => {}}>
+          <MenuItem key='edit' onClick={() => {setWorkflowModalOpen(true)}}>
             Edit
           </MenuItem>
           <MenuItem
@@ -133,7 +135,7 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
 
       {
         workflow.is_template ?
-          <TaskModal
+          <TaskCreateModal
             isOpen={taskCreateNewModalOpen}
             setOpen={setTaskCreateNewModalOpen}
             parentId={workflow.id}
@@ -142,6 +144,13 @@ export function WorkflowMenu({ data: workflow, refetchParentData }: ItemInterfac
           />
         : undefined
       }
+
+      <WorkflowModifyModal 
+        onSubmit={refetchParentData}
+        isOpen={workflowModalOpen}
+        setOpen={setWorkflowModalOpen}
+        item={workflow}
+      />    
     </>
   )
 }

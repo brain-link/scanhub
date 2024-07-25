@@ -19,8 +19,8 @@ import { useMutation } from 'react-query'
 
 import LoginContext from '../LoginContext'
 import { userApi } from '../api'
-import { User, UserRole } from '../generated-client/userlogin'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { UserRole } from '../generated-client/userlogin'
+import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 // User form items, order is row wise
@@ -33,7 +33,7 @@ const createUserFormContent = [
   { key: 'access_token', label: 'Password', placeholder: 'At least 12 characters.' },
 ]
 
-export default function UserCreateModal(props: ModalComponentProps<User>) {
+export default function UserCreateModal(props: ModalProps) {
   const [currentuser] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
   // eslint-disable-next-line camelcase
@@ -57,7 +57,7 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
           headers: { Authorization: 'Bearer ' + currentuser?.access_token },
         })
         .then(() => {
-          props.onSubmit(user)
+          props.onSubmit()
           showNotification({message: 'Created user ' + user.username, type: 'success'})
         })
         .catch((err) => {

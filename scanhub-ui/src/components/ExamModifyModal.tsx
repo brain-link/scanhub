@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamTemplateCreateModal.tsx is responsible for rendering a modal with an interface
- * to create a new exam template.
+ * ExamModifyModal.tsx is responsible for rendering a modal with an interface
+ * to modify an existing exam.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -20,42 +20,48 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { BaseExam, ExamOut } from '../generated-client/exam'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { ModalPropsModify } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
-const formContent = [
-  { key: 'name', label: 'Exam Name', placeholder: 'Knee complaints' },
-  { key: 'site', label: 'Site', placeholder: 'Berlin' },
-  { key: 'address', label: 'Site Address', placeholder: 'Street name, number' },
-  { key: 'status', label: 'Status', placeholder: 'Exam created' },
+
+const formContent: {key: keyof BaseExam, label: string}[] = [
+  { key: 'name', label: 'Exam Name' },
+  { key: 'country', label: 'Country' },
+  { key: 'site', label: 'Site' },
+  { key: 'address', label: 'Site Address' },
 ]
 
-export default function ExamModal(props: ModalComponentProps<ExamOut>) {
+export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
   const [user] = React.useContext(LoginContext)
-
+  const [, showNotification] = React.useContext(NotificationContext)
+  
   const [exam, setExam] = React.useState<BaseExam>({
-    patient_id: undefined,    // eslint-disable-line camelcase
-    name: '',
-    country: 'germany',
-    site: '',
-    address: '',
-    creator: user?.username != undefined ? user.username : '',
-    status: '',
-    is_template: true,        // eslint-disable-line camelcase
-    is_frozen: false,         // eslint-disable-line camelcase
+    patient_id: props.item.patient_id,          // eslint-disable-line camelcase
+    name: props.item.name,
+    country: props.item.country,
+    site: props.item.site,
+    address: props.item.address,
+    creator: props.item.creator,
+    status: 'UPDATED',
+    is_template: props.item.is_template,        // eslint-disable-line camelcase
+    is_frozen: props.item.is_frozen,            // eslint-disable-line camelcase
   })
 
-  // Post a new exam template and refetch exam table
+
   const mutation = useMutation(async () => {
     await examApi
-      .createExamApiV1ExamNewPost(exam, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then((response) => {
-        props.onSubmit(response.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    .updateExamApiV1ExamExamIdPut(props.item.id, 
+                                  exam, 
+                                  { headers: { Authorization: 'Bearer ' + user?.access_token } })
+    .then(() => {
+      props.onSubmit()
+    })
+    .catch(() => {
+      showNotification({message: 'Could not update exam', type: 'warning'})
+    })
   })
 
+  
   return (
     <Modal
       open={props.isOpen}
@@ -89,7 +95,7 @@ export default function ExamModal(props: ModalComponentProps<ExamOut>) {
                 <Input
                   name={item.key}
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
-                  placeholder={item.placeholder}
+                  value={exam[item.key]?.toString()}
                   required
                 />
               </Grid>

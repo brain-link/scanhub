@@ -159,7 +159,6 @@ export default function UserManagement() {
         onSubmit={() => {
           refetch()
         }}
-        onClose={() => {}}
       />
 
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 

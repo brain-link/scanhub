@@ -19,10 +19,10 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
-import { CreateItemModalInterface } from '../interfaces/components.interface'
+import { ModalPropsCreate } from '../interfaces/components.interface'
 import WorkflowItem from './WorkflowItem'
 
-export default function WorkflowFromTemplateModal(props: CreateItemModalInterface) {
+export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
   const [user] = useContext(LoginContext)
 
   const { data: workflows } = useQuery<WorkflowOut[]>({

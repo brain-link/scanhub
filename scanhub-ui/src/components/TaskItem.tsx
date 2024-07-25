@@ -24,22 +24,23 @@ import { ItemInterface } from '../interfaces/components.interface'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import LoginContext from '../LoginContext'
+import TaskModifyModal from './TaskModifyModal'
 
 
 export default function TaskItem({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
   return (
-    <Tooltip
-      placement='right'
-      variant='outlined'
-      arrow
-      title={<TaskInfo data={task} refetchParentData={refetchParentData}/>}
+    <Box
+      sx={{ 
+        width: '100%', 
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}
     >
-      <Box
-        sx={{ 
-          width: '100%', 
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
+      <Tooltip
+        placement='right'
+        variant='outlined'
+        arrow
+        title={<TaskInfo data={task} refetchParentData={refetchParentData}/>}
       >
         <Box 
           display='flex'
@@ -62,23 +63,25 @@ export default function TaskItem({ data: task, refetchParentData }: ItemInterfac
             </Typography>
           </Box>
         </Box>
-        <Box
-          display='flex'
-          alignItems='center'
-        >
-          <TaskMenu data={task} refetchParentData={refetchParentData} />
-          <IconButton sx={{visibility: 'hidden'}} >
-            <ExpandMoreIcon />
-          </IconButton>
-        </Box>
+      </Tooltip>
+      <Box
+        display='flex'
+        alignItems='center'
+      >
+        <TaskMenu data={task} refetchParentData={refetchParentData} />
+        <IconButton sx={{visibility: 'hidden'}} >
+          <ExpandMoreIcon />
+        </IconButton>
       </Box>
-    </Tooltip>
+    </Box>
   )
 }
 
 
 function TaskMenu({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
   const [user] = React.useContext(LoginContext)
+
+  const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
 
   const deleteTask = useMutation(async () => {
     await taskApi
@@ -89,23 +92,32 @@ function TaskMenu({ data: task, refetchParentData }: ItemInterface<TaskOut>) {
   })
 
   return (
-    <Dropdown>
-      <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
-        <MoreHorizIcon fontSize='small' />
-      </MenuButton>
-      <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
-        <MenuItem key='edit' onClick={() => {}}>
-          Edit
-        </MenuItem>
-        <MenuItem
-          key='delete'
-          onClick={() => {
-            deleteTask.mutate()
-          }}
-        >
-          Delete
-        </MenuItem>
-      </Menu>
-    </Dropdown>
+    <>
+      <Dropdown>
+        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
+          <MoreHorizIcon fontSize='small' />
+        </MenuButton>
+        <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
+          <MenuItem key='edit' onClick={() => setTaskModalOpen(true)}>
+            Edit
+          </MenuItem>
+          <MenuItem
+            key='delete'
+            onClick={() => {
+              deleteTask.mutate()
+            }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+
+      <TaskModifyModal 
+        isOpen={taskModalOpen}
+        setOpen={setTaskModalOpen}
+        onSubmit={refetchParentData}
+        item={task}
+      />
+    </>
   )
 }

@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * TaskCreateNewModal.tsx is responsible for rendering a modal with an interface to create a new task.
+ * TaskCreateModal.tsx is responsible for rendering a modal with an interface to create a new task.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -25,10 +25,13 @@ import { useMutation } from 'react-query'
 import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { BaseTask, TaskType } from '../generated-client/exam'
-import { CreateItemModalInterface } from '../interfaces/components.interface'
+import { ModalPropsCreate } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
 
-export default function TaskModal(props: CreateItemModalInterface) {
+export default function TaskCreateModal(props: ModalPropsCreate) {
+  const [, showNotification] = React.useContext(NotificationContext)
+
   const [task, setTask] = React.useState<BaseTask>({
     workflow_id: props.parentId,              // eslint-disable-line camelcase
     description: '',
@@ -62,8 +65,8 @@ export default function TaskModal(props: CreateItemModalInterface) {
       .then(() => {
         props.onSubmit()
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        showNotification({message: 'Could not create Task!', type: 'warning'})
       })
   })
 

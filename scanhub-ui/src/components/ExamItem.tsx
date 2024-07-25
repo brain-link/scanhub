@@ -24,8 +24,9 @@ import { examApi } from '../api'
 import LoginContext from '../LoginContext'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
 import ExamInfo from './ExamInfo'
-import WorkflowModal from './WorkflowModal'
-// import ExamModal from './ExamModal'
+import WorkflowCreateModal from './WorkflowCreateModal'
+import NotificationContext from '../NotificationContext'
+import ExamModifyModal from './ExamModifyModal'
 
 
 export default function ExamItem({ exam }: { exam: ExamOut }) {
@@ -74,26 +75,19 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
 
   const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
   const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)
-  // const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [, showNotification] = React.useContext(NotificationContext)
 
   const [user] = React.useContext(LoginContext)
-
-  // const updateExam = useMutation(async (data: Exam) => {
-  //   await client.examService
-  //     .update(data.id, data)
-  //     .then(() => {
-  //       refetchParentData()
-  //     })
-  //     .catch((err) => {
-  //       console.log('Error on exam update: ', err)
-  //     })
-  // })
 
   const deleteExam = useMutation(async () => {
     await examApi
       .examDeleteApiV1ExamExamIdDelete(exam.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
       .then(() => {
         refetchParentData()
+      })
+      .catch(() => {
+        showNotification({message: 'Could not delete exam', type: 'warning'})
       })
   })
 
@@ -104,7 +98,7 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
-          <MenuItem key='edit' onClick={() => {}}>
+          <MenuItem key='edit' onClick={() => setExamModalOpen(true)}>
             Edit
           </MenuItem>
           <MenuItem
@@ -138,14 +132,12 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
         </Menu>
       </Dropdown>
 
-      {/* <ExamModal   // TODO use ExamOut instead of Exam type
-        data={exam}
-        dialogOpen={examModalOpen}
-        setDialogOpen={setExamModalOpen}
-        handleModalSubmit={(data: Exam) => {
-          updateExam.mutate(data)
-        }}
-      /> */}
+      <ExamModifyModal
+        item={exam}
+        isOpen={examModalOpen}
+        setOpen={setExamModalOpen}
+        onSubmit={refetchParentData}
+      />
 
       <WorkflowFromTemplateModal
         isOpen={workflowFromTemplateModalOpen}
@@ -156,7 +148,7 @@ export function ExamMenu({ data: exam, refetchParentData }: ItemInterface<ExamOu
       />
       {
         exam.is_template ?
-          <WorkflowModal
+          <WorkflowCreateModal
             isOpen={workflowCreateNewModalOpen}
             setOpen={setWorkflowCreateNewModalOpen}
             parentId={exam.id}

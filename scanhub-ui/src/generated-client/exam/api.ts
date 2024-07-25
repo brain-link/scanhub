@@ -70,7 +70,7 @@ export interface BaseExam {
      * @type {string}
      * @memberof BaseExam
      */
-    'status': string;
+    'status': BaseExamStatusEnum;
     /**
      * 
      * @type {boolean}
@@ -84,6 +84,15 @@ export interface BaseExam {
      */
     'is_frozen': boolean;
 }
+
+export const BaseExamStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type BaseExamStatusEnum = typeof BaseExamStatusEnum[keyof typeof BaseExamStatusEnum];
+
 /**
  * Task model.
  * @export
@@ -238,7 +247,7 @@ export interface ExamOut {
      * @type {string}
      * @memberof ExamOut
      */
-    'status': string;
+    'status': ExamOutStatusEnum;
     /**
      * 
      * @type {boolean}
@@ -276,6 +285,15 @@ export interface ExamOut {
      */
     'workflows': Array<WorkflowOut>;
 }
+
+export const ExamOutStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type ExamOutStatusEnum = typeof ExamOutStatusEnum[keyof typeof ExamOutStatusEnum];
+
 /**
  * 
  * @export

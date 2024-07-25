@@ -19,10 +19,10 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import { CreateItemModalInterface } from '../interfaces/components.interface'
+import { ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
 
-export default function ExamFromTemplateModal(props: CreateItemModalInterface) {
+export default function ExamFromTemplateModal(props: ModalPropsCreate) {
   const [user] = useContext(LoginContext)
 
   const { data: exams } = useQuery<ExamOut[]>({

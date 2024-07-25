@@ -3,17 +3,6 @@
 // Component interfaces: Pass data and functions between components
 import {  ReactNode } from 'react'
 import { PatientOut } from '../generated-client/patient'
-import { Job } from './data.interface'
-import { Device } from './data.interface'
-// import { Workflow } from './data.interface';
-import { MRISequence } from './mri-data.interface'
-
-export interface ModalProps<T> {
-  handleModalSubmit: (data: T) => void
-  data: T | null
-  dialogOpen: boolean
-  setDialogOpen: (open: boolean) => void
-}
 
 export interface SequenceViewerProps {
   sequence_id: string
@@ -38,13 +27,6 @@ export interface SequenceUploadModal {
   setDialogOpen: (open: boolean) => void
 }
 
-export interface ModalComponentProps<T> {
-  onSubmit: (data: T) => void
-  onClose: () => void
-  setOpen: (open: boolean) => void
-  isOpen: boolean
-}
-
 export interface PatientTableInterface {
   patients: PatientOut[]
 }
@@ -54,12 +36,20 @@ export interface ItemInterface<T> {
   refetchParentData: () => void
 }
 
-export interface CreateItemModalInterface {
-  parentId: string
+
+export interface ModalProps {
   onSubmit: () => void
   isOpen: boolean
   setOpen: (open: boolean) => void
+}
+
+export interface ModalPropsCreate extends ModalProps {
   createTemplate: boolean
+  parentId: string
+}
+
+export interface ModalPropsModify<T> extends ModalProps {
+  item: T
 }
 
 export interface AccordionWithMenuInterface {
