@@ -107,8 +107,12 @@ export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
             sx={{ maxWidth: 120 }}
             onClick={(event) => {
               event.preventDefault()
-              mutation.mutate()
-              props.setOpen(false)
+              if (exam.name == '') {
+                showNotification({message: 'Name must not be empty.', type: 'warning'})
+              } else {
+                mutation.mutate()
+                props.setOpen(false)
+              }
             }}
           >
             Save
