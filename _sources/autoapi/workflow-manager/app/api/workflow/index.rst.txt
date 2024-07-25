@@ -14,8 +14,6 @@ Attributes
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
-   workflow-manager.app.api.workflow.EXAM_MANAGER_URI
    workflow-manager.app.api.workflow.router
    workflow-manager.app.api.workflow.producer
 
@@ -26,7 +24,6 @@ Classes
 .. autoapisummary::
 
    workflow-manager.app.api.workflow.RecoJob
-   workflow-manager.app.api.workflow.TaskEvent
 
 
 Functions
@@ -34,29 +31,14 @@ Functions
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.process
    workflow-manager.app.api.workflow.upload_result
    workflow-manager.app.api.workflow.download_result
    workflow-manager.app.api.workflow.get_data_from_file
    workflow-manager.app.api.workflow.get_image_file
-   workflow-manager.app.api.workflow.device_location_request
-   workflow-manager.app.api.workflow.retrieve_sequence
-   workflow-manager.app.api.workflow.create_record
-   workflow-manager.app.api.workflow.post_device_task
-   workflow-manager.app.api.workflow.start_scan
-   workflow-manager.app.api.workflow.forward_status
 
 
 Module Contents
 ---------------
-
-.. py:data:: SEQUENCE_MANAGER_URI
-   :value: 'host.docker.internal:8003'
-
-
-.. py:data:: EXAM_MANAGER_URI
-   :value: 'host.docker.internal:8004'
-
 
 .. py:class:: RecoJob
 
@@ -74,41 +56,9 @@ Module Contents
       :type:  pydantic.StrictStr
 
 
-.. py:class:: TaskEvent
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-
-   Task Event.
-
-
-   .. py:attribute:: task_id
-      :type:  str
-
-
-   .. py:attribute:: input
-      :type:  dict[str, str]
-
-
 .. py:data:: router
 
 .. py:data:: producer
-
-.. py:function:: process(workflow_id: uuid.UUID | str)
-   :async:
-
-
-   Process a workflow.
-
-   Parameters
-   ----------
-   workflow_id
-       UUID of the workflow to process
-
-   Returns
-   -------
-       Workflow process response
-
 
 .. py:function:: upload_result(record_id: int, file: fastapi.UploadFile = File(...)) -> dict[str, str]
    :async:
@@ -177,92 +127,5 @@ Module Contents
    ------
    HTTPException
        File not found
-
-
-.. py:function:: device_location_request(device_id)
-   :async:
-
-
-   Retrieve ip from device-manager.
-
-   Parameters
-   ----------
-   device_id
-       Id of device
-
-   Returns
-   -------
-       ip_address of device
-
-
-.. py:function:: retrieve_sequence(sequence_manager_uri, sequence_id)
-   :async:
-
-
-   Retrieve sequence and sequence-type from sequence-manager.
-
-   Parameters
-   ----------
-   sequence_manager_uri
-       uri of sequence manager
-
-   sequence_id
-       id of sequence
-
-   Returns
-   -------
-       sequence
-
-
-.. py:function:: create_record(exam_manager_uri, job_id)
-   :async:
-
-
-   Create new record at exam_manager and retrieve record_id.
-
-   Parameters
-   ----------
-   exam_manager_uri
-       uri of sequence manager
-
-   job_id
-       id of job
-
-   Returns
-   -------
-       id of newly created record
-
-
-.. py:function:: post_device_task(url, device_task)
-   :async:
-
-
-   Send task do device.
-
-   Parameters
-   ----------
-   url
-       url of the device
-
-   device_task
-       task
-
-   Returns
-   -------
-       response of device
-
-
-.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob)
-   :async:
-
-
-   Receives a job. Create a record id, trigger scan with it and returns it.
-
-
-.. py:function:: forward_status(scan_status: scanhub_libraries.models.ScanStatus)
-   :async:
-
-
-   Receives status for a job. Forwards it to the ui and returns ok.
 
 
