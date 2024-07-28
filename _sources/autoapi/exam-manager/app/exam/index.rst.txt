@@ -24,21 +24,21 @@ Functions
 
    exam-manager.app.exam.get_workflow_out_model
    exam-manager.app.exam.get_exam_out_model
-   exam-manager.app.exam.create_exam
+   exam-manager.app.exam.create_exam_template
    exam-manager.app.exam.create_exam_from_template
    exam-manager.app.exam.get_exam
    exam-manager.app.exam.get_all_patient_exams
    exam-manager.app.exam.get_all_exam_templates
    exam-manager.app.exam.exam_delete
    exam-manager.app.exam.update_exam
-   exam-manager.app.exam.create_workflow
+   exam-manager.app.exam.create_workflow_template
    exam-manager.app.exam.create_workflow_from_template
    exam-manager.app.exam.get_workflow
    exam-manager.app.exam.get_all_exam_workflows
    exam-manager.app.exam.get_all_workflow_templates
    exam-manager.app.exam.delete_workflow
    exam-manager.app.exam.update_workflow
-   exam-manager.app.exam.create_task
+   exam-manager.app.exam.create_task_template
    exam-manager.app.exam.create_task_from_template
    exam-manager.app.exam.get_task
    exam-manager.app.exam.get_all_workflow_tasks
@@ -84,11 +84,11 @@ Module Contents
        Exam pydantic model
 
 
-.. py:function:: create_exam(payload: scanhub_libraries.models.BaseExam) -> scanhub_libraries.models.ExamOut
+.. py:function:: create_exam_template(payload: scanhub_libraries.models.BaseExam) -> scanhub_libraries.models.ExamOut
    :async:
 
 
-   Create a new exam.
+   Create a new exam template.
 
    Parameters
    ----------
@@ -105,24 +105,22 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_exam_from_template(patient_id: int, template_id: uuid.UUID, new_exam_is_template: bool) -> scanhub_libraries.models.ExamOut
+.. py:function:: create_exam_from_template(patient_id: int, template_id: uuid.UUID) -> scanhub_libraries.models.ExamOut
    :async:
 
 
-   Create a new exam from template.
+   Create a new exam instance from template.
 
    Parameters
    ----------
    patient_id
-       Id of the patient, the exam is related to
+       Id of the patient, the exam instance is related to
    template_id
        ID of the template, the exam is created from
-   new_exam_is_template
-       set is_template on the new exam and its workflows and tasks
 
    Returns
    -------
-       Exam pydantic output model.
+       Exam pydantic output moddel.
 
    Raises
    ------
@@ -182,7 +180,7 @@ Module Contents
    :async:
 
 
-   Delete an exam by id. Cascade deletes the associated workflow and tasks.
+   Delete an existing exam by id.
 
    Parameters
    ----------
@@ -218,11 +216,11 @@ Module Contents
        404: Not found
 
 
-.. py:function:: create_workflow(payload: scanhub_libraries.models.BaseWorkflow) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: create_workflow_template(payload: scanhub_libraries.models.BaseWorkflow) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
-   Create new workflow.
+   Create new workflow template.
 
    Parameters
    ----------
@@ -239,20 +237,18 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_workflow_from_template(exam_id: uuid.UUID, template_id: uuid.UUID, new_workflow_is_template: bool) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: create_workflow_from_template(exam_id: uuid.UUID, template_id: uuid.UUID) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
-   Create new workflow from template.
+   Create new workflow instance from template.
 
    Parameters
    ----------
    exam_id
-       Id of the exam, the workflow is related to
+       Id of the exam, the workflow instance is related to
    template_id
        ID of the template, the workflow is created from
-   new_workflow_is_template
-       set the is_template property of the new workflow and its tasks
 
    Returns
    -------
@@ -316,7 +312,7 @@ Module Contents
    :async:
 
 
-   Delete a workflow. Cascade delete the associated tasks.
+   Delete an existing workflow.
 
    Parameters
    ----------
@@ -352,11 +348,11 @@ Module Contents
        404: Not found
 
 
-.. py:function:: create_task(payload: scanhub_libraries.models.BaseTask) -> scanhub_libraries.models.TaskOut
+.. py:function:: create_task_template(payload: scanhub_libraries.models.BaseTask) -> scanhub_libraries.models.TaskOut
    :async:
 
 
-   Create a new task.
+   Create a new task template.
 
    Parameters
    ----------
@@ -373,20 +369,18 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_task_from_template(workflow_id: uuid.UUID, template_id: uuid.UUID, new_task_is_template: bool) -> scanhub_libraries.models.TaskOut
+.. py:function:: create_task_from_template(workflow_id: uuid.UUID, template_id: uuid.UUID) -> scanhub_libraries.models.TaskOut
    :async:
 
 
-   Create a new task from template.
+   Create a new task instance from template.
 
    Parameters
    ----------
    workflow_id
-       ID of the workflow, the task is related to
+       ID of the workflow, the task instance is related to
    template_id
-       ID of the template, the task is created from
-   new_task_is_template
-       set the is_template property on the new task
+       ID of the template, the exam is created from
 
    Returns
    -------
@@ -450,7 +444,7 @@ Module Contents
    :async:
 
 
-   Delete a task.
+   Delete an existing task.
 
    Parameters
    ----------

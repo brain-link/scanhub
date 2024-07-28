@@ -165,10 +165,6 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
-   .. py:attribute:: name
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
    .. py:attribute:: comment
       :type:  sqlalchemy.orm.Mapped[str]
 
@@ -215,10 +211,6 @@ Module Contents
 
    .. py:attribute:: workflow_id
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
-
-
-   .. py:attribute:: name
-      :type:  sqlalchemy.orm.Mapped[str]
 
 
    .. py:attribute:: description
