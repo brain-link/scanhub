@@ -23,6 +23,7 @@ from scanhub_libraries.models import (
     ParametrizedSequence,
     ScanJob,
     ScanStatus,
+    TaskEvent,
     TaskOut,
     WorkflowOut,
 )
@@ -39,19 +40,6 @@ from .producer import Producer
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
-
-class RecoJob(BaseModel):
-    """RecoJob is a pydantic model for a reco job."""  # noqa: E501
-
-    record_id: int
-    input: StrictStr
-
-
-class TaskEvent(BaseModel):
-    """Task Event."""  # noqa: E501
-
-    task_id: str
-    input: dict[str, str]
 
 router = APIRouter()
 
@@ -101,10 +89,8 @@ async def process(workflow_id: UUID | str):
             if task.type == "DEVICE_TASK" and task.status == "PENDING":
                 print("Device task:")
                 print(task.destinations.get("device"), end="\n")
-                # reco_job = RecoJob(record_id=task.id, input=task.args["input"])
-                # # Send message to Kafka
-                # await producer.send("mri_cartesian_reco", reco_job.dict())
 
+                # Create a device scan job
                 job = ScanJob(  job_id=task.id,
                                 sequence_id=task.args["sequence_id"],
                                 workflow_id=task.args["workflow_id"],
@@ -112,6 +98,7 @@ async def process(workflow_id: UUID | str):
                                 acquisition_limits=task.args["acquisition_limits"],
                                 sequence_parameters=task.args["sequence_parameters"])
 
+                # Start scan
                 await start_scan(job)
 
                 # TBD set task status to "IN_PROGRESS"
@@ -140,19 +127,17 @@ async def process(workflow_id: UUID | str):
 
                 break
 
-            # Send message to Kafka
-            # await producer.send("mri_cartesian_reco", RecoJob(record_id=task.task_id, input=task.task_input).dict())
     return
 
 
-@router.post("/upload/{record_id}/")
-async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[str, str]:
+@router.post("/upload/{workflow_id}/")
+async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[str, str]:
     """Upload workflow result.
 
     Parameters
     ----------
-    record_id
-        Id of the record, which is processed by workflow
+    workflow_id
+        Id of the workflow, which is processed by workflow
     file, optional
         Data upload, e.g. reconstruction result, by default File(...)
 
@@ -160,7 +145,7 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
     -------
         Notification
     """
-    filename = f"records/{record_id}/{file.filename}"
+    filename = f"records/{workflow_id}/{file.filename}"
 
     try:
         contents = file.file.read()
@@ -174,14 +159,8 @@ async def upload_result(record_id: int, file: UploadFile = File(...)) -> dict[st
     finally:
         file.file.close()
 
-    # TBD: switch based on the preselected reco
-
-    reco_job = RecoJob(record_id=record_id, input=filename)
-
-    # TBD: On successful upload message kafka the correct topic to do reco
-
-    # Send message to Kafka
-    await producer.send("mri_cartesian_reco", reco_job.dict())
+    # Start Processing Task
+    await process(workflow_id)
 
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}
@@ -307,15 +286,17 @@ async def create_record(exam_manager_uri, job_id):
     -------
         id of newly created record
     """
-    async with httpx.AsyncClient() as client:
-        # TODO: data_path, comment ? # pylint: disable=fixme
-        data = {
-            "data_path": "unknown",
-            "comment": "Created in Acquisition Control",
-            "job_id": str(job_id),
-        }
-        response = await client.post(f"http://{exam_manager_uri}/api/v1/exam/record", json=data)
-        return response.json()["id"]
+    # async with httpx.AsyncClient() as client:
+    #     # TODO: data_path, comment ? # pylint: disable=fixme
+    #     data = {
+    #         "data_path": "unknown",
+    #         "comment": "Created in Acquisition Control",
+    #         "job_id": str(job_id),
+    #     }
+    #     response = await client.post(f"http://{exam_manager_uri}/api/v1/exam/record", json=data)
+    #     return response.json()["id"]
+
+    print("Error: Create Record not yet implmented:", job_id)
 
 
 async def post_device_task(url, device_task):

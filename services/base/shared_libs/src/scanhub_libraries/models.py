@@ -190,6 +190,13 @@ class DeviceOut(BaseDevice):
     datetime_updated: datetime | None
 
 
+class TaskEvent(BaseModel):
+    """Task Event."""  # noqa: E501
+
+    task_id: str
+    input: dict[str, str]
+
+
 class TaskType(str, Enum):
     """Task type enum."""
 
