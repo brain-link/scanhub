@@ -286,15 +286,17 @@ async def create_record(exam_manager_uri, job_id):
     -------
         id of newly created record
     """
-    async with httpx.AsyncClient() as client:
-        # TODO: data_path, comment ? # pylint: disable=fixme
-        data = {
-            "data_path": "unknown",
-            "comment": "Created in Acquisition Control",
-            "job_id": str(job_id),
-        }
-        response = await client.post(f"http://{exam_manager_uri}/api/v1/exam/record", json=data)
-        return response.json()["id"]
+    # async with httpx.AsyncClient() as client:
+    #     # TODO: data_path, comment ? # pylint: disable=fixme
+    #     data = {
+    #         "data_path": "unknown",
+    #         "comment": "Created in Acquisition Control",
+    #         "job_id": str(job_id),
+    #     }
+    #     response = await client.post(f"http://{exam_manager_uri}/api/v1/exam/record", json=data)
+    #     return response.json()["id"]
+
+    print("Error: Create Record not yet implmented:", job_id)
 
 
 async def post_device_task(url, device_task):
