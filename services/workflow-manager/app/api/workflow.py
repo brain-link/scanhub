@@ -16,7 +16,6 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, StreamingResponse
 
 # from scanhub import RecoJob # type: ignore
-from pydantic import BaseModel, StrictStr
 from scanhub_libraries.models import (
     Commands,
     DeviceTask,
