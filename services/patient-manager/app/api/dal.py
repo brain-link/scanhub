@@ -8,7 +8,7 @@ from pprint import pprint
 from sqlalchemy.future import select
 
 from .db import Patient, async_session
-from .models import BasePatient
+from scanhub_libraries.models import BasePatient
 
 
 async def add_patient(payload: BasePatient) -> Patient:

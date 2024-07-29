@@ -9,7 +9,7 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid'
 import { PatientTableInterface } from '../interfaces/components.interface'
-import { PatientOut } from '../generated-client/patient'
+import { PatientOut, Gender } from '../generated-client/patient'
 
 
 export default function PatientTable(props: PatientTableInterface) {
@@ -27,7 +27,7 @@ export default function PatientTable(props: PatientTableInterface) {
       headerName: 'Sex',
       width: 100,
       editable: false,
-      valueOptions: ['MALE', 'FEMALE', 'OTHER', 'NOT_GIVEN'],
+      valueOptions: Object.values(Gender),
     },
     { field: 'datetime_created', headerName: 'Added (date/time)', width: 250, editable: false },
     { field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 250, editable: false },

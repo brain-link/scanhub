@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Pydantic models of acquisition control."""
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from typing import Any, Optional
 from uuid import UUID
@@ -236,7 +236,7 @@ class BaseTask(BaseModel):
     args: dict[str, str]
     artifacts: dict[str, str]
     destinations: dict[str, str]
-    status: dict[TaskStatus, str]
+    status: TaskStatus
     is_template: bool
     is_frozen: bool
 
@@ -320,3 +320,33 @@ class User(BaseModel):
     token_type: str     # ... also token_type should be "bearer" as standardized in OAuth2. Exception: when adding a new user...
                         # ... the token_type is "password" and access_token contains the password.
     last_activity_unixtime: int | None
+
+
+
+# @dataclass
+class BasePatient(BaseModel):
+    """Patient pydantic base model."""
+
+    # @dataclass
+    class Config:
+        """Pydantic model configuration."""
+
+        extra = Extra.ignore
+        allow_population_by_field_name = True
+
+    first_name: str
+    last_name: str
+    birth_date: date
+    sex: Gender
+    issuer: str
+    status: Literal["NEW", "UPDATED", "DELETED"]
+    comment: str | None
+
+
+# @dataclass
+class PatientOut(BasePatient):
+    """Patient pydantic output model."""
+
+    patient_id: int = Field(alias="id")
+    datetime_created: datetime
+    datetime_updated: datetime | None

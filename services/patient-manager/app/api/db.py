@@ -13,6 +13,8 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
 
+from scanhub_libraries.models import Gender
+
 # Create base for device
 Base: DeclarativeMeta = declarative_base()
 
@@ -38,7 +40,7 @@ class Patient(Base):
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str] = mapped_column(nullable=False)
     birth_date: Mapped[datetime.date] = mapped_column(nullable=False)
-    sex: Mapped[Literal["MALE", "FEMALE", "OTHER", "NOT_GIVEN"]] = mapped_column(nullable=False)
+    sex: Mapped[Gender] = mapped_column(nullable=False)
     issuer: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[Literal["NEW", "UPDATED", "DELETED"]] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
