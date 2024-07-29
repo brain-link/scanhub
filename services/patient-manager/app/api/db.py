@@ -8,12 +8,11 @@ import os
 from typing import Literal
 
 from pydantic import BaseModel
+from scanhub_libraries.models import Gender
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
-
-from scanhub_libraries.models import Gender
 
 # Create base for device
 Base: DeclarativeMeta = declarative_base()

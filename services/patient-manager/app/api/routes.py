@@ -4,11 +4,9 @@
 """Definition of patient endpoints."""
 
 from fastapi import APIRouter, HTTPException
-
-from . import dal
-from . import db
 from scanhub_libraries.models import BasePatient, PatientOut
 
+from . import dal, db
 
 router = APIRouter()
 

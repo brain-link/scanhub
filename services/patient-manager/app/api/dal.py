@@ -5,10 +5,10 @@
 
 from pprint import pprint
 
+from scanhub_libraries.models import BasePatient
 from sqlalchemy.future import select
 
 from .db import Patient, async_session
-from scanhub_libraries.models import BasePatient
 
 
 async def add_patient(payload: BasePatient) -> Patient:
