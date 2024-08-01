@@ -216,7 +216,7 @@ export default function Navigation() {
               loginApi
                 .logoutApiV1UserloginLogoutPost()
                 .then(() => {
-                  queryClient.invalidateQueries() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
+                  queryClient.clear() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
                   setUser(null)
                 })
                 .catch((error) => {
