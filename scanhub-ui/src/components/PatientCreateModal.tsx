@@ -23,11 +23,11 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import { getPatientApi } from '../api'
 import LoginContext from '../LoginContext'
 import { BasePatient, Gender } from '../generated-client/patient'
 import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
+import { patientApi } from '../api'
 
 
 interface BaseFormEntry {
@@ -65,7 +65,6 @@ const createPatientFormContent: FormEntry[] = [
 export default function PatientCreateModal(props: ModalProps) {
   const [user, ] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
-  const patientApi = getPatientApi(user ? user.access_token : '')
 
   const initialPatient: BasePatient = {
     first_name: '',     // eslint-disable-line camelcase

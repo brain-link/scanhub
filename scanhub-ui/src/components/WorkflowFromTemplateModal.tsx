@@ -10,11 +10,9 @@ import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import * as React from 'react'
-import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { useQuery } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
@@ -22,15 +20,12 @@ import WorkflowItem from './WorkflowItem'
 import { Stack } from '@mui/material'
 
 export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
-  const [user] = useContext(LoginContext)
 
   const { data: workflows } = useQuery<WorkflowOut[]>({
     queryKey: ['allWorkflowTemplates'],
     queryFn: async () => {
       return await workflowsApi
-        .getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet({
-          headers: { Authorization: 'Bearer ' + user?.access_token },
-        })
+        .getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet()
         .then((result) => {
           return result.data
         })
@@ -39,9 +34,7 @@ export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
 
   const mutation = useMutation(async (id: string) => {
     await workflowsApi
-      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, props.createTemplate, {
-        headers: { Authorization: 'Bearer ' + user?.access_token },
-      })
+      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, props.createTemplate)
       .then(() => {
         props.onSubmit()
       })

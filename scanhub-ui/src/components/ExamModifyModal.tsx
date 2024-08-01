@@ -17,7 +17,6 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { BaseExam, ExamOut } from '../generated-client/exam'
 import { ModalPropsModify } from '../interfaces/components.interface'
@@ -32,7 +31,6 @@ const formContent: {key: keyof BaseExam, label: string}[] = [
 ]
 
 export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
-  const [user] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
   
   const [exam, setExam] = React.useState<BaseExam>({
@@ -50,9 +48,7 @@ export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
 
   const mutation = useMutation(async () => {
     await examApi
-    .updateExamApiV1ExamExamIdPut(props.item.id, 
-                                  exam, 
-                                  { headers: { Authorization: 'Bearer ' + user?.access_token } })
+    .updateExamApiV1ExamExamIdPut(props.item.id, exam)
     .then(() => {
       props.onSubmit()
     })

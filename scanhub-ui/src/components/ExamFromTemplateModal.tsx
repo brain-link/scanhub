@@ -6,7 +6,6 @@
  * exam template selection interface to generate a new exam.
  */
 import * as React from 'react'
-import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { useQuery } from 'react-query'
 import Modal from '@mui/joy/Modal'
@@ -15,20 +14,18 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/joy/Stack'
 
-import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
 
 export default function ExamFromTemplateModal(props: ModalPropsCreate) {
-  const [user] = useContext(LoginContext)
 
   const { data: exams } = useQuery<ExamOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
       return await examApi
-        .getAllExamTemplatesApiV1ExamTemplatesAllGet({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+        .getAllExamTemplatesApiV1ExamTemplatesAllGet()
         .then((result) => {
           return result.data
         })
@@ -37,9 +34,7 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
 
   const mutation = useMutation(async (id: string) => {
     await examApi
-      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, props.createTemplate, {
-        headers: { Authorization: 'Bearer ' + user?.access_token },
-      })
+      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, props.createTemplate)
       .then(() => {
         props.onSubmit()
       })

@@ -22,7 +22,6 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { BaseTask, TaskType } from '../generated-client/exam'
 import { ModalPropsCreate } from '../interfaces/components.interface'
@@ -57,12 +56,10 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
   const [artifactKey, setArtifactKey] = React.useState<string>('')
   const [artifactVal, setArtifactVal] = React.useState<string>('')
 
-  const [user] = React.useContext(LoginContext)
-
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await taskApi
-      .createTaskApiV1ExamTaskNewPost(task, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .createTaskApiV1ExamTaskNewPost(task)
       .then(() => {
         props.onSubmit()
       })

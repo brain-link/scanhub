@@ -6,7 +6,6 @@
  * task template selection interface to generate a new task.
  */
 import * as React from 'react'
-import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { useQuery } from 'react-query'
 import Modal from '@mui/joy/Modal'
@@ -15,20 +14,17 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/joy/Stack'
 
-import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { TaskOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import TaskTemplateItem from './TaskItem'
 
 export default function TaskFromTemplateModal(props: ModalPropsCreate) {
-  const [user] = useContext(LoginContext)
-
   const { data: tasks } = useQuery<TaskOut[]>({
     queryKey: ['allTaskTemplates'],
     queryFn: async () => {
       return await taskApi
-        .getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+        .getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet()
         .then((result) => {
           return result.data
         })
@@ -37,9 +33,7 @@ export default function TaskFromTemplateModal(props: ModalPropsCreate) {
 
   const mutation = useMutation(async (id: string) => {
     await taskApi
-      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, props.createTemplate, {
-        headers: { Authorization: 'Bearer ' + user?.access_token },
-      })
+      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, props.createTemplate)
       .then(() => {
         props.onSubmit()
       })
