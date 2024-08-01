@@ -37,7 +37,7 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
     name: '',
     description: '',
     type: TaskType.ProcessingTask,
-    status: 'PENDING',
+    status: {},
     args: {},
     artifacts: {},
     destinations: {},

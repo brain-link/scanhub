@@ -236,7 +236,7 @@ class BaseTask(BaseModel):
     args: dict[str, str]
     artifacts: dict[str, str]
     destinations: dict[str, str]
-    status: TaskStatus
+    status: dict[TaskStatus, str]
     is_template: bool
     is_frozen: bool
 

@@ -143,10 +143,10 @@ export interface BaseTask {
     'destinations': { [key: string]: string; };
     /**
      * 
-     * @type {TaskStatus}
+     * @type {{ [key: string]: string; }}
      * @memberof BaseTask
      */
-    'status': TaskStatus;
+    'status': { [key: string]: string; };
     /**
      * 
      * @type {boolean}
@@ -383,10 +383,10 @@ export interface TaskOut {
     'destinations': { [key: string]: string; };
     /**
      * 
-     * @type {TaskStatus}
+     * @type {{ [key: string]: string; }}
      * @memberof TaskOut
      */
-    'status': TaskStatus;
+    'status': { [key: string]: string; };
     /**
      * 
      * @type {boolean}
@@ -412,23 +412,6 @@ export interface TaskOut {
      */
     'datetime_created': string;
 }
-
-
-/**
- * Task status enum.
- * @export
- * @enum {string}
- */
-
-export const TaskStatus = {
-    Pending: 'PENDING',
-    InProgress: 'IN_PROGRESS',
-    Completed: 'COMPLETED',
-    Failed: 'FAILED',
-    Error: 'ERROR'
-} as const;
-
-export type TaskStatus = typeof TaskStatus[keyof typeof TaskStatus];
 
 
 /**
