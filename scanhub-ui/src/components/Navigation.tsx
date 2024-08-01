@@ -37,7 +37,6 @@ import LoginContext from '../LoginContext'
 import { loginApi } from '../api'
 import { UserRole } from '../generated-client/userlogin'
 import ScanhubLogo from '../media/ScanhubLogo.png'
-import NotificationContext from '../NotificationContext'
 
 
 function ColorSchemeToggle() {
@@ -88,7 +87,6 @@ function ColorSchemeToggle() {
 export default function Navigation() {
   const loc = useLocation()
   const [user, setUser] = useContext(LoginContext)
-  const [, setMessageObject] = useContext(NotificationContext)
   const queryClient = useQueryClient()
 
   // Menu elements
@@ -218,9 +216,6 @@ export default function Navigation() {
                 .then(() => {
                   queryClient.clear() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
                   setUser(null)
-                })
-                .catch((error) => {
-                  setMessageObject({message: 'Error at logout: ' + error, type: 'warning'})
                 })
             }}
           >

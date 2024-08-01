@@ -54,9 +54,6 @@ export default function ExamCreateModal(props: ModalProps) {
     .then(() => {
       props.onSubmit()
     })
-    .catch(() => {
-      showNotification({message: 'Could not create exam!', type: 'warning'})
-    })
   })
   
   return (

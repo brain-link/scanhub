@@ -40,9 +40,6 @@ export default function WorkflowCreateModal(props: ModalPropsCreate) {
       .then(() => {
         props.onSubmit()
       })
-      .catch(() => {
-        showNotification({message: 'Could not create workflow.', type: 'warning'})
-      })
   })
 
   return (

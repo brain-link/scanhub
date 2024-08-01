@@ -63,9 +63,6 @@ export default function TaskModifyModal(props: ModalPropsModify<TaskOut>) {
       .then(() => {
         props.onSubmit()
       })
-      .catch(() => {
-        showNotification({message: 'Could not update the Task!', type: 'warning'})
-      })
   })
 
   return (

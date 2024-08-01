@@ -38,9 +38,6 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
       .then(() => {
         props.onSubmit()
       })
-      .catch((err) => {
-        console.log(err)
-      })
   })
 
   return (

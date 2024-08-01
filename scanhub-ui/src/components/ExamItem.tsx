@@ -24,7 +24,6 @@ import { examApi } from '../api'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
 import ExamInfo from './ExamInfo'
 import WorkflowCreateModal from './WorkflowCreateModal'
-import NotificationContext from '../NotificationContext'
 import ExamModifyModal from './ExamModifyModal'
 import Button from '@mui/joy/Button'
 
@@ -78,16 +77,12 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
   const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
   const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)
   const [examModalOpen, setExamModalOpen] = React.useState(false)
-  const [, showNotification] = React.useContext(NotificationContext)
 
   const deleteExam = useMutation(async () => {
     await examApi
       .examDeleteApiV1ExamExamIdDelete(exam.id)
       .then(() => {
         refetchParentData()
-      })
-      .catch(() => {
-        showNotification({message: 'Could not delete exam', type: 'warning'})
       })
   })
 

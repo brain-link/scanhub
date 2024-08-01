@@ -86,9 +86,6 @@ export default function PatientCreateModal(props: ModalProps) {
         props.onSubmit()
         showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})
       })
-      .catch((err) => {
-        showNotification({message: 'Error at creating patient: ' + err.toString(), type: 'warning'})
-      })
   })
 
   function renderFormEntry(item: FormEntry, index: number) {

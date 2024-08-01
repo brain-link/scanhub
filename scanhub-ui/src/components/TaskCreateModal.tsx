@@ -63,9 +63,6 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
       .then(() => {
         props.onSubmit()
       })
-      .catch(() => {
-        showNotification({message: 'Could not create Task!', type: 'warning'})
-      })
   })
 
   return (

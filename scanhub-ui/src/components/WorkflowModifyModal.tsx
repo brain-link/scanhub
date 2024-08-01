@@ -40,9 +40,6 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
       .then(() => {
         props.onSubmit()
       })
-      .catch(() => {
-        showNotification({message: 'Could not update Workflow!', type: 'warning'})
-      })
   })
 
   return (

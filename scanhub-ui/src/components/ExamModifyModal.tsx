@@ -52,9 +52,6 @@ export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
     .then(() => {
       props.onSubmit()
     })
-    .catch(() => {
-      showNotification({message: 'Could not update exam', type: 'warning'})
-    })
   })
 
   
