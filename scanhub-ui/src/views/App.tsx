@@ -5,10 +5,11 @@
  * App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
  */
 import * as React from 'react'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Outlet } from 'react-router-dom'
 import Box from '@mui/joy/Box'
 import Snackbar from '@mui/joy/Snackbar'
+import { useQueryClient } from 'react-query'
 
 import NotificationContext from '../NotificationContext'
 import Navigation from '../components/Navigation'
@@ -19,7 +20,8 @@ export default function App() {
 
   const [messageObj, setMessageObject] = React.useContext(NotificationContext)
   const [, showNotification] = React.useContext(NotificationContext)
-  const [user] = React.useContext(LoginContext)
+  const [user, setUser] = React.useContext(LoginContext)
+  const queryClient = useQueryClient()
 
   React.useEffect(() => {
     // globally set authorization header
@@ -33,10 +35,16 @@ export default function App() {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
         return response;
-      }, function (error) {
+      }, function (error: AxiosError<{detail: string}>) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
-        showNotification({message: 'A problem with the connection to the server occurred!', type: 'warning'})
+        if (error.response?.status === 401 && error.response?.data.detail == 'Invalid token.') {
+          console.log('Invalid token (probably due to timeout): Automatic Logout!')
+          setUser(null)
+          queryClient.clear() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
+        } else {
+          showNotification({message: 'A problem with the connection to the server occurred!', type: 'warning'})
+        }
         return Promise.reject(error);
     });
     return () => {
