@@ -278,6 +278,8 @@ services:
         condition: service_started
       patient-manager:
         condition: service_started
+    extra_hosts:                                # somehow needed to find host.docker.internal under linux
+      - 'host.docker.internal:host-gateway'     # for the access to host.docker.internal to work the firewall of the host needs to allow incoming connections
 
 
   # Message Broker (Kafka)
@@ -307,20 +309,20 @@ services:
       retries: 10
 
 
- # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
-  scanhub-ui:
-    container_name: scanhub-ui
-    build:
-      context: ./scanhub-ui
-      dockerfile: ./Dockerfile
-      args:
-        NODE_ENV: "development" # use "development" or "production"
-    depends_on:
-      - patient-manager
-    volumes:
-      - ./scanhub-ui/src:/app/src
-    ports:
-      - 3000:3000
+#  # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
+#   scanhub-ui:
+#     container_name: scanhub-ui
+#     build:
+#       context: ./scanhub-ui
+#       dockerfile: ./Dockerfile
+#       args:
+#         NODE_ENV: "development" # use "development" or "production"
+#     depends_on:
+#       - patient-manager
+#     volumes:
+#       - ./scanhub-ui/src:/app/src
+#     ports:
+#       - 3000:3000
 
 
 volumes:

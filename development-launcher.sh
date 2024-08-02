@@ -54,13 +54,13 @@ sleep 15 && firefox localhost:8080 &
 sleep 2 && /usr/pgadmin4/bin/pgadmin4 >> /dev/null 2>&1 &
 sleep 2 && /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=code-oss --file-forwarding com.visualstudio.code-oss --unity-launch @@ . @@ >> /dev/null 2>&1
 
-# echo
-# cd scanhub-ui
-# echo scanhub-ui/: yarn start
-# echo To stop, press Ctrl-C, wait for parcel to rebuild, press Ctrl-C again, wait for complete shutdown!
-# yarn start
-# cd ..
-read -p "Press enter to stop the containers."
+echo
+cd scanhub-ui
+echo scanhub-ui/: yarn start
+echo To stop, press Ctrl-C, wait for parcel to rebuild, press Ctrl-C again, wait for complete shutdown!
+yarn start
+cd ..
+# read -p "Press enter to stop the containers."
 
 
 echo
