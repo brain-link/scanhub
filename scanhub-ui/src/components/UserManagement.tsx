@@ -124,6 +124,14 @@ export default function UserManagement() {
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
+      field: 'last_login_unixtime',
+      headerName: 'Last Login Time',
+      width: 200,
+      editable: false,
+      filterable: false,
+      valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Delete',

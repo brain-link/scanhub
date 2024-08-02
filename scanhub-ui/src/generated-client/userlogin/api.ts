@@ -97,6 +97,12 @@ export interface User {
      * @memberof User
      */
     'last_activity_unixtime'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'last_login_unixtime'?: number;
 }
 
 
@@ -513,7 +519,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -685,7 +691,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -755,7 +761,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.createUserApiV1UserloginCreateuserPost(user, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -815,7 +821,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid.
+     * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
      * @summary Get Current User
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

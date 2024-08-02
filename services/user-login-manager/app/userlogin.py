@@ -17,7 +17,8 @@ from scanhub_libraries.security import oauth2_scheme
 from app import dal
 from app.db import UserSQL
 
-AUTOMATIC_LOGOUT_TIME_SECONDS = 3600  # time until a login token gets invalid (1 hour)
+AUTOMATIC_LOGOUT_TIME_SECONDS = 3600    # time without activity until login token gets invalid
+FORCED_LOGOUT_TIME_SECONDS = 3600 * 11  # time until forced logout, independent of activity
 
 
 router = APIRouter()
@@ -41,12 +42,15 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     Raises
     ------
     HTTPException
-        401: Unauthorized if the token is invalid.
+        401: Unauthorized if the token is invalid or outdated.
     """
     user_db: UserSQL | None = await dal.get_user_from_token(access_token)
-    # auto-logout time 1 hour
-    if user_db is not None and user_db.access_token is not None and user_db.last_activity_unixtime is not None \
-            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:
+    if  (       user_db is not None
+            and user_db.access_token is not None
+            and user_db.last_activity_unixtime is not None 
+            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS
+            and user_db.last_login_unixtime is not None
+            and time.time() - user_db.last_login_unixtime < FORCED_LOGOUT_TIME_SECONDS):
         # reset last_activity timer
         await dal.update_user_data(user_db.username, {"last_activity_unixtime": time.time()})
         user = await get_user_out(user_db)
@@ -150,9 +154,11 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid authentication credentials",
                 headers={"WWW-Authenticate": "Bearer"})
-        # auto-logout time 1 hour
-        elif user_db.access_token is not None and \
-            time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS:
+        elif (      user_db.access_token is not None
+                and user_db.last_activity_unixtime is not None 
+                and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS
+                and user_db.last_login_unixtime is not None
+                and time.time() - user_db.last_login_unixtime < FORCED_LOGOUT_TIME_SECONDS):
             # user still logged in, return the current token
             print("Login while user is already logged in. Username:", form_data.username)
             await dal.update_user_data(form_data.username, {"last_activity_unixtime": time.time()})
@@ -164,15 +170,21 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 role=user_db.role,
                 access_token=user_db.access_token,
                 token_type="bearer",    # noqa: S106
-                last_activity_unixtime=None
+                last_activity_unixtime=None,
+                last_login_unixtime=None
             )
         else:
             # user not logged in anymore, create new token
             print("Login. Username:", form_data.username)
             newtoken = token_hex(256)
+            now = time.time()
             await dal.update_user_data(
                 form_data.username,
-                {"access_token": newtoken, "last_activity_unixtime": time.time()}
+                {
+                    "access_token": newtoken, 
+                    "last_activity_unixtime": now,
+                    "last_login_unixtime": now
+                }
             )
             return User(
                 username=user_db.username,
@@ -182,7 +194,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                 role=user_db.role,
                 access_token=newtoken,
                 token_type="bearer",    # noqa: S106
-                last_activity_unixtime=None
+                last_activity_unixtime=None,
+                last_login_unixtime=None
             )
 
 
@@ -195,28 +208,6 @@ async def logout(user: Annotated[User, Depends(get_current_user)]) -> None:
 
 async def get_user_out(user_db: UserSQL) -> User:
     """Convert UserSQL to User, replace token with empty string."""
-    # UserSQL
-    # --------
-    # username: Mapped[str] = mapped_column(primary_key=True)
-    # first_name: Mapped[str] = mapped_column(nullable=False)
-    # last_name: Mapped[str] = mapped_column(nullable=False)
-    # email: Mapped[str] = mapped_column(nullable=False)
-    # password_hash: Mapped[str] = mapped_column(nullable=False)
-    # salt used to create the password_hash
-    # salt: Mapped[str] = mapped_column(nullable=False)
-    # token used to access backend while user is logged in, None if user is logged out
-    # access_token: Mapped[str] = mapped_column(nullable=True, unique=True)
-    # time of last activity, used for automatic logout
-    # last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)
-
-    # User
-    # ---------
-    # username: str
-    # first_name: str
-    # last_name: str
-    # email: str | None
-    # access_token: str   # access_token and token_type are standardized names in OAuth2, don't change them
-    # token_type: str     # token_type should always be "bearer" as standardized in OAuth2
     return User(
         username=user_db.username,
         first_name=user_db.first_name,
@@ -225,7 +216,8 @@ async def get_user_out(user_db: UserSQL) -> User:
         role=user_db.role,
         access_token="",
         token_type="",
-        last_activity_unixtime=user_db.last_activity_unixtime
+        last_activity_unixtime=user_db.last_activity_unixtime,
+        last_login_unixtime=user_db.last_login_unixtime
     )
 
 
@@ -288,7 +280,8 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         password_hash=hashed_received_password,
         salt=salt,
         access_token=None,
-        last_activity_unixtime=None
+        last_activity_unixtime=None,
+        last_login_unixtime=None
     )
     await dal.add_user(new_user_db)
 
