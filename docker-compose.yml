@@ -276,6 +276,8 @@ services:
         condition: service_started
       acquisition-control:
         condition: service_started
+      patient-manager:
+        condition: service_started
 
 
   # Message Broker (Kafka)
@@ -305,7 +307,7 @@ services:
       retries: 10
 
 
-  # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
+ # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
   scanhub-ui:
     container_name: scanhub-ui
     build:

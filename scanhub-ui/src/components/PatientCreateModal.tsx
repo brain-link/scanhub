@@ -81,7 +81,7 @@ export default function PatientCreateModal(props: ModalProps) {
   // Post a new record and refetch records table
   const mutation = useMutation(async () => {
     await patientApi
-      .createPatientPost(patient)
+      .createPatientApiV1PatientPost(patient)
       .then((response) => {
         props.onSubmit()
         showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})

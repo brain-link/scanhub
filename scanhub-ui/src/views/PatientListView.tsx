@@ -33,7 +33,7 @@ export default function PatientListView() {
   } = useQuery<PatientOut[]>({
     queryKey: ['patients'],
     queryFn: async () => {
-      return await patientApi.getPatientListGet()
+      return await patientApi.getPatientListApiV1PatientGet()
       .then((result) => {
         return result.data
       })

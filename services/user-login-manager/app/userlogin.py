@@ -8,7 +8,7 @@ from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.hash import argon2
 from scanhub_libraries.models import User, UserRole
@@ -119,7 +119,7 @@ def compute_complex_password_hash(password: str, salt: str) -> str:
 
 
 @router.post("/login", tags=["login"])
-async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> User:
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], response: Response) -> User:
     """Login endpoint.
 
     Parameters
@@ -162,6 +162,13 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
             # user still logged in, return the current token
             print("Login while user is already logged in. Username:", form_data.username)
             await dal.update_user_data(form_data.username, {"last_activity_unixtime": time.time()})
+            response.set_cookie(
+                key="access_token",
+                value=user_db.access_token,
+                max_age=min(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+                secure=True,
+                httponly=True
+            )
             return User(
                 username=user_db.username,
                 first_name=user_db.first_name,
@@ -185,6 +192,13 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> U
                     "last_activity_unixtime": now,
                     "last_login_unixtime": now
                 }
+            )
+            response.set_cookie(
+                key="access_token",
+                value=newtoken,
+                max_age=min(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+                secure=True,
+                httponly=True
             )
             return User(
                 username=user_db.username,

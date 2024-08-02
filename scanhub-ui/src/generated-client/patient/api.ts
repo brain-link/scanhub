@@ -232,10 +232,10 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPatientPost: async (basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createPatientApiV1PatientPost: async (basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'basePatient' is not null or undefined
-            assertParamExists('createPatientPost', 'basePatient', basePatient)
-            const localVarPath = `/`;
+            assertParamExists('createPatientApiV1PatientPost', 'basePatient', basePatient)
+            const localVarPath = `/api/v1/patient/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -272,10 +272,10 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePatientPatientIdDelete: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deletePatientApiV1PatientPatientIdDelete: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('deletePatientPatientIdDelete', 'patientId', patientId)
-            const localVarPath = `/{patient_id}`
+            assertParamExists('deletePatientApiV1PatientPatientIdDelete', 'patientId', patientId)
+            const localVarPath = `/api/v1/patient/{patient_id}`
                 .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -304,13 +304,17 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Get all patients endpoint.  Returns -------     List of patient pydantic output models
-         * @summary Get Patient List
+         * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
+         * @summary Get Patient
+         * @param {number} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientListGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/`;
+        getPatientApiV1PatientPatientIdGet: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('getPatientApiV1PatientPatientIdGet', 'patientId', patientId)
+            const localVarPath = `/api/v1/patient/{patient_id}`
+                .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -338,17 +342,13 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
-         * @summary Get Patient
-         * @param {number} patientId 
+         * Get all patients endpoint.  Returns -------     List of patient pydantic output models
+         * @summary Get Patient List
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientPatientIdGet: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('getPatientPatientIdGet', 'patientId', patientId)
-            const localVarPath = `/{patient_id}`
-                .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
+        getPatientListApiV1PatientGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/patient/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -383,12 +383,12 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePatientPatientIdPut: async (patientId: number, basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updatePatientApiV1PatientPatientIdPut: async (patientId: number, basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('updatePatientPatientIdPut', 'patientId', patientId)
+            assertParamExists('updatePatientApiV1PatientPatientIdPut', 'patientId', patientId)
             // verify required parameter 'basePatient' is not null or undefined
-            assertParamExists('updatePatientPatientIdPut', 'basePatient', basePatient)
-            const localVarPath = `/{patient_id}`
+            assertParamExists('updatePatientApiV1PatientPatientIdPut', 'basePatient', basePatient)
+            const localVarPath = `/api/v1/patient/{patient_id}`
                 .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -436,10 +436,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPatientPost(basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPatientPost(basePatient, options);
+        async createPatientApiV1PatientPost(basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPatientApiV1PatientPost(basePatient, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.createPatientPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.createPatientApiV1PatientPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -449,22 +449,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePatientPatientIdDelete(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatientPatientIdDelete(patientId, options);
+        async deletePatientApiV1PatientPatientIdDelete(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatientApiV1PatientPatientIdDelete(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.deletePatientPatientIdDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all patients endpoint.  Returns -------     List of patient pydantic output models
-         * @summary Get Patient List
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getPatientListGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PatientOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientListGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientListGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.deletePatientApiV1PatientPatientIdDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -474,10 +462,22 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPatientPatientIdGet(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientPatientIdGet(patientId, options);
+        async getPatientApiV1PatientPatientIdGet(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientApiV1PatientPatientIdGet(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientPatientIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientApiV1PatientPatientIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all patients endpoint.  Returns -------     List of patient pydantic output models
+         * @summary Get Patient List
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPatientListApiV1PatientGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PatientOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientListApiV1PatientGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientListApiV1PatientGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -488,10 +488,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updatePatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatientPatientIdPut(patientId, basePatient, options);
+        async updatePatientApiV1PatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.updatePatientPatientIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.updatePatientApiV1PatientPatientIdPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -511,8 +511,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPatientPost(basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
-            return localVarFp.createPatientPost(basePatient, options).then((request) => request(axios, basePath));
+        createPatientApiV1PatientPost(basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
+            return localVarFp.createPatientApiV1PatientPost(basePatient, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete patient from database.  Parameters ---------- patient_id     Id of patient to be deleted  Raises ------ HTTPException     _description_
@@ -521,17 +521,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePatientPatientIdDelete(patientId: number, options?: any): AxiosPromise<void> {
-            return localVarFp.deletePatientPatientIdDelete(patientId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all patients endpoint.  Returns -------     List of patient pydantic output models
-         * @summary Get Patient List
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPatientListGet(options?: any): AxiosPromise<Array<PatientOut>> {
-            return localVarFp.getPatientListGet(options).then((request) => request(axios, basePath));
+        deletePatientApiV1PatientPatientIdDelete(patientId: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePatientApiV1PatientPatientIdDelete(patientId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
@@ -540,8 +531,17 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientPatientIdGet(patientId: number, options?: any): AxiosPromise<PatientOut> {
-            return localVarFp.getPatientPatientIdGet(patientId, options).then((request) => request(axios, basePath));
+        getPatientApiV1PatientPatientIdGet(patientId: number, options?: any): AxiosPromise<PatientOut> {
+            return localVarFp.getPatientApiV1PatientPatientIdGet(patientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all patients endpoint.  Returns -------     List of patient pydantic output models
+         * @summary Get Patient List
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPatientListApiV1PatientGet(options?: any): AxiosPromise<Array<PatientOut>> {
+            return localVarFp.getPatientListApiV1PatientGet(options).then((request) => request(axios, basePath));
         },
         /**
          * Update existing patient endpoint.  Parameters ---------- patient_id     Id of the patient to be updated payload     Patient data to be updated  Returns -------     Updated patient pydantic output model  Raises ------ HTTPException     404: Patient not found
@@ -551,8 +551,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
-            return localVarFp.updatePatientPatientIdPut(patientId, basePatient, options).then((request) => request(axios, basePath));
+        updatePatientApiV1PatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
+            return localVarFp.updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -572,8 +572,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public createPatientPost(basePatient: BasePatient, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).createPatientPost(basePatient, options).then((request) => request(this.axios, this.basePath));
+    public createPatientApiV1PatientPost(basePatient: BasePatient, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).createPatientApiV1PatientPost(basePatient, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -584,19 +584,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public deletePatientPatientIdDelete(patientId: number, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).deletePatientPatientIdDelete(patientId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all patients endpoint.  Returns -------     List of patient pydantic output models
-     * @summary Get Patient List
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PatientsApi
-     */
-    public getPatientListGet(options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).getPatientListGet(options).then((request) => request(this.axios, this.basePath));
+    public deletePatientApiV1PatientPatientIdDelete(patientId: number, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).deletePatientApiV1PatientPatientIdDelete(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -607,8 +596,19 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public getPatientPatientIdGet(patientId: number, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).getPatientPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
+    public getPatientApiV1PatientPatientIdGet(patientId: number, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).getPatientApiV1PatientPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all patients endpoint.  Returns -------     List of patient pydantic output models
+     * @summary Get Patient List
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApi
+     */
+    public getPatientListApiV1PatientGet(options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).getPatientListApiV1PatientGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -620,8 +620,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public updatePatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).updatePatientPatientIdPut(patientId, basePatient, options).then((request) => request(this.axios, this.basePath));
+    public updatePatientApiV1PatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -47,7 +47,7 @@ function PatientIndex() {
   } = useQuery<PatientOut, Error>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientPatientIdGet(Number(params.patientId)).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(Number(params.patientId)).then((result) => {
         return result.data
       })
     },
