@@ -98,7 +98,7 @@ async def process(workflow_id: UUID | str):
                                 sequence_parameters=task.args["sequence_parameters"])
 
                 # Start scan
-                await start_scan(job)
+                await start_scan(job, task.id.toString())
 
                 # TBD set task status to "IN_PROGRESS"
 
@@ -320,7 +320,7 @@ async def post_device_task(url, device_task):
 
 
 @router.post("/start-scan")
-async def start_scan(scan_job: ScanJob):
+async def start_scan(scan_job: ScanJob, task_id: str):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
     device_id = scan_job.device_id
     record_id = ""
@@ -335,7 +335,7 @@ async def start_scan(scan_job: ScanJob):
     sequence_json = await retrieve_sequence(SEQUENCE_MANAGER_URI, scan_job.sequence_id)
 
     # create record
-    record_id = await create_record(EXAM_MANAGER_URI, scan_job.job_id)
+    record_id = task_id#await create_record(EXAM_MANAGER_URI, scan_job.job_id)
     parametrized_sequence = ParametrizedSequence(
         acquisition_limits=scan_job.acquisition_limits,
         sequence_parameters=scan_job.sequence_parameters,
