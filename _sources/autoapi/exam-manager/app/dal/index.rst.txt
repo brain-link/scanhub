@@ -105,7 +105,7 @@ Module Contents
    :async:
 
 
-   Delete exam by id. Also deletes associated workflows and tasks.
+   Delete exam by id.
 
    Parameters
    ----------
@@ -204,7 +204,7 @@ Module Contents
    :async:
 
 
-   Delete a workflow by ID. Cascade delete the associated tasks.
+   Delete a workflow by ID.
 
    Parameters
    ----------
