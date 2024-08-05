@@ -465,7 +465,7 @@ document.write(`
 <td><p>Get a list of all exams assigned to a certain patient.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.dal.delete_exam_data" title="exam-manager.app.dal.delete_exam_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_exam_data</span></code></a>(→ bool)</p></td>
-<td><p>Delete exam by id.</p></td>
+<td><p>Delete exam by id. Also deletes associated workflows and tasks.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.dal.update_exam_data" title="exam-manager.app.dal.update_exam_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_exam_data</span></code></a>(→ app.db.Exam | None)</p></td>
 <td><p>Update existing exam entry.</p></td>
@@ -483,7 +483,7 @@ document.write(`
 <td><p>Get a list of all workflows assigned to a certain exam.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.dal.delete_workflow_data" title="exam-manager.app.dal.delete_workflow_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_workflow_data</span></code></a>(→ bool)</p></td>
-<td><p>Delete a workflow by ID.</p></td>
+<td><p>Delete a workflow by ID. Cascade delete the associated tasks.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.dal.update_workflow_data" title="exam-manager.app.dal.update_workflow_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_workflow_data</span></code></a>(→ app.db.Workflow | None)</p></td>
 <td><p>Update existing workflow in database.</p></td>
@@ -591,7 +591,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.dal.delete_exam_data">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">delete_exam_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exam_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#exam-manager.app.dal.delete_exam_data" title="Link to this definition">#</a></dt>
-<dd><p>Delete exam by id.</p>
+<dd><p>Delete exam by id. Also deletes associated workflows and tasks.</p>
 <section id="id7">
 <h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <dl class="simple">
@@ -707,7 +707,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.dal.delete_workflow_data">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">delete_workflow_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#exam-manager.app.dal.delete_workflow_data" title="Link to this definition">#</a></dt>
-<dd><p>Delete a workflow by ID.</p>
+<dd><p>Delete a workflow by ID. Cascade delete the associated tasks.</p>
 <section id="id19">
 <h3>Parameters<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
 <dl class="simple">
