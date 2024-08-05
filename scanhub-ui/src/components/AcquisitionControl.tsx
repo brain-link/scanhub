@@ -12,12 +12,28 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
-function AcquisitionControl() {
-  // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
+import { ItemSelection } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
+
+
+function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }) {
+  const [, showNotification] = React.useContext(NotificationContext)
 
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-      <IconButton size='sm' variant='plain' color='neutral'>
+      <IconButton 
+        size='sm' 
+        variant='plain' 
+        color='neutral'
+        onClick={() => {
+          if (itemSelection.itemId == undefined) {
+            showNotification({message: 'No item selected!', type: 'warning'})
+          } else {
+            // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
+            showNotification({message: 'Acquisition trigger not implemented!', type: 'warning'})
+          }
+        }}
+      >
         <PlayCircleIcon />
       </IconButton>
 

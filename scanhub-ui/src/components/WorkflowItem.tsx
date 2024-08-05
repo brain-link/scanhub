@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * WorkflowInstanceItem.tsx is responsible for rendering additional information
- * of a workflow instance item.
+ * WorkflowItem.tsx is responsible for rendering additional information
+ * of a workflow item.
  */
 import * as React from 'react'
 import { useMutation } from 'react-query'
@@ -18,31 +18,36 @@ import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SchemaIcon from '@mui/icons-material/Schema'
+import Button from '@mui/joy/Button'
 
 import { WorkflowOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
-import WorkflowInstanceInfo from '../components/WorkflowInstanceInfo'
+import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
+import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import LoginContext from '../LoginContext'
-import TaskFromTemplateModal from '../components/TaskFromTemplateModal'
+import TaskFromTemplateModal from './TaskFromTemplateModal'
+import TaskCreateModal from './TaskCreateModal'
+import WorkflowModifyModal from './WorkflowModifyModal'
 
 
-export default function WorkflowInstanceItem({ data: workflow, refetchParentData }: InstanceInterface<WorkflowOut>) {
+export default function WorkflowItem({ item: workflow, selection, onClick }: SelectableItemInterface<WorkflowOut>) {
   return (
     <Tooltip
       placement='right'
       variant='outlined'
       describeChild={false}
       arrow
-      title={<WorkflowInstanceInfo data={workflow} refetchParentData={refetchParentData} />}
+      title={<WorkflowInfo workflow={workflow} />}
     >
-      <Box
+      <Button
         sx={{ 
           width: '100%', 
           p: 0.5, 
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'flex-start'
         }}
+        variant={(selection.type == 'workflow' && selection.itemId == workflow.id) ? 'outlined' : 'plain'}
+        onClick={onClick}
       >
         <SchemaIcon fontSize='small' />
         <Box 
@@ -54,22 +59,23 @@ export default function WorkflowInstanceItem({ data: workflow, refetchParentData
             alignItems: 'start',
           }}
         >
-          <Typography level='title-sm'>{workflow.comment}</Typography>
+          <Typography level='title-sm'>{workflow.name}</Typography>
 
           <Typography level='body-xs' textColor='text.tertiary'>
             {`Created: ${new Date(workflow.datetime_created).toDateString()}`}
           </Typography>
         </Box>
-      </Box>
+      </Button>
     </Tooltip>
   )
 }
 
 
-export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: InstanceInterface<WorkflowOut>) {
+export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableItemInterface<WorkflowOut>) {
 
   const [taskFromTemplateModalOpen, setTaskFromTemplateModalOpen] = React.useState(false)
-  // const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)
+  const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
 
   const [user] = React.useContext(LoginContext)
 
@@ -84,11 +90,11 @@ export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: Inst
   return (
     <>
       <Dropdown>
-        <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
+        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
-          <MenuItem key='edit' onClick={() => {}}>
+          <MenuItem key='edit' onClick={() => {setWorkflowModalOpen(true)}}>
             Edit
           </MenuItem>
           <MenuItem
@@ -100,13 +106,25 @@ export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: Inst
             Delete
           </MenuItem>
           <MenuItem
-            key='add'
+            key='addFromTemplate'
             onClick={() => {
               setTaskFromTemplateModalOpen(true)
             }}
           >
-            Add Task
+            Add Task from Template
           </MenuItem>
+          {
+            workflow.is_template ?
+              <MenuItem
+                key='addNew'
+                onClick={() => {
+                  setTaskCreateNewModalOpen(true)
+                }}
+              >
+                Add new Task
+              </MenuItem>
+            : undefined
+          }
         </Menu>
       </Dropdown>
 
@@ -115,7 +133,27 @@ export function WorkflowInstanceMenu({ data: workflow, refetchParentData }: Inst
         setOpen={setTaskFromTemplateModalOpen}
         parentId={workflow.id}
         onSubmit={refetchParentData}
+        createTemplate={workflow.is_template}
       />
+
+      {
+        workflow.is_template ?
+          <TaskCreateModal
+            isOpen={taskCreateNewModalOpen}
+            setOpen={setTaskCreateNewModalOpen}
+            parentId={workflow.id}
+            onSubmit={refetchParentData}
+            createTemplate={workflow.is_template}
+          />
+        : undefined
+      }
+
+      <WorkflowModifyModal 
+        onSubmit={refetchParentData}
+        isOpen={workflowModalOpen}
+        setOpen={setWorkflowModalOpen}
+        item={workflow}
+      />    
     </>
   )
 }

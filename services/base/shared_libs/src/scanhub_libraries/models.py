@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Pydantic models of acquisition control."""
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from typing import Any, Optional
 from uuid import UUID
+from typing import Literal
 
 from pydantic import BaseModel, Extra, Field, Json  # noqa
 
@@ -229,6 +230,7 @@ class BaseTask(BaseModel):
         # }
 
     workflow_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
+    name: str
     description: str
     type: TaskType
     args: dict[str, str]
@@ -255,6 +257,7 @@ class BaseWorkflow(BaseModel):
 
         extra = Extra.ignore
 
+    name: str
     comment: str | None
     exam_id: Optional[UUID] = None  # Field("", description="ID of the workflow the task belongs to.")
     is_finished: bool
@@ -286,7 +289,7 @@ class BaseExam(BaseModel):
     site: str | None
     address: str | None
     creator: str
-    status: str
+    status: Literal["NEW", "UPDATED", "DELETED"]
     is_template: bool
     is_frozen: bool
 
@@ -317,3 +320,33 @@ class User(BaseModel):
     token_type: str     # ... also token_type should be "bearer" as standardized in OAuth2. Exception: when adding a new user...
                         # ... the token_type is "password" and access_token contains the password.
     last_activity_unixtime: int | None
+
+
+
+# @dataclass
+class BasePatient(BaseModel):
+    """Patient pydantic base model."""
+
+    # @dataclass
+    class Config:
+        """Pydantic model configuration."""
+
+        extra = Extra.ignore
+        allow_population_by_field_name = True
+
+    first_name: str
+    last_name: str
+    birth_date: date
+    sex: Gender
+    issuer: str
+    status: Literal["NEW", "UPDATED", "DELETED"]
+    comment: str | None
+
+
+# @dataclass
+class PatientOut(BasePatient):
+    """Patient pydantic output model."""
+
+    patient_id: int = Field(alias="id")
+    datetime_created: datetime
+    datetime_updated: datetime | None

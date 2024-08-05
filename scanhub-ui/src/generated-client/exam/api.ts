@@ -70,7 +70,7 @@ export interface BaseExam {
      * @type {string}
      * @memberof BaseExam
      */
-    'status': string;
+    'status': BaseExamStatusEnum;
     /**
      * 
      * @type {boolean}
@@ -84,6 +84,15 @@ export interface BaseExam {
      */
     'is_frozen': boolean;
 }
+
+export const BaseExamStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type BaseExamStatusEnum = typeof BaseExamStatusEnum[keyof typeof BaseExamStatusEnum];
+
 /**
  * Task model.
  * @export
@@ -96,6 +105,12 @@ export interface BaseTask {
      * @memberof BaseTask
      */
     'workflow_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseTask
+     */
+    'name': string;
     /**
      * 
      * @type {string}
@@ -153,6 +168,12 @@ export interface BaseTask {
  * @interface BaseWorkflow
  */
 export interface BaseWorkflow {
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseWorkflow
+     */
+    'name': string;
     /**
      * 
      * @type {string}
@@ -238,7 +259,7 @@ export interface ExamOut {
      * @type {string}
      * @memberof ExamOut
      */
-    'status': string;
+    'status': ExamOutStatusEnum;
     /**
      * 
      * @type {boolean}
@@ -276,6 +297,15 @@ export interface ExamOut {
      */
     'workflows': Array<WorkflowOut>;
 }
+
+export const ExamOutStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type ExamOutStatusEnum = typeof ExamOutStatusEnum[keyof typeof ExamOutStatusEnum];
+
 /**
  * 
  * @export
@@ -315,6 +345,12 @@ export interface TaskOut {
      * @memberof TaskOut
      */
     'workflow_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskOut
+     */
+    'name': string;
     /**
      * 
      * @type {string}
@@ -437,6 +473,12 @@ export interface WorkflowOut {
      * @type {string}
      * @memberof WorkflowOut
      */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
     'comment'?: string;
     /**
      * 
@@ -495,64 +537,16 @@ export interface WorkflowOut {
 export const ExamsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a new exam instance from template.  Parameters ---------- patient_id     Id of the patient, the exam instance is related to template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam From Template
-         * @param {number} patientId 
-         * @param {string} templateId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createExamFromTemplateApiV1ExamPost: async (patientId: number, templateId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('createExamFromTemplateApiV1ExamPost', 'patientId', patientId)
-            // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createExamFromTemplateApiV1ExamPost', 'templateId', templateId)
-            const localVarPath = `/api/v1/exam/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (patientId !== undefined) {
-                localVarQueryParameter['patient_id'] = patientId;
-            }
-
-            if (templateId !== undefined) {
-                localVarQueryParameter['template_id'] = templateId;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create a new exam template.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam Template
+         * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Exam
          * @param {BaseExam} baseExam 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createExamTemplateApiV1ExamTemplatesPost: async (baseExam: BaseExam, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createExamApiV1ExamNewPost: async (baseExam: BaseExam, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'baseExam' is not null or undefined
-            assertParamExists('createExamTemplateApiV1ExamTemplatesPost', 'baseExam', baseExam)
-            const localVarPath = `/api/v1/exam/templates`;
+            assertParamExists('createExamApiV1ExamNewPost', 'baseExam', baseExam)
+            const localVarPath = `/api/v1/exam/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -583,7 +577,62 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Delete an existing exam by id.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+         * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Exam From Template
+         * @param {number} patientId 
+         * @param {string} templateId 
+         * @param {boolean} newExamIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createExamFromTemplateApiV1ExamPost: async (patientId: number, templateId: string, newExamIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('createExamFromTemplateApiV1ExamPost', 'patientId', patientId)
+            // verify required parameter 'templateId' is not null or undefined
+            assertParamExists('createExamFromTemplateApiV1ExamPost', 'templateId', templateId)
+            // verify required parameter 'newExamIsTemplate' is not null or undefined
+            assertParamExists('createExamFromTemplateApiV1ExamPost', 'newExamIsTemplate', newExamIsTemplate)
+            const localVarPath = `/api/v1/exam/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (patientId !== undefined) {
+                localVarQueryParameter['patient_id'] = patientId;
+            }
+
+            if (templateId !== undefined) {
+                localVarQueryParameter['template_id'] = templateId;
+            }
+
+            if (newExamIsTemplate !== undefined) {
+                localVarQueryParameter['new_exam_is_template'] = newExamIsTemplate;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Exam Delete
          * @param {ExamId} examId 
          * @param {*} [options] Override http request option.
@@ -785,34 +834,35 @@ export const ExamsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ExamsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create a new exam instance from template.  Parameters ---------- patient_id     Id of the patient, the exam instance is related to template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam From Template
-         * @param {number} patientId 
-         * @param {string} templateId 
+         * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Exam
+         * @param {BaseExam} baseExam 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamFromTemplateApiV1ExamPost(patientId, templateId, options);
+        async createExamApiV1ExamNewPost(baseExam: BaseExam, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamApiV1ExamNewPost(baseExam, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ExamsApi.createExamApiV1ExamNewPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Exam From Template
+         * @param {number} patientId 
+         * @param {string} templateId 
+         * @param {boolean} newExamIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, newExamIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamFromTemplateApiV1ExamPost(patientId, templateId, newExamIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ExamsApi.createExamFromTemplateApiV1ExamPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Create a new exam template.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam Template
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createExamTemplateApiV1ExamTemplatesPost(baseExam: BaseExam, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamTemplateApiV1ExamTemplatesPost(baseExam, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.createExamTemplateApiV1ExamTemplatesPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete an existing exam by id.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Exam Delete
          * @param {ExamId} examId 
          * @param {*} [options] Override http request option.
@@ -887,28 +937,29 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = ExamsApiFp(configuration)
     return {
         /**
-         * Create a new exam instance from template.  Parameters ---------- patient_id     Id of the patient, the exam instance is related to template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam From Template
-         * @param {number} patientId 
-         * @param {string} templateId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.createExamFromTemplateApiV1ExamPost(patientId, templateId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Create a new exam template.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam Template
+         * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Exam
          * @param {BaseExam} baseExam 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createExamTemplateApiV1ExamTemplatesPost(baseExam: BaseExam, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.createExamTemplateApiV1ExamTemplatesPost(baseExam, options).then((request) => request(axios, basePath));
+        createExamApiV1ExamNewPost(baseExam: BaseExam, options?: any): AxiosPromise<ExamOut> {
+            return localVarFp.createExamApiV1ExamNewPost(baseExam, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing exam by id.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+         * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Exam From Template
+         * @param {number} patientId 
+         * @param {string} templateId 
+         * @param {boolean} newExamIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, newExamIsTemplate: boolean, options?: any): AxiosPromise<ExamOut> {
+            return localVarFp.createExamFromTemplateApiV1ExamPost(patientId, templateId, newExamIsTemplate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Exam Delete
          * @param {ExamId} examId 
          * @param {*} [options] Override http request option.
@@ -968,32 +1019,33 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
  */
 export class ExamsApi extends BaseAPI {
     /**
-     * Create a new exam instance from template.  Parameters ---------- patient_id     Id of the patient, the exam instance is related to template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Exam From Template
-     * @param {number} patientId 
-     * @param {string} templateId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).createExamFromTemplateApiV1ExamPost(patientId, templateId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Create a new exam template.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Exam Template
+     * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Exam
      * @param {BaseExam} baseExam 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExamsApi
      */
-    public createExamTemplateApiV1ExamTemplatesPost(baseExam: BaseExam, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).createExamTemplateApiV1ExamTemplatesPost(baseExam, options).then((request) => request(this.axios, this.basePath));
+    public createExamApiV1ExamNewPost(baseExam: BaseExam, options?: RawAxiosRequestConfig) {
+        return ExamsApiFp(this.configuration).createExamApiV1ExamNewPost(baseExam, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Delete an existing exam by id.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
+     * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Exam From Template
+     * @param {number} patientId 
+     * @param {string} templateId 
+     * @param {boolean} newExamIsTemplate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExamsApi
+     */
+    public createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, newExamIsTemplate: boolean, options?: RawAxiosRequestConfig) {
+        return ExamsApiFp(this.configuration).createExamFromTemplateApiV1ExamPost(patientId, templateId, newExamIsTemplate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
      * @summary Exam Delete
      * @param {ExamId} examId 
      * @param {*} [options] Override http request option.
@@ -1167,64 +1219,16 @@ export class HealthApi extends BaseAPI {
 export const TasksApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a new task instance from template.  Parameters ---------- workflow_id     ID of the workflow, the task instance is related to template_id     ID of the template, the exam is created from  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Task From Template
-         * @param {string} workflowId 
-         * @param {string} templateId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createTaskFromTemplateApiV1ExamTaskPost: async (workflowId: string, templateId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'workflowId', workflowId)
-            // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'templateId', templateId)
-            const localVarPath = `/api/v1/exam/task`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (workflowId !== undefined) {
-                localVarQueryParameter['workflow_id'] = workflowId;
-            }
-
-            if (templateId !== undefined) {
-                localVarQueryParameter['template_id'] = templateId;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create a new task template.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Task Template
+         * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Task
          * @param {BaseTask} baseTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskTemplateApiV1ExamTaskTemplatePost: async (baseTask: BaseTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createTaskApiV1ExamTaskNewPost: async (baseTask: BaseTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'baseTask' is not null or undefined
-            assertParamExists('createTaskTemplateApiV1ExamTaskTemplatePost', 'baseTask', baseTask)
-            const localVarPath = `/api/v1/exam/task/template`;
+            assertParamExists('createTaskApiV1ExamTaskNewPost', 'baseTask', baseTask)
+            const localVarPath = `/api/v1/exam/task/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1255,7 +1259,62 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Task From Template
+         * @param {string} workflowId 
+         * @param {string} templateId 
+         * @param {boolean} newTaskIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskFromTemplateApiV1ExamTaskPost: async (workflowId: string, templateId: string, newTaskIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'workflowId', workflowId)
+            // verify required parameter 'templateId' is not null or undefined
+            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'templateId', templateId)
+            // verify required parameter 'newTaskIsTemplate' is not null or undefined
+            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'newTaskIsTemplate', newTaskIsTemplate)
+            const localVarPath = `/api/v1/exam/task`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (workflowId !== undefined) {
+                localVarQueryParameter['workflow_id'] = workflowId;
+            }
+
+            if (templateId !== undefined) {
+                localVarQueryParameter['template_id'] = templateId;
+            }
+
+            if (newTaskIsTemplate !== undefined) {
+                localVarQueryParameter['new_task_is_template'] = newTaskIsTemplate;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -1457,34 +1516,35 @@ export const TasksApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TasksApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create a new task instance from template.  Parameters ---------- workflow_id     ID of the workflow, the task instance is related to template_id     ID of the template, the exam is created from  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Task From Template
-         * @param {string} workflowId 
-         * @param {string} templateId 
+         * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Task
+         * @param {BaseTask} baseTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, options);
+        async createTaskApiV1ExamTaskNewPost(baseTask: BaseTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskApiV1ExamTaskNewPost(baseTask, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskApiV1ExamTaskNewPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Task From Template
+         * @param {string} workflowId 
+         * @param {string} templateId 
+         * @param {boolean} newTaskIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskFromTemplateApiV1ExamTaskPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Create a new task template.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Task Template
-         * @param {BaseTask} baseTask 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createTaskTemplateApiV1ExamTaskTemplatePost(baseTask: BaseTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskTemplateApiV1ExamTaskTemplatePost(baseTask, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskTemplateApiV1ExamTaskTemplatePost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -1559,28 +1619,29 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = TasksApiFp(configuration)
     return {
         /**
-         * Create a new task instance from template.  Parameters ---------- workflow_id     ID of the workflow, the task instance is related to template_id     ID of the template, the exam is created from  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Task From Template
-         * @param {string} workflowId 
-         * @param {string} templateId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, options?: any): AxiosPromise<TaskOut> {
-            return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Create a new task template.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Task Template
+         * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Task
          * @param {BaseTask} baseTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskTemplateApiV1ExamTaskTemplatePost(baseTask: BaseTask, options?: any): AxiosPromise<TaskOut> {
-            return localVarFp.createTaskTemplateApiV1ExamTaskTemplatePost(baseTask, options).then((request) => request(axios, basePath));
+        createTaskApiV1ExamTaskNewPost(baseTask: BaseTask, options?: any): AxiosPromise<TaskOut> {
+            return localVarFp.createTaskApiV1ExamTaskNewPost(baseTask, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Task From Template
+         * @param {string} workflowId 
+         * @param {string} templateId 
+         * @param {boolean} newTaskIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<TaskOut> {
+            return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -1640,32 +1701,33 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
  */
 export class TasksApi extends BaseAPI {
     /**
-     * Create a new task instance from template.  Parameters ---------- workflow_id     ID of the workflow, the task instance is related to template_id     ID of the template, the exam is created from  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Task From Template
-     * @param {string} workflowId 
-     * @param {string} templateId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TasksApi
-     */
-    public createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Create a new task template.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Task Template
+     * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Task
      * @param {BaseTask} baseTask 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public createTaskTemplateApiV1ExamTaskTemplatePost(baseTask: BaseTask, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskTemplateApiV1ExamTaskTemplatePost(baseTask, options).then((request) => request(this.axios, this.basePath));
+    public createTaskApiV1ExamTaskNewPost(baseTask: BaseTask, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTaskApiV1ExamTaskNewPost(baseTask, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Delete an existing task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+     * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Task From Template
+     * @param {string} workflowId 
+     * @param {string} templateId 
+     * @param {boolean} newTaskIsTemplate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
      * @summary Delete Task
      * @param {TaskId} taskId 
      * @param {*} [options] Override http request option.
@@ -1734,64 +1796,16 @@ export class TasksApi extends BaseAPI {
 export const WorkflowsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow From Template
-         * @param {string} examId 
-         * @param {string} templateId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createWorkflowFromTemplateApiV1ExamWorkflowPost: async (examId: string, templateId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'examId', examId)
-            // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'templateId', templateId)
-            const localVarPath = `/api/v1/exam/workflow`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (examId !== undefined) {
-                localVarQueryParameter['exam_id'] = examId;
-            }
-
-            if (templateId !== undefined) {
-                localVarQueryParameter['template_id'] = templateId;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create new workflow template.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow Template
+         * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Workflow
          * @param {BaseWorkflow} baseWorkflow 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkflowTemplateApiV1ExamWorkflowTemplatesPost: async (baseWorkflow: BaseWorkflow, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createWorkflowApiV1ExamWorkflowNewPost: async (baseWorkflow: BaseWorkflow, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'baseWorkflow' is not null or undefined
-            assertParamExists('createWorkflowTemplateApiV1ExamWorkflowTemplatesPost', 'baseWorkflow', baseWorkflow)
-            const localVarPath = `/api/v1/exam/workflow/templates`;
+            assertParamExists('createWorkflowApiV1ExamWorkflowNewPost', 'baseWorkflow', baseWorkflow)
+            const localVarPath = `/api/v1/exam/workflow/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1822,7 +1836,62 @@ export const WorkflowsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+         * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Workflow From Template
+         * @param {string} examId 
+         * @param {string} templateId 
+         * @param {boolean} newWorkflowIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createWorkflowFromTemplateApiV1ExamWorkflowPost: async (examId: string, templateId: string, newWorkflowIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examId' is not null or undefined
+            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'examId', examId)
+            // verify required parameter 'templateId' is not null or undefined
+            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'templateId', templateId)
+            // verify required parameter 'newWorkflowIsTemplate' is not null or undefined
+            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'newWorkflowIsTemplate', newWorkflowIsTemplate)
+            const localVarPath = `/api/v1/exam/workflow`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (examId !== undefined) {
+                localVarQueryParameter['exam_id'] = examId;
+            }
+
+            if (templateId !== undefined) {
+                localVarQueryParameter['template_id'] = templateId;
+            }
+
+            if (newWorkflowIsTemplate !== undefined) {
+                localVarQueryParameter['new_workflow_is_template'] = newWorkflowIsTemplate;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Workflow
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -2024,34 +2093,35 @@ export const WorkflowsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WorkflowsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow From Template
-         * @param {string} examId 
-         * @param {string} templateId 
+         * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Workflow
+         * @param {BaseWorkflow} baseWorkflow 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, options);
+        async createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.createWorkflowApiV1ExamWorkflowNewPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Workflow From Template
+         * @param {string} examId 
+         * @param {string} templateId 
+         * @param {boolean} newWorkflowIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.createWorkflowFromTemplateApiV1ExamWorkflowPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Create new workflow template.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow Template
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Workflow
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -2126,28 +2196,29 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
     const localVarFp = WorkflowsApiFp(configuration)
     return {
         /**
-         * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow From Template
-         * @param {string} examId 
-         * @param {string} templateId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Create new workflow template.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow Template
+         * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Workflow
          * @param {BaseWorkflow} baseWorkflow 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow: BaseWorkflow, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow, options).then((request) => request(axios, basePath));
+        createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow: BaseWorkflow, options?: any): AxiosPromise<WorkflowOut> {
+            return localVarFp.createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+         * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Workflow From Template
+         * @param {string} examId 
+         * @param {string} templateId 
+         * @param {boolean} newWorkflowIsTemplate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: any): AxiosPromise<WorkflowOut> {
+            return localVarFp.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Workflow
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -2207,32 +2278,33 @@ export const WorkflowsApiFactory = function (configuration?: Configuration, base
  */
 export class WorkflowsApi extends BaseAPI {
     /**
-     * Create new workflow instance from template.  Parameters ---------- exam_id     Id of the exam, the workflow instance is related to template_id     ID of the template, the workflow is created from  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Workflow From Template
-     * @param {string} examId 
-     * @param {string} templateId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Create new workflow template.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Workflow Template
+     * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Workflow
      * @param {BaseWorkflow} baseWorkflow 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowsApi
      */
-    public createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(baseWorkflow, options).then((request) => request(this.axios, this.basePath));
+    public createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig) {
+        return WorkflowsApiFp(this.configuration).createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Delete an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
+     * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Workflow From Template
+     * @param {string} examId 
+     * @param {string} templateId 
+     * @param {boolean} newWorkflowIsTemplate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WorkflowsApi
+     */
+    public createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: RawAxiosRequestConfig) {
+        return WorkflowsApiFp(this.configuration).createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
      * @summary Delete Workflow
      * @param {WorkflowId} workflowId 
      * @param {*} [options] Override http request option.

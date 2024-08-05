@@ -3,30 +3,29 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * TaskFromTemplateModal.tsx is responsible for rendering a
- * task template selection interface to generate a new task instance.
+ * task template selection interface to generate a new task.
  */
-import List from '@mui/joy/List'
-import ListItemButton from '@mui/joy/ListItemButton'
-import Modal from '@mui/joy/Modal'
-import ModalClose from '@mui/joy/ModalClose'
-import ModalDialog from '@mui/joy/ModalDialog'
-import DialogTitle from '@mui/material/DialogTitle'
 import * as React from 'react'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { useQuery } from 'react-query'
+import Modal from '@mui/joy/Modal'
+import ModalClose from '@mui/joy/ModalClose'
+import ModalDialog from '@mui/joy/ModalDialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import Stack from '@mui/joy/Stack'
 
 import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { TaskOut } from '../generated-client/exam'
-import { CreateInstanceModalInterface } from '../interfaces/components.interface'
-import TaskTemplateItem from './TaskTemplateItem'
+import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
+import TaskTemplateItem from './TaskItem'
 
-export default function TaskFromTemplateModal(props: CreateInstanceModalInterface) {
+export default function TaskFromTemplateModal(props: ModalPropsCreate) {
   const [user] = useContext(LoginContext)
 
   const { data: tasks } = useQuery<TaskOut[]>({
-    queryKey: ['exams'],
+    queryKey: ['allTaskTemplates'],
     queryFn: async () => {
       return await taskApi
         .getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet({ headers: { Authorization: 'Bearer ' + user?.access_token } })
@@ -38,7 +37,7 @@ export default function TaskFromTemplateModal(props: CreateInstanceModalInterfac
 
   const mutation = useMutation(async (id: string) => {
     await taskApi
-      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, {
+      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, props.createTemplate, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {
@@ -59,8 +58,8 @@ export default function TaskFromTemplateModal(props: CreateInstanceModalInterfac
       >
         <ModalDialog sx={{ width: '50vw', p: 5 }}>
           <ModalClose />
-          <DialogTitle>Exam Templates</DialogTitle>
-          <List
+          <DialogTitle>Add Task from Template</DialogTitle>
+          <Stack
             sx={{
               overflow: 'scroll',
               mx: 'calc(-1 * var(--ModalDialog-padding))',
@@ -69,17 +68,18 @@ export default function TaskFromTemplateModal(props: CreateInstanceModalInterfac
           >
             {tasks &&
               tasks.map((task, idx) => (
-                <ListItemButton
-                  key={idx}
+                <TaskTemplateItem 
+                  key={idx} 
+                  item={task} 
+                  refetchParentData={() => {}} 
                   onClick={() => {
                     mutation.mutate(task.id)
                     props.setOpen(false)
-                  }}
-                >
-                  <TaskTemplateItem data={task} onClicked={() => {}} onDeleted={() => {}} />
-                </ListItemButton>
+                  }} 
+                  selection={ITEM_UNSELECTED} 
+                />
               ))}
-          </List>
+          </Stack>
         </ModalDialog>
       </Modal>
     </>

@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+ *
+ * AccordionWithMenu.tsx is responsible for rendering an accordion type element, that can fold and unfold.
+ * It differs from the regular MUI Accordion in that it allows to add a dropdown menu on the accordion summary.
+ */
 import React from 'react';
 import Stack from '@mui/joy/Stack';
 import IconButton from '@mui/joy/IconButton';

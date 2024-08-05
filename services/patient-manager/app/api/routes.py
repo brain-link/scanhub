@@ -4,11 +4,37 @@
 """Definition of patient endpoints."""
 
 from fastapi import APIRouter, HTTPException
+from scanhub_libraries.models import BasePatient, PatientOut
 
-from . import dal
-from .models import BasePatient, PatientOut, get_patient_out
+from . import dal, db
 
 router = APIRouter()
+
+
+async def get_patient_out(data: db.Patient) -> PatientOut:
+    """Get pydantic output model from database ORM model.
+
+    Parameters
+    ----------
+    data
+        Database ORM model
+
+    Returns
+    -------
+        Pydantic output model
+    """
+    return PatientOut(
+        id=data.patient_id,
+        first_name=data.first_name,
+        last_name=data.last_name,
+        birth_date=data.birth_date,
+        sex=data.sex,
+        issuer=data.issuer,
+        status=data.status,
+        comment=data.comment,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated
+    )
 
 
 @router.post("/", response_model=PatientOut, status_code=201, tags=["patients"])

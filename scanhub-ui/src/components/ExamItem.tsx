@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamInstanceItem.tsx is responsible for rendering a single exam instance item
- * in the exam instance list of a patient.
+ * ExamItem.tsx is responsible for rendering a single exam item.
  */
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import Typography from '@mui/joy/Typography'
@@ -19,16 +18,19 @@ import Tooltip from '@mui/joy/Tooltip'
 
 // Sub-components, interfaces, client
 import { ExamOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
+import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { examApi } from '../api'
 import LoginContext from '../LoginContext'
-import WorkflowFromTemplateModal from '../components/WorkflowFromTemplateModal'
-import ExamInstanceInfo from '../components/ExamInstanceInfo'
-// import ExamModal from './ExamModal'
+import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
+import ExamInfo from './ExamInfo'
+import WorkflowCreateModal from './WorkflowCreateModal'
+import NotificationContext from '../NotificationContext'
+import ExamModifyModal from './ExamModifyModal'
+import Button from '@mui/joy/Button'
 
 
-export default function ExamInstanceItem({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
+export default function ExamItem({ item: exam, selection, onClick }: SelectableItemInterface<ExamOut>) {
 
   return (
     <Tooltip
@@ -36,15 +38,17 @@ export default function ExamInstanceItem({ data: exam, refetchParentData }: Inst
       variant='outlined'
       describeChild={false}
       arrow
-      title={<ExamInstanceInfo data={exam} refetchParentData={refetchParentData} />}
+      title={<ExamInfo exam={exam} />}
     >
-      <Box
+      <Button
         sx={{ 
           width: '100%', 
           p: 0.5, 
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'flex-start'
         }}
+        variant={(selection.type == 'exam' && selection.itemId == exam.id) ? 'outlined' : 'plain'}
+        onClick={onClick}
       >
         <ListAltIcon fontSize='small' />
         <Box 
@@ -64,29 +68,20 @@ export default function ExamInstanceItem({ data: exam, refetchParentData }: Inst
             {`Created: ${new Date(exam.datetime_created).toDateString()}`}
           </Typography>
         </Box>
-      </Box>
+      </Button>
     </Tooltip>
   )
 }
 
 
-export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInterface<ExamOut>) {
+export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInterface<ExamOut>) {
 
   const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
-  // const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)
+  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [, showNotification] = React.useContext(NotificationContext)
 
   const [user] = React.useContext(LoginContext)
-
-  // const updateExam = useMutation(async (data: Exam) => {
-  //   await client.examService
-  //     .update(data.id, data)
-  //     .then(() => {
-  //       refetchParentData()
-  //     })
-  //     .catch((err) => {
-  //       console.log('Error on exam update: ', err)
-  //     })
-  // })
 
   const deleteExam = useMutation(async () => {
     await examApi
@@ -94,16 +89,19 @@ export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInte
       .then(() => {
         refetchParentData()
       })
+      .catch(() => {
+        showNotification({message: 'Could not delete exam', type: 'warning'})
+      })
   })
 
   return (
     <>
       <Dropdown>
-        <MenuButton variant='plain' sx={{ zIndex: 'snackbar', size: 'xs' }} slots={{ root: IconButton }}>
+        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
-          <MenuItem key='edit' onClick={() => {}}>
+          <MenuItem key='edit' onClick={() => setExamModalOpen(true)}>
             Edit
           </MenuItem>
           <MenuItem
@@ -115,31 +113,54 @@ export function ExamInstanceMenu({ data: exam, refetchParentData }: InstanceInte
             Delete
           </MenuItem>
           <MenuItem
-            key='add'
+            key='addFromTemplate'
             onClick={() => {
               setWorkflowFromTemplateModalOpen(true)
             }}
           >
-            Add Workflow
+            Add Workflow from Template
           </MenuItem>
+          {
+            exam.is_template ?
+              <MenuItem
+                key='addNew'
+                onClick={() => {
+                  setWorkflowCreateNewModalOpen(true)
+                }}
+              >
+                Add new Workflow
+              </MenuItem>
+            : undefined
+          }
         </Menu>
       </Dropdown>
 
-      {/* <ExamModal   // TODO use ExamOut instead of Exam type
-        data={exam}
-        dialogOpen={examModalOpen}
-        setDialogOpen={setExamModalOpen}
-        handleModalSubmit={(data: Exam) => {
-          updateExam.mutate(data)
-        }}
-      /> */}
+      <ExamModifyModal
+        item={exam}
+        isOpen={examModalOpen}
+        setOpen={setExamModalOpen}
+        onSubmit={refetchParentData}
+      />
 
       <WorkflowFromTemplateModal
         isOpen={workflowFromTemplateModalOpen}
         setOpen={setWorkflowFromTemplateModalOpen}
         parentId={exam.id}
         onSubmit={refetchParentData}
+        createTemplate={exam.is_template}
       />
+      {
+        exam.is_template ?
+          <WorkflowCreateModal
+            isOpen={workflowCreateNewModalOpen}
+            setOpen={setWorkflowCreateNewModalOpen}
+            parentId={exam.id}
+            onSubmit={refetchParentData}
+            createTemplate={exam.is_template}
+          />
+        : undefined
+      }
+
     </>
   )
 }

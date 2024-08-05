@@ -28,7 +28,7 @@ export default function App() {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setMessageObject({ ...messageObj, visible: false})}
       >
-        {messageObj.message}
+        {messageObj.message.toString()}
       </Snackbar>
 
       {/* Main content */}

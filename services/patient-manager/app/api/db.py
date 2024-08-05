@@ -5,8 +5,10 @@
 
 import datetime
 import os
+from typing import Literal
 
 from pydantic import BaseModel
+from scanhub_libraries.models import Gender
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -34,12 +36,13 @@ class Patient(Base):
 
     patient_id: Mapped[int] = mapped_column(primary_key=True)
 
-    sex: Mapped[str] = mapped_column(nullable=False)
-    name: Mapped[str] = mapped_column(nullable=False)
-    birth_date: Mapped[str] = mapped_column(nullable=False)
+    first_name: Mapped[str] = mapped_column(nullable=False)
+    last_name: Mapped[str] = mapped_column(nullable=False)
+    birth_date: Mapped[datetime.date] = mapped_column(nullable=False)
+    sex: Mapped[Gender] = mapped_column(nullable=False)
     issuer: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[str] = mapped_column(nullable=False)
-    comment: Mapped[str] = mapped_column(nullable=False)
+    status: Mapped[Literal["NEW", "UPDATED", "DELETED"]] = mapped_column(nullable=False)
+    comment: Mapped[str] = mapped_column(nullable=True)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now())  # pylint: disable=not-callable

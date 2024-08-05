@@ -5,92 +5,69 @@
 
 // TODO: Could add constructors for interfaces, requires the definition of a class and a constructor() within
 
-export interface Patient {
-  id: number
-  sex: string
-  name: string
-  birth_date: string // TODO: change this to date...
-  issuer: string
-  status: string
-  comment: string
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
+// export interface Device {
+//   id: string
+//   name: string
+//   manufacturer: string
+//   modality: string
+//   status: string
+//   site: string | null
+//   ip_address: string
+//   datetime_created: Date
+//   datetime_updated?: Date | null
+// }
 
-export interface Workflow {
-  id: number
-  name: string
-  version: string
-  author?: string
-  description?: string
-  definition: object
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
+// interface Record {
+//   id: string
+//   data_path?: string | null
+//   comment?: string | null
+//   datetime_created: Date
+// }
 
-export interface Device {
-  id: string
-  name: string
-  manufacturer: string
-  modality: string
-  status: string
-  site: string | null
-  ip_address: string
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
+// interface XYZ {
+//   X: number
+//   Y: number
+//   Z: number
+// }
 
-export interface Record {
-  id: string
-  data_path?: string | null
-  comment?: string | null
-  datetime_created: Date
-}
+// interface AcquisitonLimits {
+//   patient_height: number
+//   patient_weight: number
+//   patient_gender: string
+//   patient_age: number
+// }
 
-export interface XYZ {
-  X: number
-  Y: number
-  Z: number
-}
+// export interface SequenceParameters {
+//   fov: XYZ
+//   fov_offset: XYZ
+// }
 
-export interface AcquisitonLimits {
-  patient_height: number
-  patient_weight: number
-  patient_gender: string
-  patient_age: number
-}
+// export interface Job {
+//   id: string
+//   exam_id: string
+//   type: string
+//   comment?: string | null
+//   is_acquired?: boolean
+//   sequence_id: string
+//   device_id: string
+//   workflow_id?: number | null
+//   records?: [Record] | []
+//   datetime_created: Date
+//   datetime_updated?: Date | null
+//   acquisition_limits: AcquisitonLimits
+//   sequence_parameters: SequenceParameters
+// }
 
-export interface SequenceParameters {
-  fov: XYZ
-  fov_offset: XYZ
-}
-
-export interface Job {
-  id: string
-  exam_id: string
-  type: string
-  comment?: string | null
-  is_acquired?: boolean
-  sequence_id: string
-  device_id: string
-  workflow_id?: number | null
-  records?: [Record] | []
-  datetime_created: Date
-  datetime_updated?: Date | null
-  acquisition_limits: AcquisitonLimits
-  sequence_parameters: SequenceParameters
-}
-
-export interface Exam {
-  id: string
-  patient_id: number
-  name: string
-  jobs?: [Job] | []
-  country: string | null
-  site: string | null
-  address: string | null
-  creator: string
-  status: string
-  datetime_created: Date
-  datetime_updated?: Date | null
-}
+// export interface Exam {    // replaced with generated client
+//   id: string
+//   patient_id: number
+//   name: string
+//   jobs?: [Job] | []
+//   country: string | null
+//   site: string | null
+//   address: string | null
+//   creator: string
+//   status: string
+//   datetime_created: Date
+//   datetime_updated?: Date | null
+// }

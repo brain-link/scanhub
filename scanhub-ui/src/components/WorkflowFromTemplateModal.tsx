@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * WorkflowFromTemplateModal.tsx is responsible for rendering a
- * workflow template selection interface to generate a new workflow instance.
+ * workflow template selection interface to generate a new workflow.
  */
-import List from '@mui/joy/List'
-import ListItemButton from '@mui/joy/ListItemButton'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
@@ -19,15 +17,15 @@ import { useQuery } from 'react-query'
 import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
-import { CreateInstanceModalInterface } from '../interfaces/components.interface'
-import WorkflowTemplateItem from './WorkflowTemplateItem'
+import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
+import WorkflowItem from './WorkflowItem'
+import { Stack } from '@mui/material'
 
-export default function WorkflowFromTemplateModal(props: CreateInstanceModalInterface) {
+export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
   const [user] = useContext(LoginContext)
 
-  // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
   const { data: workflows } = useQuery<WorkflowOut[]>({
-    queryKey: ['workflows'],
+    queryKey: ['allWorkflowTemplates'],
     queryFn: async () => {
       return await workflowsApi
         .getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet({
@@ -41,7 +39,7 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
 
   const mutation = useMutation(async (id: string) => {
     await workflowsApi
-      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, {
+      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, props.createTemplate, {
         headers: { Authorization: 'Bearer ' + user?.access_token },
       })
       .then(() => {
@@ -54,13 +52,6 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
 
   return (
     <>
-      {/* <IconButton 
-        variant='soft'
-        onClick={() => {setModalOpen(true)}}
-      >
-        <AddSharpIcon />
-      </IconButton> */}
-
       <Modal
         open={props.isOpen}
         onClose={() => {
@@ -69,8 +60,8 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
       >
         <ModalDialog sx={{ width: '50vw', p: 5 }}>
           <ModalClose />
-          <DialogTitle>Exam Templates</DialogTitle>
-          <List
+          <DialogTitle>Add Workflow from Template</DialogTitle>
+          <Stack
             sx={{
               overflow: 'scroll',
               mx: 'calc(-1 * var(--ModalDialog-padding))',
@@ -79,17 +70,17 @@ export default function WorkflowFromTemplateModal(props: CreateInstanceModalInte
           >
             {workflows &&
               workflows.map((workflow, idx) => (
-                <ListItemButton
+                <WorkflowItem 
                   key={idx}
+                  item={workflow} 
                   onClick={() => {
                     mutation.mutate(workflow.id)
                     props.setOpen(false)
                   }}
-                >
-                  <WorkflowTemplateItem data={workflow} onClicked={() => {}} onDeleted={() => {}} />
-                </ListItemButton>
+                  selection={ITEM_UNSELECTED}
+                />
               ))}
-          </List>
+          </Stack>
         </ModalDialog>
       </Modal>
     </>
