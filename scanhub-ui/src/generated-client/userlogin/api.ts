@@ -324,6 +324,37 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
+         * @summary Loginfromcookie
+         * @param {string} [accessToken] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginfromcookieApiV1UserloginLoginfromcookiePost: async (accessToken?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/userlogin/loginfromcookie`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Logout endpoint.
          * @summary Logout
          * @param {*} [options] Override http request option.
@@ -386,6 +417,19 @@ export const LoginApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
+         * @summary Loginfromcookie
+         * @param {string} [accessToken] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LoginApi.loginfromcookieApiV1UserloginLoginfromcookiePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Logout endpoint.
          * @summary Logout
          * @param {*} [options] Override http request option.
@@ -423,6 +467,16 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
         },
         /**
+         * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
+         * @summary Loginfromcookie
+         * @param {string} [accessToken] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: string, options?: any): AxiosPromise<User> {
+            return localVarFp.loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Logout endpoint.
          * @summary Logout
          * @param {*} [options] Override http request option.
@@ -456,6 +510,18 @@ export class LoginApi extends BaseAPI {
      */
     public loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: RawAxiosRequestConfig) {
         return LoginApiFp(this.configuration).loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
+     * @summary Loginfromcookie
+     * @param {string} [accessToken] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LoginApi
+     */
+    public loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: string, options?: RawAxiosRequestConfig) {
+        return LoginApiFp(this.configuration).loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
