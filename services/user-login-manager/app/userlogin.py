@@ -6,7 +6,7 @@
 import time
 from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -120,7 +120,7 @@ def compute_complex_password_hash(password: str, salt: str) -> str:
 
 
 @router.post("/loginfromcookie", tags=["login"])
-async def loginfromcookie(response: Response, access_token: Annotated[str, Cookie()] = None) -> User:
+async def loginfromcookie(response: Response, access_token: Annotated[Optional[str], Cookie()] = None) -> User:
     """Login endpoint for login with cookie.
 
     Parameters
