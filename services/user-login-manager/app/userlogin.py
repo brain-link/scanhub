@@ -8,7 +8,7 @@ from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.hash import argon2
 from scanhub_libraries.models import User, UserRole
@@ -47,7 +47,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     user_db: UserSQL | None = await dal.get_user_from_token(access_token)
     if  (       user_db is not None
             and user_db.access_token is not None
-            and user_db.last_activity_unixtime is not None 
+            and user_db.last_activity_unixtime is not None
             and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS
             and user_db.last_login_unixtime is not None
             and time.time() - user_db.last_login_unixtime < FORCED_LOGOUT_TIME_SECONDS):
@@ -118,7 +118,7 @@ def compute_complex_password_hash(password: str, salt: str) -> str:
     return password_final_hash
 
 
-                
+
 @router.post("/loginfromcookie", tags=["login"])
 async def loginfromcookie(response: Response, access_token: Annotated[str, Cookie()] = None) -> User:
     """Login endpoint for login with cookie.
@@ -138,7 +138,7 @@ async def loginfromcookie(response: Response, access_token: Annotated[str, Cooki
     HTTPException
         401: Unauthorized if the username or password is wrong.
     """
-    if access_token == None:
+    if access_token is None:
         print("Missing token.")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -146,7 +146,8 @@ async def loginfromcookie(response: Response, access_token: Annotated[str, Cooki
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    current_user = await get_current_user(access_token)  # raises error if access_token is invalid, resets last activity time
+    # raises error if access_token is invalid, resets last activity time
+    current_user = await get_current_user(access_token)
 
     response.set_cookie(
         key="access_token",
@@ -207,7 +208,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
             headers={"WWW-Authenticate": "Bearer"})
 
     if (        user_db.access_token is not None
-            and user_db.last_activity_unixtime is not None 
+            and user_db.last_activity_unixtime is not None
             and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS
             and user_db.last_login_unixtime is not None
             and time.time() - user_db.last_login_unixtime < FORCED_LOGOUT_TIME_SECONDS):
@@ -223,7 +224,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
         await dal.update_user_data(
             form_data.username,
             {
-                "access_token": newtoken, 
+                "access_token": newtoken,
                 "last_activity_unixtime": now,
                 "last_login_unixtime": now
             }
