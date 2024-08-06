@@ -151,9 +151,10 @@ async def loginfromcookie(response: Response, access_token: Annotated[str, Cooki
     response.set_cookie(
         key="access_token",
         value=access_token,
-        max_age=min(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+        max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
         secure=True,
-        httponly=True
+        httponly=True,
+        samesite='strict'
     )
     return User(
         username=current_user.username,
@@ -231,9 +232,10 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
     response.set_cookie(
         key="access_token",
         value=return_token,
-        max_age=min(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+        max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
         secure=True,
-        httponly=True
+        httponly=True,
+        samesite='strict'
     )
     return User(
         username=user_db.username,
@@ -249,10 +251,13 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
 
 
 @router.post("/logout", tags=["login"])
-async def logout(user: Annotated[User, Depends(get_current_user)]) -> None:
+async def logout(user: Annotated[User, Depends(get_current_user)], response: Response) -> None:
     """Logout endpoint."""
     print("Logout. Username:", user.username)
     await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
+    response.delete_cookie(
+        key="access_token",
+    )
 
 
 async def get_user_out(user_db: UserSQL) -> User:

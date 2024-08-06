@@ -30,7 +30,7 @@ import { useColorScheme } from '@mui/joy/styles'
 import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
 import React, { useContext } from 'react'
 import { useQueryClient } from 'react-query'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
 import LoginContext from '../LoginContext'
 // import { SettingsInputSvideoRounded } from '@mui/icons-material';
@@ -88,6 +88,7 @@ export default function Navigation() {
   const loc = useLocation()
   const [user, setUser] = useContext(LoginContext)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   // Menu elements
   const menuItems = [
@@ -214,8 +215,10 @@ export default function Navigation() {
               loginApi
                 .logoutApiV1UserloginLogoutPost()
                 .then(() => {
+                  console.log('Logout.')
                   queryClient.clear() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
                   setUser(null)
+                  navigate('/')
                 })
             }}
           >
