@@ -105,6 +105,7 @@ async def create_exam_from_template(patient_id: int, template_id: UUID, new_exam
     template = await get_exam(exam_id=template_id)
     new_exam = BaseExam(**template.__dict__)
     new_exam.is_template = new_exam_is_template
+    new_exam.status = 'NEW'
     new_exam.patient_id = patient_id
 
     if not (exam := await dal.add_exam_data(payload=new_exam)):
