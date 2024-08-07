@@ -52,8 +52,8 @@ By default this builds the services with a base docker image from ghcr.io/brain-
     cd services/base
     docker build -t scanhub-base .
     cd ../..
-    docker-compose build --build-arg BASE_IMG=scanhub-base:latest
-    docker-compose up --detach
+    docker compose build --build-arg BASE_IMG=scanhub-base:latest
+    docker compose up --detach
 
 
 During development you may start scanhub and the tools for development using the development-launcher.sh script. It has an option --full-rebuild. For details, have a look in the script.
