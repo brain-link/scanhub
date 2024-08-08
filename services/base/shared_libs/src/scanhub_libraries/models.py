@@ -138,8 +138,22 @@ class DeviceTask(BaseModel):
     parametrized_sequence: ParametrizedSequence
 
 
+class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
+    """Pydantic model definition of a scanjob."""
+
+    class Config:
+        """Pydantic configuration."""
+
+        extra = Extra.ignore
+
+    job_id: int = Field(alias="id")
+    sequence_id: str
+    workflow_id: int
+    device_id: str
+
+
 class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic definition of a scanworkflow."""
+    """Pydantic definition of a scanstatus."""
 
     record_id: UUID
     status_percent: int
@@ -175,6 +189,13 @@ class DeviceOut(BaseDevice):
     id: str
     datetime_created: datetime
     datetime_updated: datetime | None
+
+
+class TaskEvent(BaseModel):
+    """Task Event."""  # noqa: E501
+
+    task_id: str
+    input: dict[str, str]
 
 
 class TaskType(str, Enum):
