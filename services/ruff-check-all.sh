@@ -1,6 +1,8 @@
 #!/bin/bash
 # Script to run ruff check on all services. Use option --fix to run ruff check --fix on all services.
 
+source .env/bin/activate
+
 if [ "$1" == --fix ]
 then
     fixornot=--fix

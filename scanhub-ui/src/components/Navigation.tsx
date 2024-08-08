@@ -30,14 +30,13 @@ import { useColorScheme } from '@mui/joy/styles'
 import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
 import React, { useContext } from 'react'
 import { useQueryClient } from 'react-query'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
 import LoginContext from '../LoginContext'
 // import { SettingsInputSvideoRounded } from '@mui/icons-material';
 import { loginApi } from '../api'
 import { UserRole } from '../generated-client/userlogin'
 import ScanhubLogo from '../media/ScanhubLogo.png'
-import NotificationContext from '../NotificationContext'
 
 
 function ColorSchemeToggle() {
@@ -88,8 +87,8 @@ function ColorSchemeToggle() {
 export default function Navigation() {
   const loc = useLocation()
   const [user, setUser] = useContext(LoginContext)
-  const [, setMessageObject] = useContext(NotificationContext)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   // Menu elements
   const menuItems = [
@@ -214,13 +213,12 @@ export default function Navigation() {
             key='logout'
             onClick={() => {
               loginApi
-                .logoutApiV1UserloginLogoutPost({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+                .logoutApiV1UserloginLogoutPost()
                 .then(() => {
-                  queryClient.invalidateQueries() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
+                  console.log('Logout.')
+                  queryClient.clear() // make sure the user who logs in next, can't see data not meant for them (e.g. list of all users)
                   setUser(null)
-                })
-                .catch((error) => {
-                  setMessageObject({message: 'Error at logout: ' + error, type: 'warning'})
+                  navigate('/')
                 })
             }}
           >

@@ -18,8 +18,7 @@ import * as React from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 
-import LoginContext from '../LoginContext'
-import { examApi, getPatientApi } from '../api'
+import { examApi, patientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
 import PatientInfo from '../components/PatientInfo'
@@ -39,9 +38,6 @@ function PatientIndex() {
   const [examModalOpen, setExamModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
 
-  const [user, ] = React.useContext(LoginContext)
-  const patientApi = getPatientApi(user ? user.access_token : '')
-
   // useQuery for caching the fetched data
   const {
     data: patient,
@@ -51,7 +47,7 @@ function PatientIndex() {
   } = useQuery<PatientOut, Error>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientPatientIdGet(Number(params.patientId)).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(Number(params.patientId)).then((result) => {
         return result.data
       })
     },
@@ -67,9 +63,7 @@ function PatientIndex() {
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
       return await examApi
-        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId), {
-          headers: { Authorization: 'Bearer ' + user?.access_token },
-        })
+        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId))
         .then((result) => {
           return result.data
         })

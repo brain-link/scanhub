@@ -9,10 +9,8 @@ import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
 import Stack from '@mui/joy/Stack'
 import * as React from 'react'
-import { useContext } from 'react'
 import { useQuery } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
 import ExamCreateModal from '../components/ExamCreateModal'
@@ -24,13 +22,12 @@ import { ITEM_UNSELECTED } from '../interfaces/components.interface'
 
 export default function Templates() {
   const [modalOpen, setModalOpen] = React.useState(false)
-  const [user] = useContext(LoginContext)
 
   const { data: exams, refetch } = useQuery<ExamOut[]>({
     queryKey: ['allExamTemplates'],
     queryFn: async () => {
       return await examApi
-        .getAllExamTemplatesApiV1ExamTemplatesAllGet({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+        .getAllExamTemplatesApiV1ExamTemplatesAllGet()
         .then((result) => {
           return result.data
         })

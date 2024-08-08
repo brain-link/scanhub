@@ -17,7 +17,6 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { userApi } from '../api'
 import { UserRole } from '../generated-client/userlogin'
 import { ModalProps } from '../interfaces/components.interface'
@@ -34,7 +33,6 @@ const createUserFormContent = [
 ]
 
 export default function UserCreateModal(props: ModalProps) {
-  const [currentuser] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
   // eslint-disable-next-line camelcase
   const [user, setUser] = React.useState({
@@ -53,9 +51,7 @@ export default function UserCreateModal(props: ModalProps) {
     mutationKey: ['users'],
     mutationFn: async () => {
       await userApi
-        .createUserApiV1UserloginCreateuserPost(user, {
-          headers: { Authorization: 'Bearer ' + currentuser?.access_token },
-        })
+        .createUserApiV1UserloginCreateuserPost(user)
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Created user ' + user.username, type: 'success'})

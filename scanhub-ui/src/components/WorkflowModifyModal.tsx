@@ -14,10 +14,8 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useContext } from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
 import { ModalPropsModify } from '../interfaces/components.interface'
@@ -34,21 +32,13 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
     is_template: props.item.is_template,      // eslint-disable-line camelcase
     is_frozen: props.item.is_frozen,          // eslint-disable-line camelcase
   })
-  const [user] = useContext(LoginContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await workflowsApi
-      .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(
-        props.item.id, 
-        workflow, 
-        {headers: { Authorization: 'Bearer ' + user?.access_token }}
-      )
+      .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
       .then(() => {
         props.onSubmit()
-      })
-      .catch(() => {
-        showNotification({message: 'Could not update Workflow!', type: 'warning'})
       })
   })
 

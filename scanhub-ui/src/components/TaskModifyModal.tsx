@@ -22,7 +22,6 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
 import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
 import { ModalPropsModify } from '../interfaces/components.interface'
@@ -57,21 +56,12 @@ export default function TaskModifyModal(props: ModalPropsModify<TaskOut>) {
   const [artifactKey, setArtifactKey] = React.useState<string>('')
   const [artifactVal, setArtifactVal] = React.useState<string>('')
 
-  const [user] = React.useContext(LoginContext)
-
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await taskApi
-      .updateTaskApiV1ExamTaskTaskIdPut(
-        props.item.id, 
-        task, 
-        {headers: { Authorization: 'Bearer ' + user?.access_token }}
-      )
+      .updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
       .then(() => {
         props.onSubmit()
-      })
-      .catch(() => {
-        showNotification({message: 'Could not update the Task!', type: 'warning'})
       })
   })
 

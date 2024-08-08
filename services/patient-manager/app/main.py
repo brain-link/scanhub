@@ -11,6 +11,8 @@ from api.db import init_db
 from api.routes import router
 
 app = FastAPI(
+    openapi_url="/api/v1/patient/openapi.json",
+    docs_url="/api/v1/patient/docs",
     title="ScanHub-UI",
     dependencies=[Depends(get_current_user)]
 )
@@ -31,4 +33,4 @@ async def startup() -> None:
     init_db()
 
 
-app.include_router(router)
+app.include_router(router, prefix="/api/v1/patient")
