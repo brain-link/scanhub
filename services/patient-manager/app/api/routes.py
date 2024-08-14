@@ -3,12 +3,15 @@
 
 """Definition of patient endpoints."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from scanhub_libraries.security import get_current_user
 from scanhub_libraries.models import BasePatient, PatientOut
 
 from . import dal, db
 
-router = APIRouter()
+router = APIRouter(
+    dependencies=[Depends(get_current_user)]
+)
 
 
 async def get_patient_out(data: db.Patient) -> PatientOut:

@@ -4,9 +4,8 @@
 """Exam manager main file."""
 
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from scanhub_libraries.security import get_current_user
 from sqlalchemy import inspect
 
 from app.db import engine, init_db
@@ -14,8 +13,7 @@ from app.exam import router
 
 app = FastAPI(
     openapi_url="/api/v1/exam/openapi.json",
-    docs_url="/api/v1/exam/docs",
-    dependencies=[Depends(get_current_user)]
+    docs_url="/api/v1/exam/docs"
 )
 
 # To be done: Specify specific origins:
@@ -66,7 +64,7 @@ async def shutdown() -> None:
     return None
 
 
-@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get("/api/v1/exam/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 

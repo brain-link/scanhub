@@ -101,6 +101,12 @@ services:
     environment:
       - DB_URI=postgresql://brainlink:data@patient-database/patients-data
       - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
+    healthcheck:
+      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
+      test: ["CMD", "curl", "http://patient-manager:8100/api/v1/patient/health/readiness"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     depends_on:
       patient-database:
         condition: service_healthy

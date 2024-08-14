@@ -5,7 +5,8 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from scanhub_libraries.security import get_current_user
 from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, WorkflowOut
 
 from app import dal
@@ -17,7 +18,9 @@ from app.db import Exam, Workflow
 # 204 = No Content: Delete
 # 404 = Not found
 
-router = APIRouter()
+router = APIRouter(
+    dependencies=[Depends(get_current_user)]
+)
 
 
 # Helper methods for workflows and exam, require recursive model translation
