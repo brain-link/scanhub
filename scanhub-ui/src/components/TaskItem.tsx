@@ -23,7 +23,6 @@ import Button from '@mui/joy/Button'
 import { TaskOut } from '../generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
-import LoginContext from '../LoginContext'
 import TaskModifyModal from './TaskModifyModal'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 
@@ -95,13 +94,12 @@ export default function TaskItem(
 
 
 function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<TaskOut>) {
-  const [user] = React.useContext(LoginContext)
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
 
   const deleteTask = useMutation(async () => {
     await taskApi
-      .deleteTaskApiV1ExamTaskTaskIdDelete(task.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .deleteTaskApiV1ExamTaskTaskIdDelete(task.id)
       .then(() => {
         refetchParentData()
       })

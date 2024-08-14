@@ -14,10 +14,8 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useContext } from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { BaseWorkflow } from '../generated-client/exam'
 import { ModalPropsCreate } from '../interfaces/components.interface'
@@ -32,21 +30,15 @@ export default function WorkflowCreateModal(props: ModalPropsCreate) {
     is_template: props.createTemplate,      // eslint-disable-line camelcase
     is_frozen: false,                       // eslint-disable-line camelcase
   })
-  const [user] = useContext(LoginContext)
 
   const [, showNotification] = React.useContext(NotificationContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await workflowsApi
-      .createWorkflowApiV1ExamWorkflowNewPost(workflow, {
-        headers: { Authorization: 'Bearer ' + user?.access_token },
-      })
+      .createWorkflowApiV1ExamWorkflowNewPost(workflow)
       .then(() => {
         props.onSubmit()
-      })
-      .catch(() => {
-        showNotification({message: 'Could not create workflow.', type: 'warning'})
       })
   })
 

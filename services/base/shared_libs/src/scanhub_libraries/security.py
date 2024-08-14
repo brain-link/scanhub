@@ -15,9 +15,13 @@ USERLOGIN_URI = "/api/v1/userlogin/getcurrentuser"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
-async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+async def get_current_user(
+            access_token: Annotated[str, Depends(oauth2_scheme)]
+        ) -> User:
     connection = http.client.HTTPConnection(USERLOGIN_HOST)
-    connection.request("GET", USERLOGIN_URI, headers={"Authorization": "Bearer " + access_token})
+    connection.request("GET", 
+                       USERLOGIN_URI, 
+                       headers={"Authorization": "Bearer " + access_token})
     response = connection.getresponse()
     if response.status != 200:
         print("Received invalid token.")
@@ -36,4 +40,5 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
                     role=responsebody_json["role"],
                     access_token="",
                     token_type="",
-                    last_activity_unixtime=None)
+                    last_activity_unixtime=None,
+                    last_login_unixtime=None)

@@ -51,6 +51,8 @@ class UserSQL(Base):
     access_token: Mapped[str] = mapped_column(nullable=True, unique=True)
     # time of last activity, used for automatic logout
     last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)
+    # time of last login, used for forced logout
+    last_login_unixtime: Mapped[int] = mapped_column(nullable=True)
 
 
 

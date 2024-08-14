@@ -50,12 +50,9 @@ export default function ExamCreateModal(props: ModalProps) {
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await examApi
-    .createExamApiV1ExamNewPost(exam, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+    .createExamApiV1ExamNewPost(exam)
     .then(() => {
       props.onSubmit()
-    })
-    .catch(() => {
-      showNotification({message: 'Could not create exam!', type: 'warning'})
     })
   })
   

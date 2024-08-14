@@ -8,7 +8,7 @@ echo
 echo scanhub: git status
 git status
 
-sed 308,321s/^/#/ -i docker-compose.yml    # add line comment to start of lines 308 to 321. This allows for faster development by disabling the frontend container and running the frontend directly with this script.
+# sed 308,321s/^/#/ -i docker-compose.yml    # add line comment to start of lines 308 to 321. This allows for faster development by disabling the frontend container and running the frontend directly with this script.
 
 if [ "$1" == --full-rebuild ]
 then
@@ -50,7 +50,7 @@ echo
 echo starting firefox in 15 seconds
 echo starting pgadmin4 in 2 seconds
 echo starting vscode for scanhub in 2 seconds
-sleep 15 && firefox localhost:3000 &
+sleep 15 && firefox localhost:8080 &
 sleep 2 && /usr/pgadmin4/bin/pgadmin4 >> /dev/null 2>&1 &
 sleep 2 && /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=code-oss --file-forwarding com.visualstudio.code-oss --unity-launch @@ . @@ >> /dev/null 2>&1
 
@@ -60,11 +60,13 @@ echo scanhub-ui/: yarn start
 echo To stop, press Ctrl-C, wait for parcel to rebuild, press Ctrl-C again, wait for complete shutdown!
 yarn start
 cd ..
+# read -p "Press enter to stop the containers."
+
 
 echo
 echo scanhub: docker-compose down
 docker-compose down
-sed 308,321s/^#// -i docker-compose.yml    # remove possible line comments at start of lines 308 to 321. Enable frontend container again.
+# sed 308,321s/^#// -i docker-compose.yml    # remove possible line comments at start of lines 308 to 321. Enable frontend container again.
 
 echo
 echo until next time!

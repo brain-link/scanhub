@@ -24,7 +24,6 @@ import { WorkflowOut } from '../generated-client/exam'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
-import LoginContext from '../LoginContext'
 import TaskFromTemplateModal from './TaskFromTemplateModal'
 import TaskCreateModal from './TaskCreateModal'
 import WorkflowModifyModal from './WorkflowModifyModal'
@@ -77,11 +76,9 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
   const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)
   const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
 
-  const [user] = React.useContext(LoginContext)
-
   const deleteWorkflow = useMutation(async () => {
     await workflowsApi
-      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id, { headers: { Authorization: 'Bearer ' + user?.access_token } })
+      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id)
       .then(() => {
         refetchParentData()
       })
