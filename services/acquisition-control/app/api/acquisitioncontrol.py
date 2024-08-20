@@ -166,6 +166,10 @@ async def start_scan(scan_job: ISMRMRDHeader):
     # create record
     record_id = "blub" # await create_record(EXAM_MANAGER_URI, scan_job.measurementInformation.measurementID)
     scan_job.userParameters.userParameterString.append(UserParametersString(name="record_id", value=record_id))
+    # measurementid = record_id
+    # protocolname = workflow
+    # do this in device manager
+    # create here only measurement and gather data
 
     # start scan and forward sequence, workflow, record_id
     logging.debug("Received job: %s, Generated record id: %s", scan_job.measurementInformation.measurementID, record_id)
