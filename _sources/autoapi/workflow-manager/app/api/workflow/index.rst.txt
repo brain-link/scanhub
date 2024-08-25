@@ -18,6 +18,7 @@ Attributes
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
    workflow-manager.app.api.workflow.router
    workflow-manager.app.api.workflow.producer
+   workflow-manager.app.api.workflow.loop
 
 
 Functions
@@ -25,7 +26,13 @@ Functions
 
 .. autoapisummary::
 
+   workflow-manager.app.api.workflow.consume_finished_tasks
+   workflow-manager.app.api.workflow.handle_finished_task
+   workflow-manager.app.api.workflow.update_task_status_in_db
+   workflow-manager.app.api.workflow.get_workflow_id_by_task_id
    workflow-manager.app.api.workflow.process
+   workflow-manager.app.api.workflow.handle_device_task
+   workflow-manager.app.api.workflow.handle_processing_task
    workflow-manager.app.api.workflow.upload_result
    workflow-manager.app.api.workflow.download_result
    workflow-manager.app.api.workflow.get_data_from_file
@@ -53,7 +60,49 @@ Module Contents
 
 .. py:data:: producer
 
-.. py:function:: process(workflow_id: uuid.UUID | str)
+.. py:function:: consume_finished_tasks()
+   :async:
+
+
+   Consume finished tasks from the Kafka topic and handle them.
+
+
+.. py:function:: handle_finished_task(task_id: str, status: str)
+   :async:
+
+
+   Handle finished task by updating the task status and processing the next task.
+
+   Parameters
+   ----------
+   task_id
+       ID of the task to handle
+   status
+       Status of the task
+
+
+.. py:function:: update_task_status_in_db(task_id: str, status: str)
+   :async:
+
+
+   Update the task status in the database.
+
+   Parameters
+   ----------
+   task_id
+       ID of the task to update
+   status
+       New status of the task
+
+
+.. py:function:: get_workflow_id_by_task_id(task_id: str) -> str
+   :async:
+
+
+   Fetch the workflow ID associated with the task ID.
+
+
+.. py:function:: process(workflow_id: uuid.UUID | str) -> dict[str, str]
    :async:
 
 
@@ -67,6 +116,30 @@ Module Contents
    Returns
    -------
        Workflow process response
+
+
+.. py:function:: handle_device_task(task: scanhub_libraries.models.TaskOut)
+   :async:
+
+
+   Handle a device task by creating a scan job and starting the scan.
+
+   Parameters
+   ----------
+   task
+       Task to handle
+
+
+.. py:function:: handle_processing_task(task: scanhub_libraries.models.TaskOut)
+   :async:
+
+
+   Handle a processing task by sending a message to the appropriate Kafka topic.
+
+   Parameters
+   ----------
+   task
+       Task to handle
 
 
 .. py:function:: upload_result(workflow_id: str, file: fastapi.UploadFile = File(...)) -> dict[str, str]
@@ -224,4 +297,6 @@ Module Contents
 
    Receives status for a job. Forwards it to the ui and returns ok.
 
+
+.. py:data:: loop
 
