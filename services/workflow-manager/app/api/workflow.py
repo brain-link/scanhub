@@ -3,17 +3,18 @@
 
 """Workflow manager endpoints."""
 
-import json
-import logging
-import operator
-import os
-from typing import Generator
-from uuid import UUID
-
+import asyncio
 import httpx
-from fastapi import APIRouter, File, HTTPException, UploadFile, status
-from fastapi.encoders import jsonable_encoder
+import json
+import os
+import logging
+from uuid import UUID
+from typing import Generator
+from fastapi import HTTPException, UploadFile, File, APIRouter
 from fastapi.responses import FileResponse, StreamingResponse
+from pydantic import BaseModel
+from some_module import EXAM_MANAGER_URI, SEQUENCE_MANAGER_URI, TaskOut, WorkflowOut, ScanJob, TaskEvent, DeviceTask, ParametrizedSequence, Commands, ScanStatus
+from aiokafka import AIOKafkaConsumer
 
 # from scanhub import RecoJob # type: ignore
 from scanhub_libraries.models import (
@@ -45,9 +46,66 @@ router = APIRouter()
 # Get the producer singleton instance
 producer = Producer()
 
+# Kafka consumer setup
+async def consume_finished_tasks():
+    """Consume finished tasks from the Kafka topic and handle them."""
+    consumer = AIOKafkaConsumer(
+        'task_completion_events',
+        bootstrap_servers='localhost:9092',
+        group_id="workflow_manager"
+    )
+    await consumer.start()
+    try:
+        async for msg in consumer:
+            message = json.loads(msg.value)
+            task_id = message['task_id']
+            status = message['status']
+            await handle_finished_task(task_id, status)
+    finally:
+        await consumer.stop()
+
+
+async def handle_finished_task(task_id: str, status: str):
+    """Handle finished task by updating the task status and processing the next task.
+    
+    Parameters
+    ----------
+    task_id
+        ID of the task to handle
+    status
+        Status of the task
+    """
+    # Update task status in the database
+    await update_task_status_in_db(task_id, status)
+
+    # Fetch the workflow ID associated with the task
+    workflow_id = await get_workflow_id_by_task_id(task_id)
+
+    # Process the next pending task
+    await process(workflow_id)
+
+
+async def update_task_status_in_db(task_id: str, status: str):
+    """Update the task status in the database.
+    
+    Parameters
+    ----------
+    task_id
+        ID of the task to update
+    status
+        New status of the task
+    """
+    # Simulate updating the database
+    print(f"Updating task {task_id} status to {status} in the database")
+
+async def get_workflow_id_by_task_id(task_id: str) -> str:
+    """Fetch the workflow ID associated with the task ID."""
+    # Simulate fetching the workflow ID from the database
+    return "some-workflow-id"
+
 
 @router.get("/process/{workflow_id}/")
-async def process(workflow_id: UUID | str):
+async def process(workflow_id: UUID | str) -> dict[str, str]:
     """Process a workflow.
 
     Parameters
@@ -59,72 +117,92 @@ async def process(workflow_id: UUID | str):
     -------
         Workflow process response
     """
-    # Debugging
+    # Debugging: Remove hardcoded workflow_id and use the provided one
     workflow_id = 'ae7d4105-8312-436f-bc48-98f57c2fe86d' #'cec25959-c451-4faf-9093-97431aba41e6'
 
+    # URI for the exam manager service
     exam_manager_uri = EXAM_MANAGER_URI
-
+    # Create an asynchronous HTTP client
     async with httpx.AsyncClient() as client:
-        # TODO: data_path, comment ? # pylint: disable=fixme
+        # Fetch the workflow data from the exam manager service
         response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
-
-        assert response.status_code == 200  # noqa: S101
-
+        # Raise an exception if the request was not successful
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail="Failed to fetch workflow data")
+        # Parse the response JSON into a WorkflowOut object
         workflow_raw = response.json()
         workflow = WorkflowOut(**workflow_raw)
-
-        print("Workflow tasks: ")
-
         # Sort the tasks by datetime_created
         workflow.tasks.sort(key=operator.attrgetter('datetime_created'))
-
         task: TaskOut
+        # Iterate through the tasks and handle them based on their type and status
         for task in workflow.tasks:
-            # Debugging
-            # print(task.id, end="\n")
-            # print(task.type, end="\n")
-            # print(task.description if task.description else "No description", end="\n")
-
             if task.type == "DEVICE_TASK" and task.status == "PENDING":
-                print("Device task:")
-                print(task.destinations.get("device"), end="\n")
+                # Handle device task
+                await handle_device_task(task)
+                break  # Exit after handling the first pending task
+            elif task.type == "PROCESSING_TASK" and task.status == "PENDING":
+                # Handle processing task
+                await handle_processing_task(task)
+                break  # Exit after handling the first pending task
+    return {"message": "Workflow processed successfully"}
 
-                # Create a device scan job
-                job = ScanJob(  job_id=task.id,
-                                sequence_id=task.args["sequence_id"],
-                                workflow_id=task.args["workflow_id"],
-                                device_id=task.destinations["device"],
-                                acquisition_limits=task.args["acquisition_limits"],
-                                sequence_parameters=task.args["sequence_parameters"])
 
-                # Start scan
-                await start_scan(job, task.id.toString())
+async def handle_device_task(task: TaskOut):
+    """Handle a device task by creating a scan job and starting the scan.
+    
+    Parameters
+    ----------
+    task
+        Task to handle
+    """
+    print("Device task:")
+    print(task.destinations.get("device"), end="\n")
 
-                # TBD set task status to "IN_PROGRESS"
+    # Create a device scan job
+    job = ScanJob(
+        job_id=task.id,
+        sequence_id=task.args["sequence_id"],
+        workflow_id=task.args["workflow_id"],
+        device_id=task.destinations["device"],
+        acquisition_limits=task.args["acquisition_limits"],
+        sequence_parameters=task.args["sequence_parameters"]
+    )
 
-                break
+    # Start the scan job
+    await start_scan(job, str(task.id))
 
-            if task.type == "PROCESSING_TASK" and task.status == "PENDING":
-                # print(task.destinations, end="\n")
-                print("Processing task:")
+    # Update task status to IN_PROGRESS
+    task.status = "IN_PROGRESS" # TBD do this also in the data base
 
-                topic = task.destinations.get("topic")
+    return
 
-                task_event = TaskEvent(task_id=str(task.id), input=task.args)
 
-                print("Task event", end="\n")
-                print(task_event, end="\n")
+async def handle_processing_task(task: TaskOut):
+    """Handle a processing task by sending a message to the appropriate Kafka topic.
+    
+    Parameters
+    ----------
+    task
+        Task to handle
+    """
+    print("Processing task:")
+    topic = task.destinations.get("topic")
 
-                print("Send to topic", end="\n")
-                print(topic, end="\n")
+    # Create a task event
+    task_event = TaskEvent(task_id=str(task.id), input=task.args)
 
-                # Send message to Kafka
-                # await producer.send("mri_cartesian_reco", reco_job.dict())
-                await producer.send(topic, task_event.dict())
+    # Debugging: Print task event and topic
+    print("Task event", end="\n")
+    print(task_event, end="\n")
+    print("Send to topic", end="\n")
+    print(topic, end="\n")
 
-                # TBD set task status to "IN_PROGRESS"
+    # Send the task event to the Kafka topic
+    await producer.send(topic, task_event.dict())
 
-                break
+    # Update task status to IN_PROGRESS
+    task.status = "IN_PROGRESS" # TBD do this also in the data base
 
     return
 
@@ -362,3 +440,8 @@ async def forward_status(scan_status: ScanStatus):
     """Receives status for a job. Forwards it to the ui and returns ok."""
     print("Received status: %s", scan_status)
     return {"message": "Status submitted"}
+
+
+# Start the Kafka consumer in the background
+loop = asyncio.get_event_loop()
+loop.create_task(consume_finished_tasks())
