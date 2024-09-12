@@ -8,8 +8,6 @@ echo
 echo scanhub: git status
 git status
 
-# sed 308,321s/^/#/ -i docker-compose.yml    # add line comment to start of lines 308 to 321. This allows for faster development by disabling the frontend container and running the frontend directly with this script.
-
 if [ "$1" == --full-rebuild ]
 then
     echo
@@ -66,7 +64,6 @@ cd ..
 echo
 echo scanhub: docker-compose down
 docker-compose down
-# sed 308,321s/^#// -i docker-compose.yml    # remove possible line comments at start of lines 308 to 321. Enable frontend container again.
 
 echo
 echo until next time!

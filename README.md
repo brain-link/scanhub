@@ -40,21 +40,34 @@ https://github.com/brain-link/scanhub-ui/assets/42237900/beb8edc9-04c4-4f96-83d7
 Installation
 ------------
 
-Scanhub is deployed using docker and docker-compose. Make sure they are installed first. To build scanhub, make sure that there is an internet connection.
+Scanhub is deployed using docker and docker-compose. Make sure they are installed. On the first installation the Scanhub containers need to build with docker-compose. The containers also need to be built again after making certain changes during development, in particular after making changes to the base container, after installing libraries or when changing other structural aspects. When the containers are built, Scanhub can be started and stopped with docker-compose.
 
-Building and running scanhub can be achieved using the following docker-compose command inside the scanhub repository:
+### Building Scanhub: 
 
-    docker-compose up --detach --build
-
-
-By default this builds the services with a base docker image from ghcr.io/brain-link/scanhub/scanhub-base:latest. To incorporate the latest changes, as during development, rebuild the scanhub-base image and use the build-arg BASE_IMG=scanhub-base:latest. To do this, build and start the project with the following commands:
+Make sure that there is an internet connection, then apply the following steps:
 
     cd services/base
     docker build -t scanhub-base .
     cd ../..
-    docker compose build --build-arg BASE_IMG=scanhub-base:latest
-    docker compose up --detach
+    docker-compose --profile with-frontend build --build-arg BASE_IMG=scanhub-base:latest
 
+The Scanhub containers are built using a base image. The above commands create this base image from the latest state of the code on the local computer. To alternatively use a base image from ghcr.io/brain-link/scanhub/scanhub-base:latest, you may run only:
+
+    docker-compose --profile with-frontend build
+
+### Starting Scanhub:
+
+Run:
+
+    docker-compose --profile with-frontend up --detach
+
+### Stopping Scanhub:
+
+Run:
+
+    docker-compose --profile with-frontend down
+
+### Starting Scanhub and tools for development
 
 During development you may start scanhub and the tools for development using the development-launcher.sh script. It has an option --full-rebuild. For details, have a look in the script.
 
