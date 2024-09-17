@@ -46,12 +46,7 @@ fi
 
 
 cd tests
-
-cd services/exam-manager
-source .env/bin/activate
-pytest
-deactivate
-
+source run_tests.sh
 cd ..
 
 

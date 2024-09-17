@@ -170,7 +170,7 @@ async def get_all_patient_exams(patient_id: int) -> list[ExamOut]:
 
 @router.get("/templates/all", response_model=list[ExamOut], status_code=200, tags=["exams"])
 async def get_all_exam_templates() -> list[ExamOut]:
-    """Get all exams of a certain patient.
+    """Get all exam templates.
 
     Returns
     -------
@@ -201,7 +201,7 @@ async def exam_delete(exam_id: UUID | str) -> None:
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
     exam = await get_exam(exam_id=_id)
     if exam.is_frozen:
-        raise HTTPException(status_code=404, detail="Exam template is frozen and cannot be deleted.")
+        raise HTTPException(status_code=404, detail="Exam is frozen and cannot be deleted.")
     if not await dal.delete_exam_data(exam_id=_id):
         raise HTTPException(status_code=404, detail="Exam not found")
 
