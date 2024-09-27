@@ -9,8 +9,12 @@ import requests
 # import dal
 
 
+# TODO test if items are created/deleted recursively (exam->workflows->tasks)
+# TODO test for create_exam_from_template if associated workflows/tasks are generated
 
-PREFIX = "http://localhost:8080/api/v1/exam"
+
+HOST = "http://localhost:8080"
+PREFIX = HOST + "/api/v1/exam"
 CREDENTIALS_FORM_DATA = "grant_type=password&username=Max&password=letmein"
 
 
@@ -26,41 +30,61 @@ def login():
     return response_json["access_token"]
 
 
-def test_wrong_token():
+def test_invalid_and_no_token():
     login()
-    exam = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    response = requests.post(PREFIX + "/new",
-                        json=exam,
-                        headers={"Authorization": "Bearer " + "wrongaccesstoken"},
-                        timeout=3)
-    assert response.status_code == 401
+    request_list = [
+        ["POST",    "/new"],
+        ["POST",    "/"],
+        ["GET",     "/123"],
+        ["GET",     "/all/Meyer"],
+        ["GET",     "/templates/all"],
+        ["DELETE",  "/123"],
+        ["PUT",     "/exampleExamId"],
+        ["POST",    "/workflow/new"],
+        ["POST",    "/workflow"],
+        ["GET",     "/workflow/someWorkflowId"],
+        ["GET",     "/workflow/all/someExamId"],
+        ["GET",     "/workflow/templates/all"],
+        ["DELETE",  "/workflow/someWorkflowId"],
+        ["PUT",     "/workflow/someWorkflowId"],
+        ["POST",    "/task/new"],
+        ["POST",    "/task"],
+        ["GET",     "/task/someTaskId"],
+        ["GET",     "/task/all/someWorkflowId"],
+        ["GET",     "/task/templates/all"],
+        ["DELETE",  "/task/someTaskId"],
+        ["put",     "/task/someTaskId"],
+    ]
+    def run_requests(headers, comment):
+        for i, req in enumerate(request_list):
+            response = requests.request(req[0], PREFIX + req[1], headers=headers)
+            assert response.status_code == 401, \
+                f"{comment}: request {i}: " + \
+                "request not rejected with status_code 401."
 
+    run_requests({"Authorization": "Bearer " + "wrongaccesstoken"}, "With wrong token")
+    run_requests({}, "Without token")
 
-def test_no_token():
-    login()
-    exam = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    response = requests.post(PREFIX + "/new", json=exam)
-    assert response.status_code == 401
+    
+def test_invalid_and_no_token_with_openapijson():
+    openapijson_response = requests.get(PREFIX + "/openapi.json")
+    assert openapijson_response.status_code == 200
+    openapijson = openapijson_response.json()
+    path_dict = openapijson["paths"]
+    def run_requests(headers, comment):
+        for path in path_dict:
+            if path == "/api/v1/exam/health/readiness":
+                continue
+            for method in path_dict[path]:
+                response = requests.request(
+                    method.upper(), 
+                    HOST + path, 
+                    headers=headers)
+                assert response.status_code == 401, \
+                    f"{comment}: request {HOST}{path}:" + \
+                    "request not rejected with status_code 401."
+    run_requests({"Authorization": "Bearer " + "wrongaccesstoken"}, "With wrong token")
+    run_requests({}, "Without token")
 
 
 def test_create_exam():
@@ -417,5 +441,241 @@ def test_exam_delete():
     # TODO implement cleanup of frozen item
 
 
-# TODO test if items are created/deleted recursively (exam->workflows->tasks)
-# e.g. test for create_exam_from_template if associated workflows are generated
+def test_update_exam():
+    # prepare
+    access_token = login()
+    exam = {
+        "patient_id": 123,
+        "name": "test_exam",
+        "country": "blablastan",
+        "site": "middle of nowhere",
+        "address": "midway",
+        "creator": "Max",
+        "status": "NEW",
+        "is_template": False,
+        "is_frozen": False
+    }
+    update_request_1 = {
+        "patient_id": 1233,
+        "name": "updated_exam",
+        "country": "updated country",
+        "site": "updated site, still in the middle of nowhere",
+        "address": "updated address midway",
+        "creator": "Max 2.0",
+        "status": "UPDATED",
+        "is_template": True,
+        "is_frozen": False,  # False, otherwise it can't be deleted after test
+    }
+    update_request_2 = update_request_1.copy()
+    update_request_2["status"] = "NEW"
+    postexam_response = requests.post(
+        PREFIX + "/new",
+        json=exam,
+        headers={"Authorization": "Bearer " + access_token})
+    assert postexam_response.status_code == 201
+
+    # act
+    try:
+        postexam_response_json = postexam_response.json()
+        updateexam_response = requests.put(
+            PREFIX + "/" + postexam_response_json["id"],
+            json=update_request_1,
+            headers={"Authorization": "Bearer " + access_token}
+        )
+        assert updateexam_response.status_code == 200
+
+    # check
+        updateexam_response = updateexam_response.json()
+        for key in update_request_1.keys():
+            assert updateexam_response[key] == update_request_1[key]
+        getexam_response = requests.get(
+            PREFIX + "/" + postexam_response_json["id"],
+            headers={"Authorization": "Bearer " + access_token})
+        assert getexam_response.status_code == 200
+        getexam_response_json = getexam_response.json()
+        for key in update_request_1.keys():
+            if key != "status":
+                assert getexam_response_json[key] == update_request_1[key]
+
+    # act
+        updateexam_response = requests.put(
+            PREFIX + "/" + postexam_response_json["id"],
+            json=update_request_2,
+            headers={"Authorization": "Bearer " + access_token}
+        )
+    # check
+        # update status to NEW should be rejected
+        assert updateexam_response.status_code == 403
+
+    # cleanup
+    finally:
+        deleteexam_response = requests.delete(
+            PREFIX + "/" + 
+            postexam_response_json["id"],
+            headers={"Authorization": "Bearer " + access_token})
+        assert deleteexam_response.status_code == 204
+
+
+def test_create_workflow():
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    workflow_1 = {
+        "name": "test_workflow",
+        "comment": "test comment",
+        "exam_id": None,
+        "is_finished": False,
+        "is_template": False,
+        "is_frozen": False
+    }
+    workflow_2 = workflow_1.copy()
+    workflow_2["exam_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
+    exam = {
+        "patient_id": 123,
+        "name": "test_exam",
+        "country": "blablastan",
+        "site": "middle of nowhere",
+        "address": "midway",
+        "creator": "Max",
+        "status": "NEW",
+        "is_template": False,
+        "is_frozen": False
+    }
+    exam_template = exam.copy()
+    exam_template["is_template"] = True
+    postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+    postexamtemplate_response = requests.post(
+        PREFIX + "/new", json=exam_template, headers=headers)
+    assert postexam_response.status_code == 201
+    assert postexamtemplate_response.status_code == 201
+    try:
+        postexam_response_json = postexam_response.json()
+        postexamtemplate_response_json = postexamtemplate_response.json()
+        workflow_3 = workflow_1.copy()
+        workflow_3["exam_id"] = postexam_response_json["id"]
+        workflow_4 = workflow_1.copy()
+        workflow_4["exam_id"] = postexam_response_json["id"]
+        workflow_4["is_template"] = True
+        workflow_5 = workflow_1.copy()
+        workflow_5["exam_id"] = postexamtemplate_response_json["id"]
+
+    # act
+        postworkflow_response_1 = requests.post(
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+        postworkflow_response_2 = requests.post(
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+        postworkflow_response_3 = requests.post(
+            PREFIX + "/workflow/new", json=workflow_3, headers=headers)
+        postworkflow_response_4 = requests.post(
+            PREFIX + "/workflow/new", json=workflow_4, headers=headers)
+        postworkflow_response_5 = requests.post(
+            PREFIX + "/workflow/new", json=workflow_5, headers=headers)
+
+    # check
+        # workflow instance needs exam_id
+        assert postworkflow_response_1.status_code == 400
+        # exam_id must exist  
+        assert postworkflow_response_2.status_code == 400
+        assert postworkflow_response_3.status_code == 201
+        # workflow template must not refer to exam instance
+        assert postworkflow_response_4.status_code == 400
+        # workflow instance must not refer to exam template
+        assert postworkflow_response_5.status_code == 400
+        # TODO check the same for the API calls that update exams, workflows, tasks
+        postworkflow_response_json_3 = postworkflow_response_3.json()
+        for key in workflow_3.keys():
+            assert postworkflow_response_json_3[key] == workflow_3[key]
+        getworkflow_response = requests.get(
+            PREFIX + "/workflow/" + postworkflow_response_json_3["id"],
+            headers=headers)
+        assert getworkflow_response.status_code == 200
+        getworkflow_response_json = getworkflow_response.json()
+        for key in workflow_3.keys():
+            assert getworkflow_response_json[key] == workflow_3[key]
+
+    # cleanup
+    finally:
+        deleteexam_response = requests.delete(
+            PREFIX + "/" + postexam_response_json["id"], headers=headers)
+        assert deleteexam_response.status_code == 204
+        deleteexamtemplate_response = requests.delete(
+            PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+        assert deleteexamtemplate_response.status_code == 204
+        # deleting an exam, recursively deletes the corresponding workflows
+
+
+def test_create_workflow_from_template():
+    # TODO work in progress
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    workflow_template = {
+        "name": "test_workflow_template",
+        "comment": "test comment",
+        "is_finished": False,
+        "is_template": True,
+        "is_frozen": False
+    }
+    exam = {
+        "patient_id": 123,
+        "name": "test_exam",
+        "country": "blablastan",
+        "site": "middle of nowhere",
+        "address": "midway",
+        "creator": "Max",
+        "status": "NEW",
+        "is_template": False,
+        "is_frozen": False
+    }
+    postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+    assert postexam_response.status_code == 201
+    try:
+        postexam_response_json = postexam_response.json()
+        postnewtemplate_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template, headers=headers)
+        assert postnewtemplate_response.status_code == 201
+        postnewtemplate_response_json = postnewtemplate_response.json()
+
+    # act
+        postworkflowfromtemplate_response = requests.post(
+            PREFIX + "/workflow",
+            params={
+                "exam_id": postexam_response_json["id"], 
+                "template_id": postnewtemplate_response_json["id"],
+                "new_workflow_is_template": False   #TODO check with True
+            },
+            headers=headers)
+
+    # check
+        assert postworkflowfromtemplate_response.status_code == 201
+        postworkflowfromtemplate_response_json = \
+            postworkflowfromtemplate_response.json()
+        for key in workflow_template.keys():
+            if key != "is_template":
+                assert postworkflowfromtemplate_response_json[key] == \
+                    workflow_template[key]
+        assert postworkflowfromtemplate_response_json["exam_id"] == \
+            postexam_response_json["id"]
+        assert postworkflowfromtemplate_response_json["is_template"] is False
+        getworkflow_response = requests.get(
+            PREFIX + "/workflow/" + postworkflowfromtemplate_response_json["id"], 
+            headers=headers)
+        assert getworkflow_response.status_code == 200
+        getworkflow_response_json = getworkflow_response.json()
+        for key in workflow_template.keys():
+            if key != "is_template":
+                assert getworkflow_response_json[key] == workflow_template[key]
+        assert getworkflow_response_json["exam_id"] == \
+            postexam_response_json["id"]
+        assert getworkflow_response_json["is_template"] is False
+
+    # cleanup
+    finally:
+        deleteexam_response = requests.delete(  # exam recursively deltes
+            PREFIX + "/" + postexam_response_json["id"], headers=headers)
+        assert deleteexam_response.status_code == 204
+        if postnewtemplate_response.status_code == 201:
+            deleteworkflowtemplate_response = requests.delete(
+                PREFIX + "/workflow/" + postnewtemplate_response_json["id"], 
+                headers=headers)
+            assert deleteworkflowtemplate_response.status_code == 204

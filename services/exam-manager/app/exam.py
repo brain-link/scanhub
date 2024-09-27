@@ -8,6 +8,7 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException, Depends
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, WorkflowOut
+from sqlalchemy import exc as sqlalchemy_exc
 
 from app import dal
 from app.db import Exam, Workflow
@@ -229,7 +230,9 @@ async def update_exam(exam_id: UUID | str, payload: BaseExam) -> ExamOut:
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
     exam = await get_exam(exam_id=_id)
     if exam.is_frozen:
-        raise HTTPException(status_code=404, detail="Exam is frozen an cannot be edited.")
+        raise HTTPException(status_code=403, detail="Exam is frozen an cannot be edited.")
+    if payload.status == "NEW":
+        raise HTTPException(status_code=403, detail="Exam cannot be updated to status NEW.")
     if not (exam_updated := await dal.update_exam_data(exam_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Exam not found")
     return await get_exam_out_model(data=exam_updated)
@@ -255,8 +258,26 @@ async def create_workflow(payload: BaseWorkflow) -> WorkflowOut:
     HTTPException
         404: Creation unsuccessful
     """
+    if payload.exam_id is not None:
+        _id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
+        try:
+            exam = await get_exam(exam_id=_id)  # raises 404 if it doesn't exist
+        except HTTPException:                   # catch 404 and convert to 400
+            message = "exam_id must be an existing id."
+            print(message)
+            raise HTTPException(status_code=400, detail=message)
+        if exam.is_template != payload.is_template:
+            message = "Invalid link to exam. Instance needs to refer to instance, template to template."
+            print(message)
+            raise HTTPException(status_code=400, detail=message)
+    if payload.is_template is False and payload.exam_id is None:
+        message = "Workflow instance needs exam_id."
+        print(message)
+        raise HTTPException(status_code=400, detail=message)
     if not (workflow := await dal.add_workflow_data(payload=payload)):
-        raise HTTPException(status_code=404, detail="Could not create workflow")
+        message = "Could not create workflow"
+        print(message)
+        raise HTTPException(status_code=404, detail=message)
     print("New workflow: ", workflow)
     return await get_workflow_out_model(data=workflow)
 
@@ -289,6 +310,17 @@ async def create_workflow_from_template(exam_id: UUID,
     new_workflow = BaseWorkflow(**template.__dict__)
     new_workflow.is_template = new_workflow_is_template
     new_workflow.exam_id = exam_id
+
+    try:
+        exam = await get_exam(exam_id=exam_id)  # raises 404 if it doesn't exist
+    except HTTPException:                   # catch 404 and convert to 400
+        message = "exam_id must be an existing id."
+        print(message)
+        raise HTTPException(status_code=400, detail=message)
+    if exam.is_template != new_workflow_is_template:
+        message = "Invalid link to exam. Instance needs to refer to instance, template to template."
+        print(message)
+        raise HTTPException(status_code=400, detail=message)
 
     if not (workflow := await dal.add_workflow_data(payload=new_workflow)):
         raise HTTPException(status_code=404, detail="Could not create workflow.")
