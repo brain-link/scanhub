@@ -64,12 +64,6 @@ export interface BaseExam {
      * @type {string}
      * @memberof BaseExam
      */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseExam
-     */
     'status': BaseExamStatusEnum;
     /**
      * 
@@ -248,12 +242,6 @@ export interface ExamOut {
      * @memberof ExamOut
      */
     'address'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'creator': string;
     /**
      * 
      * @type {string}
@@ -670,7 +658,7 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+         * Get all exam templates.  Returns -------     List of exam pydantic output models
          * @summary Get All Exam Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -875,7 +863,7 @@ export const ExamsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+         * Get all exam templates.  Returns -------     List of exam pydantic output models
          * @summary Get All Exam Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -969,7 +957,7 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.examDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+         * Get all exam templates.  Returns -------     List of exam pydantic output models
          * @summary Get All Exam Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1057,7 +1045,7 @@ export class ExamsApi extends BaseAPI {
     }
 
     /**
-     * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+     * Get all exam templates.  Returns -------     List of exam pydantic output models
      * @summary Get All Exam Templates
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

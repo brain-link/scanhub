@@ -3,9 +3,9 @@
 
 """Definition of patient endpoints."""
 
-from fastapi import APIRouter, HTTPException, Depends
-from scanhub_libraries.security import get_current_user
+from fastapi import APIRouter, Depends, HTTPException
 from scanhub_libraries.models import BasePatient, PatientOut
+from scanhub_libraries.security import get_current_user
 
 from . import dal, db
 

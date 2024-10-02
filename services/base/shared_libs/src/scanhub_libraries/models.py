@@ -311,7 +311,6 @@ class BaseExam(BaseModel):
     country: str | None
     site: str | None
     address: str | None
-    creator: str
     status: Literal["NEW", "UPDATED", "DELETED"]
     is_template: bool
     is_frozen: bool

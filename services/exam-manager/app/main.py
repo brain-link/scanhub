@@ -9,27 +9,28 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
 from app.db import engine, init_db
-from app.exam import router
-
-app = FastAPI(
-    openapi_url="/api/v1/exam/openapi.json",
-    docs_url="/api/v1/exam/docs"
-)
+from app.exam import LOG_CALL_DELIMITER, raise_http_exception, router
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
 #   Better specify explicitly the allowed origins
 #   See: https://fastapi.tiangolo.com/tutorial/cors/
-origins = [
+ORIGINS = [
     "http://localhost",
     "http://localhost:3000",  # frontned
     "http://localhost:8100",  # patient-manager
     "http://localhost:8080",  # nginx
 ]
 
+
+app = FastAPI(
+    openapi_url="/api/v1/exam/openapi.json",
+    docs_url="/api/v1/exam/docs"
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -77,13 +78,14 @@ async def readiness() -> dict:
     HTTPException
         500: Any of the exam-tree tables does not exist
     """
+    print(LOG_CALL_DELIMITER)
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
     required_tables = ["exam", "workflow", "task"]
     # required_tables = ["exam", "workflow", "task", "device"]
 
     if not all(t in existing_tables for t in required_tables):
-        raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
+        raise_http_exception(500, "SQL-DB: Could not create all required tables.")
 
     return {"status": "ok"}
 

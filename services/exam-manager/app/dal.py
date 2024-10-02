@@ -19,19 +19,21 @@ from app.db import (
 
 # ----- Exam data access layer
 
-async def add_exam_data(payload: BaseExam) -> Exam:
+async def add_exam_data(payload: BaseExam, creator: str) -> Exam:
     """Create new exam.
 
     Parameters
     ----------
     payload
         Exam pydantic base model
+    creator
+        The username/id of the user who creats this exam
 
     Returns
     -------
         Database orm model of created exam
     """
-    new_exam = Exam(**payload.dict())
+    new_exam = Exam(**payload.dict(), creator=creator)
     async with async_session() as session:
         session.add(new_exam)
         await session.commit()

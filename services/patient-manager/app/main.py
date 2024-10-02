@@ -7,9 +7,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 
-from api.db import init_db, engine
+from api.db import engine, init_db
 from api.routes import router
-
 
 app = FastAPI(
     openapi_url="/api/v1/patient/openapi.json",

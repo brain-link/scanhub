@@ -9,12 +9,15 @@ import requests
 # import dal
 
 
-# TODO test if items are created/deleted recursively (exam->workflows->tasks)
+# TODO test if items are created/deleted/getted(!) recursively (exam->workflows->tasks)
 # TODO test for create_exam_from_template if associated workflows/tasks are generated
+# TODO make sure that template has no parent id and that instance has parent id
+# TODO https://github.com/brain-link/scanhub/issues/133
 
 
 HOST = "http://localhost:8080"
 PREFIX = HOST + "/api/v1/exam"
+PREFIX_PATIENT_MANAGER = HOST + "/api/v1/patient"
 CREDENTIALS_FORM_DATA = "grant_type=password&username=Max&password=letmein"
 
 
@@ -90,109 +93,245 @@ def test_invalid_and_no_token_with_openapijson():
 def test_create_exam():
     # prepare
     access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    patient_1 = {
+        "first_name": "Automated Test",
+        "last_name": "Patient",
+        "birth_date": "1977-07-17",
+        "sex": "FEMALE",
+        "issuer": "someone",
+        "status": "NEW",
+        "comment": None
+    }
+    postpatient_1_response = requests.post(
+        PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+    assert postpatient_1_response.status_code == 201
+    postpatient_1_response_json = postpatient_1_response.json()
 
     # act
-    exam = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    postexam_response = requests.post(
-        PREFIX + "/new",
-        json=exam,
-        headers={"Authorization": "Bearer " + access_token})
-    assert postexam_response.status_code == 201
+    try:
+        exam_1 = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_1_response = requests.post(
+            PREFIX + "/new", json=exam_1, headers=headers)
+        exam_2 = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "UPDATED",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_2_response = requests.post(
+            PREFIX + "/new", json=exam_2, headers=headers)
+        exam_3 = {
+            "patient_id": 123,
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_3_response = requests.post(
+            PREFIX + "/new", json=exam_3, headers=headers)
 
     # check
-    try:
-        postexam_response_json = postexam_response.json()
-        for key in exam.keys():
-            assert postexam_response_json[key] == exam[key]
+        assert postexam_1_response.status_code == 201
+        postexam_1_response_json = postexam_1_response.json()
+        for key in exam_1.keys():
+            assert postexam_1_response_json[key] == exam_1[key]
         getexam_response = requests.get(
-            PREFIX + "/" + postexam_response_json["id"],
-            headers={"Authorization": "Bearer " + access_token})
+            PREFIX + "/" + postexam_1_response_json["id"],
+            headers=headers)
         assert getexam_response.status_code == 200
         getexam_response_json = getexam_response.json()
-        for key in exam.keys():
-            assert getexam_response_json[key] == exam[key]
+        for key in exam_1.keys():
+            assert getexam_response_json[key] == exam_1[key]
+        assert postexam_2_response.status_code == 400, \
+            'Status "UPDATED" should get rejected'
+        assert postexam_3_response.status_code == 400, \
+            "Wrong patient_id should get rejected."
 
     # cleanup
     finally:
-        deleteexam_response = requests.delete(
-            PREFIX + "/" + 
-            postexam_response_json["id"],
-            headers={"Authorization": "Bearer " + access_token})
-        assert deleteexam_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+
+        if postexam_1_response.status_code == 201:
+            deleteexam_1_response = requests.delete(
+                PREFIX + "/" + 
+                postexam_1_response_json["id"],
+                headers=headers)
+            assert deleteexam_1_response.status_code == 204
 
 
 def test_create_exam_from_template():
     # prepare
     access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
     exam_template = {
         "name": "test_exam_template",
         "country": "blablastan",
         "site": "middle of nowhere",
         "address": "midway",
-        "creator": "Max",
         "status": "NEW",
         "is_template": True,
         "is_frozen": False
     }
+    updated_template = {
+        "name": "test_exam_template",
+        "country": "blablastan",
+        "site": "middle of nowhere",
+        "address": "midway",
+        "status": "UPDATED",
+        "is_template": True,
+        "is_frozen": False
+    }
+    patient_1 = {
+        "first_name": "Automated Test",
+        "last_name": "Patient",
+        "birth_date": "1977-07-17",
+        "sex": "FEMALE",
+        "issuer": "someone",
+        "status": "NEW",
+        "comment": None
+    }
     try:
         postnewtemplate_response = requests.post(
-            PREFIX + "/new",
-            json=exam_template,
-            headers={"Authorization": "Bearer " + access_token})
+            PREFIX + "/new", json=exam_template, headers=headers)
         assert postnewtemplate_response.status_code == 201
         postnewtemplate_response_json = postnewtemplate_response.json()
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        assert postexam_response.status_code == 201
+        postexam_response_json = postexam_response.json()
 
     # act
-        postexamfromtemplate_response = requests.post(
+        postexamfromtemplate_1_response = requests.post(
+            PREFIX + "/",
+            params={
+                "patient_id": postpatient_1_response_json["id"], 
+                "template_id": postnewtemplate_response_json["id"],
+                "new_exam_is_template": False
+            },
+            headers=headers)
+        assert postexamfromtemplate_1_response.status_code == 201
+        postexamfromtemplate_1_response_json = postexamfromtemplate_1_response.json()
+        postexamfromtemplate_2_response = requests.post(
             PREFIX + "/",
             params={
                 "patient_id": 123, 
                 "template_id": postnewtemplate_response_json["id"],
                 "new_exam_is_template": False
             },
-            headers={"Authorization": "Bearer " + access_token})
+            headers=headers)
+        putupdatedtemplate_response = requests.put(
+            PREFIX + "/" + postnewtemplate_response_json["id"],
+            json=updated_template,
+            headers=headers)
+        assert putupdatedtemplate_response.status_code == 200
+        putupdatedtemplate_response_json = putupdatedtemplate_response.json()
+        postexamfromupdatedtemplate_response = requests.post(
+            PREFIX + "/",
+            params={
+                "patient_id": postpatient_1_response_json["id"], 
+                "template_id": putupdatedtemplate_response_json["id"],
+                "new_exam_is_template": False
+            },
+            headers=headers)
+        assert postexamfromupdatedtemplate_response.status_code == 201
+        postexamfromupdatedtemplate_response_json = \
+            postexamfromupdatedtemplate_response.json()
+        postexamfrominstance_response = requests.post(
+            PREFIX + "/",
+            params={
+                "patient_id": 333, 
+                "template_id": postexam_response_json["id"],
+                "new_exam_is_template": False
+            },
+            headers=headers)
 
     # check
-        assert postexamfromtemplate_response.status_code == 201
-        postexamfromtemplate_response_json = postexamfromtemplate_response.json()
         for key in exam_template.keys():
             if key != "is_template":
-                assert postexamfromtemplate_response_json[key] == exam_template[key]
-        assert postexamfromtemplate_response_json["patient_id"] == 123
-        assert postexamfromtemplate_response_json["is_template"] is False
+                assert postexamfromtemplate_1_response_json[key] == exam_template[key]
+        assert postexamfromtemplate_1_response_json["patient_id"] == \
+            postpatient_1_response_json["id"]
+        assert postexamfromtemplate_1_response_json["is_template"] is False
         getexam_response = requests.get(
-            PREFIX + "/" + postexamfromtemplate_response_json["id"],
-            headers={"Authorization": "Bearer " + access_token})
+            PREFIX + "/" + postexamfromtemplate_1_response_json["id"],
+            headers=headers)
         assert getexam_response.status_code == 200
         getexam_response_json = getexam_response.json()
         for key in exam_template.keys():
             if key != "is_template":
                 assert getexam_response_json[key] == exam_template[key]
-        assert getexam_response_json["patient_id"] == 123
+        assert getexam_response_json["patient_id"] == postpatient_1_response_json["id"]
         assert getexam_response_json["is_template"] is False
+        assert postexamfromtemplate_2_response.status_code == 400, \
+            "Create exam from template should reject invalid patient_id."
+        assert postexamfromupdatedtemplate_response_json["status"] == "NEW", \
+            "Status of new instance needs to be NEW, even if template has other status"
+        assert postexamfrominstance_response.status_code == 400, \
+            "Should only allow create from template, not from instance."
 
     # cleanup
     finally:
         if postnewtemplate_response.status_code == 201:
             deleteexamtemplate_response = requests.delete(
                 PREFIX + "/" + postnewtemplate_response_json["id"],
-                headers={"Authorization": "Bearer " + access_token})
+                headers=headers)
             assert deleteexamtemplate_response.status_code == 204
-        if postexamfromtemplate_response.status_code == 201:
-            deleteexam_response = requests.delete(
-                PREFIX + "/" + postexamfromtemplate_response_json["id"],
-                headers={"Authorization": "Bearer " + access_token})
-            assert deleteexam_response.status_code == 204
+        if postexamfromtemplate_1_response.status_code == 201:
+            deleteexam_1_response = requests.delete(
+                PREFIX + "/" + postexamfromtemplate_1_response_json["id"],
+                headers=headers)
+            assert deleteexam_1_response.status_code == 204
+        if postexamfromupdatedtemplate_response.status_code == 201:
+            deleteexam_2_response = requests.delete(
+                PREFIX + "/" + postexamfromupdatedtemplate_response_json["id"],
+                headers=headers)
+            assert deleteexam_2_response.status_code == 204
+        if postexam_response.status_code == 201:
+            deleteexam_3_response = requests.delete(
+                PREFIX + "/" + postexam_response_json["id"],
+                headers=headers)
+            assert deleteexam_3_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
 
 
 def test_get_exam():
@@ -211,46 +350,53 @@ def test_get_exam():
 def test_get_all_patient_exams():
     # prepare
     access_token = login()
-    exam1 = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
+    headers = {"Authorization": "Bearer " + access_token}
     try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        postpatient_1A_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1A_response.status_code == 201
+        postpatient_1A_response_json = postpatient_1A_response.json()
+        exam1 = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
         exam2 = exam1.copy()
         exam2["site"] = "test site 2"
         exam3 = exam1.copy()
         exam3["site"] = "test site 3"
-        exam3["patient_id"] = 456
+        exam3["patient_id"] = postpatient_1A_response_json["id"]
         postnewexam1_response = requests.post(
-            PREFIX + "/new",
-            json=exam1,
-            headers={"Authorization": "Bearer " + access_token}
-        )
+            PREFIX + "/new", json=exam1, headers=headers)
         postnewexam2_response = requests.post(
-            PREFIX + "/new",
-            json=exam2,
-            headers={"Authorization": "Bearer " + access_token}
-        )
+            PREFIX + "/new", json=exam2, headers=headers)
         postnewexam3_response = requests.post(
-            PREFIX + "/new",
-            json=exam3,
-            headers={"Authorization": "Bearer " + access_token}
-        )
+            PREFIX + "/new", json=exam3, headers=headers)
         assert postnewexam1_response.status_code == 201
         assert postnewexam2_response.status_code == 201
         assert postnewexam3_response.status_code == 201
 
     # act
         getallexams_response = requests.get(
-            PREFIX + "/all/123",
-            headers={"Authorization": "Bearer " + access_token})
+            PREFIX + "/all/" + str(postpatient_1_response_json["id"]), headers=headers)
 
     # check
         assert getallexams_response.status_code == 200
@@ -275,22 +421,28 @@ def test_get_all_patient_exams():
     finally:
         if postnewexam1_response.status_code == 201:
             deleteexam1_response = requests.delete(
-                PREFIX + "/" + postnewexam1_response.json()["id"],
-                headers={"Authorization": "Bearer " + access_token}
-            )
+                PREFIX + "/" + postnewexam1_response.json()["id"], headers=headers)
             assert deleteexam1_response.status_code == 204
         if postnewexam2_response.status_code == 201:
             deleteexam2_response = requests.delete(
-                PREFIX + "/" + postnewexam2_response.json()["id"],
-                headers={"Authorization": "Bearer " + access_token}
-            )
+                PREFIX + "/" + postnewexam2_response.json()["id"], headers=headers)
             assert deleteexam2_response.status_code == 204
         if postnewexam3_response.status_code == 201:
             deleteexam3_response = requests.delete(
-                PREFIX + "/" + postnewexam3_response.json()["id"],
-                headers={"Authorization": "Bearer " + access_token}
-            )
+                PREFIX + "/" + postnewexam3_response.json()["id"], headers=headers)
             assert deleteexam3_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+        if postpatient_1A_response.status_code == 201:
+            deletepatient_1A_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1A_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1A_response.status_code == 204
 
 
 def test_get_all_exam_templates():
@@ -301,7 +453,6 @@ def test_get_all_exam_templates():
         "country": "blablastan",
         "site": "middle of nowhere",
         "address": "midway",
-        "creator": "Max",
         "status": "NEW",
         "is_template": True,
         "is_frozen": False
@@ -334,6 +485,7 @@ def test_get_all_exam_templates():
         
         def exam_template_in_received_list(exam_template):
             for exam_template_json_found in getalltemplates_response_json:
+                assert exam_template_json_found["is_template"] is True
                 exam_template_matches = True
                 for key in exam_template.keys():
                     if exam_template[key] != exam_template_json_found[key]:
@@ -364,133 +516,162 @@ def test_get_all_exam_templates():
 def test_exam_delete():
     # prepare / act
     access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postnewexam_response = requests.post(
+            PREFIX + "/new", json=exam, headers=headers)
+        assert postnewexam_response.status_code == 201
+        postnewexam_response_json = postnewexam_response.json()
+        deleteexam_response = requests.delete(
+            PREFIX + "/" + postnewexam_response_json["id"],
+            headers=headers
+        )
+        assert deleteexam_response.status_code == 204
 
-    exam = {
-        "patient_id": 777,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    postnewexam_response = requests.post(
-        PREFIX + "/new",
-        json=exam,
-        headers={"Authorization": "Bearer " + access_token}
-    )
-    assert postnewexam_response.status_code == 201
-    postnewexam_response_json = postnewexam_response.json()
-    deleteexam_response = requests.delete(
-        PREFIX + "/" + postnewexam_response_json["id"],
-        headers={"Authorization": "Bearer " + access_token}
-    )
-    assert deleteexam_response.status_code == 204
+        exam_template = {
+            "name": "test_exam_template",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        postnewtemplate_response = requests.post(
+            PREFIX + "/new", json=exam_template, headers=headers)
+        assert postnewtemplate_response.status_code == 201
+        postnewtemplate_response_json = postnewtemplate_response.json()
+        deleteexamtemplate_presponse = requests.delete(
+            PREFIX + "/" + postnewtemplate_response_json["id"],
+            headers=headers,
+        )
+        assert deleteexamtemplate_presponse.status_code == 204
 
-    exam_template = {
-        "name": "test_exam_template",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": True,
-        "is_frozen": False
-    }
-    postnewtemplate_response = requests.post(
-        PREFIX + "/new",
-        json=exam_template,
-        headers={"Authorization": "Bearer " + access_token})
-    assert postnewtemplate_response.status_code == 201
-    postnewtemplate_response_json = postnewtemplate_response.json()
-    deleteexamtemplate_presponse = requests.delete(
-        PREFIX + "/" + postnewtemplate_response_json["id"],
-        headers={"Authorization": "Bearer " + access_token},
-    )
-    assert deleteexamtemplate_presponse.status_code == 204
-
-    # exam_frozen = exam.copy()
-    # exam_frozen["is_frozen"] = True
-    # postnewexamfrozen_response = requests.post(
-    #     PREFIX + "/new",
-    #     json=exam_frozen,
-    #     headers={"Authorization": "Bearer " + access_token}
-    # )
-    # assert postnewexamfrozen_response.status_code == 201
+        # exam_frozen = exam.copy()
+        # exam_frozen["is_frozen"] = True
+        # postnewexamfrozen_response = requests.post(
+        #     PREFIX + "/new",
+        #     json=exam_frozen,
+        #     headers={"Authorization": "Bearer " + access_token}
+        # )
+        # assert postnewexamfrozen_response.status_code == 201
 
     # check
-    getexam_response = requests.get(
-        PREFIX + "/" + postnewexam_response_json["id"],
-        headers={"Authorization": "Bearer " + access_token})
-    assert getexam_response.status_code == 404
-    getexamtemplate_response = requests.get(
-        PREFIX + "/" + postnewtemplate_response_json["id"],
-        headers={"Authorization": "Bearer " + access_token})
-    assert getexamtemplate_response.status_code == 404
+        getexam_response = requests.get(
+            PREFIX + "/" + postnewexam_response_json["id"],
+            headers=headers)
+        assert getexam_response.status_code == 404
+        getexamtemplate_response = requests.get(
+            PREFIX + "/" + postnewtemplate_response_json["id"],
+            headers=headers)
+        assert getexamtemplate_response.status_code == 404
 
-    # postnewexamfrozen_response_json = postnewexamfrozen_response.json()
-    # deleteexamfrozen_response = requests.delete(
-    #     PREFIX + "/" + postnewexamfrozen_response_json["id"],
-    #     headers={"Authorization": "Bearer " + access_token}
-    # )
-    # assert deleteexamfrozen_response.status_code == 404
+        # postnewexamfrozen_response_json = postnewexamfrozen_response.json()
+        # deleteexamfrozen_response = requests.delete(
+        #     PREFIX + "/" + postnewexamfrozen_response_json["id"],
+        #     headers={"Authorization": "Bearer " + access_token}
+        # )
+        # assert deleteexamfrozen_response.status_code == 404
 
-    # cleanup (only necessary for the frozen item)
+    # cleanup
     # TODO implement cleanup of frozen item
+    finally:
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
 
 
 def test_update_exam():
     # prepare
     access_token = login()
-    exam = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    update_request_1 = {
-        "patient_id": 1233,
-        "name": "updated_exam",
-        "country": "updated country",
-        "site": "updated site, still in the middle of nowhere",
-        "address": "updated address midway",
-        "creator": "Max 2.0",
-        "status": "UPDATED",
-        "is_template": True,
-        "is_frozen": False,  # False, otherwise it can't be deleted after test
-    }
-    update_request_2 = update_request_1.copy()
-    update_request_2["status"] = "NEW"
-    postexam_response = requests.post(
-        PREFIX + "/new",
-        json=exam,
-        headers={"Authorization": "Bearer " + access_token})
-    assert postexam_response.status_code == 201
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        postpatient_1A_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1A_response.status_code == 201
+        postpatient_1A_response_json = postpatient_1A_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        assert postexam_response.status_code == 201
+        update_request_1 = {
+            "patient_id": postpatient_1A_response_json["id"],
+            "name": "updated_exam",
+            "country": "updated country",
+            "site": "updated site, still in the middle of nowhere",
+            "address": "updated address midway",
+            "status": "UPDATED",
+            "is_template": False,
+            "is_frozen": False,  # False, otherwise it can't be deleted after test
+        }
+        update_request_2 = update_request_1.copy()
+        update_request_2["status"] = "NEW"
+        update_request_3 = update_request_1.copy()
+        update_request_3["patient_id"] = 333
 
     # act
-    try:
         postexam_response_json = postexam_response.json()
         updateexam_response = requests.put(
             PREFIX + "/" + postexam_response_json["id"],
             json=update_request_1,
-            headers={"Authorization": "Bearer " + access_token}
+            headers=headers
         )
-        assert updateexam_response.status_code == 200
 
     # check
+        assert updateexam_response.status_code == 200
         updateexam_response = updateexam_response.json()
         for key in update_request_1.keys():
             assert updateexam_response[key] == update_request_1[key]
         getexam_response = requests.get(
             PREFIX + "/" + postexam_response_json["id"],
-            headers={"Authorization": "Bearer " + access_token})
+            headers=headers)
         assert getexam_response.status_code == 200
         getexam_response_json = getexam_response.json()
         for key in update_request_1.keys():
@@ -498,58 +679,100 @@ def test_update_exam():
                 assert getexam_response_json[key] == update_request_1[key]
 
     # act
-        updateexam_response = requests.put(
-            PREFIX + "/" + postexam_response_json["id"],
-            json=update_request_2,
-            headers={"Authorization": "Bearer " + access_token}
+        updateexam_2_response = requests.put(
+            PREFIX + "/" + postexam_response_json["id"], 
+            json=update_request_2, 
+            headers=headers
         )
     # check
-        # update status to NEW should be rejected
-        assert updateexam_response.status_code == 403
+        assert updateexam_2_response.status_code == 403, \
+            "Update status to NEW should be rejected."
+
+    # act
+        updateexam_3_response = requests.put(
+            PREFIX + "/" + postexam_response_json["id"], 
+            json=update_request_3, 
+            headers=headers
+        )
+    # check
+        assert updateexam_3_response.status_code == 400, \
+            "Wrong patient_id should be rejected."
 
     # cleanup
     finally:
-        deleteexam_response = requests.delete(
-            PREFIX + "/" + 
-            postexam_response_json["id"],
-            headers={"Authorization": "Bearer " + access_token})
-        assert deleteexam_response.status_code == 204
+        if postexam_response.status_code == 201:
+            deleteexam_response = requests.delete(
+                PREFIX + "/" + 
+                postexam_response_json["id"],
+                headers=headers)
+            assert deleteexam_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+        if postpatient_1A_response.status_code == 201:
+            deletepatient_1A_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1A_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1A_response.status_code == 204
 
 
 def test_create_workflow():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    workflow_1 = {
-        "name": "test_workflow",
-        "comment": "test comment",
-        "exam_id": None,
-        "is_finished": False,
-        "is_template": False,
-        "is_frozen": False
-    }
-    workflow_2 = workflow_1.copy()
-    workflow_2["exam_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
-    exam = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    exam_template = exam.copy()
-    exam_template["is_template"] = True
-    postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
-    postexamtemplate_response = requests.post(
-        PREFIX + "/new", json=exam_template, headers=headers)
-    assert postexam_response.status_code == 201
-    assert postexamtemplate_response.status_code == 201
     try:
+        workflow_1 = {
+            "name": "test_workflow",
+            "comment": "test comment",
+            "exam_id": None,
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        workflow_2 = workflow_1.copy()
+        workflow_2["exam_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        exam_template = {
+            "name": "test_exam_template",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexamtemplate_response = requests.post(
+            PREFIX + "/new", json=exam_template, headers=headers)
+        assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
+        assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
         workflow_3 = workflow_1.copy()
         workflow_3["exam_id"] = postexam_response_json["id"]
@@ -572,15 +795,15 @@ def test_create_workflow():
             PREFIX + "/workflow/new", json=workflow_5, headers=headers)
 
     # check
-        # workflow instance needs exam_id
-        assert postworkflow_response_1.status_code == 400
-        # exam_id must exist  
-        assert postworkflow_response_2.status_code == 400
+        assert postworkflow_response_1.status_code == 400, \
+            "Workflow instance without exam_id should be rejected."
+        assert postworkflow_response_2.status_code == 400, \
+            "Workflow with wrong exam_id should be rejected."
         assert postworkflow_response_3.status_code == 201
-        # workflow template must not refer to exam instance
-        assert postworkflow_response_4.status_code == 400
-        # workflow instance must not refer to exam template
-        assert postworkflow_response_5.status_code == 400
+        assert postworkflow_response_4.status_code == 400, \
+            "Workflow template that refers to exam instance should be rejected."
+        assert postworkflow_response_5.status_code == 400, \
+            "Workflow instance that refers to template should be rejected."
         # TODO check the same for the API calls that update exams, workflows, tasks
         postworkflow_response_json_3 = postworkflow_response_3.json()
         for key in workflow_3.keys():
@@ -595,12 +818,21 @@ def test_create_workflow():
 
     # cleanup
     finally:
-        deleteexam_response = requests.delete(
-            PREFIX + "/" + postexam_response_json["id"], headers=headers)
-        assert deleteexam_response.status_code == 204
-        deleteexamtemplate_response = requests.delete(
-            PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
-        assert deleteexamtemplate_response.status_code == 204
+        if postexam_response.status_code == 201:
+            deleteexam_response = requests.delete(
+                PREFIX + "/" + postexam_response_json["id"], headers=headers)
+            assert deleteexam_response.status_code == 204
+        if postexamtemplate_response.status_code == 201:
+            postexamtemplate_response_json = postexamtemplate_response.json()
+            deleteexamtemplate_response = requests.delete(
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+            assert deleteexamtemplate_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
         # deleting an exam, recursively deletes the corresponding workflows
 
 
@@ -609,32 +841,56 @@ def test_create_workflow_from_template():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    workflow_template = {
-        "name": "test_workflow_template",
-        "comment": "test comment",
-        "is_finished": False,
-        "is_template": True,
-        "is_frozen": False
-    }
-    exam = {
-        "patient_id": 123,
-        "name": "test_exam",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "creator": "Max",
-        "status": "NEW",
-        "is_template": False,
-        "is_frozen": False
-    }
-    postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
-    assert postexam_response.status_code == 201
     try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        workflow_template = {
+            "name": "test_workflow_template",
+            "comment": "test comment",
+            "is_finished": False,
+            "is_template": True,
+            "is_frozen": False
+        }
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "test_exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
         postnewtemplate_response = requests.post(
             PREFIX + "/workflow/new", json=workflow_template, headers=headers)
         assert postnewtemplate_response.status_code == 201
         postnewtemplate_response_json = postnewtemplate_response.json()
+        workflow = {
+            "exam_id": postexam_response_json["id"],
+            "name": "test_workflow_template",
+            "comment": "test comment",
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        postworkflow_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow, headers=headers)
+        assert postworkflow_response.status_code == 201
+        postworkflow_response_json = postworkflow_response.json()
 
     # act
         postworkflowfromtemplate_response = requests.post(
@@ -642,7 +898,15 @@ def test_create_workflow_from_template():
             params={
                 "exam_id": postexam_response_json["id"], 
                 "template_id": postnewtemplate_response_json["id"],
-                "new_workflow_is_template": False   #TODO check with True
+                "new_workflow_is_template": False   # could also check with True
+            },
+            headers=headers)
+        postworkflowfromtemplate_fail_1_response = requests.post(
+            PREFIX + "/workflow",
+            params={
+                "exam_id": postexam_response_json["id"], 
+                "template_id": postworkflow_response_json["id"],
+                "new_workflow_is_template": False   # could also check with True
             },
             headers=headers)
 
@@ -668,10 +932,12 @@ def test_create_workflow_from_template():
         assert getworkflow_response_json["exam_id"] == \
             postexam_response_json["id"]
         assert getworkflow_response_json["is_template"] is False
+        assert postworkflowfromtemplate_fail_1_response.status_code == 400
 
     # cleanup
     finally:
-        deleteexam_response = requests.delete(  # exam recursively deltes
+        # deleting exam recursively deletes associated workflows
+        deleteexam_response = requests.delete(
             PREFIX + "/" + postexam_response_json["id"], headers=headers)
         assert deleteexam_response.status_code == 204
         if postnewtemplate_response.status_code == 201:
@@ -679,3 +945,9 @@ def test_create_workflow_from_template():
                 PREFIX + "/workflow/" + postnewtemplate_response_json["id"], 
                 headers=headers)
             assert deleteworkflowtemplate_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
