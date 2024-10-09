@@ -182,6 +182,12 @@ export interface BaseWorkflow {
     'exam_id'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof BaseWorkflow
+     */
+    'status': BaseWorkflowStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof BaseWorkflow
      */
@@ -199,6 +205,15 @@ export interface BaseWorkflow {
      */
     'is_frozen': boolean;
 }
+
+export const BaseWorkflowStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type BaseWorkflowStatusEnum = typeof BaseWorkflowStatusEnum[keyof typeof BaseWorkflowStatusEnum];
+
 /**
  * 
  * @export
@@ -476,6 +491,12 @@ export interface WorkflowOut {
     'exam_id'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
+    'status': WorkflowOutStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof WorkflowOut
      */
@@ -517,6 +538,15 @@ export interface WorkflowOut {
      */
     'datetime_updated'?: string;
 }
+
+export const WorkflowOutStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type WorkflowOutStatusEnum = typeof WorkflowOutStatusEnum[keyof typeof WorkflowOutStatusEnum];
+
 
 /**
  * ExamsApi - axios parameter creator

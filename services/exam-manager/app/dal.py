@@ -147,19 +147,21 @@ async def update_exam_data(exam_id: UUID, payload: BaseExam) -> (Exam | None):
 
 # ----- Workflow data access layer
 
-async def add_workflow_data(payload: BaseWorkflow) -> Workflow:
+async def add_workflow_data(payload: BaseWorkflow, creator: str) -> Workflow:
     """Add new workflow.
 
     Parameters
     ----------
     payload
         Workflow pydantic base model with data for workflow creation
+    creator
+        The username/id of the user who creats this exam
 
     Returns
     -------
         Database orm model of created workflow
     """
-    new_workflow = Workflow(**payload.dict())
+    new_workflow = Workflow(**payload.dict(), creator=creator)
     async with async_session() as session:
         session.add(new_workflow)
         await session.commit()

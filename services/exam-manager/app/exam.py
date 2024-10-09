@@ -357,6 +357,8 @@ async def create_workflow(payload: BaseWorkflow, user: Annotated[User, Depends(g
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("payload:", payload)
+    if payload.status != "NEW":
+        raise_http_exception(400, "New workflow needs to have status NEW.")
     if payload.exam_id is not None:
         _id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
         if not (exam := await dal.get_exam_data(exam_id=_id)):
@@ -366,7 +368,7 @@ async def create_workflow(payload: BaseWorkflow, user: Annotated[User, Depends(g
                 "Invalid link to exam. Instance needs to refer to instance, template to template.")
     if payload.is_template is False and payload.exam_id is None:
         raise_http_exception(400, "Workflow instance needs exam_id.")
-    if not (workflow := await dal.add_workflow_data(payload=payload)):
+    if not (workflow := await dal.add_workflow_data(payload=payload, creator=user.username)):
         raise_http_exception(404, "Could not create workflow")
     print("New workflow: ", workflow)
     return await get_workflow_out_model(data=workflow)
@@ -407,13 +409,14 @@ async def create_workflow_from_template(exam_id: UUID,
     if template.is_template is not True:
         raise_http_exception(400, "Request to create workflow from workflow instance instead of workflow template.")
     new_workflow = BaseWorkflow(**template.__dict__)
+    new_workflow.status = "NEW"
     new_workflow.is_template = new_workflow_is_template
     new_workflow.exam_id = exam_id
     if not (exam := await dal.get_exam_data(exam_id=exam_id)):
         raise_http_exception(400, "exam_id must be an existing id.")
     if exam.is_template != new_workflow_is_template:
         raise_http_exception(400, "Invalid link to exam. Instance needs to refer to instance, template to template.")
-    if not (workflow := await dal.add_workflow_data(payload=new_workflow)):
+    if not (workflow := await dal.add_workflow_data(payload=new_workflow, creator=user.username)):
         raise_http_exception(404, "Could not create workflow.")
 
     # Create all the sub-items for the task templates in a workflow template
@@ -554,6 +557,17 @@ async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow,
     print("Username:", user.username)
     print("workflow_id:", workflow_id)
     print("payload:", payload)
+    if payload.status == "NEW":
+        raise_http_exception(403, "Workflow cannot be updated to status NEW.")
+    if payload.exam_id is not None:
+        exam_id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
+        if not (exam := await dal.get_exam_data(exam_id=exam_id)):
+            raise_http_exception(400, "exam_id must be an existing id.")
+        if exam.is_template != payload.is_template:
+            raise_http_exception(400,
+                "Invalid link to exam. Instance needs to refer to instance, template to template.")
+    if payload.is_template is False and payload.exam_id is None:
+        raise_http_exception(400, "Workflow instance needs exam_id.")
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
     if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
         raise_http_exception(404, "Workflow not found")

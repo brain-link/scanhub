@@ -168,7 +168,6 @@ class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     record_id: UUID
 
 
-
 class BaseDevice(BaseModel):
     """Device base model."""
 
@@ -271,7 +270,6 @@ class TaskOut(BaseTask):
     datetime_created: datetime
 
 
-
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
 
@@ -283,6 +281,7 @@ class BaseWorkflow(BaseModel):
     name: str
     comment: str | None
     exam_id: Optional[UUID] = None
+    status: Literal["NEW", "UPDATED", "DELETED"]
     is_finished: bool
     is_template: bool
     is_frozen: bool
@@ -295,7 +294,6 @@ class WorkflowOut(BaseWorkflow):
     tasks: list[TaskOut]
     datetime_created: datetime
     datetime_updated: datetime | None
-
 
 
 class BaseExam(BaseModel):
@@ -346,7 +344,6 @@ class User(BaseModel):
     token_type: str     
     last_activity_unixtime: int | None
     last_login_unixtime: int | None
-
 
 
 # @dataclass
