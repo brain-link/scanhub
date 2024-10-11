@@ -9,7 +9,7 @@ from uuid import UUID
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, User, WorkflowOut
+from scanhub_libraries.models import BaseExam, BaseTask, TaskStatus, BaseWorkflow, ExamOut, TaskOut, User, WorkflowOut
 from scanhub_libraries.security import get_current_user
 
 from app import dal
@@ -210,7 +210,10 @@ async def get_exam(exam_id: UUID | str, user: Annotated[User, Depends(get_curren
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("exam_id:", exam_id)
-    _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
+    try:
+        _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
+    except ValueError:
+        raise raise_http_exception(400, "Badly formed exam_id")
     if not (exam := await dal.get_exam_data(exam_id=_id)):
         raise_http_exception(404, "Exam not found")
     return await get_exam_out_model(data=exam)
@@ -449,7 +452,10 @@ async def get_workflow(workflow_id: UUID | str, user: Annotated[User, Depends(ge
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("workflow_id:", workflow_id)
-    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    try:
+        _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
+    except ValueError:
+        raise_http_exception(400, "Badly formed workflow_id.")
     if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
         raise_http_exception(404, "Workflow not found")
     return await get_workflow_out_model(data=workflow)
@@ -601,7 +607,23 @@ async def create_task(payload: BaseTask, user: Annotated[User, Depends(get_curre
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("payload:", payload)
-    if not (task := await dal.add_task_data(payload=payload)):
+    if not TaskStatus.PENDING in payload.status \
+            or TaskStatus.IN_PROGRESS in payload.status \
+            or TaskStatus.COMPLETED in payload.status \
+            or TaskStatus.FAILED in payload.status \
+            or TaskStatus.ERROR in payload.status:
+        raise_http_exception(400, "New task needs to have status PENDING " + \
+            "and must not have status IN_PROGRESS, COMPLETED, FAILED or ERROR")
+    if payload.workflow_id is not None:
+        workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
+        if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
+            raise_http_exception(400, "workflow_id must be an existing id.")
+        if workflow.is_template != payload.is_template:
+            raise_http_exception(400,
+                "Invalid link to workflow. Instance needs to refer to instance, template to template.")
+    if payload.is_template is False and payload.workflow_id is None:
+        raise_http_exception(400, "Task instance needs workflow_id.")
+    if not (task := await dal.add_task_data(payload=payload, creator=user.username)):
         raise_http_exception(404, "Could not create task")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
@@ -637,11 +659,19 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
     print("template_id:", template_id)
     print("new_task_is_template:", new_task_is_template)
     if not (template := await dal.get_task_data(task_id=template_id)):
-        raise_http_exception(404, "Task not found")
+        raise_http_exception(404, "Task template not found")
+    if template.is_template is not True:
+        raise_http_exception(400, "Request to create task from task instance instead of task template.")
     new_task = BaseTask(**template.__dict__)
+    # if not TaskStatus.PENDING in new_task.status:
+    #     new_task[TaskStatus.PENDING] = "New task instance."
     new_task.is_template = new_task_is_template
     new_task.workflow_id = workflow_id
-    if not (task := await dal.add_task_data(payload=new_task)):
+    if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
+        raise_http_exception(400, "workflow_id must be an existing id.")
+    if workflow.is_template != new_task_is_template:
+        raise_http_exception(400, "Invalid link to workflow. Instance needs to refer to instance, template to template.")
+    if not (task := await dal.add_task_data(payload=new_task, creator=user.username)):
         raise_http_exception(404, "Could not create task.")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
@@ -669,7 +699,10 @@ async def get_task(task_id: UUID | str, user: Annotated[User, Depends(get_curren
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("task_id:", task_id)
-    _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
+    try:
+        _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
+    except ValueError:
+        raise_http_exception(400, "Badly formed task_id.")
     if not (task := await dal.get_task_data(task_id=_id)):
         raise_http_exception(404, "Task not found")
     return TaskOut(**task.__dict__)
@@ -781,6 +814,17 @@ async def update_task(task_id: UUID | str, payload: BaseTask,
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("task_id:", task_id)
+    # if TaskStatus.PENDING in payload.status:
+    #     raise_http_exception(400, "Task must not update to status PENDING "
+    if payload.workflow_id is not None:
+        workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
+        if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
+            raise_http_exception(400, "workflow_id must be an existing id.")
+        if workflow.is_template != payload.is_template:
+            raise_http_exception(400,
+                "Invalid link to workflow. Instance needs to refer to instance, template to template.")    
+    if payload.is_template is False and payload.workflow_id is None:
+        raise_http_exception(400, "Task instance needs workflow_id.")
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
     if not (task := await dal.get_task_data(task_id=_id)):
         raise_http_exception(404, "Task not found")

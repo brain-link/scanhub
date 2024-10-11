@@ -272,19 +272,21 @@ async def update_workflow_data(workflow_id: UUID, payload: BaseWorkflow) -> (Wor
 
 # ----- Task data access layer
 
-async def add_task_data(payload: BaseTask) -> Task:
+async def add_task_data(payload: BaseTask, creator) -> Task:
     """Add new task to database.
 
     Parameters
     ----------
     payload
         Task pydantic base model
+    creator
+        The username/id of the user who creats this task
 
     Returns
     -------
         Database orm model of created task
     """
-    new_task = Task(**payload.dict())
+    new_task = Task(**payload.dict(), creator=creator)
     async with async_session() as session:
         session.add(new_task)
         await session.commit()

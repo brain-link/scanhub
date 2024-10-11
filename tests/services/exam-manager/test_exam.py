@@ -4,6 +4,7 @@
 """ pytest tests for exam.py """
 
 import requests
+import json
 # import sys
 # sys.path.append("../../../services/exam-manager/app/")
 # import dal
@@ -11,8 +12,7 @@ import requests
 
 # TODO test if items are created/deleted/getted(!) recursively (exam->workflows->tasks)
 # TODO test for create_exam_from_template if associated workflows/tasks are generated
-# TODO https://github.com/brain-link/scanhub/issues/133
-# TODO manuell frontend checken
+# TODO manuell frontend checken und ggf. aktualisieren
 # TODO implement tests for deleting frozen exams, workflows, tasks 
 #      with freeze and unfreeze logic
 # TODO implement tests for status DELETED
@@ -342,7 +342,7 @@ def test_get_exam():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     getexam_response = requests.get(PREFIX + "/123", headers=headers)
-    assert getexam_response.status_code == 500   # invalid uuid format
+    assert getexam_response.status_code == 400   # invalid uuid format
     getexam_response = requests.get(
         PREFIX + "/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers)
     assert getexam_response.status_code == 404
@@ -1051,7 +1051,7 @@ def test_get_workflow():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     getworkflow_response = requests.get(PREFIX + "/workflow/123", headers=headers)
-    assert getworkflow_response.status_code == 500   # invalid uuid format
+    assert getworkflow_response.status_code == 400   # invalid uuid format
     getworkflow_response = requests.get(
         PREFIX + "/workflow/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers)
     assert getworkflow_response.status_code == 404
@@ -1545,6 +1545,1164 @@ def test_update_workflow():
     # check
         assert updateworkflow_response_4.status_code == 400, \
             "Update to template with reference to exam instance should be rejected."
+
+    # cleanup
+    finally:
+        if postexam_1_response.status_code == 201:
+            deleteexam_1_response = requests.delete(
+                PREFIX + "/" + 
+                postexam_1_response_json["id"],
+                headers=headers)
+            assert deleteexam_1_response.status_code == 204
+        if postexam_2_response.status_code == 201:
+            deleteexam_2_response = requests.delete(
+                PREFIX + "/" + 
+                postexam_2_response_json["id"],
+                headers=headers)
+            assert deleteexam_2_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+
+
+def test_create_task():
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "Automated test exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        exam_template = {
+            "name": "Automated test exam template",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexamtemplate_response = requests.post(
+            PREFIX + "/new", json=exam_template, headers=headers)
+        assert postexam_response.status_code == 201
+        postexam_response_json = postexam_response.json()
+        assert postexamtemplate_response.status_code == 201
+        postexamtemplate_response_json = postexamtemplate_response.json()
+        workflow_1 = {
+            "name": "Automated test workflow",
+            "comment": "test comment",
+            "exam_id": postexam_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        workflow_template_1 = {
+            "name": "Automated test workflow",
+            "comment": "test comment",
+            "exam_id": postexamtemplate_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": True,
+            "is_frozen": False
+        }
+        postworkflow_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+        postworkflowtemplate_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+        assert postworkflow_1_response.status_code == 201
+        assert postworkflowtemplate_1_response.status_code == 201
+        postworkflow_1_response_json = postworkflow_1_response.json()
+        postworkflowtemplate_1_response_json = postworkflowtemplate_1_response.json()
+        task_1 = {
+            "workflow_id": postworkflow_1_response_json["id"],
+            "name": "Automated test task",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": False,
+            "is_frozen": False
+        }
+        task_2 = task_1.copy()
+        task_2["workflow_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
+        task_3 = task_1.copy()
+        task_3["workflow_id"] = None
+        task_4 = task_1.copy()
+        task_4["is_template"] = True
+        task_5 = task_1.copy()
+        task_5["workflow_id"] = postworkflowtemplate_1_response_json["id"]
+        task_6 = task_1.copy()
+        task_6["status"] = {"IN_PROGRESS": "some comment"}
+
+    # act
+        posttask_1_response = requests.post(
+            PREFIX + "/task/new", json=task_1, headers=headers)
+        posttask_2_response = requests.post(
+            PREFIX + "/task/new", json=task_2, headers=headers)
+        posttask_3_response = requests.post(
+            PREFIX + "/task/new", json=task_3, headers=headers)
+        posttask_4_response = requests.post(
+            PREFIX + "/task/new", json=task_4, headers=headers)
+        posttask_5_response = requests.post(
+            PREFIX + "/task/new", json=task_5, headers=headers)
+        posttask_6_response = requests.post(
+            PREFIX + "/task/new", json=task_6, headers=headers)
+
+    # check
+        assert posttask_1_response.status_code == 201
+        posttask_1_response_json = posttask_1_response.json()
+        for key in task_1.keys():
+            assert posttask_1_response_json[key] == task_1[key]
+        gettask_1_response = requests.get(
+            PREFIX + "/task/" + posttask_1_response_json["id"], headers=headers)
+        assert gettask_1_response.status_code == 200
+        gettask_1_response_json = gettask_1_response.json()
+        for key in task_1.keys():
+            assert gettask_1_response_json[key] == task_1[key]
+        input_json = json.loads(gettask_1_response_json["artifacts"]["input"])
+        output_json = json.loads(gettask_1_response_json["artifacts"]["output"])
+        assert input_json[0]["path"] == "/data"
+        assert input_json[0]["name"] == "inputfile2"
+        assert output_json[0]["path"] == "/data"
+        assert output_json[0]["name"] == "outputfile1"
+        assert posttask_2_response.status_code == 400, \
+            "Task with wrong workflow_id should be rejected."
+        assert posttask_3_response.status_code == 400, \
+            "Task without workflow_id should be rejected."
+        assert posttask_4_response.status_code == 400, \
+            "Task template that refers to workflow instance should be rejected."
+        assert posttask_5_response.status_code == 400, \
+            "Task instance that refers to workflow template should be rejected."
+        assert posttask_6_response.status_code == 400, \
+            'New task with status != {"PENDING": "..."} should be rejected.'
+
+    # cleanup
+    finally:
+        if postexam_response.status_code == 201:
+            deleteexam_response = requests.delete(
+                PREFIX + "/" + postexam_response_json["id"], headers=headers)
+            assert deleteexam_response.status_code == 204
+        if postexamtemplate_response.status_code == 201:
+            postexamtemplate_response_json = postexamtemplate_response.json()
+            deleteexamtemplate_response = requests.delete(
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+            assert deleteexamtemplate_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+        # deleting an exam, recursively deletes the corresponding workflows and tasks
+
+
+def test_create_task_from_template():
+    # TODO work in progress
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "Automated test exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        assert postexam_response.status_code == 201
+        postexam_response_json = postexam_response.json()
+        exam_template = {
+            "name": "Automated test exam template",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        postexamtemplate_response = requests.post(
+            PREFIX + "/new", json=exam_template, headers=headers)
+        assert postexamtemplate_response.status_code == 201
+        postexamtemplate_response_json = postexamtemplate_response.json()
+        workflow_template = {
+            "exam_id": postexamtemplate_response_json["id"],
+            "name": "Automated test workflow template",
+            "comment": "test comment",
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": True,
+            "is_frozen": False
+        }
+        postworkflowtemplate_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template, headers=headers)
+        assert postworkflowtemplate_response.status_code == 201
+        postworkflowtemplate_response_json = postworkflowtemplate_response.json()
+        workflow = {
+            "exam_id": postexam_response_json["id"],
+            "name": "Automated test workflow",
+            "comment": "test comment",
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        postworkflow_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow, headers=headers)
+        assert postworkflow_response.status_code == 201
+        postworkflow_response_json = postworkflow_response.json()
+        task_template = {
+            "workflow_id": postworkflowtemplate_response_json["id"],
+            "name": "Automated test task template",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": True,
+            "is_frozen": False
+        }
+        posttasktemplate_response = requests.post(
+            PREFIX + "/task/new", json=task_template, headers=headers)
+        assert posttasktemplate_response.status_code == 201
+        posttasktemplate_response_json = posttasktemplate_response.json()
+        task = task_template.copy()
+        task["workflow_id"] = postworkflow_response_json["id"]
+        task["name"] = "Automated test task"
+        task["is_template"] = False
+        posttask_response = requests.post(
+            PREFIX + "/task/new", json=task, headers=headers)
+        assert posttask_response.status_code == 201
+        posttask_response_json = posttask_response.json()
+
+    # act
+        posttaskfromtemplate_response = requests.post(
+            PREFIX + "/task",
+            params={
+                "workflow_id": postworkflow_response_json["id"], 
+                "template_id": posttasktemplate_response_json["id"],
+                "new_task_is_template": False   # could also check with True
+            },
+            headers=headers)
+        posttaskfromtemplate_fail_1_response = requests.post(
+            PREFIX + "/task",
+            params={
+                "workflow_id": postworkflow_response_json["id"], 
+                "template_id": posttask_response_json["id"],
+                "new_task_is_template": False   # could also check with True
+            },
+            headers=headers)
+        posttaskfromtemplate_fail_2_response = requests.post(
+            PREFIX + "/task",
+            params={
+                "workflow_id": "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", 
+                "template_id": posttasktemplate_response_json["id"],
+                "new_task_is_template": False   # could also check with True
+            },
+            headers=headers)
+        posttaskfromtemplate_fail_3_response = requests.post(
+            PREFIX + "/task",
+            params={
+                "workflow_id": posttask_response_json["id"], 
+                "template_id": posttasktemplate_response_json["id"],
+                "new_task_is_template": True
+            },
+            headers=headers)
+        posttasktemplatefromtemplate_response = requests.post(
+            PREFIX + "/task",
+            params={
+                "workflow_id": postworkflowtemplate_response_json["id"], 
+                "template_id": posttasktemplate_response_json["id"],
+                "new_task_is_template": True
+            },
+            headers=headers)
+
+    # check
+        assert posttaskfromtemplate_response.status_code == 201
+        posttaskfromtemplate_response_json = posttaskfromtemplate_response.json()
+        for key in task_template.keys():
+            if key != "is_template" and key != "workflow_id":
+                assert posttaskfromtemplate_response_json[key] == task_template[key]
+        assert posttaskfromtemplate_response_json["workflow_id"] == \
+            postworkflow_response_json["id"]
+        assert posttaskfromtemplate_response_json["is_template"] is False
+        gettask_response = requests.get(
+            PREFIX + "/task/" + posttaskfromtemplate_response_json["id"], 
+            headers=headers)
+        assert gettask_response.status_code == 200
+        gettask_response_json = gettask_response.json()
+        for key in task_template.keys():
+            if key != "is_template" and key != "workflow_id":
+                assert gettask_response_json[key] == task_template[key]
+        assert gettask_response_json["workflow_id"] == postworkflow_response_json["id"]
+        assert gettask_response_json["is_template"] is False
+        assert posttaskfromtemplate_fail_1_response.status_code == 400, \
+            "Creating task from task instance should be rejected."
+        assert posttaskfromtemplate_fail_2_response.status_code == 400, \
+            "exam_id must refer to an existing exam."
+        assert posttaskfromtemplate_fail_3_response.status_code == 400, \
+            "Creating task template that links to task instance should be rejected."
+        assert posttasktemplatefromtemplate_response.status_code == 201
+
+    # prepare
+        # updated_workflow_template = workflow_template.copy()
+        # updated_workflow_template["name"] = "Atomated test workflow template updated"
+        # updated_workflow_template["status"] = "UPDATED"
+        # putupdatedworkflowtemplate_response = requests.put(
+        #     PREFIX + "/workflow/" + postworkflow_response_json["id"],
+        #     json=updated_workflow_template,
+        #     headers=headers)
+        # assert putupdatedworkflowtemplate_response.status_code == 200
+
+    # act
+        # postworkflowfromupdatedtemplate_response = requests.post(
+        #     PREFIX + "/workflow",
+        #     params={
+        #         "exam_id": postexam_response_json["id"], 
+        #         "template_id": putupdatedworkflowtemplate_response.json()["id"],
+        #         "new_workflow_is_template": False   # could also check with True
+        #     },
+        #     headers=headers)
+
+    # check
+        # assert postworkflowfromupdatedtemplate_response.status_code == 201
+        # assert postworkflowfromupdatedtemplate_response.json()["status"] == "NEW", \
+        #    "status of new workflow should be NEW independent of the templates status."
+
+    # cleanup
+    finally:
+        # deleting exam recursively deletes associated workflows and tasks
+        deleteexam_response = requests.delete(
+            PREFIX + "/" + postexam_response_json["id"], headers=headers)
+        assert deleteexam_response.status_code == 204
+        if postexamtemplate_response.status_code == 201:
+            deleteexamtemplate_response = requests.delete(
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+            assert deleteexamtemplate_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+
+
+def test_get_task():
+    # Successfully getting a task is already tested in test_create_task.
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    gettask_response = requests.get(PREFIX + "/task/123", headers=headers)
+    assert gettask_response.status_code == 400   # invalid uuid format
+    gettask_response = requests.get(
+        PREFIX + "/task/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers)
+    assert gettask_response.status_code == 404
+
+
+def test_get_all_workflow_tasks():
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "Automated test exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postnewexam_response = requests.post(
+            PREFIX + "/new", json=exam, headers=headers)
+        assert postnewexam_response.status_code == 201
+        postnewexam_response_json = postnewexam_response.json()
+        workflow_1 = {
+            "name": "Automated test workflow",
+            "comment": "automated test",
+            "exam_id": postnewexam_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        workflow_2 = workflow_1.copy()
+        workflow_2["name"] = "Automated test workflow 2"
+        postworkflow_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+        postworkflow_2_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+        assert postworkflow_1_response.status_code == 201
+        assert postworkflow_2_response.status_code == 201
+        postworkflow_1_response_json = postworkflow_1_response.json()
+        postworkflow_2_response_json = postworkflow_2_response.json()
+        task_1 = {
+            "workflow_id": postworkflow_1_response_json["id"],
+            "name": "Automated test task",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": False,
+            "is_frozen": False
+        }
+        task_2 = task_1.copy()
+        task_2["name"] = "Automated test task 2"
+        task_3 = task_1.copy()
+        task_3["name"] = "Automated test task 3"
+        task_3["workflow_id"] = postworkflow_2_response_json["id"]
+        posttask_1_response = requests.post(
+            PREFIX + "/task/new", json=task_1, headers=headers)
+        posttask_2_response = requests.post(
+            PREFIX + "/task/new", json=task_2, headers=headers)
+        posttask_3_response = requests.post(
+            PREFIX + "/task/new", json=task_3, headers=headers)
+        assert posttask_1_response.status_code == 201
+        assert posttask_2_response.status_code == 201
+        assert posttask_3_response.status_code == 201
+
+    # act
+        getalltasks_response = requests.get(
+            PREFIX + "/task/all/" + str(postworkflow_1_response_json["id"]), 
+            headers=headers)
+        # could enforce error when requesting tasks for non existing workflow
+        # getalltaskswrongid_response = requests.get(
+        #     PREFIX + "/task/all/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", 
+        #     headers=headers)
+
+    # check
+        assert getalltasks_response.status_code == 200
+        getalltasks_response_json = getalltasks_response.json()
+        assert len(getalltasks_response_json) == 2
+        def task_in_response(task):
+            for task_json_found in getalltasks_response_json:
+                task_matches = True
+                for key in task.keys():
+                    if task[key] != task_json_found[key]:
+                        task_matches = False
+                if task_matches:
+                    return True
+            return False
+        assert task_in_response(task_1)
+        assert task_in_response(task_2)
+        assert not task_in_response(task_3)
+        # could enforce error when requesting workflows for non existing exam
+        # assert getallworkflowswrongid_response.status_code == 404
+
+    # cleanup
+    finally:
+        if postnewexam_response.status_code == 201:
+            deleteexam1_response = requests.delete(
+                PREFIX + "/" + postnewexam_response.json()["id"], headers=headers)
+            assert deleteexam1_response.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+
+
+def test_get_all_task_templates():
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        exam_template_1 = {
+            "name": "Automated test exam template",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        exam_template_2 = exam_template_1.copy()
+        exam_template_2["name"] = "Automated test template 2"
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam_1 = exam_template_1.copy()
+        exam_1["is_template"] = False
+        exam_1["patient_id"] = postpatient_1_response_json["id"]
+        getalltasktemplatesbefore_response = requests.get(
+            PREFIX + "/task/templates/all",
+            headers=headers)
+        assert getalltasktemplatesbefore_response.status_code == 200
+        postnewexamtemplate_1_response = requests.post(
+            PREFIX + "/new", json=exam_template_1, headers=headers)
+        assert postnewexamtemplate_1_response.status_code == 201
+        postnewexamtemplate_1_response_json = postnewexamtemplate_1_response.json()
+        postnewexamtemplate_2_response = requests.post(
+            PREFIX + "/new", json=exam_template_2, headers=headers)
+        assert postnewexamtemplate_2_response.status_code == 201
+        postnewexamtemplate_2_response_json = postnewexamtemplate_2_response.json()
+        postnewexam_1_response = requests.post(
+            PREFIX + "/new", json=exam_1, headers=headers)
+        assert postnewexam_1_response.status_code == 201
+        postnewexam_1_response_json = postnewexam_1_response.json()
+        workflow_template_1 = {
+            "name": "Automated test workflow template",
+            "comment": "automated test",
+            "exam_id": postnewexamtemplate_1_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": True,
+            "is_frozen": False
+        }
+        workflow_template_2 = workflow_template_1.copy()
+        workflow_template_2["name"] = "Automated test workflow template 2"
+        workflow_template_3 = workflow_template_1.copy()
+        workflow_template_3["name"] = "Automated test workflow template 3"
+        workflow_template_3["exam_id"] = postnewexamtemplate_2_response_json["id"]
+        workflow_1 = workflow_template_1.copy()
+        workflow_1["name"] = "Automated test workflow 1"
+        workflow_1["exam_id"] = postnewexam_1_response_json["id"]
+        workflow_1["is_template"] = False
+        postworkflowtemplate_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+        postworkflowtemplate_2_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers)
+        postworkflowtemplate_3_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_3, headers=headers)
+        postworkflow_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+        assert postworkflowtemplate_1_response.status_code == 201
+        assert postworkflowtemplate_2_response.status_code == 201
+        assert postworkflowtemplate_3_response.status_code == 201
+        assert postworkflow_1_response.status_code == 201
+        postworkflowtemplate_1_response_json = postworkflowtemplate_1_response.json()
+        postworkflowtemplate_2_response_json = postworkflowtemplate_2_response.json()
+        postworkflowtemplate_3_response_json = postworkflowtemplate_3_response.json()
+        postworkflow_1_response_json = postworkflow_1_response.json()
+        task_template_1 = {
+            "workflow_id": postworkflowtemplate_1_response_json["id"],
+            "name": "Automated test task",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": True,
+            "is_frozen": False
+        }
+        task_template_2 = task_template_1.copy()
+        task_template_2["name"] = "Automated test task template 2"
+        task_template_2["workflow_id"] = postworkflowtemplate_2_response_json["id"]
+        task_template_3 = task_template_1.copy()
+        task_template_3["name"] = "Automated test task template 3"
+        task_template_3["workflow_id"] = postworkflowtemplate_3_response_json["id"]
+        task_1 = task_template_1.copy()
+        task_1["name"] = "Automated test task"
+        task_1["is_template"] = False
+        task_1["workflow_id"] = postworkflow_1_response_json["id"]
+        posttasktemplate_1_response = requests.post(
+            PREFIX + "/task/new", json=task_template_1, headers=headers)
+        posttasktemplate_2_response = requests.post(
+            PREFIX + "/task/new", json=task_template_2, headers=headers)
+        posttasktemplate_3_response = requests.post(
+            PREFIX + "/task/new", json=task_template_3, headers=headers)
+        posttask_1_response = requests.post(
+            PREFIX + "/task/new", json=task_1, headers=headers)
+        assert posttasktemplate_1_response.status_code == 201
+        assert posttasktemplate_2_response.status_code == 201
+        assert posttasktemplate_3_response.status_code == 201
+        assert posttask_1_response.status_code == 201
+
+    # act
+        getalltasktemplates_response = requests.get(
+            PREFIX + "/task/templates/all",
+            headers=headers)
+
+    # check
+        assert getalltasktemplates_response.status_code == 200
+        getalltasktemplates_response_json = getalltasktemplates_response.json()
+        assert len(getalltasktemplates_response_json) \
+            - len(getalltasktemplatesbefore_response.json()) == 3
+        
+        def task_template_in_received_list(task_template):
+            for task_template_json_found in getalltasktemplates_response_json:
+                assert task_template_json_found["is_template"] is True
+                task_template_matches = True
+                for key in task_template.keys():
+                    if task_template[key] != task_template_json_found[key]:
+                        task_template_matches = False
+                if task_template_matches:
+                    return True
+            return False
+
+        assert task_template_in_received_list(task_template_1)
+        assert task_template_in_received_list(task_template_2)
+        assert task_template_in_received_list(task_template_3)
+
+    # cleanup
+    finally:
+        if postnewexamtemplate_1_response.status_code == 201:
+            deleteexamtemplate_1_presponse = requests.delete(
+                PREFIX + "/" + postnewexamtemplate_1_response_json["id"],
+                headers=headers,
+            )
+            assert deleteexamtemplate_1_presponse.status_code == 204
+        if postnewexamtemplate_2_response.status_code == 201:
+            deleteexamtemplate_2_presponse = requests.delete(
+                PREFIX + "/" + postnewexamtemplate_2_response_json["id"],
+                headers=headers,
+            )
+            assert deleteexamtemplate_2_presponse.status_code == 204
+        if postnewexam_1_response.status_code == 201:
+            deleteexam_1_presponse = requests.delete(
+                PREFIX + "/" + postnewexam_1_response_json["id"],
+                headers=headers,
+            )
+            assert deleteexam_1_presponse.status_code == 204
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+
+
+def test_task_delete():
+    # TODO implement tests for deleting frozen tasks 
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "Automated test exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postnewexam_response = requests.post(
+            PREFIX + "/new", json=exam, headers=headers)
+        assert postnewexam_response.status_code == 201
+        postnewexam_response_json = postnewexam_response.json()
+        exam_template = {
+            "name": "Automated test exam template",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        postnewexamtemplate_response = requests.post(
+            PREFIX + "/new", json=exam_template, headers=headers)
+        assert postnewexamtemplate_response.status_code == 201
+        postnewexamtemplate_response_json = postnewexamtemplate_response.json()
+        workflow_1 = {
+            "name": "Automated test workflow",
+            "comment": "test comment",
+            "exam_id": postnewexam_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        workflow_2 = workflow_1.copy()
+        workflow_2["name"] = "Automated test workflow 2"
+        workflow_template_1 = {
+            "name": "Automated test workflow template",
+            "comment": "test comment",
+            "exam_id": postnewexamtemplate_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": True,
+            "is_frozen": False
+        }
+        postworkflow_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+        assert postworkflow_1_response.status_code == 201
+        postworkflow_1_response_json = postworkflow_1_response.json()
+        postworkflow_2_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+        assert postworkflow_2_response.status_code == 201
+        postworkflow_2_response_json = postworkflow_2_response.json()
+        postworkflow_template_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+        assert postworkflow_template_response.status_code == 201
+        postworkflow_template_response_json = postworkflow_template_response.json()
+        task_1 = {
+            "workflow_id": postworkflow_1_response_json["id"],
+            "name": "Automated test task",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": False,
+            "is_frozen": False
+        }
+        task_2 = task_1.copy()
+        task_2["name"] = "Automated test task 2"
+        task_2["workflow_id"] = postworkflow_2_response_json["id"]
+        task_template = task_1.copy()
+        task_template["name"] = "Automated task template"
+        task_template["workflow_id"] = postworkflow_template_response_json["id"]
+        task_template["is_template"] = True
+        posttask_1_response = requests.post(
+            PREFIX + "/task/new", json=task_1, headers=headers)
+        assert posttask_1_response.status_code == 201
+        posttask_1_response_json = posttask_1_response.json()
+        posttask_2_response = requests.post(
+            PREFIX + "/task/new", json=task_2, headers=headers)
+        assert posttask_1_response.status_code == 201
+        posttask_2_response_json = posttask_2_response.json()
+        posttask_template_response = requests.post(
+            PREFIX + "/task/new", json=task_template, headers=headers)
+        assert posttask_template_response.status_code == 201
+        posttask_template_response_json = posttask_template_response.json()
+
+    # act
+        deletetask_1_response = requests.delete(
+            PREFIX + "/task/" + posttask_1_response_json["id"], 
+            headers=headers
+        )
+        deletetask_template_response = requests.delete(
+            PREFIX + "/task/" + posttask_template_response_json["id"], 
+            headers=headers
+        )
+
+    # check
+        assert deletetask_1_response.status_code == 204
+        assert deletetask_template_response.status_code == 204
+        gettask_1_response = requests.get(
+            PREFIX + "/task/" + posttask_1_response_json["id"],
+            headers=headers)
+        assert gettask_1_response.status_code == 404
+        gettask_2_response = requests.get(
+            PREFIX + "/task/" + posttask_2_response_json["id"],
+            headers=headers)
+        assert gettask_2_response.status_code == 200
+        gettasktemplate_response = requests.get(
+            PREFIX + "/" + posttask_template_response_json["id"],
+            headers=headers)
+        assert gettasktemplate_response.status_code == 404
+
+    # cleanup
+    finally:
+        if postpatient_1_response.status_code == 201:
+            deletepatient_1_response = requests.delete(
+                PREFIX_PATIENT_MANAGER + "/" + 
+                str(postpatient_1_response_json["id"]),
+                headers=headers)
+            assert deletepatient_1_response.status_code == 204
+        if postnewexam_response.status_code == 201:
+            deleteexam_response = requests.delete(
+                PREFIX + "/" + postnewexam_response_json["id"],
+                headers=headers
+            )
+            assert deleteexam_response.status_code == 204
+        if postnewexamtemplate_response.status_code:
+            deleteexamtemplate_presponse = requests.delete(
+                PREFIX + "/" + postnewexamtemplate_response_json["id"],
+                headers=headers
+            )
+            assert deleteexamtemplate_presponse.status_code == 204
+
+
+def test_update_task():
+    # prepare
+    access_token = login()
+    headers = {"Authorization": "Bearer " + access_token}
+    try:
+        patient_1 = {
+            "first_name": "Automated Test",
+            "last_name": "Patient",
+            "birth_date": "1977-07-17",
+            "sex": "FEMALE",
+            "issuer": "someone",
+            "status": "NEW",
+            "comment": None
+        }
+        postpatient_1_response = requests.post(
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        assert postpatient_1_response.status_code == 201
+        postpatient_1_response_json = postpatient_1_response.json()
+        exam_1 = {
+            "patient_id": postpatient_1_response_json["id"],
+            "name": "Automated test exam",
+            "country": "blablastan",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": False,
+            "is_frozen": False
+        }
+        postexam_1_response = requests.post(
+            PREFIX + "/new", json=exam_1, headers=headers)
+        assert postexam_1_response.status_code == 201
+        postexam_1_response_json = postexam_1_response.json()
+        exam_2 = exam_1.copy()
+        exam_2["name"] = "Automated test exam 2"
+        postexam_2_response = requests.post(
+            PREFIX + "/new", json=exam_2, headers=headers)
+        assert postexam_2_response.status_code == 201
+        postexam_2_response_json = postexam_2_response.json()
+        workflow_1 = {
+            "name": "Automated test workflow",
+            "comment": "test comment",
+            "exam_id": postexam_1_response_json["id"],
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": False,
+            "is_frozen": False
+        }
+        workflow_2 = workflow_1.copy()
+        workflow_2["name"] = "Automated test workflow 2"
+        workflow_2["exam_id"] = postexam_2_response_json["id"]
+        postworkflow_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+        assert postworkflow_1_response.status_code == 201
+        postworkflow_1_response_json = postworkflow_1_response.json()
+        postworkflow_2_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+        assert postworkflow_2_response.status_code == 201
+        postworkflow_2_response_json = postworkflow_2_response.json()
+        task_1 = {
+            "workflow_id": postworkflow_1_response_json["id"],
+            "name": "Automated test task",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": False,
+            "is_frozen": False
+        }
+        posttask_1_response = requests.post(
+            PREFIX + "/task/new", json=task_1, headers=headers)
+        assert posttask_1_response.status_code == 201
+        posttask_1_response_json = posttask_1_response.json()
+        update_request_1 = {
+            "workflow_id": postworkflow_2_response_json["id"],
+            "name": "Automated test task updated",
+            "description": "some task description updated",
+            "type": "CERTIFIED_DEVICE_TASK",
+            "args": {
+                "arg1": "updated",
+                "arg2 updated": "val2",
+                "arg3 updated": "val3 updated"
+            },
+            "artifacts": {
+                "some unspecified artifacts updated": "yay updated",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data updated",
+                        "name": "inputfile2 updated"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data updated",
+                        "name": "outputfile1 updated"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA updated": "FANTASY PACS 1 updated",
+                "RAWDATA FANTASIA updated": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "COMPLETED": "some status annotation completed",
+            },
+            "is_template": False,
+            "is_frozen": False
+        }
+        # update_request_2 = update_request_1.copy()
+        # update_request_2["status"] = {"PENDING": "some status annotation"}
+        update_request_3 = update_request_1.copy()
+        update_request_3["workflow_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
+        update_request_4 = update_request_1.copy()
+        update_request_4["is_template"] = True
+        # TODO implement more conditions like in test_create_exam_from_template
+
+    # act
+        updatetask_response_1 = requests.put(
+            PREFIX + "/task/" + posttask_1_response_json["id"],
+            json=update_request_1,
+            headers=headers
+        )
+
+    # check
+        assert updatetask_response_1.status_code == 200
+        updatetask_response_1_json = updatetask_response_1.json()
+        for key in update_request_1.keys():
+            assert updatetask_response_1_json[key] == update_request_1[key]
+        gettask_response_1 = requests.get(
+            PREFIX + "/task/" + updatetask_response_1_json["id"],
+            headers=headers)
+        assert gettask_response_1.status_code == 200
+        gettask_response_1_json = gettask_response_1.json()
+        for key in update_request_1.keys():
+            if key != "status":
+                assert gettask_response_1_json[key] == update_request_1[key]
+
+    # # act
+    #     updatetask_response_2 = requests.put(
+    #         PREFIX + "/task/" + posttask_1_response_json["id"],
+    #         json=update_request_2,
+    #         headers=headers
+    #     )
+    # # check
+    #     assert updatetask_response_2.status_code == 403, \
+    #         "Update status to PENDING should be rejected."  # debateble
+
+    # act
+        updatetask_response_3 = requests.put(
+            PREFIX + "/task/" + posttask_1_response_json["id"],
+            json=update_request_3,
+            headers=headers
+        )
+    # check
+        assert updatetask_response_3.status_code == 400, \
+            "Wrong workflow_id should be rejected."
+
+    # act
+        updatetask_response_4 = requests.put(
+            PREFIX + "/task/" + posttask_1_response_json["id"],
+            json=update_request_4,
+            headers=headers
+        )
+    # check
+        assert updatetask_response_4.status_code == 400, \
+            "Update to template with reference to workflow instance should be rejected."
 
     # cleanup
     finally:
