@@ -23,6 +23,8 @@ Functions
 
 .. autoapisummary::
 
+   exam-manager.app.main.custom_http_exception_handler
+   exam-manager.app.main.validation_exception_handler
    exam-manager.app.main.startup
    exam-manager.app.main.shutdown
    exam-manager.app.main.readiness
@@ -36,6 +38,24 @@ Module Contents
 
 
 .. py:data:: app
+
+.. py:function:: custom_http_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: validation_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for fastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
 
 .. py:function:: startup()
    :async:

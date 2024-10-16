@@ -27,7 +27,6 @@ Functions
 
    exam-manager.app.exam.get_workflow_out_model
    exam-manager.app.exam.get_exam_out_model
-   exam-manager.app.exam.raise_http_exception
    exam-manager.app.exam.create_exam
    exam-manager.app.exam.create_exam_from_template
    exam-manager.app.exam.get_exam
@@ -96,23 +95,6 @@ Module Contents
    Returns
    -------
        Exam pydantic model
-
-
-.. py:function:: raise_http_exception(status_code, detail)
-
-   Print the detail and raises an HTTPException with the status code and detail.
-
-   Parameters
-   ----------
-   status_code
-       The http status code for the HTTPException.
-   detail
-       The detail message for the HTTPException.
-
-   Returns
-   -------
-       It does not return and instead raises the HTTPException.
-
 
 
 .. py:function:: create_exam(payload: scanhub_libraries.models.BaseExam, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
