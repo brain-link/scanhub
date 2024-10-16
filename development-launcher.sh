@@ -17,13 +17,13 @@ then
     docker build -t scanhub-base .
     cd ../..
     echo
-    echo docker-compose build --build-arg BASE_IMG=scanhub-base:latest
-    docker-compose build --build-arg BASE_IMG=scanhub-base:latest
+    echo docker compose build --build-arg BASE_IMG=scanhub-base:latest
+    docker compose build --build-arg BASE_IMG=scanhub-base:latest
 fi
 
 echo
-echo docker-compose up -d
-docker-compose up -d
+echo docker compose up -d
+docker compose up -d
 
 if [ "$1" == --full-rebuild ]
 then
@@ -62,8 +62,8 @@ cd ..
 
 
 echo
-echo scanhub: docker-compose down
-docker-compose down
+echo scanhub: docker compose down
+docker compose down
 
 echo
 echo until next time!

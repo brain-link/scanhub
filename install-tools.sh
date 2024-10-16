@@ -8,7 +8,7 @@
 # Regular installs with apt and flatpak
 #
 sudo apt -y install docker.io
-sudo apt -y install docker-compose
+sudo apt -y install docker-compose-v2
 sudo flatpak install com.visualstudio.code-oss
 
 #

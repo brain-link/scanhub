@@ -5,11 +5,17 @@
 
 
 from fastapi import FastAPI, HTTPException
+from fastapi.exception_handlers import (
+    http_exception_handler,
+    request_validation_exception_handler,
+)
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.db import engine, init_db
-from app.exam import LOG_CALL_DELIMITER, raise_http_exception, router
+from app.exam import LOG_CALL_DELIMITER, router
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
@@ -28,6 +34,7 @@ app = FastAPI(
     docs_url="/api/v1/exam/docs"
 )
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ORIGINS,
@@ -36,6 +43,28 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request, exc):
+    """
+    Add logging for http exceptions.
+
+    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+    """
+    print(f"{repr(exc)}")
+    return await http_exception_handler(request, exc)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    """
+    Add logging for fastAPI's automatic input validation exceptions.
+
+    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+    """
+    print(f"{exc}")
+    return await request_validation_exception_handler(request, exc)
 
 
 @app.on_event("startup")
@@ -85,7 +114,7 @@ async def readiness() -> dict:
     # required_tables = ["exam", "workflow", "task", "device"]
 
     if not all(t in existing_tables for t in required_tables):
-        raise_http_exception(500, "SQL-DB: Could not create all required tables.")
+        raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
 
     return {"status": "ok"}
 

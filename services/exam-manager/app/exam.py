@@ -66,26 +66,6 @@ async def get_exam_out_model(data: Exam) -> ExamOut:
     return ExamOut(**exam)
 
 
-def raise_http_exception(status_code, detail):
-    """
-    Print the detail and raises an HTTPException with the status code and detail.
-
-    Parameters
-    ----------
-    status_code
-        The http status code for the HTTPException.
-    detail
-        The detail message for the HTTPException.
-
-    Returns
-    -------
-        It does not return and instead raises the HTTPException.
-
-    """
-    print(detail)
-    raise HTTPException(status_code=status_code, detail=detail)
-
-
 # ----- Exam API endpoints
 
 @router.post("/new", response_model=ExamOut, status_code=201, tags=["exams"])
@@ -112,20 +92,20 @@ async def create_exam(payload: BaseExam,
     print("Username:", user.username)
     print("Payload:", payload)
     if payload.status != "NEW":
-        raise_http_exception(400, "New exam needs to have status NEW.")
+        raise HTTPException(status_code=400, detail="New exam needs to have status NEW.")
     if payload.is_template is False:
         if payload.patient_id is None:
-            raise_http_exception(400, "patient_id must be given to create exam.")
+            raise HTTPException(status_code=400, detail="patient_id must be given to create exam.")
         getpatient_response = requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3)
         if getpatient_response.status_code != 200:
-            raise_http_exception(400, "patient_id must refer to an existing patient.")
+            raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
     if payload.is_template is True and payload.patient_id is not None:
-        raise_http_exception(400, "Exam template must not have patient_id.")
+        raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
     if not (exam := await dal.add_exam_data(payload=payload, creator=user.username)):
-        raise_http_exception(404, "Could not create exam")
+        raise HTTPException(status_code=404, detail="Could not create exam")
     return await get_exam_out_model(data=exam)
 
 
@@ -160,25 +140,28 @@ async def create_exam_from_template(patient_id: Optional[int], template_id: UUID
     print("new_exam_is_template:", new_exam_is_template)
     if new_exam_is_template is False:
         if patient_id is None:
-            raise_http_exception(400, "patient_id must be given to create exam.")
+            raise HTTPException(status_code=400, detail="patient_id must be given to create exam.")
         getpatient_response = requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3)
         if getpatient_response.status_code != 200:
-            raise_http_exception(400, "patient_id must refer to an existing patient.")
+            raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
     if new_exam_is_template is True and patient_id is not None:
-        raise_http_exception(400, "Exam template must not have patient_id.")
+        raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
     if not (template := await dal.get_exam_data(exam_id=template_id)):
-        raise_http_exception(400, "Template not found.")
+        raise HTTPException(status_code=400, detail="Template not found.")
     if template.is_template is not True:
-        raise_http_exception(400, "Request to create exam from exam instance instead of exam template.")
+        raise HTTPException(
+            status_code=400,
+            detail="Request to create exam from exam instance instead of exam template."
+        )
     new_exam = BaseExam(**template.__dict__)
     new_exam.is_template = new_exam_is_template
     new_exam.status = 'NEW'
     new_exam.patient_id = patient_id
     if not (exam := await dal.add_exam_data(payload=new_exam, creator=user.username)):
-        raise_http_exception(404, "Could not create exam.")
+        raise HTTPException(status_code=404, detail="Could not create exam.")
 
     exam_out = await get_exam_out_model(data=exam)
 
@@ -218,9 +201,9 @@ async def get_exam(exam_id: UUID | str, user: Annotated[User, Depends(get_curren
     try:
         _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
     except ValueError:
-        raise raise_http_exception(400, "Badly formed exam_id")
+        raise HTTPException(status_code=400, detail="Badly formed exam_id")
     if not (exam := await dal.get_exam_data(exam_id=_id)):
-        raise_http_exception(404, "Exam not found")
+        raise HTTPException(status_code=404, detail="Exam not found")
     return await get_exam_out_model(data=exam)
 
 
@@ -285,11 +268,11 @@ async def exam_delete(exam_id: UUID | str, user: Annotated[User, Depends(get_cur
     print("exam_id:", exam_id)
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
     if not (exam := await dal.get_exam_data(exam_id=_id)):
-        raise_http_exception(404, "Exam not found")
+        raise HTTPException(status_code=404, detail="Exam not found")
     if exam.is_frozen:
-        raise_http_exception(404, "Exam is frozen and cannot be deleted.")
+        raise HTTPException(status_code=404, detail="Exam is frozen and cannot be deleted.")
     if not await dal.delete_exam_data(exam_id=_id):
-        raise_http_exception(404, "Could not delete exam.")
+        raise HTTPException(status_code=404, detail="Could not delete exam.")
 
 
 @router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
@@ -319,26 +302,26 @@ async def update_exam(exam_id: UUID | str, payload: BaseExam,
     print("exam_id:", exam_id)
     if payload.is_template is False:
         if payload.patient_id is None:
-            raise_http_exception(400, "patient_id must be given for exam instance.")
+            raise HTTPException(status_code=400, detail="patient_id must be given for exam instance.")
         getpatient_response = requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3)
         if getpatient_response.status_code != 200:
-            raise_http_exception(400, "patient_id must refer to an existing patient.")
+            raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
         # for now, allow changing the patient_id, but could require administrator rights in the future
     if payload.is_template is True and payload.patient_id is not None:
-        raise_http_exception(400, "Exam template must not have patient_id.")
+        raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
     # for now allow changing is_template in principle, but that could be refused in the future
     if payload.status == "NEW":
-        raise_http_exception(403, "Exam cannot be updated to status NEW.")
+        raise HTTPException(status_code=403, detail="Exam cannot be updated to status NEW.")
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
     if not (exam := await dal.get_exam_data(exam_id=_id)):
-        raise_http_exception(404, "Exam not found.")
+        raise HTTPException(status_code=404, detail="Exam not found.")
     if exam.is_frozen:
-        raise_http_exception(403, "Exam is frozen an cannot be edited.")
+        raise HTTPException(status_code=403, detail="Exam is frozen an cannot be edited.")
     if not (exam_updated := await dal.update_exam_data(exam_id=_id, payload=payload)):
-        raise_http_exception(404, "Could not update exam.")
+        raise HTTPException(status_code=404, detail="Could not update exam.")
     return await get_exam_out_model(data=exam_updated)
 
 
@@ -366,18 +349,20 @@ async def create_workflow(payload: BaseWorkflow, user: Annotated[User, Depends(g
     print("Username:", user.username)
     print("payload:", payload)
     if payload.status != "NEW":
-        raise_http_exception(400, "New workflow needs to have status NEW.")
+        raise HTTPException(status_code=400, detail="New workflow needs to have status NEW.")
     if payload.exam_id is not None:
         _id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
         if not (exam := await dal.get_exam_data(exam_id=_id)):
-            raise_http_exception(400, "exam_id must be an existing id.")
+            raise HTTPException(status_code=400, detail="exam_id must be an existing id.")
         if exam.is_template != payload.is_template:
-            raise_http_exception(400,
-                "Invalid link to exam. Instance needs to refer to instance, template to template.")
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid link to exam. Instance needs to refer to instance, template to template."
+            )
     if payload.is_template is False and payload.exam_id is None:
-        raise_http_exception(400, "Workflow instance needs exam_id.")
+        raise HTTPException(status_code=400, detail="Workflow instance needs exam_id.")
     if not (workflow := await dal.add_workflow_data(payload=payload, creator=user.username)):
-        raise_http_exception(404, "Could not create workflow")
+        raise HTTPException(status_code=404, detail="Could not create workflow")
     print("New workflow: ", workflow)
     return await get_workflow_out_model(data=workflow)
 
@@ -413,19 +398,25 @@ async def create_workflow_from_template(exam_id: UUID,
     print("template_id:", template_id)
     print("new_workflow_is_template:", new_workflow_is_template)
     if not (template := await dal.get_workflow_data(workflow_id=template_id)):
-        raise_http_exception(404, "Workflow not found")
+        raise HTTPException(status_code=404, detail="Workflow not found")
     if template.is_template is not True:
-        raise_http_exception(400, "Request to create workflow from workflow instance instead of workflow template.")
+        raise HTTPException(
+            status_code=400,
+            detail="Request to create workflow from workflow instance instead of workflow template."
+        )
     new_workflow = BaseWorkflow(**template.__dict__)
     new_workflow.status = "NEW"
     new_workflow.is_template = new_workflow_is_template
     new_workflow.exam_id = exam_id
     if not (exam := await dal.get_exam_data(exam_id=exam_id)):
-        raise_http_exception(400, "exam_id must be an existing id.")
+        raise HTTPException(status_code=400, detail="exam_id must be an existing id.")
     if exam.is_template != new_workflow_is_template:
-        raise_http_exception(400, "Invalid link to exam. Instance needs to refer to instance, template to template.")
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid link to exam. Instance needs to refer to instance, template to template."
+        )
     if not (workflow := await dal.add_workflow_data(payload=new_workflow, creator=user.username)):
-        raise_http_exception(404, "Could not create workflow.")
+        raise HTTPException(status_code=404, detail="Could not create workflow.")
 
     workflow_out = await get_workflow_out_model(data=workflow)
 
@@ -465,9 +456,9 @@ async def get_workflow(workflow_id: UUID | str, user: Annotated[User, Depends(ge
     try:
         _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
     except ValueError:
-        raise_http_exception(400, "Badly formed workflow_id.")
+        raise HTTPException(status_code=400, detail="Badly formed workflow_id.")
     if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
-        raise_http_exception(404, "Workflow not found")
+        raise HTTPException(status_code=404, detail="Workflow not found")
     return await get_workflow_out_model(data=workflow)
 
 
@@ -541,11 +532,11 @@ async def delete_workflow(workflow_id: UUID | str, user: Annotated[User, Depends
     print("workflow_id:", workflow_id)
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
     if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
-        raise_http_exception(404, "Workflow not found")
+        raise HTTPException(status_code=404, detail="Workflow not found")
     if workflow.is_frozen:
-        raise_http_exception(404, "Workflow is frozen and cannot be deleted")
+        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
     if not await dal.delete_workflow_data(workflow_id=_id):
-        raise_http_exception(404, "Workflow not found")
+        raise HTTPException(status_code=404, detail="Workflow not found")
 
 
 @router.put("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
@@ -574,23 +565,25 @@ async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow,
     print("workflow_id:", workflow_id)
     print("payload:", payload)
     if payload.status == "NEW":
-        raise_http_exception(403, "Workflow cannot be updated to status NEW.")
+        raise HTTPException(status_code=403, detail="Workflow cannot be updated to status NEW.")
     if payload.exam_id is not None:
         exam_id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
         if not (exam := await dal.get_exam_data(exam_id=exam_id)):
-            raise_http_exception(400, "exam_id must be an existing id.")
+            raise HTTPException(status_code=400, detail="exam_id must be an existing id.")
         if exam.is_template != payload.is_template:
-            raise_http_exception(400,
-                "Invalid link to exam. Instance needs to refer to instance, template to template.")
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid link to exam. Instance needs to refer to instance, template to template."
+            )
     if payload.is_template is False and payload.exam_id is None:
-        raise_http_exception(400, "Workflow instance needs exam_id.")
+        raise HTTPException(status_code=400, detail="Workflow instance needs exam_id.")
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
     if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
-        raise_http_exception(404, "Workflow not found")
+        raise HTTPException(status_code=404, detail="Workflow not found")
     if workflow.is_frozen:
-        raise_http_exception(404, "Workflow is frozen and cannot be updated")
+        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be updated")
     if not (workflow := await dal.update_workflow_data(workflow_id=_id, payload=payload)):
-        raise_http_exception(404, "Workflow could not be updated.")
+        raise HTTPException(status_code=404, detail="Workflow could not be updated.")
     return await get_workflow_out_model(data=workflow)
 
 
@@ -622,19 +615,21 @@ async def create_task(payload: BaseTask, user: Annotated[User, Depends(get_curre
             or TaskStatus.COMPLETED in payload.status \
             or TaskStatus.FAILED in payload.status \
             or TaskStatus.ERROR in payload.status:
-        raise_http_exception(400, "New task needs to have status PENDING " + \
+        raise HTTPException(status_code=400, detail="New task needs to have status PENDING " + \
             "and must not have status IN_PROGRESS, COMPLETED, FAILED or ERROR")
     if payload.workflow_id is not None:
         workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
         if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
-            raise_http_exception(400, "workflow_id must be an existing id.")
+            raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
         if workflow.is_template != payload.is_template:
-            raise_http_exception(400,
-                "Invalid link to workflow. Instance needs to refer to instance, template to template.")
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid link to workflow. Instance needs to refer to instance, template to template."
+            )
     if payload.is_template is False and payload.workflow_id is None:
-        raise_http_exception(400, "Task instance needs workflow_id.")
+        raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
     if not (task := await dal.add_task_data(payload=payload, creator=user.username)):
-        raise_http_exception(404, "Could not create task")
+        raise HTTPException(status_code=404, detail="Could not create task")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
     return result
@@ -669,23 +664,26 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
     print("template_id:", template_id)
     print("new_task_is_template:", new_task_is_template)
     if not (template := await dal.get_task_data(task_id=template_id)):
-        raise_http_exception(404, "Task template not found")
+        raise HTTPException(status_code=404, detail="Task template not found")
     if template.is_template is not True:
-        raise_http_exception(400, "Request to create task from task instance instead of task template.")
+        raise HTTPException(
+            status_code=400,
+            detail="Request to create task from task instance instead of task template."
+        )
     new_task = BaseTask(**template.__dict__)
     # if not TaskStatus.PENDING in new_task.status:
     #     new_task[TaskStatus.PENDING] = "New task instance."
     new_task.is_template = new_task_is_template
     new_task.workflow_id = workflow_id
     if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
-        raise_http_exception(400, "workflow_id must be an existing id.")
+        raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
     if workflow.is_template != new_task_is_template:
-        raise_http_exception(
-            400,
-            "Invalid link to workflow. Instance needs to refer to instance, template to template."
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid link to workflow. Instance needs to refer to instance, template to template."
         )
     if not (task := await dal.add_task_data(payload=new_task, creator=user.username)):
-        raise_http_exception(404, "Could not create task.")
+        raise HTTPException(status_code=404, detail="Could not create task.")
     result = TaskOut(**task.__dict__)
     print("Task created: ", result)
     return result
@@ -715,9 +713,9 @@ async def get_task(task_id: UUID | str, user: Annotated[User, Depends(get_curren
     try:
         _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
     except ValueError:
-        raise_http_exception(400, "Badly formed task_id.")
+        raise HTTPException(status_code=400, detail="Badly formed task_id.")
     if not (task := await dal.get_task_data(task_id=_id)):
-        raise_http_exception(404, "Task not found")
+        raise HTTPException(status_code=404, detail="Task not found")
     return TaskOut(**task.__dict__)
 
 
@@ -794,11 +792,11 @@ async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_cur
     print("task_id:", task_id)
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
     if not (task := await dal.get_task_data(task_id=_id)):
-        raise_http_exception(404, "Task not found")
+        raise HTTPException(status_code=404, detail="Task not found")
     if task.is_frozen:
-        raise_http_exception(404, "Task is frozen and cannot be deleted")
+        raise HTTPException(status_code=404, detail="Task is frozen and cannot be deleted")
     if not await dal.delete_task_data(task_id=_id):
-        raise_http_exception(404, "Task not found")
+        raise HTTPException(status_code=404, detail="Task not found")
 
 
 @router.put("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
@@ -828,21 +826,23 @@ async def update_task(task_id: UUID | str, payload: BaseTask,
     print("Username:", user.username)
     print("task_id:", task_id)
     # if TaskStatus.PENDING in payload.status:
-    #     raise_http_exception(400, "Task must not update to status PENDING "
+    #     raise HTTPException(status_code=400, detail="Task must not update to status PENDING "
     if payload.workflow_id is not None:
         workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
         if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
-            raise_http_exception(400, "workflow_id must be an existing id.")
+            raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
         if workflow.is_template != payload.is_template:
-            raise_http_exception(400,
-                "Invalid link to workflow. Instance needs to refer to instance, template to template.")
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid link to workflow. Instance needs to refer to instance, template to template."
+            )
     if payload.is_template is False and payload.workflow_id is None:
-        raise_http_exception(400, "Task instance needs workflow_id.")
+        raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
     if not (task := await dal.get_task_data(task_id=_id)):
-        raise_http_exception(404, "Task not found")
+        raise HTTPException(status_code=404, detail="Task not found")
     if task.is_frozen:
-        raise_http_exception(404, "Task is frozen and cannot be deleted")
+        raise HTTPException(status_code=404, detail="Task is frozen and cannot be deleted")
     if not (task_updated := await dal.update_task_data(task_id=_id, payload=payload)):
-        raise_http_exception(404, "Task not found")
+        raise HTTPException(status_code=404, detail="Task not found")
     return TaskOut(**task_updated.__dict__)
