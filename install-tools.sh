@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to install: docker.io, docker-compose, com.visualstudio.code-oss, pgadmin4, nvm, nodejs, npm and yarn for development of scanhub on Linux Mint (version 21.3 based on Ubuntu jammy)
+# Script to install: docker.io, docker-compose-v2, com.visualstudio.code-oss, pgadmin4, nvm, nodejs, npm and yarn for development of scanhub on Linux Mint (version 21.3 based on Ubuntu jammy)
 # For the installation of pgadmin4 the pgadmin.org repository and keys are added to the system according to https://www.pgadmin.org/download/pgadmin-4-apt/.
 # The installation of nvm works by downloading and executing a bash script according to https://nodejs.org/en/download/package-manager
 # Adds the current linux user to the docker group.
@@ -8,7 +8,7 @@
 # Regular installs with apt and flatpak
 #
 sudo apt -y install docker.io
-sudo apt -y install docker-compose-v2
+sudo apt -y install docker-compose-v2               # provides a version callable with "docker compose" instead of "docker-compose". This is relevant for the other scripts to work.
 sudo flatpak install com.visualstudio.code-oss
 
 #
