@@ -29,7 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -38,7 +38,7 @@
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/exam-manager/app/db/index';</script>
     <link rel="icon" href="../../../../_static/favicon-32x32.png"/>
@@ -658,6 +658,16 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Workflow.creator">
+<span class="sig-name descname"><span class="pre">creator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Workflow.creator" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Workflow.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Workflow.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="exam-manager.app.db.Workflow.is_finished">
 <span class="sig-name descname"><span class="pre">is_finished</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Workflow.is_finished" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -742,6 +752,11 @@ document.write(`
 <dl class="py attribute">
 <dt class="sig sig-object py" id="exam-manager.app.db.Task.status">
 <span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.TaskStatus</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Task.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Task.creator">
+<span class="sig-name descname"><span class="pre">creator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Task.creator" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -848,6 +863,8 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.exam_id"><code class="docutils literal notranslate"><span class="pre">Workflow.exam_id</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.name"><code class="docutils literal notranslate"><span class="pre">Workflow.name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.comment"><code class="docutils literal notranslate"><span class="pre">Workflow.comment</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.creator"><code class="docutils literal notranslate"><span class="pre">Workflow.creator</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.status"><code class="docutils literal notranslate"><span class="pre">Workflow.status</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.is_finished"><code class="docutils literal notranslate"><span class="pre">Workflow.is_finished</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.is_template"><code class="docutils literal notranslate"><span class="pre">Workflow.is_template</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Workflow.is_frozen"><code class="docutils literal notranslate"><span class="pre">Workflow.is_frozen</span></code></a></li>
@@ -867,6 +884,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.artifacts"><code class="docutils literal notranslate"><span class="pre">Task.artifacts</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.destinations"><code class="docutils literal notranslate"><span class="pre">Task.destinations</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.status"><code class="docutils literal notranslate"><span class="pre">Task.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.creator"><code class="docutils literal notranslate"><span class="pre">Task.creator</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.is_template"><code class="docutils literal notranslate"><span class="pre">Task.is_template</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.is_frozen"><code class="docutils literal notranslate"><span class="pre">Task.is_frozen</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.datetime_created"><code class="docutils literal notranslate"><span class="pre">Task.datetime_created</span></code></a></li>

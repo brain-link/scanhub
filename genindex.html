@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -37,7 +37,7 @@
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
@@ -413,7 +413,6 @@ document.write(`
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -520,20 +519,18 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.comment">comment (exam-manager.app.db.Workflow attribute)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.consume_finished_tasks">consume_finished_tasks() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.country">country (exam-manager.app.db.Exam attribute)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam">create_exam() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam_from_template">create_exam_from_template() (in module exam-manager.app.exam)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.create_record">create_record() (in module workflow-manager.app.api.workflow)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task">create_task() (in module exam-manager.app.exam)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task_from_template">create_task_from_template() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow">create_workflow() (in module exam-manager.app.exam)</a>
@@ -541,7 +538,13 @@ document.write(`
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow_from_template">create_workflow_from_template() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.creator">creator (exam-manager.app.db.Exam attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.creator">(exam-manager.app.db.Task attribute)</a>
 </li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.creator">(exam-manager.app.db.Workflow attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -802,23 +805,7 @@ document.write(`
 </li>
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_workflow_data">get_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_workflow_id_by_task_id">get_workflow_id_by_task_id() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_workflow_out_model">get_workflow_out_model() (in module exam-manager.app.exam)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_device_task">handle_device_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_finished_task">handle_finished_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_processing_task">handle_processing_task() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -876,7 +863,7 @@ document.write(`
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.loop">loop (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.LOG_CALL_DELIMITER">LOG_CALL_DELIMITER (in module exam-manager.app.exam)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -969,7 +956,11 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.origins">origins (in module exam-manager.app.main)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.oauth2_scheme">oauth2_scheme (in module exam-manager.app.exam)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.ORIGINS">ORIGINS (in module exam-manager.app.main)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -981,10 +972,12 @@ document.write(`
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.post_device_task">post_device_task() (in module workflow-manager.app.api.workflow)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.process">process() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.PREFIX_PATIENT_MANAGER">PREFIX_PATIENT_MANAGER (in module exam-manager.app.exam)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.process">process() (in module workflow-manager.app.api.workflow)</a>
+</li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer">Producer (class in workflow-manager.app.api.producer)</a>
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.producer">producer (in module workflow-manager.app.api.workflow)</a>
@@ -999,6 +992,8 @@ document.write(`
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.raise_http_exception">raise_http_exception() (in module exam-manager.app.exam)</a>
+</li>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.readiness">readiness() (in module device-manager.app.api.devices)</a>
 
       <ul>
@@ -1047,10 +1042,10 @@ document.write(`
       </ul></li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.start">start() (workflow-manager.app.api.producer.Producer method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_scan">start_scan() (in module workflow-manager.app.api.workflow)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.startup">startup() (in module device-manager.app.main)</a>
 
       <ul>
@@ -1067,6 +1062,8 @@ document.write(`
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.status">(exam-manager.app.db.Exam attribute)</a>
 </li>
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.status">(exam-manager.app.db.Task attribute)</a>
+</li>
+        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.status">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.stop">stop() (workflow-manager.app.api.producer.Producer method)</a>
@@ -1101,13 +1098,11 @@ document.write(`
 </li>
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_exam_data">update_exam_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.update_task">update_task() (in module exam-manager.app.exam)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_task_data">update_task_data() (in module exam-manager.app.dal)</a>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.update_task">update_task() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.update_task_status_in_db">update_task_status_in_db() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_task_data">update_task_data() (in module exam-manager.app.dal)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.update_workflow">update_workflow() (in module exam-manager.app.exam)</a>
 </li>

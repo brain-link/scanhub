@@ -14,8 +14,8 @@ Attributes
 
 .. autoapisummary::
 
+   exam-manager.app.main.ORIGINS
    exam-manager.app.main.app
-   exam-manager.app.main.origins
 
 
 Functions
@@ -31,11 +31,11 @@ Functions
 Module Contents
 ---------------
 
-.. py:data:: app
-
-.. py:data:: origins
+.. py:data:: ORIGINS
    :value: ['http://localhost', 'http://localhost:3000', 'http://localhost:8100', 'http://localhost:8080']
 
+
+.. py:data:: app
 
 .. py:function:: startup()
    :async:
