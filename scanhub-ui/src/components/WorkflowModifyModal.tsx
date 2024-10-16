@@ -28,6 +28,7 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
     name: props.item.name,
     comment: props.item.comment,
     exam_id: props.item.exam_id,              // eslint-disable-line camelcase
+    status: 'UPDATED',
     is_finished: props.item.is_finished,      // eslint-disable-line camelcase
     is_template: props.item.is_template,      // eslint-disable-line camelcase
     is_frozen: props.item.is_frozen,          // eslint-disable-line camelcase

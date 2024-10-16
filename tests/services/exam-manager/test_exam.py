@@ -10,9 +10,6 @@ import json
 # import dal
 
 
-# TODO test if items are created/deleted/getted(!) recursively (exam->workflows->tasks)
-# TODO test for create_exam_from_template if associated workflows/tasks are generated
-# TODO manuell frontend checken und ggf. aktualisieren
 # TODO implement tests for deleting frozen exams, workflows, tasks 
 #      with freeze and unfreeze logic
 # TODO implement tests for status DELETED
@@ -237,6 +234,95 @@ def test_create_exam_from_template():
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
+        exam_template_2 = {
+            "name": "Automated test exam template 2",
+            "country": "with workflows and tasks",
+            "site": "middle of nowhere",
+            "address": "midway",
+            "status": "NEW",
+            "is_template": True,
+            "is_frozen": False
+        }
+        postexamtemplate_2_response = requests.post(
+            PREFIX + "/new", json=exam_template_2, headers=headers)
+        assert postexamtemplate_2_response.status_code == 201
+        postexamtemplate_2_response_json = postexamtemplate_2_response.json()
+        workflow_template_1 = {
+            "exam_id": postexamtemplate_2_response_json["id"],
+            "name": "Automated test workflow template 1",
+            "comment": "Belongs to 'automated test exam template 2'.",
+            "status": "NEW",
+            "is_finished": False,
+            "is_template": True,
+            "is_frozen": False
+        }
+        workflow_template_2 = workflow_template_1.copy()
+        workflow_template_2["name"] = "Automated test workflow template 2"
+        workflow_template_2["comment"] = "Belongs to 'automated test exam template 2'."
+        postworkflowtemplate_1_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+        assert postworkflowtemplate_1_response.status_code == 201
+        postworkflowtemplate_1_response_json = postworkflowtemplate_1_response.json()
+        postworkflowtemplate_2_response = requests.post(
+            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers)
+        assert postworkflowtemplate_2_response.status_code == 201
+        postworkflowtemplate_2_response_json = postworkflowtemplate_2_response.json()
+        task_template_1 = {
+            "workflow_id": postworkflowtemplate_1_response_json["id"],
+            "name": "Automated test task template 1",
+            "description": "some task description",
+            "type": "PROCESSING_TASK",
+            "args": {
+                "arg1": "val1",
+                "arg2": "val2",
+                "arg3": "val3"
+            },
+            "artifacts": {
+                "some unspecified artifacts": "yay",
+                # could enforce form of the values for input and output in the future
+                "input": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "inputfile2"
+                    }
+                ]),
+                "output": json.dumps([
+                    {
+                        "path": "/data",
+                        "name": "outputfile1"
+                    }
+                ])
+            },
+            "destinations": {
+                "DICOM FANTASIA": "FANTASY PACS 1",
+                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+            },
+            "status": {
+                "PENDING": "some status annotation",
+            },
+            "is_template": True,
+            "is_frozen": False
+        }
+        task_template_2 = task_template_1.copy()
+        task_template_2["name"] = "Automated test task template 2"
+        task_template_3 = task_template_1.copy()
+        task_template_3["name"] = "Automated test task template 3"
+        task_template_3["workflow_id"] = postworkflowtemplate_2_response_json["id"]
+        task_template_4 = task_template_1.copy()
+        task_template_4["name"] = "Automated test task template 4"
+        task_template_4["workflow_id"] = postworkflowtemplate_2_response_json["id"]
+        posttasktemplate_2_response = requests.post(
+            PREFIX + "/task/new", json=task_template_1, headers=headers)
+        assert posttasktemplate_2_response.status_code == 201
+        posttasktemplate_2_response = requests.post(
+            PREFIX + "/task/new", json=task_template_2, headers=headers)
+        assert posttasktemplate_2_response.status_code == 201
+        posttasktemplate_2_response = requests.post(
+            PREFIX + "/task/new", json=task_template_3, headers=headers)
+        assert posttasktemplate_2_response.status_code == 201
+        posttasktemplate_2_response = requests.post(
+            PREFIX + "/task/new", json=task_template_4, headers=headers)
+        assert posttasktemplate_2_response.status_code == 201
 
     # act
         postexamfromtemplate_1_response = requests.post(
@@ -282,6 +368,16 @@ def test_create_exam_from_template():
                 "new_exam_is_template": False
             },
             headers=headers)
+        postexamfromtemplate_3_response = requests.post(
+            PREFIX + "/",
+            params={
+                "patient_id": postpatient_1_response_json["id"], 
+                "template_id": postexamtemplate_2_response_json["id"],
+                "new_exam_is_template": False
+            },
+            headers=headers)
+        assert postexamfromtemplate_3_response.status_code == 201
+        postexamfromtemplate_3_response_json = postexamfromtemplate_3_response.json()
 
     # check
         for key in exam_template.keys():
@@ -306,6 +402,97 @@ def test_create_exam_from_template():
             "Status of new instance needs to be NEW, even if template has other status"
         assert postexamfrominstance_response.status_code == 400, \
             "Should only allow create from template, not from instance."
+        for key in exam_template_2.keys():
+            if key != "is_template":
+                assert postexamfromtemplate_3_response_json[key] == exam_template_2[key]
+        assert postexamfromtemplate_3_response_json["is_template"] is False
+        assert postexamfromtemplate_3_response_json["patient_id"] == \
+            postpatient_1_response_json["id"]
+        assert len(postexamfromtemplate_3_response_json["workflows"]) == 2
+        def template_matches_itemlist(template, itemlist):
+            for i, item_json_found in enumerate(itemlist):
+                item_matches = True
+                for key in template.keys():
+                    if template[key] != item_json_found[key] \
+                            and key != "is_template" \
+                            and key != "exam_id" \
+                            and key != "workflow_id":
+                        item_matches = False
+                if item_matches:
+                    return i
+            return -1
+        wf1_index = template_matches_itemlist(
+            workflow_template_1,
+            postexamfromtemplate_3_response_json["workflows"]
+        )
+        wf2_index = template_matches_itemlist(
+            workflow_template_2,
+            postexamfromtemplate_3_response_json["workflows"]
+        )
+        assert wf1_index >= 0, "Workflow missing in response of create from template"
+        assert wf2_index >= 0, "Workflow missing in response of create from template"
+        t1_index = template_matches_itemlist(
+            task_template_1,
+            postexamfromtemplate_3_response_json["workflows"][wf1_index]["tasks"]
+        )
+        t2_index = template_matches_itemlist(
+            task_template_2,
+            postexamfromtemplate_3_response_json["workflows"][wf1_index]["tasks"]
+        )
+        t3_index = template_matches_itemlist(
+            task_template_3,
+            postexamfromtemplate_3_response_json["workflows"][wf2_index]["tasks"]
+        )
+        t4_index = template_matches_itemlist(
+            task_template_4,
+            postexamfromtemplate_3_response_json["workflows"][wf2_index]["tasks"]
+        )
+        assert t1_index >= 0, "Task missing in response of create from template"
+        assert t2_index >= 0, "Task missing in response of create from template"
+        assert t3_index >= 0, "Task missing in response of create from template"
+        assert t4_index >= 0, "Task missing in response of create from template"
+        getexam_3_response = requests.get(
+            PREFIX + "/" + postexamfromtemplate_3_response_json["id"],
+            headers=headers)
+        assert getexam_3_response.status_code == 200
+        getexam_3_response_json = getexam_3_response.json()
+        for key in exam_template_2.keys():
+            if key != "is_template":
+                assert getexam_3_response_json[key] == exam_template_2[key]
+        assert getexam_3_response_json["is_template"] is False
+        assert getexam_3_response_json["patient_id"] == \
+            postpatient_1_response_json["id"]
+        assert len(getexam_3_response_json["workflows"]) == 2
+        wf1_index = template_matches_itemlist(
+            workflow_template_1,
+            getexam_3_response_json["workflows"]
+        )
+        wf2_index = template_matches_itemlist(
+            workflow_template_2,
+            getexam_3_response_json["workflows"]
+        )
+        assert wf1_index >= 0, "Workflow missing in response of get exam"
+        assert wf2_index >= 0, "Workflow missing in response of get exam"
+        t1_index = template_matches_itemlist(
+            task_template_1,
+            getexam_3_response_json["workflows"][wf1_index]["tasks"]
+        )
+        t2_index = template_matches_itemlist(
+            task_template_2,
+            getexam_3_response_json["workflows"][wf1_index]["tasks"]
+        )
+        t3_index = template_matches_itemlist(
+            task_template_3,
+            getexam_3_response_json["workflows"][wf2_index]["tasks"]
+        )
+        t4_index = template_matches_itemlist(
+            task_template_4,
+            getexam_3_response_json["workflows"][wf2_index]["tasks"]
+        )
+        assert t1_index >= 0, "Task missing in response of get exam"
+        assert t2_index >= 0, "Task missing in response of get exam"
+        assert t3_index >= 0, "Task missing in response of get exam"
+        assert t4_index >= 0, "Task missing in response of get exam"
 
     # cleanup
     finally:
@@ -335,6 +522,16 @@ def test_create_exam_from_template():
                 str(postpatient_1_response_json["id"]),
                 headers=headers)
             assert deletepatient_1_response.status_code == 204
+        if postexamtemplate_2_response.status_code == 201:
+            deleteexamtemplate_2_response = requests.delete(
+                PREFIX + "/" + postexamtemplate_2_response_json["id"],
+                headers=headers)
+            assert deleteexamtemplate_2_response.status_code == 204
+        if postexamfromtemplate_3_response.status_code == 201:
+            deleteexamfromtemplate_3_response = requests.delete(
+                PREFIX + "/" + postexamfromtemplate_3_response_json["id"],
+                headers=headers)
+            assert deleteexamfromtemplate_3_response.status_code == 204
 
 
 def test_get_exam():
@@ -511,7 +708,7 @@ def test_get_all_exam_templates():
             assert deleteexamtemplate_2_presponse.status_code == 204
 
 
-def test_exam_delete():
+def test_delete_exam():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
@@ -1300,7 +1497,7 @@ def test_get_all_workflow_templates():
             assert deletepatient_1_response.status_code == 204
 
 
-def test_workflow_delete():
+def test_delete_workflow():
     # TODO implement tests for deleting frozen workflows 
     # prepare
     access_token = login()
@@ -2329,7 +2526,7 @@ def test_get_all_task_templates():
             assert deletepatient_1_response.status_code == 204
 
 
-def test_task_delete():
+def test_delete_task():
     # TODO implement tests for deleting frozen tasks 
     # prepare
     access_token = login()
@@ -2485,9 +2682,45 @@ def test_task_delete():
             headers=headers)
         assert gettask_2_response.status_code == 200
         gettasktemplate_response = requests.get(
-            PREFIX + "/" + posttask_template_response_json["id"],
+            PREFIX + "/task/" + posttask_template_response_json["id"],
             headers=headers)
         assert gettasktemplate_response.status_code == 404
+
+    # act
+        if postnewexam_response.status_code == 201:
+            deleteexam_response = requests.delete(
+                PREFIX + "/" + postnewexam_response_json["id"],
+                headers=headers
+            )
+        if postnewexamtemplate_response.status_code:
+            deleteexamtemplate_presponse = requests.delete(
+                PREFIX + "/" + postnewexamtemplate_response_json["id"],
+                headers=headers
+            )
+
+    # check
+        assert deleteexam_response.status_code == 204
+        assert deleteexamtemplate_presponse.status_code == 204
+        gettask_2_response = requests.get(
+            PREFIX + "/task/" + posttask_2_response_json["id"],
+            headers=headers)
+        assert gettask_2_response.status_code == 404
+        getworkflow_1_response = requests.get(
+            PREFIX + "/workflow/" + postworkflow_1_response_json["id"],
+            headers=headers)
+        assert getworkflow_1_response.status_code == 404
+        getworkflow_2_response = requests.get(
+            PREFIX + "/workflow/" + postworkflow_2_response_json["id"],
+            headers=headers)
+        assert getworkflow_2_response.status_code == 404
+        getexam_1_response = requests.get(
+            PREFIX + "/exam/" + postnewexam_response_json["id"],
+            headers=headers)
+        assert getexam_1_response.status_code == 404
+        getexamtemplate_response = requests.get(
+            PREFIX + "/exam/" + postnewexamtemplate_response_json["id"],
+            headers=headers)
+        assert getexamtemplate_response.status_code == 404
 
     # cleanup
     finally:
@@ -2497,18 +2730,6 @@ def test_task_delete():
                 str(postpatient_1_response_json["id"]),
                 headers=headers)
             assert deletepatient_1_response.status_code == 204
-        if postnewexam_response.status_code == 201:
-            deleteexam_response = requests.delete(
-                PREFIX + "/" + postnewexam_response_json["id"],
-                headers=headers
-            )
-            assert deleteexam_response.status_code == 204
-        if postnewexamtemplate_response.status_code:
-            deleteexamtemplate_presponse = requests.delete(
-                PREFIX + "/" + postnewexamtemplate_response_json["id"],
-                headers=headers
-            )
-            assert deleteexamtemplate_presponse.status_code == 204
 
 
 def test_update_task():

@@ -9,7 +9,7 @@ from uuid import UUID
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from scanhub_libraries.models import BaseExam, BaseTask, TaskStatus, BaseWorkflow, ExamOut, TaskOut, User, WorkflowOut
+from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, TaskStatus, User, WorkflowOut
 from scanhub_libraries.security import get_current_user
 
 from app import dal
@@ -180,13 +180,18 @@ async def create_exam_from_template(patient_id: Optional[int], template_id: UUID
     if not (exam := await dal.add_exam_data(payload=new_exam, creator=user.username)):
         raise_http_exception(404, "Could not create exam.")
 
+    exam_out = await get_exam_out_model(data=exam)
+
     # Create all the sub-items for the workflow templates in the exam template
     for workflow in template.workflows:
-        await create_workflow_from_template(exam_id=exam.id,
-                                            template_id=workflow.id,
-                                            new_workflow_is_template=new_exam_is_template)
+        exam_out.workflows.append(await create_workflow_from_template(
+            exam_id=exam.id,
+            template_id=workflow.id,
+            new_workflow_is_template=new_exam_is_template,
+            user=user
+        ))
 
-    return await get_exam_out_model(data=exam)
+    return exam_out
 
 
 @router.get("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
@@ -422,13 +427,18 @@ async def create_workflow_from_template(exam_id: UUID,
     if not (workflow := await dal.add_workflow_data(payload=new_workflow, creator=user.username)):
         raise_http_exception(404, "Could not create workflow.")
 
+    workflow_out = await get_workflow_out_model(data=workflow)
+
     # Create all the sub-items for the task templates in a workflow template
     for task in template.tasks:
-        _ = await create_task_from_template(workflow_id=workflow.id,
-                                            template_id=task.id,
-                                            new_task_is_template=new_workflow_is_template)
+        workflow_out.tasks.append(await create_task_from_template(
+            workflow_id=workflow.id,
+            template_id=task.id,
+            new_task_is_template=new_workflow_is_template,
+            user=user
+        ))
 
-    return await get_workflow_out_model(data=workflow)
+    return workflow_out
 
 
 @router.get("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
@@ -607,7 +617,7 @@ async def create_task(payload: BaseTask, user: Annotated[User, Depends(get_curre
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("payload:", payload)
-    if not TaskStatus.PENDING in payload.status \
+    if TaskStatus.PENDING not in payload.status \
             or TaskStatus.IN_PROGRESS in payload.status \
             or TaskStatus.COMPLETED in payload.status \
             or TaskStatus.FAILED in payload.status \
@@ -670,7 +680,10 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
     if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
         raise_http_exception(400, "workflow_id must be an existing id.")
     if workflow.is_template != new_task_is_template:
-        raise_http_exception(400, "Invalid link to workflow. Instance needs to refer to instance, template to template.")
+        raise_http_exception(
+            400,
+            "Invalid link to workflow. Instance needs to refer to instance, template to template."
+        )
     if not (task := await dal.add_task_data(payload=new_task, creator=user.username)):
         raise_http_exception(404, "Could not create task.")
     result = TaskOut(**task.__dict__)
@@ -822,7 +835,7 @@ async def update_task(task_id: UUID | str, payload: BaseTask,
             raise_http_exception(400, "workflow_id must be an existing id.")
         if workflow.is_template != payload.is_template:
             raise_http_exception(400,
-                "Invalid link to workflow. Instance needs to refer to instance, template to template.")    
+                "Invalid link to workflow. Instance needs to refer to instance, template to template.")
     if payload.is_template is False and payload.workflow_id is None:
         raise_http_exception(400, "Task instance needs workflow_id.")
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id

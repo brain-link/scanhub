@@ -299,6 +299,12 @@ export interface ExamOut {
      * @memberof ExamOut
      */
     'workflows': Array<WorkflowOut>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExamOut
+     */
+    'creator': string;
 }
 
 export const ExamOutStatusEnum = {
@@ -408,6 +414,12 @@ export interface TaskOut {
      * @memberof TaskOut
      */
     'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskOut
+     */
+    'creator': string;
     /**
      * 
      * @type {string}
@@ -525,6 +537,12 @@ export interface WorkflowOut {
      * @memberof WorkflowOut
      */
     'tasks': Array<TaskOut>;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
+    'creator': string;
     /**
      * 
      * @type {string}

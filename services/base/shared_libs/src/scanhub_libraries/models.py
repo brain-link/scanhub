@@ -267,6 +267,7 @@ class TaskOut(BaseTask):
     """Task output model."""
 
     id: UUID
+    creator: str
     datetime_created: datetime
 
 
@@ -292,6 +293,7 @@ class WorkflowOut(BaseWorkflow):
 
     id: UUID
     tasks: list[TaskOut]
+    creator: str
     datetime_created: datetime
     datetime_updated: datetime | None
 
@@ -321,6 +323,7 @@ class ExamOut(BaseExam):
     datetime_created: datetime
     datetime_updated: datetime | None
     workflows: list[WorkflowOut]
+    creator: str
 
 
 class UserRole(Enum):
