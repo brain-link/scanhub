@@ -39,7 +39,6 @@ export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
     country: props.item.country,
     site: props.item.site,
     address: props.item.address,
-    creator: props.item.creator,
     status: 'UPDATED',
     is_template: props.item.is_template,        // eslint-disable-line camelcase
     is_frozen: props.item.is_frozen,            // eslint-disable-line camelcase

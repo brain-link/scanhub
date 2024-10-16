@@ -17,7 +17,6 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { BaseExam } from '../generated-client/exam'
 import { ModalProps } from '../interfaces/components.interface'
@@ -32,7 +31,6 @@ const formContent = [
 ]
 
 export default function ExamCreateModal(props: ModalProps) {
-  const [user] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
   
   const [exam, setExam] = React.useState<BaseExam>({
@@ -41,7 +39,6 @@ export default function ExamCreateModal(props: ModalProps) {
     country: '',
     site: '',
     address: '',
-    creator: user?.username != undefined ? user.username : '',
     status: 'NEW',
     is_template: true,        // eslint-disable-line camelcase
     is_frozen: false,         // eslint-disable-line camelcase

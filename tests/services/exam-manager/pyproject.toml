@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "test-exam-manager"
+version = "0.1.0"
+description = "Tests for exam-manager"
+authors = ["Ben Wilhelm <ben.wilhelm@uniklinik-freiburg.de>"]
+license = "GPLv3 or Scanhub proprietary license."
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytest = "^8.3.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

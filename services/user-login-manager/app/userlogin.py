@@ -153,6 +153,7 @@ async def loginfromcookie(response: Response, access_token: Annotated[Optional[s
         key="access_token",
         value=access_token,
         max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+        path="/api/v1/userlogin/loginfromcookie",
         secure=True,
         httponly=True,
         samesite='strict'
@@ -234,6 +235,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
         key="access_token",
         value=return_token,
         max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+        path="/api/v1/userlogin/loginfromcookie",
         secure=True,
         httponly=True,
         samesite='strict'
@@ -258,6 +260,7 @@ async def logout(user: Annotated[User, Depends(get_current_user)], response: Res
     await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
     response.delete_cookie(
         key="access_token",
+        path="/api/v1/userlogin/loginfromcookie"
     )
 
 

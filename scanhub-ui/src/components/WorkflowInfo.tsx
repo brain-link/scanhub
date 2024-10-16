@@ -39,6 +39,11 @@ function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
           {workflow.comment}
         </Typography>
 
+        <Typography fontSize='sm'>Creator</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {workflow.creator}
+        </Typography>
+
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {new Date(workflow.datetime_created).toDateString()}

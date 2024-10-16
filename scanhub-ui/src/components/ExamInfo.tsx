@@ -44,14 +44,14 @@ function ExamInfo({ exam }: { exam: ExamOut }) {
           {exam.status}
         </Typography>
 
-        <Typography fontSize='sm'>Issuer</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {exam.creator}
-        </Typography>
-
         <Typography fontSize='sm'>Site</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {exam.site}
+        </Typography>
+
+        <Typography fontSize='sm'>Creator</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {exam.creator}
         </Typography>
 
         <Typography fontSize='sm'>Created</Typography>
