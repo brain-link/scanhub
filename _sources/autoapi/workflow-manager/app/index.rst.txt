@@ -9,21 +9,13 @@ workflow-manager.app
 
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/workflow-manager/app/api/index
-
-
 Submodules
 ----------
 
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/workflow-manager/app/api/index
    /autoapi/workflow-manager/app/main/index
 
 

@@ -9,21 +9,13 @@ device-manager.app
 
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/device-manager/app/api/index
-
-
 Submodules
 ----------
 
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/device-manager/app/api/index
    /autoapi/device-manager/app/main/index
 
 

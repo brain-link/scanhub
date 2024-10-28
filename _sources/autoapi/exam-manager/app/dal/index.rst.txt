@@ -37,7 +37,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: add_exam_data(payload: scanhub_libraries.models.BaseExam, creator: str) -> app.db.Exam
+.. py:function:: add_exam_data(payload: scanhub_libraries.models.BaseExam) -> app.db.Exam
    :async:
 
 
@@ -47,8 +47,6 @@ Module Contents
    ----------
    payload
        Exam pydantic base model
-   creator
-       The username/id of the user who creats this exam
 
    Returns
    -------
@@ -138,7 +136,7 @@ Module Contents
        Database orm model of updated exam
 
 
-.. py:function:: add_workflow_data(payload: scanhub_libraries.models.BaseWorkflow, creator: str) -> app.db.Workflow
+.. py:function:: add_workflow_data(payload: scanhub_libraries.models.BaseWorkflow) -> app.db.Workflow
    :async:
 
 
@@ -148,8 +146,6 @@ Module Contents
    ----------
    payload
        Workflow pydantic base model with data for workflow creation
-   creator
-       The username/id of the user who creats this exam
 
    Returns
    -------
@@ -238,7 +234,7 @@ Module Contents
        Workflow database orm model of updated workflow
 
 
-.. py:function:: add_task_data(payload: scanhub_libraries.models.BaseTask, creator) -> app.db.Task
+.. py:function:: add_task_data(payload: scanhub_libraries.models.BaseTask) -> app.db.Task
    :async:
 
 
@@ -248,8 +244,6 @@ Module Contents
    ----------
    payload
        Task pydantic base model
-   creator
-       The username/id of the user who creats this task
 
    Returns
    -------

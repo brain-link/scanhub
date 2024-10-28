@@ -15,26 +15,29 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -45,6 +48,7 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.1" />
   </head>
   
   
@@ -60,19 +64,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -80,7 +73,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -88,8 +80,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -123,7 +115,7 @@
     
     
     <img src="_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
-    <script>document.write(`<img src="_static/logo_brainlink.svg" class="logo__image only-dark" alt="ScanHub Documentation - Home"/>`);</script>
+    <img src="_static/logo_brainlink.svg" class="logo__image only-dark pst-js-only" alt="ScanHub Documentation - Home"/>
   
   
 </a></div>
@@ -176,29 +168,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -246,15 +230,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -271,7 +251,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -325,15 +306,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -414,7 +391,6 @@ document.write(`
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -423,7 +399,6 @@ document.write(`
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
- | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
 </div>
@@ -528,10 +503,10 @@ document.write(`
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.create_record">create_record() (in module workflow-manager.app.api.workflow)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task">create_task() (in module exam-manager.app.exam)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task">create_task() (in module exam-manager.app.exam)</a>
+</li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task_from_template">create_task_from_template() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow">create_workflow() (in module exam-manager.app.exam)</a>
@@ -539,14 +514,6 @@ document.write(`
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow_from_template">create_workflow_from_template() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.creator">creator (exam-manager.app.db.Exam attribute)</a>
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.creator">(exam-manager.app.db.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.creator">(exam-manager.app.db.Workflow attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.custom_http_exception_handler">custom_http_exception_handler() (in module exam-manager.app.main)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -863,14 +830,6 @@ document.write(`
   </ul></td>
 </tr></table>
 
-<h2 id="L">L</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.LOG_CALL_DELIMITER">LOG_CALL_DELIMITER (in module exam-manager.app.exam)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -959,11 +918,7 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.oauth2_scheme">oauth2_scheme (in module exam-manager.app.exam)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.ORIGINS">ORIGINS (in module exam-manager.app.main)</a>
+      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.origins">origins (in module exam-manager.app.main)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -975,12 +930,10 @@ document.write(`
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.post_device_task">post_device_task() (in module workflow-manager.app.api.workflow)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.PREFIX_PATIENT_MANAGER">PREFIX_PATIENT_MANAGER (in module exam-manager.app.exam)</a>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.process">process() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.process">process() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer">Producer (class in workflow-manager.app.api.producer)</a>
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.producer">producer (in module workflow-manager.app.api.workflow)</a>
@@ -1043,10 +996,10 @@ document.write(`
       </ul></li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.start">start() (workflow-manager.app.api.producer.Producer method)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_scan">start_scan() (in module workflow-manager.app.api.workflow)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_scan">start_scan() (in module workflow-manager.app.api.workflow)</a>
+</li>
       <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.startup">startup() (in module device-manager.app.main)</a>
 
       <ul>
@@ -1063,8 +1016,6 @@ document.write(`
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.status">(exam-manager.app.db.Exam attribute)</a>
 </li>
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.status">(exam-manager.app.db.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.status">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.stop">stop() (workflow-manager.app.api.producer.Producer method)</a>
@@ -1110,14 +1061,6 @@ document.write(`
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.update_workflow_data">update_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.upload_result">upload_result() (in module workflow-manager.app.api.workflow)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="V">V</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.validation_exception_handler">validation_exception_handler() (in module exam-manager.app.main)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1209,8 +1152,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
