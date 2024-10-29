@@ -489,12 +489,14 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.dal.add_exam_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">add_exam_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseExam</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#exam-manager.app.db.Exam" title="exam-manager.app.db.Exam"><span class="pre">app.db.Exam</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.add_exam_data" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">add_exam_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseExam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#exam-manager.app.db.Exam" title="exam-manager.app.db.Exam"><span class="pre">app.db.Exam</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.add_exam_data" title="Link to this definition">#</a></dt>
 <dd><p>Create new exam.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Exam pydantic base model</p>
+</dd>
+<dt>creator</dt><dd><p>The username/id of the user who creats this exam</p>
 </dd>
 </dl>
 </section>
@@ -605,12 +607,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.dal.add_workflow_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">add_workflow_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseWorkflow</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#exam-manager.app.db.Workflow" title="exam-manager.app.db.Workflow"><span class="pre">app.db.Workflow</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.add_workflow_data" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">add_workflow_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseWorkflow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#exam-manager.app.db.Workflow" title="exam-manager.app.db.Workflow"><span class="pre">app.db.Workflow</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.add_workflow_data" title="Link to this definition">#</a></dt>
 <dd><p>Add new workflow.</p>
 <section id="id11">
 <h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Workflow pydantic base model with data for workflow creation</p>
+</dd>
+<dt>creator</dt><dd><p>The username/id of the user who creats this exam</p>
 </dd>
 </dl>
 </section>
@@ -721,12 +725,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.dal.add_task_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">add_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseTask</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#exam-manager.app.db.Task" title="exam-manager.app.db.Task"><span class="pre">app.db.Task</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.add_task_data" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.</span></span><span class="sig-name descname"><span class="pre">add_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseTask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creator</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../db/index.html#exam-manager.app.db.Task" title="exam-manager.app.db.Task"><span class="pre">app.db.Task</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.add_task_data" title="Link to this definition">#</a></dt>
 <dd><p>Add new task to database.</p>
 <section id="id23">
 <h3>Parameters<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>payload</dt><dd><p>Task pydantic base model</p>
+</dd>
+<dt>creator</dt><dd><p>The username/id of the user who creats this task</p>
 </dd>
 </dl>
 </section>

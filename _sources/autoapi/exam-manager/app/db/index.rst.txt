@@ -173,6 +173,14 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
    .. py:attribute:: is_finished
       :type:  sqlalchemy.orm.Mapped[bool]
 
@@ -243,6 +251,10 @@ Module Contents
 
    .. py:attribute:: status
       :type:  sqlalchemy.orm.Mapped[dict[scanhub_libraries.models.TaskStatus, str]]
+
+
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
 
 
    .. py:attribute:: is_template

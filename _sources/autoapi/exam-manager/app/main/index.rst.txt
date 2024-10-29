@@ -14,8 +14,8 @@ Attributes
 
 .. autoapisummary::
 
+   exam-manager.app.main.ORIGINS
    exam-manager.app.main.app
-   exam-manager.app.main.origins
 
 
 Functions
@@ -23,6 +23,8 @@ Functions
 
 .. autoapisummary::
 
+   exam-manager.app.main.custom_http_exception_handler
+   exam-manager.app.main.validation_exception_handler
    exam-manager.app.main.startup
    exam-manager.app.main.shutdown
    exam-manager.app.main.readiness
@@ -31,10 +33,28 @@ Functions
 Module Contents
 ---------------
 
+.. py:data:: ORIGINS
+   :value: ['http://localhost', 'http://localhost:3000', 'http://localhost:8100', 'http://localhost:8080']
+
+
 .. py:data:: app
 
-.. py:data:: origins
-   :value: ['http://localhost', 'http://localhost:3000', 'http://localhost:8100', 'http://localhost:8080']
+.. py:function:: custom_http_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: validation_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for fastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
 
 
 .. py:function:: startup()

@@ -14,6 +14,9 @@ Attributes
 
 .. autoapisummary::
 
+   exam-manager.app.exam.PREFIX_PATIENT_MANAGER
+   exam-manager.app.exam.oauth2_scheme
+   exam-manager.app.exam.LOG_CALL_DELIMITER
    exam-manager.app.exam.router
 
 
@@ -50,6 +53,16 @@ Functions
 Module Contents
 ---------------
 
+.. py:data:: PREFIX_PATIENT_MANAGER
+   :value: 'http://patient-manager:8100/api/v1/patient'
+
+
+.. py:data:: oauth2_scheme
+
+.. py:data:: LOG_CALL_DELIMITER
+   :value: '-------------------------------------------------------------------------------'
+
+
 .. py:data:: router
 
 .. py:function:: get_workflow_out_model(data: app.db.Workflow) -> scanhub_libraries.models.WorkflowOut
@@ -84,7 +97,7 @@ Module Contents
        Exam pydantic model
 
 
-.. py:function:: create_exam(payload: scanhub_libraries.models.BaseExam) -> scanhub_libraries.models.ExamOut
+.. py:function:: create_exam(payload: scanhub_libraries.models.BaseExam, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
    :async:
 
 
@@ -105,7 +118,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_exam_from_template(patient_id: int, template_id: uuid.UUID, new_exam_is_template: bool) -> scanhub_libraries.models.ExamOut
+.. py:function:: create_exam_from_template(patient_id: Optional[int], template_id: uuid.UUID, new_exam_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
    :async:
 
 
@@ -130,7 +143,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: get_exam(exam_id: uuid.UUID | str) -> scanhub_libraries.models.ExamOut
+.. py:function:: get_exam(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ExamOut
    :async:
 
 
@@ -151,7 +164,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: get_all_patient_exams(patient_id: int) -> list[scanhub_libraries.models.ExamOut]
+.. py:function:: get_all_patient_exams(patient_id: int, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ExamOut]
    :async:
 
 
@@ -167,18 +180,18 @@ Module Contents
        List of exam pydantic output models
 
 
-.. py:function:: get_all_exam_templates() -> list[scanhub_libraries.models.ExamOut]
+.. py:function:: get_all_exam_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ExamOut]
    :async:
 
 
-   Get all exams of a certain patient.
+   Get all exam templates.
 
    Returns
    -------
        List of exam pydantic output models
 
 
-.. py:function:: exam_delete(exam_id: uuid.UUID | str) -> None
+.. py:function:: exam_delete(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
    :async:
 
 
@@ -195,7 +208,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: update_exam(exam_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseExam) -> scanhub_libraries.models.ExamOut
+.. py:function:: update_exam(exam_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseExam, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
    :async:
 
 
@@ -218,7 +231,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: create_workflow(payload: scanhub_libraries.models.BaseWorkflow) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: create_workflow(payload: scanhub_libraries.models.BaseWorkflow, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
@@ -239,7 +252,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_workflow_from_template(exam_id: uuid.UUID, template_id: uuid.UUID, new_workflow_is_template: bool) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: create_workflow_from_template(exam_id: uuid.UUID, template_id: uuid.UUID, new_workflow_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
@@ -264,7 +277,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: get_workflow(workflow_id: uuid.UUID | str) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: get_workflow(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
@@ -285,7 +298,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: get_all_exam_workflows(exam_id: uuid.UUID | str) -> list[scanhub_libraries.models.WorkflowOut]
+.. py:function:: get_all_exam_workflows(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.WorkflowOut]
    :async:
 
 
@@ -301,7 +314,7 @@ Module Contents
        List of workflow pydantic output model
 
 
-.. py:function:: get_all_workflow_templates() -> list[scanhub_libraries.models.WorkflowOut]
+.. py:function:: get_all_workflow_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.WorkflowOut]
    :async:
 
 
@@ -312,7 +325,7 @@ Module Contents
        List of workflow pydantic output model
 
 
-.. py:function:: delete_workflow(workflow_id: uuid.UUID | str) -> None
+.. py:function:: delete_workflow(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
    :async:
 
 
@@ -329,7 +342,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: update_workflow(workflow_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseWorkflow) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: update_workflow(workflow_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseWorkflow, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
@@ -352,7 +365,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: create_task(payload: scanhub_libraries.models.BaseTask) -> scanhub_libraries.models.TaskOut
+.. py:function:: create_task(payload: scanhub_libraries.models.BaseTask, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
    :async:
 
 
@@ -373,7 +386,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_task_from_template(workflow_id: uuid.UUID, template_id: uuid.UUID, new_task_is_template: bool) -> scanhub_libraries.models.TaskOut
+.. py:function:: create_task_from_template(workflow_id: uuid.UUID, template_id: uuid.UUID, new_task_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
    :async:
 
 
@@ -398,7 +411,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: get_task(task_id: uuid.UUID | str) -> scanhub_libraries.models.TaskOut
+.. py:function:: get_task(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
    :async:
 
 
@@ -419,7 +432,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: get_all_workflow_tasks(workflow_id: uuid.UUID | str) -> list[scanhub_libraries.models.TaskOut]
+.. py:function:: get_all_workflow_tasks(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.TaskOut]
    :async:
 
 
@@ -435,7 +448,7 @@ Module Contents
        List of task pydantic output model
 
 
-.. py:function:: get_all_task_templates() -> list[scanhub_libraries.models.TaskOut]
+.. py:function:: get_all_task_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.TaskOut]
    :async:
 
 
@@ -446,7 +459,7 @@ Module Contents
        List of task pydantic output model
 
 
-.. py:function:: delete_task(task_id: uuid.UUID | str) -> None
+.. py:function:: delete_task(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
    :async:
 
 
@@ -463,7 +476,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: update_task(task_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseTask) -> scanhub_libraries.models.TaskOut
+.. py:function:: update_task(task_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseTask, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
    :async:
 
 
