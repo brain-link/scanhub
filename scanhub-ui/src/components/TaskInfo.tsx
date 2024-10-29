@@ -74,6 +74,11 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
             ))}
         </Stack>
 
+        <Typography fontSize='sm'>Creator</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.creator}
+        </Typography>
+
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {new Date(task.datetime_created).toDateString()}
