@@ -437,6 +437,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.producer" title="workflow-manager.app.api.workflow.producer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">producer</span></code></a></p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.loop" title="workflow-manager.app.api.workflow.loop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loop</span></code></a></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -445,8 +448,26 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.process" title="workflow-manager.app.api.workflow.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>(workflow_id)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.consume_finished_tasks" title="workflow-manager.app.api.workflow.consume_finished_tasks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">consume_finished_tasks</span></code></a>()</p></td>
+<td><p>Consume finished tasks from the Kafka topic and handle them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.handle_finished_task" title="workflow-manager.app.api.workflow.handle_finished_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_finished_task</span></code></a>(task_id, status)</p></td>
+<td><p>Handle finished task by updating the task status and processing the next task.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.update_task_status_in_db" title="workflow-manager.app.api.workflow.update_task_status_in_db"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_task_status_in_db</span></code></a>(task_id, status)</p></td>
+<td><p>Update the task status in the database.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.get_workflow_id_by_task_id" title="workflow-manager.app.api.workflow.get_workflow_id_by_task_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_workflow_id_by_task_id</span></code></a>(→ str)</p></td>
+<td><p>Fetch the workflow ID associated with the task ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.process" title="workflow-manager.app.api.workflow.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>(→ dict[str, str])</p></td>
 <td><p>Process a workflow.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.handle_device_task" title="workflow-manager.app.api.workflow.handle_device_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_device_task</span></code></a>(task)</p></td>
+<td><p>Handle a device task by creating a scan job and starting the scan.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.handle_processing_task" title="workflow-manager.app.api.workflow.handle_processing_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_processing_task</span></code></a>(task)</p></td>
+<td><p>Handle a processing task by sending a message to the appropriate Kafka topic.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.upload_result" title="workflow-manager.app.api.workflow.upload_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_result</span></code></a>() → dict[str, str])</p></td>
 <td><p>Upload workflow result.</p></td>
@@ -505,11 +526,53 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.process">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.process" title="Link to this definition">#</a></dt>
-<dd><p>Process a workflow.</p>
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.consume_finished_tasks">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">consume_finished_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.consume_finished_tasks" title="Link to this definition">#</a></dt>
+<dd><p>Consume finished tasks from the Kafka topic and handle them.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.handle_finished_task">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">handle_finished_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.handle_finished_task" title="Link to this definition">#</a></dt>
+<dd><p>Handle finished task by updating the task status and processing the next task.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task_id</dt><dd><p>ID of the task to handle</p>
+</dd>
+<dt>status</dt><dd><p>Status of the task</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.update_task_status_in_db">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">update_task_status_in_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.update_task_status_in_db" title="Link to this definition">#</a></dt>
+<dd><p>Update the task status in the database.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task_id</dt><dd><p>ID of the task to update</p>
+</dd>
+<dt>status</dt><dd><p>New status of the task</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_workflow_id_by_task_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_workflow_id_by_task_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_workflow_id_by_task_id" title="Link to this definition">#</a></dt>
+<dd><p>Fetch the workflow ID associated with the task ID.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.process">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.process" title="Link to this definition">#</a></dt>
+<dd><p>Process a workflow.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>workflow_id</dt><dd><p>UUID of the workflow to process</p>
 </dd>
@@ -524,11 +587,37 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.handle_device_task">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">handle_device_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.TaskOut</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.handle_device_task" title="Link to this definition">#</a></dt>
+<dd><p>Handle a device task by creating a scan job and starting the scan.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task</dt><dd><p>Task to handle</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.handle_processing_task">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">handle_processing_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.TaskOut</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.handle_processing_task" title="Link to this definition">#</a></dt>
+<dd><p>Handle a processing task by sending a message to the appropriate Kafka topic.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task</dt><dd><p>Task to handle</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_result" title="Link to this definition">#</a></dt>
 <dd><p>Upload workflow result.</p>
-<section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>workflow_id</dt><dd><p>Id of the workflow, which is processed by workflow</p>
 </dd>
@@ -536,8 +625,8 @@
 </dd>
 </dl>
 </section>
-<section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Notification</p>
 </div></blockquote>
@@ -548,15 +637,15 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.download_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">download_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.FileResponse</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.download_result" title="Link to this definition">#</a></dt>
 <dd><p>Download DICOM result.</p>
-<section id="id3">
-<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>ID of the record the DICOM file belongs to.</p>
 </dd>
 </dl>
 </section>
-<section id="id4">
-<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>DICOM file response</p>
 </div></blockquote>
@@ -567,8 +656,8 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_data_from_file">
 <span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_data_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_data_from_file" title="Link to this definition">#</a></dt>
 <dd><p>Open a file and read the data.</p>
-<section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>file_path</dt><dd><p>Path of the file to open</p>
 </dd>
@@ -586,15 +675,15 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.get_image_file">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">get_image_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.StreamingResponse</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.get_image_file" title="Link to this definition">#</a></dt>
 <dd><p>Read image file data and content as streaming response.</p>
-<section id="id6">
-<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>record_id</dt><dd><p>Record ID the image should be read for</p>
 </dd>
 </dl>
 </section>
-<section id="id7">
-<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<section id="id11">
+<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Image file content</p>
 </div></blockquote>
@@ -612,15 +701,15 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.device_location_request">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">device_location_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.device_location_request" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve ip from device-manager.</p>
-<section id="id8">
-<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>device_id</dt><dd><p>Id of device</p>
 </dd>
 </dl>
 </section>
-<section id="id9">
-<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<section id="id13">
+<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>ip_address of device</p>
 </div></blockquote>
@@ -631,8 +720,8 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.retrieve_sequence">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">retrieve_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence_manager_uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.retrieve_sequence" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve sequence and sequence-type from sequence-manager.</p>
-<section id="id10">
-<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<section id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>sequence_manager_uri</dt><dd><p>uri of sequence manager</p>
 </dd>
@@ -640,8 +729,8 @@
 </dd>
 </dl>
 </section>
-<section id="id11">
-<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<section id="id15">
+<h3>Returns<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>sequence</p>
 </div></blockquote>
@@ -652,8 +741,8 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.create_record">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">create_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exam_manager_uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.create_record" title="Link to this definition">#</a></dt>
 <dd><p>Create new record at exam_manager and retrieve record_id.</p>
-<section id="id12">
-<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>exam_manager_uri</dt><dd><p>uri of sequence manager</p>
 </dd>
@@ -661,8 +750,8 @@
 </dd>
 </dl>
 </section>
-<section id="id13">
-<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<section id="id17">
+<h3>Returns<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>id of newly created record</p>
 </div></blockquote>
@@ -673,8 +762,8 @@
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.post_device_task">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">post_device_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_task</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.post_device_task" title="Link to this definition">#</a></dt>
 <dd><p>Send task do device.</p>
-<section id="id14">
-<h3>Parameters<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<section id="id18">
+<h3>Parameters<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>url</dt><dd><p>url of the device</p>
 </dd>
@@ -682,8 +771,8 @@
 </dd>
 </dl>
 </section>
-<section id="id15">
-<h3>Returns<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<section id="id19">
+<h3>Returns<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>response of device</p>
 </div></blockquote>
@@ -701,6 +790,11 @@
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">forward_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scan_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.ScanStatus</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.forward_status" title="Link to this definition">#</a></dt>
 <dd><p>Receives status for a job. Forwards it to the ui and returns ok.</p>
 </dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.loop">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">loop</span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.loop" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -741,7 +835,13 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.producer"><code class="docutils literal notranslate"><span class="pre">producer</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.consume_finished_tasks"><code class="docutils literal notranslate"><span class="pre">consume_finished_tasks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.handle_finished_task"><code class="docutils literal notranslate"><span class="pre">handle_finished_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.update_task_status_in_db"><code class="docutils literal notranslate"><span class="pre">update_task_status_in_db()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.get_workflow_id_by_task_id"><code class="docutils literal notranslate"><span class="pre">get_workflow_id_by_task_id()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.process"><code class="docutils literal notranslate"><span class="pre">process()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.handle_device_task"><code class="docutils literal notranslate"><span class="pre">handle_device_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.handle_processing_task"><code class="docutils literal notranslate"><span class="pre">handle_processing_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.upload_result"><code class="docutils literal notranslate"><span class="pre">upload_result()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.download_result"><code class="docutils literal notranslate"><span class="pre">download_result()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.get_data_from_file"><code class="docutils literal notranslate"><span class="pre">get_data_from_file()</span></code></a></li>
@@ -752,6 +852,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.post_device_task"><code class="docutils literal notranslate"><span class="pre">post_device_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.start_scan"><code class="docutils literal notranslate"><span class="pre">start_scan()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.forward_status"><code class="docutils literal notranslate"><span class="pre">forward_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.loop"><code class="docutils literal notranslate"><span class="pre">loop</span></code></a></li>
 </ul>
 </li>
 </ul>
