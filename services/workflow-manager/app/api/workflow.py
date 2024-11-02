@@ -13,8 +13,11 @@ from typing import Generator
 from fastapi import HTTPException, UploadFile, File, APIRouter
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
-from some_module import EXAM_MANAGER_URI, SEQUENCE_MANAGER_URI, TaskOut, WorkflowOut, ScanJob, TaskEvent, DeviceTask, ParametrizedSequence, Commands, ScanStatus
+# from some_module import EXAM_MANAGER_URI, SEQUENCE_MANAGER_URI, TaskOut, WorkflowOut, ScanJob, TaskEvent, DeviceTask, ParametrizedSequence, Commands, ScanStatus
 from aiokafka import AIOKafkaConsumer
+
+from dal import update_task_status, get_workflow_id_by_task_id
+
 
 # from scanhub import RecoJob # type: ignore
 from scanhub_libraries.models import (
