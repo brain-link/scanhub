@@ -220,6 +220,107 @@ export interface ValidationError {
 }
 
 /**
+ * HealthApi - axios parameter creator
+ * @export
+ */
+export const HealthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * @summary Readiness
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        readinessApiV1PatientHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/patient/health/readiness`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HealthApi - functional programming interface
+ * @export
+ */
+export const HealthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HealthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * @summary Readiness
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async readinessApiV1PatientHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1PatientHealthReadinessGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1PatientHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * HealthApi - factory interface
+ * @export
+ */
+export const HealthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HealthApiFp(configuration)
+    return {
+        /**
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * @summary Readiness
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        readinessApiV1PatientHealthReadinessGet(options?: any): AxiosPromise<any> {
+            return localVarFp.readinessApiV1PatientHealthReadinessGet(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HealthApi - object-oriented interface
+ * @export
+ * @class HealthApi
+ * @extends {BaseAPI}
+ */
+export class HealthApi extends BaseAPI {
+    /**
+     * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+     * @summary Readiness
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HealthApi
+     */
+    public readinessApiV1PatientHealthReadinessGet(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).readinessApiV1PatientHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * PatientsApi - axios parameter creator
  * @export
  */

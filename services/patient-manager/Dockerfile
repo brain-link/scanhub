@@ -8,17 +8,14 @@ RUN poetry config virtualenvs.create false
 
 WORKDIR /app
 
-# ENV POETRY_VIRTUALENVS_CREATE false
-# COPY ./requirements.txt /app/requirements.txt
-
+# Install curl to perform healthcheck, assume yes to all prompts
+RUN apt-get -y update \
+    && apt-get -y install curl
 
 COPY pyproject.toml poetry.lock ./
 # COPY app/ressources /ressources
 
 ENV POETRY_REQUESTS_TIMEOUT=100
 RUN poetry install --no-interaction --no-root && rm -rf /root/.cache/pip
-
-# RUN pip install -r /app/requirements.txt \
-#     && rm -rf /root/.cache/pip
 
 COPY . /app

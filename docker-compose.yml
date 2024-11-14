@@ -57,6 +57,7 @@ services:
       scanhub-database:
         condition: service_healthy
 
+
   exam-manager:
     container_name: exam-manager
     build: 
@@ -101,6 +102,12 @@ services:
     environment:
       - DB_URI=postgresql://brainlink:data@patient-database/patients-data
       - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
+    healthcheck:
+      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
+      test: ["CMD", "curl", "http://patient-manager:8100/api/v1/patient/health/readiness"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     depends_on:
       patient-database:
         condition: service_healthy
@@ -260,7 +267,9 @@ services:
       sequence-manager:
         condition: service_started
       patient-manager:
-        condition: service_started
+        condition: service_healthy
+      user-login-manager:
+        condition: service_healthy
     extra_hosts:                                # somehow needed to find host.docker.internal under linux
       - 'host.docker.internal:host-gateway'     # for the access to host.docker.internal to work the firewall of the host needs to allow incoming connections
   
@@ -292,20 +301,21 @@ services:
       retries: 10
 
 
-#  # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
-#   scanhub-ui:
-#     container_name: scanhub-ui
-#     build:
-#       context: ./scanhub-ui
-#       dockerfile: ./Dockerfile
-#       args:
-#         NODE_ENV: "development" # use "development" or "production"
-#     depends_on:
-#       - patient-manager
-#     volumes:
-#       - ./scanhub-ui/src:/app/src
-#     ports:
-#       - 3000:3000
+  # FRONTEND/SCANHUB-UI
+  scanhub-ui:
+    profiles: ["with-frontend"]
+    container_name: scanhub-ui
+    build:
+      context: ./scanhub-ui
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: "development" # use "development" or "production"
+    volumes:
+      - ./scanhub-ui/src:/app/src
+    depends_on:
+      - nginx
+    ports:
+      - 3000:3000
 
 
 volumes:

@@ -26,6 +26,7 @@ export default function WorkflowCreateModal(props: ModalPropsCreate) {
     name: '',
     comment: undefined,
     exam_id: props.parentId,                // eslint-disable-line camelcase
+    status: 'NEW',
     is_finished: false,                     // eslint-disable-line camelcase
     is_template: props.createTemplate,      // eslint-disable-line camelcase
     is_frozen: false,                       // eslint-disable-line camelcase

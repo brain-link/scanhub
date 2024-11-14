@@ -64,12 +64,6 @@ export interface BaseExam {
      * @type {string}
      * @memberof BaseExam
      */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseExam
-     */
     'status': BaseExamStatusEnum;
     /**
      * 
@@ -188,6 +182,12 @@ export interface BaseWorkflow {
     'exam_id'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof BaseWorkflow
+     */
+    'status': BaseWorkflowStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof BaseWorkflow
      */
@@ -205,6 +205,15 @@ export interface BaseWorkflow {
      */
     'is_frozen': boolean;
 }
+
+export const BaseWorkflowStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type BaseWorkflowStatusEnum = typeof BaseWorkflowStatusEnum[keyof typeof BaseWorkflowStatusEnum];
+
 /**
  * 
  * @export
@@ -253,12 +262,6 @@ export interface ExamOut {
      * @type {string}
      * @memberof ExamOut
      */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
     'status': ExamOutStatusEnum;
     /**
      * 
@@ -296,6 +299,12 @@ export interface ExamOut {
      * @memberof ExamOut
      */
     'workflows': Array<WorkflowOut>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExamOut
+     */
+    'creator': string;
 }
 
 export const ExamOutStatusEnum = {
@@ -410,6 +419,12 @@ export interface TaskOut {
      * @type {string}
      * @memberof TaskOut
      */
+    'creator': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskOut
+     */
     'datetime_created': string;
 }
 
@@ -488,6 +503,12 @@ export interface WorkflowOut {
     'exam_id'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
+    'status': WorkflowOutStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof WorkflowOut
      */
@@ -521,6 +542,12 @@ export interface WorkflowOut {
      * @type {string}
      * @memberof WorkflowOut
      */
+    'creator': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
     'datetime_created': string;
     /**
      * 
@@ -529,6 +556,15 @@ export interface WorkflowOut {
      */
     'datetime_updated'?: string;
 }
+
+export const WorkflowOutStatusEnum = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Deleted: 'DELETED'
+} as const;
+
+export type WorkflowOutStatusEnum = typeof WorkflowOutStatusEnum[keyof typeof WorkflowOutStatusEnum];
+
 
 /**
  * ExamsApi - axios parameter creator
@@ -670,7 +706,7 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+         * Get all exam templates.  Returns -------     List of exam pydantic output models
          * @summary Get All Exam Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -875,7 +911,7 @@ export const ExamsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+         * Get all exam templates.  Returns -------     List of exam pydantic output models
          * @summary Get All Exam Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -969,7 +1005,7 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.examDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+         * Get all exam templates.  Returns -------     List of exam pydantic output models
          * @summary Get All Exam Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1057,7 +1093,7 @@ export class ExamsApi extends BaseAPI {
     }
 
     /**
-     * Get all exams of a certain patient.  Returns -------     List of exam pydantic output models
+     * Get all exam templates.  Returns -------     List of exam pydantic output models
      * @summary Get All Exam Templates
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1131,10 +1167,6 @@ export const HealthApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     

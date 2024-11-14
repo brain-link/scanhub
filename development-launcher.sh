@@ -8,8 +8,6 @@ echo
 echo scanhub: git status
 git status
 
-# sed 308,321s/^/#/ -i docker-compose.yml    # add line comment to start of lines 308 to 321. This allows for faster development by disabling the frontend container and running the frontend directly with this script.
-
 if [ "$1" == --full-rebuild ]
 then
     echo
@@ -19,13 +17,13 @@ then
     docker build -t scanhub-base .
     cd ../..
     echo
-    echo docker-compose build --build-arg BASE_IMG=scanhub-base:latest
-    docker-compose build --build-arg BASE_IMG=scanhub-base:latest
+    echo docker compose build --build-arg BASE_IMG=scanhub-base:latest
+    docker compose build --build-arg BASE_IMG=scanhub-base:latest
 fi
 
 echo
-echo docker-compose up -d
-docker-compose up -d
+echo docker compose up -d
+docker compose up -d
 
 if [ "$1" == --full-rebuild ]
 then
@@ -64,9 +62,8 @@ cd ..
 
 
 echo
-echo scanhub: docker-compose down
-docker-compose down
-# sed 308,321s/^#// -i docker-compose.yml    # remove possible line comments at start of lines 308 to 321. Enable frontend container again.
+echo scanhub: docker compose down
+docker compose down
 
 echo
 echo until next time!
