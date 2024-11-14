@@ -36,6 +36,26 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
+@router.put('/{device_id}/start-scan', status_code=200, tags=["devices"])
+async def start_scan(device_id: str, header_xml: str, sequence_data: str, acquisition_data: str):
+    print(device_id)
+    print(dict_id_websocket)
+    if not (device := await dal_get_device(device_id)):
+        raise HTTPException(status_code=404, detail="Device not found")
+    if device_id not in dict_id_websocket:
+        raise HTTPException(status_code=404, detail="Device not connected")
+    print("Start Scan")
+    websocket = dict_id_websocket[device_id]
+    data = {
+        "header_xml" : header_xml,
+        "sequence_data" : sequence_data,
+        "acquisition_data": acquisition_data
+    }
+    await websocket.send_json({
+        "command": "start",
+        "data": data
+    })
+
 @router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])
 async def get_devices() -> list[DeviceOut]:
     """
@@ -146,6 +166,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive_json()
             command = message.get('command')
+            print(message)
             # ===============  Register device ===================
             if command == 'register':
                 if device_id_global != "":
@@ -153,18 +174,26 @@ async def websocket_endpoint(websocket: WebSocket):
 In this session a device already was registered.'})
                     continue
                 device_data = message.get('data')
-                ip_address = message.get('ip_address')
                 device_id = device_data.get('id')
-                device = DeviceOut(ip_address=ip_address, **device_data)
-                try:
-                    await dal_create_device(device)
-                except exc.SQLAlchemyError as ex:
-                    print('Error registering device: ', device, ex)
-                    await websocket.send_json({'message': 'Error registering device' + str(ex)})
-                    continue
-                print('Device registered:', device)
-                # Send response to the device
-                await websocket.send_json({'message': 'Device registered successfully'})
+                device = DeviceOut(**device_data)
+                 
+                if not (device := await dal_get_device(device_id)):
+                    try:
+                        await dal_create_device(device)
+                    except exc.SQLAlchemyError as ex:
+                        print('Error registering device: ', device, ex)
+                        await websocket.send_json({'message': 'Error registering device' + str(ex)})
+                        continue
+                    print('Device registered:', device)
+                    # Send response to the device
+                    await websocket.send_json({
+                        'command': 'feedback',
+                        'message': 'Device registered successfully'})
+                else:
+                    await websocket.send_json({
+                        'command': 'feedback',
+                        'message': 'Device already registered'})
+
                 device_id_global = device_id
                 dict_id_websocket[device_id] = websocket
 
@@ -180,13 +209,25 @@ Device ID does not match'})
                 else:
                     device_out = await get_device_out(device_to_update)
                     # Update the device's status and last_status_update
-                    device_out.status = status_data.get('status')
+                    print(status_data)
+                    if "additional_data" in status_data:
+                        additional_data = status_data.get('additional_data')
+                        device_out.status = str({
+                            "status": status_data.get('status'),
+                            "additional_data": additional_data
+                        })
+                    else:
+                        device_out.status = str({
+                            "status": status_data.get('status'),
+                        })
                     device_out.datetime_updated = datetime.now()
                     if not await dal_update_device(device_id, device_out):
                         await websocket.send_json({'message': 'Error updating device.'})
                     else:
                         # Send response to the device
-                        await websocket.send_json({'message': 'Device status updated successfully'})
+                        await websocket.send_json({
+                            'command': 'feedback',
+                            'message': 'Device status updated successfully'})
                         device_id_global = device_id
                         dict_id_websocket[device_id] = websocket
 
