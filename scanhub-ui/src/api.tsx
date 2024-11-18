@@ -8,6 +8,7 @@ import { ExamsApi } from './generated-client/exam'
 import { WorkflowsApi } from './generated-client/exam'
 import { TasksApi } from './generated-client/exam'
 import { PatientsApi } from './generated-client/patient'
+import { WorkflowManagerApi } from './generated-client/workflowmanager'
 import { LoginApi } from './generated-client/userlogin'
 import { UserApi } from './generated-client/userlogin'
 import baseUrls from './utils/Urls'
@@ -17,5 +18,6 @@ export const patientApi = new PatientsApi(undefined, baseUrls.patientService)
 export const examApi = new ExamsApi(undefined, baseUrls.examService)
 export const workflowsApi = new WorkflowsApi(undefined, baseUrls.examService)
 export const taskApi = new TasksApi(undefined, baseUrls.examService)
+export const workflowManagerApi = new WorkflowManagerApi(undefined, baseUrls.workflowManagerService)
 export const loginApi = new LoginApi(undefined, baseUrls.userloginService)
 export const userApi = new UserApi(undefined, baseUrls.userloginService)

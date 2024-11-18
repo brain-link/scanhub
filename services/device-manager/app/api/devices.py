@@ -8,7 +8,7 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, Depends
 from sqlalchemy import exc
 
 from .dal import (
@@ -19,21 +19,13 @@ from .dal import (
     dal_update_device,
 )
 from .models import DeviceOut, get_device_out
+from scanhub_libraries.security import get_current_user
 
-router = APIRouter()
+
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 active_connections: list[WebSocket] = []
 dict_id_websocket = {}
-
-@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
-async def readiness() -> dict:
-    """Readiness health endpoint.
-
-    Returns
-    -------
-        Status dictionary
-    """
-    return {"status": "ok"}
 
 
 @router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])

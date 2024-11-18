@@ -7,13 +7,14 @@ import json
 import logging
 import operator
 import os
-from typing import Generator
+from typing import Generator, Annotated
 from uuid import UUID
 
 import httpx
-from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, File, HTTPException, UploadFile, status, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.security import OAuth2PasswordBearer
 
 # from scanhub import RecoJob # type: ignore
 from scanhub_libraries.models import (
@@ -26,27 +27,112 @@ from scanhub_libraries.models import (
     TaskOut,
     WorkflowOut,
 )
+from scanhub_libraries.security import get_current_user
 
 from .producer import Producer
 
-# Http status codes
-# 200 = Ok: GET, PUT
-# 201 = Created: POST
-# 204 = No Content: Delete
-# 404 = Not found
-
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
-EXAM_MANAGER_URI = "host.docker.internal:8004"
+EXAM_MANAGER_URI = "exam-manager:8000"
 
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # Get the producer singleton instance
 producer = Producer()
 
 
-@router.get("/process/{workflow_id}/")
+
+@router.get("/task/process/{task_id}/", tags=["WorkflowManager"])
+async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]):
+    """Process a task.
+
+    Parameters
+    ----------
+    task_id
+        UUID of the task to process
+
+    Returns
+    -------
+        Task process response
+    """
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task_id}", headers={"Authorization": "Bearer " + access_token})
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail="Failed to fetch task with id=" + str(task_id))
+        task_raw = response.json()
+        task = TaskOut(**task_raw)
+
+        print("Task:")
+        print("    id:              ", task.id)
+        print("    creator:         ", task.creator)
+        print("    datetime_created:", task.datetime_created)
+        print("    workflow_id:     ", task.workflow_id)
+        print("    name:            ", task.name)
+        print("    description:     ", task.description)
+        print("    type:            ", task.type)
+        print("    args:")
+        for key in task.args:
+            print("        " + key + ": " + task.args[key])
+        print("    artifacts:")
+        for key in task.artifacts:
+            print("        " + key + ": " + task.artifacts[key])
+        print("    destinations:")
+        for key in task.destinations:
+            print("        " + key + ": " + task.destinations[key])
+        print("    status:")
+        for key in task.status:
+            print("        " + key + ": " + task.status[key])
+        print("    is_template:     ", task.is_template)
+        print("    is_frozen:       ", task.is_frozen)
+
+        print("DEBUG return!")
+        return
+
+    #     if task.type == "DEVICE_TASK" and "PENDING" in task.status:
+    #         print("Device task:")
+    #         print(task.destinations.get("device"), end="\n")
+
+    #         # Create a device scan job
+    #         job = ScanJob(  job_id=task.id,
+    #                         sequence_id=task.args["sequence_id"],
+    #                         workflow_id=task.args["workflow_id"],
+    #                         device_id=task.destinations["device"],
+    #                         acquisition_limits=task.args["acquisition_limits"],
+    #                         sequence_parameters=task.args["sequence_parameters"])
+
+    #         # Start scan
+    #         await start_scan(job, task.id.toString())
+
+    #         # TBD set task status to "IN_PROGRESS"
+
+    #     if task.type == "PROCESSING_TASK" and task.status == "PENDING":
+    #         # print(task.destinations, end="\n")
+    #         print("Processing task:")
+
+    #         topic = task.destinations.get("topic")
+
+    #         task_event = TaskEvent(task_id=str(task.id), input=task.args)
+
+    #         print("Task event", end="\n")
+    #         print(task_event, end="\n")
+
+    #         print("Send to topic", end="\n")
+    #         print(topic, end="\n")
+
+    #         # Send message to Kafka
+    #         # await producer.send("mri_cartesian_reco", reco_job.dict())
+    #         await producer.send(topic, task_event.dict())
+
+    #         # TBD set task status to "IN_PROGRESS"
+    # return
+
+
+
+
+@router.get("/process/{workflow_id}/", tags=["WorkflowManager"])
 async def process(workflow_id: UUID | str):
     """Process a workflow.
 
@@ -59,33 +145,19 @@ async def process(workflow_id: UUID | str):
     -------
         Workflow process response
     """
-    # Debugging
-    workflow_id = 'ae7d4105-8312-436f-bc48-98f57c2fe86d' #'cec25959-c451-4faf-9093-97431aba41e6'
-
-    exam_manager_uri = EXAM_MANAGER_URI
 
     async with httpx.AsyncClient() as client:
-        # TODO: data_path, comment ? # pylint: disable=fixme
-        response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
-
-        assert response.status_code == 200  # noqa: S101
-
+        response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{workflow_id}")
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail="Failed to fetch workflow data")
         workflow_raw = response.json()
         workflow = WorkflowOut(**workflow_raw)
 
-        print("Workflow tasks: ")
-
-        # Sort the tasks by datetime_created
         workflow.tasks.sort(key=operator.attrgetter('datetime_created'))
-
+        print("Workflow tasks: ")
         task: TaskOut
         for task in workflow.tasks:
-            # Debugging
-            # print(task.id, end="\n")
-            # print(task.type, end="\n")
-            # print(task.description if task.description else "No description", end="\n")
-
-            if task.type == "DEVICE_TASK" and task.status == "PENDING":
+            if task.type == "DEVICE_TASK" and "PENDING" in task.status:
                 print("Device task:")
                 print(task.destinations.get("device"), end="\n")
 
@@ -129,7 +201,7 @@ async def process(workflow_id: UUID | str):
     return
 
 
-@router.post("/upload/{workflow_id}/")
+@router.post("/upload/{workflow_id}/", tags=["WorkflowManager"])
 async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[str, str]:
     """Upload workflow result.
 
@@ -165,7 +237,7 @@ async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[
     return {"message": f"Successfully uploaded {file.filename}"}
 
 
-@router.get("/download/{record_id}/")
+@router.get("/download/{record_id}/", tags=["WorkflowManager"])
 async def download_result(record_id: int) -> FileResponse:
     """Download DICOM result.
 
@@ -200,7 +272,7 @@ def get_data_from_file(file_path: str) -> Generator:
         yield file_like.read()
 
 
-@router.get("/image/{record_id}/")
+@router.get("/image/{record_id}/", tags=["WorkflowManager"])
 async def get_image_file(record_id: int) -> StreamingResponse:
     """Read image file data and content as streaming response.
 
@@ -319,7 +391,7 @@ async def post_device_task(url, device_task):
         return response.status_code
 
 
-@router.post("/start-scan")
+@router.post("/start-scan", tags=["WorkflowManager"])
 async def start_scan(scan_job: ScanJob, task_id: str):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
     device_id = scan_job.device_id
@@ -357,7 +429,7 @@ async def start_scan(scan_job: ScanJob, task_id: str):
     return {"record_id": record_id}
 
 
-@router.post("/forward-status")
+@router.post("/forward-status", tags=["WorkflowManager"])
 async def forward_status(scan_status: ScanStatus):
     """Receives status for a job. Forwards it to the ui and returns ok."""
     print("Received status: %s", scan_status)

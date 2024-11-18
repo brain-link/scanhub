@@ -72,7 +72,8 @@
     "generate-patient-client": "rm -rf src/generated-client/patient; openapi-generator-cli generate -i http://localhost:8080/api/v1/patient/openapi.json -g typescript-axios -o src/generated-client/patient --additional-properties=supportsES6=true",
     "generate-exam-client": "rm -rf src/generated-client/exam; openapi-generator-cli generate -i http://localhost:8080/api/v1/exam/openapi.json -g typescript-axios -o src/generated-client/exam --additional-properties=supportsES6=true",
     "generate-userlogin-client": "rm -rf src/generated-client/userlogin; openapi-generator-cli generate -i http://localhost:8080/api/v1/userlogin/openapi.json -g typescript-axios -o src/generated-client/userlogin --additional-properties=supportsES6=true",
-    "generate-all-clients": "yarn generate-patient-client; yarn generate-exam-client; yarn generate-userlogin-client;",
+    "generate-workflowmanager-client": "rm -rf src/generated-client/workflow; openapi-generator-cli generate -i http://localhost:8080/api/v1/workflowmanager/openapi.json -g typescript-axios -o src/generated-client/workflowmanager --additional-properties=supportsES6=true",
+    "generate-all-clients": "yarn generate-patient-client; yarn generate-exam-client; yarn generate-userlogin-client; yarn generate-workflowmanager-client",
     "ts-unused-exports": "ts-unused-exports tsconfig.json --excludePathsFromReport=rc/generated-client"
   },
   "browserslist": {
