@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * UserManagement.tsx is responsible for rendering the user table and for adding, modifying and removing users.
+ * UserManagementView.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
@@ -23,9 +23,9 @@ import { userApi } from '../api'
 import AlertItem from '../components/AlertItem'
 import { User, UserRole } from '../generated-client/userlogin'
 import { Alerts } from '../interfaces/components.interface'
-import UserCreateModal from './UserCreateModal'
+import UserCreateModal from '../components/UserCreateModal'
 
-export default function UserManagement() {
+export default function UserManagementView() {
   const [, showNotification] = useContext(NotificationContext)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)

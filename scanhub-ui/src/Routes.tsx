@@ -19,14 +19,13 @@ const materialTheme = materialExtendTheme()
 
 // import Context
 import LoginContext from './LoginContext'
-import UserManagement from './components/UserManagement'
-import PatientIndex from './views/AcquisitionView'
 // Import views
 import App from './views/App'
 import Login from './views/LoginView'
 import PatientListView from './views/PatientListView'
-// import RecordViewer from './views/RecordViewer'
-import Templates from './views/TemplatesView'
+import AcquisitionView from './views/AcquisitionView'
+import TemplatesView from './views/TemplatesView'
+import UserManagementView from './views/UserManagementView'
 
 // import models
 
@@ -59,11 +58,9 @@ export function RouteConfiguration() {
         <Routes>
           <Route path='/' element={user ? <App /> : <Navigate to='/login' state={{from: location}} />}>
             <Route index element={<PatientListView />} />
-            <Route path=':patientId' element={<PatientIndex />}>
-              {/* <Route path=':examId' element={<PatientIndex />} /> */}
-            </Route>
-            <Route path='/templates' element={<Templates />} />
-            <Route path='/users' element={<UserManagement />} />
+            <Route path=':patientId' element={<AcquisitionView />} />
+            <Route path='/templates' element={<TemplatesView />} />
+            <Route path='/users' element={<UserManagementView />} />
           </Route>
 
           <Route

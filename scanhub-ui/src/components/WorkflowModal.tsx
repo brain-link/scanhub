@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * WorkflowModifyModal.tsx is responsible for rendering a modal with an interface
- * to modify an existing workflow.
+ * WorkflowModal.tsx is responsible for rendering a modal with an interface
+ * to create a new workflow or to modify an existing modal.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -18,30 +18,54 @@ import { useMutation } from 'react-query'
 
 import { workflowsApi } from '../api'
 import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
-import { ModalPropsModify } from '../interfaces/components.interface'
+import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
-export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>) {
-  const [, showNotification] = React.useContext(NotificationContext)
-  
-  const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
-    name: props.item.name,
-    comment: props.item.comment,
-    exam_id: props.item.exam_id,              // eslint-disable-line camelcase
-    status: 'UPDATED',
-    is_finished: props.item.is_finished,      // eslint-disable-line camelcase
-    is_template: props.item.is_template,      // eslint-disable-line camelcase
-    is_frozen: props.item.is_frozen,          // eslint-disable-line camelcase
-  })
+export default function WorkflowModal(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
+  const [workflow, setWorkflow] = React.useState<BaseWorkflow>(
+		'item' in props ?
+      {
+        name: props.item.name,
+        comment: props.item.comment,
+        exam_id: props.item.exam_id,              // eslint-disable-line camelcase
+        status: 'UPDATED',
+        is_finished: props.item.is_finished,      // eslint-disable-line camelcase
+        is_template: props.item.is_template,      // eslint-disable-line camelcase
+        is_frozen: props.item.is_frozen,          // eslint-disable-line camelcase
+      }
+		:
+      {
+        name: '',
+        comment: undefined,
+        exam_id: props.parentId,                // eslint-disable-line camelcase
+        status: 'NEW',
+        is_finished: false,                     // eslint-disable-line camelcase
+        is_template: props.createTemplate,      // eslint-disable-line camelcase
+        is_frozen: false,                       // eslint-disable-line camelcase
+      }
+	)
 
-  // Post a new exam template and refetch exam table
-  const mutation = useMutation(async () => {
-    await workflowsApi
-      .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
-      .then(() => {
-        props.onSubmit()
+  const [, showNotification] = React.useContext(NotificationContext)
+
+  const mutation = 
+  'item' in props ?
+      useMutation(async () => {
+        await workflowsApi
+          .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
+          .then(() => {
+            props.onSubmit()
+          })
       })
-  })
+    :
+      useMutation(async () => {
+        await workflowsApi
+          .createWorkflowApiV1ExamWorkflowNewPost(workflow)
+          .then(() => {
+            props.onSubmit()
+          })
+      })
+
+  const title = 'item' in props ? 'Update Workflow' : 'Create New Workflow'
 
   return (
     <Modal
@@ -65,7 +89,7 @@ export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Update Workflow
+          {title}
         </Typography>
 
         <Stack spacing={1}>

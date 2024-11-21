@@ -32,7 +32,7 @@ import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
 
 
-function PatientIndex() {
+function AcquisitionView() {
   const params = useParams()
 
   const [examModalOpen, setExamModalOpen] = React.useState(false)
@@ -185,4 +185,4 @@ function PatientIndex() {
   )
 }
 
-export default PatientIndex
+export default AcquisitionView

@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * TaskCreateModal.tsx is responsible for rendering a modal with an interface to create a new task.
+ * TaskModal.tsx is responsible for rendering a modal with an interface to create a new task or to modify an existing task.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -23,26 +23,42 @@ import * as React from 'react'
 import { useMutation } from 'react-query'
 
 import { taskApi } from '../api'
-import { BaseTask, TaskType } from '../generated-client/exam'
-import { ModalPropsCreate } from '../interfaces/components.interface'
+import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
+import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
-export default function TaskCreateModal(props: ModalPropsCreate) {
+export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const [task, setTask] = React.useState<BaseTask>({
-    workflow_id: props.parentId,              // eslint-disable-line camelcase
-    name: '',
-    description: '',
-    type: TaskType.ProcessingTask,
-    status: {'PENDING': 'defaultstatus'},
-    args: {},
-    artifacts: {},
-    destinations: {},
-    is_template: props.createTemplate,        // eslint-disable-line camelcase
-    is_frozen: false,                         // eslint-disable-line camelcase
-  })
+  const [task, setTask] = React.useState<BaseTask>(
+    'item' in props ?
+      {
+        workflow_id: props.item.workflow_id,              // eslint-disable-line camelcase
+        name: props.item.name,
+        description: props.item.description,
+        type: props.item.type,
+        status: props.item.status,
+        args: props.item.args,
+        artifacts: props.item.artifacts,
+        destinations: props.item.destinations,
+        is_template: props.item.is_template,              // eslint-disable-line camelcase
+        is_frozen: props.item.is_frozen,                  // eslint-disable-line camelcase
+      }
+    :
+      {
+        workflow_id: props.parentId,              // eslint-disable-line camelcase
+        name: '',
+        description: '',
+        type: TaskType.ProcessingTask,
+        status: {'PENDING': 'defaultstatus'},
+        args: {},
+        artifacts: {},
+        destinations: {},
+        is_template: props.createTemplate,        // eslint-disable-line camelcase
+        is_frozen: false,                         // eslint-disable-line camelcase
+      }
+  )
 
   // New argument
   const [argKey, setArgKey] = React.useState<string>('')
@@ -57,13 +73,25 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
   const [artifactVal, setArtifactVal] = React.useState<string>('')
 
   // Post a new exam template and refetch exam table
-  const mutation = useMutation(async () => {
-    await taskApi
-      .createTaskApiV1ExamTaskNewPost(task)
-      .then(() => {
-        props.onSubmit()
+  const mutation = 
+    'item' in props ?
+      useMutation(async () => {
+        await taskApi
+          .updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
+          .then(() => {
+            props.onSubmit()
+          })
       })
-  })
+    :
+      useMutation(async () => {
+        await taskApi
+          .createTaskApiV1ExamTaskNewPost(task)
+          .then(() => {
+            props.onSubmit()
+          })
+      })
+
+  const title = 'item' in props ? 'Update Task' : 'Create New Task'
 
   return (
     <Modal
@@ -87,7 +115,7 @@ export default function TaskCreateModal(props: ModalPropsCreate) {
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Task
+          {title}
         </Typography>
 
         <Stack direction='row' spacing={4}>

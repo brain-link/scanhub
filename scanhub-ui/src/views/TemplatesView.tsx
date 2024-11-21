@@ -13,14 +13,15 @@ import { useQuery } from 'react-query'
 
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import ExamCreateModal from '../components/ExamCreateModal'
+import ExamModal from '../components/ExamModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED } from '../interfaces/components.interface'
 
-export default function Templates() {
+
+export default function TemplatesView() {
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const { data: exams, refetch } = useQuery<ExamOut[]>({
@@ -40,7 +41,7 @@ export default function Templates() {
         Create Exam Template
       </Button>
 
-      <ExamCreateModal
+      <ExamModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
         onSubmit={
@@ -48,6 +49,7 @@ export default function Templates() {
             refetch()
           }
         }
+        item={undefined}
       />
 
       {exams?.map((exam) => (

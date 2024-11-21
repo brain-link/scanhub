@@ -25,8 +25,8 @@ import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces
 import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import TaskFromTemplateModal from './TaskFromTemplateModal'
-import TaskCreateModal from './TaskCreateModal'
-import WorkflowModifyModal from './WorkflowModifyModal'
+import TaskModal from './TaskModal'
+import WorkflowModal from './WorkflowModal'
 
 
 export default function WorkflowItem({ item: workflow, selection, onClick }: SelectableItemInterface<WorkflowOut>) {
@@ -135,7 +135,7 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
 
       {
         workflow.is_template ?
-          <TaskCreateModal
+          <TaskModal
             isOpen={taskCreateNewModalOpen}
             setOpen={setTaskCreateNewModalOpen}
             parentId={workflow.id}
@@ -145,7 +145,7 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
         : undefined
       }
 
-      <WorkflowModifyModal 
+      <WorkflowModal 
         onSubmit={refetchParentData}
         isOpen={workflowModalOpen}
         setOpen={setWorkflowModalOpen}

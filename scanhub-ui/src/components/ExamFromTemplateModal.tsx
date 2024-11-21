@@ -41,38 +41,36 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
   })
 
   return (
-    <>
-      <Modal
-        open={props.isOpen}
-        onClose={() => {
-          props.setOpen(false)
-        }}
-      >
-        <ModalDialog sx={{ width: '50vw', p: 5 }}>
-          <ModalClose />
-          <DialogTitle>Add Exam from Template</DialogTitle>
-          <Stack
-            sx={{
-              overflow: 'scroll',
-              mx: 'calc(-1 * var(--ModalDialog-padding))',
-              px: 'var(--ModalDialog-padding)',
-            }}
-          >
-            {exams &&
-              exams.map((exam, idx) => (
-                <ExamItem
-                  key={idx}
-                  item={exam}
-                  onClick={() => {
-                    mutation.mutate(exam.id)
-                    props.setOpen(false)
-                  }}
-                  selection={ITEM_UNSELECTED} 
-                />
-              ))}
-          </Stack>
-        </ModalDialog>
-      </Modal>
-    </>
+    <Modal
+      open={props.isOpen}
+      onClose={() => {
+        props.setOpen(false)
+      }}
+    >
+      <ModalDialog sx={{ width: '50vw', p: 5 }}>
+        <ModalClose />
+        <DialogTitle>Add Exam from Template</DialogTitle>
+        <Stack
+          sx={{
+            overflow: 'scroll',
+            mx: 'calc(-1 * var(--ModalDialog-padding))',
+            px: 'var(--ModalDialog-padding)',
+          }}
+        >
+          {exams &&
+            exams.map((exam, idx) => (
+              <ExamItem
+                key={idx}
+                item={exam}
+                onClick={() => {
+                  mutation.mutate(exam.id)
+                  props.setOpen(false)
+                }}
+                selection={ITEM_UNSELECTED} 
+              />
+            ))}
+        </Stack>
+      </ModalDialog>
+    </Modal>
   )
 }

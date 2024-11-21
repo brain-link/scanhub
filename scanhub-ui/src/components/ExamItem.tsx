@@ -23,8 +23,8 @@ import Box from '@mui/joy/Box'
 import { examApi } from '../api'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
 import ExamInfo from './ExamInfo'
-import WorkflowCreateModal from './WorkflowCreateModal'
-import ExamModifyModal from './ExamModifyModal'
+import WorkflowModal from './WorkflowModal'
+import ExamModal from './ExamModal'
 import Button from '@mui/joy/Button'
 
 
@@ -127,7 +127,7 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
         </Menu>
       </Dropdown>
 
-      <ExamModifyModal
+      <ExamModal
         item={exam}
         isOpen={examModalOpen}
         setOpen={setExamModalOpen}
@@ -143,7 +143,7 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
       />
       {
         exam.is_template ?
-          <WorkflowCreateModal
+          <WorkflowModal
             isOpen={workflowCreateNewModalOpen}
             setOpen={setWorkflowCreateNewModalOpen}
             parentId={exam.id}

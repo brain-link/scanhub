@@ -32,7 +32,7 @@ from scanhub_libraries.security import get_current_user
 from .producer import Producer
 
 
-SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
+SEQUENCE_MANAGER_URI = "sequence-manager:8000"
 EXAM_MANAGER_URI = "exam-manager:8000"
 
 
@@ -88,25 +88,33 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
         print("    is_template:     ", task.is_template)
         print("    is_frozen:       ", task.is_frozen)
 
-        print("DEBUG return!")
-        return
+        # print("DEBUG return!")
+        # return
 
-    #     if task.type == "DEVICE_TASK" and "PENDING" in task.status:
-    #         print("Device task:")
-    #         print(task.destinations.get("device"), end="\n")
+        if task.type == "DEVICE_TASK" and "PENDING" in task.status:
+            print("Start pending device task!")
 
-    #         # Create a device scan job
-    #         job = ScanJob(  job_id=task.id,
-    #                         sequence_id=task.args["sequence_id"],
-    #                         workflow_id=task.args["workflow_id"],
-    #                         device_id=task.destinations["device"],
-    #                         acquisition_limits=task.args["acquisition_limits"],
-    #                         sequence_parameters=task.args["sequence_parameters"])
+            # # Create a device scan job
+            # job = ScanJob(  job_id=task.id,
+            #                 sequence_id=task.args["sequence_id"],
+            #                 workflow_id=task.workflow_id,
+            #                 device_id=task.args["device"],
+            #                 acquisition_limits=task.args["acquisition_limits"],
+            #                 sequence_parameters=task.args["sequence_parameters"])
+            # await start_scan(job, task.id.toString())
 
-    #         # Start scan
-    #         await start_scan(job, task.id.toString())
+            # Start scan
+            await start_scan_2(device_id=task.args["device"],
+                               sequence_id=task.args["sequence_id"],
+                               record_id=task.id,
+                               acquisition_limits=task.args["acquisition_limits"],
+                               sequence_parameters=task.args["sequence_parameters"],
+                               access_token=access_token)
 
-    #         # TBD set task status to "IN_PROGRESS"
+            # TBD set task status to "IN_PROGRESS"
+
+        print("DEBUG exit, done.")
+
 
     #     if task.type == "PROCESSING_TASK" and task.status == "PENDING":
     #         # print(task.destinations, end="\n")
@@ -164,7 +172,7 @@ async def process(workflow_id: UUID | str):
                 # Create a device scan job
                 job = ScanJob(  job_id=task.id,
                                 sequence_id=task.args["sequence_id"],
-                                workflow_id=task.args["workflow_id"],
+                                workflow_id=task.workflow_id,
                                 device_id=task.destinations["device"],
                                 acquisition_limits=task.args["acquisition_limits"],
                                 sequence_parameters=task.args["sequence_parameters"])
@@ -305,7 +313,7 @@ async def get_image_file(record_id: int) -> StreamingResponse:
 
 ## Formerly acquisition control
 
-async def device_location_request(device_id):
+async def device_location_request(device_id, access_token):
     """Retrieve ip from device-manager.
 
     Parameters
@@ -313,32 +321,37 @@ async def device_location_request(device_id):
     device_id
         Id of device
 
+    access_token
+        the current access_token for using the API
+
     Returns
     -------
         ip_address of device
     """
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address")
+        response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address",
+                                    headers={"Authorization": "Bearer " + access_token})
         return response.json()["ip_address"]
 
 
-async def retrieve_sequence(sequence_manager_uri, sequence_id):
+async def retrieve_sequence(sequence_id, access_token):
     """Retrieve sequence and sequence-type from sequence-manager.
 
     Parameters
     ----------
-    sequence_manager_uri
-        uri of sequence manager
-
     sequence_id
         id of sequence
+    
+    access_token
+        the current access_token for using the API
 
     Returns
     -------
         sequence
     """
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"http://{sequence_manager_uri}/api/v1/mri/sequences/{sequence_id}")
+        response = await client.get(f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{sequence_id}",
+                                    headers={"Authorization": "Bearer " + access_token})
         return response.json()
 
 
@@ -389,6 +402,42 @@ async def post_device_task(url, device_task):
         data = json.dumps(device_task, default=jsonable_encoder)
         response = await client.post(url, content=data)
         return response.status_code
+
+
+
+@router.post("/start-scan", tags=["WorkflowManager"])
+async def start_scan_2(device_id: str,
+                       sequence_id: str,
+                       record_id: str,
+                       acquisition_limits: str,
+                       sequence_parameters: str,
+                       access_token: str):
+    """ Load the device and sequence data from the database and start the scan. """
+
+    device_ip = await device_location_request(device_id, access_token)
+    print("Device ip: ", device_ip)
+    device_url = f"http://{device_ip}/api/start-scan"
+
+    sequence_json = await retrieve_sequence(sequence_id, access_token)
+    print("Sequence JSON:", sequence_json)
+
+    parametrized_sequence = ParametrizedSequence(
+        acquisition_limits=acquisition_limits,
+        sequence_parameters=sequence_parameters,
+        sequence=json.dumps(sequence_json),
+    )
+
+    device_task = DeviceTask(
+        device_id=device_id, record_id=record_id, command=Commands.START, parametrized_sequence=parametrized_sequence
+    )
+    status_code = await post_device_task(device_url, device_task)
+
+    if status_code == 200:
+        print("Scan started successfully.")
+    else:
+        print("Failed to start scan.")
+    return
+
 
 
 @router.post("/start-scan", tags=["WorkflowManager"])
