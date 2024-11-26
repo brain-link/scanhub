@@ -1,7 +1,6 @@
 # examples/simulate_scan.py
 
 import asyncio
-import xml.etree.ElementTree as ET
 from device_sdk import Client
 
 async def perform_scan(client, header_xml_str, sequence_data, acquisition_data):
