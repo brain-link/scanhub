@@ -15,7 +15,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 # pylint: disable=too-many-statements
 
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy import exc
@@ -33,7 +33,7 @@ router = APIRouter()
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 active_connections: list[WebSocket] = []
-dict_id_websocket = {}
+dict_id_websocket: Dict[str, WebSocket] = {}
 
 @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
@@ -211,7 +211,7 @@ In this session a device already was registered.'})
                 device_id = device_data.get('id')
                 device = DeviceOut(**device_data)
 
-                if not (device := await dal_get_device(device_id)):
+                if not (await dal_get_device(device_id)):
                     try:
                         await dal_create_device(device)
                     except exc.SQLAlchemyError as ex:
