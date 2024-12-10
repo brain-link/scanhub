@@ -54,6 +54,7 @@ Module Contents
 
 
 .. py:data:: dict_id_websocket
+   :type:  Dict[str, fastapi.WebSocket]
 
 .. py:function:: readiness() -> dict
    :async:
