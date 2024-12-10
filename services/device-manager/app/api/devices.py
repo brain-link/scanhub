@@ -1,7 +1,16 @@
-# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
+Device API Endpoints.
 
-"""Device api endpoints."""
+This module defines the API routes and WebSocket endpoints for managing devices.
+It includes functionalities for:
+- CRUD operations on devices.
+- Device registration and status updates via WebSocket.
+- Health readiness checks.
+
+Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
+
 # pylint: disable=no-name-in-module
 # pylint: disable=too-many-statements
 
@@ -22,25 +31,50 @@ from .models import DeviceOut, get_device_out
 
 router = APIRouter()
 
+# Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 active_connections: list[WebSocket] = []
 dict_id_websocket = {}
 
 @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
-    """Readiness health endpoint.
+    """
+    Readiness health endpoint.
+
+    Checks if the service is ready to handle requests.
 
     Returns
     -------
-        Status dictionary
+    dict
+        A dictionary with the readiness status.
     """
     return {"status": "ok"}
 
 
 @router.put('/{device_id}/start-scan', status_code=200, tags=["devices"])
 async def start_scan(device_id: str, header_xml: str, sequence_data: str, acquisition_data: str):
-    print(device_id)
-    print(dict_id_websocket)
-    if not (device := await dal_get_device(device_id)):
+    """
+    Start a scan on a connected device.
+
+    Sends a command to a device via WebSocket to initiate a scan.
+
+    Args
+    ----
+    device_id : str
+        The unique identifier of the device.
+    header_xml : str
+        Metadata in XML format.
+    sequence_data : str
+        Data related to the scanning sequence.
+    acquisition_data : str
+        Data for scan acquisition.
+
+    Raises
+    ------
+    HTTPException
+        If the device is not found or not connected.
+
+    """
+    if not (await dal_get_device(device_id)):
         raise HTTPException(status_code=404, detail="Device not found")
     if device_id not in dict_id_websocket:
         raise HTTPException(status_code=404, detail="Device not connected")
@@ -176,7 +210,7 @@ In this session a device already was registered.'})
                 device_data = message.get('data')
                 device_id = device_data.get('id')
                 device = DeviceOut(**device_data)
-                 
+
                 if not (device := await dal_get_device(device_id)):
                     try:
                         await dal_create_device(device)
