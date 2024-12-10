@@ -445,22 +445,25 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.readiness" title="device-manager.app.api.devices.readiness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readiness</span></code></a>(→ dict)</p></td>
 <td><p>Readiness health endpoint.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_devices" title="device-manager.app.api.devices.get_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_devices</span></code></a>(...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.start_scan" title="device-manager.app.api.devices.start_scan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan</span></code></a>(device_id, header_xml, sequence_data, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_devices" title="device-manager.app.api.devices.get_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_devices</span></code></a>(...)</p></td>
 <td><p>Retrieve the list of registered devices.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device_ip_address" title="device-manager.app.api.devices.get_device_ip_address"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device_ip_address</span></code></a>(device_id)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device_ip_address" title="device-manager.app.api.devices.get_device_ip_address"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device_ip_address</span></code></a>(device_id)</p></td>
 <td><p>Retrieve the IP address of a specific device.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device" title="device-manager.app.api.devices.get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device</span></code></a>(device_id)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device" title="device-manager.app.api.devices.get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device</span></code></a>(device_id)</p></td>
 <td><p>Retrieve a specific device.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device_status" title="device-manager.app.api.devices.get_device_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device_status</span></code></a>(device_id)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device_status" title="device-manager.app.api.devices.get_device_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device_status</span></code></a>(device_id)</p></td>
 <td><p>Retrieve the status of a specific device.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.delete_device" title="device-manager.app.api.devices.delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_device</span></code></a>(device_id)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.delete_device" title="device-manager.app.api.devices.delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_device</span></code></a>(device_id)</p></td>
 <td><p>Delete a device.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.websocket_endpoint" title="device-manager.app.api.devices.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.websocket_endpoint" title="device-manager.app.api.devices.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket)</p></td>
 <td><p>Websocket endpoint for device communication.</p></td>
 </tr>
 </tbody>
@@ -495,6 +498,11 @@
 </div></blockquote>
 </section>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.devices.start_scan">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">start_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acquisition_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.start_scan" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.get_devices">
@@ -631,6 +639,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.active_connections"><code class="docutils literal notranslate"><span class="pre">active_connections</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dict_id_websocket"><code class="docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.readiness"><code class="docutils literal notranslate"><span class="pre">readiness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.start_scan"><code class="docutils literal notranslate"><span class="pre">start_scan()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_devices"><code class="docutils literal notranslate"><span class="pre">get_devices()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_device_ip_address"><code class="docutils literal notranslate"><span class="pre">get_device_ip_address()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_device"><code class="docutils literal notranslate"><span class="pre">get_device()</span></code></a></li>

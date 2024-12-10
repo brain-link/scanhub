@@ -25,6 +25,7 @@ Functions
 .. autoapisummary::
 
    device-manager.app.api.devices.readiness
+   device-manager.app.api.devices.start_scan
    device-manager.app.api.devices.get_devices
    device-manager.app.api.devices.get_device_ip_address
    device-manager.app.api.devices.get_device
@@ -54,6 +55,10 @@ Module Contents
    Returns
    -------
        Status dictionary
+
+
+.. py:function:: start_scan(device_id: str, header_xml: str, sequence_data: str, acquisition_data: str)
+   :async:
 
 
 .. py:function:: get_devices() -> list[device-manager.app.api.models.DeviceOut]
