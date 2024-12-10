@@ -5,7 +5,16 @@ device-manager.app.api.devices
 
 .. autoapi-nested-parse::
 
-   Device api endpoints.
+   Device API Endpoints.
+
+   This module defines the API routes and WebSocket endpoints for managing devices.
+   It includes functionalities for:
+   - CRUD operations on devices.
+   - Device registration and status updates via WebSocket.
+   - Health readiness checks.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 
 
@@ -52,13 +61,38 @@ Module Contents
 
    Readiness health endpoint.
 
+   Checks if the service is ready to handle requests.
+
    Returns
    -------
-       Status dictionary
+   dict
+       A dictionary with the readiness status.
 
 
 .. py:function:: start_scan(device_id: str, header_xml: str, sequence_data: str, acquisition_data: str)
    :async:
+
+
+   Start a scan on a connected device.
+
+   Sends a command to a device via WebSocket to initiate a scan.
+
+   Args
+   ----
+   device_id : str
+       The unique identifier of the device.
+   header_xml : str
+       Metadata in XML format.
+   sequence_data : str
+       Data related to the scanning sequence.
+   acquisition_data : str
+       Data for scan acquisition.
+
+   Raises
+   ------
+   HTTPException
+       If the device is not found or not connected.
+
 
 
 .. py:function:: get_devices() -> list[device-manager.app.api.models.DeviceOut]
