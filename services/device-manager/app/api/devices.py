@@ -364,4 +364,4 @@ Device ID does not match'})
                 print('Error updating device.')
             else:
                 # Send response to the device
-                print('Device status updated successfully')
+                print('Device status updated successfully') 
