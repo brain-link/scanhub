@@ -14,16 +14,10 @@ Attributes
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.router
    workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
+   workflow-manager.app.api.workflow.router
    workflow-manager.app.api.workflow.producer
-   workflow-manager.app.api.workflow.workflows
-   workflow-manager.app.api.workflow.WORKFLOW_REQUESTS_TOPIC
-   workflow-manager.app.api.workflow.TASK_ASSIGNMENTS_TOPIC
-   workflow-manager.app.api.workflow.TASK_COMPLETIONS_TOPIC
-   workflow-manager.app.api.workflow.WORKFLOW_RESPONSES_TOPIC
-   workflow-manager.app.api.workflow.loop
 
 
 Functions
@@ -31,14 +25,6 @@ Functions
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.consume_workflow_requests
-   workflow-manager.app.api.workflow.consume_task_completions
-   workflow-manager.app.api.workflow.start_workflow
-   workflow-manager.app.api.workflow.dispatch_next_task
-   workflow-manager.app.api.workflow.handle_finished_task
-   workflow-manager.app.api.workflow.send_workflow_status
-   workflow-manager.app.api.workflow.handle_device_task
-   workflow-manager.app.api.workflow.handle_processing_task
    workflow-manager.app.api.workflow.process
    workflow-manager.app.api.workflow.upload_result
    workflow-manager.app.api.workflow.download_result
@@ -46,6 +32,7 @@ Functions
    workflow-manager.app.api.workflow.get_image_file
    workflow-manager.app.api.workflow.device_location_request
    workflow-manager.app.api.workflow.retrieve_sequence
+   workflow-manager.app.api.workflow.create_record
    workflow-manager.app.api.workflow.post_device_task
    workflow-manager.app.api.workflow.start_scan
    workflow-manager.app.api.workflow.forward_status
@@ -53,8 +40,6 @@ Functions
 
 Module Contents
 ---------------
-
-.. py:data:: router
 
 .. py:data:: SEQUENCE_MANAGER_URI
    :value: 'host.docker.internal:8003'
@@ -64,120 +49,179 @@ Module Contents
    :value: 'host.docker.internal:8004'
 
 
+.. py:data:: router
+
 .. py:data:: producer
 
-.. py:data:: workflows
-   :type:  Dict[str, Dict[str, Any]]
-
-.. py:data:: WORKFLOW_REQUESTS_TOPIC
-   :value: 'workflow-requests'
-
-
-.. py:data:: TASK_ASSIGNMENTS_TOPIC
-   :value: 'task-assignments'
-
-
-.. py:data:: TASK_COMPLETIONS_TOPIC
-   :value: 'task-completions'
-
-
-.. py:data:: WORKFLOW_RESPONSES_TOPIC
-   :value: 'workflow-responses'
-
-
-.. py:function:: consume_workflow_requests()
+.. py:function:: process(workflow_id: uuid.UUID | str)
    :async:
 
 
-.. py:function:: consume_task_completions()
-   :async:
+   Process a workflow.
 
+   Parameters
+   ----------
+   workflow_id
+       UUID of the workflow to process
 
-.. py:function:: start_workflow(workflow_id: str)
-   :async:
-
-
-   Fetch and initialize a workflow, then dispatch the first task.
-
-
-.. py:function:: dispatch_next_task(workflow_id: str)
-   :async:
-
-
-   Find the next pending task and dispatch it.
-
-
-.. py:function:: handle_finished_task(workflow_id: str, task_id: str, success: bool)
-   :async:
-
-
-   Update task status and dispatch next task if successful.
-
-
-.. py:function:: send_workflow_status(workflow_id: str)
-   :async:
-
-
-   Produce a message with the current workflow status to workflow-responses.
-
-
-.. py:function:: handle_device_task(workflow_id: str, task: dict)
-   :async:
-
-
-   Handle a device task by starting the scan.
-
-
-.. py:function:: handle_processing_task(workflow_id: str, task: dict)
-   :async:
-
-
-   Handle a processing task by sending it to the specified topic.
-
-
-.. py:function:: process(workflow_id: uuid.UUID | str) -> dict[str, str]
-   :async:
-
-
-   Process a workflow - start or continue workflow if needed.
+   Returns
+   -------
+       Workflow process response
 
 
 .. py:function:: upload_result(workflow_id: str, file: fastapi.UploadFile = File(...)) -> dict[str, str]
    :async:
 
 
-   Upload workflow result, then try to dispatch next tasks.
+   Upload workflow result.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow, which is processed by workflow
+   file, optional
+       Data upload, e.g. reconstruction result, by default File(...)
+
+   Returns
+   -------
+       Notification
 
 
 .. py:function:: download_result(record_id: int) -> fastapi.responses.FileResponse
    :async:
 
 
+   Download DICOM result.
+
+   Parameters
+   ----------
+   record_id
+       ID of the record the DICOM file belongs to.
+
+   Returns
+   -------
+       DICOM file response
+
+
 .. py:function:: get_data_from_file(file_path: str) -> Generator
+
+   Open a file and read the data.
+
+   Parameters
+   ----------
+   file_path
+       Path of the file to open
+
+   Yields
+   ------
+       File content
+
 
 .. py:function:: get_image_file(record_id: int) -> fastapi.responses.StreamingResponse
    :async:
+
+
+   Read image file data and content as streaming response.
+
+   Parameters
+   ----------
+   record_id
+       Record ID the image should be read for
+
+   Returns
+   -------
+       Image file content
+
+   Raises
+   ------
+   HTTPException
+       File not found
 
 
 .. py:function:: device_location_request(device_id)
    :async:
 
 
+   Retrieve ip from device-manager.
+
+   Parameters
+   ----------
+   device_id
+       Id of device
+
+   Returns
+   -------
+       ip_address of device
+
+
 .. py:function:: retrieve_sequence(sequence_manager_uri, sequence_id)
    :async:
+
+
+   Retrieve sequence and sequence-type from sequence-manager.
+
+   Parameters
+   ----------
+   sequence_manager_uri
+       uri of sequence manager
+
+   sequence_id
+       id of sequence
+
+   Returns
+   -------
+       sequence
+
+
+.. py:function:: create_record(exam_manager_uri, job_id)
+   :async:
+
+
+   Create new record at exam_manager and retrieve record_id.
+
+   Parameters
+   ----------
+   exam_manager_uri
+       uri of sequence manager
+
+   job_id
+       id of job
+
+   Returns
+   -------
+       id of newly created record
 
 
 .. py:function:: post_device_task(url, device_task)
    :async:
 
 
+   Send task do device.
+
+   Parameters
+   ----------
+   url
+       url of the device
+
+   device_task
+       task
+
+   Returns
+   -------
+       response of device
+
+
 .. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob, task_id: str)
    :async:
+
+
+   Receives a job. Create a record id, trigger scan with it and returns it.
 
 
 .. py:function:: forward_status(scan_status: scanhub_libraries.models.ScanStatus)
    :async:
 
 
-.. py:data:: loop
+   Receives status for a job. Forwards it to the ui and returns ok.
+
 

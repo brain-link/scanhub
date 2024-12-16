@@ -390,7 +390,6 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -498,15 +497,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.comment">comment (exam-manager.app.db.Workflow attribute)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.consume_task_completions">consume_task_completions() (in module workflow-manager.app.api.workflow)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.consume_workflow_requests">consume_workflow_requests() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.country">country (exam-manager.app.db.Exam attribute)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam">create_exam() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam_from_template">create_exam_from_template() (in module exam-manager.app.exam)</a>
+</li>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.create_record">create_record() (in module workflow-manager.app.api.workflow)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task">create_task() (in module exam-manager.app.exam)</a>
 </li>
@@ -652,8 +649,6 @@
 </li>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dict_id_websocket">dict_id_websocket (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.dispatch_next_task">dispatch_next_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.download_result">download_result() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
@@ -795,20 +790,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_device_task">handle_device_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_finished_task">handle_finished_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_processing_task">handle_processing_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -863,10 +844,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.LOG_CALL_DELIMITER">LOG_CALL_DELIMITER (in module exam-manager.app.exam)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.loop">loop (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1025,8 +1002,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.send">send() (workflow-manager.app.api.producer.Producer method)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.send_workflow_status">send_workflow_status() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI">SEQUENCE_MANAGER_URI (in module workflow-manager.app.api.workflow)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.shutdown">shutdown() (in module exam-manager.app.main)</a>
@@ -1045,12 +1020,14 @@
       </ul></li>
       <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.start">start() (workflow-manager.app.api.producer.Producer method)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_scan">start_scan() (in module workflow-manager.app.api.workflow)</a>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.start_scan">start_scan() (in module device-manager.app.api.devices)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_scan">(in module workflow-manager.app.api.workflow)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_workflow">start_workflow() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.startup">startup() (in module device-manager.app.main)</a>
 
       <ul>
@@ -1081,12 +1058,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task">Task (class in exam-manager.app.db)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.TASK_ASSIGNMENTS_TOPIC">TASK_ASSIGNMENTS_TOPIC (in module workflow-manager.app.api.workflow)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.TASK_COMPLETIONS_TOPIC">TASK_COMPLETIONS_TOPIC (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.tasks">tasks (exam-manager.app.db.Workflow attribute)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.type">type (exam-manager.app.db.Task attribute)</a>
@@ -1135,6 +1108,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.websocket_endpoint">websocket_endpoint() (in module device-manager.app.api.devices)</a>
 </li>
+      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.websocket_endpoint_legacy">websocket_endpoint_legacy() (in module device-manager.app.api.devices)</a>
+</li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow">Workflow (class in exam-manager.app.db)</a>
 </li>
       <li>
@@ -1158,6 +1133,8 @@
         <li><a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     workflow-manager.app.api.producer
 
@@ -1165,8 +1142,6 @@
         <li><a href="autoapi/workflow-manager/app/api/producer/index.html#module-workflow-manager.app.api.producer">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     workflow-manager.app.api.workflow
 
@@ -1183,16 +1158,8 @@
       </ul></li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.workflow_id">workflow_id (exam-manager.app.db.Task attribute)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.WORKFLOW_REQUESTS_TOPIC">WORKFLOW_REQUESTS_TOPIC (in module workflow-manager.app.api.workflow)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.WORKFLOW_RESPONSES_TOPIC">WORKFLOW_RESPONSES_TOPIC (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.workflows">workflows (exam-manager.app.db.Exam attribute)</a>
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.workflows">(in module workflow-manager.app.api.workflow)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
