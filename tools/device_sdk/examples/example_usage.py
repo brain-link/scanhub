@@ -21,9 +21,16 @@ async def perform_scan(client, header_xml_str, sequence_data, acquisition_data):
     await client.send_ready_status()
     print("Ready status sent.")
 
+async def feedback_handler(message):
+    print(f"Server Feedback: {message}")
+
+async def error_handler(message):
+    print(f"Server Error: {message}")
+
+
 async def main():
     client = Client(
-        websocket_uri="ws://localhost:8002/api/v1/device/ws",  # Replace with actual WebSocket URI
+        websocket_uri="ws://localhost:8002/api/v1/device/ws2",  # Replace with actual WebSocket URI
         device_id="Device123",  # Unique device ID
         name="Device001",
         manufacturer="AcmeCorp",
@@ -32,12 +39,6 @@ async def main():
         site="MainHospital",
         ip_address="192.168.1.100"
     )
-
-    def feedback_handler(message):
-        print(f"Server Feedback: {message}")
-
-    def error_handler(message):
-        print(f"Server Error: {message}")
 
     client.set_feedback_handler(feedback_handler)
     client.set_error_handler(error_handler)

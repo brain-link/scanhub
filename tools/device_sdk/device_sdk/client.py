@@ -134,9 +134,9 @@ class Client:
                 if command == "start":
                     await self.handle_start_command(data.get("data"))
                 elif command == "feedback": # for feedback only 'message' is needed
-                    self.handle_feedback(data.get("message"))
+                    await self.handle_feedback(data.get("message"))
                 else: # on error whole websocket message is needed
-                    self.handle_error(str(data))
+                    await self.handle_error(str(data))
             except json.JSONDecodeError:
                 self.logger.error("Received invalid JSON message: %s",
                                   message)
@@ -247,7 +247,7 @@ class Client:
         await asyncio.sleep(self.reconnect_delay)
         await self.connect_and_register()
 
-    def handle_feedback(self, message):
+    async def handle_feedback(self, message):
         """
         Handles feedback messages from the server.
 
@@ -255,12 +255,12 @@ class Client:
             message (str): The feedback message.
         """
         if self.feedback_handler:
-            self.feedback_handler(message)
+            await self.feedback_handler(message)
         else:
             self.logger.info("Feedback received from server: %s",
                              message)
 
-    def handle_error(self, message):
+    async def handle_error(self, message):
         """
         Handles error messages from the server.
 
@@ -268,7 +268,7 @@ class Client:
             message (str): The error message.
         """
         if self.error_handler:
-            self.error_handler(message)
+            await self.error_handler(message)
         else:
             self.logger.info("Error received from server: %s",
                              message)
