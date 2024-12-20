@@ -131,6 +131,7 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ta
         setOpen={setTaskModalOpen}
         onSubmit={refetchParentData}
         item={task}
+        modalType={'modify'}
       />
     </>
   )

@@ -31,10 +31,10 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 export interface BaseExam {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof BaseExam
      */
-    'patient_id'?: number;
+    'patient_id'?: string;
     /**
      * 
      * @type {string}
@@ -46,46 +46,45 @@ export interface BaseExam {
      * @type {string}
      * @memberof BaseExam
      */
-    'country'?: string;
+    'description': string;
     /**
      * 
      * @type {string}
      * @memberof BaseExam
      */
-    'site'?: string;
+    'indication'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BaseExam
+     */
+    'patient_height_cm'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BaseExam
+     */
+    'patient_weight_kg'?: number;
     /**
      * 
      * @type {string}
      * @memberof BaseExam
      */
-    'address'?: string;
+    'comment'?: string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof BaseExam
      */
-    'status': BaseExamStatusEnum;
+    'status': ItemStatus;
     /**
      * 
      * @type {boolean}
      * @memberof BaseExam
      */
     'is_template': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseExam
-     */
-    'is_frozen': boolean;
 }
 
-export const BaseExamStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type BaseExamStatusEnum = typeof BaseExamStatusEnum[keyof typeof BaseExamStatusEnum];
 
 /**
  * Task model.
@@ -113,6 +112,12 @@ export interface BaseTask {
     'description': string;
     /**
      * 
+     * @type {string}
+     * @memberof BaseTask
+     */
+    'comment'?: string;
+    /**
+     * 
      * @type {TaskType}
      * @memberof BaseTask
      */
@@ -137,22 +142,16 @@ export interface BaseTask {
     'destinations': { [key: string]: string; };
     /**
      * 
-     * @type {{ [key: string]: string; }}
+     * @type {ItemStatus}
      * @memberof BaseTask
      */
-    'status': { [key: string]: string; };
+    'status': ItemStatus;
     /**
      * 
      * @type {boolean}
      * @memberof BaseTask
      */
     'is_template': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseTask
-     */
-    'is_frozen': boolean;
 }
 
 
@@ -167,7 +166,19 @@ export interface BaseWorkflow {
      * @type {string}
      * @memberof BaseWorkflow
      */
+    'exam_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseWorkflow
+     */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseWorkflow
+     */
+    'description': string;
     /**
      * 
      * @type {string}
@@ -176,43 +187,18 @@ export interface BaseWorkflow {
     'comment'?: string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof BaseWorkflow
      */
-    'exam_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseWorkflow
-     */
-    'status': BaseWorkflowStatusEnum;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseWorkflow
-     */
-    'is_finished': boolean;
+    'status': ItemStatus;
     /**
      * 
      * @type {boolean}
      * @memberof BaseWorkflow
      */
     'is_template': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseWorkflow
-     */
-    'is_frozen': boolean;
 }
 
-export const BaseWorkflowStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type BaseWorkflowStatusEnum = typeof BaseWorkflowStatusEnum[keyof typeof BaseWorkflowStatusEnum];
 
 /**
  * 
@@ -229,10 +215,10 @@ export interface ExamId {
 export interface ExamOut {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ExamOut
      */
-    'patient_id'?: number;
+    'patient_id'?: string;
     /**
      * 
      * @type {string}
@@ -244,25 +230,37 @@ export interface ExamOut {
      * @type {string}
      * @memberof ExamOut
      */
-    'country'?: string;
+    'description': string;
     /**
      * 
      * @type {string}
      * @memberof ExamOut
      */
-    'site'?: string;
+    'indication'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ExamOut
+     */
+    'patient_height_cm'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ExamOut
+     */
+    'patient_weight_kg'?: number;
     /**
      * 
      * @type {string}
      * @memberof ExamOut
      */
-    'address'?: string;
+    'comment'?: string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof ExamOut
      */
-    'status': ExamOutStatusEnum;
+    'status': ItemStatus;
     /**
      * 
      * @type {boolean}
@@ -271,16 +269,16 @@ export interface ExamOut {
     'is_template': boolean;
     /**
      * 
-     * @type {boolean}
+     * @type {string}
      * @memberof ExamOut
      */
-    'is_frozen': boolean;
+    'id': string;
     /**
      * 
      * @type {string}
      * @memberof ExamOut
      */
-    'id': string;
+    'creator': string;
     /**
      * 
      * @type {string}
@@ -299,21 +297,8 @@ export interface ExamOut {
      * @memberof ExamOut
      */
     'workflows': Array<WorkflowOut>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'creator': string;
 }
 
-export const ExamOutStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type ExamOutStatusEnum = typeof ExamOutStatusEnum[keyof typeof ExamOutStatusEnum];
 
 /**
  * 
@@ -328,6 +313,23 @@ export interface HTTPValidationError {
      */
     'detail'?: Array<ValidationError>;
 }
+/**
+ * Task status enum.
+ * @export
+ * @enum {string}
+ */
+
+export const ItemStatus = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Started: 'STARTED',
+    Finished: 'FINISHED',
+    Deleted: 'DELETED'
+} as const;
+
+export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
+
+
 /**
  * 
  * @export
@@ -368,6 +370,12 @@ export interface TaskOut {
     'description': string;
     /**
      * 
+     * @type {string}
+     * @memberof TaskOut
+     */
+    'comment'?: string;
+    /**
+     * 
      * @type {TaskType}
      * @memberof TaskOut
      */
@@ -392,22 +400,16 @@ export interface TaskOut {
     'destinations': { [key: string]: string; };
     /**
      * 
-     * @type {{ [key: string]: string; }}
+     * @type {ItemStatus}
      * @memberof TaskOut
      */
-    'status': { [key: string]: string; };
+    'status': ItemStatus;
     /**
      * 
      * @type {boolean}
      * @memberof TaskOut
      */
     'is_template': boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskOut
-     */
-    'is_frozen': boolean;
     /**
      * 
      * @type {string}
@@ -426,6 +428,12 @@ export interface TaskOut {
      * @memberof TaskOut
      */
     'datetime_created': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskOut
+     */
+    'datetime_updated'?: string;
 }
 
 
@@ -488,7 +496,19 @@ export interface WorkflowOut {
      * @type {string}
      * @memberof WorkflowOut
      */
+    'exam_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkflowOut
+     */
+    'description': string;
     /**
      * 
      * @type {string}
@@ -497,22 +517,10 @@ export interface WorkflowOut {
     'comment'?: string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof WorkflowOut
      */
-    'exam_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkflowOut
-     */
-    'status': WorkflowOutStatusEnum;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorkflowOut
-     */
-    'is_finished': boolean;
+    'status': ItemStatus;
     /**
      * 
      * @type {boolean}
@@ -521,22 +529,10 @@ export interface WorkflowOut {
     'is_template': boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof WorkflowOut
-     */
-    'is_frozen': boolean;
-    /**
-     * 
      * @type {string}
      * @memberof WorkflowOut
      */
     'id': string;
-    /**
-     * 
-     * @type {Array<TaskOut>}
-     * @memberof WorkflowOut
-     */
-    'tasks': Array<TaskOut>;
     /**
      * 
      * @type {string}
@@ -555,15 +551,14 @@ export interface WorkflowOut {
      * @memberof WorkflowOut
      */
     'datetime_updated'?: string;
+    /**
+     * 
+     * @type {Array<TaskOut>}
+     * @memberof WorkflowOut
+     */
+    'tasks': Array<TaskOut>;
 }
 
-export const WorkflowOutStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type WorkflowOutStatusEnum = typeof WorkflowOutStatusEnum[keyof typeof WorkflowOutStatusEnum];
 
 
 /**
@@ -613,21 +608,18 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Exam From Template
-         * @param {number} patientId 
          * @param {string} templateId 
-         * @param {boolean} newExamIsTemplate 
+         * @param {BaseExam} baseExam 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createExamFromTemplateApiV1ExamPost: async (patientId: number, templateId: string, newExamIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('createExamFromTemplateApiV1ExamPost', 'patientId', patientId)
+        createExamFromTemplateApiV1ExamPost: async (templateId: string, baseExam: BaseExam, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'templateId' is not null or undefined
             assertParamExists('createExamFromTemplateApiV1ExamPost', 'templateId', templateId)
-            // verify required parameter 'newExamIsTemplate' is not null or undefined
-            assertParamExists('createExamFromTemplateApiV1ExamPost', 'newExamIsTemplate', newExamIsTemplate)
+            // verify required parameter 'baseExam' is not null or undefined
+            assertParamExists('createExamFromTemplateApiV1ExamPost', 'baseExam', baseExam)
             const localVarPath = `/api/v1/exam/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -644,23 +636,18 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
-            if (patientId !== undefined) {
-                localVarQueryParameter['patient_id'] = patientId;
-            }
-
             if (templateId !== undefined) {
                 localVarQueryParameter['template_id'] = templateId;
             }
 
-            if (newExamIsTemplate !== undefined) {
-                localVarQueryParameter['new_exam_is_template'] = newExamIsTemplate;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseExam, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -742,11 +729,11 @@ export const ExamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
          * @summary Get All Patient Exams
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllPatientExamsApiV1ExamAllPatientIdGet: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllPatientExamsApiV1ExamAllPatientIdGet: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
             assertParamExists('getAllPatientExamsApiV1ExamAllPatientIdGet', 'patientId', patientId)
             const localVarPath = `/api/v1/exam/all/{patient_id}`
@@ -883,16 +870,15 @@ export const ExamsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Exam From Template
-         * @param {number} patientId 
          * @param {string} templateId 
-         * @param {boolean} newExamIsTemplate 
+         * @param {BaseExam} baseExam 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, newExamIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamFromTemplateApiV1ExamPost(patientId, templateId, newExamIsTemplate, options);
+        async createExamFromTemplateApiV1ExamPost(templateId: string, baseExam: BaseExam, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamFromTemplateApiV1ExamPost(templateId, baseExam, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ExamsApi.createExamFromTemplateApiV1ExamPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -925,11 +911,11 @@ export const ExamsApiFp = function(configuration?: Configuration) {
         /**
          * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
          * @summary Get All Patient Exams
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExamOut>>> {
+        async getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExamOut>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPatientExamsApiV1ExamAllPatientIdGet(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ExamsApi.getAllPatientExamsApiV1ExamAllPatientIdGet']?.[localVarOperationServerIndex]?.url;
@@ -983,16 +969,15 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createExamApiV1ExamNewPost(baseExam, options).then((request) => request(axios, basePath));
         },
         /**
-         * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Exam From Template
-         * @param {number} patientId 
          * @param {string} templateId 
-         * @param {boolean} newExamIsTemplate 
+         * @param {BaseExam} baseExam 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, newExamIsTemplate: boolean, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.createExamFromTemplateApiV1ExamPost(patientId, templateId, newExamIsTemplate, options).then((request) => request(axios, basePath));
+        createExamFromTemplateApiV1ExamPost(templateId: string, baseExam: BaseExam, options?: any): AxiosPromise<ExamOut> {
+            return localVarFp.createExamFromTemplateApiV1ExamPost(templateId, baseExam, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
@@ -1016,11 +1001,11 @@ export const ExamsApiFactory = function (configuration?: Configuration, basePath
         /**
          * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
          * @summary Get All Patient Exams
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: number, options?: any): AxiosPromise<Array<ExamOut>> {
+        getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: string, options?: any): AxiosPromise<Array<ExamOut>> {
             return localVarFp.getAllPatientExamsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1067,17 +1052,16 @@ export class ExamsApi extends BaseAPI {
     }
 
     /**
-     * Create a new exam from template.  Parameters ---------- patient_id     Id of the patient, the exam is related to template_id     ID of the template, the exam is created from new_exam_is_template     set is_template on the new exam and its workflows and tasks  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
+     * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
      * @summary Create Exam From Template
-     * @param {number} patientId 
      * @param {string} templateId 
-     * @param {boolean} newExamIsTemplate 
+     * @param {BaseExam} baseExam 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExamsApi
      */
-    public createExamFromTemplateApiV1ExamPost(patientId: number, templateId: string, newExamIsTemplate: boolean, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).createExamFromTemplateApiV1ExamPost(patientId, templateId, newExamIsTemplate, options).then((request) => request(this.axios, this.basePath));
+    public createExamFromTemplateApiV1ExamPost(templateId: string, baseExam: BaseExam, options?: RawAxiosRequestConfig) {
+        return ExamsApiFp(this.configuration).createExamFromTemplateApiV1ExamPost(templateId, baseExam, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1106,12 +1090,12 @@ export class ExamsApi extends BaseAPI {
     /**
      * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
      * @summary Get All Patient Exams
-     * @param {number} patientId 
+     * @param {string} patientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExamsApi
      */
-    public getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: number, options?: RawAxiosRequestConfig) {
+    public getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig) {
         return ExamsApiFp(this.configuration).getAllPatientExamsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1494,7 +1478,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Update an existing task.  Requires that the task to be updated is not frozen  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Update Task
          * @param {TaskId} taskId 
          * @param {BaseTask} baseTask 
@@ -1627,7 +1611,7 @@ export const TasksApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Update an existing task.  Requires that the task to be updated is not frozen  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Update Task
          * @param {TaskId} taskId 
          * @param {BaseTask} baseTask 
@@ -1712,7 +1696,7 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getTaskApiV1ExamTaskTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update an existing task.  Requires that the task to be updated is not frozen  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Update Task
          * @param {TaskId} taskId 
          * @param {BaseTask} baseTask 
@@ -1806,7 +1790,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Update an existing task.  Requires that the task to be updated is not frozen  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+     * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
      * @summary Update Task
      * @param {TaskId} taskId 
      * @param {BaseTask} baseTask 

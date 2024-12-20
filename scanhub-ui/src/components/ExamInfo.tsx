@@ -5,8 +5,6 @@
  * ExamInfo.tsx is responsible for rendering additional information of an exam item.
  */
 import Box from '@mui/joy/Box'
-import Chip from '@mui/joy/Chip'
-import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
@@ -34,19 +32,44 @@ function ExamInfo({ exam }: { exam: ExamOut }) {
           {exam.name}
         </Typography>
 
-        <Typography fontSize='sm'>ID</Typography>
+        <Typography fontSize='sm'>Description</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.id}
+          {exam.description}
         </Typography>
 
-        <Typography fontSize='sm'>Note</Typography>
+        <Typography fontSize='sm'>Indication</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {exam.indication}
+        </Typography>
+
+        <Typography fontSize='sm'>Patient height [cm]</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {exam.patient_height_cm}
+        </Typography>
+
+        <Typography fontSize='sm'>Patient weight [kg]</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {exam.patient_weight_kg}
+        </Typography>
+
+        <Typography fontSize='sm'>Comment</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {exam.comment}
+        </Typography>
+
+        <Typography fontSize='sm'>Status</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {exam.status}
         </Typography>
 
-        <Typography fontSize='sm'>Site</Typography>
+        <Typography fontSize='sm'>Is Template</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.site}
+          {exam.is_template ? 'True' : 'False'}
+        </Typography>
+
+        <Typography fontSize='sm'>ID</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {exam.id}
         </Typography>
 
         <Typography fontSize='sm'>Creator</Typography>
@@ -56,23 +79,13 @@ function ExamInfo({ exam }: { exam: ExamOut }) {
 
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(exam.datetime_created).toDateString()}
+          {new Date(exam.datetime_created).toLocaleString()}
         </Typography>
 
         <Typography fontSize='sm'>Updated</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}
+          {exam.datetime_updated ? new Date(exam.datetime_updated).toLocaleString() : '-'}
         </Typography>
-
-        <Typography fontSize='sm'>Status</Typography>
-        <Stack direction='row' spacing={0.5}>
-          <Chip size='sm' color={exam.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Template
-          </Chip>
-          <Chip size='sm' color={exam.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Frozen
-          </Chip>
-        </Stack>
       </Box>
     </Box>
   )

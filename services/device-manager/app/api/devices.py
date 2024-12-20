@@ -6,9 +6,10 @@
 # pylint: disable=too-many-statements
 
 from datetime import datetime
-from typing import List, Annotated
+from typing import List
 
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from scanhub_libraries.security import get_current_user
 from sqlalchemy import exc
 
 from .dal import (
@@ -19,9 +20,6 @@ from .dal import (
     dal_update_device,
 )
 from .models import DeviceOut, get_device_out
-from scanhub_libraries.models import User
-from scanhub_libraries.security import get_current_user
-
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
@@ -118,8 +116,9 @@ async def delete_device(device_id: str):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
-# TODO restrict access to token-bearer 
-# (currently it is not restricted because the current dependency on get_current_user in the APIRouter is only applicable to regular HTTP Connections)
+# TODO restrict access to token-bearer
+# (currently it is not restricted because the current dependency on get_current_user in the APIRouter
+# is only applicable to regular HTTP Connections)
 # https://fastapi.tiangolo.com/advanced/websockets/#using-depends-and-others
 # https://fastapi.tiangolo.com/reference/websockets/ (see first tip)
 # https://github.com/DontPanicO/fastapi-distributed-websocket/blob/main/distributed_websocket/_auth.py

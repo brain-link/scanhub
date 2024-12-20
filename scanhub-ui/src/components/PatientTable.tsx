@@ -17,7 +17,7 @@ export default function PatientTable(props: PatientTableInterface) {
   const navigate = useNavigate()
 
   const columns: GridColDef<PatientOut>[] = [
-    { field: 'id', headerName: 'ID', width: 100, editable: false },
+    { field: 'id', headerName: 'ID', width: 300, editable: false },
     { field: 'first_name', headerName: 'First Name', width: 200, editable: false },
     { field: 'last_name', headerName: 'Last Name', width: 200, editable: false },
     { field: 'birth_date', headerName: 'Birthday', width: 150, editable: false },
@@ -31,7 +31,7 @@ export default function PatientTable(props: PatientTableInterface) {
     },
     { field: 'datetime_created', headerName: 'Added (date/time)', width: 250, editable: false },
     { field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 250, editable: false },
-    { field: 'comment', headerName: 'Comment', width: 500, editable: false },
+    { field: 'comment', headerName: 'Comment', width: 300, editable: false },
   ]
 
   return (

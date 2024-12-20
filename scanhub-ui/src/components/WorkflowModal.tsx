@@ -21,39 +21,33 @@ import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
-export default function WorkflowModal(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
-  const [workflow, setWorkflow] = React.useState<BaseWorkflow>(
-		'item' in props ?
-      {
-        name: props.item.name,
-        comment: props.item.comment,
-        exam_id: props.item.exam_id,              // eslint-disable-line camelcase
-        status: 'UPDATED',
-        is_finished: props.item.is_finished,      // eslint-disable-line camelcase
-        is_template: props.item.is_template,      // eslint-disable-line camelcase
-        is_frozen: props.item.is_frozen,          // eslint-disable-line camelcase
-      }
-		:
-      {
-        name: '',
-        comment: undefined,
-        exam_id: props.parentId,                // eslint-disable-line camelcase
-        status: 'NEW',
-        is_finished: false,                     // eslint-disable-line camelcase
-        is_template: props.createTemplate,      // eslint-disable-line camelcase
-        is_frozen: false,                       // eslint-disable-line camelcase
-      }
-	)
+
+function WorkflowForm(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
+
+  const initialWorkflow: BaseWorkflow = props.modalType == 'modify' ?
+  {...props.item, status: 'UPDATED'}
+:
+  {
+    name: '',
+    description: '',
+    comment: undefined,
+    exam_id: props.parentId,                // eslint-disable-line camelcase
+    status: 'NEW',
+    is_template: props.createTemplate,      // eslint-disable-line camelcase
+  }
+
+  const [workflow, setWorkflow] = React.useState<BaseWorkflow>(initialWorkflow);
 
   const [, showNotification] = React.useContext(NotificationContext)
 
   const mutation = 
-  'item' in props ?
+  props.modalType == 'modify' ?
       useMutation(async () => {
         await workflowsApi
           .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
           .then(() => {
             props.onSubmit()
+            showNotification({message: 'Updated Workflow.', type: 'success'})
           })
       })
     :
@@ -62,11 +56,74 @@ export default function WorkflowModal(props: ModalPropsCreate | ModalPropsModify
           .createWorkflowApiV1ExamWorkflowNewPost(workflow)
           .then(() => {
             props.onSubmit()
+            showNotification({message: 'Created Workflow.', type: 'success'})
           })
       })
 
   const title = 'item' in props ? 'Update Workflow' : 'Create New Workflow'
 
+  return (
+    <>
+      <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
+        {title}
+      </Typography>
+
+      <Stack spacing={1}>
+        <FormLabel>Name</FormLabel>
+        <Input
+          name={'name'}
+          onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
+          defaultValue={workflow.name}
+        />
+
+        <FormLabel>Description</FormLabel>
+        <Input
+          name={'description'}
+          onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
+          defaultValue={workflow.description}
+          required={true}
+        />
+
+        {
+          !workflow.is_template ? 
+            <>
+              <FormLabel>Comment</FormLabel>
+              <Input
+                name={'comment'}
+                onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
+                defaultValue={workflow.comment}
+              />
+            </>
+          :
+            undefined
+        }
+
+        <Button
+          size='sm'
+          sx={{ maxWidth: 120 }}
+          onClick={(event) => {
+            event.preventDefault()
+            if (workflow.name == '') {
+              showNotification({message: 'Workflow name must not be empty.', type: 'warning'})
+            }
+            else if (workflow.description == '') {
+              showNotification({message: 'Workflow description must not be empty.', type: 'warning'})
+            }
+            else {
+              mutation.mutate()
+              props.setOpen(false)
+            }
+          }}
+        >
+          Save
+        </Button>
+      </Stack>
+    </>
+  )
+}
+
+
+export default function WorkflowModal(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
   return (
     <Modal
       open={props.isOpen}
@@ -87,43 +144,7 @@ export default function WorkflowModal(props: ModalPropsCreate | ModalPropsModify
             bgcolor: 'background.body',
           }}
         />
-
-        <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          {title}
-        </Typography>
-
-        <Stack spacing={1}>
-          <FormLabel>Name</FormLabel>
-          <Input
-            name={'name'}
-            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-            defaultValue={workflow.name}
-          />
-
-          <FormLabel>Comment</FormLabel>
-          <Input
-            name={'comment'}
-            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-            defaultValue={workflow.comment}
-          />
-
-          <Button
-            size='sm'
-            sx={{ maxWidth: 120 }}
-            onClick={(event) => {
-              event.preventDefault()
-              if (workflow.name == '') {
-                showNotification({message: 'Workflow name must not be empty.', type: 'warning'})
-              }
-              else {
-                mutation.mutate()
-                props.setOpen(false)
-              }
-            }}
-          >
-            Save
-          </Button>
-        </Stack>
+        <WorkflowForm {...props} />
       </ModalDialog>
     </Modal>
   )

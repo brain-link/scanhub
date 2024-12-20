@@ -5,6 +5,7 @@
 
 import datetime
 import os
+import uuid
 from typing import Literal
 
 from pydantic import BaseModel
@@ -33,8 +34,7 @@ class Patient(Base):
     """Patient ORM model."""
 
     __tablename__ = 'patients'
-
-    patient_id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
 
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str] = mapped_column(nullable=False)

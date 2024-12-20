@@ -6,7 +6,6 @@
  * exam template selection interface to generate a new exam.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
 import { useQuery } from 'react-query'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
@@ -18,8 +17,12 @@ import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
+import ExamModal from './ExamModal'
+
 
 export default function ExamFromTemplateModal(props: ModalPropsCreate) {
+
+  const [examForModification, setExamForModification] = React.useState<ExamOut | undefined>(undefined);
 
   const { data: exams } = useQuery<ExamOut[]>({
     queryKey: ['exams'],
@@ -32,16 +35,8 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
     },
   })
 
-  const mutation = useMutation(async (id: string) => {
-    await examApi
-      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, props.createTemplate)
-      .then(() => {
-        props.onSubmit()
-      })
-  })
-
-  return (
-    <Modal
+  function returnExamFromTemplateModal() {
+    return <Modal
       open={props.isOpen}
       onClose={() => {
         props.setOpen(false)
@@ -63,8 +58,7 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
                 key={idx}
                 item={exam}
                 onClick={() => {
-                  mutation.mutate(exam.id)
-                  props.setOpen(false)
+                  setExamForModification({ ...exam, 'patient_id': props.parentId, 'is_template': props.createTemplate })
                 }}
                 selection={ITEM_UNSELECTED} 
               />
@@ -72,5 +66,23 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
         </Stack>
       </ModalDialog>
     </Modal>
+  }
+
+  return (
+    examForModification ? 
+      <ExamModal
+        item={examForModification}
+        isOpen={true}
+        setOpen={(status) => {
+          if (status == false) {
+            setExamForModification(undefined)  // reset state
+          }
+          props.setOpen(status)
+        }}
+        onSubmit={props.onSubmit}
+        modalType={'createModifyFromTemplate'}
+      />
+    :
+      returnExamFromTemplateModal()
   )
 }

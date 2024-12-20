@@ -167,10 +167,10 @@ export interface PatientOut {
     'comment'?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof PatientOut
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -369,11 +369,11 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Delete patient from database.  Parameters ---------- patient_id     Id of patient to be deleted  Raises ------ HTTPException     _description_
          * @summary Delete Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePatientApiV1PatientPatientIdDelete: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deletePatientApiV1PatientPatientIdDelete: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
             assertParamExists('deletePatientApiV1PatientPatientIdDelete', 'patientId', patientId)
             const localVarPath = `/api/v1/patient/{patient_id}`
@@ -407,11 +407,11 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
          * @summary Get Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientApiV1PatientPatientIdGet: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPatientApiV1PatientPatientIdGet: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
             assertParamExists('getPatientApiV1PatientPatientIdGet', 'patientId', patientId)
             const localVarPath = `/api/v1/patient/{patient_id}`
@@ -479,12 +479,12 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Update existing patient endpoint.  Parameters ---------- patient_id     Id of the patient to be updated payload     Patient data to be updated  Returns -------     Updated patient pydantic output model  Raises ------ HTTPException     404: Patient not found
          * @summary Update Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {BasePatient} basePatient 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePatientApiV1PatientPatientIdPut: async (patientId: number, basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updatePatientApiV1PatientPatientIdPut: async (patientId: string, basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
             assertParamExists('updatePatientApiV1PatientPatientIdPut', 'patientId', patientId)
             // verify required parameter 'basePatient' is not null or undefined
@@ -546,11 +546,11 @@ export const PatientsApiFp = function(configuration?: Configuration) {
         /**
          * Delete patient from database.  Parameters ---------- patient_id     Id of patient to be deleted  Raises ------ HTTPException     _description_
          * @summary Delete Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePatientApiV1PatientPatientIdDelete(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deletePatientApiV1PatientPatientIdDelete(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatientApiV1PatientPatientIdDelete(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PatientsApi.deletePatientApiV1PatientPatientIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -559,11 +559,11 @@ export const PatientsApiFp = function(configuration?: Configuration) {
         /**
          * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
          * @summary Get Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPatientApiV1PatientPatientIdGet(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+        async getPatientApiV1PatientPatientIdGet(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientApiV1PatientPatientIdGet(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientApiV1PatientPatientIdGet']?.[localVarOperationServerIndex]?.url;
@@ -584,12 +584,12 @@ export const PatientsApiFp = function(configuration?: Configuration) {
         /**
          * Update existing patient endpoint.  Parameters ---------- patient_id     Id of the patient to be updated payload     Patient data to be updated  Returns -------     Updated patient pydantic output model  Raises ------ HTTPException     404: Patient not found
          * @summary Update Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {BasePatient} basePatient 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updatePatientApiV1PatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+        async updatePatientApiV1PatientPatientIdPut(patientId: string, basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PatientsApi.updatePatientApiV1PatientPatientIdPut']?.[localVarOperationServerIndex]?.url;
@@ -618,21 +618,21 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
         /**
          * Delete patient from database.  Parameters ---------- patient_id     Id of patient to be deleted  Raises ------ HTTPException     _description_
          * @summary Delete Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePatientApiV1PatientPatientIdDelete(patientId: number, options?: any): AxiosPromise<void> {
+        deletePatientApiV1PatientPatientIdDelete(patientId: string, options?: any): AxiosPromise<void> {
             return localVarFp.deletePatientApiV1PatientPatientIdDelete(patientId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
          * @summary Get Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientApiV1PatientPatientIdGet(patientId: number, options?: any): AxiosPromise<PatientOut> {
+        getPatientApiV1PatientPatientIdGet(patientId: string, options?: any): AxiosPromise<PatientOut> {
             return localVarFp.getPatientApiV1PatientPatientIdGet(patientId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -647,12 +647,12 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
         /**
          * Update existing patient endpoint.  Parameters ---------- patient_id     Id of the patient to be updated payload     Patient data to be updated  Returns -------     Updated patient pydantic output model  Raises ------ HTTPException     404: Patient not found
          * @summary Update Patient
-         * @param {number} patientId 
+         * @param {string} patientId 
          * @param {BasePatient} basePatient 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePatientApiV1PatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
+        updatePatientApiV1PatientPatientIdPut(patientId: string, basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
             return localVarFp.updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options).then((request) => request(axios, basePath));
         },
     };
@@ -680,24 +680,24 @@ export class PatientsApi extends BaseAPI {
     /**
      * Delete patient from database.  Parameters ---------- patient_id     Id of patient to be deleted  Raises ------ HTTPException     _description_
      * @summary Delete Patient
-     * @param {number} patientId 
+     * @param {string} patientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public deletePatientApiV1PatientPatientIdDelete(patientId: number, options?: RawAxiosRequestConfig) {
+    public deletePatientApiV1PatientPatientIdDelete(patientId: string, options?: RawAxiosRequestConfig) {
         return PatientsApiFp(this.configuration).deletePatientApiV1PatientPatientIdDelete(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
      * @summary Get Patient
-     * @param {number} patientId 
+     * @param {string} patientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public getPatientApiV1PatientPatientIdGet(patientId: number, options?: RawAxiosRequestConfig) {
+    public getPatientApiV1PatientPatientIdGet(patientId: string, options?: RawAxiosRequestConfig) {
         return PatientsApiFp(this.configuration).getPatientApiV1PatientPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -715,13 +715,13 @@ export class PatientsApi extends BaseAPI {
     /**
      * Update existing patient endpoint.  Parameters ---------- patient_id     Id of the patient to be updated payload     Patient data to be updated  Returns -------     Updated patient pydantic output model  Raises ------ HTTPException     404: Patient not found
      * @summary Update Patient
-     * @param {number} patientId 
+     * @param {string} patientId 
      * @param {BasePatient} basePatient 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public updatePatientApiV1PatientPatientIdPut(patientId: number, basePatient: BasePatient, options?: RawAxiosRequestConfig) {
+    public updatePatientApiV1PatientPatientIdPut(patientId: string, basePatient: BasePatient, options?: RawAxiosRequestConfig) {
         return PatientsApiFp(this.configuration).updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -35,7 +35,7 @@ import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interfa
 function AcquisitionView() {
   const params = useParams()
 
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
 
   // useQuery for caching the fetched data
@@ -47,7 +47,7 @@ function AcquisitionView() {
   } = useQuery<PatientOut, Error>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientApiV1PatientPatientIdGet(Number(params.patientId)).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!).then((result) => {
         return result.data
       })
     },
@@ -63,7 +63,7 @@ function AcquisitionView() {
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
       return await examApi
-        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId))
+        .getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
         .then((result) => {
           return result.data
         })
@@ -111,7 +111,7 @@ function AcquisitionView() {
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
 
-          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamModalOpen(true)}>
+          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamFromTemplateModalOpen(true)}>
             <AddSharpIcon />
           </IconButton>
         </Box>
@@ -173,11 +173,12 @@ function AcquisitionView() {
       </Sheet>
 
       <ExamFromTemplateModal
-        isOpen={examModalOpen}
-        setOpen={setExamModalOpen}
+        isOpen={examFromTemplateModalOpen}
+        setOpen={setExamFromTemplateModalOpen}
         parentId={String(params.patientId)}
         onSubmit={refetchExams}
         createTemplate={false}
+        modalType={'create'}
       />
 
       <DicomViewer />

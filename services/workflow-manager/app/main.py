@@ -38,7 +38,7 @@ async def shutdown() -> None:
     await producer.stop()
 
 
-@app.get("/api/v1/workflow/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get("/api/v1/workflowmanager/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 

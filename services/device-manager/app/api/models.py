@@ -25,8 +25,8 @@ class DeviceOut(BaseDevice):
     """Device pydantic output model."""
 
     id: str
-    datetime_created: datetime = datetime.now()
-    datetime_updated: datetime = datetime.now()
+    datetime_created: datetime
+    datetime_updated: datetime | None
 
 
 async def get_device_out(data: Device) -> DeviceOut:

@@ -24,6 +24,55 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
+ * Pydantic definition of AcquisitionLimits.
+ * @export
+ * @interface AcquisitionLimits
+ */
+export interface AcquisitionLimits {
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_weight': number;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof AcquisitionLimits
+     */
+    'Gender'?: Gender;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_age': number;
+}
+
+
+/**
+ * Pydantic definition of genders.
+ * @export
+ * @enum {string}
+ */
+
+export const Gender = {
+    Male: 'MALE',
+    Female: 'FEMALE',
+    Other: 'OTHER',
+    NotGiven: 'NOT_GIVEN'
+} as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
+
+
+/**
  * 
  * @export
  * @interface HTTPValidationError
@@ -145,8 +194,8 @@ export const HealthApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1WorkflowHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/workflow/health/readiness`;
+        readinessApiV1WorkflowmanagerHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/workflowmanager/health/readiness`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -185,10 +234,10 @@ export const HealthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async readinessApiV1WorkflowHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1WorkflowHealthReadinessGet(options);
+        async readinessApiV1WorkflowmanagerHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1WorkflowmanagerHealthReadinessGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1WorkflowHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1WorkflowmanagerHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -207,8 +256,8 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1WorkflowHealthReadinessGet(options?: any): AxiosPromise<any> {
-            return localVarFp.readinessApiV1WorkflowHealthReadinessGet(options).then((request) => request(axios, basePath));
+        readinessApiV1WorkflowmanagerHealthReadinessGet(options?: any): AxiosPromise<any> {
+            return localVarFp.readinessApiV1WorkflowmanagerHealthReadinessGet(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -227,8 +276,8 @@ export class HealthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof HealthApi
      */
-    public readinessApiV1WorkflowHealthReadinessGet(options?: RawAxiosRequestConfig) {
-        return HealthApiFp(this.configuration).readinessApiV1WorkflowHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    public readinessApiV1WorkflowmanagerHealthReadinessGet(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).readinessApiV1WorkflowmanagerHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

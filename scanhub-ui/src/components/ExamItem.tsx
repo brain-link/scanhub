@@ -132,6 +132,7 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
         isOpen={examModalOpen}
         setOpen={setExamModalOpen}
         onSubmit={refetchParentData}
+        modalType='modify'
       />
 
       <WorkflowFromTemplateModal
@@ -140,6 +141,7 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
         parentId={exam.id}
         onSubmit={refetchParentData}
         createTemplate={exam.is_template}
+        modalType={'create'}
       />
       {
         exam.is_template ?
@@ -149,6 +151,7 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
             parentId={exam.id}
             onSubmit={refetchParentData}
             createTemplate={exam.is_template}
+            modalType={'create'}
           />
         : undefined
       }

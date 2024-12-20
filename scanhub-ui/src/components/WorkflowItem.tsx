@@ -131,6 +131,7 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
         parentId={workflow.id}
         onSubmit={refetchParentData}
         createTemplate={workflow.is_template}
+        modalType={'create'}
       />
 
       {
@@ -141,6 +142,7 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
             parentId={workflow.id}
             onSubmit={refetchParentData}
             createTemplate={workflow.is_template}
+            modalType={'create'}
           />
         : undefined
       }
@@ -150,6 +152,7 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
         isOpen={workflowModalOpen}
         setOpen={setWorkflowModalOpen}
         item={workflow}
+        modalType={'modify'}
       />    
     </>
   )

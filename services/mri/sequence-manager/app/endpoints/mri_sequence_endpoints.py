@@ -24,6 +24,7 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse
 from pypulseq import Sequence  # type: ignore
+from scanhub_libraries.security import get_current_user
 
 from database.models import MRISequence, MRISequenceCreate
 from dependencies import get_database
@@ -37,6 +38,9 @@ from services.mri_sequence_service import (  # search_mri_sequences,; download_m
 )
 
 logger = logging.getLogger(__name__)
+
+
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 async def mri_sequence_form(
@@ -67,9 +71,6 @@ async def mri_sequence_form(
     return MRISequenceCreate(
         name=name, description=description, sequence_type=sequence_type, tags=tags_list
     )
-
-
-router = APIRouter()
 
 
 @router.post("/", response_model=MRISequence, status_code=status.HTTP_201_CREATED)

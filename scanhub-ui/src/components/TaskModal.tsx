@@ -28,37 +28,26 @@ import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.int
 import NotificationContext from '../NotificationContext'
 
 
-export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
+function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const [task, setTask] = React.useState<BaseTask>(
-    'item' in props ?
-      {
-        workflow_id: props.item.workflow_id,              // eslint-disable-line camelcase
-        name: props.item.name,
-        description: props.item.description,
-        type: props.item.type,
-        status: props.item.status,
-        args: props.item.args,
-        artifacts: props.item.artifacts,
-        destinations: props.item.destinations,
-        is_template: props.item.is_template,              // eslint-disable-line camelcase
-        is_frozen: props.item.is_frozen,                  // eslint-disable-line camelcase
-      }
-    :
-      {
-        workflow_id: props.parentId,              // eslint-disable-line camelcase
-        name: '',
-        description: '',
-        type: TaskType.ProcessingTask,
-        status: {'PENDING': 'defaultstatus'},
-        args: {},
-        artifacts: {},
-        destinations: {},
-        is_template: props.createTemplate,        // eslint-disable-line camelcase
-        is_frozen: false,                         // eslint-disable-line camelcase
-      }
-  )
+  const initialTask: BaseTask = props.modalType == 'modify' ?
+    {...props.item, status: 'UPDATED'}
+  :
+    {
+      workflow_id: props.parentId,              // eslint-disable-line camelcase
+      name: '',
+      description: '',
+      comment: undefined,
+      type: TaskType.ProcessingTask,
+      status: 'NEW',
+      args: {},
+      artifacts: {},
+      destinations: {},
+      is_template: props.createTemplate,        // eslint-disable-line camelcase
+    }
+
+  const [task, setTask] = React.useState<BaseTask>(initialTask);
 
   // New argument
   const [argKey, setArgKey] = React.useState<string>('')
@@ -72,14 +61,15 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Tas
   const [artifactKey, setArtifactKey] = React.useState<string>('')
   const [artifactVal, setArtifactVal] = React.useState<string>('')
 
-  // Post a new exam template and refetch exam table
+  // Post a new/modified task and reset
   const mutation = 
-    'item' in props ?
+    props.modalType == 'modify' ?
       useMutation(async () => {
         await taskApi
           .updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
           .then(() => {
             props.onSubmit()
+            showNotification({message: 'Updated Task.', type: 'success'})
           })
       })
     :
@@ -88,10 +78,245 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Tas
           .createTaskApiV1ExamTaskNewPost(task)
           .then(() => {
             props.onSubmit()
+            showNotification({message: 'Created Task.', type: 'success'})
           })
       })
 
-  const title = 'item' in props ? 'Update Task' : 'Create New Task'
+  const title = props.modalType == 'modify' ? 'Update Task' : 'Create New Task'
+
+  return (
+    <>
+      <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
+        {title}
+      </Typography>
+
+      <Stack direction='row' spacing={4}>
+        <Stack spacing={1}>
+          <FormLabel>Name</FormLabel>
+          <Input
+            name={'name'}
+            onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+            value={task.name}
+          />
+        </Stack>
+        <Stack spacing={1}>
+          <FormLabel>Type</FormLabel>
+          <Select
+            defaultValue={task.type}
+            placeholder={task.type}
+            size='sm'
+            onChange={(e: React.SyntheticEvent | null, key: TaskType | null) => {
+              // Only set type if key is not null
+              key ? setTask({ ...task, ['type']: TaskType[key as keyof typeof TaskType] }) : () => {}
+            }}
+          >
+            {Object.keys(TaskType).map((key) => (
+              <Option key={key} value={key}>
+                {TaskType[key as keyof typeof TaskType]}
+              </Option>
+            ))}
+          </Select>
+        </Stack>
+        <Stack spacing={1}>
+          <FormLabel>Description</FormLabel>
+          <Textarea
+            minRows={2}
+            name={'description'}
+            onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+            defaultValue={task.description}
+          />
+        </Stack>
+        {
+          !task.is_template ?
+            <Stack spacing={1}>
+              <FormLabel>Comment</FormLabel>
+              <Textarea
+                minRows={2}
+                name={'comment'}
+                onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+                defaultValue={task.comment}
+              />
+            </Stack>
+          :
+            undefined
+        }
+      </Stack>
+
+      <Stack direction='row' spacing={4}>
+
+        <Stack spacing={1}>
+          <FormLabel>Arguments</FormLabel>
+          <Stack direction='row' spacing={1}>
+            <FormControl>
+              <FormLabel>Key</FormLabel>
+              <Input onChange={(e) => setArgKey(e.target.value)} size='sm' value={argKey} />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Value</FormLabel>
+              <Stack direction='row' spacing={1}>
+                <Input onChange={(e) => setArgVal(e.target.value)} size='sm' value={argVal} />
+                <IconButton
+                  onClick={() => {
+                    setTask({ ...task, args: { ...task.args, [argKey]: argVal } })
+                    setArgKey('')
+                    setArgVal('')
+                  }}
+                  size='sm'
+                >
+                  <AddSharpIcon />
+                </IconButton>
+              </Stack>
+            </FormControl>
+          </Stack>
+
+          {task &&
+            Object.entries(task.args).map((arg, index) => (
+              <Stack direction='row' spacing={2} alignItems='center' key={index}>
+                <Typography level='body-sm' textColor='text.tertiary'>
+                  {arg[0]}: {arg[1]}
+                </Typography>
+                <IconButton
+                  size='sm'
+                  onClick={() => {
+                    setTask((prevTask) => {
+                      const tmpArgs = { ...prevTask.args }
+                      delete tmpArgs[arg[0]]
+                      return { ...prevTask, args: tmpArgs }
+                    })
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </Stack>
+            ))}
+        </Stack>
+
+        <Stack spacing={1}>
+          <FormLabel>Destinations</FormLabel>
+
+          <Stack direction='row' spacing={1}>
+            <FormControl>
+              <FormLabel>Key</FormLabel>
+              <Input onChange={(e) => setDestinationKey(e.target.value)} size='sm' value={destinationKey} />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Value</FormLabel>
+              <Stack direction='row' spacing={1}>
+                <Input onChange={(e) => setDestinationVal(e.target.value)} size='sm' value={destinationVal} />
+                <IconButton
+                  onClick={() => {
+                    setTask({ ...task, destinations: { ...task.destinations, [destinationKey]: destinationVal } })
+                    setDestinationKey('')
+                    setDestinationVal('')
+                  }}
+                  size='sm'
+                >
+                  <AddSharpIcon />
+                </IconButton>
+              </Stack>
+            </FormControl>
+          </Stack>
+
+          {task &&
+            Object.entries(task.destinations).map((destination, index) => (
+              <Stack direction='row' spacing={2} alignItems='center' key={index}>
+                <Typography level='body-sm' textColor='text.tertiary'>
+                  {destination[0]}: {destination[1]}
+                </Typography>
+                <IconButton
+                  size='sm'
+                  onClick={() => {
+                    setTask((prevTask) => {
+                      const tmpDestinations = { ...prevTask.destinations }
+                      delete tmpDestinations[destination[0]]
+                      return { ...prevTask, destinations: tmpDestinations }
+                    })
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </Stack>
+            ))}
+        </Stack>
+
+        <Stack spacing={1}>
+          <FormLabel>Artifacts</FormLabel>
+
+          <Stack direction='row' spacing={1}>
+            <FormControl>
+              <FormLabel>Key</FormLabel>
+              <Input onChange={(e) => setArtifactKey(e.target.value)} size='sm' value={artifactKey} />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Value</FormLabel>
+              <Stack direction='row' spacing={1}>
+                <Input onChange={(e) => setArtifactVal(e.target.value)} size='sm' value={artifactVal} />
+                <IconButton
+                  onClick={() => {
+                    setTask({ ...task, artifacts: { ...task.artifacts, [artifactKey]: artifactVal } })
+                    setArtifactKey('')
+                    setArtifactVal('')
+                  }}
+                  size='sm'
+                >
+                  <AddSharpIcon />
+                </IconButton>
+              </Stack>
+            </FormControl>
+          </Stack>
+
+          {task &&
+            Object.entries(task.artifacts).map((artifact, index) => (
+              <Stack direction='row' spacing={2} alignItems='center' key={index}>
+                <Typography level='body-sm' textColor='text.tertiary'>
+                  {artifact[0]}: {artifact[1]}
+                </Typography>
+                <IconButton
+                  size='sm'
+                  onClick={() => {
+                    setTask((prevTask) => {
+                      const tmpArtifacts = { ...prevTask.artifacts }
+                      delete tmpArtifacts[artifact[0]]
+                      return { ...prevTask, artifacts: tmpArtifacts }
+                    })
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </Stack>
+            ))}
+        </Stack>
+      </Stack>
+
+      <Button
+        size='sm'
+        sx={{ maxWidth: 120 }}
+        onClick={(event) => {
+          event.preventDefault()
+          if (task.name == '') {
+            showNotification({message: 'Task name must not be empty.', type: 'warning'})
+          }
+          else if (task.description == '') {
+            showNotification({message: 'Task description must not be empty.', type: 'warning'})
+          }
+          else {
+            mutation.mutate()
+            props.setOpen(false)
+          }
+        }}
+      >
+        Save
+      </Button>
+    </>
+  )
+}
+
+
+export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
+
 
   return (
     <Modal
@@ -113,208 +338,7 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Tas
             bgcolor: 'background.body',
           }}
         />
-
-        <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          {title}
-        </Typography>
-
-        <Stack direction='row' spacing={4}>
-          <Stack spacing={1}>
-            <FormLabel>Name</FormLabel>
-            <Input
-              name={'name'}
-              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-              value={task.name}
-            />
-          </Stack>
-          <Stack spacing={1}>
-            <FormLabel>Type</FormLabel>
-            <Select
-              defaultValue={task.type}
-              placeholder={task.type}
-              size='sm'
-              onChange={(e: React.SyntheticEvent | null, key: TaskType | null) => {
-                // Only set type if key is not null
-                key ? setTask({ ...task, ['type']: TaskType[key as keyof typeof TaskType] }) : () => {}
-              }}
-            >
-              {Object.keys(TaskType).map((key) => (
-                <Option key={key} value={key}>
-                  {TaskType[key as keyof typeof TaskType]}
-                </Option>
-              ))}
-            </Select>
-          </Stack>
-          <Stack spacing={1}>
-            <FormLabel>Comment</FormLabel>
-            <Textarea
-              minRows={2}
-              name={'description'}
-              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-              defaultValue={task.description}
-            />
-          </Stack>
-        </Stack>
-
-        <Stack direction='row' spacing={4}>
-
-          <Stack spacing={1}>
-            <FormLabel>Arguments</FormLabel>
-            <Stack direction='row' spacing={1}>
-              <FormControl>
-                <FormLabel>Key</FormLabel>
-                <Input onChange={(e) => setArgKey(e.target.value)} size='sm' />
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Value</FormLabel>
-                <Stack direction='row' spacing={1}>
-                  <Input onChange={(e) => setArgVal(e.target.value)} size='sm' />
-                  <IconButton
-                    onClick={() => {
-                      setTask({ ...task, args: { ...task.args, [argKey]: argVal } })
-                    }}
-                    size='sm'
-                  >
-                    <AddSharpIcon />
-                  </IconButton>
-                </Stack>
-              </FormControl>
-            </Stack>
-
-            {task &&
-              Object.entries(task.args).map((arg, index) => (
-                <Stack direction='row' spacing={2} alignItems='center' key={index}>
-                  <Typography level='body-sm' textColor='text.tertiary'>
-                    {arg[0]}: {arg[1]}
-                  </Typography>
-                  <IconButton
-                    size='sm'
-                    onClick={() => {
-                      setTask((prevTask) => {
-                        const tmpArgs = { ...prevTask.args }
-                        delete tmpArgs[arg[0]]
-                        return { ...prevTask, args: tmpArgs }
-                      })
-                    }}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                </Stack>
-              ))}
-          </Stack>
-
-          <Stack spacing={1}>
-            <FormLabel>Destinations</FormLabel>
-
-            <Stack direction='row' spacing={1}>
-              <FormControl>
-                <FormLabel>Key</FormLabel>
-                <Input onChange={(e) => setDestinationKey(e.target.value)} size='sm' />
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Value</FormLabel>
-                <Stack direction='row' spacing={1}>
-                  <Input onChange={(e) => setDestinationVal(e.target.value)} size='sm' />
-                  <IconButton
-                    onClick={() => {
-                      setTask({ ...task, destinations: { ...task.destinations, [destinationKey]: destinationVal } })
-                    }}
-                    size='sm'
-                  >
-                    <AddSharpIcon />
-                  </IconButton>
-                </Stack>
-              </FormControl>
-            </Stack>
-
-            {task &&
-              Object.entries(task.destinations).map((destination, index) => (
-                <Stack direction='row' spacing={2} alignItems='center' key={index}>
-                  <Typography level='body-sm' textColor='text.tertiary'>
-                    {destination[0]}: {destination[1]}
-                  </Typography>
-                  <IconButton
-                    size='sm'
-                    onClick={() => {
-                      setTask((prevTask) => {
-                        const tmpDestinations = { ...prevTask.destinations }
-                        delete tmpDestinations[destination[0]]
-                        return { ...prevTask, destinations: tmpDestinations }
-                      })
-                    }}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                </Stack>
-              ))}
-          </Stack>
-
-          <Stack spacing={1}>
-            <FormLabel>Artifacts</FormLabel>
-
-            <Stack direction='row' spacing={1}>
-              <FormControl>
-                <FormLabel>Key</FormLabel>
-                <Input onChange={(e) => setArtifactKey(e.target.value)} size='sm' />
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Value</FormLabel>
-                <Stack direction='row' spacing={1}>
-                  <Input onChange={(e) => setArtifactVal(e.target.value)} size='sm' />
-                  <IconButton
-                    onClick={() => {
-                      setTask({ ...task, artifacts: { ...task.artifacts, [artifactKey]: artifactVal } })
-                    }}
-                    size='sm'
-                  >
-                    <AddSharpIcon />
-                  </IconButton>
-                </Stack>
-              </FormControl>
-            </Stack>
-
-            {task &&
-              Object.entries(task.artifacts).map((artifact, index) => (
-                <Stack direction='row' spacing={2} alignItems='center' key={index}>
-                  <Typography level='body-sm' textColor='text.tertiary'>
-                    {artifact[0]}: {artifact[1]}
-                  </Typography>
-                  <IconButton
-                    size='sm'
-                    onClick={() => {
-                      setTask((prevTask) => {
-                        const tmpArtifacts = { ...prevTask.args }
-                        delete tmpArtifacts[artifact[0]]
-                        return { ...prevTask, args: tmpArtifacts }
-                      })
-                    }}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                </Stack>
-              ))}
-          </Stack>
-        </Stack>
-
-        <Button
-          size='sm'
-          sx={{ maxWidth: 120 }}
-          onClick={(event) => {
-            event.preventDefault()
-            if (task.name == '') {
-              showNotification({message: 'Task name must not be empty.', type: 'warning'})
-            }
-            else {
-              mutation.mutate()
-              props.setOpen(false)
-            }
-          }}
-        >
-          Save
-        </Button>
+        <TaskForm {...props} />
       </ModalDialog>
     </Modal>
   )

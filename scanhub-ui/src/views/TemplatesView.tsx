@@ -44,12 +44,10 @@ export default function TemplatesView() {
       <ExamModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
-        onSubmit={
-          () => {
-            refetch()
-          }
-        }
-        item={undefined}
+        onSubmit={() => refetch()}
+        modalType='create'
+        createTemplate={true}
+        parentId={undefined}
       />
 
       {exams?.map((exam) => (

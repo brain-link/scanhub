@@ -3,24 +3,28 @@
 
 """Workflow manager endpoints."""
 
+import datetime
 import json
 import logging
 import operator
 import os
-from typing import Generator, Annotated
+from typing import Annotated, Generator
 from uuid import UUID
 
 import httpx
-from fastapi import APIRouter, File, HTTPException, UploadFile, status, Depends
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
 
 # from scanhub import RecoJob # type: ignore
 from scanhub_libraries.models import (
+    AcquisitionLimits,
     Commands,
     DeviceTask,
+    ExamOut,
     ParametrizedSequence,
+    PatientOut,
     ScanJob,
     ScanStatus,
     TaskEvent,
@@ -31,9 +35,9 @@ from scanhub_libraries.security import get_current_user
 
 from .producer import Producer
 
-
 SEQUENCE_MANAGER_URI = "sequence-manager:8000"
 EXAM_MANAGER_URI = "exam-manager:8000"
+PATIENT_MANAGER_URI = "patient-manager:8100"
 
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
@@ -41,6 +45,25 @@ router = APIRouter(dependencies=[Depends(get_current_user)])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # Get the producer singleton instance
 producer = Producer()
+
+
+def calculate_age(birth_date):
+    """Calculate age in years from birth date.
+
+    Parameters
+    ----------
+    birth_date
+        date of birth as datetime.date object
+
+    Returns
+    -------
+        Age in years as integer
+    """
+    today = datetime.date.today()
+    age = today.year - birth_date.year
+    if today.month < birth_date.month or (today.month == birth_date.month and today.day < birth_date.day):
+        age -= 1
+    return age
 
 
 
@@ -57,21 +80,22 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
     -------
         Task process response
     """
+    print()
+    print("Process Task:")
+    print()
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task_id}", headers={"Authorization": "Bearer " + access_token})
-        if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Failed to fetch task with id=" + str(task_id))
-        task_raw = response.json()
+    headers = {"Authorization": "Bearer " + access_token}
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
+        get_task_response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task_id}", headers=headers)
+        if get_task_response.status_code != 200:
+            raise HTTPException(status_code=get_task_response.status_code, detail="Failed to fetch task with id=" + str(task_id))
+        task_raw = get_task_response.json()
         task = TaskOut(**task_raw)
-
         print("Task:")
-        print("    id:              ", task.id)
-        print("    creator:         ", task.creator)
-        print("    datetime_created:", task.datetime_created)
         print("    workflow_id:     ", task.workflow_id)
         print("    name:            ", task.name)
         print("    description:     ", task.description)
+        print("    comment:         ", task.comment)
         print("    type:            ", task.type)
         print("    args:")
         for key in task.args:
@@ -82,17 +106,78 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
         print("    destinations:")
         for key in task.destinations:
             print("        " + key + ": " + task.destinations[key])
-        print("    status:")
-        for key in task.status:
-            print("        " + key + ": " + task.status[key])
+        print("    status:          ", task.status)
         print("    is_template:     ", task.is_template)
-        print("    is_frozen:       ", task.is_frozen)
+        print("    id:              ", task.id)
+        print("    creator:         ", task.creator)
+        print("    datetime_created:", task.datetime_created)
+        print("    datetime_updated:", task.datetime_updated)
+        print()
 
-        # print("DEBUG return!")
-        # return
+        get_workflow_response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{task.workflow_id}", headers=headers)
+        if get_workflow_response.status_code != 200:
+            raise HTTPException(status_code=get_workflow_response.status_code, detail="Failed to fetch workflow with id=" + str(task.workflow_id))
+        workflow_raw = get_workflow_response.json()
+        workflow = WorkflowOut(**workflow_raw)
+        print("Workflow:")
+        print("    exam_id:         ", workflow.exam_id)
+        print("    name:            ", workflow.name)
+        print("    description:     ", workflow.description)
+        print("    comment:         ", workflow.comment)
+        print("    status:          ", workflow.status)
+        print("    is_template:     ", workflow.is_template)
+        print("    id:              ", workflow.id)
+        print("    creator:         ", workflow.creator)
+        print("    datetime_created:", workflow.datetime_created)
+        print("    datetime_updated:", workflow.datetime_updated)
+        print()
+        # print workflow.tasks
 
-        if task.type == "DEVICE_TASK" and "PENDING" in task.status:
-            print("Start pending device task!")
+        get_exam_response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/{workflow.exam_id}", headers=headers)
+        if get_exam_response.status_code != 200:
+            raise HTTPException(status_code=get_exam_response.status_code, detail="Failed to fetch exam with id=" + str(workflow.exam_id))
+        exam_raw = get_exam_response.json()
+        exam = ExamOut(**exam_raw)
+        print("Exam:")
+        print("    patient_id:          ", exam.patient_id)
+        print("    name:                ", exam.name)
+        print("    description:         ", exam.description)
+        print("    indication:          ", exam.indication)
+        print("    patient_height_cm:   ", exam.patient_height_cm)
+        print("    patient_weight_kg:   ", exam.patient_weight_kg)
+        print("    comment:             ", exam.comment)
+        print("    status:              ", exam.status)
+        print("    is_template:         ", exam.is_template)
+        print("    id:                  ", exam.id)
+        print("    creator:             ", exam.creator)
+        print("    datetime_created:    ", exam.datetime_created)
+        print("    datetime_updated:    ", exam.datetime_updated)
+        print()
+        # print exam.workflows
+
+        get_patient_response = await client.get(f"http://{PATIENT_MANAGER_URI}/api/v1/patient/{exam.patient_id}", headers=headers)
+        if get_patient_response.status_code != 200:
+            raise HTTPException(status_code=get_patient_response.status_code, detail="Failed to fetch patient with id=" + str(exam.patient_id))
+        patient_raw = get_patient_response.json()
+        patient = PatientOut(**patient_raw)
+        print("Patient:")
+        print("    first_name:          ", patient.first_name)
+        print("    last_name:           ", patient.last_name)
+        print("    birth_date:          ", patient.birth_date)
+        print("    sex:                 ", patient.sex)
+        print("    issuer:              ", patient.issuer)
+        print("    status:              ", patient.status)
+        print("    comment:             ", patient.comment)
+        print("    patient_id:          ", patient.patient_id)
+        print("    datetime_created:    ", patient.datetime_created)
+        print("    datetime_updated:    ", patient.datetime_updated)
+        print()
+
+        if task.status != "NEW" and task.status != "UPDATED":
+            raise HTTPException(status_code=400, detail="Task to process does not have status NEW or UPDATED.")
+
+        if task.type == "DEVICE_TASK":
+            print("Start device task!")
 
             # # Create a device scan job
             # job = ScanJob(  job_id=task.id,
@@ -107,13 +192,19 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
             await start_scan_2(device_id=task.args["device"],
                                sequence_id=task.args["sequence_id"],
                                record_id=task.id,
-                               acquisition_limits=task.args["acquisition_limits"],
+                               acquisition_limits={
+                                    "patient_height": exam.patient_height_cm,
+                                    "patient_weight": exam.patient_weight_kg,
+                                    "patient_gender": patient.sex,
+                                    "patient_age": calculate_age(patient.birth_date),
+                               },
                                sequence_parameters=task.args["sequence_parameters"],
                                access_token=access_token)
 
             # TBD set task status to "IN_PROGRESS"
 
         print("DEBUG exit, done.")
+        print()
 
 
     #     if task.type == "PROCESSING_TASK" and task.status == "PENDING":
@@ -153,8 +244,7 @@ async def process(workflow_id: UUID | str):
     -------
         Workflow process response
     """
-
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         response = await client.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{workflow_id}")
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail="Failed to fetch workflow data")
@@ -328,7 +418,7 @@ async def device_location_request(device_id, access_token):
     -------
         ip_address of device
     """
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         response = await client.get(f"http://api-gateway:8080/api/v1/device/{device_id}/ip_address",
                                     headers={"Authorization": "Bearer " + access_token})
         return response.json()["ip_address"]
@@ -341,7 +431,7 @@ async def retrieve_sequence(sequence_id, access_token):
     ----------
     sequence_id
         id of sequence
-    
+
     access_token
         the current access_token for using the API
 
@@ -349,7 +439,7 @@ async def retrieve_sequence(sequence_id, access_token):
     -------
         sequence
     """
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         response = await client.get(f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{sequence_id}",
                                     headers={"Authorization": "Bearer " + access_token})
         return response.json()
@@ -398,7 +488,7 @@ async def post_device_task(url, device_task):
     -------
         response of device
     """
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         data = json.dumps(device_task, default=jsonable_encoder)
         response = await client.post(url, content=data)
         return response.status_code
@@ -409,11 +499,10 @@ async def post_device_task(url, device_task):
 async def start_scan_2(device_id: str,
                        sequence_id: str,
                        record_id: str,
-                       acquisition_limits: str,
+                       acquisition_limits: AcquisitionLimits,
                        sequence_parameters: str,
                        access_token: str):
-    """ Load the device and sequence data from the database and start the scan. """
-
+    """Load the device and sequence data from the database and start the scan."""
     device_ip = await device_location_request(device_id, access_token)
     print("Device ip: ", device_ip)
     device_url = f"http://{device_ip}/api/start-scan"
