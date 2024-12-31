@@ -15,7 +15,7 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
-   /autoapi/workflow-manager/app/api/producer/index
+   /autoapi/workflow-manager/app/api/orchestration_engine/index
    /autoapi/workflow-manager/app/api/workflow/index
 
 

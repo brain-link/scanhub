@@ -14,10 +14,12 @@ Attributes
 
 .. autoapisummary::
 
+   workflow-manager.app.api.workflow.router
    workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
-   workflow-manager.app.api.workflow.router
    workflow-manager.app.api.workflow.producer
+   workflow-manager.app.api.workflow.workflows
+   workflow-manager.app.api.workflow.orchestration_engine
 
 
 Functions
@@ -25,21 +27,17 @@ Functions
 
 .. autoapisummary::
 
+   workflow-manager.app.api.workflow.trigger_workflow
    workflow-manager.app.api.workflow.process
+   workflow-manager.app.api.workflow.handle_device_task
+   workflow-manager.app.api.workflow.handle_processing_task
    workflow-manager.app.api.workflow.upload_result
-   workflow-manager.app.api.workflow.download_result
-   workflow-manager.app.api.workflow.get_data_from_file
-   workflow-manager.app.api.workflow.get_image_file
-   workflow-manager.app.api.workflow.device_location_request
-   workflow-manager.app.api.workflow.retrieve_sequence
-   workflow-manager.app.api.workflow.create_record
-   workflow-manager.app.api.workflow.post_device_task
-   workflow-manager.app.api.workflow.start_scan
-   workflow-manager.app.api.workflow.forward_status
 
 
 Module Contents
 ---------------
+
+.. py:data:: router
 
 .. py:data:: SEQUENCE_MANAGER_URI
    :value: 'host.docker.internal:8003'
@@ -49,11 +47,18 @@ Module Contents
    :value: 'host.docker.internal:8004'
 
 
-.. py:data:: router
-
 .. py:data:: producer
 
-.. py:function:: process(workflow_id: uuid.UUID | str)
+.. py:data:: workflows
+   :type:  Dict[str, Dict[str, Any]]
+
+.. py:data:: orchestration_engine
+
+.. py:function:: trigger_workflow(workflow_id: str)
+   :async:
+
+
+.. py:function:: process(workflow_id: uuid.UUID | str) -> dict[str, str]
    :async:
 
 
@@ -67,6 +72,20 @@ Module Contents
    Returns
    -------
        Workflow process response
+
+
+.. py:function:: handle_device_task(task: scanhub_libraries.models.TaskOut)
+   :async:
+
+
+   Handle a device task by creating a scan job and starting the scan.
+
+
+.. py:function:: handle_processing_task(task: scanhub_libraries.models.TaskOut)
+   :async:
+
+
+   Handle a processing task by triggering the appropriate orchestration engine.
 
 
 .. py:function:: upload_result(workflow_id: str, file: fastapi.UploadFile = File(...)) -> dict[str, str]
@@ -85,143 +104,5 @@ Module Contents
    Returns
    -------
        Notification
-
-
-.. py:function:: download_result(record_id: int) -> fastapi.responses.FileResponse
-   :async:
-
-
-   Download DICOM result.
-
-   Parameters
-   ----------
-   record_id
-       ID of the record the DICOM file belongs to.
-
-   Returns
-   -------
-       DICOM file response
-
-
-.. py:function:: get_data_from_file(file_path: str) -> Generator
-
-   Open a file and read the data.
-
-   Parameters
-   ----------
-   file_path
-       Path of the file to open
-
-   Yields
-   ------
-       File content
-
-
-.. py:function:: get_image_file(record_id: int) -> fastapi.responses.StreamingResponse
-   :async:
-
-
-   Read image file data and content as streaming response.
-
-   Parameters
-   ----------
-   record_id
-       Record ID the image should be read for
-
-   Returns
-   -------
-       Image file content
-
-   Raises
-   ------
-   HTTPException
-       File not found
-
-
-.. py:function:: device_location_request(device_id)
-   :async:
-
-
-   Retrieve ip from device-manager.
-
-   Parameters
-   ----------
-   device_id
-       Id of device
-
-   Returns
-   -------
-       ip_address of device
-
-
-.. py:function:: retrieve_sequence(sequence_manager_uri, sequence_id)
-   :async:
-
-
-   Retrieve sequence and sequence-type from sequence-manager.
-
-   Parameters
-   ----------
-   sequence_manager_uri
-       uri of sequence manager
-
-   sequence_id
-       id of sequence
-
-   Returns
-   -------
-       sequence
-
-
-.. py:function:: create_record(exam_manager_uri, job_id)
-   :async:
-
-
-   Create new record at exam_manager and retrieve record_id.
-
-   Parameters
-   ----------
-   exam_manager_uri
-       uri of sequence manager
-
-   job_id
-       id of job
-
-   Returns
-   -------
-       id of newly created record
-
-
-.. py:function:: post_device_task(url, device_task)
-   :async:
-
-
-   Send task do device.
-
-   Parameters
-   ----------
-   url
-       url of the device
-
-   device_task
-       task
-
-   Returns
-   -------
-       response of device
-
-
-.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob, task_id: str)
-   :async:
-
-
-   Receives a job. Create a record id, trigger scan with it and returns it.
-
-
-.. py:function:: forward_status(scan_status: scanhub_libraries.models.ScanStatus)
-   :async:
-
-
-   Receives status for a job. Forwards it to the ui and returns ok.
 
 

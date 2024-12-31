@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -357,9 +357,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -388,9 +393,10 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
- | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -427,9 +433,13 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer._instance">_instance (workflow-manager.app.api.producer.Producer attribute)</a>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_workflow_status">_get_airflow_workflow_status() (workflow-manager.app.api.orchestration_engine.OrchestrationEngine method)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer._producer">_producer (workflow-manager.app.api.producer.Producer attribute)</a>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_kestra_workflow_status">_get_kestra_workflow_status() (workflow-manager.app.api.orchestration_engine.OrchestrationEngine method)</a>
+</li>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_workflow">_trigger_airflow_workflow() (workflow-manager.app.api.orchestration_engine.OrchestrationEngine method)</a>
+</li>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_kestra_workflow">_trigger_kestra_workflow() (workflow-manager.app.api.orchestration_engine.OrchestrationEngine method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -446,6 +456,8 @@
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.add_workflow_data">add_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.address">address (exam-manager.app.db.Exam attribute)</a>
+</li>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url">airflow_api_url (workflow-manager.app.api.orchestration_engine.OrchestrationEngine attribute)</a>
 </li>
       <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.app">app (in module device-manager.app.main)</a>
 
@@ -503,14 +515,12 @@
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_exam_from_template">create_exam_from_template() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.create_record">create_record() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task">create_task() (in module exam-manager.app.exam)</a>
+</li>
+      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task_from_template">create_task_from_template() (in module exam-manager.app.exam)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_task_from_template">create_task_from_template() (in module exam-manager.app.exam)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow">create_workflow() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.create_workflow_from_template">create_workflow_from_template() (in module exam-manager.app.exam)</a>
@@ -577,10 +587,10 @@
 </li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.description">description (exam-manager.app.db.Task attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.destinations">destinations (exam-manager.app.db.Task attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.destinations">destinations (exam-manager.app.db.Task attribute)</a>
+</li>
       <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device">Device (class in device-manager.app.api.db)</a>
 
       <ul>
@@ -643,13 +653,9 @@
         <li><a href="autoapi/device-manager/app/main/index.html#module-device-manager.app.main">module</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.device_location_request">device_location_request() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/device-manager/app/api/models/index.html#device-manager.app.api.models.DeviceOut">DeviceOut (class in device-manager.app.api.models)</a>
 </li>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.dict_id_websocket">dict_id_websocket (in module device-manager.app.api.devices)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.download_result">download_result() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -661,6 +667,8 @@
 
       <ul>
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.engine">(in module exam-manager.app.db)</a>
+</li>
+        <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine">(workflow-manager.app.api.orchestration_engine.OrchestrationEngine attribute)</a>
 </li>
       </ul></li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam">Exam (class in exam-manager.app.db)</a>
@@ -718,14 +726,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="F">F</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.forward_status">forward_status() (in module workflow-manager.app.api.workflow)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -753,8 +753,6 @@
 </li>
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_all_workflows_template_data">get_all_workflows_template_data() (in module exam-manager.app.dal)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_data_from_file">get_data_from_file() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.get_device">get_device() (in module device-manager.app.api.devices)</a>
 </li>
   </ul></td>
@@ -773,10 +771,6 @@
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_exam_out_model">get_exam_out_model() (in module exam-manager.app.exam)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.get_image_file">get_image_file() (in module workflow-manager.app.api.workflow)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.get_producer">get_producer() (workflow-manager.app.api.producer.Producer class method)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_task">get_task() (in module exam-manager.app.exam)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_task_data">get_task_data() (in module exam-manager.app.dal)</a>
@@ -786,6 +780,20 @@
       <li><a href="autoapi/exam-manager/app/dal/index.html#exam-manager.app.dal.get_workflow_data">get_workflow_data() (in module exam-manager.app.dal)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.get_workflow_out_model">get_workflow_out_model() (in module exam-manager.app.exam)</a>
+</li>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_workflow_status">get_workflow_status() (workflow-manager.app.api.orchestration_engine.OrchestrationEngine method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_device_task">handle_device_task() (in module workflow-manager.app.api.workflow)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.handle_processing_task">handle_processing_task() (in module workflow-manager.app.api.workflow)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -840,6 +848,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url">kestra_api_url (workflow-manager.app.api.orchestration_engine.OrchestrationEngine attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -851,8 +867,6 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.main">main() (in module workflow-manager.app.api.producer)</a>
-</li>
       <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.manufacturer">manufacturer (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
@@ -905,7 +919,7 @@
 </li>
         <li><a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api">workflow-manager.app.api</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/producer/index.html#module-workflow-manager.app.api.producer">workflow-manager.app.api.producer</a>
+        <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#module-workflow-manager.app.api.orchestration_engine">workflow-manager.app.api.orchestration_engine</a>
 </li>
         <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#module-workflow-manager.app.api.workflow">workflow-manager.app.api.workflow</a>
 </li>
@@ -938,8 +952,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.oauth2_scheme">oauth2_scheme (in module exam-manager.app.exam)</a>
 </li>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.orchestration_engine">orchestration_engine (in module workflow-manager.app.api.workflow)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine">OrchestrationEngine (class in workflow-manager.app.api.orchestration_engine)</a>
+</li>
       <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.ORIGINS">ORIGINS (in module exam-manager.app.main)</a>
 </li>
   </ul></td>
@@ -950,15 +968,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.patient_id">patient_id (exam-manager.app.db.Exam attribute)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.post_device_task">post_device_task() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/exam/index.html#exam-manager.app.exam.PREFIX_PATIENT_MANAGER">PREFIX_PATIENT_MANAGER (in module exam-manager.app.exam)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.process">process() (in module workflow-manager.app.api.workflow)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer">Producer (class in workflow-manager.app.api.producer)</a>
 </li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.producer">producer (in module workflow-manager.app.api.workflow)</a>
 
@@ -984,8 +998,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.retrieve_sequence">retrieve_sequence() (in module workflow-manager.app.api.workflow)</a>
-</li>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.router">router (in module device-manager.app.api.devices)</a>
 
       <ul>
@@ -1000,8 +1012,6 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.send">send() (workflow-manager.app.api.producer.Producer method)</a>
-</li>
       <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI">SEQUENCE_MANAGER_URI (in module workflow-manager.app.api.workflow)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.shutdown">shutdown() (in module exam-manager.app.main)</a>
@@ -1018,16 +1028,6 @@
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.site">(exam-manager.app.db.Exam attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.start">start() (workflow-manager.app.api.producer.Producer method)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.start_scan">start_scan() (in module device-manager.app.api.devices)</a>
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.start_scan">(in module workflow-manager.app.api.workflow)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.startup">startup() (in module device-manager.app.main)</a>
 
       <ul>
@@ -1036,6 +1036,8 @@
         <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.startup">(in module workflow-manager.app.main)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.status">status (device-manager.app.api.db.Device attribute)</a>
 
       <ul>
@@ -1048,8 +1050,6 @@
         <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.status">(exam-manager.app.db.Workflow attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflow-manager/app/api/producer/index.html#workflow-manager.app.api.producer.Producer.stop">stop() (workflow-manager.app.api.producer.Producer method)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -1058,10 +1058,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task">Task (class in exam-manager.app.db)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow.tasks">tasks (exam-manager.app.db.Workflow attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.trigger_workflow">trigger_workflow() (in module workflow-manager.app.api.workflow)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_workflow">(workflow-manager.app.api.orchestration_engine.OrchestrationEngine method)</a>
+</li>
+      </ul></li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.type">type (exam-manager.app.db.Task attribute)</a>
 </li>
   </ul></td>
@@ -1108,8 +1114,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.websocket_endpoint">websocket_endpoint() (in module device-manager.app.api.devices)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/devices/index.html#device-manager.app.api.devices.websocket_endpoint_legacy">websocket_endpoint_legacy() (in module device-manager.app.api.devices)</a>
-</li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Workflow">Workflow (class in exam-manager.app.db)</a>
 </li>
       <li>
@@ -1136,10 +1140,10 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    workflow-manager.app.api.producer
+    workflow-manager.app.api.orchestration_engine
 
       <ul>
-        <li><a href="autoapi/workflow-manager/app/api/producer/index.html#module-workflow-manager.app.api.producer">module</a>
+        <li><a href="autoapi/workflow-manager/app/api/orchestration_engine/index.html#module-workflow-manager.app.api.orchestration_engine">module</a>
 </li>
       </ul></li>
       <li>
@@ -1159,7 +1163,11 @@
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Task.workflow_id">workflow_id (exam-manager.app.db.Task attribute)</a>
 </li>
       <li><a href="autoapi/exam-manager/app/db/index.html#exam-manager.app.db.Exam.workflows">workflows (exam-manager.app.db.Exam attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/workflow-manager/app/api/workflow/index.html#workflow-manager.app.api.workflow.workflows">(in module workflow-manager.app.api.workflow)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1192,8 +1200,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
