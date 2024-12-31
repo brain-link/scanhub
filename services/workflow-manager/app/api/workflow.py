@@ -24,15 +24,12 @@ from scanhub_libraries.models import (
     WorkflowOut,
 )
 
-from .producer import Producer
 from .orchestration_engine import OrchestrationEngine
 
 router = APIRouter()
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
-
-producer = Producer()
 
 # In-memory workflow storage
 # {
