@@ -1,9 +1,28 @@
+x-airflow-common:
+  &airflow-common
+  build: ./services/airflow
+  image: ${AIRFLOW_IMAGE_NAME:-extending_airflow:latest}
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 10
+  volumes:
+    - ./services/airflow/dags:/opt/airflow/dags
+    - ./services/airflow/logs:/opt/airflow/logs
+    - ./services/airflow/plugins:/opt/airflow/plugins
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    airflow-database:
+      condition: service_healthy
+
 services:
 
   # SERVICES
-  
   # Workflow manager, device manager and exam manager create data tables in postgres DB
-
   workflow-manager:
     container_name: workflow-manager
     build: 
@@ -28,9 +47,6 @@ services:
     depends_on:
       scanhub-database:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
-
 
   device-manager:
     container_name: device-manager
@@ -87,8 +103,6 @@ services:
       workflow-manager:
         condition: service_healthy
 
-
-
   patient-manager:
     container_name: patient-manager
     build: 
@@ -104,8 +118,6 @@ services:
     depends_on:
       patient-database:
         condition: service_healthy
-
-
 
   user-login-manager:
     container_name: user-login-manager
@@ -167,17 +179,56 @@ services:
       args: 
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    environment:
-      - KAFKA_TOPIC_SUBSCRIPTION=mri_cartesian_reco
-    depends_on:
-      kafka:
-        condition: service_healthy
     volumes:
       - ./services/mri/recos/cartesian-reco-service/app/:/app/
       - data_lake:/app/data_lake/
 
+  
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    command: version
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
 
   # DATABASES
+  # Airflow Postgres Database:
+  airflow-database:
+    container_name: airflow-db
+    image: postgres:15.2-bullseye
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-db-volume:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
 
   # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
   scanhub-database:
@@ -261,33 +312,6 @@ services:
         condition: service_started
 
 
-  # Message Broker (Kafka)
-  kafka:
-    container_name: message-broker
-    image: bitnami/kafka:latest
-    ports:
-      - "9092:9092"
-    volumes:
-      - "kafka_data:/bitnami"
-    environment:
-      # KRaft settings
-      - KAFKA_CFG_NODE_ID=0
-      - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-      # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
-      - KAFKA_CFG_MESSAGE_MAX_BYTES=1048588
-    healthcheck:
-      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-
   # FRONTEND/SCANHUB-UI    # development-launcher.sh expects this container description in line 308-321
   scanhub-ui:
     container_name: scanhub-ui
@@ -309,5 +333,4 @@ volumes:
   mongodb_data_sequence:
   postgres_data_scanhub:
   postgres_data_patient:
-  kafka_data:
-    driver: local
+  airflow-db-volume:
