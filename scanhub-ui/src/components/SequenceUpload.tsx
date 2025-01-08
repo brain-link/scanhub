@@ -20,7 +20,7 @@ import Typography from '@mui/joy/Typography'
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
 import { ModalProps } from '../interfaces/components.interface'
-import { MRISequence } from '../interfaces/mri-data.interface'
+import { MRISequence } from '../generated-client/sequence/api'
 
 function SequenceUpload(props: ModalProps) {
   const [, showNotification] = useContext(NotificationContext)
@@ -40,8 +40,13 @@ function SequenceUpload(props: ModalProps) {
       showNotification({message: 'No file selected for upload.', type: 'warning'})
     }
     else {
-      await sequenceApi.uploadMriSequenceFileApiV1MriSequencesUploadPost(sequence.file, sequence.name).catch(() => {
-        showNotification({message: 'Error on sequence upload.', type: 'success'})
+      await sequenceApi.uploadMriSequenceFileApiV1MriSequencesUploadPost(sequence.file, sequence.name)
+      .then(() => {
+        showNotification({message: 'Sequence uploaded.', type: 'success'})
+        props.onSubmit()
+      })
+      .catch(() => {
+        showNotification({message: 'Error on sequence upload.', type: 'warning'})
       })
     }
     // check if upload was successful
@@ -100,10 +105,19 @@ function SequenceUpload(props: ModalProps) {
               required
             />
 
+            <FormLabel> File Selection </FormLabel>
+            <Stack direction={'row'} gap={'5px'} >
+              <Typography>
+                {'Selected file: '}
+              </Typography>
+              <Typography sx={{fontStyle: 'italic'}}>
+                {sequence.file ? sequence.file?.name : '---'}
+              </Typography>
+            </Stack>
             <Button color='primary' aria-label='upload picture' component='label'>
               <input
                 hidden
-                accept='*.seq'
+                accept='.seq'
                 type='file'
                 onChange={(e) => {
                   e.preventDefault()
@@ -118,9 +132,22 @@ function SequenceUpload(props: ModalProps) {
               sx={{ maxWidth: 120 }}
               onClick={(event) => {
                 event.preventDefault()
-                uploadSequence.mutate(sequence)
-                props.onSubmit()
-                props.setOpen(false)
+                if (sequence.file == undefined || sequence.file == null) {
+                  showNotification({message: 'No file selected for upload.', type: 'warning'})
+                }
+                else if (sequence.name == '') {
+                  showNotification({message: 'No sequence name given.', type: 'warning'})
+                }
+                else if (sequence.description == '') {
+                  showNotification({message: 'No sequence description given.', type: 'warning'})
+                }
+                else if (sequence.description == '') {
+                  showNotification({message: 'No sequence type given.', type: 'warning'})
+                }
+                else {
+                  uploadSequence.mutate(sequence)
+                  props.setOpen(false)
+                }
               }}
             >
               Save

@@ -89,7 +89,7 @@ See our dedicated [Documentation](https://scanhub.brain-link.de/) web page to ge
 
 ## State of development
 
-<span style="color:red; font-weight: bold">This software is not yet ready for clinical use!</span>
+This software is not yet ready for clinical use!
 
 
 ## Contributor Guide

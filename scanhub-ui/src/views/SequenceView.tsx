@@ -105,7 +105,7 @@ export default function SequenceView() {
   }
 
   const columns: GridColDef<MRISequence>[] = [
-    { field: 'id', headerName: 'ID', width: 200, editable: false },
+    { field: '_id', headerName: 'ID', width: 250, editable: false },
     { field: 'name', headerName: 'Name', width: 200, editable: false },
     { field: 'description', headerName: 'Description', width: 300, editable: false },
     { field: 'sequence_type', headerName: 'Type', width: 200, editable: false },
@@ -115,7 +115,7 @@ export default function SequenceView() {
       width: 200,
       editable: false,
       filterable: false,
-      // valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
+      valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
       field: 'updated_at',
@@ -123,7 +123,7 @@ export default function SequenceView() {
       width: 200,
       editable: false,
       filterable: false,
-      // valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
+      valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
       field: 'tags',
@@ -131,7 +131,6 @@ export default function SequenceView() {
       width: 200,
       editable: false,
       filterable: false,
-      // valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     { field: 'file', headerName: 'File', width: 200, editable: false },
     { field: 'file_extension', headerName: 'File extension', width: 100, editable: false },
@@ -148,7 +147,7 @@ export default function SequenceView() {
       />
 
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 
-        <Typography level='title-md'>List of Sequences</Typography>
+        <Typography level='title-md'>List of Sequences 2</Typography>
         <IconButton size='sm' variant='outlined'>
           <AddSharpIcon onClick={() => setDialogOpen(true)} />
         </IconButton>
