@@ -99,7 +99,6 @@ export default function Navigation() {
       component='header'
       className='Header'
       sx={{
-        // height: navigation.height,
         height: 'var(--Navigation-height)',
         p: 2,
         gap: 0,
@@ -126,7 +125,7 @@ export default function Navigation() {
         </a>
       </IconButton>
 
-      <Typography level='h4' sx={{ mr: 5 }}>
+      <Typography level='h4' sx={{ mr: 2, ml: 1 }}>
         ScanHub
       </Typography>
 
@@ -151,9 +150,15 @@ export default function Navigation() {
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
         <ColorSchemeToggle />
         <ConnectionStatus buttonOrPage='button'/>
-        <Typography sx={{ mr: 2 }}>
-          {'Version ' + version}
-        </Typography>
+
+        <Box sx={{background: 'Orange', border: '1px solid black', borderRadius: '3px', padding: '3px', textWrapMode: 'nowrap'}}>
+          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
+            {'Version ' + version}
+          </Typography>
+          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
+            {'Not for clinical use!'}
+          </Typography>
+        </Box>
       </Box>
 
       {/* User menu */}

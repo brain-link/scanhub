@@ -138,7 +138,7 @@ export default function SequenceView() {
   ]
 
   return (
-    <Box sx={{ m: 3, width: '100%'}}>
+    <Box sx={{ p: 3, width: '100%'}}>
       <SequenceUpload
         isOpen={dialogOpen}
         setOpen={setDialogOpen}

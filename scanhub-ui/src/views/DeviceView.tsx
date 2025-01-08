@@ -149,7 +149,7 @@ export default function DeviceView() {
   ]
 
   return (
-    <Box sx={{ m: 3, width: '100%'}}>
+    <Box sx={{ p: 3, width: '100%'}}>
       {/* <UserCreateModal
         isOpen={dialogOpen}
         setOpen={setDialogOpen}

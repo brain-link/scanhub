@@ -190,7 +190,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     }
     else {
       return (
-        <Box sx={{display: 'flex', alignItems: 'stretch', width: '20%', margin: 'auto'}}>
+        <Box sx={{display: 'flex', justifyContent: 'center', width: '30%', margin: 'auto'}}>
           <Box
             sx={{
               rowGap: 0.4,
@@ -198,9 +198,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
               p: 2,
               display: 'grid',
               gridTemplateColumns: 'auto 1fr',
-              '& > *:nth-of-type(odd)': {
-                color: 'text.secondary',
-              },
+              textWrapMode: 'nowrap'
             }}
           >
             <Typography fontSize='sm'>Patient Manager</Typography>

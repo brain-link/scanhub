@@ -164,7 +164,7 @@ export default function ExamModal(props: ModalPropsCreate | ModalPropsModify<Exa
       <ModalDialog
         aria-labelledby='basic-modal-dialog-title'
         aria-describedby='basic-modal-dialog-description'
-        sx={{ width: '50vw', borderRadius: 'md', p: 5 }}
+        sx={{ width: '70vw', borderRadius: 'md', p: 5 }}
       >
         <ModalClose
           sx={{

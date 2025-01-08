@@ -149,7 +149,7 @@ export default function PatientCreateModal(props: ModalProps) {
         aria-describedby='basic-modal-dialog-description'
         size='sm'
         sx={{
-          width: '50vw',
+          width: '70vw',
           borderRadius: 'md',
           p: 5,
         }}

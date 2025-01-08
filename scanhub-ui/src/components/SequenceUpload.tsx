@@ -47,10 +47,6 @@ function SequenceUpload(props: ModalProps) {
     // check if upload was successful
   })
 
-  React.useEffect(() => {
-    console.log(sequence)
-  }, [sequence.file])
-
   return (
     <React.Fragment>
       <Modal

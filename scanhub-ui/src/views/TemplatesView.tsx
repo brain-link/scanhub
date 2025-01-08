@@ -36,7 +36,7 @@ export default function TemplatesView() {
   })
 
   return (
-    <Stack direction='column' alignContent='center' width='20%' margin='auto' spacing={2} sx={{ p: 2 }}>
+    <Stack direction='column' alignContent='center' width='400px' margin='auto' spacing={2} sx={{ p: 2 }}>
       <Button startDecorator={<Add />} onClick={() => setModalOpen(true)}>
         Create Exam Template
       </Button>
