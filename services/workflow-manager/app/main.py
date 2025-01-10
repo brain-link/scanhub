@@ -6,9 +6,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from scanhub_libraries.security import get_current_user
-from db import database
 
-from api.producer import Producer
 from api.workflow import router
 
 app = FastAPI(
@@ -26,22 +24,16 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-producer = Producer()
-
 
 @app.on_event("startup")
 async def startup() -> None:
     """Call database initialization of startup."""
-    await producer.start()
-    await database.connect()
-
+    pass
 
 @app.on_event("shutdown")
 async def shutdown() -> None:
     """Shutdown event for the API."""
-    await producer.stop()
-    await database.disconnect()
-
+    pass
 
 @router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:

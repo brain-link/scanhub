@@ -45,8 +45,8 @@ workflows: Dict[str, Dict[str, Any]] = {}
 
 orchestration_engine = OrchestrationEngine()
 
-@router.post("/trigger_workflow/{workflow_id}")
-async def trigger_workflow(workflow_id: str):
+@router.post("/test/{workflow_id}")
+async def test(workflow_id: str):
     try:
         result = orchestration_engine.trigger_workflow(workflow_id)
         return result
@@ -57,7 +57,7 @@ async def trigger_workflow(workflow_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-@router.get("/process/{workflow_id}/")
+@router.post("/process/{workflow_id}/")
 async def process(workflow_id: UUID | str) -> dict[str, str]:
     """Process a workflow.
 
