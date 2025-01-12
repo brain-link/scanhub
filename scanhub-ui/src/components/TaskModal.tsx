@@ -20,10 +20,11 @@ import Stack from '@mui/joy/Stack'
 import Textarea from '@mui/joy/Textarea'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 
-import { taskApi } from '../api'
+import { sequenceApi, taskApi } from '../api'
 import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
+import { MRISequence } from '../generated-client/sequence/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
@@ -81,6 +82,22 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
             showNotification({message: 'Created Task.', type: 'success'})
           })
       })
+
+  const {
+    data: sequences,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<MRISequence[]>({
+    queryKey: ['sequences'],
+    queryFn: async () => {
+      return await sequenceApi
+        .getMriSequencesEndpointApiV1MriSequencesGet()
+        .then((result) => {
+          return result.data
+        })
+    },
+  })
 
   const title = props.modalType == 'modify' ? 'Update Task' : 'Create New Task'
 
@@ -141,6 +158,35 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
             undefined
         }
       </Stack>
+
+      {
+        (task.type == TaskType.DeviceTask) ?
+          <Stack direction='row' spacing={4}>
+            <Stack spacing={1}>
+              <FormLabel>Sequence</FormLabel>
+              <Select
+                value={task.args.sequence_id ? task.args.sequence_id : null}
+                placeholder={'Select a sequence...'}
+                size='sm'
+                onChange={(event: React.SyntheticEvent | null, value: {} | null) => {
+                  if (value) {
+                    setTask({ ...task, args: { ...task.args, 'sequence_id': value.toString() } })
+                  }
+                }}
+              >
+                {sequences?.map((sequence) => {
+                  const sequence_id_name = sequence.name + ' (' + sequence._id + ')'
+                  return (
+                    <Option key={sequence_id_name} value={sequence._id}>
+                      {sequence.name}
+                    </Option>
+                  )
+                })}
+              </Select>
+            </Stack>
+          </Stack>
+        : undefined
+      }
 
       <Stack direction='row' spacing={4}>
 
