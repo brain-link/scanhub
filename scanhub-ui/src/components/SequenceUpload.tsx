@@ -22,7 +22,9 @@ import { sequenceApi } from '../api'
 import { ModalProps } from '../interfaces/components.interface'
 import { MRISequence } from '../generated-client/sequence/api'
 
-function SequenceUpload(props: ModalProps) {
+
+function SequenceUploadForm(props: ModalProps) {
+
   const [, showNotification] = useContext(NotificationContext)
 
   const [sequence, setSequence] = React.useState<MRISequence>({
@@ -40,7 +42,7 @@ function SequenceUpload(props: ModalProps) {
       showNotification({message: 'No file selected for upload.', type: 'warning'})
     }
     else {
-      await sequenceApi.uploadMriSequenceFileApiV1MriSequencesUploadPost(sequence.file, sequence.name)
+      await sequenceApi.uploadMriSequenceFileApiV1MriSequencesUploadPost(sequence.file, sequence.name, sequence.description, sequence.sequence_type)
       .then(() => {
         showNotification({message: 'Sequence uploaded.', type: 'success'})
         props.onSubmit()
@@ -49,9 +51,96 @@ function SequenceUpload(props: ModalProps) {
         showNotification({message: 'Error on sequence upload.', type: 'warning'})
       })
     }
-    // check if upload was successful
   })
 
+  return (
+    <>
+      <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb={3}>
+        Upload sequence
+      </Typography>
+
+      <Stack spacing={1.5} justifyContent='flex-start'>
+        <FormLabel> Name </FormLabel>
+        <Input
+          name='name'
+          onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
+          placeholder='Sequence name'
+          defaultValue={sequence.name}
+          required
+        />
+
+        <FormLabel> Description </FormLabel>
+        <Input
+          name='description'
+          onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
+          placeholder='Sequence description'
+          defaultValue={sequence.name}
+          required
+        />
+
+        <FormLabel> Type </FormLabel>
+        <Input
+          name='sequence_type'
+          onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
+          placeholder='Sequence type'
+          defaultValue={sequence.sequence_type ? sequence.sequence_type : ''}
+          required
+        />
+
+        <FormLabel> File Selection </FormLabel>
+        <Stack direction={'row'} gap={'5px'} >
+          <Typography>
+            {'Selected file: '}
+          </Typography>
+          <Typography sx={{fontStyle: 'italic'}}>
+            {sequence.file ? sequence.file?.name : '---'}
+          </Typography>
+        </Stack>
+        <Button color='primary' aria-label='upload picture' component='label'>
+          <input
+            hidden
+            accept='.seq'
+            type='file'
+            onChange={(e) => {
+              e.preventDefault()
+              setSequence({ ...sequence, file: e.target.files ? e.target.files[0] : null })
+            }}
+          />
+          Upload sequence
+        </Button>
+
+        <Button
+          size='sm'
+          sx={{ maxWidth: 120 }}
+          onClick={(event) => {
+            event.preventDefault()
+            if (sequence.file == undefined || sequence.file == null) {
+              showNotification({message: 'No file selected for upload.', type: 'warning'})
+            }
+            else if (sequence.name == '') {
+              showNotification({message: 'No sequence name given.', type: 'warning'})
+            }
+            else if (sequence.description == '') {
+              showNotification({message: 'No sequence description given.', type: 'warning'})
+            }
+            else if (sequence.description == '') {
+              showNotification({message: 'No sequence type given.', type: 'warning'})
+            }
+            else {
+              uploadSequence.mutate(sequence)
+              props.setOpen(false)
+            }
+          }}
+        >
+          Save
+        </Button>
+      </Stack>
+    </>
+  )
+}
+
+
+function SequenceUpload(props: ModalProps) {
   return (
     <React.Fragment>
       <Modal
@@ -73,86 +162,7 @@ function SequenceUpload(props: ModalProps) {
               bgcolor: 'background.body',
             }}
           />
-          <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb={3}>
-            Upload sequence
-          </Typography>
-
-          <Stack spacing={1.5} justifyContent='flex-start'>
-            <FormLabel> Name </FormLabel>
-            <Input
-              name='name'
-              onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
-              placeholder='Sequence name'
-              defaultValue={sequence.name}
-              required
-            />
-
-            <FormLabel> Description </FormLabel>
-            <Input
-              name='description'
-              onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
-              placeholder='Sequence description'
-              defaultValue={sequence.name}
-              required
-            />
-
-            <FormLabel> Type </FormLabel>
-            <Input
-              name='sequence_type'
-              onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
-              placeholder='Sequence type'
-              defaultValue={sequence.sequence_type ? sequence.sequence_type : ''}
-              required
-            />
-
-            <FormLabel> File Selection </FormLabel>
-            <Stack direction={'row'} gap={'5px'} >
-              <Typography>
-                {'Selected file: '}
-              </Typography>
-              <Typography sx={{fontStyle: 'italic'}}>
-                {sequence.file ? sequence.file?.name : '---'}
-              </Typography>
-            </Stack>
-            <Button color='primary' aria-label='upload picture' component='label'>
-              <input
-                hidden
-                accept='.seq'
-                type='file'
-                onChange={(e) => {
-                  e.preventDefault()
-                  setSequence({ ...sequence, file: e.target.files ? e.target.files[0] : null })
-                }}
-              />
-              Upload sequence
-            </Button>
-
-            <Button
-              size='sm'
-              sx={{ maxWidth: 120 }}
-              onClick={(event) => {
-                event.preventDefault()
-                if (sequence.file == undefined || sequence.file == null) {
-                  showNotification({message: 'No file selected for upload.', type: 'warning'})
-                }
-                else if (sequence.name == '') {
-                  showNotification({message: 'No sequence name given.', type: 'warning'})
-                }
-                else if (sequence.description == '') {
-                  showNotification({message: 'No sequence description given.', type: 'warning'})
-                }
-                else if (sequence.description == '') {
-                  showNotification({message: 'No sequence type given.', type: 'warning'})
-                }
-                else {
-                  uploadSequence.mutate(sequence)
-                  props.setOpen(false)
-                }
-              }}
-            >
-              Save
-            </Button>
-          </Stack>
+          <SequenceUploadForm {...props} />
         </ModalDialog>
       </Modal>
     </React.Fragment>

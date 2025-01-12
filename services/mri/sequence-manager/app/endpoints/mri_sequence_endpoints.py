@@ -117,6 +117,7 @@ async def upload_mri_sequence_file(
     MRISequence
         The stored MRI sequence with the uploaded file.
     """
+    logger.info("----------------------------")
     logger.info("Uploading MRI sequence file with metadata: %s", str(mri_sequence))
 
     if filename := file.filename:
@@ -154,6 +155,7 @@ async def get_mri_sequences_endpoint(database=Depends(get_database)):
     List[MRISequence]
         The list of MRI sequences.
     """
+    logger.info("----------------------------")
     logger.info("Retrieving all MRI sequences")
     return await get_mri_sequences(database)
 

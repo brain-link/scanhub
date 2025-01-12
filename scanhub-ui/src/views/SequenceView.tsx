@@ -147,7 +147,7 @@ export default function SequenceView() {
       />
 
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 
-        <Typography level='title-md'>List of Sequences 2</Typography>
+        <Typography level='title-md'>List of Sequences</Typography>
         <IconButton size='sm' variant='outlined'>
           <AddSharpIcon onClick={() => setDialogOpen(true)} />
         </IconButton>
