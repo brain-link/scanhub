@@ -143,6 +143,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             message = await websocket.receive_json()
+            print("MESSAGE:", message)
             command = message.get('command')
             # ===============  Register device ===================
             if command == 'register':

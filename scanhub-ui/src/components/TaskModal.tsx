@@ -22,9 +22,10 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation, useQuery } from 'react-query'
 
-import { sequenceApi, taskApi } from '../api'
+import { deviceApi, sequenceApi, taskApi } from '../api'
 import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
 import { MRISequence } from '../generated-client/sequence/api'
+import { DeviceOut } from '../generated-client/device/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
@@ -85,14 +86,30 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
 
   const {
     data: sequences,
-    isLoading,
-    isError,
-    refetch,
+    isLoading: isLoadingSequences,
+    isError: isErrorSequences,
+    refetch: refetchSequences,
   } = useQuery<MRISequence[]>({
     queryKey: ['sequences'],
     queryFn: async () => {
       return await sequenceApi
         .getMriSequencesEndpointApiV1MriSequencesGet()
+        .then((result) => {
+          return result.data
+        })
+    },
+  })
+
+  const {
+    data: devices,
+    isLoading: isLoadingDevices,
+    isError: isErrorDevices,
+    refetch: refetchDevices,
+  } = useQuery<DeviceOut[]>({
+    queryKey: ['devices'],
+    queryFn: async () => {
+      return await deviceApi
+        .getDevicesApiV1DeviceGet()
         .then((result) => {
           return result.data
         })
@@ -179,6 +196,27 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
                   return (
                     <Option key={sequence_id_name} value={sequence._id}>
                       {sequence.name}
+                    </Option>
+                  )
+                })}
+              </Select>
+            </Stack>
+            <Stack spacing={1}>
+              <FormLabel>Device</FormLabel>
+              <Select
+                value={task.args.device_id ? task.args.device_id : null}
+                placeholder={'Select a device...'}
+                size='sm'
+                onChange={(event: React.SyntheticEvent | null, value: {} | null) => {
+                  if (value) {
+                    setTask({ ...task, args: { ...task.args, 'device_id': value.toString() } })
+                  }
+                }}
+              >
+                {devices?.map((device) => {
+                  return (
+                    <Option key={device.id} value={device.id}>
+                      {device.name}
                     </Option>
                   )
                 })}

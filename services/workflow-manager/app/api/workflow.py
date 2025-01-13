@@ -20,6 +20,7 @@ from fastapi.security import OAuth2PasswordBearer
 # from scanhub import RecoJob # type: ignore
 from scanhub_libraries.models import (
     AcquisitionLimits,
+    SequenceParameters,
     Commands,
     DeviceTask,
     ExamOut,
@@ -189,7 +190,7 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
             # await start_scan(job, task.id.toString())
 
             # Start scan
-            await start_scan_2(device_id=task.args["device"],
+            await start_scan_2(device_id=task.args["device_id"],
                                sequence_id=task.args["sequence_id"],
                                record_id=task.id,
                                acquisition_limits={
@@ -198,7 +199,7 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
                                     "patient_gender": patient.sex,
                                     "patient_age": calculate_age(patient.birth_date),
                                },
-                               sequence_parameters=task.args["sequence_parameters"],
+                               sequence_parameters=json.loads(task.args["sequence_parameters"]),
                                access_token=access_token)
 
             # TBD set task status to "IN_PROGRESS"
@@ -488,6 +489,7 @@ async def post_device_task(url, device_task):
     -------
         response of device
     """
+    print("Post device task. URL:", url)
     async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         data = json.dumps(device_task, default=jsonable_encoder)
         response = await client.post(url, content=data)
@@ -500,12 +502,13 @@ async def start_scan_2(device_id: str,
                        sequence_id: str,
                        record_id: str,
                        acquisition_limits: AcquisitionLimits,
-                       sequence_parameters: str,
+                       sequence_parameters: SequenceParameters,
                        access_token: str):
     """Load the device and sequence data from the database and start the scan."""
     device_ip = await device_location_request(device_id, access_token)
     print("Device ip: ", device_ip)
     device_url = f"http://{device_ip}/api/start-scan"
+    # TODO check if device is online
 
     sequence_json = await retrieve_sequence(sequence_id, access_token)
     print("Sequence JSON:", sequence_json)
