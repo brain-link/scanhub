@@ -52,6 +52,9 @@ services:
     environment:
       - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
       - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      - ORCHESTRATION_ENGINE=AIRFLOW
+      - KESTRA_API_URL=http://localhost:8080
+      - AIRFLOW_API_URL=http://localhost:8081
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflow/health/readiness"]
@@ -320,6 +323,7 @@ services:
     restart: always # unless-stopped
     volumes:
       - postgres_data_scanhub:/var/lib/postgresql/data/
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     environment:
       POSTGRES_USER: brainlink
       POSTGRES_PASSWORD: 9ArU5*Sr

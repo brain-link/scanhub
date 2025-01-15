@@ -6,61 +6,129 @@ import requests
 from fastapi import HTTPException
 
 class OrchestrationEngine:
+    """
+    OrchestrationEngine is responsible for interacting with different orchestration engines
+    like Airflow and Kestra to manage tasks and workflows.
+    """
+
     def __init__(self):
+        """
+        Initializes the OrchestrationEngine with environment variables.
+        """
         self.engine = os.getenv("ORCHESTRATION_ENGINE")
         self.kestra_api_url = os.getenv("KESTRA_API_URL")
         self.airflow_api_url = os.getenv("AIRFLOW_API_URL")
 
-    def trigger_workflow(self, workflow_id: str):
-        if self.engine == "KESTRA":
-            return self._trigger_kestra_workflow(workflow_id)
-        elif self.engine == "AIRFLOW":
-            return self._trigger_airflow_workflow(workflow_id)
+    def get_available_tasks(self):
+        """
+        Retrieves the available tasks from the orchestration engine.
+        Currently, only Airflow is supported.
+
+        Returns:
+            list: A list of available tasks (DAGs) for Airflow.
+
+        Raises:
+            ValueError: If the orchestration engine is not Airflow.
+        """
+        if self.engine == "AIRFLOW":
+            return self._get_airflow_dags()
         else:
-            raise ValueError("Invalid orchestration engine specified")
+            raise ValueError("Task listing is only supported for Airflow")
 
-    def _trigger_kestra_workflow(self, workflow_id: str):
-        response = requests.post(
-            f"{self.kestra_api_url}/executions",
-            json={
-                "namespace": "my_namespace",
-                "flowId": "example_workflow",
-                "inputs": {"workflow_id": workflow_id}
-            }
-        )
-        if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Failed to trigger Kestra workflow")
-        return {"message": "Kestra workflow triggered successfully"}
+    def _get_airflow_dags(self):
+        """
+        Helper method to get the list of Airflow DAGs.
 
-    def _trigger_airflow_workflow(self, workflow_id: str):
-        response = requests.post(
-            f"{self.airflow_api_url}/dags/example_workflow/dagRuns",
-            json={"conf": {"workflow_id": workflow_id}}
-        )
-        if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Failed to trigger Airflow workflow")
-        return {"message": "Airflow workflow triggered successfully"}
+        Returns:
+            dict: A dictionary containing the list of Airflow DAGs.
 
-    def get_workflow_status(self, workflow_id: str):
-        if self.engine == "KESTRA":
-            return self._get_kestra_workflow_status(workflow_id)
-        elif self.engine == "AIRFLOW":
-            return self._get_airflow_workflow_status(workflow_id)
-        else:
-            raise ValueError("Invalid orchestration engine specified")
-
-    def _get_kestra_workflow_status(self, workflow_id: str):
+        Raises:
+            HTTPException: If the request to Airflow API fails.
+        """
         response = requests.get(
-            f"{self.kestra_api_url}/executions/{workflow_id}"
+            url=f"{self.airflow_api_url}/api/v1/dags",
+            auth=("airflow", "airflow")
         )
         if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Failed to get Kestra workflow status")
+            raise HTTPException(status_code=response.status_code, detail="Failed to retrieve Airflow DAGs")
         return response.json()
 
-    def _get_airflow_workflow_status(self, workflow_id: str):
-        response = requests.get(
-            f"{self.airflow_api_url}/dags/example_workflow/dagRuns/{workflow_id}"
+    def trigger_task(self, task_id: str):
+        """
+        Triggers a task in the orchestration engine.
+        Currently, only Airflow is supported.
+
+        Args:
+            task_id (str): The ID of the task to be triggered.
+
+        Returns:
+            dict: A dictionary containing a success message.
+
+        Raises:
+            ValueError: If the orchestration engine is not Airflow.
+        """
+        if self.engine == "AIRFLOW":
+            return self._trigger_airflow_task(task_id)
+        else:
+            raise ValueError("Task triggering is only supported for Airflow")
+
+    def _trigger_airflow_task(self, task_id: str):
+        """
+        Helper method to trigger an Airflow task.
+
+        Args:
+            task_id (str): The ID of the task to be triggered.
+
+        Returns:
+            dict: A dictionary containing a success message.
+
+        Raises:
+            HTTPException: If the request to Airflow API fails.
+        """
+        response = requests.post(
+            f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns",
+            auth=("airflow", "airflow")
         )
         if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Failed to get Airflow workflow status")
+            raise HTTPException(status_code=response.status_code, detail="Failed to trigger Airflow task")
+        return {"message": "Airflow task triggered successfully"}
+
+    def get_task_status(self, task_id: str):
+        """
+        Retrieves the status of a task in the orchestration engine.
+        Currently, only Airflow is supported.
+
+        Args:
+            task_id (str): The ID of the task whose status is to be retrieved.
+
+        Returns:
+            dict: A dictionary containing the task status.
+
+        Raises:
+            ValueError: If the orchestration engine is not Airflow.
+        """
+        if self.engine == "AIRFLOW":
+            return self._get_airflow_task_status(task_id)
+        else:
+            raise ValueError("Task status is only supported for Airflow")
+
+    def _get_airflow_task_status(self, task_id: str):
+        """
+        Helper method to get the status of an Airflow task.
+
+        Args:
+            task_id (str): The ID of the task whose status is to be retrieved.
+
+        Returns:
+            dict: A dictionary containing the task status.
+
+        Raises:
+            HTTPException: If the request to Airflow API fails.
+        """
+        response = requests.get(
+            f"{self.airflow_api_url}/dags/example_workflow/dagRuns/{task_id}",
+            auth=("airflow", "airflow")
+        )
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail="Failed to get Airflow task status")
         return response.json()

@@ -27,6 +27,7 @@ from scanhub_libraries.models import (
 from .orchestration_engine import OrchestrationEngine
 
 router = APIRouter()
+orchestration_engine = OrchestrationEngine()
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
@@ -43,7 +44,6 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 # }
 workflows: Dict[str, Dict[str, Any]] = {}
 
-orchestration_engine = OrchestrationEngine()
 
 @router.post("/test/{workflow_id}")
 async def test(workflow_id: str):
@@ -56,6 +56,23 @@ async def test(workflow_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@router.get("/tasks/")
+async def list_available_tasks():
+    """
+    Endpoint to list the available tasks from the orchestration engine.
+    Currently, only Airflow is supported.
+
+    Returns:
+        dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+    """
+    try:
+        tasks = orchestration_engine.get_available_tasks()
+        return {"tasks": tasks}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 @router.post("/process/{workflow_id}/")
 async def process(workflow_id: UUID | str) -> dict[str, str]:
