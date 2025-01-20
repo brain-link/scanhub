@@ -497,7 +497,7 @@ async def post_device_task(url, device_task):
 
 
 
-@router.post("/start-scan", tags=["WorkflowManager"])
+@router.post("/start-scan-2", tags=["WorkflowManager"])
 async def start_scan_2(device_id: str,
                        sequence_id: str,
                        record_id: str,

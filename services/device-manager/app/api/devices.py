@@ -29,7 +29,7 @@ from .dal import (
     dal_get_device,
     dal_update_device,
 )
-from .models import DeviceOut, get_device_out
+from .models import BaseDevice, DeviceOut, get_device_out
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
@@ -148,23 +148,26 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     active_connections.append(websocket)
 
-    print('Device connected.')
+    print('Device connected on ws2.')
 
     device_id_global = ""
 
     try:
         while True:
             message = await websocket.receive_json()
+            print("Received messgage:", message)
             command = message.get('command')
             # ===============  Register device ===================
             if command == 'register':
+                print("Received command 'register'.")
                 if device_id_global != "":
                     await websocket.send_json({'message': 'Error registering device. \
 In this session a device already was registered.'})
                     continue
                 device_data = message.get('data')
+                print("Device data:", device_data)
                 device_id = device_data.get('id')
-                device = DeviceOut(**device_data)
+                device = BaseDevice(**device_data)
 
                 if not (await dal_get_device(device_id)):
                     try:
@@ -188,6 +191,7 @@ In this session a device already was registered.'})
 
             # ================ Update device status ===============
             elif command == 'update_status':
+                print("Received command 'update_status'.")
                 status_data = message.get('data')
                 device_id = status_data.get('id')
                 if device_id_global not in ("", device_id):
@@ -218,8 +222,12 @@ Device ID does not match'})
                             'message': 'Device status updated successfully'})
                         device_id_global = device_id
                         dict_id_websocket[device_id] = websocket
+            else:
+                print("Received unknown command, which will be ignored:", command)
+                
 
     except WebSocketDisconnect:
+        print("WebSocketDisconnect")
         active_connections.remove(websocket)
         if device_id_global in dict_id_websocket:
             del dict_id_websocket[device_id_global]
@@ -259,13 +267,14 @@ async def websocket_endpoint_legacy(websocket: WebSocket):
     await websocket.accept()
     active_connections.append(websocket)
 
-    print('Device connected.')
+    print('Device connected on ws.')
 
     device_id_global = ""
 
     try:
         while True:
             message = await websocket.receive_json()
+            print("Received messgage:", message)
             command = message.get('command')
             # ===============  Register device ===================
             if command == 'register':
@@ -276,7 +285,7 @@ In this session a device already was registered.'})
                 device_data = message.get('data')
                 ip_address = message.get('ip_address')
                 device_id = device_data.get('id')
-                device = DeviceOut(ip_address=ip_address, **device_data)
+                device = BaseDevice(ip_address=ip_address, **device_data)
                 try:
                     await dal_create_device(device)
                 except exc.SQLAlchemyError as ex:

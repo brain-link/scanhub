@@ -12,7 +12,8 @@ from api.db import Device
 
 class BaseDevice(BaseModel):
     """Device pydantic base model."""
-
+    
+    id: str
     name: str
     manufacturer: str
     modality: str
@@ -24,7 +25,6 @@ class BaseDevice(BaseModel):
 class DeviceOut(BaseDevice):
     """Device pydantic output model."""
 
-    id: str
     datetime_created: datetime
     datetime_updated: datetime | None
 
