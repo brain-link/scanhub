@@ -24,6 +24,54 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
+ * Pydantic definition of AcquisitionLimits.
+ * @export
+ * @interface AcquisitionLimits
+ */
+export interface AcquisitionLimits {
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_weight': number;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof AcquisitionLimits
+     */
+    'Gender'?: Gender;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_age': number;
+}
+
+
+/**
+ * Pydantic definition of a commands.
+ * @export
+ * @enum {string}
+ */
+
+export const Commands = {
+    Start: 'START',
+    Stop: 'STOP',
+    Pause: 'PAUSE'
+} as const;
+
+export type Commands = typeof Commands[keyof typeof Commands];
+
+
+/**
  * Device pydantic output model.
  * @export
  * @interface DeviceOut
@@ -85,6 +133,55 @@ export interface DeviceOut {
     'datetime_updated'?: string;
 }
 /**
+ * Pydantic model definition of a device workflow.
+ * @export
+ * @interface DeviceTask
+ */
+export interface DeviceTask {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceTask
+     */
+    'device_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceTask
+     */
+    'record_id': string;
+    /**
+     * 
+     * @type {Commands}
+     * @memberof DeviceTask
+     */
+    'command': Commands;
+    /**
+     * 
+     * @type {ParametrizedSequence}
+     * @memberof DeviceTask
+     */
+    'parametrized_sequence': ParametrizedSequence;
+}
+
+
+/**
+ * Pydantic definition of genders.
+ * @export
+ * @enum {string}
+ */
+
+export const Gender = {
+    Male: 'MALE',
+    Female: 'FEMALE',
+    Other: 'OTHER',
+    NotGiven: 'NOT_GIVEN'
+} as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
+
+
+/**
  * 
  * @export
  * @interface HTTPValidationError
@@ -103,6 +200,50 @@ export interface HTTPValidationError {
  * @interface LocationInner
  */
 export interface LocationInner {
+}
+/**
+ * Pydantic model definition of a parametrized sequence.
+ * @export
+ * @interface ParametrizedSequence
+ */
+export interface ParametrizedSequence {
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof ParametrizedSequence
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {SequenceParameters}
+     * @memberof ParametrizedSequence
+     */
+    'sequence_parameters': SequenceParameters;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParametrizedSequence
+     */
+    'sequence': string;
+}
+/**
+ * Pydantic definition of SequenceParameters.
+ * @export
+ * @interface SequenceParameters
+ */
+export interface SequenceParameters {
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof SequenceParameters
+     */
+    'fov': XYZ;
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof SequenceParameters
+     */
+    'fov_offset': XYZ;
 }
 /**
  * 
@@ -128,6 +269,31 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+}
+/**
+ * Pydantic definition of coordinates.
+ * @export
+ * @interface XYZ
+ */
+export interface XYZ {
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'X': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'Y': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'Z': number;
 }
 
 /**
@@ -322,6 +488,46 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Start Scan Via Websocket
+         * @param {DeviceTask} deviceTask 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost: async (deviceTask: DeviceTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deviceTask' is not null or undefined
+            assertParamExists('startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost', 'deviceTask', deviceTask)
+            const localVarPath = `/api/v1/device/start_scan_via_websocket`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deviceTask, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -396,6 +602,19 @@ export const DevicesApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDevicesApiV1DeviceGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Start Scan Via Websocket
+         * @param {DeviceTask} deviceTask 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask: DeviceTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -454,6 +673,16 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          */
         getDevicesApiV1DeviceGet(options?: any): AxiosPromise<Array<DeviceOut>> {
             return localVarFp.getDevicesApiV1DeviceGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start Scan Via Websocket
+         * @param {DeviceTask} deviceTask 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask: DeviceTask, options?: any): AxiosPromise<any> {
+            return localVarFp.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -522,6 +751,18 @@ export class DevicesApi extends BaseAPI {
      */
     public getDevicesApiV1DeviceGet(options?: RawAxiosRequestConfig) {
         return DevicesApiFp(this.configuration).getDevicesApiV1DeviceGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start Scan Via Websocket
+     * @param {DeviceTask} deviceTask 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevicesApi
+     */
+    public startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask: DeviceTask, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -177,20 +177,11 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
         if task.status != "NEW" and task.status != "UPDATED":
             raise HTTPException(status_code=400, detail="Task to process does not have status NEW or UPDATED.")
 
-        if task.type == "DEVICE_TASK_SIMULATOR":
-            print("Start device task on simulator!")
+        if task.type in ["DEVICE_TASK_SIMULATOR", "DEVICE_TASK_SDK"]:
+            print("Start device task!")
 
-            # # Create a device scan job
-            # job = ScanJob(  job_id=task.id,
-            #                 sequence_id=task.args["sequence_id"],
-            #                 workflow_id=task.workflow_id,
-            #                 device_id=task.args["device"],
-            #                 acquisition_limits=task.args["acquisition_limits"],
-            #                 sequence_parameters=task.args["sequence_parameters"])
-            # await start_scan(job, task.id.toString())
-
-            # Start scan
-            await start_scan_2(device_id=task.args["device_id"],
+            await start_scan_2(task_type=task.type,
+                               device_id=task.args["device_id"],
                                sequence_id=task.args["sequence_id"],
                                record_id=task.id,
                                acquisition_limits={
@@ -202,32 +193,32 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
                                sequence_parameters=json.loads(task.args["sequence_parameters"]),
                                access_token=access_token)
 
-            # TBD set task status to "IN_PROGRESS"
+            # TODO set task status to "IN_PROGRESS"
 
-        print("DEBUG exit, done.")
-        print()
+        elif task.type == "PROCESSING_TASK" and task.status == "PENDING":
+            # print(task.destinations, end="\n")
+            print("Deal with processing task:")
 
+            topic = task.destinations.get("topic")
 
-    #     if task.type == "PROCESSING_TASK" and task.status == "PENDING":
-    #         # print(task.destinations, end="\n")
-    #         print("Processing task:")
+            task_event = TaskEvent(task_id=str(task.id), input=task.args)
 
-    #         topic = task.destinations.get("topic")
+            print("Task event", end="\n")
+            print(task_event, end="\n")
 
-    #         task_event = TaskEvent(task_id=str(task.id), input=task.args)
+            print("Send to topic", end="\n")
+            print(topic, end="\n")
 
-    #         print("Task event", end="\n")
-    #         print(task_event, end="\n")
+            # Send message to Kafka
+            # await producer.send("mri_cartesian_reco", reco_job.dict())
+            await producer.send(topic, task_event.dict())
 
-    #         print("Send to topic", end="\n")
-    #         print(topic, end="\n")
+            # TODO set task status to "IN_PROGRESS"
 
-    #         # Send message to Kafka
-    #         # await producer.send("mri_cartesian_reco", reco_job.dict())
-    #         await producer.send(topic, task_event.dict())
+        else:
+            raise HTTPException(status_code=501, detail="No action implemented for this task type.")
 
-    #         # TBD set task status to "IN_PROGRESS"
-    # return
+    return
 
 
 
@@ -474,7 +465,7 @@ async def create_record(exam_manager_uri, job_id):
     print("Error: Create Record not yet implmented:", job_id)
 
 
-async def post_device_task(url, device_task):
+async def post_device_task(url, device_task, headers=None):
     """Send task do device.
 
     Parameters
@@ -492,26 +483,24 @@ async def post_device_task(url, device_task):
     print("Post device task. URL:", url)
     async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         data = json.dumps(device_task, default=jsonable_encoder)
-        response = await client.post(url, content=data)
+        print("Post device task: data:", data)
+        response = await client.post(url, content=data, headers=headers)
         return response.status_code
 
 
 
 @router.post("/start-scan-2", tags=["WorkflowManager"])
-async def start_scan_2(device_id: str,
+async def start_scan_2(task_type: str,
+                       device_id: str,
                        sequence_id: str,
                        record_id: str,
                        acquisition_limits: AcquisitionLimits,
                        sequence_parameters: SequenceParameters,
                        access_token: str):
-    """Load the device and sequence data from the database and start the scan."""
-    device_ip = await device_location_request(device_id, access_token)
-    print("Device ip: ", device_ip)
-    device_url = f"http://{device_ip}/api/start-scan"
-    # TODO check if device is online
+    """Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK."""
 
     sequence_json = await retrieve_sequence(sequence_id, access_token)
-    print("Sequence JSON:", sequence_json)
+    # print("Sequence JSON:", sequence_json)
 
     parametrized_sequence = ParametrizedSequence(
         acquisition_limits=acquisition_limits,
@@ -522,7 +511,21 @@ async def start_scan_2(device_id: str,
     device_task = DeviceTask(
         device_id=device_id, record_id=record_id, command=Commands.START, parametrized_sequence=parametrized_sequence
     )
-    status_code = await post_device_task(device_url, device_task)
+
+    print("Device task:", device_task)
+
+    if task_type == "DEVICE_TASK_SIMULATOR":
+        device_ip = await device_location_request(device_id, access_token)
+        print("Device ip: ", device_ip)
+        url = f"http://{device_ip}/api/start-scan"
+        status_code = await post_device_task(url, device_task)
+        # TODO check if device is online
+    elif task_type == "DEVICE_TASK_SDK":
+        url = "http://device-manager:8000/api/v1/device/start_scan_via_websocket"
+        status_code = await post_device_task(url, device_task, headers={"Authorization": "Bearer " + access_token})
+    else:
+        raise RuntimeError("Task type must be DEVICE_TASK_SIMULATOR or DEVICE_TASK_SDK")
+
 
     if status_code == 200:
         print("Scan started successfully.")

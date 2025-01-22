@@ -73,7 +73,7 @@ class ParametrizedSequence(BaseModel):
 
     acquisition_limits: AcquisitionLimits
     sequence_parameters: SequenceParameters
-    sequence: Json
+    sequence: str
 
 
 class MRISequence(BaseModel):

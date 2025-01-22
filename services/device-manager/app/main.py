@@ -5,6 +5,12 @@
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exception_handlers import (
+    http_exception_handler,
+    request_validation_exception_handler,
+)
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import inspect
 
 from api.db import engine, init_db
@@ -24,6 +30,28 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request, exc):
+    """
+    Add logging for http exceptions.
+
+    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+    """
+    print(f"{repr(exc)}")
+    return await http_exception_handler(request, exc)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    """
+    Add logging for fastAPI's automatic input validation exceptions.
+
+    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+    """
+    print(f"{exc}")
+    return await request_validation_exception_handler(request, exc)
 
 
 @app.on_event("startup")

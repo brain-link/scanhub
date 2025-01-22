@@ -20,6 +20,7 @@ from typing import Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from scanhub_libraries.security import get_current_user
+from scanhub_libraries.models import DeviceTask
 from sqlalchemy import exc
 
 from .dal import (
@@ -125,6 +126,13 @@ async def delete_device(device_id: str):
     """
     if not await dal_delete_device(device_id):
         raise HTTPException(status_code=404, detail="Device not found")
+
+
+@router.post('/start_scan_via_websocket', response_model={}, status_code=200, tags=["devices"])
+def start_scan_via_websocket(device_task: DeviceTask):
+    print("start_scan_via_websocket")
+    print("device_task:", device_task)
+    return
 
 
 # TODO restrict access to token-bearer
@@ -338,3 +346,4 @@ Device ID does not match'})
             else:
                 # Send response to the device
                 print('Device status updated successfully')
+
