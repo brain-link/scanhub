@@ -50,6 +50,33 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
     }
 
   const [task, setTask] = React.useState<BaseTask>(initialTask);
+  var sequence_parameters_json: any = undefined;
+  try {
+    sequence_parameters_json = JSON.parse(task.args.sequence_parameters);
+  } catch {}
+  if (sequence_parameters_json == undefined
+    || sequence_parameters_json.fov == undefined
+    || sequence_parameters_json.fov.X == undefined
+    || sequence_parameters_json.fov.Y == undefined
+    || sequence_parameters_json.fov.Z == undefined
+    || sequence_parameters_json.fov_offset == undefined
+    || sequence_parameters_json.fov_offset.X == undefined
+    || sequence_parameters_json.fov_offset.Y == undefined
+    || sequence_parameters_json.fov_offset.Z == undefined) {
+      sequence_parameters_json = {
+        'fov': {
+          'X': 0,
+          'Y': 0,
+          'Z': 0
+        },
+        'fov_offset': {
+          'X': 0,
+          'Y': 0,
+          'Z': 0
+        }
+      }
+    }
+
 
   // New argument
   const [argKey, setArgKey] = React.useState<string>('')
@@ -124,7 +151,7 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
         {title}
       </Typography>
 
-      <Stack direction='row' spacing={4}>
+      <Stack direction='row' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
         <Stack spacing={1}>
           <FormLabel>Name</FormLabel>
           <Input
@@ -177,8 +204,8 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
       </Stack>
 
       {
-        (task.type == TaskType.DeviceTask) ?
-          <Stack direction='row' spacing={4}>
+        (task.type == TaskType.DeviceTaskSimulator || task.type == TaskType.DeviceTaskSdk) ?
+          <Stack direction='row' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
             <Stack spacing={1}>
               <FormLabel>Sequence</FormLabel>
               <Select
@@ -222,11 +249,51 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
                 })}
               </Select>
             </Stack>
+            <Stack spacing={1}>
+              <FormLabel>Field of View</FormLabel>
+              <Stack spacing={1} direction={'row'}>
+                {['X', 'Y', 'Z'].map((index) => [
+                  <FormLabel key={'FormLabelFov' + index}>{index}</FormLabel>,
+                  <Input
+                    key={'InputFov' + index}
+                    type="number"
+                    size='sm'
+                    slotProps={ {input: {min: 0, max: 30000}} }
+                    value={sequence_parameters_json.fov[index]}
+                    endDecorator="px"
+                    onChange={(event) => {
+                      sequence_parameters_json.fov[index] = event.target.valueAsNumber
+                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequence_parameters_json) } })
+                    }}
+                  />
+                  ])}
+              </Stack>
+            </Stack>
+            <Stack spacing={1}>
+              <FormLabel>Field of View Offset</FormLabel>
+              <Stack spacing={1} direction={'row'}>
+                {['X', 'Y', 'Z'].map((index) => [
+                  <FormLabel key={'FormLabelFovOffset' + index}>{index}</FormLabel>,
+                  <Input
+                    key={'InputFovOffset' + index}
+                    type="number"
+                    size='sm'
+                    slotProps={ {input: {min: 0, max: 30000}} }
+                    value={sequence_parameters_json.fov_offset[index]}
+                    endDecorator="px"
+                    onChange={(event) => {
+                      sequence_parameters_json.fov_offset[index] = event.target.valueAsNumber
+                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequence_parameters_json) } })
+                    }}
+                  />
+                  ])}
+              </Stack>
+            </Stack>
           </Stack>
         : undefined
       }
 
-      <Stack direction='row' spacing={4}>
+      <Stack direction='row' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
 
         <Stack spacing={1}>
           <FormLabel>Arguments</FormLabel>
@@ -412,7 +479,7 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Tas
       <ModalDialog
         aria-labelledby='basic-modal-dialog-title'
         aria-describedby='basic-modal-dialog-description'
-        sx={{ borderRadius: 'md', p: 5 }}
+        sx={{ width: '75vw', maxHeight: 'calc(100vh - 2 * var(--Navigation-height))', borderRadius: 'md', p: 5, overflow: 'auto'}}
       >
         <ModalClose
           sx={{

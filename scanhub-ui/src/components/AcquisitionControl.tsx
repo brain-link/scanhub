@@ -57,9 +57,15 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
         <PlayCircleIcon />
       </IconButton>
 
-      <Stack direction='column' spacing={1} sx={{ flex: 1 }}>
-        <Typography level='title-sm'>Execute: Exam</Typography>
-        <LinearProgress determinate value={60} />
+      <Stack direction='column' sx={{ flex: 1 }}>
+        <Typography level='title-sm'>
+          {itemSelection.type ? 
+            'Execute ' + itemSelection.type + ' "' + itemSelection.name + '"'
+          : 
+            'Select item to start...'}
+        </Typography>
+        <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
+        <LinearProgress determinate value={60} sx={{marginTop: 1}} />
       </Stack>
     </Box>
   )

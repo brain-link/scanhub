@@ -133,7 +133,7 @@ function AcquisitionView() {
               accordionSummary={
                 <ExamItem 
                   item={exam} 
-                  onClick={() => {setItemSelection({type: 'exam', itemId: exam.id})}} 
+                  onClick={() => {setItemSelection({type: 'exam', name: exam.name, itemId: exam.id})}} 
                   selection={itemSelection}
                 />
               }
@@ -147,7 +147,7 @@ function AcquisitionView() {
                   accordionSummary={
                     <WorkflowItem 
                       item={workflow} 
-                      onClick={() => {setItemSelection({type: 'workflow', itemId: workflow.id})}}
+                      onClick={() => {setItemSelection({type: 'workflow', name: workflow.name, itemId: workflow.id})}}
                       selection={itemSelection}
                     />
                   }
@@ -158,7 +158,7 @@ function AcquisitionView() {
                       key={`task-${task.id}`} 
                       item={task} 
                       refetchParentData={refetchExams}
-                      onClick={() => {setItemSelection({type: 'task', itemId: task.id})}}
+                      onClick={() => {setItemSelection({type: 'task', name: task.name, itemId: task.id})}}
                       selection={itemSelection}
                     />
                   ))}

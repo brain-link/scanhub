@@ -57,6 +57,25 @@ export interface AcquisitionLimits {
 
 
 /**
+ * 
+ * @export
+ * @interface BodyStartScan2ApiV1WorkflowmanagerStartScan2Post
+ */
+export interface BodyStartScan2ApiV1WorkflowmanagerStartScan2Post {
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof BodyStartScan2ApiV1WorkflowmanagerStartScan2Post
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {SequenceParameters}
+     * @memberof BodyStartScan2ApiV1WorkflowmanagerStartScan2Post
+     */
+    'sequence_parameters': SequenceParameters;
+}
+/**
  * Pydantic definition of genders.
  * @export
  * @enum {string}
@@ -143,6 +162,25 @@ export interface ScanStatus {
     'status_percent': number;
 }
 /**
+ * Pydantic definition of SequenceParameters.
+ * @export
+ * @interface SequenceParameters
+ */
+export interface SequenceParameters {
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof SequenceParameters
+     */
+    'fov': XYZ;
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof SequenceParameters
+     */
+    'fov_offset': XYZ;
+}
+/**
  * 
  * @export
  * @interface TaskId
@@ -180,6 +218,31 @@ export interface ValidationError {
  * @interface WorkflowId
  */
 export interface WorkflowId {
+}
+/**
+ * Pydantic definition of coordinates.
+ * @export
+ * @interface XYZ
+ */
+export interface XYZ {
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'X': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'Y': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'Z': number;
 }
 
 /**
@@ -312,10 +375,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -348,10 +407,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
@@ -390,10 +445,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -427,10 +478,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
@@ -482,6 +529,70 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             };
         },
         /**
+         * Load the device and sequence data from the database and start the scan.
+         * @summary Start Scan 2
+         * @param {string} deviceId 
+         * @param {string} sequenceId 
+         * @param {string} recordId 
+         * @param {string} accessToken 
+         * @param {BodyStartScan2ApiV1WorkflowmanagerStartScan2Post} bodyStartScan2ApiV1WorkflowmanagerStartScan2Post 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startScan2ApiV1WorkflowmanagerStartScan2Post: async (deviceId: string, sequenceId: string, recordId: string, accessToken: string, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post: BodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deviceId' is not null or undefined
+            assertParamExists('startScan2ApiV1WorkflowmanagerStartScan2Post', 'deviceId', deviceId)
+            // verify required parameter 'sequenceId' is not null or undefined
+            assertParamExists('startScan2ApiV1WorkflowmanagerStartScan2Post', 'sequenceId', sequenceId)
+            // verify required parameter 'recordId' is not null or undefined
+            assertParamExists('startScan2ApiV1WorkflowmanagerStartScan2Post', 'recordId', recordId)
+            // verify required parameter 'accessToken' is not null or undefined
+            assertParamExists('startScan2ApiV1WorkflowmanagerStartScan2Post', 'accessToken', accessToken)
+            // verify required parameter 'bodyStartScan2ApiV1WorkflowmanagerStartScan2Post' is not null or undefined
+            assertParamExists('startScan2ApiV1WorkflowmanagerStartScan2Post', 'bodyStartScan2ApiV1WorkflowmanagerStartScan2Post', bodyStartScan2ApiV1WorkflowmanagerStartScan2Post)
+            const localVarPath = `/api/v1/workflowmanager/start-scan-2`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (deviceId !== undefined) {
+                localVarQueryParameter['device_id'] = deviceId;
+            }
+
+            if (sequenceId !== undefined) {
+                localVarQueryParameter['sequence_id'] = sequenceId;
+            }
+
+            if (recordId !== undefined) {
+                localVarQueryParameter['record_id'] = recordId;
+            }
+
+            if (accessToken !== undefined) {
+                localVarQueryParameter['access_token'] = accessToken;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyStartScan2ApiV1WorkflowmanagerStartScan2Post, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Receives a job. Create a record id, trigger scan with it and returns it.
          * @summary Start Scan
          * @param {string} taskId 
@@ -505,10 +616,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (taskId !== undefined) {
                 localVarQueryParameter['task_id'] = taskId;
@@ -554,10 +661,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
             if (file !== undefined) { 
@@ -653,6 +756,23 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Load the device and sequence data from the database and start the scan.
+         * @summary Start Scan 2
+         * @param {string} deviceId 
+         * @param {string} sequenceId 
+         * @param {string} recordId 
+         * @param {string} accessToken 
+         * @param {BodyStartScan2ApiV1WorkflowmanagerStartScan2Post} bodyStartScan2ApiV1WorkflowmanagerStartScan2Post 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startScan2ApiV1WorkflowmanagerStartScan2Post(deviceId: string, sequenceId: string, recordId: string, accessToken: string, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post: BodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startScan2ApiV1WorkflowmanagerStartScan2Post(deviceId, sequenceId, recordId, accessToken, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.startScan2ApiV1WorkflowmanagerStartScan2Post']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Receives a job. Create a record id, trigger scan with it and returns it.
          * @summary Start Scan
          * @param {string} taskId 
@@ -739,6 +859,20 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
          */
         processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<any> {
             return localVarFp.processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Load the device and sequence data from the database and start the scan.
+         * @summary Start Scan 2
+         * @param {string} deviceId 
+         * @param {string} sequenceId 
+         * @param {string} recordId 
+         * @param {string} accessToken 
+         * @param {BodyStartScan2ApiV1WorkflowmanagerStartScan2Post} bodyStartScan2ApiV1WorkflowmanagerStartScan2Post 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startScan2ApiV1WorkflowmanagerStartScan2Post(deviceId: string, sequenceId: string, recordId: string, accessToken: string, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post: BodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options?: any): AxiosPromise<any> {
+            return localVarFp.startScan2ApiV1WorkflowmanagerStartScan2Post(deviceId, sequenceId, recordId, accessToken, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options).then((request) => request(axios, basePath));
         },
         /**
          * Receives a job. Create a record id, trigger scan with it and returns it.
@@ -830,6 +964,22 @@ export class WorkflowManagerApi extends BaseAPI {
      */
     public processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig) {
         return WorkflowManagerApiFp(this.configuration).processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Load the device and sequence data from the database and start the scan.
+     * @summary Start Scan 2
+     * @param {string} deviceId 
+     * @param {string} sequenceId 
+     * @param {string} recordId 
+     * @param {string} accessToken 
+     * @param {BodyStartScan2ApiV1WorkflowmanagerStartScan2Post} bodyStartScan2ApiV1WorkflowmanagerStartScan2Post 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WorkflowManagerApi
+     */
+    public startScan2ApiV1WorkflowmanagerStartScan2Post(deviceId: string, sequenceId: string, recordId: string, accessToken: string, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post: BodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).startScan2ApiV1WorkflowmanagerStartScan2Post(deviceId, sequenceId, recordId, accessToken, bodyStartScan2ApiV1WorkflowmanagerStartScan2Post, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

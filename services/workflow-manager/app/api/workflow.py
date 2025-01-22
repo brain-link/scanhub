@@ -177,8 +177,8 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
         if task.status != "NEW" and task.status != "UPDATED":
             raise HTTPException(status_code=400, detail="Task to process does not have status NEW or UPDATED.")
 
-        if task.type == "DEVICE_TASK":
-            print("Start device task!")
+        if task.type == "DEVICE_TASK_SIMULATOR":
+            print("Start device task on simulator!")
 
             # # Create a device scan job
             # job = ScanJob(  job_id=task.id,
@@ -330,7 +330,7 @@ async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[
         file.file.close()
 
     # Start Processing Task
-    await process(workflow_id)
+    # await process(workflow_id)  # TODO improve, maybe decouple from upload call
 
     # TBD: On successful upload message kafka topic to do reco
     return {"message": f"Successfully uploaded {file.filename}"}

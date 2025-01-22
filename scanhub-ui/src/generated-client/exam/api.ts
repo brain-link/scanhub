@@ -445,7 +445,8 @@ export interface TaskOut {
 
 export const TaskType = {
     ProcessingTask: 'PROCESSING_TASK',
-    DeviceTask: 'DEVICE_TASK',
+    DeviceTaskSimulator: 'DEVICE_TASK_SIMULATOR',
+    DeviceTaskSdk: 'DEVICE_TASK_SDK',
     CertifiedDeviceTask: 'CERTIFIED_DEVICE_TASK',
     CertifiedProcessingTask: 'CERTIFIED_PROCESSING_TASK'
 } as const;

@@ -34,6 +34,12 @@ export interface DeviceOut {
      * @type {string}
      * @memberof DeviceOut
      */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
     'name': string;
     /**
      * 
@@ -65,12 +71,6 @@ export interface DeviceOut {
      * @memberof DeviceOut
      */
     'ip_address': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'id': string;
     /**
      * 
      * @type {string}

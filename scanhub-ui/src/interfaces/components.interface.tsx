@@ -32,10 +32,11 @@ export interface RefetchableItemInterface<T> {
 
 export interface ItemSelection {
   type: 'exam' | 'workflow' | 'task' | undefined, 
+  name: string | undefined,
   itemId: string | undefined
 }
 
-export const ITEM_UNSELECTED = { type: undefined, itemId: undefined }
+export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined }
 
 export interface SelectableItemInterface<T> {
   item: T
