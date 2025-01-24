@@ -15,16 +15,16 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 # pylint: disable=no-name-in-module
 # pylint: disable=too-many-statements
 
+import json
 from datetime import datetime
 from typing import Dict, List
-import json
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
+from scanhub_libraries.models import DeviceTask
+from scanhub_libraries.security import get_current_user
 from sqlalchemy import exc
 
-from scanhub_libraries.security import get_current_user
-from scanhub_libraries.models import DeviceTask
 from .dal import (
     dal_create_device,
     dal_delete_device,
@@ -132,6 +132,14 @@ async def delete_device(device_id: str):
 
 @router.post('/start_scan_via_websocket', response_model={}, status_code=200, tags=["devices"])
 async def start_scan_via_websocket(device_task: DeviceTask):
+    """Start a scan via a websocket that was already opened by the device.
+
+    Parameters
+    ----------
+    device_task
+        Details of the scan and the device to scan on.
+
+    """
     print("start_scan_via_websocket")
     print("device_task:", device_task)
     if device_task.device_id in dict_id_websocket:
@@ -239,7 +247,7 @@ Device ID does not match'})
                         dict_id_websocket[device_id] = websocket
             else:
                 print("Received unknown command, which will be ignored:", command)
-                
+
 
     except WebSocketDisconnect:
         print("WebSocketDisconnect")

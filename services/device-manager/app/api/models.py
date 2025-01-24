@@ -12,7 +12,7 @@ from api.db import Device
 
 class BaseDevice(BaseModel):
     """Device pydantic base model."""
-    
+
     id: str
     name: str
     manufacturer: str

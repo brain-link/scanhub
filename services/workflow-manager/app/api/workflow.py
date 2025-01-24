@@ -20,7 +20,6 @@ from fastapi.security import OAuth2PasswordBearer
 # from scanhub import RecoJob # type: ignore
 from scanhub_libraries.models import (
     AcquisitionLimits,
-    SequenceParameters,
     Commands,
     DeviceTask,
     ExamOut,
@@ -28,6 +27,7 @@ from scanhub_libraries.models import (
     PatientOut,
     ScanJob,
     ScanStatus,
+    SequenceParameters,
     TaskEvent,
     TaskOut,
     WorkflowOut,
@@ -498,7 +498,6 @@ async def start_scan_2(task_type: str,
                        sequence_parameters: SequenceParameters,
                        access_token: str):
     """Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK."""
-
     sequence_json = await retrieve_sequence(sequence_id, access_token)
     # print("Sequence JSON:", sequence_json)
 
