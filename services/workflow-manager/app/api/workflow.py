@@ -224,7 +224,7 @@ async def process_task(task_id: UUID | str, access_token: Annotated[str, Depends
 
 
 @router.get("/process/{workflow_id}/", tags=["WorkflowManager"])
-async def process(workflow_id: UUID | str):
+async def process(workflow_id: UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]):
     """Process a workflow.
 
     Parameters
@@ -260,7 +260,7 @@ async def process(workflow_id: UUID | str):
                                 sequence_parameters=task.args["sequence_parameters"])
 
                 # Start scan
-                await start_scan(job, task.id.toString())
+                await start_scan(job, task.id.toString(), access_token=access_token)
 
                 # TBD set task status to "IN_PROGRESS"
 
@@ -489,7 +489,6 @@ async def post_device_task(url, device_task, headers=None):
 
 
 
-@router.post("/start-scan-2", tags=["WorkflowManager"])
 async def start_scan_2(task_type: str,
                        device_id: str,
                        sequence_id: str,
@@ -534,14 +533,13 @@ async def start_scan_2(task_type: str,
 
 
 
-@router.post("/start-scan", tags=["WorkflowManager"])
-async def start_scan(scan_job: ScanJob, task_id: str):
+async def start_scan(scan_job: ScanJob, task_id: str, access_token: str):
     """Receives a job. Create a record id, trigger scan with it and returns it."""
     device_id = scan_job.device_id
     record_id = ""
     command = Commands.START
 
-    device_ip = await device_location_request(device_id)
+    device_ip = await device_location_request(device_id, access_token=access_token)
     url = f"http://{device_ip}/api/start-scan"
 
     print("Start-scan endpoint, device ip: ", device_ip)

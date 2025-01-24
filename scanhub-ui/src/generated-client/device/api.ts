@@ -489,7 +489,7 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
          * @summary Start Scan Via Websocket
          * @param {DeviceTask} deviceTask 
          * @param {*} [options] Override http request option.
@@ -603,7 +603,7 @@ export const DevicesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
          * @summary Start Scan Via Websocket
          * @param {DeviceTask} deviceTask 
          * @param {*} [options] Override http request option.
@@ -675,7 +675,7 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getDevicesApiV1DeviceGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
          * @summary Start Scan Via Websocket
          * @param {DeviceTask} deviceTask 
          * @param {*} [options] Override http request option.
@@ -754,7 +754,7 @@ export class DevicesApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
      * @summary Start Scan Via Websocket
      * @param {DeviceTask} deviceTask 
      * @param {*} [options] Override http request option.
