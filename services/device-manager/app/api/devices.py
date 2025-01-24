@@ -17,12 +17,14 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 from datetime import datetime
 from typing import Dict, List
+import json
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
-from scanhub_libraries.security import get_current_user
-from scanhub_libraries.models import DeviceTask
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import exc
 
+from scanhub_libraries.security import get_current_user
+from scanhub_libraries.models import DeviceTask
 from .dal import (
     dal_create_device,
     dal_delete_device,
@@ -129,10 +131,15 @@ async def delete_device(device_id: str):
 
 
 @router.post('/start_scan_via_websocket', response_model={}, status_code=200, tags=["devices"])
-def start_scan_via_websocket(device_task: DeviceTask):
+async def start_scan_via_websocket(device_task: DeviceTask):
     print("start_scan_via_websocket")
     print("device_task:", device_task)
-    return
+    if device_task.device_id in dict_id_websocket:
+        websocket = dict_id_websocket[device_task.device_id]
+        await websocket.send_text(json.dumps({'command': 'start', 'data': device_task}, default=jsonable_encoder))
+        return
+    else:
+        raise HTTPException(status_code=503, detail='Device offline.')
 
 
 # TODO restrict access to token-bearer
