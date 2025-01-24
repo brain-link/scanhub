@@ -94,7 +94,7 @@ Module Contents
        Task process response
 
 
-.. py:function:: process(workflow_id: uuid.UUID | str)
+.. py:function:: process(workflow_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)])
    :async:
 
 
@@ -262,7 +262,7 @@ Module Contents
    Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK.
 
 
-.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob, task_id: str)
+.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob, task_id: str, access_token: str)
    :async:
 
 
