@@ -37,6 +37,10 @@ Module Contents
    Device pydantic base model.
 
 
+   .. py:attribute:: id
+      :type:  str
+
+
    .. py:attribute:: name
       :type:  str
 
@@ -69,16 +73,12 @@ Module Contents
    Device pydantic output model.
 
 
-   .. py:attribute:: id
-      :type:  str
-
-
    .. py:attribute:: datetime_created
       :type:  datetime.datetime
 
 
    .. py:attribute:: datetime_updated
-      :type:  datetime.datetime
+      :type:  datetime.datetime | None
 
 
 .. py:function:: get_device_out(data: api.db.Device) -> DeviceOut

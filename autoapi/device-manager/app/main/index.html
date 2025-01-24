@@ -30,7 +30,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=7e2203eb" />
   
@@ -441,6 +441,12 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.main.custom_http_exception_handler" title="device-manager.app.main.custom_http_exception_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">custom_http_exception_handler</span></code></a>(request, exc)</p></td>
+<td><p>Add logging for http exceptions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.main.validation_exception_handler" title="device-manager.app.main.validation_exception_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validation_exception_handler</span></code></a>(request, exc)</p></td>
+<td><p>Add logging for fastAPI's automatic input validation exceptions.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.main.startup" title="device-manager.app.main.startup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">startup</span></code></a>()</p></td>
 <td><p>Inititalize database on startup.</p></td>
 </tr>
@@ -457,6 +463,20 @@
 <dt class="sig sig-object py" id="device-manager.app.main.app">
 <span class="sig-prename descclassname"><span class="pre">device-manager.app.main.</span></span><span class="sig-name descname"><span class="pre">app</span></span><a class="headerlink" href="#device-manager.app.main.app" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.main.custom_http_exception_handler">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.main.</span></span><span class="sig-name descname"><span class="pre">custom_http_exception_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.main.custom_http_exception_handler" title="Link to this definition">#</a></dt>
+<dd><p>Add logging for http exceptions.</p>
+<p><a class="reference external" href="https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers">https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.main.validation_exception_handler">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.main.</span></span><span class="sig-name descname"><span class="pre">validation_exception_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.main.validation_exception_handler" title="Link to this definition">#</a></dt>
+<dd><p>Add logging for fastAPI’s automatic input validation exceptions.</p>
+<p><a class="reference external" href="https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers">https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers</a></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="device-manager.app.main.startup">
@@ -520,6 +540,8 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.main.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.main.custom_http_exception_handler"><code class="docutils literal notranslate"><span class="pre">custom_http_exception_handler()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.main.validation_exception_handler"><code class="docutils literal notranslate"><span class="pre">validation_exception_handler()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.main.startup"><code class="docutils literal notranslate"><span class="pre">startup()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.main.readiness"><code class="docutils literal notranslate"><span class="pre">readiness()</span></code></a></li>
 </ul>

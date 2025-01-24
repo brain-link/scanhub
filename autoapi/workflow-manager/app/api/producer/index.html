@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>workflow-manager.app.api.orchestration_engine &#8212; ScanHub Documentation</title>
+    <title>workflow-manager.app.api.producer &#8212; ScanHub Documentation</title>
   
   
   
@@ -30,7 +30,7 @@
   <link href="../../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css?v=7e2203eb" />
   
@@ -43,7 +43,7 @@
     <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/orchestration_engine/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/producer/index';</script>
     <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -406,7 +406,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.orchestration_engine</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.producer</span></li>
   </ul>
 </nav>
 </div>
@@ -423,14 +423,26 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-workflow-manager.app.api.orchestration_engine">
-<span id="workflow-manager-app-api-orchestration-engine"></span><h1>workflow-manager.app.api.orchestration_engine<a class="headerlink" href="#module-workflow-manager.app.api.orchestration_engine" title="Link to this heading">#</a></h1>
+  <section id="module-workflow-manager.app.api.producer">
+<span id="workflow-manager-app-api-producer"></span><h1>workflow-manager.app.api.producer<a class="headerlink" href="#module-workflow-manager.app.api.producer" title="Link to this heading">#</a></h1>
+<p>Producer Singleton class definition for Kafka producer.</p>
 <section id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine" title="workflow-manager.app.api.orchestration_engine.OrchestrationEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OrchestrationEngine</span></code></a></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.producer.Producer" title="workflow-manager.app.api.producer.Producer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Producer</span></code></a></p></td>
+<td><p>Producer Singleton class for Kafka producer.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.producer.main" title="workflow-manager.app.api.producer.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p>Define main test function.</p></td>
 </tr>
 </tbody>
 </table>
@@ -439,53 +451,58 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.orchestration_engine.</span></span><span class="sig-name descname"><span class="pre">OrchestrationEngine</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine" title="Link to this definition">#</a></dt>
-<dd><dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine">
-<span class="sig-name descname"><span class="pre">engine</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.producer.</span></span><span class="sig-name descname"><span class="pre">Producer</span></span><a class="headerlink" href="#workflow-manager.app.api.producer.Producer" title="Link to this definition">#</a></dt>
+<dd><p>Producer Singleton class for Kafka producer.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer._instance">
+<span class="sig-name descname"><span class="pre">_instance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#workflow-manager.app.api.producer.Producer" title="workflow-manager.app.api.producer.Producer"><span class="pre">Producer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#workflow-manager.app.api.producer.Producer._instance" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url">
-<span class="sig-name descname"><span class="pre">kestra_api_url</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url">
-<span class="sig-name descname"><span class="pre">airflow_api_url</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer._producer">
+<span class="sig-name descname"><span class="pre">_producer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">aiokafka.AIOKafkaProducer</span></em><a class="headerlink" href="#workflow-manager.app.api.producer.Producer._producer" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_workflow">
-<span class="sig-name descname"><span class="pre">trigger_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_workflow" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer.start">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.producer.Producer.start" title="Link to this definition">#</a></dt>
+<dd><p>Start producer.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_kestra_workflow">
-<span class="sig-name descname"><span class="pre">_trigger_kestra_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_kestra_workflow" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer.stop">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.producer.Producer.stop" title="Link to this definition">#</a></dt>
+<dd><p>Stop producer.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_workflow">
-<span class="sig-name descname"><span class="pre">_trigger_airflow_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_workflow" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer.send">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.producer.Producer.send" title="Link to this definition">#</a></dt>
+<dd><p>Send message to Kafka topic.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>topic</dt><dd><p>Kafka topic to send message to</p>
+</dd>
+<dt>message</dt><dd><p>Message to be sent</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_workflow_status">
-<span class="sig-name descname"><span class="pre">get_workflow_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_workflow_status" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.Producer.get_producer">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_producer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.producer.Producer.get_producer" title="Link to this definition">#</a></dt>
+<dd><p>Get producer.</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_kestra_workflow_status">
-<span class="sig-name descname"><span class="pre">_get_kestra_workflow_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_kestra_workflow_status" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_workflow_status">
-<span class="sig-name descname"><span class="pre">_get_airflow_workflow_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_workflow_status" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.producer.main">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.producer.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.producer.main" title="Link to this definition">#</a></dt>
+<dd><p>Define main test function.</p>
 </dd></dl>
 
 </section>
@@ -521,19 +538,18 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.engine</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.kestra_api_url</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.airflow_api_url</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_workflow"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.trigger_workflow()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_kestra_workflow"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._trigger_kestra_workflow()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_workflow"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._trigger_airflow_workflow()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_workflow_status"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.get_workflow_status()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_kestra_workflow_status"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._get_kestra_workflow_status()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_workflow_status"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._get_airflow_workflow_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer"><code class="docutils literal notranslate"><span class="pre">Producer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer._instance"><code class="docutils literal notranslate"><span class="pre">Producer._instance</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer._producer"><code class="docutils literal notranslate"><span class="pre">Producer._producer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer.start"><code class="docutils literal notranslate"><span class="pre">Producer.start()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer.stop"><code class="docutils literal notranslate"><span class="pre">Producer.stop()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer.send"><code class="docutils literal notranslate"><span class="pre">Producer.send()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.Producer.get_producer"><code class="docutils literal notranslate"><span class="pre">Producer.get_producer()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.producer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -543,7 +559,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/orchestration_engine/index.rst.txt"
+      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/producer/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

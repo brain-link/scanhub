@@ -22,6 +22,8 @@ Functions
 
 .. autoapisummary::
 
+   device-manager.app.main.custom_http_exception_handler
+   device-manager.app.main.validation_exception_handler
    device-manager.app.main.startup
    device-manager.app.main.readiness
 
@@ -30,6 +32,24 @@ Module Contents
 ---------------
 
 .. py:data:: app
+
+.. py:function:: custom_http_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: validation_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for fastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
 
 .. py:function:: startup()
    :async:

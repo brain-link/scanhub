@@ -5,7 +5,15 @@ device-manager.app.api.devices
 
 .. autoapi-nested-parse::
 
-   Device api endpoints.
+   Device API Endpoints.
+
+   This module defines the API routes and WebSocket endpoints for managing devices.
+   It includes functionalities for:
+   - CRUD operations on devices.
+   - Device registration and status updates via WebSocket.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 
 
@@ -24,13 +32,14 @@ Functions
 
 .. autoapisummary::
 
-   device-manager.app.api.devices.readiness
    device-manager.app.api.devices.get_devices
    device-manager.app.api.devices.get_device_ip_address
    device-manager.app.api.devices.get_device
    device-manager.app.api.devices.get_device_status
    device-manager.app.api.devices.delete_device
+   device-manager.app.api.devices.start_scan_via_websocket
    device-manager.app.api.devices.websocket_endpoint
+   device-manager.app.api.devices.websocket_endpoint_legacy
 
 
 Module Contents
@@ -44,17 +53,7 @@ Module Contents
 
 
 .. py:data:: dict_id_websocket
-
-.. py:function:: readiness() -> dict
-   :async:
-
-
-   Readiness health endpoint.
-
-   Returns
-   -------
-       Status dictionary
-
+   :type:  Dict[str, fastapi.WebSocket]
 
 .. py:function:: get_devices() -> list[device-manager.app.api.models.DeviceOut]
    :async:
@@ -127,11 +126,35 @@ Module Contents
        dict: The response indicating the success or failure of the deletion.
 
 
+.. py:function:: start_scan_via_websocket(device_task: scanhub_libraries.models.DeviceTask)
+   :async:
+
+
+   Start a scan via a websocket that was already opened by the device.
+
+   Parameters
+   ----------
+   device_task
+       Details of the scan and the device to scan on.
+
+
+
 .. py:function:: websocket_endpoint(websocket: fastapi.WebSocket)
    :async:
 
 
    Websocket endpoint for device communication.
+
+   Args
+   ----
+       websocket (WebSocket): The WebSocket connection object.
+
+
+.. py:function:: websocket_endpoint_legacy(websocket: fastapi.WebSocket)
+   :async:
+
+
+   Websocket endpoint for device communication (legacy). Used for old way over acquisition-manager.
 
    Args
    ----
