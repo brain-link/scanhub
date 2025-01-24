@@ -50,33 +50,35 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
     }
 
   const [task, setTask] = React.useState<BaseTask>(initialTask);
-  var sequence_parameters_json: any = undefined;
+
+  let sequenceParametersJson: {fov: {[key: string]: number}, fov_offset: {[key: string]: number}};
   try {
-    sequence_parameters_json = JSON.parse(task.args.sequence_parameters);
-  } catch {}
-  if (sequence_parameters_json == undefined
-    || sequence_parameters_json.fov == undefined
-    || sequence_parameters_json.fov.X == undefined
-    || sequence_parameters_json.fov.Y == undefined
-    || sequence_parameters_json.fov.Z == undefined
-    || sequence_parameters_json.fov_offset == undefined
-    || sequence_parameters_json.fov_offset.X == undefined
-    || sequence_parameters_json.fov_offset.Y == undefined
-    || sequence_parameters_json.fov_offset.Z == undefined) {
-      sequence_parameters_json = {
-        'fov': {
-          'X': 0,
-          'Y': 0,
-          'Z': 0
-        },
-        'fov_offset': {
-          'X': 0,
-          'Y': 0,
-          'Z': 0
-        }
+    sequenceParametersJson = JSON.parse(task.args.sequence_parameters);
+    if (sequenceParametersJson == undefined
+      || sequenceParametersJson.fov == undefined
+      || sequenceParametersJson.fov.X == undefined
+      || sequenceParametersJson.fov.Y == undefined
+      || sequenceParametersJson.fov.Z == undefined
+      || sequenceParametersJson.fov_offset == undefined
+      || sequenceParametersJson.fov_offset.X == undefined
+      || sequenceParametersJson.fov_offset.Y == undefined
+      || sequenceParametersJson.fov_offset.Z == undefined) {
+        throw Error()
+      }
+  } catch {
+    sequenceParametersJson = {
+      'fov': {
+        'X': 0,
+        'Y': 0,
+        'Z': 0
+      },
+      'fov_offset': {
+        'X': 0,
+        'Y': 0,
+        'Z': 0
       }
     }
-
+  }
 
   // New argument
   const [argKey, setArgKey] = React.useState<string>('')
@@ -113,9 +115,9 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
 
   const {
     data: sequences,
-    isLoading: isLoadingSequences,
-    isError: isErrorSequences,
-    refetch: refetchSequences,
+    // isLoading: isLoadingSequences,
+    // isError: isErrorSequences,
+    // refetch: refetchSequences,
   } = useQuery<MRISequence[]>({
     queryKey: ['sequences'],
     queryFn: async () => {
@@ -129,9 +131,9 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
 
   const {
     data: devices,
-    isLoading: isLoadingDevices,
-    isError: isErrorDevices,
-    refetch: refetchDevices,
+    // isLoading: isLoadingDevices,
+    // isError: isErrorDevices,
+    // refetch: refetchDevices,
   } = useQuery<DeviceOut[]>({
     queryKey: ['devices'],
     queryFn: async () => {
@@ -212,16 +214,15 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
                 value={task.args.sequence_id ? task.args.sequence_id : null}
                 placeholder={'Select a sequence...'}
                 size='sm'
-                onChange={(event: React.SyntheticEvent | null, value: {} | null) => {
+                onChange={(event, value) => {
                   if (value) {
                     setTask({ ...task, args: { ...task.args, 'sequence_id': value.toString() } })
                   }
                 }}
               >
                 {sequences?.map((sequence) => {
-                  const sequence_id_name = sequence.name + ' (' + sequence._id + ')'
                   return (
-                    <Option key={sequence_id_name} value={sequence._id}>
+                    <Option key={sequence.name + ' (' + sequence._id + ')'} value={sequence._id}>
                       {sequence.name}
                     </Option>
                   )
@@ -234,7 +235,7 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
                 value={task.args.device_id ? task.args.device_id : null}
                 placeholder={'Select a device...'}
                 size='sm'
-                onChange={(event: React.SyntheticEvent | null, value: {} | null) => {
+                onChange={(event, value) => {
                   if (value) {
                     setTask({ ...task, args: { ...task.args, 'device_id': value.toString() } })
                   }
@@ -259,11 +260,11 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
                     type="number"
                     size='sm'
                     slotProps={ {input: {min: 0, max: 30000}} }
-                    value={sequence_parameters_json.fov[index]}
+                    value={sequenceParametersJson.fov[index]}
                     endDecorator="px"
                     onChange={(event) => {
-                      sequence_parameters_json.fov[index] = event.target.valueAsNumber
-                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequence_parameters_json) } })
+                      sequenceParametersJson.fov[index] = event.target.valueAsNumber
+                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequenceParametersJson) } })
                     }}
                   />
                   ])}
@@ -279,11 +280,11 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
                     type="number"
                     size='sm'
                     slotProps={ {input: {min: 0, max: 30000}} }
-                    value={sequence_parameters_json.fov_offset[index]}
+                    value={sequenceParametersJson.fov_offset[index]}
                     endDecorator="px"
                     onChange={(event) => {
-                      sequence_parameters_json.fov_offset[index] = event.target.valueAsNumber
-                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequence_parameters_json) } })
+                      sequenceParametersJson.fov_offset[index] = event.target.valueAsNumber
+                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequenceParametersJson) } })
                     }}
                   />
                   ])}

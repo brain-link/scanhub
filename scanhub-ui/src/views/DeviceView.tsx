@@ -28,13 +28,13 @@ import { DeviceOut } from '../generated-client/device/api'
 export default function DeviceView() {
   // const [, showNotification] = useContext(NotificationContext)
   // const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
-  const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
+  // const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
   const {
     data: devices,
     isLoading,
     isError,
-    refetch,
+//    refetch,
   } = useQuery<DeviceOut[]>({
     queryKey: ['devices'],
     queryFn: async () => {
@@ -173,7 +173,7 @@ export default function DeviceView() {
           hideFooterSelectedRowCount 
           editMode={'row'}
           rowHeight={40}  // MUI default is 52
-          loading={isUpdating}
+          // loading={isUpdating}
           processRowUpdate={(updatedUser) => {
             // setIsUpdating(true)
             // updateMutation.mutate(updatedUser)

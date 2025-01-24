@@ -17,7 +17,7 @@ import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
 
 // import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
@@ -30,7 +30,7 @@ import SequenceUpload from '../components/SequenceUpload'
 export default function SequenceView() {
   // const [, showNotification] = useContext(NotificationContext)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
-  const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
+  // const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
   const {
     data: sequences,
@@ -161,7 +161,7 @@ export default function SequenceView() {
           hideFooterSelectedRowCount 
           editMode={'row'}
           rowHeight={40}  // MUI default is 52
-          loading={isUpdating}
+          // loading={isUpdating}
           processRowUpdate={(updatedUser) => {
             // setIsUpdating(true)
             // updateMutation.mutate(updatedUser)

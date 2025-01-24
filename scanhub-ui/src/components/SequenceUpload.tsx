@@ -31,10 +31,10 @@ function SequenceUploadForm(props: ModalProps) {
     _id: '',
     name: '',
     description: '',
-    sequence_type: '',
+    sequence_type: '',  // eslint-disable-line camelcase
     tags: [],
     file: null,
-    file_extension: '.seq',
+    file_extension: '.seq',   // eslint-disable-line camelcase
   })
 
   const uploadSequence = useMutation(async (sequence: MRISequence) => {
@@ -123,9 +123,9 @@ function SequenceUploadForm(props: ModalProps) {
             else if (sequence.description == '') {
               showNotification({message: 'No sequence description given.', type: 'warning'})
             }
-            else if (sequence.description == '') {
-              showNotification({message: 'No sequence type given.', type: 'warning'})
-            }
+            // else if (sequence.type == '') {
+            //   showNotification({message: 'No sequence type given.', type: 'warning'})
+            // }
             else {
               uploadSequence.mutate(sequence)
               props.setOpen(false)

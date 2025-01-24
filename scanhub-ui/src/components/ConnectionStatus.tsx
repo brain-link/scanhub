@@ -32,7 +32,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     const {
       // data,
       isError: patientManagerHealthIsError
-    } = useQuery<{}>({
+    } = useQuery<unknown>({
       queryKey: ['patientManagerHealth'],
       refetchInterval: 5000,
       retry: 0,
@@ -45,7 +45,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           }
           // return result.data
         })
-        .catch((error) => {
+        .catch(() => {
             return Promise.reject('Error at health check of patient-manager.')
         })
       },
@@ -54,7 +54,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     const {
       // data,
       isError: examManagerHealthIsError
-    } = useQuery<{}>({
+    } = useQuery<unknown>({
       queryKey: ['examManagerHealth'],
       refetchInterval: 5000,
       retry: 0,
@@ -67,7 +67,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           }
           // return result.data
         })
-        .catch((error) => {
+        .catch(() => {
             return Promise.reject('Error at health check of exam-manager.')
         })
       },
@@ -76,7 +76,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     const {
       // data,
       isError: workflowManagerHealthIsError
-    } = useQuery<{}>({
+    } = useQuery<unknown>({
       queryKey: ['workflowManagerHealth'],
       refetchInterval: 5000,
       retry: 0,
@@ -89,7 +89,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           }
           // return result.data
         })
-        .catch((error) => {
+        .catch(() => {
             return Promise.reject('Error at health check of workflow-manager.')
         })
       },
@@ -98,7 +98,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     const {
       // data,
       isError: userLoginHealthIsError
-    } = useQuery<{}>({
+    } = useQuery<unknown>({
       queryKey: ['userLoginHealth'],
       refetchInterval: 5000,
       retry: 0,
@@ -111,7 +111,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           }
           // return result.data
         })
-        .catch((error) => {
+        .catch(() => {
           return Promise.reject('Error at health check of user-login-manager.')
         })
       },
@@ -120,7 +120,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     const {
       // data,
       isError: deviceManagerHealthIsError
-    } = useQuery<{}>({
+    } = useQuery<unknown>({
       queryKey: ['deviceManagerHealth'],
       refetchInterval: 5000,
       retry: 0,
@@ -133,7 +133,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           }
           // return result.data
         })
-        .catch((error) => {
+        .catch(() => {
           return Promise.reject('Error at health check of device-manager.')
         })
       },
@@ -142,7 +142,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     const {
       // data,
       isError: sequenceManagerHealthIsError
-    } = useQuery<{}>({
+    } = useQuery<unknown>({
       queryKey: ['sequenceManagerHealth'],
       refetchInterval: 5000,
       retry: 0,
@@ -155,7 +155,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           }
           // return result.data
         })
-        .catch((error) => {
+        .catch(() => {
           return Promise.reject('Error at health check of sequence-manager.')
         })
       },
