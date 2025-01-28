@@ -16,9 +16,7 @@ Attributes
 
    workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
-   workflow-manager.app.api.workflow.PATIENT_MANAGER_URI
    workflow-manager.app.api.workflow.router
-   workflow-manager.app.api.workflow.oauth2_scheme
    workflow-manager.app.api.workflow.producer
 
 
@@ -27,8 +25,6 @@ Functions
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.calculate_age
-   workflow-manager.app.api.workflow.process_task
    workflow-manager.app.api.workflow.process
    workflow-manager.app.api.workflow.upload_result
    workflow-manager.app.api.workflow.download_result
@@ -38,7 +34,6 @@ Functions
    workflow-manager.app.api.workflow.retrieve_sequence
    workflow-manager.app.api.workflow.create_record
    workflow-manager.app.api.workflow.post_device_task
-   workflow-manager.app.api.workflow.start_scan_2
    workflow-manager.app.api.workflow.start_scan
    workflow-manager.app.api.workflow.forward_status
 
@@ -47,54 +42,18 @@ Module Contents
 ---------------
 
 .. py:data:: SEQUENCE_MANAGER_URI
-   :value: 'sequence-manager:8000'
+   :value: 'host.docker.internal:8003'
 
 
 .. py:data:: EXAM_MANAGER_URI
-   :value: 'exam-manager:8000'
-
-
-.. py:data:: PATIENT_MANAGER_URI
-   :value: 'patient-manager:8100'
+   :value: 'host.docker.internal:8004'
 
 
 .. py:data:: router
 
-.. py:data:: oauth2_scheme
-
 .. py:data:: producer
 
-.. py:function:: calculate_age(birth_date)
-
-   Calculate age in years from birth date.
-
-   Parameters
-   ----------
-   birth_date
-       date of birth as datetime.date object
-
-   Returns
-   -------
-       Age in years as integer
-
-
-.. py:function:: process_task(task_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)])
-   :async:
-
-
-   Process a task.
-
-   Parameters
-   ----------
-   task_id
-       UUID of the task to process
-
-   Returns
-   -------
-       Task process response
-
-
-.. py:function:: process(workflow_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)])
+.. py:function:: process(workflow_id: uuid.UUID | str)
    :async:
 
 
@@ -179,7 +138,7 @@ Module Contents
        File not found
 
 
-.. py:function:: device_location_request(device_id, access_token)
+.. py:function:: device_location_request(device_id)
    :async:
 
 
@@ -190,15 +149,12 @@ Module Contents
    device_id
        Id of device
 
-   access_token
-       the current access_token for using the API
-
    Returns
    -------
        ip_address of device
 
 
-.. py:function:: retrieve_sequence(sequence_id, access_token)
+.. py:function:: retrieve_sequence(sequence_manager_uri, sequence_id)
    :async:
 
 
@@ -206,11 +162,11 @@ Module Contents
 
    Parameters
    ----------
+   sequence_manager_uri
+       uri of sequence manager
+
    sequence_id
        id of sequence
-
-   access_token
-       the current access_token for using the API
 
    Returns
    -------
@@ -236,7 +192,7 @@ Module Contents
        id of newly created record
 
 
-.. py:function:: post_device_task(url, device_task, headers=None)
+.. py:function:: post_device_task(url, device_task)
    :async:
 
 
@@ -255,14 +211,7 @@ Module Contents
        response of device
 
 
-.. py:function:: start_scan_2(task_type: str, device_id: str, sequence_id: str, record_id: str, acquisition_limits: scanhub_libraries.models.AcquisitionLimits, sequence_parameters: scanhub_libraries.models.SequenceParameters, access_token: str)
-   :async:
-
-
-   Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK.
-
-
-.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob, task_id: str, access_token: str)
+.. py:function:: start_scan(scan_job: scanhub_libraries.models.ScanJob, task_id: str)
    :async:
 
 

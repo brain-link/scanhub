@@ -118,7 +118,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_exam_from_template(payload: scanhub_libraries.models.BaseExam, template_id: uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
+.. py:function:: create_exam_from_template(patient_id: Optional[int], template_id: uuid.UUID, new_exam_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
    :async:
 
 
@@ -126,10 +126,12 @@ Module Contents
 
    Parameters
    ----------
-   payload
-       The potentially modified exam to create.
+   patient_id
+       Id of the patient, the exam is related to
    template_id
        ID of the template, the exam is created from
+   new_exam_is_template
+       set is_template on the new exam and its workflows and tasks
 
    Returns
    -------
@@ -162,7 +164,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: get_all_patient_exams(patient_id: uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ExamOut]
+.. py:function:: get_all_patient_exams(patient_id: int, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ExamOut]
    :async:
 
 
@@ -479,6 +481,8 @@ Module Contents
 
 
    Update an existing task.
+
+   Requires that the task to be updated is not frozen
 
    Parameters
    ----------

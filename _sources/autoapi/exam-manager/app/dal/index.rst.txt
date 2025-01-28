@@ -71,7 +71,7 @@ Module Contents
        Database orm model of exam or none
 
 
-.. py:function:: get_all_exam_data(patient_id: uuid.UUID) -> list[app.db.Exam]
+.. py:function:: get_all_exam_data(patient_id: int) -> list[app.db.Exam]
    :async:
 
 

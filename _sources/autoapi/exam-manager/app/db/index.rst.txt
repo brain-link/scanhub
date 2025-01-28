@@ -89,8 +89,44 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
+   .. py:attribute:: workflows
+      :type:  sqlalchemy.orm.Mapped[list[Workflow]]
+
+
+   .. py:attribute:: patient_id
+      :type:  sqlalchemy.orm.Mapped[int]
+
+
+   .. py:attribute:: name
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: country
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: site
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: address
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
    .. py:attribute:: creator
       :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: is_template
+      :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: is_frozen
+      :type:  sqlalchemy.orm.Mapped[bool]
 
 
    .. py:attribute:: datetime_created
@@ -99,46 +135,6 @@ Module Contents
 
    .. py:attribute:: datetime_updated
       :type:  sqlalchemy.orm.Mapped[datetime.datetime]
-
-
-   .. py:attribute:: workflows
-      :type:  sqlalchemy.orm.Mapped[list[Workflow]]
-
-
-   .. py:attribute:: patient_id
-      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
-
-
-   .. py:attribute:: name
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: description
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: indication
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: patient_height_cm
-      :type:  sqlalchemy.orm.Mapped[int]
-
-
-   .. py:attribute:: patient_weight_kg
-      :type:  sqlalchemy.orm.Mapped[int]
-
-
-   .. py:attribute:: comment
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: status
-      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
-
-
-   .. py:attribute:: is_template
-      :type:  sqlalchemy.orm.Mapped[bool]
 
 
 .. py:class:: Workflow
@@ -161,18 +157,6 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
-   .. py:attribute:: creator
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: datetime_created
-      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
-
-
-   .. py:attribute:: datetime_updated
-      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
-
-
    .. py:attribute:: tasks
       :type:  sqlalchemy.orm.Mapped[list[Task]]
 
@@ -185,20 +169,36 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: description
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
    .. py:attribute:: comment
       :type:  sqlalchemy.orm.Mapped[str]
 
 
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
    .. py:attribute:: status
-      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: is_finished
+      :type:  sqlalchemy.orm.Mapped[bool]
 
 
    .. py:attribute:: is_template
       :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: is_frozen
+      :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: datetime_updated
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
 
 
 .. py:class:: Task
@@ -221,18 +221,6 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
-   .. py:attribute:: creator
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: datetime_created
-      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
-
-
-   .. py:attribute:: datetime_updated
-      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
-
-
    .. py:attribute:: workflow_id
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
@@ -242,10 +230,6 @@ Module Contents
 
 
    .. py:attribute:: description
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: comment
       :type:  sqlalchemy.orm.Mapped[str]
 
 
@@ -266,11 +250,23 @@ Module Contents
 
 
    .. py:attribute:: status
-      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+      :type:  sqlalchemy.orm.Mapped[dict[scanhub_libraries.models.TaskStatus, str]]
+
+
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
 
 
    .. py:attribute:: is_template
       :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: is_frozen
+      :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
 
 
 .. py:data:: MappedBase
