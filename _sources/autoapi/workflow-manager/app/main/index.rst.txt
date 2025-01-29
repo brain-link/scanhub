@@ -15,7 +15,6 @@ Attributes
 .. autoapisummary::
 
    workflow-manager.app.main.app
-   workflow-manager.app.main.producer
 
 
 Functions
@@ -32,8 +31,6 @@ Module Contents
 ---------------
 
 .. py:data:: app
-
-.. py:data:: producer
 
 .. py:function:: startup() -> None
    :async:
