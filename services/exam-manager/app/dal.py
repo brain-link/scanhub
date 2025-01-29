@@ -19,19 +19,21 @@ from app.db import (
 
 # ----- Exam data access layer
 
-async def add_exam_data(payload: BaseExam) -> Exam:
+async def add_exam_data(payload: BaseExam, creator: str) -> Exam:
     """Create new exam.
 
     Parameters
     ----------
     payload
         Exam pydantic base model
+    creator
+        The username/id of the user who creats this exam
 
     Returns
     -------
         Database orm model of created exam
     """
-    new_exam = Exam(**payload.dict())
+    new_exam = Exam(**payload.dict(), creator=creator)
     async with async_session() as session:
         session.add(new_exam)
         await session.commit()
@@ -96,7 +98,7 @@ async def get_all_exam_template_data() -> list[Exam]:
 
 
 async def delete_exam_data(exam_id: UUID) -> bool:
-    """Delete exam by id.
+    """Delete exam by id. Also deletes associated workflows and tasks.
 
     Parameters
     ----------
@@ -109,6 +111,10 @@ async def delete_exam_data(exam_id: UUID) -> bool:
     """
     async with async_session() as session:
         if exam := await session.get(Exam, exam_id):
+            for workflow in exam.workflows:
+                for task in workflow.tasks:
+                    await session.delete(task)
+                await session.delete(workflow)
             await session.delete(exam)
             await session.commit()
             return True
@@ -141,25 +147,27 @@ async def update_exam_data(exam_id: UUID, payload: BaseExam) -> (Exam | None):
 
 # ----- Workflow data access layer
 
-async def add_workflow_data(payload: BaseWorkflow) -> Workflow:
+async def add_workflow_data(payload: BaseWorkflow, creator: str) -> Workflow:
     """Add new workflow.
 
     Parameters
     ----------
     payload
         Workflow pydantic base model with data for workflow creation
+    creator
+        The username/id of the user who creats this exam
 
     Returns
     -------
         Database orm model of created workflow
     """
-    new_workflow = Workflow(**payload.dict())
+    new_workflow = Workflow(**payload.dict(), creator=creator)
     async with async_session() as session:
         session.add(new_workflow)
         await session.commit()
         await session.refresh(new_workflow)
     # Debugging
-    print("***** NEW JOB *****")
+    print("***** NEW WORKFLOW *****")
     pprint(new_workflow.__dict__)
     return new_workflow
 
@@ -218,7 +226,7 @@ async def get_all_workflows_template_data() -> list[Workflow]:
 
 
 async def delete_workflow_data(workflow_id: UUID) -> bool:
-    """Delete a workflow by ID.
+    """Delete a workflow by ID. Cascade delete the associated tasks.
 
     Parameters
     ----------
@@ -231,6 +239,8 @@ async def delete_workflow_data(workflow_id: UUID) -> bool:
     """
     async with async_session() as session:
         if workflow := await session.get(Workflow, workflow_id):
+            for task in workflow.tasks:
+                await session.delete(task)
             await session.delete(workflow)
             await session.commit()
             return True
@@ -262,19 +272,21 @@ async def update_workflow_data(workflow_id: UUID, payload: BaseWorkflow) -> (Wor
 
 # ----- Task data access layer
 
-async def add_task_data(payload: BaseTask) -> Task:
+async def add_task_data(payload: BaseTask, creator) -> Task:
     """Add new task to database.
 
     Parameters
     ----------
     payload
         Task pydantic base model
+    creator
+        The username/id of the user who creats this task
 
     Returns
     -------
         Database orm model of created task
     """
-    new_task = Task(**payload.dict())
+    new_task = Task(**payload.dict(), creator=creator)
     async with async_session() as session:
         session.add(new_task)
         await session.commit()

@@ -5,10 +5,10 @@
 
 from pprint import pprint
 
+from scanhub_libraries.models import BasePatient
 from sqlalchemy.future import select
 
 from .db import Patient, async_session
-from .models import BasePatient
 
 
 async def add_patient(payload: BasePatient) -> Patient:
@@ -23,6 +23,7 @@ async def add_patient(payload: BasePatient) -> Patient:
     -------
         Patient database entry
     """
+    # TODO verify payload.issuer
     new_patient: Patient = Patient(**payload.dict())
     async with async_session() as session:
         session.add(new_patient)
@@ -95,6 +96,7 @@ async def update_patient(patient_id: int, payload: BasePatient) -> (Patient | No
     -------
         Updated database entry
     """
+    # TODO verify payload.issuer
     async with async_session() as session:
         if (patient := await session.get(Patient, patient_id)):
             patient.update(payload)

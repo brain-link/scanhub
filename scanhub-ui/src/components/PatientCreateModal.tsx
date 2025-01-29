@@ -12,60 +12,136 @@ import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Select from '@mui/joy/Select'
+import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import { getPatientApi } from '../api'
 import LoginContext from '../LoginContext'
-import { BasePatient, PatientOut } from '../generated-client/patient'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { BasePatient, Gender } from '../generated-client/patient'
+import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
+import { patientApi } from '../api'
+
+
+interface BaseFormEntry {
+  key: string,
+  label: string
+}
+
+interface TextFormEntry extends BaseFormEntry {
+  type: 'text'
+  required?: boolean
+  placeholder?: string
+};
+
+interface SelectFormEntry extends BaseFormEntry {
+  type: 'select'
+  options: string[]
+};
+
+interface DateFormEntry extends BaseFormEntry {
+  type: 'date'
+};
+
+type FormEntry = TextFormEntry | SelectFormEntry | DateFormEntry;
+
 
 // Patient form items, order is row wise
-const createPatientFormContent = [
-  { key: 'name', label: 'Patient Name', placeholder: 'Last name, first name' },
-  { key: 'issuer', label: 'Issuer', placeholder: 'Last name, first name' },
-  { key: 'sex', label: 'Patient Gender', placeholder: 'M/F/D' },
-  { key: 'status', label: 'Status', placeholder: 'Patient created' },
-  { key: 'birth_date', label: 'Patient Birth Date', placeholder: '01.01.1995' },
-  { key: 'comment', label: 'Comment', placeholder: '' },
+const createPatientFormContent: FormEntry[] = [
+  { type: 'text', key: 'first_name', label: 'First Name', required: true },
+  { type: 'text', key: 'last_name', label: 'Last Name', placeholder: '', required: true },
+  { type: 'date', key: 'birth_date', label: 'Patient Birth Date' },
+  { type: 'select', key: 'sex', label: 'Patient Gender', options: Object.values(Gender) },
+  { type: 'text', key: 'comment', label: 'Comment'},
 ]
 
-export default function PatientCreateModal(props: ModalComponentProps<PatientOut>) {
+export default function PatientCreateModal(props: ModalProps) {
   const [user, ] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
-  const patientApi = getPatientApi(user ? user.access_token : '')
 
-  const [patient, setPatient] = React.useState<BasePatient>({
-    sex: '',
-    name: '',
-    issuer: '',
-    status: '',
-    comment: '',
-    birth_date: '',
-  })
+  const initialPatient: BasePatient = {
+    first_name: '',     // eslint-disable-line camelcase
+    last_name: '',      // eslint-disable-line camelcase
+    birth_date: '',     // eslint-disable-line camelcase
+    sex: Gender.NotGiven,
+    issuer: user ? user.username : '',
+    status: 'NEW',
+    comment: undefined,
+  }
+
+  const [patient, setPatient] = React.useState<BasePatient>(initialPatient)
 
   // Post a new record and refetch records table
   const mutation = useMutation(async () => {
     await patientApi
-      .createPatientPost(patient)
+      .createPatientApiV1PatientPost(patient)
       .then((response) => {
-        props.onSubmit(response.data)
-        showNotification({message: 'Created user ' + response.data.name, type: 'success'})
-      })
-      .catch((err) => {
-        showNotification({message: err, type: 'warning'})
+        props.onSubmit()
+        showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})
       })
   })
 
+  function renderFormEntry(item: FormEntry, index: number) {
+    if (item.type == 'date') {
+      return (
+        <Grid key={index} md={6}>
+          <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker 
+              sx={{width: '100%'}} 
+              label="MM/DD/YYYY"
+              maxDate={dayjs()}
+              onAccept={(value) => setPatient({ ...patient, [item.key]: value?.format('YYYY-MM-DD') })}
+            />
+          </LocalizationProvider>
+        </Grid>
+      )    
+    }
+    else if (item.type == 'text') {
+      return (
+        <Grid key={index} md={6}>
+          <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
+          <Input
+            name={item.key}
+            onChange={(e) => setPatient({ ...patient, [e.target.name]: e.target.value })}
+            placeholder={item.placeholder}
+            required={item.required}
+          />
+        </Grid>
+      )
+    }
+    else if (item.type == 'select') {
+      return (
+        <Grid key={index} md={6}>
+          <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
+          <Select 
+            onChange={(event, value) => setPatient({ ...patient, [item.key]: value })}
+            required
+          >
+            {item.options.map((option) => 
+              <Option key={option} value={option}>{option}</Option>
+            )}
+          </Select>
+        </Grid>
+      )
+    }
+  }
+
   return (
     <Modal
-      keepMounted
       open={props.isOpen}
       color='neutral'
-      onClose={() => props.setOpen(false)}
+      onClose={() => {
+        props.setOpen(false)
+        setPatient(initialPatient)
+      }}
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <ModalDialog
@@ -83,7 +159,6 @@ export default function PatientCreateModal(props: ModalComponentProps<PatientOut
             top: '10px',
             right: '10px',
             borderRadius: '50%',
-            bgcolor: 'background.body',
           }}
         />
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
@@ -93,23 +168,18 @@ export default function PatientCreateModal(props: ModalComponentProps<PatientOut
         <form
           onSubmit={(event) => {
             event.preventDefault()
-            mutation.mutate()
-            props.setOpen(false)
+            if (patient.birth_date == '') {
+              showNotification({message: 'Please select a birth date', type: 'warning'})
+            } else {
+              mutation.mutate()
+              props.setOpen(false)
+              setPatient(initialPatient)
+            }
           }}
         >
           <Stack spacing={5}>
             <Grid container rowSpacing={1.5} columnSpacing={5}>
-              {createPatientFormContent.map((item, index) => (
-                <Grid key={index} md={6}>
-                  <FormLabel>{item.label}</FormLabel>
-                  <Input
-                    name={item.key}
-                    onChange={(e) => setPatient({ ...patient, [e.target.name]: e.target.value })}
-                    placeholder={item.placeholder}
-                    required
-                  />
-                </Grid>
-              ))}
+              {createPatientFormContent.map((item, index) => renderFormEntry(item, index))}
             </Grid>
             <Button size='sm' type='submit' sx={{ maxWidth: 100 }}>
               Submit

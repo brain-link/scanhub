@@ -18,29 +18,25 @@ import * as React from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 
-import LoginContext from '../LoginContext'
-import { examApi, getPatientApi } from '../api'
+import { examApi, patientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
-import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
-import ExamItem, { ExamInstanceMenu } from '../components/ExamInstanceItem'
 import PatientInfo from '../components/PatientInfo'
-
-import TaskItem from '../components/TaskInstanceItem'
-import WorkflowItem, { WorkflowInstanceMenu } from '../components/WorkflowInstanceItem'
-import { ExamOut } from '../generated-client/exam'
 import { PatientOut } from '../generated-client/patient'
+import { ExamOut } from '../generated-client/exam'
+import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
+import ExamItem, { ExamMenu } from '../components/ExamItem'
+import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
+import TaskItem from '../components/TaskItem'
+import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
 
 
 function PatientIndex() {
   const params = useParams()
 
-  // Modal states for exam
   const [examModalOpen, setExamModalOpen] = React.useState(false)
-
-  const [user, ] = React.useContext(LoginContext)
-  const patientApi = getPatientApi(user ? user.access_token : '')
+  const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
 
   // useQuery for caching the fetched data
   const {
@@ -51,7 +47,7 @@ function PatientIndex() {
   } = useQuery<PatientOut, Error>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientPatientIdGet(Number(params.patientId)).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(Number(params.patientId)).then((result) => {
         return result.data
       })
     },
@@ -64,12 +60,10 @@ function PatientIndex() {
     // isLoading: examsLoading,
     // isError: examsError,
   } = useQuery<ExamOut[], Error>({
-    queryKey: ['exam', params.patientId],
+    queryKey: ['allExams', params.patientId],
     queryFn: async () => {
       return await examApi
-        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId), {
-          headers: { Authorization: 'Bearer ' + user?.access_token },
-        })
+        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId))
         .then((result) => {
           return result.data
         })
@@ -136,17 +130,37 @@ function PatientIndex() {
           {exams?.map((exam) => (
             <AccordionWithMenu 
               key={`exam-${exam.id}`}
-              accordionSummary={<ExamItem data={exam} refetchParentData={refetchExams} />}
-              accordionMenu={<ExamInstanceMenu data={exam} refetchParentData={refetchExams} />}
+              accordionSummary={
+                <ExamItem 
+                  item={exam} 
+                  onClick={() => {setItemSelection({type: 'exam', itemId: exam.id})}} 
+                  selection={itemSelection}
+                />
+              }
+              accordionMenu={
+                <ExamMenu item={exam} refetchParentData={refetchExams} />
+              }
             >
               {exam.workflows?.map((workflow) => (
                 <AccordionWithMenu 
                   key={`workflow-${workflow.id}`}
-                  accordionSummary={<WorkflowItem data={workflow} refetchParentData={refetchExams} />}
-                  accordionMenu={<WorkflowInstanceMenu data={workflow} refetchParentData={refetchExams} />}
+                  accordionSummary={
+                    <WorkflowItem 
+                      item={workflow} 
+                      onClick={() => {setItemSelection({type: 'workflow', itemId: workflow.id})}}
+                      selection={itemSelection}
+                    />
+                  }
+                  accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetchExams} />}
                 >
                   {workflow.tasks?.map((task) => (
-                    <TaskItem key={`task-${task.id}`} data={task} refetchParentData={refetchExams} />
+                    <TaskItem 
+                      key={`task-${task.id}`} 
+                      item={task} 
+                      refetchParentData={refetchExams}
+                      onClick={() => {setItemSelection({type: 'task', itemId: task.id})}}
+                      selection={itemSelection}
+                    />
                   ))}
                 </AccordionWithMenu>
               ))}
@@ -155,7 +169,7 @@ function PatientIndex() {
         </Box>
 
         <Divider />
-        <AcquisitionControl />
+        <AcquisitionControl itemSelection={itemSelection}/>
       </Sheet>
 
       <ExamFromTemplateModal
@@ -163,6 +177,7 @@ function PatientIndex() {
         setOpen={setExamModalOpen}
         parentId={String(params.patientId)}
         onSubmit={refetchExams}
+        createTemplate={false}
       />
 
       <DicomViewer />

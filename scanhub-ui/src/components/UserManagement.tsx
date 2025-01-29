@@ -17,7 +17,6 @@ import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 import * as React from 'react'
 import { useMutation, useQuery } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import NotificationContext from '../NotificationContext'
 import { useContext } from 'react'
 import { userApi } from '../api'
@@ -27,7 +26,6 @@ import { Alerts } from '../interfaces/components.interface'
 import UserCreateModal from './UserCreateModal'
 
 export default function UserManagement() {
-  const [currentuser] = React.useContext(LoginContext)
   const [, showNotification] = useContext(NotificationContext)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
@@ -41,7 +39,7 @@ export default function UserManagement() {
     queryKey: ['users'],
     queryFn: async () => {
       return await userApi
-        .getUserListApiV1UserloginGetallusersGet({ headers: { Authorization: 'Bearer ' + currentuser?.access_token } })
+        .getUserListApiV1UserloginGetallusersGet()
         .then((result) => {
           return result.data
         })
@@ -50,9 +48,7 @@ export default function UserManagement() {
 
   const delteMutation = useMutation<unknown, unknown, string>(async (username) => {
     await userApi
-      .userDeleteApiV1UserloginDeleteuserDelete(username, {
-        headers: { Authorization: 'Bearer ' + currentuser?.access_token },
-      })
+      .userDeleteApiV1UserloginDeleteuserDelete(username)
       .then(() => {
         showNotification({message: 'Deleted user ' + username, type: 'success'})
         refetch()
@@ -70,9 +66,7 @@ export default function UserManagement() {
 
   const updateMutation = useMutation<unknown, unknown, User>(async (user) => {
     await userApi
-      .updateUserApiV1UserloginUpdateuserPut(user, {
-        headers: { Authorization: 'Bearer ' + currentuser?.access_token },
-      })
+      .updateUserApiV1UserloginUpdateuserPut(user)
       .then(() => {
         console.log('Modified user:', user.username)
         setIsUpdating(false)
@@ -130,6 +124,14 @@ export default function UserManagement() {
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
+      field: 'last_login_unixtime',
+      headerName: 'Last Login Time',
+      width: 200,
+      editable: false,
+      filterable: false,
+      valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Delete',
@@ -159,7 +161,6 @@ export default function UserManagement() {
         onSubmit={() => {
           refetch()
         }}
-        onClose={() => {}}
       />
 
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 

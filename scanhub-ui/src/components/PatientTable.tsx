@@ -9,7 +9,7 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid'
 import { PatientTableInterface } from '../interfaces/components.interface'
-import { PatientOut } from '../generated-client/patient'
+import { PatientOut, Gender } from '../generated-client/patient'
 
 
 export default function PatientTable(props: PatientTableInterface) {
@@ -17,18 +17,21 @@ export default function PatientTable(props: PatientTableInterface) {
   const navigate = useNavigate()
 
   const columns: GridColDef<PatientOut>[] = [
-    { field: 'id', headerName: 'ID', width: 200, editable: false },
-    { field: 'name', headerName: 'Name', width: 200, editable: false },
+    { field: 'id', headerName: 'ID', width: 100, editable: false },
+    { field: 'first_name', headerName: 'First Name', width: 200, editable: false },
+    { field: 'last_name', headerName: 'Last Name', width: 200, editable: false },
+    { field: 'birth_date', headerName: 'Birthday', width: 150, editable: false },
     {
       field: 'sex',
       type: 'singleSelect',
       headerName: 'Sex',
-      width: 200,
+      width: 100,
       editable: false,
-      valueOptions: ['m', 'w', 'o'],
+      valueOptions: Object.values(Gender),
     },
-    { field: 'birth_date', headerName: 'Birthday', width: 200, editable: false },
-    { field: 'status', headerName: 'Status', width: 200, editable: false },
+    { field: 'datetime_created', headerName: 'Added (date/time)', width: 250, editable: false },
+    { field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 250, editable: false },
+    { field: 'comment', headerName: 'Comment', width: 500, editable: false },
   ]
 
   return (

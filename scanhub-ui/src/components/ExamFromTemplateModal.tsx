@@ -3,37 +3,29 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * ExamFromTemplateModal.tsx is responsible for rendering a
- * exam template selection interface to generate a new exam instance.
+ * exam template selection interface to generate a new exam.
  */
-import List from '@mui/joy/List'
-import ListItemButton from '@mui/joy/ListItemButton'
-// import IconButton from '@mui/joy/IconButton'
-// import AddSharpIcon from '@mui/icons-material/AddSharp'
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import { useQuery } from 'react-query'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import DialogTitle from '@mui/material/DialogTitle'
-import * as React from 'react'
-import { useContext } from 'react'
-import { useMutation } from 'react-query'
-import { useQuery } from 'react-query'
+import Stack from '@mui/joy/Stack'
 
-import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import { CreateInstanceModalInterface } from '../interfaces/components.interface'
-import ExamTemplateItem from './ExamTemplateItem'
+import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
+import ExamItem from './ExamItem'
 
-export default function ExamFromTemplateModal(props: CreateInstanceModalInterface) {
-  const [user] = useContext(LoginContext)
-  // const [modalOpen, setModalOpen] = React.useState(false)
+export default function ExamFromTemplateModal(props: ModalPropsCreate) {
 
-  // const {data: exams, isLoading, isError} = useQuery<ExamOut[]>({
   const { data: exams } = useQuery<ExamOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
       return await examApi
-        .getAllExamTemplatesApiV1ExamTemplatesAllGet({ headers: { Authorization: 'Bearer ' + user?.access_token } })
+        .getAllExamTemplatesApiV1ExamTemplatesAllGet()
         .then((result) => {
           return result.data
         })
@@ -42,26 +34,14 @@ export default function ExamFromTemplateModal(props: CreateInstanceModalInterfac
 
   const mutation = useMutation(async (id: string) => {
     await examApi
-      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, {
-        headers: { Authorization: 'Bearer ' + user?.access_token },
-      })
+      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, props.createTemplate)
       .then(() => {
         props.onSubmit()
-      })
-      .catch((err) => {
-        console.log(err)
       })
   })
 
   return (
     <>
-      {/* <IconButton 
-        variant='soft'
-        onClick={() => {setModalOpen(true)}}
-      >
-        <AddSharpIcon />
-      </IconButton> */}
-
       <Modal
         open={props.isOpen}
         onClose={() => {
@@ -70,8 +50,8 @@ export default function ExamFromTemplateModal(props: CreateInstanceModalInterfac
       >
         <ModalDialog sx={{ width: '50vw', p: 5 }}>
           <ModalClose />
-          <DialogTitle>Exam Templates</DialogTitle>
-          <List
+          <DialogTitle>Add Exam from Template</DialogTitle>
+          <Stack
             sx={{
               overflow: 'scroll',
               mx: 'calc(-1 * var(--ModalDialog-padding))',
@@ -80,17 +60,17 @@ export default function ExamFromTemplateModal(props: CreateInstanceModalInterfac
           >
             {exams &&
               exams.map((exam, idx) => (
-                <ListItemButton
+                <ExamItem
                   key={idx}
+                  item={exam}
                   onClick={() => {
                     mutation.mutate(exam.id)
                     props.setOpen(false)
                   }}
-                >
-                  <ExamTemplateItem data={exam} onClicked={() => {}} onDeleted={() => {}} />
-                </ListItemButton>
+                  selection={ITEM_UNSELECTED} 
+                />
               ))}
-          </List>
+          </Stack>
         </ModalDialog>
       </Modal>
     </>

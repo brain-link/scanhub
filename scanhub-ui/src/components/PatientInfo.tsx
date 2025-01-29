@@ -45,38 +45,39 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
           {patient.id}
         </Typography>
 
+        <Typography level='body-sm'>First Name</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {patient.first_name}
+        </Typography>
+
+        <Typography level='body-sm'>Last Name</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {patient.last_name}
+        </Typography>
+
+        <Typography level='body-sm'>Birthday</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {new Date(patient.birth_date).toLocaleDateString()}
+        </Typography>
+
         <Typography level='body-sm'>Sex</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.sex}
         </Typography>
 
-        <Typography level='body-sm'>Birthday</Typography>
+        <Typography level='body-sm'>Added on</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {patient.birth_date}
+          {new Date(patient.datetime_created).toLocaleDateString()}
         </Typography>
 
-        <Typography level='body-sm'>Admission</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {new Date(patient.datetime_created).toDateString()}
-        </Typography>
-
-        <Typography level='body-sm'>Updated</Typography>
+        <Typography level='body-sm'>Updated on</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-'}
-        </Typography>
-
-        <Typography level='body-sm'>Status</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {patient.status}
-        </Typography>
-
-        <Typography level='body-sm'>Concern</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {patient.issuer}
         </Typography>
       </Box>
     )
   }
+  return null;
 }
 
 export default PatientInfo

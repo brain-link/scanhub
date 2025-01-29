@@ -3,39 +3,6 @@
 // Component interfaces: Pass data and functions between components
 import {  ReactNode } from 'react'
 import { PatientOut } from '../generated-client/patient'
-import { Job } from './data.interface'
-import { Device } from './data.interface'
-// import { Workflow } from './data.interface';
-import { MRISequence } from './mri-data.interface'
-
-export interface ModalProps<T> {
-  handleModalSubmit: (data: T) => void
-  data: T | null
-  dialogOpen: boolean
-  setDialogOpen: (open: boolean) => void
-}
-
-export interface ComponentProps<T> {
-  data: T
-  refetchParentData: () => void
-  isSelected: boolean
-}
-
-export interface JobComponentProps {
-  data: Job
-  devices: Device[]
-  sequences: MRISequence[]
-  // workflows: Workflow[];
-  refetchParentData: () => void
-}
-
-// Reuse JobComponentProps but omit data which can be null in case of the modal props
-export interface JobModalProps extends Omit<JobComponentProps, 'data'> {
-  data: Job | null
-  handleModalSubmit: (data: Job) => void
-  dialogOpen: boolean
-  setDialogOpen: (open: boolean) => void
-}
 
 export interface SequenceViewerProps {
   sequence_id: string
@@ -54,43 +21,47 @@ export interface AlertProps {
   type: Alerts
 }
 
-export interface ExamTreeProps {
-  setDataPath: (dataPath: string) => void
-}
-
 export interface SequenceUploadModal {
   fetchSequences: () => void
   dialogOpen: boolean
   setDialogOpen: (open: boolean) => void
 }
 
-export interface ModalComponentProps<T> {
-  onSubmit: (data: T) => void
-  onClose: () => void
-  setOpen: (open: boolean) => void
-  isOpen: boolean
-}
-
 export interface PatientTableInterface {
   patients: PatientOut[]
 }
 
-export interface TemplateInterface<T> {
-  data: T
-  onClicked: () => void
-  onDeleted: () => void
-}
-
-export interface InstanceInterface<T> {
-  data: T
+export interface RefetchableItemInterface<T> {
+  item: T
   refetchParentData: () => void
 }
 
-export interface CreateInstanceModalInterface {
-  parentId: number | string
+export interface ItemSelection {
+  type: 'exam' | 'workflow' | 'task' | undefined, 
+  itemId: string | undefined
+}
+
+export const ITEM_UNSELECTED = { type: undefined, itemId: undefined }
+
+export interface SelectableItemInterface<T> {
+  item: T
+  selection: ItemSelection
+  onClick: () => void
+}
+
+export interface ModalProps {
   onSubmit: () => void
   isOpen: boolean
   setOpen: (open: boolean) => void
+}
+
+export interface ModalPropsCreate extends ModalProps {
+  createTemplate: boolean
+  parentId: string
+}
+
+export interface ModalPropsModify<T> extends ModalProps {
+  item: T
 }
 
 export interface AccordionWithMenuInterface {

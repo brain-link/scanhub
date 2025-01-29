@@ -18,7 +18,6 @@ import CornerstoneViewport from 'react-cornerstone-viewport'
 
 import DicomViewerToolbar, { tools } from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
-import { navigation } from '../utils/SizeVars'
 
 
 initCornerstone()  // initialize cornerstone before first render cycle
@@ -45,7 +44,7 @@ function DicomViewer() {
         flexDirection: 'column',
         flexGrow: 1,
         width: '100%',
-        height: `calc(100vh - ${navigation.height})`,
+        height: 'calc(100vh - var(--Navigation-height))',
         p: 1,
       }}
     >

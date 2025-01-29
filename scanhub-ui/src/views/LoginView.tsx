@@ -29,6 +29,21 @@ function Login(props: { onLogin: (user: User) => void }) {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
 
+  React.useEffect(() => {
+    console.log('Try autologin with cookie.')
+    setLoginRequestInProgress(true)
+    loginApi
+    .loginfromcookieApiV1UserloginLoginfromcookiePost()
+    .then((result) => {
+      setLoginRequestInProgress(false)
+      props.onLogin(result.data)
+    })
+    .catch(() => {
+      console.log('Autologin not successfull.')
+      setLoginRequestInProgress(false)
+    })
+  }, [])
+
   return (
     <Stack direction='column' justifyContent='center' alignItems='center' spacing={2} sx={{ height: '70vh' }}>
       <Typography level='title-lg' style={{ textAlign: 'center' }}>

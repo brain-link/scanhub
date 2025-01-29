@@ -6,7 +6,7 @@
  */
 
 const baseUrls = {
-  patientService: 'http://localhost:8100',
+  patientService: 'http://localhost:8080',
   examService: 'http://localhost:8080',
   userloginService: 'http://localhost:8080',
 }

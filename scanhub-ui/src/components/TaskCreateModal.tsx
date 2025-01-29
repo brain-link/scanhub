@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * TaskTemplateCreateModal.tsx is responsible for rendering a modal with an interface
- * to create a new task template.
+ * TaskCreateModal.tsx is responsible for rendering a modal with an interface to create a new task.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -23,22 +22,26 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { taskApi } from '../api'
-import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { BaseTask, TaskType } from '../generated-client/exam'
+import { ModalPropsCreate } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
-export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskOut>) {
+
+export default function TaskCreateModal(props: ModalPropsCreate) {
+  const [, showNotification] = React.useContext(NotificationContext)
+
   const [task, setTask] = React.useState<BaseTask>({
-    workflow_id: undefined,
+    workflow_id: props.parentId,              // eslint-disable-line camelcase
+    name: '',
     description: '',
     type: TaskType.ProcessingTask,
-    status: {},
+    status: {'PENDING': 'defaultstatus'},
     args: {},
     artifacts: {},
     destinations: {},
-    is_template: true,
-    is_frozen: false,
+    is_template: props.createTemplate,        // eslint-disable-line camelcase
+    is_frozen: false,                         // eslint-disable-line camelcase
   })
 
   // New argument
@@ -53,17 +56,12 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
   const [artifactKey, setArtifactKey] = React.useState<string>('')
   const [artifactVal, setArtifactVal] = React.useState<string>('')
 
-  const [user] = React.useContext(LoginContext)
-
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await taskApi
-      .createTaskTemplateApiV1ExamTaskTemplatePost(task, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then((response) => {
-        props.onSubmit(response.data)
-      })
-      .catch((err) => {
-        console.log(err)
+      .createTaskApiV1ExamTaskNewPost(task)
+      .then(() => {
+        props.onSubmit()
       })
   })
 
@@ -89,20 +87,19 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Workflow Template
+          Create New Task
         </Typography>
 
         <Stack direction='row' spacing={4}>
           <Stack spacing={1}>
-            {/* TODO: Drop-down menu to select exam template */}
-            <FormLabel>Workflow ID</FormLabel>
+            <FormLabel>Name</FormLabel>
             <Input
-              name={'workflow_id'}
+              name={'name'}
               onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-              defaultValue={task.workflow_id}
-              size='sm'
+              value={task.name}
             />
-
+          </Stack>
+          <Stack spacing={1}>
             <FormLabel>Type</FormLabel>
             <Select
               defaultValue={task.type}
@@ -119,7 +116,8 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
                 </Option>
               ))}
             </Select>
-
+          </Stack>
+          <Stack spacing={1}>
             <FormLabel>Comment</FormLabel>
             <Textarea
               minRows={2}
@@ -128,10 +126,12 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
               defaultValue={task.description}
             />
           </Stack>
+        </Stack>
+
+        <Stack direction='row' spacing={4}>
 
           <Stack spacing={1}>
             <FormLabel>Arguments</FormLabel>
-
             <Stack direction='row' spacing={1}>
               <FormControl>
                 <FormLabel>Key</FormLabel>
@@ -276,8 +276,13 @@ export default function TaskTemplateCreateModal(props: ModalComponentProps<TaskO
           sx={{ maxWidth: 120 }}
           onClick={(event) => {
             event.preventDefault()
-            mutation.mutate()
-            props.setOpen(false)
+            if (task.name == '') {
+              showNotification({message: 'Task name must not be empty.', type: 'warning'})
+            }
+            else {
+              mutation.mutate()
+              props.setOpen(false)
+            }
           }}
         >
           Save

@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * WorkflowTemplateCreateModal.tsx is responsible for rendering a modal with an interface
- * to create a new workflow template.
+ * WorkflowModifyModal.tsx is responsible for rendering a modal with an interface
+ * to modify an existing workflow.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -14,35 +14,32 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useContext } from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { workflowsApi } from '../api'
 import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { ModalPropsModify } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
-export default function WorkflowTemplateCreateModal(props: ModalComponentProps<WorkflowOut>) {
+export default function WorkflowModifyModal(props: ModalPropsModify<WorkflowOut>) {
+  const [, showNotification] = React.useContext(NotificationContext)
+  
   const [workflow, setWorkflow] = React.useState<BaseWorkflow>({
-    comment: '',
-    exam_id: undefined,
-    is_finished: false,
-    is_template: true,
-    is_frozen: false,
+    name: props.item.name,
+    comment: props.item.comment,
+    exam_id: props.item.exam_id,              // eslint-disable-line camelcase
+    status: 'UPDATED',
+    is_finished: props.item.is_finished,      // eslint-disable-line camelcase
+    is_template: props.item.is_template,      // eslint-disable-line camelcase
+    is_frozen: props.item.is_frozen,          // eslint-disable-line camelcase
   })
-  const [user] = useContext(LoginContext)
 
   // Post a new exam template and refetch exam table
   const mutation = useMutation(async () => {
     await workflowsApi
-      .createWorkflowTemplateApiV1ExamWorkflowTemplatesPost(workflow, {
-        headers: { Authorization: 'Bearer ' + user?.access_token },
-      })
-      .then((response) => {
-        props.onSubmit(response.data)
-      })
-      .catch((err) => {
-        console.log(err)
+      .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
+      .then(() => {
+        props.onSubmit()
       })
   })
 
@@ -68,10 +65,17 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Workflow Template
+          Update Workflow
         </Typography>
 
         <Stack spacing={1}>
+          <FormLabel>Name</FormLabel>
+          <Input
+            name={'name'}
+            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
+            defaultValue={workflow.name}
+          />
+
           <FormLabel>Comment</FormLabel>
           <Input
             name={'comment'}
@@ -79,21 +83,18 @@ export default function WorkflowTemplateCreateModal(props: ModalComponentProps<W
             defaultValue={workflow.comment}
           />
 
-          {/* TODO: Drop-down menu to select exam template */}
-          <FormLabel>Exam ID</FormLabel>
-          <Input
-            name={'exam_id'}
-            onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-            defaultValue={workflow.exam_id}
-          />
-
           <Button
             size='sm'
             sx={{ maxWidth: 120 }}
             onClick={(event) => {
               event.preventDefault()
-              mutation.mutate()
-              props.setOpen(false)
+              if (workflow.name == '') {
+                showNotification({message: 'Workflow name must not be empty.', type: 'warning'})
+              }
+              else {
+                mutation.mutate()
+                props.setOpen(false)
+              }
             }}
           >
             Save

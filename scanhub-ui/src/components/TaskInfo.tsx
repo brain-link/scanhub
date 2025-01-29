@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * TaskInstanceInfo.tsx is responsible for rendering additional information
- * of a task instance item.
+ * TaskInfo.tsx is responsible for rendering additional information of a task item.
  */
 import * as React from 'react'
 
@@ -13,10 +12,9 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
 import { TaskOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
 
 
-function TaskInstanceInfo({ data: task }: InstanceInterface<TaskOut>) {
+function TaskInfo({ data: task }: { data: TaskOut }) {
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box
@@ -76,6 +74,11 @@ function TaskInstanceInfo({ data: task }: InstanceInterface<TaskOut>) {
             ))}
         </Stack>
 
+        <Typography fontSize='sm'>Creator</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.creator}
+        </Typography>
+
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {new Date(task.datetime_created).toDateString()}
@@ -95,4 +98,4 @@ function TaskInstanceInfo({ data: task }: InstanceInterface<TaskOut>) {
   )
 }
 
-export default TaskInstanceInfo
+export default TaskInfo

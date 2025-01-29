@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamTemplateCreateModal.tsx is responsible for rendering a modal with an interface
- * to create a new exam template.
+ * ExamModifyModal.tsx is responsible for rendering a modal with an interface
+ * to modify an existing exam.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -17,45 +17,43 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { examApi } from '../api'
 import { BaseExam, ExamOut } from '../generated-client/exam'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { ModalPropsModify } from '../interfaces/components.interface'
+import NotificationContext from '../NotificationContext'
 
-const formContent = [
-  { key: 'name', label: 'Exam Name', placeholder: 'Knee complaints' },
-  { key: 'site', label: 'Site', placeholder: 'Berlin' },
-  { key: 'address', label: 'Site Address', placeholder: 'Street name, number' },
-  { key: 'creator', label: 'Name of Exam Creater', placeholder: 'Last name, first name' },
-  { key: 'status', label: 'Status', placeholder: 'Exam created' },
+
+const formContent: {key: keyof BaseExam, label: string}[] = [
+  { key: 'name', label: 'Exam Name' },
+  { key: 'country', label: 'Country' },
+  { key: 'site', label: 'Site' },
+  { key: 'address', label: 'Site Address' },
 ]
 
-export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamOut>) {
+export default function ExamCreateModal(props: ModalPropsModify<ExamOut>) {
+  const [, showNotification] = React.useContext(NotificationContext)
+  
   const [exam, setExam] = React.useState<BaseExam>({
-    patient_id: undefined,
-    name: '',
-    country: 'germany',
-    site: '',
-    address: '',
-    creator: '',
-    status: '',
-    is_template: true,
-    is_frozen: false,
+    patient_id: props.item.patient_id,          // eslint-disable-line camelcase
+    name: props.item.name,
+    country: props.item.country,
+    site: props.item.site,
+    address: props.item.address,
+    status: 'UPDATED',
+    is_template: props.item.is_template,        // eslint-disable-line camelcase
+    is_frozen: props.item.is_frozen,            // eslint-disable-line camelcase
   })
-  const [user] = React.useContext(LoginContext)
 
-  // Post a new exam template and refetch exam table
+
   const mutation = useMutation(async () => {
     await examApi
-      .createExamTemplateApiV1ExamTemplatesPost(exam, { headers: { Authorization: 'Bearer ' + user?.access_token } })
-      .then((response) => {
-        props.onSubmit(response.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    .updateExamApiV1ExamExamIdPut(props.item.id, exam)
+    .then(() => {
+      props.onSubmit()
+    })
   })
 
+  
   return (
     <Modal
       open={props.isOpen}
@@ -78,7 +76,7 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
         />
 
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Exam Template
+          Update Exam
         </Typography>
 
         <Stack spacing={1}>
@@ -89,7 +87,7 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
                 <Input
                   name={item.key}
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
-                  placeholder={item.placeholder}
+                  value={exam[item.key]?.toString()}
                   required
                 />
               </Grid>
@@ -101,8 +99,12 @@ export default function ExamTemplateCreateModal(props: ModalComponentProps<ExamO
             sx={{ maxWidth: 120 }}
             onClick={(event) => {
               event.preventDefault()
-              mutation.mutate()
-              props.setOpen(false)
+              if (exam.name == '') {
+                showNotification({message: 'Name must not be empty.', type: 'warning'})
+              } else {
+                mutation.mutate()
+                props.setOpen(false)
+              }
             }}
           >
             Save

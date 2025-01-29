@@ -4,39 +4,67 @@
 """Exam manager main file."""
 
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException
+from fastapi.exception_handlers import (
+    http_exception_handler,
+    request_validation_exception_handler,
+)
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from scanhub_libraries.security import get_current_user
 from sqlalchemy import inspect
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.db import engine, init_db
-from app.exam import router
-
-app = FastAPI(
-    openapi_url="/api/v1/exam/openapi.json",
-    docs_url="/api/v1/exam/docs",
-    dependencies=[Depends(get_current_user)]
-)
+from app.exam import LOG_CALL_DELIMITER, router
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
 #   Better specify explicitly the allowed origins
 #   See: https://fastapi.tiangolo.com/tutorial/cors/
-origins = [
+ORIGINS = [
     "http://localhost",
     "http://localhost:3000",  # frontned
     "http://localhost:8100",  # patient-manager
     "http://localhost:8080",  # nginx
 ]
 
+
+app = FastAPI(
+    openapi_url="/api/v1/exam/openapi.json",
+    docs_url="/api/v1/exam/docs"
+)
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request, exc):
+    """
+    Add logging for http exceptions.
+
+    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+    """
+    print(f"{repr(exc)}")
+    return await http_exception_handler(request, exc)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    """
+    Add logging for fastAPI's automatic input validation exceptions.
+
+    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+    """
+    print(f"{exc}")
+    return await request_validation_exception_handler(request, exc)
 
 
 @app.on_event("startup")
@@ -66,7 +94,7 @@ async def shutdown() -> None:
     return None
 
 
-@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get("/api/v1/exam/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -79,6 +107,7 @@ async def readiness() -> dict:
     HTTPException
         500: Any of the exam-tree tables does not exist
     """
+    print(LOG_CALL_DELIMITER)
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
     required_tables = ["exam", "workflow", "task"]

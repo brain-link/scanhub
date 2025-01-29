@@ -17,10 +17,9 @@ import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import LoginContext from '../LoginContext'
 import { userApi } from '../api'
-import { User, UserRole } from '../generated-client/userlogin'
-import { ModalComponentProps } from '../interfaces/components.interface'
+import { UserRole } from '../generated-client/userlogin'
+import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 // User form items, order is row wise
@@ -33,19 +32,18 @@ const createUserFormContent = [
   { key: 'access_token', label: 'Password', placeholder: 'At least 12 characters.' },
 ]
 
-export default function UserCreateModal(props: ModalComponentProps<User>) {
-  const [currentuser] = React.useContext(LoginContext)
+export default function UserCreateModal(props: ModalProps) {
   const [, showNotification] = React.useContext(NotificationContext)
   // eslint-disable-next-line camelcase
   const [user, setUser] = React.useState({
     username: '',
-    first_name: '',
-    last_name: '',
+    first_name: '',   // eslint-disable-line camelcase
+    last_name: '',    // eslint-disable-line camelcase
     email: '',
     role: UserRole.Medical, // eslint-disable-next-line camelcase
     password: '',
-    token_type: 'password',
-    access_token: '',
+    token_type: 'password',   // eslint-disable-line camelcase
+    access_token: '',         // eslint-disable-line camelcase
   })
 
   // Post a new record and refetch records table
@@ -53,11 +51,9 @@ export default function UserCreateModal(props: ModalComponentProps<User>) {
     mutationKey: ['users'],
     mutationFn: async () => {
       await userApi
-        .createUserApiV1UserloginCreateuserPost(user, {
-          headers: { Authorization: 'Bearer ' + currentuser?.access_token },
-        })
+        .createUserApiV1UserloginCreateuserPost(user)
         .then(() => {
-          props.onSubmit(user)
+          props.onSubmit()
           showNotification({message: 'Created user ' + user.username, type: 'success'})
         })
         .catch((err) => {

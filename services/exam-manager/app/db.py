@@ -87,7 +87,10 @@ class Workflow(Base): # TBD: rename to "Workflow"
     exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
 
     # Fields
+    name: Mapped[str] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
+    creator: Mapped[str] = mapped_column(nullable=False)
+    status: Mapped[str] = mapped_column(nullable=False)
 
     # Flags
     is_finished: Mapped[bool] = mapped_column(nullable=False, default=False)
@@ -114,7 +117,8 @@ class Task(Base):
     workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
 
     # Fields
-    description: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=True)
     type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
 
     # Arguments and parameters
@@ -132,6 +136,7 @@ class Task(Base):
     destinations: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
 
     status: Mapped[dict[TaskStatus, str]] = mapped_column(type_=JSON, nullable=False)
+    creator: Mapped[str] = mapped_column(nullable=False)
 
     # Flags
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)

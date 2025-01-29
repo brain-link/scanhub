@@ -2,7 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamCreateModal.tsx is responsible for rendering the modal for creating a new exam.
+ * ExamCreateModal.tsx is responsible for rendering a modal with an interface
+ * to create a new exam.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -12,48 +13,51 @@ import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
-// Import mui joy components
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
+import { useMutation } from 'react-query'
 
+import { examApi } from '../api'
+import { BaseExam } from '../generated-client/exam'
 import { ModalProps } from '../interfaces/components.interface'
-// Import api service and interfaces
-import { Exam } from '../interfaces/data.interface'
+import NotificationContext from '../NotificationContext'
 
-// Exam form template, order is row wise, used to map the exam fields
-const createExamFormContent = [
+
+const formContent = [
   { key: 'name', label: 'Exam Name', placeholder: 'Knee complaints' },
+  { key: 'country', label: 'Country', placeholder: '' },
   { key: 'site', label: 'Site', placeholder: 'Berlin' },
   { key: 'address', label: 'Site Address', placeholder: 'Street name, number' },
-  { key: 'creator', label: 'Name of Exam Creater', placeholder: 'Last name, first name' },
-  { key: 'status', label: 'Status', placeholder: 'Exam created' },
 ]
 
-function ExamModal(props: ModalProps<Exam>) {
-  const params = useParams()
-
-  const [exam, setExam] = props.data
-    ? React.useState<Exam>(props.data)
-    : React.useState<Exam>({
-        id: '',
-        patient_id: Number(params.patientId),
-        name: '',
-        country: 'D',
-        site: '',
-        address: '',
-        creator: '',
-        status: '',
-        datetime_created: new Date(),
-      })
-
-  const title = props.data ? 'Update Exam' : 'Create Exam'
-
+export default function ExamCreateModal(props: ModalProps) {
+  const [, showNotification] = React.useContext(NotificationContext)
+  
+  const [exam, setExam] = React.useState<BaseExam>({
+    patient_id: undefined,    // eslint-disable-line camelcase
+    name: '',
+    country: '',
+    site: '',
+    address: '',
+    status: 'NEW',
+    is_template: true,        // eslint-disable-line camelcase
+    is_frozen: false,         // eslint-disable-line camelcase
+  })
+  
+  // Post a new exam template and refetch exam table
+  const mutation = useMutation(async () => {
+    await examApi
+    .createExamApiV1ExamNewPost(exam)
+    .then(() => {
+      props.onSubmit()
+    })
+  })
+  
   return (
     <Modal
-      open={props.dialogOpen}
+      open={props.isOpen}
       color='neutral'
-      onClose={() => props.setDialogOpen(false)}
+      onClose={() => props.setOpen(false)}
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <ModalDialog
@@ -69,13 +73,14 @@ function ExamModal(props: ModalProps<Exam>) {
             bgcolor: 'background.body',
           }}
         />
+
         <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          {title}
+          Create New Exam
         </Typography>
 
-        <Stack spacing={3}>
+        <Stack spacing={1}>
           <Grid container rowSpacing={1.5} columnSpacing={5}>
-            {createExamFormContent.map((item, index) => (
+            {formContent.map((item, index) => (
               <Grid key={index} md={6}>
                 <FormLabel>{item.label}</FormLabel>
                 <Input
@@ -93,8 +98,12 @@ function ExamModal(props: ModalProps<Exam>) {
             sx={{ maxWidth: 120 }}
             onClick={(event) => {
               event.preventDefault()
-              props.handleModalSubmit(exam)
-              props.setDialogOpen(false)
+              if (exam.name == '') {
+                showNotification({message: 'Name must not be empty.', type: 'warning'})
+              } else {
+                mutation.mutate()
+                props.setOpen(false)
+              }
             }}
           >
             Save
@@ -104,5 +113,3 @@ function ExamModal(props: ModalProps<Exam>) {
     </Modal>
   )
 }
-
-export default ExamModal

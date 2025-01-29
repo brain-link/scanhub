@@ -2,8 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamInstanceInfo.tsx is responsible for rendering additional information#
- * of an exam instance item.
+ * WorkflowInfo.tsx is responsible for rendering additional information of a workflow item.
  */
 import Box from '@mui/joy/Box'
 import Chip from '@mui/joy/Chip'
@@ -11,11 +10,10 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
-import { ExamOut } from '../generated-client/exam'
-import { InstanceInterface } from '../interfaces/components.interface'
+import { WorkflowOut } from '../generated-client/exam'
 
 
-function ExamInstanceInfo({ data: exam }: InstanceInterface<ExamOut>) {
+function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
 
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
@@ -31,48 +29,41 @@ function ExamInstanceInfo({ data: exam }: InstanceInterface<ExamOut>) {
           },
         }}
       >
-        <Typography fontSize='sm'>Name</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {exam.name}
-        </Typography>
-
         <Typography fontSize='sm'>ID</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.id}
+          {workflow.id}
         </Typography>
 
-        <Typography fontSize='sm'>Note</Typography>
+        <Typography fontSize='sm'>Comment</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.status}
+          {workflow.comment}
         </Typography>
 
-        <Typography fontSize='sm'>Issuer</Typography>
+        <Typography fontSize='sm'>Creator</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.creator}
-        </Typography>
-
-        <Typography fontSize='sm'>Site</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {exam.site}
+          {workflow.creator}
         </Typography>
 
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(exam.datetime_created).toDateString()}
+          {new Date(workflow.datetime_created).toDateString()}
         </Typography>
 
         <Typography fontSize='sm'>Updated</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.datetime_updated ? new Date(exam.datetime_updated).toDateString() : '-'}
+          {workflow.datetime_updated ? new Date(workflow.datetime_updated).toDateString() : '-'}
         </Typography>
 
         <Typography fontSize='sm'>Status</Typography>
         <Stack direction='row' spacing={0.5}>
-          <Chip size='sm' color={exam.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
+          <Chip size='sm' color={workflow.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
             Template
           </Chip>
-          <Chip size='sm' color={exam.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
+          <Chip size='sm' color={workflow.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
             Frozen
+          </Chip>
+          <Chip size='sm' color={workflow.is_finished ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
+            Finished
           </Chip>
         </Stack>
       </Box>
@@ -80,4 +71,4 @@ function ExamInstanceInfo({ data: exam }: InstanceInterface<ExamOut>) {
   )
 }
 
-export default ExamInstanceInfo
+export default WorkflowInfo

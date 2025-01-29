@@ -3,17 +3,19 @@
 
 """Patient manager main file."""
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from scanhub_libraries.security import get_current_user
+from sqlalchemy import inspect
 
-from api.db import init_db
+from api.db import engine, init_db
 from api.routes import router
 
 app = FastAPI(
-    title="ScanHub-UI",
-    dependencies=[Depends(get_current_user)]
+    openapi_url="/api/v1/patient/openapi.json",
+    docs_url="/api/v1/patient/docs",
+    title="ScanHub-UI"
 )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,4 +33,27 @@ async def startup() -> None:
     init_db()
 
 
-app.include_router(router)
+@app.get("/api/v1/patient/health/readiness", response_model={}, status_code=200, tags=["health"])
+async def readiness() -> dict:
+    """Readiness health endpoint.
+
+    Returns
+    -------
+        Status dictionary
+
+    Raises
+    ------
+    HTTPException
+        500: Any of the exam-tree tables does not exist
+    """
+    ins = inspect(engine)
+    existing_tables = ins.get_table_names()
+    required_tables = ["patients"]
+
+    if not all(t in existing_tables for t in required_tables):
+        raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
+
+    return {"status": "ok"}
+
+
+app.include_router(router, prefix="/api/v1/patient")
