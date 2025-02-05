@@ -21,12 +21,6 @@ export interface AlertProps {
   type: Alerts
 }
 
-export interface SequenceUploadModal {
-  fetchSequences: () => void
-  dialogOpen: boolean
-  setDialogOpen: (open: boolean) => void
-}
-
 export interface PatientTableInterface {
   patients: PatientOut[]
 }
@@ -38,10 +32,11 @@ export interface RefetchableItemInterface<T> {
 
 export interface ItemSelection {
   type: 'exam' | 'workflow' | 'task' | undefined, 
+  name: string | undefined,
   itemId: string | undefined
 }
 
-export const ITEM_UNSELECTED = { type: undefined, itemId: undefined }
+export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined }
 
 export interface SelectableItemInterface<T> {
   item: T
@@ -57,11 +52,18 @@ export interface ModalProps {
 
 export interface ModalPropsCreate extends ModalProps {
   createTemplate: boolean
-  parentId: string
+  parentId: string | undefined
+  modalType: 'create'
 }
 
 export interface ModalPropsModify<T> extends ModalProps {
   item: T
+  modalType: 'modify'
+}
+
+export interface ModalPropsCreateModifyFromTemplate<T> extends ModalProps {
+  item: T
+  modalType: 'createModifyFromTemplate'
 }
 
 export interface AccordionWithMenuInterface {

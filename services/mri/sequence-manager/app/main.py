@@ -5,13 +5,12 @@
 
 import logging
 
-from fastapi import Depends, FastAPI, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from scanhub_libraries.security import get_current_user
 
-from database.mongodb import close_mongo_connection, connect_to_mongo
-from endpoints import health, mri_sequence_endpoints
+from database.mongodb import close_mongo_connection, connect_to_mongo, db
+from endpoints import mri_sequence_endpoints
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +20,6 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     openapi_url="/api/v1/mri/sequences/openapi.json",
     docs_url="/api/v1/mri/sequences/docs",
-    dependencies=[Depends(get_current_user)]
 )
 
 #   Wildcard ["*"] excludes eeverything that involves credentials
@@ -63,15 +61,6 @@ async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content={"detail": str(exc)})
 
 
-# Include routers for endpoints
-app.include_router(
-    mri_sequence_endpoints.router,
-    prefix="/api/v1/mri/sequences",
-    tags=["MRI Sequences"],
-)
-app.include_router(health.router)
-
-
 @app.on_event("startup")
 async def startup_event():
     """Connect to MongoDB on startup."""
@@ -84,3 +73,43 @@ async def shutdown_event():
     """Close MongoDB connection on shutdown."""
     logger.info("ShutDown...")
     await close_mongo_connection()
+
+
+async def check_db_connection() -> bool:
+    """Check if the database connection is established."""
+    logger.info(
+        "Checking database connection: db=%s, db.collection=%s",
+        str(db),
+        str(db.collection),
+    )
+    return db.collection is not None
+
+
+@app.get("/api/v1/mri/sequences/health", status_code=status.HTTP_200_OK, tags=["health"])
+async def health_check(
+    is_db_connected: bool = Depends(check_db_connection),
+) -> dict[str, str]:
+    """
+    Perform a health check for the microservice.
+
+    Parameters
+    ----------
+    is_db_connected: bool
+        The status of the database connection.
+
+    Returns
+    -------
+        The status of the microservice.
+    """
+    logger.info("Database connection status: %r", is_db_connected)
+    if not is_db_connected:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    return {"status": "ok"}
+
+
+# Include routers for endpoints
+app.include_router(
+    mri_sequence_endpoints.router,
+    prefix="/api/v1/mri/sequences",
+    tags=["MRI Sequences"],
+)

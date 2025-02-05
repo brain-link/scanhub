@@ -55,6 +55,4 @@ class MRISequenceCreate(BaseModel):
     name: str
     description: str | None = None
     sequence_type: str | None = None
-    created_at: datetime.datetime | None = None
-    updated_at: datetime.datetime | None = None
     tags: list[str] | None = None

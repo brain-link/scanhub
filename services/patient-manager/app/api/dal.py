@@ -4,6 +4,7 @@
 """Data Access Layer (DAL)."""
 
 from pprint import pprint
+from uuid import UUID
 
 from scanhub_libraries.models import BasePatient
 from sqlalchemy.future import select
@@ -34,7 +35,7 @@ async def add_patient(payload: BasePatient) -> Patient:
     return new_patient
 
 
-async def get_patient(patient_id: int) -> (Patient | None):
+async def get_patient(patient_id: UUID) -> (Patient | None):
     """Fetch a patient from database.
 
     Parameters
@@ -64,7 +65,7 @@ async def get_all_patients() -> list[Patient]:
     return patients
 
 
-async def delete_patient(patient_id: int) -> bool:
+async def delete_patient(patient_id: UUID) -> bool:
     """Delete patient entry from database.
 
     Parameters
@@ -84,7 +85,7 @@ async def delete_patient(patient_id: int) -> bool:
         return False
 
 
-async def update_patient(patient_id: int, payload: BasePatient) -> (Patient | None):
+async def update_patient(patient_id: UUID, payload: BasePatient) -> (Patient | None):
     """Update existing patient in database.
 
     Parameters

@@ -5,8 +5,6 @@
  * WorkflowInfo.tsx is responsible for rendering additional information of a workflow item.
  */
 import Box from '@mui/joy/Box'
-import Chip from '@mui/joy/Chip'
-import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
@@ -29,14 +27,34 @@ function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
           },
         }}
       >
-        <Typography fontSize='sm'>ID</Typography>
+        <Typography fontSize='sm'>Name</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {workflow.id}
+          {workflow.name}
+        </Typography>
+
+        <Typography fontSize='sm'>Description</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {workflow.description}
         </Typography>
 
         <Typography fontSize='sm'>Comment</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {workflow.comment}
+        </Typography>
+
+        <Typography fontSize='sm'>Status</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {workflow.status}
+        </Typography>
+
+        <Typography fontSize='sm'>Is Template</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {workflow.is_template ? 'True' : 'False'}
+        </Typography>
+
+        <Typography fontSize='sm'>ID</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {workflow.id}
         </Typography>
 
         <Typography fontSize='sm'>Creator</Typography>
@@ -46,26 +64,13 @@ function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
 
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(workflow.datetime_created).toDateString()}
+          {new Date(workflow.datetime_created).toLocaleString()}
         </Typography>
 
         <Typography fontSize='sm'>Updated</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {workflow.datetime_updated ? new Date(workflow.datetime_updated).toDateString() : '-'}
+          {workflow.datetime_updated ? new Date(workflow.datetime_updated).toLocaleString() : '-'}
         </Typography>
-
-        <Typography fontSize='sm'>Status</Typography>
-        <Stack direction='row' spacing={0.5}>
-          <Chip size='sm' color={workflow.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Template
-          </Chip>
-          <Chip size='sm' color={workflow.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Frozen
-          </Chip>
-          <Chip size='sm' color={workflow.is_finished ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Finished
-          </Chip>
-        </Stack>
       </Box>
     </Box>
   )

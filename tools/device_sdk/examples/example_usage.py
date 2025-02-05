@@ -3,12 +3,10 @@
 import asyncio
 from device_sdk import Client
 
-async def perform_scan(client, header_xml_str, sequence_data, acquisition_data):
+async def perform_scan(client, deviceTask):
     # Simulates a scanning process by sending status updates.
     # header_xml = ET.fromstring(header_xml_str)
-    print(header_xml_str)
-    print(sequence_data)
-    print(acquisition_data)
+    print(deviceTask)
 
     await client.send_init_status()
     print("Initialization status sent.")
@@ -43,7 +41,7 @@ async def main():
     client.set_feedback_handler(feedback_handler)
     client.set_error_handler(error_handler)
 
-    client.set_scan_callback(lambda header_xml_str, sequence_data, acquisition_data: perform_scan(client, header_xml_str, sequence_data, acquisition_data))
+    client.set_scan_callback(lambda deviceTask: perform_scan(client, deviceTask))
 
     await client.start()
     print("Client started and waiting for commands from the server.")

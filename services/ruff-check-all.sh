@@ -13,7 +13,6 @@ fi
 set -x  # @echo on
 
 ruff check $fixornot base
-ruff check $fixornot acquisition-control
 ruff check $fixornot device-manager
 ruff check $fixornot exam-manager
 ruff check $fixornot mri/recos

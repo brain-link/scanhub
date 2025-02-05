@@ -7,6 +7,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+
 import CssBaseline from '@mui/joy/CssBaseline';
 import { GlobalStyles } from '@mui/system'
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
@@ -17,18 +18,18 @@ import {
 } from '@mui/material/styles'
 const materialTheme = materialExtendTheme()
 
-// import Context
 import LoginContext from './LoginContext'
-import UserManagement from './components/UserManagement'
-import PatientIndex from './views/AcquisitionView'
-// Import views
+
 import App from './views/App'
 import Login from './views/LoginView'
 import PatientListView from './views/PatientListView'
-// import RecordViewer from './views/RecordViewer'
-import Templates from './views/TemplatesView'
+import AcquisitionView from './views/AcquisitionView'
+import TemplatesView from './views/TemplatesView'
+import UserManagementView from './views/UserManagementView'
+import SequenceView from './views/SequenceView'
+import DeviceView from './views/DeviceView'
+import ConnectionStatus from './components/ConnectionStatus'
 
-// import models
 
 export function RouteConfiguration() {
   const navigate = useNavigate()
@@ -59,11 +60,12 @@ export function RouteConfiguration() {
         <Routes>
           <Route path='/' element={user ? <App /> : <Navigate to='/login' state={{from: location}} />}>
             <Route index element={<PatientListView />} />
-            <Route path=':patientId' element={<PatientIndex />}>
-              {/* <Route path=':examId' element={<PatientIndex />} /> */}
-            </Route>
-            <Route path='/templates' element={<Templates />} />
-            <Route path='/users' element={<UserManagement />} />
+            <Route path=':patientId' element={<AcquisitionView />} />
+            <Route path='/templates' element={<TemplatesView />} />
+            <Route path='/devices' element={<DeviceView />} />
+            <Route path='/sequences' element={<SequenceView />} />
+            <Route path='/users' element={<UserManagementView />} />
+            <Route path='/connections' element={<ConnectionStatus buttonOrPage='page' />} />
           </Route>
 
           <Route

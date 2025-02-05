@@ -4,16 +4,20 @@
  *
  * Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
  */
+import React, { useContext } from 'react'
+import { useQueryClient } from 'react-query'
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
+
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
-import BuildSharpIcon from '@mui/icons-material/BuildSharp'
+import ListAltIcon from '@mui/icons-material/ListAlt'
+import HomeMiniIcon from '@mui/icons-material/HomeMini';
+import LineStyleIcon from '@mui/icons-material/LineStyle'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
 import BrightnessAutoIcon from '@mui/icons-material/BrightnessAuto';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp'
 import Person2SharpIcon from '@mui/icons-material/Person2Sharp'
 import PersonSharpIcon from '@mui/icons-material/PersonSharp'
-// Icons
-// import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp'
 import Avatar from '@mui/joy/Avatar'
 import Box from '@mui/joy/Box'
@@ -28,30 +32,18 @@ import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import { useColorScheme } from '@mui/joy/styles'
 import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
-import React, { useContext } from 'react'
-import { useQueryClient } from 'react-query'
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
 import LoginContext from '../LoginContext'
-// import { SettingsInputSvideoRounded } from '@mui/icons-material';
-import { loginApi } from '../api'
 import { UserRole } from '../generated-client/userlogin'
 import ScanhubLogo from '../media/ScanhubLogo.png'
+import { loginApi } from '../api'
+import ConnectionStatus from './ConnectionStatus'
+import { version } from '../utils/Versions'
 
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
   const { setMode: setMuiMode } = useMaterialColorScheme()
-  const [mounted, setMounted] = React.useState(true)
-
-  React.useEffect(() => {  // this effect is somehow needed for server side rendering according to the docs.
-    setMounted(true)       // probably not needed in our case.
-  }, [])
-
-
-  if (!mounted) {
-    return <IconButton size='sm' variant='outlined' color='primary' />
-  }
 
   let modeicon = <BrightnessAutoIcon />
   if (mode === 'light') {
@@ -84,6 +76,7 @@ function ColorSchemeToggle() {
   )
 }
 
+
 export default function Navigation() {
   const loc = useLocation()
   const [user, setUser] = useContext(LoginContext)
@@ -93,10 +86,12 @@ export default function Navigation() {
   // Menu elements
   const menuItems = [
     { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon /> },
-    { id: 1, text: 'Templates', link: '/templates', icon: <BuildSharpIcon /> },
+    { id: 1, text: 'Templates', link: '/templates', icon: <ListAltIcon /> },
+    { id: 2, text: 'Devices', link: '/devices', icon: <HomeMiniIcon /> },
+    { id: 3, text: 'Sequences', link: '/sequences', icon: <LineStyleIcon /> },
   ]
   if (user && user.role == UserRole.Admin) {
-    menuItems.push({ id: 2, text: 'Users', link: '/users', icon: <Person2SharpIcon /> })
+    menuItems.push({ id: 4, text: 'Users', link: '/users', icon: <Person2SharpIcon /> })
   }
 
   return (
@@ -104,16 +99,14 @@ export default function Navigation() {
       component='header'
       className='Header'
       sx={{
-        // height: navigation.height,
         height: 'var(--Navigation-height)',
         p: 2,
-        gap: 2,
+        gap: 0,
         bgcolor: 'background.surface',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gridColumn: '1 / -1',
         borderBottom: '1px solid',
         borderColor: 'divider',
         position: 'sticky',
@@ -132,7 +125,7 @@ export default function Navigation() {
         </a>
       </IconButton>
 
-      <Typography level='h4' sx={{ mr: 5 }}>
+      <Typography level='h4' sx={{ mr: 2, ml: 1 }}>
         ScanHub
       </Typography>
 
@@ -154,14 +147,25 @@ export default function Navigation() {
         ))}
       </>
 
-      <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
         <ColorSchemeToggle />
+        <ConnectionStatus buttonOrPage='button'/>
+
+        <Box sx={{background: 'Orange', border: '1px solid black', borderRadius: '3px', padding: '3px', textWrapMode: 'nowrap'}}>
+          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
+            {'Version ' + version}
+          </Typography>
+          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
+            {'Not for clinical use!'}
+          </Typography>
+        </Box>
       </Box>
 
       {/* User menu */}
       <Dropdown>
         <MenuButton
           slots={{root: IconButton}}
+          sx={{ ml: 2 }}
         >
           <Avatar variant='soft' color='primary' />
         </MenuButton>

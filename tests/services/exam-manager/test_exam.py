@@ -9,9 +9,6 @@ import json
 # sys.path.append("../../../services/exam-manager/app/")
 # import dal
 
-
-# TODO implement tests for deleting frozen exams, workflows, tasks 
-#      with freeze and unfreeze logic
 # TODO implement tests for status DELETED
 
 
@@ -19,6 +16,73 @@ HOST = "http://localhost:8080"
 PREFIX = HOST + "/api/v1/exam"
 PREFIX_PATIENT_MANAGER = HOST + "/api/v1/patient"
 CREDENTIALS_FORM_DATA = "grant_type=password&username=Max&password=letmein"
+
+
+PATIENT = {
+    "first_name": "Automated Test",
+    "last_name": "Patient",
+    "birth_date": "1977-07-17",
+    "sex": "FEMALE",
+    "issuer": "someone",
+    "status": "NEW",
+    "comment": None
+}
+
+EXAM_TEMPLATE = {
+#    "patient_id": None,
+    "name": "Automated test exam",
+    "description": "Some test description",
+    "indication": "Some test indication",
+    "patient_height_cm": 150,
+    "patient_weight_kg": 50,
+    "comment": "Some test comment",
+    "status": "NEW",
+    "is_template": True,
+}
+
+WORKFLOW_TEMPLATE = {
+#    "exam_id": None,
+    "name": "Automated test workflow",
+    "description": "test description",
+    "comment": "test comment",
+    "status": "NEW",
+    "is_template": True,
+}
+
+TASK_TEMPLATE = {
+#    "workflow_id": None,
+    "name": "Automated test task",
+    "description": "some test task description",
+    "comment": "some test comment",
+    "type": "PROCESSING_TASK",
+    "args": {
+        "arg1": "val1",
+        "arg2": "val2",
+        "arg3": "val3"
+    },
+    "artifacts": {
+        "some unspecified artifacts": "yay",
+        # could enforce form of the values for input and output in the future
+        "input": json.dumps([
+            {
+                "path": "/data",
+                "name": "inputfile2"
+            }
+        ]),
+        "output": json.dumps([
+            {
+                "path": "/data",
+                "name": "outputfile1"
+            }
+        ])
+    },
+    "destinations": {
+        "DICOM FANTASIA": "FANTASY PACS 1",
+        "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
+    },
+    "status": "NEW",
+    "is_template": True,
+}
 
 
 def login():
@@ -94,15 +158,7 @@ def test_create_exam():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    patient_1 = {
-        "first_name": "Automated Test",
-        "last_name": "Patient",
-        "birth_date": "1977-07-17",
-        "sex": "FEMALE",
-        "issuer": "someone",
-        "status": "NEW",
-        "comment": None
-    }
+    patient_1 = PATIENT.copy()
     postpatient_1_response = requests.post(
         PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
     assert postpatient_1_response.status_code == 201
@@ -110,40 +166,20 @@ def test_create_exam():
 
     # act
     try:
-        exam_1 = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam_1 = EXAM_TEMPLATE.copy()
+        exam_1["is_template"] = False
+        exam_1["patient_id"] = postpatient_1_response_json["id"]
         postexam_1_response = requests.post(
             PREFIX + "/new", json=exam_1, headers=headers)
-        exam_2 = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "UPDATED",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam_2 = EXAM_TEMPLATE.copy()
+        exam_2["patient_id"] = postpatient_1_response_json["id"]
+        exam_2["status"] = "UPDATED"
+        exam_2["is_template"] = False
         postexam_2_response = requests.post(
             PREFIX + "/new", json=exam_2, headers=headers)
-        exam_3 = {
-            "patient_id": 123,
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam_3 = EXAM_TEMPLATE.copy()
+        exam_3["patient_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
+        exam_3["is_template"] = False
         postexam_3_response = requests.post(
             PREFIX + "/new", json=exam_3, headers=headers)
 
@@ -185,33 +221,10 @@ def test_create_exam_from_template():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    exam_template = {
-        "name": "Automated test exam template",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "status": "NEW",
-        "is_template": True,
-        "is_frozen": False
-    }
-    updated_template = {
-        "name": "Automated test exam template",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "status": "UPDATED",
-        "is_template": True,
-        "is_frozen": False
-    }
-    patient_1 = {
-        "first_name": "Automated Test",
-        "last_name": "Patient",
-        "birth_date": "1977-07-17",
-        "sex": "FEMALE",
-        "issuer": "someone",
-        "status": "NEW",
-        "comment": None
-    }
+    exam_template = EXAM_TEMPLATE.copy()
+    updated_template = EXAM_TEMPLATE.copy()
+    updated_template["status"] = "UPDATED"
+    patient_1 = PATIENT.copy()
     try:
         postnewtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
@@ -221,41 +234,22 @@ def test_create_exam_from_template():
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
-        exam_template_2 = {
-            "name": "Automated test exam template 2",
-            "country": "with workflows and tasks",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template_2 = EXAM_TEMPLATE.copy()
+        exam_template_2["name"] = "Automated test exam template 2"
         postexamtemplate_2_response = requests.post(
             PREFIX + "/new", json=exam_template_2, headers=headers)
         assert postexamtemplate_2_response.status_code == 201
         postexamtemplate_2_response_json = postexamtemplate_2_response.json()
-        workflow_template_1 = {
-            "exam_id": postexamtemplate_2_response_json["id"],
-            "name": "Automated test workflow template 1",
-            "comment": "Belongs to 'automated test exam template 2'.",
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_template_1["exam_id"] = postexamtemplate_2_response_json["id"]
+        workflow_template_1["name"] = "Automated test workflow template 1"
+        workflow_template_1["comment"] = "Belongs to 'automated test exam template 2'."
         workflow_template_2 = workflow_template_1.copy()
         workflow_template_2["name"] = "Automated test workflow template 2"
         workflow_template_2["comment"] = "Belongs to 'automated test exam template 2'."
@@ -267,42 +261,8 @@ def test_create_exam_from_template():
             PREFIX + "/workflow/new", json=workflow_template_2, headers=headers)
         assert postworkflowtemplate_2_response.status_code == 201
         postworkflowtemplate_2_response_json = postworkflowtemplate_2_response.json()
-        task_template_1 = {
-            "workflow_id": postworkflowtemplate_1_response_json["id"],
-            "name": "Automated test task template 1",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": True,
-            "is_frozen": False
-        }
+        task_template_1 = TASK_TEMPLATE.copy()
+        task_template_1["workflow_id"] = postworkflowtemplate_1_response_json["id"]
         task_template_2 = task_template_1.copy()
         task_template_2["name"] = "Automated test task template 2"
         task_template_3 = task_template_1.copy()
@@ -325,23 +285,24 @@ def test_create_exam_from_template():
         assert posttasktemplate_2_response.status_code == 201
 
     # act
+        examfromtemplate_1_request = postnewtemplate_response_json.copy()
+        examfromtemplate_1_request["patient_id"] = postpatient_1_response_json["id"]
+        examfromtemplate_1_request["is_template"] = False
         postexamfromtemplate_1_response = requests.post(
             PREFIX + "/",
-            params={
-                "patient_id": postpatient_1_response_json["id"], 
-                "template_id": postnewtemplate_response_json["id"],
-                "new_exam_is_template": False
-            },
+            json=examfromtemplate_1_request,
+            params={"template_id": postnewtemplate_response_json["id"]},
             headers=headers)
         assert postexamfromtemplate_1_response.status_code == 201
         postexamfromtemplate_1_response_json = postexamfromtemplate_1_response.json()
+        examfromtemplate_2_request = postnewtemplate_response_json.copy()
+        examfromtemplate_2_request["patient_id"] = \
+            "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
+        examfromtemplate_2_request["is_template"] = False
         postexamfromtemplate_2_response = requests.post(
             PREFIX + "/",
-            params={
-                "patient_id": 123, 
-                "template_id": postnewtemplate_response_json["id"],
-                "new_exam_is_template": False
-            },
+            json=examfromtemplate_2_request,
+            params={"template_id": postnewtemplate_response_json["id"]},
             headers=headers)
         putupdatedtemplate_response = requests.put(
             PREFIX + "/" + postnewtemplate_response_json["id"],
@@ -349,32 +310,33 @@ def test_create_exam_from_template():
             headers=headers)
         assert putupdatedtemplate_response.status_code == 200
         putupdatedtemplate_response_json = putupdatedtemplate_response.json()
+        examfromupdatedtemplate_request = putupdatedtemplate_response_json.copy()
+        examfromupdatedtemplate_request["patient_id"] = \
+            postpatient_1_response_json["id"]
+        examfromupdatedtemplate_request["is_template"] = False
         postexamfromupdatedtemplate_response = requests.post(
             PREFIX + "/",
-            params={
-                "patient_id": postpatient_1_response_json["id"], 
-                "template_id": putupdatedtemplate_response_json["id"],
-                "new_exam_is_template": False
-            },
+            json=examfromupdatedtemplate_request,
+            params={"template_id": putupdatedtemplate_response_json["id"]},
             headers=headers)
         assert postexamfromupdatedtemplate_response.status_code == 201
         postexamfromupdatedtemplate_response_json = \
             postexamfromupdatedtemplate_response.json()
+        examfrominstance_request = postexam_response_json.copy()
+        examfrominstance_request["patient_id"] = postexam_response_json["patient_id"]
+        examfrominstance_request["is_template"] = False
         postexamfrominstance_response = requests.post(
             PREFIX + "/",
-            params={
-                "patient_id": 333, 
-                "template_id": postexam_response_json["id"],
-                "new_exam_is_template": False
-            },
+            json=examfrominstance_request,
+            params={"template_id": postexam_response_json["id"]},
             headers=headers)
+        examfromtemplate_3_request = postexamtemplate_2_response_json.copy()
+        examfromtemplate_3_request["patient_id"] = postpatient_1_response_json["id"]
+        examfromtemplate_3_request["is_template"] = False
         postexamfromtemplate_3_response = requests.post(
             PREFIX + "/",
-            params={
-                "patient_id": postpatient_1_response_json["id"], 
-                "template_id": postexamtemplate_2_response_json["id"],
-                "new_exam_is_template": False
-            },
+            json=examfromtemplate_3_request,
+            params={"template_id": postexamtemplate_2_response_json["id"]},
             headers=headers)
         assert postexamfromtemplate_3_response.status_code == 201
         postexamfromtemplate_3_response_json = postexamfromtemplate_3_response.json()
@@ -550,15 +512,7 @@ def test_get_all_patient_exams():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
@@ -567,20 +521,13 @@ def test_get_all_patient_exams():
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1A_response.status_code == 201
         postpatient_1A_response_json = postpatient_1A_response.json()
-        exam1 = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam1 = EXAM_TEMPLATE.copy()
+        exam1["patient_id"] = postpatient_1_response_json["id"]
+        exam1["is_template"] = False
         exam2 = exam1.copy()
-        exam2["site"] = "test site 2"
+        exam2["description"] = "test description 2"
         exam3 = exam1.copy()
-        exam3["site"] = "test site 3"
+        exam3["description"] = "test description 3"
         exam3["patient_id"] = postpatient_1A_response_json["id"]
         postnewexam1_response = requests.post(
             PREFIX + "/new", json=exam1, headers=headers)
@@ -647,17 +594,9 @@ def test_get_all_exam_templates():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    exam_template_1 = {
-        "name": "Automated test exam template",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "status": "NEW",
-        "is_template": True,
-        "is_frozen": False
-    }
+    exam_template_1 = EXAM_TEMPLATE.copy()
     exam_template_2 = exam_template_1.copy()
-    exam_template_2["site"] = "template 2 site"
+    exam_template_2["description"] = "description 2"
     try:
         getalltemplatesbefore_response = requests.get(
             PREFIX + "/templates/all", headers=headers)
@@ -713,29 +652,14 @@ def test_delete_exam():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postnewexam_response = requests.post(
             PREFIX + "/new", json=exam, headers=headers)
         assert postnewexam_response.status_code == 201
@@ -746,15 +670,7 @@ def test_delete_exam():
             PREFIX + "/new", json=exam_2, headers=headers)
         assert postnewexam_2_response.status_code == 201
         postnewexam_2_response_json = postnewexam_2_response.json()
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template = EXAM_TEMPLATE.copy()
         postnewtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
         assert postnewtemplate_response.status_code == 201
@@ -771,14 +687,6 @@ def test_delete_exam():
             headers=headers,
         )
         assert deleteexamtemplate_presponse.status_code == 204
-        # exam_frozen = exam.copy()
-        # exam_frozen["is_frozen"] = True
-        # postnewexamfrozen_response = requests.post(
-        #     PREFIX + "/new",
-        #     json=exam_frozen,
-        #     headers={"Authorization": "Bearer " + access_token}
-        # )
-        # assert postnewexamfrozen_response.status_code == 201
 
     # check
         getexam_response = requests.get(
@@ -796,15 +704,8 @@ def test_delete_exam():
             headers=headers
         )
         assert getexamtemplate_response.status_code == 404
-        # postnewexamfrozen_response_json = postnewexamfrozen_response.json()
-        # deleteexamfrozen_response = requests.delete(
-        #     PREFIX + "/" + postnewexamfrozen_response_json["id"],
-        #     headers={"Authorization": "Bearer " + access_token}
-        # )
-        # assert deleteexamfrozen_response.status_code == 404
 
     # cleanup
-    # TODO implement cleanup of frozen item
     finally:
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
@@ -826,15 +727,7 @@ def test_update_exam():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
@@ -843,32 +736,26 @@ def test_update_exam():
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1A_response.status_code == 201
         postpatient_1A_response_json = postpatient_1A_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         assert postexam_response.status_code == 201
         update_request_1 = {
             "patient_id": postpatient_1A_response_json["id"],
             "name": "Automated test exam updated",
-            "country": "updated country",
-            "site": "updated site, still in the middle of nowhere",
-            "address": "updated address midway",
+            "description": "Some test description updated",
+            "indication": "Test indictation updated",
+            "patient_height_cm": 111,
+            "patient_weight_kg": 222,
+            "comment": "updated comment",
             "status": "UPDATED",
-            "is_template": False,
-            "is_frozen": False,  # False, otherwise it can't be deleted after test
+            "is_template": False
         }
         update_request_2 = update_request_1.copy()
         update_request_2["status"] = "NEW"
         update_request_3 = update_request_1.copy()
-        update_request_3["patient_id"] = 333
+        update_request_3["patient_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
 
         # TODO implement more conditions like in test_create_exam_from_template
 
@@ -941,38 +828,15 @@ def test_create_workflow():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
+        exam_template = EXAM_TEMPLATE.copy()
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         postexamtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
@@ -980,15 +844,8 @@ def test_create_workflow():
         postexam_response_json = postexam_response.json()
         assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": None,
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["is_template"] = False    # no exam id here
         workflow_2 = workflow_1.copy()
         workflow_2["exam_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
         workflow_3 = workflow_1.copy()
@@ -1062,67 +919,31 @@ def test_create_workflow_from_template():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template = EXAM_TEMPLATE.copy()
         postexamtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
         assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
-        workflow_template = {
-            "exam_id": postexamtemplate_response_json["id"],
-            "name": "Automated test workflow template",
-            "comment": "test comment",
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template = WORKFLOW_TEMPLATE.copy()
+        workflow_template["exam_id"] = postexamtemplate_response_json["id"]
         postnewtemplate_response = requests.post(
             PREFIX + "/workflow/new", json=workflow_template, headers=headers)
         assert postnewtemplate_response.status_code == 201
         postnewtemplate_response_json = postnewtemplate_response.json()
-        workflow = {
-            "exam_id": postexam_response_json["id"],
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow = WORKFLOW_TEMPLATE.copy()
+        workflow["exam_id"] = postexam_response_json["id"]
+        workflow["is_template"] = False
         postworkflow_response = requests.post(
             PREFIX + "/workflow/new", json=workflow, headers=headers)
         assert postworkflow_response.status_code == 201
@@ -1259,29 +1080,14 @@ def test_get_all_exam_workflows():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam1 = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam1 = EXAM_TEMPLATE.copy()
+        exam1["patient_id"] = postpatient_1_response_json["id"]
+        exam1["is_template"] = False
         exam2 = exam1.copy()
         exam2["site"] = "test site 2"
         postnewexam1_response = requests.post(
@@ -1292,15 +1098,9 @@ def test_get_all_exam_workflows():
         assert postnewexam2_response.status_code == 201
         postnewexam1_response_json = postnewexam1_response.json()
         postnewexam2_response_json = postnewexam2_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "automated test",
-            "exam_id": postnewexam1_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["exam_id"] = postnewexam1_response_json["id"]
+        workflow_1["is_template"] = False
         workflow_2 = workflow_1.copy()
         workflow_2["name"] = "Automated test workflow 2"
         workflow_3 = workflow_1.copy()
@@ -1366,27 +1166,11 @@ def test_get_all_workflow_templates():
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    exam_template_1 = {
-        "name": "Automated test exam template",
-        "country": "blablastan",
-        "site": "middle of nowhere",
-        "address": "midway",
-        "status": "NEW",
-        "is_template": True,
-        "is_frozen": False
-    }
+    exam_template_1 = EXAM_TEMPLATE.copy()
     exam_template_2 = exam_template_1.copy()
     exam_template_2["site"] = "template 2 site"
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
@@ -1411,15 +1195,8 @@ def test_get_all_workflow_templates():
             PREFIX + "/new", json=exam_1, headers=headers)
         assert postnewexam_1_response.status_code == 201
         postnewexam_1_response_json = postnewexam_1_response.json()
-        workflow_template_1 = {
-            "name": "Automated test workflow template",
-            "comment": "automated test",
-            "exam_id": postnewexamtemplate_1_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_template_1["exam_id"] = postnewexamtemplate_1_response_json["id"]
         workflow_template_2 = workflow_template_1.copy()
         workflow_template_2["name"] = "Automated test workflow template 2"
         workflow_template_3 = workflow_template_1.copy()
@@ -1498,71 +1275,34 @@ def test_get_all_workflow_templates():
 
 
 def test_delete_workflow():
-    # TODO implement tests for deleting frozen workflows 
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postnewexam_response = requests.post(
             PREFIX + "/new", json=exam, headers=headers)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template = EXAM_TEMPLATE.copy()
         postnewexamtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
         assert postnewexamtemplate_response.status_code == 201
         postnewexamtemplate_response_json = postnewexamtemplate_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": postnewexam_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["exam_id"] = postnewexam_response_json["id"]
+        workflow_1["is_template"] = False
         workflow_2 = workflow_1.copy()
         workflow_2["name"] = "Automated test workflow 2"
-        workflow_template_1 = {
-            "name": "Automated test workflow template",
-            "comment": "test comment",
-            "exam_id": postnewexamtemplate_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_template_1["exam_id"] = postnewexamtemplate_response_json["id"]
         postworkflow_1_response = requests.post(
             PREFIX + "/workflow/new", json=workflow_1, headers=headers)
         assert postworkflow_1_response.status_code == 201
@@ -1629,29 +1369,14 @@ def test_update_workflow():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam_1 = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam_1 = EXAM_TEMPLATE.copy()
+        exam_1["patient_id"] = postpatient_1_response_json["id"]
+        exam_1["is_template"] = False
         postexam_1_response = requests.post(
             PREFIX + "/new", json=exam_1, headers=headers)
         assert postexam_1_response.status_code == 201
@@ -1662,27 +1387,20 @@ def test_update_workflow():
             PREFIX + "/new", json=exam_2, headers=headers)
         assert postexam_2_response.status_code == 201
         postexam_2_response_json = postexam_2_response.json()
-        workflow = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": postexam_1_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow = WORKFLOW_TEMPLATE.copy()
+        workflow["exam_id"] = postexam_1_response_json["id"]
+        workflow["is_template"] = False
         postworkflow_response = requests.post(
             PREFIX + "/workflow/new", json=workflow, headers=headers)
         assert postworkflow_response.status_code == 201
         postworkflow_response_json = postworkflow_response.json()
         update_request_1 = {
-            "name": "Automated test workflow updated",
-            "comment": "test comment updated",
             "exam_id": postexam_2_response_json["id"],
+            "name": "Automated test workflow updated",
+            "description": "test description updated",
+            "comment": "test comment updated",
             "status": "UPDATED",
-            "is_finished": True,
             "is_template": False,
-            "is_frozen": False
         }
         update_request_2 = update_request_1.copy()
         update_request_2["status"] = "NEW"
@@ -1770,38 +1488,15 @@ def test_create_task():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
+        exam_template = EXAM_TEMPLATE.copy()
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         postexamtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
@@ -1809,24 +1504,11 @@ def test_create_task():
         postexam_response_json = postexam_response.json()
         assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": postexam_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
-        workflow_template_1 = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": postexamtemplate_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["exam_id"] = postexam_response_json["id"]
+        workflow_1["is_template"] = False
+        workflow_template_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_template_1["exam_id"] = postexamtemplate_response_json["id"]
         postworkflow_1_response = requests.post(
             PREFIX + "/workflow/new", json=workflow_1, headers=headers)
         postworkflowtemplate_1_response = requests.post(
@@ -1835,42 +1517,9 @@ def test_create_task():
         assert postworkflowtemplate_1_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
         postworkflowtemplate_1_response_json = postworkflowtemplate_1_response.json()
-        task_1 = {
-            "workflow_id": postworkflow_1_response_json["id"],
-            "name": "Automated test task",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": False,
-            "is_frozen": False
-        }
+        task_1 = TASK_TEMPLATE.copy()
+        task_1["workflow_id"] = postworkflow_1_response_json["id"]
+        task_1["is_template"] = False
         task_2 = task_1.copy()
         task_2["workflow_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
         task_3 = task_1.copy()
@@ -1880,7 +1529,7 @@ def test_create_task():
         task_5 = task_1.copy()
         task_5["workflow_id"] = postworkflowtemplate_1_response_json["id"]
         task_6 = task_1.copy()
-        task_6["status"] = {"IN_PROGRESS": "some comment"}
+        task_6["status"] = "STARTED"
 
     # act
         posttask_1_response = requests.post(
@@ -1950,107 +1599,37 @@ def test_create_task_from_template():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template = EXAM_TEMPLATE.copy()
         postexamtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
         assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
-        workflow_template = {
-            "exam_id": postexamtemplate_response_json["id"],
-            "name": "Automated test workflow template",
-            "comment": "test comment",
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template = WORKFLOW_TEMPLATE.copy()
+        workflow_template["exam_id"] = postexamtemplate_response_json["id"]
         postworkflowtemplate_response = requests.post(
             PREFIX + "/workflow/new", json=workflow_template, headers=headers)
         assert postworkflowtemplate_response.status_code == 201
         postworkflowtemplate_response_json = postworkflowtemplate_response.json()
-        workflow = {
-            "exam_id": postexam_response_json["id"],
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow = WORKFLOW_TEMPLATE.copy()
+        workflow["exam_id"] = postexam_response_json["id"]
+        workflow["is_template"] = False
         postworkflow_response = requests.post(
             PREFIX + "/workflow/new", json=workflow, headers=headers)
         assert postworkflow_response.status_code == 201
         postworkflow_response_json = postworkflow_response.json()
-        task_template = {
-            "workflow_id": postworkflowtemplate_response_json["id"],
-            "name": "Automated test task template",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": True,
-            "is_frozen": False
-        }
+        task_template = TASK_TEMPLATE.copy()
+        task_template["workflow_id"] = postworkflowtemplate_response_json["id"]
         posttasktemplate_response = requests.post(
             PREFIX + "/task/new", json=task_template, headers=headers)
         assert posttasktemplate_response.status_code == 201
@@ -2192,42 +1771,21 @@ def test_get_all_workflow_tasks():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postnewexam_response = requests.post(
             PREFIX + "/new", json=exam, headers=headers)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "automated test",
-            "exam_id": postnewexam_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["exam_id"] = postnewexam_response_json["id"]
+        workflow_1["is_template"] = False
         workflow_2 = workflow_1.copy()
         workflow_2["name"] = "Automated test workflow 2"
         postworkflow_1_response = requests.post(
@@ -2238,42 +1796,9 @@ def test_get_all_workflow_tasks():
         assert postworkflow_2_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
         postworkflow_2_response_json = postworkflow_2_response.json()
-        task_1 = {
-            "workflow_id": postworkflow_1_response_json["id"],
-            "name": "Automated test task",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": False,
-            "is_frozen": False
-        }
+        task_1 = TASK_TEMPLATE.copy()
+        task_1["workflow_id"] = postworkflow_1_response_json["id"]
+        task_1["is_template"] = False
         task_2 = task_1.copy()
         task_2["name"] = "Automated test task 2"
         task_3 = task_1.copy()
@@ -2336,26 +1861,10 @@ def test_get_all_task_templates():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        exam_template_1 = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template_1 = EXAM_TEMPLATE.copy()
         exam_template_2 = exam_template_1.copy()
         exam_template_2["name"] = "Automated test template 2"
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
@@ -2379,15 +1888,8 @@ def test_get_all_task_templates():
             PREFIX + "/new", json=exam_1, headers=headers)
         assert postnewexam_1_response.status_code == 201
         postnewexam_1_response_json = postnewexam_1_response.json()
-        workflow_template_1 = {
-            "name": "Automated test workflow template",
-            "comment": "automated test",
-            "exam_id": postnewexamtemplate_1_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_template_1["exam_id"] = postnewexamtemplate_1_response_json["id"]
         workflow_template_2 = workflow_template_1.copy()
         workflow_template_2["name"] = "Automated test workflow template 2"
         workflow_template_3 = workflow_template_1.copy()
@@ -2413,42 +1915,8 @@ def test_get_all_task_templates():
         postworkflowtemplate_2_response_json = postworkflowtemplate_2_response.json()
         postworkflowtemplate_3_response_json = postworkflowtemplate_3_response.json()
         postworkflow_1_response_json = postworkflow_1_response.json()
-        task_template_1 = {
-            "workflow_id": postworkflowtemplate_1_response_json["id"],
-            "name": "Automated test task",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": True,
-            "is_frozen": False
-        }
+        task_template_1 = TASK_TEMPLATE.copy()
+        task_template_1["workflow_id"] = postworkflowtemplate_1_response_json["id"]
         task_template_2 = task_template_1.copy()
         task_template_2["name"] = "Automated test task template 2"
         task_template_2["workflow_id"] = postworkflowtemplate_2_response_json["id"]
@@ -2527,71 +1995,34 @@ def test_get_all_task_templates():
 
 
 def test_delete_task():
-    # TODO implement tests for deleting frozen tasks 
     # prepare
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam = EXAM_TEMPLATE.copy()
+        exam["patient_id"] = postpatient_1_response_json["id"]
+        exam["is_template"] = False
         postnewexam_response = requests.post(
             PREFIX + "/new", json=exam, headers=headers)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
-        exam_template = {
-            "name": "Automated test exam template",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": True,
-            "is_frozen": False
-        }
+        exam_template = EXAM_TEMPLATE.copy()
         postnewexamtemplate_response = requests.post(
             PREFIX + "/new", json=exam_template, headers=headers)
         assert postnewexamtemplate_response.status_code == 201
         postnewexamtemplate_response_json = postnewexamtemplate_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": postnewexam_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["exam_id"] = postnewexam_response_json["id"]
+        workflow_1["is_template"] = False
         workflow_2 = workflow_1.copy()
         workflow_2["name"] = "Automated test workflow 2"
-        workflow_template_1 = {
-            "name": "Automated test workflow template",
-            "comment": "test comment",
-            "exam_id": postnewexamtemplate_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": True,
-            "is_frozen": False
-        }
+        workflow_template_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_template_1["exam_id"] = postnewexamtemplate_response_json["id"]
         postworkflow_1_response = requests.post(
             PREFIX + "/workflow/new", json=workflow_1, headers=headers)
         assert postworkflow_1_response.status_code == 201
@@ -2604,42 +2035,9 @@ def test_delete_task():
             PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
         assert postworkflow_template_response.status_code == 201
         postworkflow_template_response_json = postworkflow_template_response.json()
-        task_1 = {
-            "workflow_id": postworkflow_1_response_json["id"],
-            "name": "Automated test task",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": False,
-            "is_frozen": False
-        }
+        task_1 = TASK_TEMPLATE.copy()
+        task_1["workflow_id"] = postworkflow_1_response_json["id"]
+        task_1["is_template"] = False
         task_2 = task_1.copy()
         task_2["name"] = "Automated test task 2"
         task_2["workflow_id"] = postworkflow_2_response_json["id"]
@@ -2737,29 +2135,14 @@ def test_update_task():
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
     try:
-        patient_1 = {
-            "first_name": "Automated Test",
-            "last_name": "Patient",
-            "birth_date": "1977-07-17",
-            "sex": "FEMALE",
-            "issuer": "someone",
-            "status": "NEW",
-            "comment": None
-        }
+        patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
             PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
-        exam_1 = {
-            "patient_id": postpatient_1_response_json["id"],
-            "name": "Automated test exam",
-            "country": "blablastan",
-            "site": "middle of nowhere",
-            "address": "midway",
-            "status": "NEW",
-            "is_template": False,
-            "is_frozen": False
-        }
+        exam_1 = EXAM_TEMPLATE.copy()
+        exam_1["patient_id"] = postpatient_1_response_json["id"]
+        exam_1["is_template"] = False
         postexam_1_response = requests.post(
             PREFIX + "/new", json=exam_1, headers=headers)
         assert postexam_1_response.status_code == 201
@@ -2770,15 +2153,9 @@ def test_update_task():
             PREFIX + "/new", json=exam_2, headers=headers)
         assert postexam_2_response.status_code == 201
         postexam_2_response_json = postexam_2_response.json()
-        workflow_1 = {
-            "name": "Automated test workflow",
-            "comment": "test comment",
-            "exam_id": postexam_1_response_json["id"],
-            "status": "NEW",
-            "is_finished": False,
-            "is_template": False,
-            "is_frozen": False
-        }
+        workflow_1 = WORKFLOW_TEMPLATE.copy()
+        workflow_1["exam_id"] = postexam_1_response_json["id"]
+        workflow_1["is_template"] = False
         workflow_2 = workflow_1.copy()
         workflow_2["name"] = "Automated test workflow 2"
         workflow_2["exam_id"] = postexam_2_response_json["id"]
@@ -2790,42 +2167,9 @@ def test_update_task():
             PREFIX + "/workflow/new", json=workflow_2, headers=headers)
         assert postworkflow_2_response.status_code == 201
         postworkflow_2_response_json = postworkflow_2_response.json()
-        task_1 = {
-            "workflow_id": postworkflow_1_response_json["id"],
-            "name": "Automated test task",
-            "description": "some task description",
-            "type": "PROCESSING_TASK",
-            "args": {
-                "arg1": "val1",
-                "arg2": "val2",
-                "arg3": "val3"
-            },
-            "artifacts": {
-                "some unspecified artifacts": "yay",
-                # could enforce form of the values for input and output in the future
-                "input": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "inputfile2"
-                    }
-                ]),
-                "output": json.dumps([
-                    {
-                        "path": "/data",
-                        "name": "outputfile1"
-                    }
-                ])
-            },
-            "destinations": {
-                "DICOM FANTASIA": "FANTASY PACS 1",
-                "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
-            },
-            "status": {
-                "PENDING": "some status annotation",
-            },
-            "is_template": False,
-            "is_frozen": False
-        }
+        task_1 = TASK_TEMPLATE.copy()
+        task_1["workflow_id"] = postworkflow_1_response_json["id"]
+        task_1["is_template"] = False
         posttask_1_response = requests.post(
             PREFIX + "/task/new", json=task_1, headers=headers)
         assert posttask_1_response.status_code == 201
@@ -2834,6 +2178,7 @@ def test_update_task():
             "workflow_id": postworkflow_2_response_json["id"],
             "name": "Automated test task updated",
             "description": "some task description updated",
+            "comment": "some test comment updated",
             "type": "CERTIFIED_DEVICE_TASK",
             "args": {
                 "arg1": "updated",
@@ -2860,11 +2205,8 @@ def test_update_task():
                 "DICOM FANTASIA updated": "FANTASY PACS 1 updated",
                 "RAWDATA FANTASIA updated": "FANTASY EXPORT INTERFACE 1"
             },
-            "status": {
-                "COMPLETED": "some status annotation completed",
-            },
+            "status": "FINISHED",
             "is_template": False,
-            "is_frozen": False
         }
         # update_request_2 = update_request_1.copy()
         # update_request_2["status"] = {"PENDING": "some status annotation"}

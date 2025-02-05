@@ -7,21 +7,21 @@
 import { useEffect, useState } from 'react'
 
 function useHealthCheck(url: string, interval: number = 5000) {
-  const [isReady, setIsReady] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetch(`${url}/health/readiness`)
         .then((response) => {
-          response.status === 200 ? setIsReady(true) : setIsReady(false)
+          response.status === 200 ? setIsError(false) : setIsError(true)
         })
-        .catch(() => setIsReady(false))
+        .catch(() => setIsError(true))
     }, interval)
 
     return () => clearInterval(intervalId)
   }, [url, interval])
 
-  return isReady
+  return isError
 }
 
 export default useHealthCheck

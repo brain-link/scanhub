@@ -3,13 +3,13 @@
 
 """Definition of exam API endpoints accessible through swagger UI."""
 
-from typing import Annotated, Optional
+from typing import Annotated
 from uuid import UUID
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, TaskOut, TaskStatus, User, WorkflowOut
+from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, ItemStatus, TaskOut, User, WorkflowOut
 from scanhub_libraries.security import get_current_user
 
 from app import dal
@@ -110,19 +110,17 @@ async def create_exam(payload: BaseExam,
 
 
 @router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
-async def create_exam_from_template(patient_id: Optional[int], template_id: UUID, new_exam_is_template: bool,
+async def create_exam_from_template(payload: BaseExam, template_id: UUID,
                                     user: Annotated[User, Depends(get_current_user)],
                                     access_token: Annotated[str, Depends(oauth2_scheme)]) -> ExamOut:
     """Create a new exam from template.
 
     Parameters
     ----------
-    patient_id
-        Id of the patient, the exam is related to
+    payload
+        The potentially modified exam to create.
     template_id
         ID of the template, the exam is created from
-    new_exam_is_template
-        set is_template on the new exam and its workflows and tasks
 
     Returns
     -------
@@ -135,19 +133,18 @@ async def create_exam_from_template(patient_id: Optional[int], template_id: UUID
     """
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("patient_id:", patient_id)
+    print("Exam:", payload)
     print("template_id:", template_id)
-    print("new_exam_is_template:", new_exam_is_template)
-    if new_exam_is_template is False:
-        if patient_id is None:
-            raise HTTPException(status_code=400, detail="patient_id must be given to create exam.")
+    if payload.is_template is False:
+        if payload.patient_id is None:
+            raise HTTPException(status_code=400, detail="patient_id must be given to create exam instance.")
         getpatient_response = requests.get(
-            PREFIX_PATIENT_MANAGER + "/" + str(patient_id),
+            PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3)
         if getpatient_response.status_code != 200:
             raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
-    if new_exam_is_template is True and patient_id is not None:
+    if payload.is_template is True and payload.patient_id is not None:
         raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
     if not (template := await dal.get_exam_data(exam_id=template_id)):
         raise HTTPException(status_code=400, detail="Template not found.")
@@ -156,10 +153,8 @@ async def create_exam_from_template(patient_id: Optional[int], template_id: UUID
             status_code=400,
             detail="Request to create exam from exam instance instead of exam template."
         )
-    new_exam = BaseExam(**template.__dict__)
-    new_exam.is_template = new_exam_is_template
+    new_exam = BaseExam(**payload.__dict__)
     new_exam.status = 'NEW'
-    new_exam.patient_id = patient_id
     if not (exam := await dal.add_exam_data(payload=new_exam, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create exam.")
 
@@ -170,10 +165,9 @@ async def create_exam_from_template(patient_id: Optional[int], template_id: UUID
         exam_out.workflows.append(await create_workflow_from_template(
             exam_id=exam.id,
             template_id=workflow.id,
-            new_workflow_is_template=new_exam_is_template,
+            new_workflow_is_template=exam.is_template,
             user=user
         ))
-
     return exam_out
 
 
@@ -208,7 +202,7 @@ async def get_exam(exam_id: UUID | str, user: Annotated[User, Depends(get_curren
 
 
 @router.get("/all/{patient_id}", response_model=list[ExamOut], status_code=200, tags=["exams"])
-async def get_all_patient_exams(patient_id: int, user: Annotated[User, Depends(get_current_user)]) -> list[ExamOut]:
+async def get_all_patient_exams(patient_id: UUID, user: Annotated[User, Depends(get_current_user)]) -> list[ExamOut]:
     """Get all exams of a certain patient.
 
     Parameters
@@ -267,12 +261,9 @@ async def exam_delete(exam_id: UUID | str, user: Annotated[User, Depends(get_cur
     print("Username:", user.username)
     print("exam_id:", exam_id)
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (exam := await dal.get_exam_data(exam_id=_id)):
-        raise HTTPException(status_code=404, detail="Exam not found")
-    if exam.is_frozen:
-        raise HTTPException(status_code=404, detail="Exam is frozen and cannot be deleted.")
     if not await dal.delete_exam_data(exam_id=_id):
-        raise HTTPException(status_code=404, detail="Could not delete exam.")
+        message = "Could not delete exam, either because it does not exist, or for another reason."
+        raise HTTPException(status_code=404, detail=message)
 
 
 @router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
@@ -316,12 +307,9 @@ async def update_exam(exam_id: UUID | str, payload: BaseExam,
     if payload.status == "NEW":
         raise HTTPException(status_code=403, detail="Exam cannot be updated to status NEW.")
     _id = UUID(exam_id) if not isinstance(exam_id, UUID) else exam_id
-    if not (exam := await dal.get_exam_data(exam_id=_id)):
-        raise HTTPException(status_code=404, detail="Exam not found.")
-    if exam.is_frozen:
-        raise HTTPException(status_code=403, detail="Exam is frozen an cannot be edited.")
     if not (exam_updated := await dal.update_exam_data(exam_id=_id, payload=payload)):
-        raise HTTPException(status_code=404, detail="Could not update exam.")
+        message = "Could not update exam, either because it does not exist, or for another reason."
+        raise HTTPException(status_code=404, detail=message)
     return await get_exam_out_model(data=exam_updated)
 
 
@@ -531,12 +519,9 @@ async def delete_workflow(workflow_id: UUID | str, user: Annotated[User, Depends
     print("Username:", user.username)
     print("workflow_id:", workflow_id)
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
-        raise HTTPException(status_code=404, detail="Workflow not found")
-    if workflow.is_frozen:
-        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be deleted")
     if not await dal.delete_workflow_data(workflow_id=_id):
-        raise HTTPException(status_code=404, detail="Workflow not found")
+        message = "Could not delete workflow, either because it does not exist, or for another reason."
+        raise HTTPException(status_code=404, detail=message)
 
 
 @router.put("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
@@ -580,8 +565,6 @@ async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow,
     _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
     if not (workflow := await dal.get_workflow_data(workflow_id=_id)):
         raise HTTPException(status_code=404, detail="Workflow not found")
-    if workflow.is_frozen:
-        raise HTTPException(status_code=404, detail="Workflow is frozen and cannot be updated")
     if not (workflow := await dal.update_workflow_data(workflow_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Workflow could not be updated.")
     return await get_workflow_out_model(data=workflow)
@@ -610,13 +593,8 @@ async def create_task(payload: BaseTask, user: Annotated[User, Depends(get_curre
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("payload:", payload)
-    if TaskStatus.PENDING not in payload.status \
-            or TaskStatus.IN_PROGRESS in payload.status \
-            or TaskStatus.COMPLETED in payload.status \
-            or TaskStatus.FAILED in payload.status \
-            or TaskStatus.ERROR in payload.status:
-        raise HTTPException(status_code=400, detail="New task needs to have status PENDING " + \
-            "and must not have status IN_PROGRESS, COMPLETED, FAILED or ERROR")
+    if payload.status != ItemStatus.NEW:
+        raise HTTPException(status_code=400, detail="New task needs to have status NEW")
     if payload.workflow_id is not None:
         workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
         if not (workflow := await dal.get_workflow_data(workflow_id=workflow_id)):
@@ -791,20 +769,15 @@ async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_cur
     print("Username:", user.username)
     print("task_id:", task_id)
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await dal.get_task_data(task_id=_id)):
-        raise HTTPException(status_code=404, detail="Task not found")
-    if task.is_frozen:
-        raise HTTPException(status_code=404, detail="Task is frozen and cannot be deleted")
     if not await dal.delete_task_data(task_id=_id):
-        raise HTTPException(status_code=404, detail="Task not found")
+        message = "Could not delete task, either because it does not exist, or for another reason."
+        raise HTTPException(status_code=404, detail=message)
 
 
 @router.put("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
 async def update_task(task_id: UUID | str, payload: BaseTask,
                       user: Annotated[User, Depends(get_current_user)]) -> TaskOut:
     """Update an existing task.
-
-    Requires that the task to be updated is not frozen
 
     Parameters
     ----------
@@ -839,10 +812,7 @@ async def update_task(task_id: UUID | str, payload: BaseTask,
     if payload.is_template is False and payload.workflow_id is None:
         raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await dal.get_task_data(task_id=_id)):
-        raise HTTPException(status_code=404, detail="Task not found")
-    if task.is_frozen:
-        raise HTTPException(status_code=404, detail="Task is frozen and cannot be deleted")
     if not (task_updated := await dal.update_task_data(task_id=_id, payload=payload)):
-        raise HTTPException(status_code=404, detail="Task not found")
+        message = "Could not update workflow, either because it does not exist, or for another reason."
+        raise HTTPException(status_code=404, detail=message)
     return TaskOut(**task_updated.__dict__)
