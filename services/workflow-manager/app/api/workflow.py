@@ -45,6 +45,12 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 workflows: Dict[str, Dict[str, Any]] = {}
 
 
+@router.get("/hello/")
+async def hello_world() -> dict[str, str]:
+    """Hello world endpoint."""
+    return {"message": "Hello, World!"}
+
+
 @router.post("/test/{workflow_id}")
 async def test(workflow_id: str):
     try:
