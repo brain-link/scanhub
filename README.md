@@ -15,8 +15,10 @@
 </a>
 </p>
 
------------------
-  
+---
+
+# Scanhub
+
 ScanHub is intended to be a multi modal acquisition software, which allows individualizable, modular and cloud-based processing of functional and anatomical medical images. 
 It seamlessly merges the acquisition with the processing of complex data on a single platform.
 ScanHub is open-source and freely availably to anyone :earth_africa:.
@@ -30,15 +32,14 @@ ScanHub is designed as a client-server application. It consists of several servi
 We welcome anyone who would like to join our mission, just [get in touch](mailto:info@brain-link.de) :email:.
 
 
-Demo :clapper:
---------------
+## Demo :clapper:
 
 The following video shows a short demonstration of the ScanHub UI (September 2023). You will see how to navigate through the acquisition planner, inspect an MRI sequence and start an MRI simulation on a virtual MRI scanner. In the end we are demonstrating how to view the DICOM image, reconstructed by our workflow engine subsequently to the acquisition.
 
 https://github.com/user-attachments/assets/da900b3b-e9b3-45bf-a6bb-85f69f3d5f73
 
-Installation
-------------
+
+## Installation + Start & Stop
 
 Scanhub is deployed using Docker and Docker Compose. Make sure they are installed. There exist multiple forms of the Docker Compose tool. The version used here should be callable with "docker compose" for the helper scripts to work. If you want to install tools for development of Scanhub on Linux (Ubuntu/Mint), you may use the install-tools.sh script.
 
@@ -76,19 +77,22 @@ During development you may start scanhub and the tools for development using the
     development-launcher.sh --full-rebuild
 
 
-Default Username and Password
------------------------------
+## Default Username and Password
 
-For now a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt and defaultuser.csv
+For now, a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt and defaultuser.csv
 
 
-Documentation
------------
+## Documentation
 
 See our dedicated [Documentation](https://scanhub.brain-link.de/) web page to get insights into the structure of ScanHub, microservice APIs and more.
 
-Contributor Guide
------------
+
+## State of development
+
+This software is not yet ready for clinical use!
+
+
+## Contributor Guide
 
 We appreciate every contribution to ScanHub, if you would like to contribute to the project, please contact us.
 Based on a stable main-branch, we are implementing features based on issues.
@@ -105,8 +109,8 @@ When you start working on an issue, please create a new branch according to the 
 The `<ID>` refers to the ID of the related issue and `short-name` is a short expression for the title of the issue.
 Please link the branch to the issue, as soon as you start working on it.
 
-About
------------
+
+## About
 
 The advent of cloud computing has enabled a new era of innovation, and ScanHub is at the forefront of leveraging this technology for the benefit of the MRI community. By shifting image reconstruction, processing, and storage from on-site infrastructure to the cloud, ScanHub offers a myriad of advantages over traditional MRI consoles:
 1.	Open-source transparency: ScanHub's open-source nature fosters transparency and collaboration within the MRI community, encouraging the development of a unified standard and preventing the fragmentation caused by proprietary black-box solutions. This approach enables researchers and developers to build upon each other's work, accelerating innovation and improving the overall quality of MRI solutions.

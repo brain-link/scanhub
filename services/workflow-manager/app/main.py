@@ -3,16 +3,14 @@
 
 """Workflow manager main."""
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from scanhub_libraries.security import get_current_user
 
 from api.workflow import router
 
 app = FastAPI(
-    openapi_url="/api/v1/workflow/openapi.json",
-    docs_url="/api/v1/workflow/docs",
-    dependencies=[Depends(get_current_user)]
+    openapi_url="/api/v1/workflowmanager/openapi.json",
+    docs_url="/api/v1/workflowmanager/docs",
 )
 
 app.add_middleware(
@@ -35,7 +33,7 @@ async def shutdown() -> None:
     """Shutdown event for the API."""
     pass
 
-@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get("/api/v1/workflowmanager/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -53,4 +51,4 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
-app.include_router(router, prefix="/api/v1/workflow")
+app.include_router(router, prefix="/api/v1/workflowmanager")

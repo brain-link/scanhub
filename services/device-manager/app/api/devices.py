@@ -1,3 +1,6 @@
+# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
 """
 Device API Endpoints.
 
@@ -5,19 +8,21 @@ This module defines the API routes and WebSocket endpoints for managing devices.
 It includes functionalities for:
 - CRUD operations on devices.
 - Device registration and status updates via WebSocket.
-- Health readiness checks.
 
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
-
 # pylint: disable=no-name-in-module
 # pylint: disable=too-many-statements
 
+import json
 from datetime import datetime
 from typing import Dict, List
 
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.encoders import jsonable_encoder
+from scanhub_libraries.models import DeviceTask
+from scanhub_libraries.security import get_current_user
 from sqlalchemy import exc
 
 from .dal import (
@@ -27,68 +32,14 @@ from .dal import (
     dal_get_device,
     dal_update_device,
 )
-from .models import DeviceOut, get_device_out
+from .models import BaseDevice, DeviceOut, get_device_out
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 active_connections: list[WebSocket] = []
 dict_id_websocket: Dict[str, WebSocket] = {}
 
-@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
-async def readiness() -> dict:
-    """
-    Readiness health endpoint.
-
-    Checks if the service is ready to handle requests.
-
-    Returns
-    -------
-    dict
-        A dictionary with the readiness status.
-    """
-    return {"status": "ok"}
-
-
-@router.put('/{device_id}/start-scan', status_code=200, tags=["devices"])
-async def start_scan(device_id: str, header_xml: str, sequence_data: str, acquisition_data: str):
-    """
-    Start a scan on a connected device.
-
-    Sends a command to a device via WebSocket to initiate a scan.
-
-    Args
-    ----
-    device_id : str
-        The unique identifier of the device.
-    header_xml : str
-        Metadata in XML format.
-    sequence_data : str
-        Data related to the scanning sequence.
-    acquisition_data : str
-        Data for scan acquisition.
-
-    Raises
-    ------
-    HTTPException
-        If the device is not found or not connected.
-
-    """
-    if not (await dal_get_device(device_id)):
-        raise HTTPException(status_code=404, detail="Device not found")
-    if device_id not in dict_id_websocket:
-        raise HTTPException(status_code=404, detail="Device not connected")
-    print("Start Scan")
-    websocket = dict_id_websocket[device_id]
-    data = {
-        "header_xml" : header_xml,
-        "sequence_data" : sequence_data,
-        "acquisition_data": acquisition_data
-    }
-    await websocket.send_json({
-        "command": "start",
-        "data": data
-    })
 
 @router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])
 async def get_devices() -> list[DeviceOut]:
@@ -179,6 +130,34 @@ async def delete_device(device_id: str):
         raise HTTPException(status_code=404, detail="Device not found")
 
 
+@router.post('/start_scan_via_websocket', response_model={}, status_code=200, tags=["devices"])
+async def start_scan_via_websocket(device_task: DeviceTask):
+    """Start a scan via a websocket that was already opened by the device.
+
+    Parameters
+    ----------
+    device_task
+        Details of the scan and the device to scan on.
+
+    """
+    print("start_scan_via_websocket")
+    print("device_task:", device_task)
+    if device_task.device_id in dict_id_websocket:
+        websocket = dict_id_websocket[device_task.device_id]
+        await websocket.send_text(json.dumps({'command': 'start', 'data': device_task}, default=jsonable_encoder))
+        return
+    else:
+        raise HTTPException(status_code=503, detail='Device offline.')
+
+
+# TODO restrict access to token-bearer
+# (currently it is not restricted because the current dependency on get_current_user in the APIRouter
+# is only applicable to regular HTTP Connections)
+# https://fastapi.tiangolo.com/advanced/websockets/#using-depends-and-others
+# https://fastapi.tiangolo.com/reference/websockets/ (see first tip)
+# https://github.com/DontPanicO/fastapi-distributed-websocket/blob/main/distributed_websocket/_auth.py
+# https://github.com/fastapi/fastapi/blob/5614b94ccc9f72f1de2f63aae63f5fe90b86c8b5/fastapi/security/oauth2.py#L139
+# https://fastapi.tiangolo.com/reference/exceptions/
 # pylint: disable=locally-disabled, too-many-branches
 @router.websocket('/ws2')
 async def websocket_endpoint(websocket: WebSocket):
@@ -192,23 +171,26 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     active_connections.append(websocket)
 
-    print('Device connected.')
+    print('Device connected on ws2.')
 
     device_id_global = ""
 
     try:
         while True:
             message = await websocket.receive_json()
+            print("Received messgage:", message)
             command = message.get('command')
             # ===============  Register device ===================
             if command == 'register':
+                print("Received command 'register'.")
                 if device_id_global != "":
                     await websocket.send_json({'message': 'Error registering device. \
 In this session a device already was registered.'})
                     continue
                 device_data = message.get('data')
+                print("Device data:", device_data)
                 device_id = device_data.get('id')
-                device = DeviceOut(**device_data)
+                device = BaseDevice(**device_data)
 
                 if not (await dal_get_device(device_id)):
                     try:
@@ -232,6 +214,7 @@ In this session a device already was registered.'})
 
             # ================ Update device status ===============
             elif command == 'update_status':
+                print("Received command 'update_status'.")
                 status_data = message.get('data')
                 device_id = status_data.get('id')
                 if device_id_global not in ("", device_id):
@@ -262,8 +245,12 @@ Device ID does not match'})
                             'message': 'Device status updated successfully'})
                         device_id_global = device_id
                         dict_id_websocket[device_id] = websocket
+            else:
+                print("Received unknown command, which will be ignored:", command)
+
 
     except WebSocketDisconnect:
+        print("WebSocketDisconnect")
         active_connections.remove(websocket)
         if device_id_global in dict_id_websocket:
             del dict_id_websocket[device_id_global]
@@ -283,6 +270,14 @@ Device ID does not match'})
                 print('Device status updated successfully')
 
 
+# TODO restrict access to token-bearer
+# (currently it is not restricted because the current dependency on get_current_user in the APIRouter
+# is only applicable to regular HTTP Connections)
+# https://fastapi.tiangolo.com/advanced/websockets/#using-depends-and-others
+# https://fastapi.tiangolo.com/reference/websockets/ (see first tip)
+# https://github.com/DontPanicO/fastapi-distributed-websocket/blob/main/distributed_websocket/_auth.py
+# https://github.com/fastapi/fastapi/blob/5614b94ccc9f72f1de2f63aae63f5fe90b86c8b5/fastapi/security/oauth2.py#L139
+# https://fastapi.tiangolo.com/reference/exceptions/
 @router.websocket('/ws')
 async def websocket_endpoint_legacy(websocket: WebSocket):
     """
@@ -295,13 +290,14 @@ async def websocket_endpoint_legacy(websocket: WebSocket):
     await websocket.accept()
     active_connections.append(websocket)
 
-    print('Device connected.')
+    print('Device connected on ws.')
 
     device_id_global = ""
 
     try:
         while True:
             message = await websocket.receive_json()
+            print("Received messgage:", message)
             command = message.get('command')
             # ===============  Register device ===================
             if command == 'register':
@@ -312,7 +308,7 @@ In this session a device already was registered.'})
                 device_data = message.get('data')
                 ip_address = message.get('ip_address')
                 device_id = device_data.get('id')
-                device = DeviceOut(ip_address=ip_address, **device_data)
+                device = BaseDevice(ip_address=ip_address, **device_data)
                 try:
                     await dal_create_device(device)
                 except exc.SQLAlchemyError as ex:
@@ -365,3 +361,4 @@ Device ID does not match'})
             else:
                 # Send response to the device
                 print('Device status updated successfully')
+

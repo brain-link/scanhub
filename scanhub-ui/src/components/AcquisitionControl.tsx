@@ -11,13 +11,31 @@ import LinearProgress from '@mui/joy/LinearProgress'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
+import { useMutation } from 'react-query'
 
+import { workflowManagerApi } from '../api'
 import { ItemSelection } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
 function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }) {
   const [, showNotification] = React.useContext(NotificationContext)
+
+  const processTaskMutation = useMutation({
+    mutationKey: ['workflowManagerProcessTask'],
+    mutationFn: async () => {
+      await workflowManagerApi
+        .processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet((itemSelection.itemId as string))
+        .then(() => {
+          // props.onSubmit()
+          showNotification({message: 'Started task', type: 'success'})
+        })
+        .catch(() => {
+          showNotification({message: 'Error at starting task.', type: 'warning'})
+        })
+    },
+  })
+
 
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -28,18 +46,26 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
         onClick={() => {
           if (itemSelection.itemId == undefined) {
             showNotification({message: 'No item selected!', type: 'warning'})
+          } else if (itemSelection.type == 'task') {
+            processTaskMutation.mutate()
           } else {
             // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
-            showNotification({message: 'Acquisition trigger not implemented!', type: 'warning'})
+            showNotification({message: 'Acquisition trigger not implemented for this item type!', type: 'warning'})
           }
         }}
       >
         <PlayCircleIcon />
       </IconButton>
 
-      <Stack direction='column' spacing={1} sx={{ flex: 1 }}>
-        <Typography level='title-sm'>Execute: Exam</Typography>
-        <LinearProgress determinate value={60} />
+      <Stack direction='column' sx={{ flex: 1 }}>
+        <Typography level='title-sm'>
+          {itemSelection.type ? 
+            'Execute ' + itemSelection.type + ' "' + itemSelection.name + '"'
+          : 
+            'Select item to start...'}
+        </Typography>
+        <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
+        <LinearProgress determinate value={60} sx={{marginTop: 1}} />
       </Stack>
     </Box>
   )

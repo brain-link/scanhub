@@ -7,7 +7,6 @@
 import * as React from 'react'
 
 import Box from '@mui/joy/Box'
-import Chip from '@mui/joy/Chip'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
@@ -29,14 +28,19 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
           },
         }}
       >
+        <Typography fontSize='sm'>Name</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.name}
+        </Typography>
+
         <Typography fontSize='sm'>Description</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {task.description}
         </Typography>
 
-        <Typography fontSize='sm'>ID</Typography>
+        <Typography fontSize='sm'>Comment</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {task.id}
+          {task.comment}
         </Typography>
 
         <Typography fontSize='sm'>Type</Typography>
@@ -74,6 +78,21 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
             ))}
         </Stack>
 
+        <Typography fontSize='sm'>Status</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.status}
+        </Typography>
+
+        <Typography fontSize='sm'>Is Template</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.is_template ? 'True' : 'False'}
+        </Typography>
+
+        <Typography fontSize='sm'>ID</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.id}
+        </Typography>
+
         <Typography fontSize='sm'>Creator</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {task.creator}
@@ -81,18 +100,14 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
 
         <Typography fontSize='sm'>Created</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(task.datetime_created).toDateString()}
+          {new Date(task.datetime_created).toLocaleString()}
         </Typography>
 
-        <Typography fontSize='sm'>Status</Typography>
-        <Stack direction='row' spacing={0.5}>
-          <Chip size='sm' color={task.is_template ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Template
-          </Chip>
-          <Chip size='sm' color={task.is_frozen ? 'success' : 'danger'} sx={{ fontWeight: 'lg' }}>
-            Frozen
-          </Chip>
-        </Stack>
+        <Typography fontSize='sm'>Updated</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.datetime_updated ? new Date(task.datetime_updated).toLocaleString() : '-'}
+        </Typography>
+
       </Box>
     </Box>
   )

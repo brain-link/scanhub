@@ -13,14 +13,15 @@ import { useQuery } from 'react-query'
 
 import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
-import ExamCreateModal from '../components/ExamCreateModal'
+import ExamModal from '../components/ExamModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED } from '../interfaces/components.interface'
 
-export default function Templates() {
+
+export default function TemplatesView() {
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const { data: exams, refetch } = useQuery<ExamOut[]>({
@@ -35,19 +36,18 @@ export default function Templates() {
   })
 
   return (
-    <Stack direction='column' alignContent='center' width='20%' margin='auto' spacing={2} sx={{ p: 2 }}>
+    <Stack direction='column' alignContent='center' width='400px' margin='auto' spacing={2} sx={{ p: 2 }}>
       <Button startDecorator={<Add />} onClick={() => setModalOpen(true)}>
         Create Exam Template
       </Button>
 
-      <ExamCreateModal
+      <ExamModal
         isOpen={modalOpen}
         setOpen={setModalOpen}
-        onSubmit={
-          () => {
-            refetch()
-          }
-        }
+        onSubmit={() => refetch()}
+        modalType='create'
+        createTemplate={true}
+        parentId={undefined}
       />
 
       {exams?.map((exam) => (

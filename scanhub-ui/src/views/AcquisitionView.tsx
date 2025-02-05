@@ -32,10 +32,10 @@ import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
 
 
-function PatientIndex() {
+function AcquisitionView() {
   const params = useParams()
 
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
 
   // useQuery for caching the fetched data
@@ -47,7 +47,7 @@ function PatientIndex() {
   } = useQuery<PatientOut, Error>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientApiV1PatientPatientIdGet(Number(params.patientId)).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!).then((result) => {
         return result.data
       })
     },
@@ -63,7 +63,7 @@ function PatientIndex() {
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
       return await examApi
-        .getAllPatientExamsApiV1ExamAllPatientIdGet(Number(params.patientId))
+        .getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
         .then((result) => {
           return result.data
         })
@@ -111,7 +111,7 @@ function PatientIndex() {
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
 
-          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamModalOpen(true)}>
+          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamFromTemplateModalOpen(true)}>
             <AddSharpIcon />
           </IconButton>
         </Box>
@@ -133,7 +133,7 @@ function PatientIndex() {
               accordionSummary={
                 <ExamItem 
                   item={exam} 
-                  onClick={() => {setItemSelection({type: 'exam', itemId: exam.id})}} 
+                  onClick={() => {setItemSelection({type: 'exam', name: exam.name, itemId: exam.id})}} 
                   selection={itemSelection}
                 />
               }
@@ -147,7 +147,7 @@ function PatientIndex() {
                   accordionSummary={
                     <WorkflowItem 
                       item={workflow} 
-                      onClick={() => {setItemSelection({type: 'workflow', itemId: workflow.id})}}
+                      onClick={() => {setItemSelection({type: 'workflow', name: workflow.name, itemId: workflow.id})}}
                       selection={itemSelection}
                     />
                   }
@@ -158,7 +158,7 @@ function PatientIndex() {
                       key={`task-${task.id}`} 
                       item={task} 
                       refetchParentData={refetchExams}
-                      onClick={() => {setItemSelection({type: 'task', itemId: task.id})}}
+                      onClick={() => {setItemSelection({type: 'task', name: task.name, itemId: task.id})}}
                       selection={itemSelection}
                     />
                   ))}
@@ -173,11 +173,12 @@ function PatientIndex() {
       </Sheet>
 
       <ExamFromTemplateModal
-        isOpen={examModalOpen}
-        setOpen={setExamModalOpen}
+        isOpen={examFromTemplateModalOpen}
+        setOpen={setExamFromTemplateModalOpen}
         parentId={String(params.patientId)}
         onSubmit={refetchExams}
         createTemplate={false}
+        modalType={'create'}
       />
 
       <DicomViewer />
@@ -185,4 +186,4 @@ function PatientIndex() {
   )
 }
 
-export default PatientIndex
+export default AcquisitionView

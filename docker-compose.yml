@@ -57,7 +57,7 @@ services:
       - AIRFLOW_API_URL=http://localhost:8081
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflow/health/readiness"]
+      test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflowmanager/health/readiness"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -189,6 +189,12 @@ services:
       - MONGODB_PORT=27017
       - MONGODB_DB=mri_sequences_db
       - MONGODB_COLLECTION_NAME=mri_sequences
+    healthcheck:
+      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
+      test: ["CMD", "curl", "http://sequence-manager:8000/api/v1/mri/sequences/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     depends_on:
       sequence-database:
         condition: service_healthy
@@ -394,6 +400,11 @@ services:
       - "8080:8080"
     volumes:
       - ./infrastructure/nginx_config.conf:/etc/nginx/conf.d/default.conf
+    healthcheck:
+      test: ["CMD", "curl", "http://api-gateway:8080/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     depends_on:
       device-manager:
         condition: service_healthy

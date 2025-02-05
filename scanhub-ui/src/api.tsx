@@ -4,18 +4,32 @@
  *
  * api.tsx contains instances of the different apis.
  */
-import { ExamsApi } from './generated-client/exam'
-import { WorkflowsApi } from './generated-client/exam'
-import { TasksApi } from './generated-client/exam'
-import { PatientsApi } from './generated-client/patient'
-import { LoginApi } from './generated-client/userlogin'
-import { UserApi } from './generated-client/userlogin'
+import { PatientsApi, HealthApi as PatientManagerHealthApi } from './generated-client/patient'
+import { ExamsApi, WorkflowsApi, TasksApi, HealthApi as ExamManagerHealthApi } from './generated-client/exam'
+import { WorkflowManagerApi, HealthApi as WorkflowManagerHealthApi } from './generated-client/workflowmanager'
+import { UserApi, LoginApi, HealthApi as UserLoginManagerHealthApi } from './generated-client/userlogin'
+import { DevicesApi, HealthApi as DeviceManagerHealthApi } from './generated-client/device'
+import { MRISequencesApi, HealthApi as SequenceManagerHealthApi } from './generated-client/sequence'
 import baseUrls from './utils/Urls'
 
 
 export const patientApi = new PatientsApi(undefined, baseUrls.patientService)
+export const patientManagerHealthApi = new PatientManagerHealthApi(undefined, baseUrls.patientService)
+
 export const examApi = new ExamsApi(undefined, baseUrls.examService)
 export const workflowsApi = new WorkflowsApi(undefined, baseUrls.examService)
 export const taskApi = new TasksApi(undefined, baseUrls.examService)
+export const examManagerHealthApi = new ExamManagerHealthApi(undefined, baseUrls.examService)
+
+export const workflowManagerApi = new WorkflowManagerApi(undefined, baseUrls.workflowManagerService)
+export const workflowManagerHealthApi = new WorkflowManagerHealthApi(undefined, baseUrls.workflowManagerService)
+
 export const loginApi = new LoginApi(undefined, baseUrls.userloginService)
 export const userApi = new UserApi(undefined, baseUrls.userloginService)
+export const userLoginManagerHealthApi = new UserLoginManagerHealthApi(undefined, baseUrls.userloginService)
+
+export const deviceApi = new DevicesApi(undefined, baseUrls.deviceService)
+export const deviceManagerHealthApi = new DeviceManagerHealthApi(undefined, baseUrls.deviceService)
+
+export const sequenceApi = new MRISequencesApi(undefined, baseUrls.sequenceService)
+export const sequenceManagerHealthApi = new SequenceManagerHealthApi(undefined, baseUrls.sequenceService)

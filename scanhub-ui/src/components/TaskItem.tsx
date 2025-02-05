@@ -23,7 +23,7 @@ import Button from '@mui/joy/Button'
 import { TaskOut } from '../generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
-import TaskModifyModal from './TaskModifyModal'
+import TaskModal from './TaskModal'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 
 
@@ -126,11 +126,12 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ta
         </Menu>
       </Dropdown>
 
-      <TaskModifyModal 
+      <TaskModal 
         isOpen={taskModalOpen}
         setOpen={setTaskModalOpen}
         onSubmit={refetchParentData}
         item={task}
+        modalType={'modify'}
       />
     </>
   )

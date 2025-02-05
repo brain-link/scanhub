@@ -61,7 +61,7 @@ async def get_exam_data(exam_id: UUID) -> (Exam | None):
     return exam
 
 
-async def get_all_exam_data(patient_id: int) -> list[Exam]:
+async def get_all_exam_data(patient_id: UUID) -> list[Exam]:
     """Get a list of all exams assigned to a certain patient.
 
     Parameters

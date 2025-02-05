@@ -6,7 +6,6 @@
  * exam template selection interface to generate a new exam.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
 import { useQuery } from 'react-query'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
@@ -18,8 +17,12 @@ import { examApi } from '../api'
 import { ExamOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
+import ExamModal from './ExamModal'
+
 
 export default function ExamFromTemplateModal(props: ModalPropsCreate) {
+
+  const [examForModification, setExamForModification] = React.useState<ExamOut | undefined>(undefined);
 
   const { data: exams } = useQuery<ExamOut[]>({
     queryKey: ['exams'],
@@ -32,47 +35,54 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
     },
   })
 
-  const mutation = useMutation(async (id: string) => {
-    await examApi
-      .createExamFromTemplateApiV1ExamPost(Number(props.parentId), id, props.createTemplate)
-      .then(() => {
-        props.onSubmit()
-      })
-  })
+  function returnExamFromTemplateModal() {
+    return <Modal
+      open={props.isOpen}
+      onClose={() => {
+        props.setOpen(false)
+      }}
+    >
+      <ModalDialog sx={{ width: '50vw', p: 5 }}>
+        <ModalClose />
+        <DialogTitle>Add Exam from Template</DialogTitle>
+        <Stack
+          sx={{
+            overflow: 'scroll',
+            mx: 'calc(-1 * var(--ModalDialog-padding))',
+            px: 'var(--ModalDialog-padding)',
+          }}
+        >
+          {exams &&
+            exams.map((exam, idx) => (
+              <ExamItem
+                key={idx}
+                item={exam}
+                onClick={() => {
+                  setExamForModification({ ...exam, 'patient_id': props.parentId, 'is_template': props.createTemplate })
+                }}
+                selection={ITEM_UNSELECTED} 
+              />
+            ))}
+        </Stack>
+      </ModalDialog>
+    </Modal>
+  }
 
   return (
-    <>
-      <Modal
-        open={props.isOpen}
-        onClose={() => {
-          props.setOpen(false)
+    examForModification ? 
+      <ExamModal
+        item={examForModification}
+        isOpen={true}
+        setOpen={(status) => {
+          if (status == false) {
+            setExamForModification(undefined)  // reset state
+          }
+          props.setOpen(status)
         }}
-      >
-        <ModalDialog sx={{ width: '50vw', p: 5 }}>
-          <ModalClose />
-          <DialogTitle>Add Exam from Template</DialogTitle>
-          <Stack
-            sx={{
-              overflow: 'scroll',
-              mx: 'calc(-1 * var(--ModalDialog-padding))',
-              px: 'var(--ModalDialog-padding)',
-            }}
-          >
-            {exams &&
-              exams.map((exam, idx) => (
-                <ExamItem
-                  key={idx}
-                  item={exam}
-                  onClick={() => {
-                    mutation.mutate(exam.id)
-                    props.setOpen(false)
-                  }}
-                  selection={ITEM_UNSELECTED} 
-                />
-              ))}
-          </Stack>
-        </ModalDialog>
-      </Modal>
-    </>
+        onSubmit={props.onSubmit}
+        modalType={'createModifyFromTemplate'}
+      />
+    :
+      returnExamFromTemplateModal()
   )
 }

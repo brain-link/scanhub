@@ -8,7 +8,7 @@ import os
 import uuid
 
 from pydantic import BaseModel
-from scanhub_libraries.models import TaskStatus, TaskType
+from scanhub_libraries.models import ItemStatus, TaskType
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -50,29 +50,24 @@ class Exam(Base):
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    workflows: Mapped[list["Workflow"]] = relationship(lazy="selectin")
-
-    # Relations and references
-    patient_id: Mapped[int] = mapped_column(nullable=True)
-
-    # Fields
-    name: Mapped[str] = mapped_column(nullable=False)
-    country: Mapped[str] = mapped_column(nullable=True)
-    site: Mapped[str] = mapped_column(nullable=True)
-    address: Mapped[str] = mapped_column(nullable=True)
     creator: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[str] = mapped_column(nullable=False)
-
-    # Flags
-    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
-    is_frozen: Mapped[bool] = mapped_column(nullable=False, default=False)
-
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
+    workflows: Mapped[list["Workflow"]] = relationship(lazy="selectin")
+
+    patient_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    indication: Mapped[str] = mapped_column(nullable=True)
+    patient_height_cm: Mapped[int] = mapped_column(nullable=True)
+    patient_weight_kg: Mapped[int] = mapped_column(nullable=True)
+    comment: Mapped[str] = mapped_column(nullable=True)
+    status: Mapped[ItemStatus] = mapped_column(nullable=False)
+    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
 
 
 class Workflow(Base): # TBD: rename to "Workflow"
@@ -82,28 +77,21 @@ class Workflow(Base): # TBD: rename to "Workflow"
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-
-    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
-    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
-
-    # Fields
-    name: Mapped[str] = mapped_column(nullable=False)
-    comment: Mapped[str] = mapped_column(nullable=True)
     creator: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[str] = mapped_column(nullable=False)
-
-    # Flags
-    is_finished: Mapped[bool] = mapped_column(nullable=False, default=False)
-    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
-    is_frozen: Mapped[bool] = mapped_column(nullable=False, default=False)
-
-    # Meta
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
+    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
+
+    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    comment: Mapped[str] = mapped_column(nullable=True)
+    status: Mapped[ItemStatus] = mapped_column(nullable=False)
+    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
 
 
 class Task(Base):
@@ -113,12 +101,18 @@ class Task(Base):
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    # Workflow id must be nullable, as a template must not have a relationship
-    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
+    creator: Mapped[str] = mapped_column(nullable=False)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now()  # pylint: disable=not-callable
+    )
+    datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+    )
 
-    # Fields
+    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=True)
+    description: Mapped[str] = mapped_column(nullable=False)
+    comment: Mapped[str] = mapped_column(nullable=True)
     type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
 
     # Arguments and parameters
@@ -135,17 +129,8 @@ class Task(Base):
     # i.e., target topics
     destinations: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
 
-    status: Mapped[dict[TaskStatus, str]] = mapped_column(type_=JSON, nullable=False)
-    creator: Mapped[str] = mapped_column(nullable=False)
-
-    # Flags
+    status: Mapped[ItemStatus] = mapped_column(nullable=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
-    is_frozen: Mapped[bool] = mapped_column(nullable=False, default=False)
-
-    # Fields
-    datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now()  # pylint: disable=not-callable
-    )
 
 
 # Create automap base

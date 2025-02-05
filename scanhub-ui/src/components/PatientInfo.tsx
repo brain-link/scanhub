@@ -41,17 +41,17 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
         }}
       >
         <Typography level='body-sm'>ID</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
+        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
           {patient.id}
         </Typography>
 
         <Typography level='body-sm'>First Name</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
+        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
           {patient.first_name}
         </Typography>
 
         <Typography level='body-sm'>Last Name</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
+        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
           {patient.last_name}
         </Typography>
 
@@ -61,7 +61,7 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
         </Typography>
 
         <Typography level='body-sm'>Sex</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
+        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
           {patient.sex}
         </Typography>
 

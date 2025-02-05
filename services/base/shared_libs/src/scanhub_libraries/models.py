@@ -36,12 +36,11 @@ class XYZ(BaseModel):
     Z: float
 
 
-# TODO: Move these parameters to the patient model.
 class AcquisitionLimits(BaseModel):
     """Pydantic definition of AcquisitionLimits."""
 
-    patient_height: float
-    patient_weight: float
+    patient_height: int
+    patient_weight: int
     patient_gender: Gender = Field(None, alias="Gender")
     patient_age: int
 
@@ -74,7 +73,7 @@ class ParametrizedSequence(BaseModel):
 
     acquisition_limits: AcquisitionLimits
     sequence_parameters: SequenceParameters
-    sequence: Json
+    sequence: str
 
 
 class MRISequence(BaseModel):
@@ -203,19 +202,20 @@ class TaskType(str, Enum):
     """Task type enum."""
 
     PROCESSING_TASK = "PROCESSING_TASK"
-    DEVICE_TASK = "DEVICE_TASK"
+    DEVICE_TASK_SIMULATOR = "DEVICE_TASK_SIMULATOR"
+    DEVICE_TASK_SDK = "DEVICE_TASK_SDK"
     CERTIFIED_DEVICE_TASK = "CERTIFIED_DEVICE_TASK"
     CERTIFIED_PROCESSING_TASK = "CERTIFIED_PROCESSING_TASK"
 
 
-class TaskStatus(str, Enum):
+class ItemStatus(str, Enum):
     """Task status enum."""
 
-    PENDING = "PENDING"
-    IN_PROGRESS = "IN_PROGRESS"
-    COMPLETED = "COMPLETED"
-    FAILED = "FAILED"
-    ERROR = "ERROR"
+    NEW = "NEW"
+    UPDATED = "UPDATED"
+    STARTED = "STARTED"
+    FINISHED = "FINISHED"
+    DELETED = "DELETED"
 
 
 class BaseTask(BaseModel):
@@ -228,8 +228,11 @@ class BaseTask(BaseModel):
         # schema_extra = {
         #     "examples": [
         #         {
-        #             "description": "task description",
-        #             "type": TaskType.PROCESSING_TASK,
+        #             "workflow_id": "2c6cc3b9-574b-4bb6-8fc9-45b7cba679ca"
+        #             "name": "Localizer"
+        #             "description": "Fast and low resolution",
+        #             "comment": "should work this time"
+        #             "type": TaskType.DEVICE_TASK,
         #             "args": {"arg1": "val1"},
         #             "artifacts": {
         #                 "input": [
@@ -245,8 +248,9 @@ class BaseTask(BaseModel):
         #                     }
         #                 ]
         #             },
-        #             "task_destinations": [],
-        #             "status": {TaskStatus.PENDING: "additional status information"}
+        #             "destinations": [],
+        #             "status": "NEW",
+        #             "is_template": False,
         #         }
         #     ]
         # }
@@ -254,13 +258,13 @@ class BaseTask(BaseModel):
     workflow_id: Optional[UUID] = None
     name: str
     description: str
+    comment: str | None
     type: TaskType
     args: dict[str, str]
     artifacts: dict[str, str]
     destinations: dict[str, str]
-    status: dict[TaskStatus, str]
+    status: ItemStatus
     is_template: bool
-    is_frozen: bool
 
 
 class TaskOut(BaseTask):
@@ -269,6 +273,7 @@ class TaskOut(BaseTask):
     id: UUID
     creator: str
     datetime_created: datetime
+    datetime_updated: datetime | None
 
 
 class BaseWorkflow(BaseModel):
@@ -279,23 +284,22 @@ class BaseWorkflow(BaseModel):
 
         extra = Extra.ignore
 
-    name: str
-    comment: str | None
     exam_id: Optional[UUID] = None
-    status: Literal["NEW", "UPDATED", "DELETED"]
-    is_finished: bool
+    name: str
+    description: str
+    comment: str | None
+    status: ItemStatus
     is_template: bool
-    is_frozen: bool
 
 
 class WorkflowOut(BaseWorkflow):
     """Workflow output model."""
 
     id: UUID
-    tasks: list[TaskOut]
     creator: str
     datetime_created: datetime
     datetime_updated: datetime | None
+    tasks: list[TaskOut]
 
 
 class BaseExam(BaseModel):
@@ -306,24 +310,25 @@ class BaseExam(BaseModel):
 
         extra = Extra.ignore
 
-    patient_id: Optional[int] = None # TODO: replace by UUID
+    patient_id: Optional[UUID] = None
     name: str
-    country: str | None
-    site: str | None
-    address: str | None
-    status: Literal["NEW", "UPDATED", "DELETED"]
+    description: str
+    indication: str | None
+    patient_height_cm: int | None
+    patient_weight_kg: int | None
+    comment: str | None
+    status: ItemStatus
     is_template: bool
-    is_frozen: bool
 
 
 class ExamOut(BaseExam):
     """Exam output model."""
 
     id: UUID
+    creator: str
     datetime_created: datetime
     datetime_updated: datetime | None
     workflows: list[WorkflowOut]
-    creator: str
 
 
 class UserRole(Enum):
@@ -373,6 +378,6 @@ class BasePatient(BaseModel):
 class PatientOut(BasePatient):
     """Patient pydantic output model."""
 
-    patient_id: int = Field(alias="id")
+    patient_id: UUID = Field(alias="id")
     datetime_created: datetime
     datetime_updated: datetime | None

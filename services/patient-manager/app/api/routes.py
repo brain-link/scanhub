@@ -3,6 +3,8 @@
 
 """Definition of patient endpoints."""
 
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException
 from scanhub_libraries.models import BasePatient, PatientOut
 from scanhub_libraries.security import get_current_user
@@ -65,7 +67,7 @@ async def create_patient(payload: BasePatient) -> PatientOut:
 
 
 @router.get("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"])
-async def get_patient(patient_id: int) -> PatientOut:
+async def get_patient(patient_id: UUID) -> PatientOut:
     """Get a patient from database by id.
 
     Parameters
@@ -103,7 +105,7 @@ async def get_patient_list() -> list[PatientOut]:
 
 
 @router.delete("/{patient_id}", response_model={}, status_code=204, tags=["patients"])
-async def delete_patient(patient_id: int) -> None:
+async def delete_patient(patient_id: UUID) -> None:
     """Delete patient from database.
 
     Parameters
@@ -121,7 +123,7 @@ async def delete_patient(patient_id: int) -> None:
 
 
 @router.put("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"])
-async def update_patient(patient_id: int, payload: BasePatient):
+async def update_patient(patient_id: UUID, payload: BasePatient):
     """Update existing patient endpoint.
 
     Parameters

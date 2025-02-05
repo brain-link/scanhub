@@ -149,23 +149,20 @@ class Client:
                 await self.reconnect()
 
 
-    async def handle_start_command(self, data):
+    async def handle_start_command(self, deviceTask):
         """
         Handles the 'start' command from the server to begin a scanning process.
 
         Args:
-            data (dict): Command data containing scanning parameters.
+            deviceTask (dict): Command data containing scanning parameters.
 
         Sends an error status if the scan callback is not defined or an error 
         occurs during processing.
         """
         try:
             if self.scan_callback:
-                header_xml_str = data["header_xml"]
-                sequence_data = data["sequence_data"]
-                acquisition_data = data["acquisition_data"]
                 # Call the external scan callback function
-                await self.scan_callback(header_xml_str, sequence_data, acquisition_data)
+                await self.scan_callback(deviceTask)
             else:
                 self.logger.error("Scan callback not defined.")
                 await self.send_error_status("Scan callback not defined.")
@@ -296,7 +293,7 @@ class Client:
         Set a callback function to handle the scanning process.
 
         Args:
-            callback (callable): A function that takes three 
-            arguments (header_xml, sequence_data, acquisition_data).
+            callback (callable): A function that takes one 
+            argument (deviceTask).
         """
         self.scan_callback = callback
