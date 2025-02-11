@@ -11,7 +11,6 @@ device-manager.app.api.devices
    It includes functionalities for:
    - CRUD operations on devices.
    - Device registration and status updates via WebSocket.
-   - Health readiness checks.
 
    Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
    SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
@@ -33,13 +32,12 @@ Functions
 
 .. autoapisummary::
 
-   device-manager.app.api.devices.readiness
-   device-manager.app.api.devices.start_scan
    device-manager.app.api.devices.get_devices
    device-manager.app.api.devices.get_device_ip_address
    device-manager.app.api.devices.get_device
    device-manager.app.api.devices.get_device_status
    device-manager.app.api.devices.delete_device
+   device-manager.app.api.devices.start_scan_via_websocket
    device-manager.app.api.devices.websocket_endpoint
    device-manager.app.api.devices.websocket_endpoint_legacy
 
@@ -56,46 +54,6 @@ Module Contents
 
 .. py:data:: dict_id_websocket
    :type:  Dict[str, fastapi.WebSocket]
-
-.. py:function:: readiness() -> dict
-   :async:
-
-
-   Readiness health endpoint.
-
-   Checks if the service is ready to handle requests.
-
-   Returns
-   -------
-   dict
-       A dictionary with the readiness status.
-
-
-.. py:function:: start_scan(device_id: str, header_xml: str, sequence_data: str, acquisition_data: str)
-   :async:
-
-
-   Start a scan on a connected device.
-
-   Sends a command to a device via WebSocket to initiate a scan.
-
-   Args
-   ----
-   device_id : str
-       The unique identifier of the device.
-   header_xml : str
-       Metadata in XML format.
-   sequence_data : str
-       Data related to the scanning sequence.
-   acquisition_data : str
-       Data for scan acquisition.
-
-   Raises
-   ------
-   HTTPException
-       If the device is not found or not connected.
-
-
 
 .. py:function:: get_devices() -> list[device-manager.app.api.models.DeviceOut]
    :async:
@@ -166,6 +124,19 @@ Module Contents
    Returns
    -------
        dict: The response indicating the success or failure of the deletion.
+
+
+.. py:function:: start_scan_via_websocket(device_task: scanhub_libraries.models.DeviceTask)
+   :async:
+
+
+   Start a scan via a websocket that was already opened by the device.
+
+   Parameters
+   ----------
+   device_task
+       Details of the scan and the device to scan on.
+
 
 
 .. py:function:: websocket_endpoint(websocket: fastapi.WebSocket)

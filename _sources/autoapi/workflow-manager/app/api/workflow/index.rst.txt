@@ -26,6 +26,7 @@ Functions
 
 .. autoapisummary::
 
+   workflow-manager.app.api.workflow.hello_world
    workflow-manager.app.api.workflow.test
    workflow-manager.app.api.workflow.list_available_tasks
    workflow-manager.app.api.workflow.process
@@ -51,6 +52,13 @@ Module Contents
 
 .. py:data:: workflows
    :type:  Dict[str, Dict[str, Any]]
+
+.. py:function:: hello_world() -> dict[str, str]
+   :async:
+
+
+   Hello world endpoint.
+
 
 .. py:function:: test(workflow_id: str)
    :async:
