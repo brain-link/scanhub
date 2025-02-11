@@ -50,18 +50,25 @@ async def hello_world() -> dict[str, str]:
     """Hello world endpoint."""
     return {"message": "Hello, World!"}
 
+@router.post("/trigger_task/{task_id}/")
+async def trigger_task(task_id: str) -> dict[str, Any]:
+    """
+    Endpoint to trigger a task in the orchestration engine.
 
-@router.post("/test/{workflow_id}")
-async def test(workflow_id: str):
+    Args:
+        task_id (str): The ID of the DAG to be triggered.
+
+    Returns:
+        dict: A dictionary containing the response from the orchestration engine.
+    """
+    print(f"Triggering task: {task_id}")
     try:
-        result = orchestration_engine.trigger_workflow(workflow_id)
-        return result
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except HTTPException as e:
-        raise e
+        response = orchestration_engine.trigger_task(task_id)
+        return {"status": "success", "data": response}
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        logging.error(f"Failed to trigger task: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    return {"status": "success", "data": "Task triggered successfully"}
 
 @router.get("/tasks/")
 async def list_available_tasks():

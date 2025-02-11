@@ -4,6 +4,7 @@
 import os
 import requests
 from fastapi import HTTPException
+from datetime import datetime
 
 class OrchestrationEngine:
     """
@@ -45,6 +46,9 @@ class OrchestrationEngine:
         Raises:
             HTTPException: If the request to Airflow API fails.
         """
+
+        print(f"{self.airflow_api_url}/api/v1/dags")
+
         # TBD: Authentication should be handled in a more secure way
         response = requests.get(
             url=f"{self.airflow_api_url}/api/v1/dags",
@@ -86,10 +90,19 @@ class OrchestrationEngine:
         Raises:
             HTTPException: If the request to Airflow API fails.
         """
+
+        print(f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns")
+
+        payload = {}
+
+        print(payload)
+
         response = requests.post(
-            f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns",
-            auth=("airflow", "airflow")
+            url=f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns",
+            auth=("airflow", "airflow"),
+            json=payload
         )
+
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail="Failed to trigger Airflow task")
         return {"message": "Airflow task triggered successfully"}

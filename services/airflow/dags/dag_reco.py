@@ -37,8 +37,10 @@ finally:
 # [START instantiate_dag]
 @dag(dag_id='dag_reco_v01', 
      default_args=default_args, 
-     start_date=datetime(2021, 10, 26), 
-     schedule_interval='@daily')
+     start_date=datetime(2025, 1, 1), 
+     schedule_interval=None,
+     catchup=False,
+     tags=['scanhub', 'reconstruction'])
 def cartesian_reco_etl():
     """
     ### TaskFlow API Tutorial Documentation
