@@ -19,7 +19,7 @@ from app.db import UserSQL
 
 AUTOMATIC_LOGOUT_TIME_SECONDS = 3600    # time without activity until login token gets invalid
 FORCED_LOGOUT_TIME_SECONDS = 3600 * 11  # time until forced logout, independent of activity
-
+LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 
 router = APIRouter()
 
@@ -44,6 +44,9 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     HTTPException
         401: Unauthorized if the token is invalid or outdated.
     """
+    print(LOG_CALL_DELIMITER)
+    # need to explicitly print the function name for the case where it is called without http from within this module
+    print("get_current_user")
     user_db: UserSQL | None = await dal.get_user_from_token(access_token)
     if  (       user_db is not None
             and user_db.access_token is not None
@@ -54,6 +57,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
         # reset last_activity timer
         await dal.update_user_data(user_db.username, {"last_activity_unixtime": time.time()})
         user = await get_user_out(user_db)
+        print("Username:", user.username)
         return user
 
     print("Received invalid token.")
@@ -84,6 +88,11 @@ async def get_current_user_admin(current_user: Annotated[User, Depends(get_curre
     HTTPException
         401: Unauthorized if the token is invalid or user is not admin.
     """
+    print(LOG_CALL_DELIMITER)
+    # need to explicitly print the function name for the case where it is called without http from within this module
+    print("get_current_user_admin")
+    print("Username:", current_user.username)
+
     if current_user.role == UserRole.admin:
         return current_user
 
@@ -138,6 +147,7 @@ async def loginfromcookie(response: Response, access_token: Annotated[Optional[s
     HTTPException
         401: Unauthorized if the username or password is wrong.
     """
+    print(LOG_CALL_DELIMITER)
     if access_token is None:
         print("Missing token.")
         raise HTTPException(
@@ -148,6 +158,7 @@ async def loginfromcookie(response: Response, access_token: Annotated[Optional[s
 
     # raises error if access_token is invalid, resets last activity time
     current_user = await get_current_user(access_token)
+    print("Username:", current_user.username)
 
     response.set_cookie(
         key="access_token",
@@ -189,6 +200,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
     HTTPException
         401: Unauthorized if the username or password is wrong.
     """
+    print(LOG_CALL_DELIMITER)
     user_db = await dal.get_user_data(form_data.username)
     if user_db is None:
         print("Login try by unknown user. Username:", form_data.username)
@@ -256,6 +268,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
 @router.post("/logout", tags=["login"])
 async def logout(user: Annotated[User, Depends(get_current_user)], response: Response) -> None:
     """Logout endpoint."""
+    print(LOG_CALL_DELIMITER)
     print("Logout. Username:", user.username)
     await dal.update_user_data(user.username, {"access_token": None, "last_activity_unixtime": time.time()})
     response.delete_cookie(
@@ -288,6 +301,10 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user_a
     -------
         List of all users. The access_token and token_type properties are set to "" for all of them.
     """
+    print(LOG_CALL_DELIMITER)
+    # need to explicitly print the function name for the case where it is called without http from within this module
+    print("get_user_list")
+    print("Username:", current_user.username)
     users: list[UserSQL] = await dal.get_all_users()
     if not (users):
         # If return is none, list is empty
@@ -312,6 +329,15 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         Patient pydantic output model
 
     """
+    print(LOG_CALL_DELIMITER)
+    print("Username:", current_user.username)
+    print("Requested new_user.name:", new_user.username)
+    print("Requested new_user.first_name:", new_user.first_name)
+    print("Requested new_user.last_name", new_user.last_name)
+    print("Requested new_user.email:", new_user.email)
+    print("Requested new_user.role:", new_user.role)
+    print("Requested new_user.token_type:", new_user.token_type)
+
     user_db = await dal.get_user_data(new_user.username)
     if user_db is not None:
         print("Requested to create user that already exists.")
@@ -359,10 +385,14 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found
     """
+    print(LOG_CALL_DELIMITER)
+    print("Username:", current_user.username)
+    print("Username to delete:", username_to_delete)
     # check if the this would delete the last user with admin role
     sql_user_to_delete = await dal.get_user_data(username_to_delete)
     if sql_user_to_delete is not None and sql_user_to_delete.role == UserRole.admin.value:
         at_least_two_admins = 0
+        print("Call get_user_list to check that the last admin is not removed...")
         for user in await get_user_list(current_user):
             if user.role == UserRole.admin:
                 at_least_two_admins += 1
@@ -398,6 +428,9 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found if user not found.
     """
+    print(LOG_CALL_DELIMITER)
+    print("Username:", current_user.username)
+    print("Updated user:", updated_user)
     # check if the user exists
     sql_user_to_modify = await dal.get_user_data(updated_user.username)
     if sql_user_to_modify is None:
@@ -405,6 +438,7 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     # check if this would change the role of the last user with admin role
     if updated_user.role != UserRole.admin and sql_user_to_modify.role == UserRole.admin.value:
         at_least_two_admins = 0
+        print("Call get_user_list to check that the last admin is not removed...")
         for user in await get_user_list(current_user):
             if user.role == UserRole.admin:
                 at_least_two_admins += 1
