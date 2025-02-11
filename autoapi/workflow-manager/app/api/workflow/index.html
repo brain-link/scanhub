@@ -456,8 +456,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.hello_world" title="workflow-manager.app.api.workflow.hello_world"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hello_world</span></code></a>(→ dict[str, str])</p></td>
 <td><p>Hello world endpoint.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.test" title="workflow-manager.app.api.workflow.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>(workflow_id)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.trigger_task" title="workflow-manager.app.api.workflow.trigger_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trigger_task</span></code></a>(→ dict[str, Any])</p></td>
+<td><p>Endpoint to trigger a task in the orchestration engine.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.list_available_tasks" title="workflow-manager.app.api.workflow.list_available_tasks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_available_tasks</span></code></a>()</p></td>
 <td><p>Endpoint to list the available tasks from the orchestration engine.</p></td>
@@ -512,9 +512,16 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.test">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.test" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.trigger_task">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">trigger_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.trigger_task" title="Link to this definition">#</a></dt>
+<dd><p>Endpoint to trigger a task in the orchestration engine.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>task_id (str): The ID of the DAG to be triggered.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary containing the response from the orchestration engine.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.list_available_tasks">
@@ -620,7 +627,7 @@ Currently, only Airflow is supported.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.workflows"><code class="docutils literal notranslate"><span class="pre">workflows</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.hello_world"><code class="docutils literal notranslate"><span class="pre">hello_world()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.test"><code class="docutils literal notranslate"><span class="pre">test()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.trigger_task"><code class="docutils literal notranslate"><span class="pre">trigger_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.list_available_tasks"><code class="docutils literal notranslate"><span class="pre">list_available_tasks()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.process"><code class="docutils literal notranslate"><span class="pre">process()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.handle_device_task"><code class="docutils literal notranslate"><span class="pre">handle_device_task()</span></code></a></li>

@@ -27,7 +27,7 @@ Functions
 .. autoapisummary::
 
    workflow-manager.app.api.workflow.hello_world
-   workflow-manager.app.api.workflow.test
+   workflow-manager.app.api.workflow.trigger_task
    workflow-manager.app.api.workflow.list_available_tasks
    workflow-manager.app.api.workflow.process
    workflow-manager.app.api.workflow.handle_device_task
@@ -60,8 +60,17 @@ Module Contents
    Hello world endpoint.
 
 
-.. py:function:: test(workflow_id: str)
+.. py:function:: trigger_task(task_id: str) -> dict[str, Any]
    :async:
+
+
+   Endpoint to trigger a task in the orchestration engine.
+
+   Args:
+       task_id (str): The ID of the DAG to be triggered.
+
+   Returns:
+       dict: A dictionary containing the response from the orchestration engine.
 
 
 .. py:function:: list_available_tasks()
