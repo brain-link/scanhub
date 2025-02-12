@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 import os
+
 import requests
 from fastapi import HTTPException
-from datetime import datetime
+
 
 class OrchestrationEngine:
     """
@@ -25,10 +26,12 @@ class OrchestrationEngine:
         Retrieves the available tasks from the orchestration engine.
         Currently, only Airflow is supported.
 
-        Returns:
+        Returns
+        -------
             list: A list of available tasks (DAGs) for Airflow.
 
-        Raises:
+        Raises
+        ------
             ValueError: If the orchestration engine is not Airflow.
         """
         if self.engine == "AIRFLOW":
@@ -40,13 +43,14 @@ class OrchestrationEngine:
         """
         Helper method to get the list of Airflow DAGs.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing the list of Airflow DAGs.
 
-        Raises:
+        Raises
+        ------
             HTTPException: If the request to Airflow API fails.
         """
-
         print(f"{self.airflow_api_url}/api/v1/dags")
 
         # TBD: Authentication should be handled in a more secure way
@@ -66,10 +70,12 @@ class OrchestrationEngine:
         Args:
             task_id (str): The ID of the task to be triggered.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing a success message.
 
-        Raises:
+        Raises
+        ------
             ValueError: If the orchestration engine is not Airflow.
         """
         if self.engine == "AIRFLOW":
@@ -84,13 +90,14 @@ class OrchestrationEngine:
         Args:
             task_id (str): The ID of the task to be triggered.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing a success message.
 
-        Raises:
+        Raises
+        ------
             HTTPException: If the request to Airflow API fails.
         """
-
         print(f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns")
 
         payload = {}
@@ -115,10 +122,12 @@ class OrchestrationEngine:
         Args:
             task_id (str): The ID of the task whose status is to be retrieved.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing the task status.
 
-        Raises:
+        Raises
+        ------
             ValueError: If the orchestration engine is not Airflow.
         """
         if self.engine == "AIRFLOW":
@@ -133,10 +142,12 @@ class OrchestrationEngine:
         Args:
             task_id (str): The ID of the task whose status is to be retrieved.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing the task status.
 
-        Raises:
+        Raises
+        ------
             HTTPException: If the request to Airflow API fails.
         """
         response = requests.get(

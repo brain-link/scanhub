@@ -2,27 +2,16 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Workflow manager endpoints."""
-import asyncio
-import httpx
-import json
-import os
 import logging
 import operator
-
-from typing import Generator, Dict, Any
+from typing import Any, Dict
 from uuid import UUID
 
+import httpx
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
-
 from scanhub_libraries.models import (
-    Commands,
-    DeviceTask,
-    ParametrizedSequence,
     ScanJob,
-    ScanStatus,
-    TaskEvent,
     TaskOut,
     WorkflowOut,
 )
@@ -43,7 +32,7 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 # {
 #   "workflow_id": {
 #     "tasks": [
-#         {"id": <task_id>, "type": <task_type>, "status": "PENDING|IN_PROGRESS|COMPLETED|FAILED", 
+#         {"id": <task_id>, "type": <task_type>, "status": "PENDING|IN_PROGRESS|COMPLETED|FAILED",
 #          "destinations": {...}, "args": {...}}
 #     ],
 #     "status": "running|completed|failed"
@@ -65,7 +54,8 @@ async def trigger_task(task_id: str) -> dict[str, Any]:
     Args:
         task_id (str): The ID of the DAG to be triggered.
 
-    Returns:
+    Returns
+    -------
         dict: A dictionary containing the response from the orchestration engine.
     """
     print(f"Triggering task: {task_id}")
@@ -83,7 +73,8 @@ async def list_available_tasks():
     Endpoint to list the available tasks from the orchestration engine.
     Currently, only Airflow is supported.
 
-    Returns:
+    Returns
+    -------
         dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
     """
     try:
