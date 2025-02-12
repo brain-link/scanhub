@@ -15,6 +15,7 @@ Attributes
 .. autoapisummary::
 
    workflow-manager.app.api.workflow.router
+   workflow-manager.app.api.workflow.oauth2_scheme
    workflow-manager.app.api.workflow.orchestration_engine
    workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
@@ -39,6 +40,8 @@ Module Contents
 ---------------
 
 .. py:data:: router
+
+.. py:data:: oauth2_scheme
 
 .. py:data:: orchestration_engine
 
