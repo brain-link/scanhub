@@ -52,7 +52,7 @@ class OrchestrationEngine:
         # TBD: Authentication should be handled in a more secure way
         response = requests.get(
             url=f"{self.airflow_api_url}/api/v1/dags",
-            auth=("airflow", "airflow")
+            auth=("airflow", "airflow"),
             timeout=5
         )
         if response.status_code != 200:
