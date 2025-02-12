@@ -3,8 +3,8 @@ x-airflow-common:
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5-python3.10}
-  # build: .
+  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5-python3.10}
+  build: ./services/airflow
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -19,7 +19,6 @@ x-airflow-common:
     AIRFLOW__SECRETS__BACKEND_KWARGS: '{"variables_file_path": "/opt/secrets/variables.yaml", "connections_file_path": "/opt/secrets/connections.yaml"}'
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
     AIRFLOW__CLI__ENDPOINT_URL: http://localhost:8081
-    _PIP_ADDITIONAL_REQUIREMENTS: "pydicom==2.3.1 pydantic==1.8.2 numpy==1.24.3" #${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
     - ./services/airflow/dags:/opt/airflow/dags
     - ./services/airflow/logs:/opt/airflow/logs
