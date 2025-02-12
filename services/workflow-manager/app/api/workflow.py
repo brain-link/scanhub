@@ -141,7 +141,7 @@ async def handle_device_task(task: TaskOut):
     )
 
     # Start the scan job
-    await start_scan(job, str(task.id))
+    # await start_scan(job, str(task.id))
 
     # Update task status to IN_PROGRESS
     task.status = "IN_PROGRESS" # TBD do this also in the data base
@@ -154,7 +154,7 @@ async def handle_processing_task(task: TaskOut):
     print(task.destinations.get("topic"), end="\n")
 
     # Trigger the orchestration engine to handle the processing task
-    orchestration_engine.trigger_workflow(str(task.id))
+    orchestration_engine.trigger_task(str(task.id))
 
     # Update task status to IN_PROGRESS
     task.status = "IN_PROGRESS" # TBD do this also in the data base

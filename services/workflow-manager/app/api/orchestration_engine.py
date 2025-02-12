@@ -1,6 +1,8 @@
 # Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
+"""Orchestration engine file for the workflow manager service."""
+
 import os
 
 import requests
