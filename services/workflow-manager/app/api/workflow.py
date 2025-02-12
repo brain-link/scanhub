@@ -8,10 +8,13 @@ import json
 import os
 import logging
 import operator
-from uuid import UUID
+
 from typing import Generator, Dict, Any
-from fastapi import HTTPException, UploadFile, File, APIRouter, status
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.security import OAuth2PasswordBearer
 
 from scanhub_libraries.models import (
     Commands,
@@ -23,10 +26,14 @@ from scanhub_libraries.models import (
     TaskOut,
     WorkflowOut,
 )
+from scanhub_libraries.security import get_current_user
 
 from .orchestration_engine import OrchestrationEngine
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
 orchestration_engine = OrchestrationEngine()
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
