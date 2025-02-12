@@ -431,7 +431,7 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine" title="workflow-manager.app.api.orchestration_engine.OrchestrationEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OrchestrationEngine</span></code></a></p></td>
-<td><p>OrchestrationEngine is responsible for interacting with different orchestration engines</p></td>
+<td><p>OrchestrationEngine is responsible for interacting with different orchestration engines.</p></td>
 </tr>
 </tbody>
 </table>
@@ -442,8 +442,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.orchestration_engine.</span></span><span class="sig-name descname"><span class="pre">OrchestrationEngine</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine" title="Link to this definition">#</a></dt>
-<dd><p>OrchestrationEngine is responsible for interacting with different orchestration engines
-like Airflow and Kestra to manage tasks and workflows.</p>
+<dd><p>OrchestrationEngine is responsible for interacting with different orchestration engines.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine">
 <span class="sig-name descname"><span class="pre">engine</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine" title="Link to this definition">#</a></dt>
@@ -462,8 +461,8 @@ like Airflow and Kestra to manage tasks and workflows.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_available_tasks">
 <span class="sig-name descname"><span class="pre">get_available_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_available_tasks" title="Link to this definition">#</a></dt>
-<dd><p>Retrieves the available tasks from the orchestration engine.
-Currently, only Airflow is supported.</p>
+<dd><p>Retrieve the available tasks from the orchestration engine.</p>
+<p>Currently, only Airflow is supported.</p>
 <section id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
@@ -481,7 +480,7 @@ Currently, only Airflow is supported.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags">
 <span class="sig-name descname"><span class="pre">_get_airflow_dags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags" title="Link to this definition">#</a></dt>
-<dd><p>Helper method to get the list of Airflow DAGs.</p>
+<dd><p>Get the list of Airflow DAGs.</p>
 <section id="id1">
 <h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
@@ -499,8 +498,8 @@ Currently, only Airflow is supported.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task">
 <span class="sig-name descname"><span class="pre">trigger_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task" title="Link to this definition">#</a></dt>
-<dd><p>Triggers a task in the orchestration engine.
-Currently, only Airflow is supported.</p>
+<dd><p>Trigger a task in the orchestration engine.</p>
+<p>Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.</p>
 </dd>
@@ -522,7 +521,7 @@ Currently, only Airflow is supported.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_task">
 <span class="sig-name descname"><span class="pre">_trigger_airflow_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_task" title="Link to this definition">#</a></dt>
-<dd><p>Helper method to trigger an Airflow task.</p>
+<dd><p>Trigger an Airflow task.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.</p>
 </dd>
@@ -544,7 +543,7 @@ Currently, only Airflow is supported.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_task_status">
 <span class="sig-name descname"><span class="pre">get_task_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_task_status" title="Link to this definition">#</a></dt>
-<dd><p>Retrieves the status of a task in the orchestration engine.
+<dd><p>Retrieve the status of a task in the orchestration engine.
 Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>

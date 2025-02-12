@@ -22,8 +22,7 @@ Module Contents
 
 .. py:class:: OrchestrationEngine
 
-   OrchestrationEngine is responsible for interacting with different orchestration engines
-   like Airflow and Kestra to manage tasks and workflows.
+   OrchestrationEngine is responsible for interacting with different orchestration engines.
 
 
    .. py:attribute:: engine
@@ -37,7 +36,8 @@ Module Contents
 
    .. py:method:: get_available_tasks()
 
-      Retrieves the available tasks from the orchestration engine.
+      Retrieve the available tasks from the orchestration engine.
+
       Currently, only Airflow is supported.
 
       Returns
@@ -52,7 +52,7 @@ Module Contents
 
    .. py:method:: _get_airflow_dags()
 
-      Helper method to get the list of Airflow DAGs.
+      Get the list of Airflow DAGs.
 
       Returns
       -------
@@ -66,7 +66,8 @@ Module Contents
 
    .. py:method:: trigger_task(task_id: str)
 
-      Triggers a task in the orchestration engine.
+      Trigger a task in the orchestration engine.
+
       Currently, only Airflow is supported.
 
       Args:
@@ -84,7 +85,7 @@ Module Contents
 
    .. py:method:: _trigger_airflow_task(task_id: str)
 
-      Helper method to trigger an Airflow task.
+      Trigger an Airflow task.
 
       Args:
           task_id (str): The ID of the task to be triggered.
@@ -101,7 +102,7 @@ Module Contents
 
    .. py:method:: get_task_status(task_id: str)
 
-      Retrieves the status of a task in the orchestration engine.
+      Retrieve the status of a task in the orchestration engine.
       Currently, only Airflow is supported.
 
       Args:
