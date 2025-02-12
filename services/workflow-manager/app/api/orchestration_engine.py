@@ -4,6 +4,7 @@
 """Orchestration engine file for the workflow manager service."""
 
 import os
+from typing import Dict
 
 import requests
 from fastapi import HTTPException
@@ -96,7 +97,7 @@ class OrchestrationEngine:
         """
         print(f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns")
 
-        payload = {}
+        payload: Dict[str, str] = {}
 
         print(payload)
 

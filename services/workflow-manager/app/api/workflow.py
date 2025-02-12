@@ -64,7 +64,6 @@ async def trigger_task(task_id: str) -> dict[str, Any]:
     except Exception as e:
         logging.error(f"Failed to trigger task: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-    return {"status": "success", "data": "Task triggered successfully"}
 
 @router.get("/tasks/")
 async def list_available_tasks():
