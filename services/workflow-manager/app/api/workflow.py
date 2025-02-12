@@ -11,7 +11,6 @@ import httpx
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
-    ScanJob,
     TaskOut,
     WorkflowOut,
 )
@@ -69,8 +68,8 @@ async def trigger_task(task_id: str) -> dict[str, Any]:
 
 @router.get("/tasks/")
 async def list_available_tasks():
-    """
-    Endpoint to list the available tasks from the orchestration engine.
+    """Endpoint to list the available tasks from the orchestration engine.
+
     Currently, only Airflow is supported.
 
     Returns
@@ -131,14 +130,14 @@ async def handle_device_task(task: TaskOut):
     print(task.destinations.get("device"), end="\n")
 
     # Create a device scan job
-    job = ScanJob(
-        job_id=task.id,
-        sequence_id=task.args["sequence_id"],
-        workflow_id=task.args["workflow_id"],
-        device_id=task.destinations["device"],
-        acquisition_limits=task.args["acquisition_limits"],
-        sequence_parameters=task.args["sequence_parameters"]
-    )
+    # job = ScanJob(
+    #     job_id=task.id,
+    #     sequence_id=task.args["sequence_id"],
+    #     workflow_id=task.args["workflow_id"],
+    #     device_id=task.destinations["device"],
+    #     acquisition_limits=task.args["acquisition_limits"],
+    #     sequence_parameters=task.args["sequence_parameters"]
+    # )
 
     # Start the scan job
     # await start_scan(job, str(task.id))
