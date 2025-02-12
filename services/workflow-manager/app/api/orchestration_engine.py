@@ -16,16 +16,13 @@ class OrchestrationEngine:
     """
 
     def __init__(self):
-        """
-        Initializes the OrchestrationEngine with environment variables.
-        """
+        """Initializes the OrchestrationEngine with environment variables."""
         self.engine = os.getenv("ORCHESTRATION_ENGINE")
         self.kestra_api_url = os.getenv("KESTRA_API_URL")
         self.airflow_api_url = os.getenv("AIRFLOW_API_URL")
 
     def get_available_tasks(self):
-        """
-        Retrieves the available tasks from the orchestration engine.
+        """Retrieves the available tasks from the orchestration engine.
         Currently, only Airflow is supported.
 
         Returns
@@ -42,8 +39,7 @@ class OrchestrationEngine:
             raise ValueError("Task listing is only supported for Airflow")
 
     def _get_airflow_dags(self):
-        """
-        Helper method to get the list of Airflow DAGs.
+        """Helper method to get the list of Airflow DAGs.
 
         Returns
         -------
@@ -65,8 +61,7 @@ class OrchestrationEngine:
         return response.json()
 
     def trigger_task(self, task_id: str):
-        """
-        Triggers a task in the orchestration engine.
+        """Triggers a task in the orchestration engine.
         Currently, only Airflow is supported.
 
         Args:
@@ -86,8 +81,7 @@ class OrchestrationEngine:
             raise ValueError("Task triggering is only supported for Airflow")
 
     def _trigger_airflow_task(self, task_id: str):
-        """
-        Helper method to trigger an Airflow task.
+        """Helper method to trigger an Airflow task.
 
         Args:
             task_id (str): The ID of the task to be triggered.
@@ -117,8 +111,7 @@ class OrchestrationEngine:
         return {"message": "Airflow task triggered successfully"}
 
     def get_task_status(self, task_id: str):
-        """
-        Retrieves the status of a task in the orchestration engine.
+        """Retrieves the status of a task in the orchestration engine.
         Currently, only Airflow is supported.
 
         Args:
@@ -138,8 +131,7 @@ class OrchestrationEngine:
             raise ValueError("Task status is only supported for Airflow")
 
     def _get_airflow_task_status(self, task_id: str):
-        """
-        Helper method to get the status of an Airflow task.
+        """Helper method to get the status of an Airflow task.
 
         Args:
             task_id (str): The ID of the task whose status is to be retrieved.
