@@ -103,6 +103,7 @@ Module Contents
    .. py:method:: get_task_status(task_id: str)
 
       Retrieve the status of a task in the orchestration engine.
+
       Currently, only Airflow is supported.
 
       Args:
@@ -120,7 +121,7 @@ Module Contents
 
    .. py:method:: _get_airflow_task_status(task_id: str)
 
-      Helper method to get the status of an Airflow task.
+      Get the status of an Airflow task.
 
       Args:
           task_id (str): The ID of the task whose status is to be retrieved.
