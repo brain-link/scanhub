@@ -526,9 +526,13 @@
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the DAG to be triggered.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing the response from the orchestration engine.</p>
-</dd>
 </dl>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the response from the orchestration engine.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py function">
@@ -536,10 +540,12 @@
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">list_available_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.list_available_tasks" title="Link to this definition">#</a></dt>
 <dd><p>Endpoint to list the available tasks from the orchestration engine.
 Currently, only Airflow is supported.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>dict: A dictionary containing the list of available tasks (DAGs) for Airflow.</p>
-</dd>
-</dl>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the list of available tasks (DAGs) for Airflow.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py function">
@@ -553,8 +559,8 @@ Currently, only Airflow is supported.</p>
 </dd>
 </dl>
 </section>
-<section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Workflow process response</p>
 </div></blockquote>
@@ -577,8 +583,8 @@ Currently, only Airflow is supported.</p>
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_result">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_result" title="Link to this definition">#</a></dt>
 <dd><p>Upload workflow result.</p>
-<section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>workflow_id</dt><dd><p>Id of the workflow, which is processed by workflow</p>
 </dd>
@@ -586,8 +592,8 @@ Currently, only Airflow is supported.</p>
 </dd>
 </dl>
 </section>
-<section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>Notification</p>
 </div></blockquote>

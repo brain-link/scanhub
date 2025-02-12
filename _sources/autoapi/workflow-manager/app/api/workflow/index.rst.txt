@@ -72,7 +72,8 @@ Module Contents
    Args:
        task_id (str): The ID of the DAG to be triggered.
 
-   Returns:
+   Returns
+   -------
        dict: A dictionary containing the response from the orchestration engine.
 
 
@@ -83,7 +84,8 @@ Module Contents
    Endpoint to list the available tasks from the orchestration engine.
    Currently, only Airflow is supported.
 
-   Returns:
+   Returns
+   -------
        dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
 
 

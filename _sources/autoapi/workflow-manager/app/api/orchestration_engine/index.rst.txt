@@ -35,10 +35,12 @@ Module Contents
       Retrieves the available tasks from the orchestration engine.
       Currently, only Airflow is supported.
 
-      Returns:
+      Returns
+      -------
           list: A list of available tasks (DAGs) for Airflow.
 
-      Raises:
+      Raises
+      ------
           ValueError: If the orchestration engine is not Airflow.
 
 
@@ -47,10 +49,12 @@ Module Contents
 
       Helper method to get the list of Airflow DAGs.
 
-      Returns:
+      Returns
+      -------
           dict: A dictionary containing the list of Airflow DAGs.
 
-      Raises:
+      Raises
+      ------
           HTTPException: If the request to Airflow API fails.
 
 
@@ -63,10 +67,12 @@ Module Contents
       Args:
           task_id (str): The ID of the task to be triggered.
 
-      Returns:
+      Returns
+      -------
           dict: A dictionary containing a success message.
 
-      Raises:
+      Raises
+      ------
           ValueError: If the orchestration engine is not Airflow.
 
 
@@ -78,10 +84,12 @@ Module Contents
       Args:
           task_id (str): The ID of the task to be triggered.
 
-      Returns:
+      Returns
+      -------
           dict: A dictionary containing a success message.
 
-      Raises:
+      Raises
+      ------
           HTTPException: If the request to Airflow API fails.
 
 
@@ -94,10 +102,12 @@ Module Contents
       Args:
           task_id (str): The ID of the task whose status is to be retrieved.
 
-      Returns:
+      Returns
+      -------
           dict: A dictionary containing the task status.
 
-      Raises:
+      Raises
+      ------
           ValueError: If the orchestration engine is not Airflow.
 
 
@@ -109,10 +119,12 @@ Module Contents
       Args:
           task_id (str): The ID of the task whose status is to be retrieved.
 
-      Returns:
+      Returns
+      -------
           dict: A dictionary containing the task status.
 
-      Raises:
+      Raises
+      ------
           HTTPException: If the request to Airflow API fails.
 
 

@@ -463,24 +463,36 @@ like Airflow and Kestra to manage tasks and workflows.</p>
 <span class="sig-name descname"><span class="pre">get_available_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_available_tasks" title="Link to this definition">#</a></dt>
 <dd><p>Retrieves the available tasks from the orchestration engine.
 Currently, only Airflow is supported.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>list: A list of available tasks (DAGs) for Airflow.</p>
-</dd>
-<dt>Raises:</dt><dd><p>ValueError: If the orchestration engine is not Airflow.</p>
-</dd>
-</dl>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>list: A list of available tasks (DAGs) for Airflow.</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>ValueError: If the orchestration engine is not Airflow.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags">
 <span class="sig-name descname"><span class="pre">_get_airflow_dags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags" title="Link to this definition">#</a></dt>
 <dd><p>Helper method to get the list of Airflow DAGs.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>dict: A dictionary containing the list of Airflow DAGs.</p>
-</dd>
-<dt>Raises:</dt><dd><p>HTTPException: If the request to Airflow API fails.</p>
-</dd>
-</dl>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the list of Airflow DAGs.</p>
+</div></blockquote>
+</section>
+<section id="id2">
+<h3>Raises<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>HTTPException: If the request to Airflow API fails.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -491,11 +503,19 @@ Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message.</p>
-</dd>
-<dt>Raises:</dt><dd><p>ValueError: If the orchestration engine is not Airflow.</p>
-</dd>
 </dl>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing a success message.</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>Raises<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>ValueError: If the orchestration engine is not Airflow.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -505,11 +525,19 @@ Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message.</p>
-</dd>
-<dt>Raises:</dt><dd><p>HTTPException: If the request to Airflow API fails.</p>
-</dd>
 </dl>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing a success message.</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>HTTPException: If the request to Airflow API fails.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -520,11 +548,19 @@ Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing the task status.</p>
-</dd>
-<dt>Raises:</dt><dd><p>ValueError: If the orchestration engine is not Airflow.</p>
-</dd>
 </dl>
+<section id="id7">
+<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the task status.</p>
+</div></blockquote>
+</section>
+<section id="id8">
+<h3>Raises<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>ValueError: If the orchestration engine is not Airflow.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -534,11 +570,19 @@ Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing the task status.</p>
-</dd>
-<dt>Raises:</dt><dd><p>HTTPException: If the request to Airflow API fails.</p>
-</dd>
 </dl>
+<section id="id9">
+<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the task status.</p>
+</div></blockquote>
+</section>
+<section id="id10">
+<h3>Raises<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>HTTPException: If the request to Airflow API fails.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 </dd></dl>
