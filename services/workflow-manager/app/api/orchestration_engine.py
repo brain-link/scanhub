@@ -103,7 +103,8 @@ class OrchestrationEngine:
         response = requests.post(
             url=f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns",
             auth=("airflow", "airflow"),
-            json=payload
+            json=payload,
+            timeout=5
         )
 
         if response.status_code != 200:
@@ -112,6 +113,7 @@ class OrchestrationEngine:
 
     def get_task_status(self, task_id: str):
         """Retrieve the status of a task in the orchestration engine.
+
         Currently, only Airflow is supported.
 
         Args:
@@ -131,7 +133,7 @@ class OrchestrationEngine:
             raise ValueError("Task status is only supported for Airflow")
 
     def _get_airflow_task_status(self, task_id: str):
-        """Helper method to get the status of an Airflow task.
+        """Get the status of an Airflow task.
 
         Args:
             task_id (str): The ID of the task whose status is to be retrieved.
@@ -146,7 +148,8 @@ class OrchestrationEngine:
         """
         response = requests.get(
             f"{self.airflow_api_url}/dags/example_workflow/dagRuns/{task_id}",
-            auth=("airflow", "airflow")
+            auth=("airflow", "airflow"),
+            timeout=5
         )
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail="Failed to get Airflow task status")
