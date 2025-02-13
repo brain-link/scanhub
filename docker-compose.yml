@@ -200,18 +200,7 @@ services:
         condition: service_healthy
 
 
-  # MRI Reconstruction Services
-  cartesian-reco-service:
-    container_name: service-cartesian-reco
-    build:
-      context: ./services/mri/recos/cartesian-reco-service
-      args: 
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./services/mri/recos/cartesian-reco-service/app/:/app/
-      - data_lake:/app/data_lake/
-
+  # Airflow services
   airflow-webserver:
     <<: *airflow-common
     command: webserver
