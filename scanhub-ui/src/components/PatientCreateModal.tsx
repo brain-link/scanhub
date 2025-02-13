@@ -62,11 +62,12 @@ const createPatientFormContent: FormEntry[] = [
   { type: 'text', key: 'comment', label: 'Comment'},
 ]
 
-export default function PatientCreateModal(props: ModalProps) {
+
+function PatientForm(props: ModalProps) {
   const [user, ] = React.useContext(LoginContext)
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const initialPatient: BasePatient = {
+  const [patient, setPatient] = React.useState<BasePatient>({
     first_name: '',     // eslint-disable-line camelcase
     last_name: '',      // eslint-disable-line camelcase
     birth_date: '',     // eslint-disable-line camelcase
@@ -74,9 +75,7 @@ export default function PatientCreateModal(props: ModalProps) {
     issuer: user ? user.username : '',
     status: 'NEW',
     comment: undefined,
-  }
-
-  const [patient, setPatient] = React.useState<BasePatient>(initialPatient)
+  })
 
   // Post a new record and refetch records table
   const mutation = useMutation(async () => {
@@ -135,12 +134,43 @@ export default function PatientCreateModal(props: ModalProps) {
   }
 
   return (
+    <>
+      <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
+        Create New Patient
+      </Typography>
+
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (patient.birth_date == '') {
+            showNotification({message: 'Please select a birth date', type: 'warning'})
+          } else {
+            mutation.mutate()
+            props.setOpen(false)
+          }
+        }}
+      >
+        <Stack spacing={5}>
+          <Grid container rowSpacing={1.5} columnSpacing={5}>
+            {createPatientFormContent.map((item, index) => renderFormEntry(item, index))}
+          </Grid>
+          <Button size='sm' type='submit' sx={{ maxWidth: 100 }}>
+            Submit
+          </Button>
+        </Stack>
+      </form>
+    </>
+  )
+}
+
+
+export default function PatientCreateModal(props: ModalProps) {
+  return (
     <Modal
       open={props.isOpen}
       color='neutral'
       onClose={() => {
         props.setOpen(false)
-        setPatient(initialPatient)
       }}
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
@@ -161,31 +191,7 @@ export default function PatientCreateModal(props: ModalProps) {
             borderRadius: '50%',
           }}
         />
-        <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-          Create New Patient
-        </Typography>
-
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            if (patient.birth_date == '') {
-              showNotification({message: 'Please select a birth date', type: 'warning'})
-            } else {
-              mutation.mutate()
-              props.setOpen(false)
-              setPatient(initialPatient)
-            }
-          }}
-        >
-          <Stack spacing={5}>
-            <Grid container rowSpacing={1.5} columnSpacing={5}>
-              {createPatientFormContent.map((item, index) => renderFormEntry(item, index))}
-            </Grid>
-            <Button size='sm' type='submit' sx={{ maxWidth: 100 }}>
-              Submit
-            </Button>
-          </Stack>
-        </form>
+        <PatientForm {...props} />
       </ModalDialog>
     </Modal>
   )

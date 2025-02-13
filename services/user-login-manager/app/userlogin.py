@@ -338,12 +338,20 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
     print("Requested new_user.role:", new_user.role)
     print("Requested new_user.token_type:", new_user.token_type)
 
-    user_db = await dal.get_user_data(new_user.username)
-    if user_db is not None:
-        print("Requested to create user that already exists.")
+    if len(new_user.username) < 1:
         raise HTTPException(
-            status_code=500,
-            detail="User already exists.")
+            status_code=400,
+            detail="The username must not be empty!")
+    if len(new_user.first_name) < 1:
+        raise HTTPException(
+            status_code=400,
+            detail="The first name must not be empty!")
+    if len(new_user.last_name) < 1:
+        raise HTTPException(
+            status_code=400,
+            detail="The last name must not be empty!")
+    # email may be empty
+    # validity of user role is automatically checked by fastAPI
     if new_user.token_type != "password":   # noqa: S105
         raise HTTPException(
             status_code=400,
@@ -352,6 +360,14 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         raise HTTPException(
             status_code=400,
             detail="The password should at least be 12 characters long!")
+
+    user_db = await dal.get_user_data(new_user.username)
+    if user_db is not None:
+        print("Requested to create user that already exists.")
+        raise HTTPException(
+            status_code=500,
+            detail="User already exists.")
+
     print("Create new user! Username:", new_user.username)
     salt = token_hex(1024)  # create new salt
     hashed_received_password = compute_complex_password_hash(new_user.access_token, salt)
@@ -431,6 +447,36 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     print(LOG_CALL_DELIMITER)
     print("Username:", current_user.username)
     print("Updated user:", updated_user)
+
+    # username is checked below by getting the user from the db
+    if len(updated_user.first_name) < 1:
+        raise HTTPException(
+            status_code=400,
+            detail="The first name must not be empty!")
+    if len(updated_user.last_name) < 1:
+        raise HTTPException(
+            status_code=400,
+            detail="The last name must not be empty!")
+    # email may be empty
+    # validity of user role is automatically checked by fastAPI
+    if updated_user.token_type != "":   # noqa: S105
+        raise HTTPException(
+            status_code=400,
+            detail="Changing the password is not allowed in this version of ScanHub!")
+    if len(updated_user.access_token) > 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Changing the password is not allowed in this version of ScanHub!")
+
+    # if updated_user.token_type != "password":   # noqa: S105
+    #     raise HTTPException(
+    #         status_code=400,
+    #         detail="To update the password of the user, the token_type should be 'password'!")
+    # if len(updated_user.access_token) < 12:
+    #     raise HTTPException(
+    #         status_code=400,
+    #         detail="The password should at least be 12 characters long!")
+
     # check if the user exists
     sql_user_to_modify = await dal.get_user_data(updated_user.username)
     if sql_user_to_modify is None:
