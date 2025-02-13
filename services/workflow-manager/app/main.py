@@ -6,7 +6,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.producer import Producer
 from api.workflow import router
 
 app = FastAPI(
@@ -23,20 +22,16 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-producer = Producer()
-
 
 @app.on_event("startup")
 async def startup() -> None:
     """Call database initialization of startup."""
-    await producer.start()
-
+    pass
 
 @app.on_event("shutdown")
 async def shutdown() -> None:
     """Shutdown event for the API."""
-    await producer.stop()
-
+    pass
 
 @app.get("/api/v1/workflowmanager/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
