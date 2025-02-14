@@ -7,11 +7,12 @@ import time
 from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
 from typing import Annotated, Optional
+from collections import namedtuple
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.hash import argon2
-from scanhub_libraries.models import User, UserRole
+from scanhub_libraries.models import User, UserRole, PasswordUpdateRequest
 from scanhub_libraries.security import oauth2_scheme
 
 from app import dal
@@ -163,7 +164,7 @@ async def loginfromcookie(response: Response, access_token: Annotated[Optional[s
     response.set_cookie(
         key="access_token",
         value=access_token,
-        max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+        max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS - (int(time.time()) - current_user.last_login_unixtime)),
         path="/api/v1/userlogin/loginfromcookie",
         secure=True,
         httponly=True,
@@ -502,3 +503,46 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
             "role": updated_user.role.value,
         }
     )
+
+
+@router.put("/changeownpassword", response_model={}, status_code=200, tags=["user"])
+async def change_own_password(current_user: Annotated[User, Depends(get_current_user)],
+                              password_update_request: PasswordUpdateRequest,
+                              response: Response) -> None:
+    """
+    Allow all users to change their own password.
+
+    Parameters
+    ----------
+    oldpassword
+        The old password of the current user to verify that the request is legitimate.
+    newpassword
+        The new password to set for the current user.
+
+    Returns
+    -------
+        None
+
+    Raises
+    ------
+    HTTPException
+        400: New Password must have at least 12 characters. Old Password must be correct.
+    """
+    print(LOG_CALL_DELIMITER)
+    print("Username:", current_user.username)
+
+    if len(password_update_request.newpassword) < 12:
+        raise HTTPException(
+            status_code=400,
+            detail="The new password should at least be 12 characters long!")
+
+    # check old password
+    form_like = namedtuple('OAuth2PasswordRequestForm_like',
+                           ['username', 'password'])(current_user.username, password_update_request.oldpassword)
+    # login(...) raises exception if username or password are wrong, otherwise it sets login-cookie on response
+    await login(form_like, response=response)
+
+    # do the update
+    salt = token_hex(1024)  # create new salt
+    newpassword_hash = compute_complex_password_hash(password_update_request.newpassword, salt)
+    await dal.update_user_data(current_user.username, {"password_hash": newpassword_hash, "salt": salt})

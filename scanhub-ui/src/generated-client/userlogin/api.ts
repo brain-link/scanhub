@@ -46,6 +46,25 @@ export interface LocationInner {
 /**
  * 
  * @export
+ * @interface PasswordUpdateRequest
+ */
+export interface PasswordUpdateRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PasswordUpdateRequest
+     */
+    'oldpassword': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PasswordUpdateRequest
+     */
+    'newpassword': string;
+}
+/**
+ * 
+ * @export
  * @interface User
  */
 export interface User {
@@ -545,6 +564,46 @@ export class LoginApi extends BaseAPI {
 export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+         * @summary Change Own Password
+         * @param {PasswordUpdateRequest} passwordUpdateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        changeOwnPasswordApiV1UserloginChangeownpasswordPut: async (passwordUpdateRequest: PasswordUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'passwordUpdateRequest' is not null or undefined
+            assertParamExists('changeOwnPasswordApiV1UserloginChangeownpasswordPut', 'passwordUpdateRequest', passwordUpdateRequest)
+            const localVarPath = `/api/v1/userlogin/changeownpassword`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(passwordUpdateRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
          * @summary Create User
          * @param {User} user 
@@ -744,6 +803,19 @@ export const UserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
     return {
         /**
+         * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+         * @summary Change Own Password
+         * @param {PasswordUpdateRequest} passwordUpdateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.changeOwnPasswordApiV1UserloginChangeownpasswordPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
          * @summary Create User
          * @param {User} user 
@@ -817,6 +889,16 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = UserApiFp(configuration)
     return {
         /**
+         * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+         * @summary Change Own Password
+         * @param {PasswordUpdateRequest} passwordUpdateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: any): AxiosPromise<any> {
+            return localVarFp.changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
          * @summary Create User
          * @param {User} user 
@@ -874,6 +956,18 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI {
+    /**
+     * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+     * @summary Change Own Password
+     * @param {PasswordUpdateRequest} passwordUpdateRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
      * @summary Create User
