@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * PasswordModal.tsx is responsible for rendering a modal with an interface
- * to change the users own password.
+ * to change the password of a user.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -17,43 +17,46 @@ import * as React from 'react'
 import { useMutation } from 'react-query'
 
 import { userApi } from '../api'
-import { ModalProps } from '../interfaces/components.interface'
+import { ModalPropsModify } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext'
 import NotificationContext from '../NotificationContext'
 
 
-function PasswordForm(props: ModalProps) {
+function PasswordForm(props: ModalPropsModify<string>) {
   // The form is in this separate component to make sure that the state is reset after closing the modal
 
-  const [oldPassword, setOldPassword] = React.useState('');
+  const [passwordOfRequester, setPasswordOfRequester] = React.useState('');
   const [newPassword1, setNewPassword1] = React.useState('');
   const [newPassword2, setNewPassword2] = React.useState('');
 
   const [, showNotification] = React.useContext(NotificationContext)
+  const [user, ] = React.useContext(LoginContext)
 
   const mutation = useMutation(async () => {
-    await userApi.changeOwnPasswordApiV1UserloginChangeownpasswordPut({ oldpassword: oldPassword, newpassword: newPassword1 })
+    await userApi.changePasswordApiV1UserloginChangepasswordPut({ password_of_requester: passwordOfRequester,
+                                                                  username_to_change_password_for: props.item,
+                                                                  newpassword: newPassword1 })
       .then(() => {
         props.onSubmit()
         showNotification({message: 'Updated password sucessfully.', type: 'success'})
       })
       .catch(() => {
-        showNotification({message: 'Error at updating password! Maybe the old password was wrong.', type: 'warning'})
+        showNotification({message: 'Error at updating password! Maybe your password was wrong.', type: 'warning'})
       })
   })
-
 
   return (
     <>
       <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        Change Password
+        Change Password for user "{props.item}"
       </Typography>
 
       <Stack spacing={1}>
-        <FormLabel>Old Password</FormLabel>
+        <FormLabel>Password of user {user?.username}</FormLabel>
         <Input
-          name={'oldpassword'}
+          name={'password'}
           type={'password'}
-          onChange={(e) => setOldPassword(e.target.value)}
+          onChange={(e) => setPasswordOfRequester(e.target.value)}
         />
 
         <FormLabel>New Password</FormLabel>
@@ -75,8 +78,8 @@ function PasswordForm(props: ModalProps) {
           sx={{ maxWidth: 120 }}
           onClick={(event) => {
             event.preventDefault()
-            if (oldPassword == '') {
-              showNotification({message: 'Old password must not be empty.', type: 'warning'})
+            if (passwordOfRequester == '') {
+              showNotification({message: 'Password must not be empty.', type: 'warning'})
             }
             else if (newPassword1.length < 12) {
               showNotification({message: 'The new password must at least have 12 characters.', type: 'warning'})
@@ -98,7 +101,7 @@ function PasswordForm(props: ModalProps) {
 }
 
 
-export default function PasswordModal(props: ModalProps) {
+export default function PasswordModal(props: ModalPropsModify<string>) {
   return (
     <Modal
       open={props.isOpen}

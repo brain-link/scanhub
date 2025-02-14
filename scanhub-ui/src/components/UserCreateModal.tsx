@@ -37,12 +37,18 @@ interface TextFormEntry extends BaseFormEntry {
   placeholder?: string
 };
 
+interface PasswordFormEntry extends BaseFormEntry {
+  type: 'password'
+  required?: boolean
+  placeholder?: string
+};
+
 interface SelectFormEntry extends BaseFormEntry {
   type: 'select'
   options: string[]
 };
 
-type FormEntry = TextFormEntry | SelectFormEntry;
+type FormEntry = TextFormEntry | SelectFormEntry | PasswordFormEntry;
 
 // User form items, order is row wise
 const createUserFormContent: FormEntry[] = [
@@ -51,7 +57,7 @@ const createUserFormContent: FormEntry[] = [
   { type: 'text', key: 'last_name', label: 'Last name', placeholder: 'Last name', required: true },
   { type: 'text', key: 'email', label: 'e-Mail', placeholder: 'e-Mail', required: false },
   { type: 'select', key: 'role', label: 'Role', options: Object.values(UserRole) },
-  { type: 'text', key: 'access_token', label: 'Password', placeholder: 'At least 12 characters.', required: true },
+  { type: 'password', key: 'access_token', label: 'Password', placeholder: 'At least 12 characters.', required: true },
 ]
 
 
@@ -105,6 +111,20 @@ function UserForm(props: ModalProps) {
             onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
             placeholder={item.placeholder}
             required={item.required}
+          />
+        </Grid>
+      )
+    }
+    else if (item.type == 'password') {
+      return (
+        <Grid key={index} md={6}>
+          <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
+          <Input
+            name={item.key}
+            onChange={(e) => setUser({ ...user, [e.target.name]: e.target.value })}
+            placeholder={item.placeholder}
+            required={item.required}
+            type={'password'}
           />
         </Grid>
       )

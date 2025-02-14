@@ -355,8 +355,9 @@ class User(BaseModel):
 
 
 class PasswordUpdateRequest(BaseModel):
-    oldpassword: str
-    newpassword: str
+    password_of_requester: str                 # the password of the user that sends the request
+    username_to_change_password_for: str       # the username of the user whose password is set
+    newpassword: str                           # the new password
 
 
 # @dataclass

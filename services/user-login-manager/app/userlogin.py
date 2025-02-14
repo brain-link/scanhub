@@ -18,8 +18,8 @@ from scanhub_libraries.security import oauth2_scheme
 from app import dal
 from app.db import UserSQL
 
-AUTOMATIC_LOGOUT_TIME_SECONDS = 3600    # time without activity until login token gets invalid
-FORCED_LOGOUT_TIME_SECONDS = 3600 * 11  # time until forced logout, independent of activity
+MAX_INACTIVITY_TIME_SECONDS = 3600          # max time without activity until login token gets invalid
+MAX_SESSION_LENGTH_SECONDS = 3600 * 11      # max session length from login, independent of activity
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 
 router = APIRouter()
@@ -52,9 +52,9 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     if  (       user_db is not None
             and user_db.access_token is not None
             and user_db.last_activity_unixtime is not None
-            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS
+            and time.time() - user_db.last_activity_unixtime < MAX_INACTIVITY_TIME_SECONDS
             and user_db.last_login_unixtime is not None
-            and time.time() - user_db.last_login_unixtime < FORCED_LOGOUT_TIME_SECONDS):
+            and time.time() - user_db.last_login_unixtime < MAX_SESSION_LENGTH_SECONDS):
         # reset last_activity timer
         await dal.update_user_data(user_db.username, {"last_activity_unixtime": time.time()})
         user = await get_user_out(user_db)
@@ -96,6 +96,10 @@ async def get_current_user_admin(current_user: Annotated[User, Depends(get_curre
 
     if current_user.role == UserRole.admin:
         return current_user
+
+    # TODO consider requireing a very fresh access_token for get_current_user_admin to go through (could be checked with last_login_unixtime)
+    # the access_token should be refreshed by re-login with password when changing to the admin panel
+    # this mitigates risk of admins leaving their session unattended
 
     print("User is not admin.")
     raise HTTPException(
@@ -161,15 +165,6 @@ async def loginfromcookie(response: Response, access_token: Annotated[Optional[s
     current_user = await get_current_user(access_token)
     print("Username:", current_user.username)
 
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS - (int(time.time()) - current_user.last_login_unixtime)),
-        path="/api/v1/userlogin/loginfromcookie",
-        secure=True,
-        httponly=True,
-        samesite='strict'
-    )
     return User(
         username=current_user.username,
         first_name=current_user.first_name,
@@ -223,9 +218,9 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
 
     if (        user_db.access_token is not None
             and user_db.last_activity_unixtime is not None
-            and time.time() - user_db.last_activity_unixtime < AUTOMATIC_LOGOUT_TIME_SECONDS
+            and time.time() - user_db.last_activity_unixtime < MAX_INACTIVITY_TIME_SECONDS
             and user_db.last_login_unixtime is not None
-            and time.time() - user_db.last_login_unixtime < FORCED_LOGOUT_TIME_SECONDS):
+            and time.time() - user_db.last_login_unixtime < MAX_SESSION_LENGTH_SECONDS):
         # user still logged in, return the current token
         print("Login while user is already logged in. Username:", form_data.username)
         await dal.update_user_data(form_data.username, {"last_activity_unixtime": time.time()})
@@ -247,7 +242,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
     response.set_cookie(
         key="access_token",
         value=return_token,
-        max_age=max(AUTOMATIC_LOGOUT_TIME_SECONDS, FORCED_LOGOUT_TIME_SECONDS),
+        max_age=MAX_SESSION_LENGTH_SECONDS,
         path="/api/v1/userlogin/loginfromcookie",
         secure=True,
         httponly=True,
@@ -302,6 +297,10 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user_a
     -------
         List of all users. The access_token and token_type properties are set to "" for all of them.
     """
+    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # the password should be entered at performing the action in the UI
+    # or the access_token should be refreshed by re-login with password when changing to the admin panel
+    # this mitigates risk of admins leaving their session unattended
     print(LOG_CALL_DELIMITER)
     # need to explicitly print the function name for the case where it is called without http from within this module
     print("get_user_list")
@@ -330,6 +329,10 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         Patient pydantic output model
 
     """
+    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # the password should be entered at performing the action in the UI
+    # or the access_token should be refreshed by re-login with password when changing to the admin panel
+    # this mitigates risk of admins leaving their session unattended
     print(LOG_CALL_DELIMITER)
     print("Username:", current_user.username)
     print("Requested new_user.name:", new_user.username)
@@ -402,6 +405,10 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found
     """
+    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # the password should be entered at performing the action in the UI
+    # or the access_token should be refreshed by re-login with password when changing to the admin panel
+    # this mitigates risk of admins leaving their session unattended
     print(LOG_CALL_DELIMITER)
     print("Username:", current_user.username)
     print("Username to delete:", username_to_delete)
@@ -445,6 +452,10 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found if user not found.
     """
+    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # the password should be entered at performing the action in the UI
+    # or the access_token should be refreshed by re-login with password when changing to the admin panel
+    # this mitigates risk of admins leaving their session unattended
     print(LOG_CALL_DELIMITER)
     print("Username:", current_user.username)
     print("Updated user:", updated_user)
@@ -463,20 +474,11 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     if updated_user.token_type != "":   # noqa: S105
         raise HTTPException(
             status_code=400,
-            detail="Changing the password is not allowed in this version of ScanHub!")
+            detail="Use separate endpoint to set password!")
     if len(updated_user.access_token) > 0:
         raise HTTPException(
             status_code=400,
-            detail="Changing the password is not allowed in this version of ScanHub!")
-
-    # if updated_user.token_type != "password":   # noqa: S105
-    #     raise HTTPException(
-    #         status_code=400,
-    #         detail="To update the password of the user, the token_type should be 'password'!")
-    # if len(updated_user.access_token) < 12:
-    #     raise HTTPException(
-    #         status_code=400,
-    #         detail="The password should at least be 12 characters long!")
+            detail="Use separate endpoint to set password!")
 
     # check if the user exists
     sql_user_to_modify = await dal.get_user_data(updated_user.username)
@@ -505,19 +507,19 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     )
 
 
-@router.put("/changeownpassword", response_model={}, status_code=200, tags=["user"])
-async def change_own_password(current_user: Annotated[User, Depends(get_current_user)],
-                              password_update_request: PasswordUpdateRequest,
-                              response: Response) -> None:
+@router.put("/changepassword", response_model={}, status_code=200, tags=["user"])
+async def change_password(current_user: Annotated[User, Depends(get_current_user)],
+                          password_update_request: PasswordUpdateRequest,
+                          response: Response) -> None:
     """
-    Allow all users to change their own password.
+    Change password of a user. Only administrators may change passwords of other users.
 
     Parameters
     ----------
-    oldpassword
-        The old password of the current user to verify that the request is legitimate.
-    newpassword
-        The new password to set for the current user.
+    password_update_request
+        .password_of_requester: the password of the requester
+        .username_to_change_password_for: the username for whom to change the password
+        .newpassword: the new password
 
     Returns
     -------
@@ -530,19 +532,26 @@ async def change_own_password(current_user: Annotated[User, Depends(get_current_
     """
     print(LOG_CALL_DELIMITER)
     print("Username:", current_user.username)
+    print("Request to change password of user:", password_update_request.username_to_change_password_for)
 
     if len(password_update_request.newpassword) < 12:
         raise HTTPException(
             status_code=400,
             detail="The new password should at least be 12 characters long!")
 
-    # check old password
+    # check password of the requester
     form_like = namedtuple('OAuth2PasswordRequestForm_like',
-                           ['username', 'password'])(current_user.username, password_update_request.oldpassword)
+                           ['username', 'password'])(current_user.username, password_update_request.password_of_requester)
     # login(...) raises exception if username or password are wrong, otherwise it sets login-cookie on response
     await login(form_like, response=response)
+
+    # only admins may change the password for other users
+    if password_update_request.username_to_change_password_for != current_user.username:
+        # raises error if current_user is not admin
+        await get_current_user_admin(current_user)
 
     # do the update
     salt = token_hex(1024)  # create new salt
     newpassword_hash = compute_complex_password_hash(password_update_request.newpassword, salt)
-    await dal.update_user_data(current_user.username, {"password_hash": newpassword_hash, "salt": salt})
+    await dal.update_user_data(password_update_request.username_to_change_password_for,
+                               {"password_hash": newpassword_hash, "salt": salt})

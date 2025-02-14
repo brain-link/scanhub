@@ -54,7 +54,13 @@ export interface PasswordUpdateRequest {
      * @type {string}
      * @memberof PasswordUpdateRequest
      */
-    'oldpassword': string;
+    'password_of_requester': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PasswordUpdateRequest
+     */
+    'username_to_change_password_for': string;
     /**
      * 
      * @type {string}
@@ -564,16 +570,16 @@ export class LoginApi extends BaseAPI {
 export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
-         * @summary Change Own Password
+         * Change password of a user. Only administrators may change passwords of other users.  Parameters ---------- password_update_request     .password_of_requester: the password of the requester     .username_to_change_password_for: the username for whom to change the password     .newpassword: the new password  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+         * @summary Change Password
          * @param {PasswordUpdateRequest} passwordUpdateRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changeOwnPasswordApiV1UserloginChangeownpasswordPut: async (passwordUpdateRequest: PasswordUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        changePasswordApiV1UserloginChangepasswordPut: async (passwordUpdateRequest: PasswordUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'passwordUpdateRequest' is not null or undefined
-            assertParamExists('changeOwnPasswordApiV1UserloginChangeownpasswordPut', 'passwordUpdateRequest', passwordUpdateRequest)
-            const localVarPath = `/api/v1/userlogin/changeownpassword`;
+            assertParamExists('changePasswordApiV1UserloginChangepasswordPut', 'passwordUpdateRequest', passwordUpdateRequest)
+            const localVarPath = `/api/v1/userlogin/changepassword`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -803,16 +809,16 @@ export const UserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
     return {
         /**
-         * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
-         * @summary Change Own Password
+         * Change password of a user. Only administrators may change passwords of other users.  Parameters ---------- password_update_request     .password_of_requester: the password of the requester     .username_to_change_password_for: the username for whom to change the password     .newpassword: the new password  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+         * @summary Change Password
          * @param {PasswordUpdateRequest} passwordUpdateRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest, options);
+        async changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.changeOwnPasswordApiV1UserloginChangeownpasswordPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.changePasswordApiV1UserloginChangepasswordPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -889,14 +895,14 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = UserApiFp(configuration)
     return {
         /**
-         * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
-         * @summary Change Own Password
+         * Change password of a user. Only administrators may change passwords of other users.  Parameters ---------- password_update_request     .password_of_requester: the password of the requester     .username_to_change_password_for: the username for whom to change the password     .newpassword: the new password  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+         * @summary Change Password
          * @param {PasswordUpdateRequest} passwordUpdateRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: any): AxiosPromise<any> {
-            return localVarFp.changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest, options).then((request) => request(axios, basePath));
+        changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: any): AxiosPromise<any> {
+            return localVarFp.changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
@@ -957,15 +963,15 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
  */
 export class UserApi extends BaseAPI {
     /**
-     * Allow all users to change their own password.  Parameters ---------- oldpassword     The old password of the current user to verify that the request is legitimate. newpassword     The new password to set for the current user.  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
-     * @summary Change Own Password
+     * Change password of a user. Only administrators may change passwords of other users.  Parameters ---------- password_update_request     .password_of_requester: the password of the requester     .username_to_change_password_for: the username for whom to change the password     .newpassword: the new password  Returns -------     None  Raises ------ HTTPException     400: New Password must have at least 12 characters. Old Password must be correct.
+     * @summary Change Password
      * @param {PasswordUpdateRequest} passwordUpdateRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).changeOwnPasswordApiV1UserloginChangeownpasswordPut(passwordUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+    public changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

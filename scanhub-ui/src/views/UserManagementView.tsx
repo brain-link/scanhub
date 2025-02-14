@@ -6,6 +6,7 @@
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
+import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
@@ -24,10 +25,13 @@ import AlertItem from '../components/AlertItem'
 import { User, UserRole } from '../generated-client/userlogin'
 import { Alerts } from '../interfaces/components.interface'
 import UserCreateModal from '../components/UserCreateModal'
+import PasswordModal from '../components/PasswordModal'
+
 
 export default function UserManagementView() {
   const [, showNotification] = useContext(NotificationContext)
-  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
+  const [userCreateModalOpen, setUserCreateModalOpen] = React.useState<boolean>(false)
+  const [usernameToResetPasswordFor, setUsernameToResetPasswordFor] = React.useState('')
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
   const {
@@ -134,8 +138,8 @@ export default function UserManagementView() {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Delete',
-      width: 150,
+      headerName: 'Delete / Set Password',
+      width: 200,
       cellClassName: 'actions',
       getActions: (row) => {
         return [
@@ -145,7 +149,16 @@ export default function UserManagementView() {
             label='Delete'
             color='inherit'
             onClick={() => {
-              delteMutation.mutate(row.id.toString())
+              delteMutation.mutate(row.row.username)
+            }}
+          />,
+          <GridActionsCellItem
+            key='2'
+            icon={<AdminPanelSettingsSharpIcon />}
+            label='setpassword'
+            color='inherit'
+            onClick={() => {
+              setUsernameToResetPasswordFor(row.row.username)
             }}
           />,
         ]
@@ -156,8 +169,8 @@ export default function UserManagementView() {
   return (
     <Box sx={{ p: 3, width: '100%'}}>
       <UserCreateModal
-        isOpen={dialogOpen}
-        setOpen={setDialogOpen}
+        isOpen={userCreateModalOpen}
+        setOpen={setUserCreateModalOpen}
         onSubmit={() => {
           refetch()
         }}
@@ -166,7 +179,7 @@ export default function UserManagementView() {
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 
         <Typography level='title-md'>List of Users</Typography> 
         <IconButton size='sm' variant='outlined'>
-          <AddSharpIcon onClick={() => setDialogOpen(true)} />
+          <AddSharpIcon onClick={() => setUserCreateModalOpen(true)} />
         </IconButton>
       </Stack>
 
@@ -186,6 +199,16 @@ export default function UserManagementView() {
           }}
         />
       </Sheet>
+
+      <PasswordModal 
+        onSubmit={() => {}} 
+        isOpen={usernameToResetPasswordFor != '' ? true : false} 
+        setOpen={(status) => {
+          if (status == false) setUsernameToResetPasswordFor('')
+        }}
+        modalType={'modify'}
+        item={usernameToResetPasswordFor}
+      />
     </Box>
   )
 }

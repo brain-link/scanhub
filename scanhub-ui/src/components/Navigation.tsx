@@ -239,6 +239,8 @@ export default function Navigation() {
         onSubmit={() => {}} 
         isOpen={passwordModalOpen} 
         setOpen={setPasswordModalOpen}
+        modalType={'modify'}
+        item={user?.username ? user.username : ''}
       />
 
     </Box>
