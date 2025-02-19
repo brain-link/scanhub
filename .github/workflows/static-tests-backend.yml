@@ -23,7 +23,6 @@ jobs:
           "device-manager",
           "user-login-manager",
           "mri/sequence-manager",
-          "mri/recos/cartesian-reco-service",
           "patient-manager",
         ]
 
