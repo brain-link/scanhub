@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Workflow manager endpoints."""
+import os
 import logging
 import operator
 from typing import Any, Dict
@@ -159,14 +160,15 @@ async def handle_processing_task(task: TaskOut):
 
     return
 
-@router.post("/upload/{workflow_id}/")
-async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[str, str]:
-    """Upload workflow result.
+@router.post("/upload_and_trigger/{dag_id}/")
+async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> dict[str, str]:
+    """
+    Upload a file and trigger an Airflow DAG.
 
     Parameters
     ----------
-    workflow_id
-        Id of the workflow, which is processed by workflow
+    dag_id
+        The ID of the DAG to be triggered.
     file, optional
         Data upload, e.g. reconstruction result, by default File(...)
 
@@ -174,8 +176,18 @@ async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[
     -------
         Notification
     """
-    # Simulate file upload handling
-    file_location = f"/app/data_lake/results/{workflow_id}/{file.filename}"
+    # Define the file location in the shared data lake
+    file_location = f"/app/data_lake/results/{dag_id}/{file.filename}"
+    os.makedirs(os.path.dirname(file_location), exist_ok=True)
+
+    # Save the uploaded file
     with open(file_location, "wb") as f:
         f.write(file.file.read())
-    return {"message": "File uploaded successfully"}
+
+    # Trigger the Airflow DAG with the filename as a parameter
+    try:
+        response = orchestration_engine.trigger_task(dag_id, conf={"file_path": file_location})
+        return {"message": "File uploaded and DAG triggered successfully", "data": response}
+    except Exception as e:
+        logging.error(f"Failed to trigger DAG: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

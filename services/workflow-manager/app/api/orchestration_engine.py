@@ -8,6 +8,8 @@ from typing import Dict
 
 import requests
 from fastapi import HTTPException
+from datetime import datetime
+from typing import Dict
 
 
 class OrchestrationEngine:
@@ -60,44 +62,50 @@ class OrchestrationEngine:
             raise HTTPException(status_code=response.status_code, detail="Failed to retrieve Airflow DAGs")
         return response.json()
 
-    def trigger_task(self, task_id: str):
-        """Trigger a task in the orchestration engine.
-
+    def trigger_task(self, task_id: str, conf: Dict[str, str] = None):
+        """
+        Triggers a task in the orchestration engine.
         Currently, only Airflow is supported.
 
         Args:
             task_id (str): The ID of the task to be triggered.
+            conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.
 
-        Returns
-        -------
+        Returns:
             dict: A dictionary containing a success message.
 
-        Raises
-        ------
-            ValueError: If the orchestration engine is not Airflow.
+        Raises:
+            HTTPException: If the request to Airflow API fails.
         """
         if self.engine == "AIRFLOW":
-            return self._trigger_airflow_task(task_id)
+            return self._trigger_airflow_task(task_id, conf)
         else:
             raise ValueError("Task triggering is only supported for Airflow")
 
-    def _trigger_airflow_task(self, task_id: str):
-        """Trigger an Airflow task.
+    def _trigger_airflow_task(self, task_id: str, conf: Dict[str, str] = None):
+        """
+        Trigger an Airflow task.
 
         Args:
             task_id (str): The ID of the task to be triggered.
+            conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.
 
-        Returns
-        -------
+        Returns:
             dict: A dictionary containing a success message.
 
-        Raises
-        ------
+        Raises:
             HTTPException: If the request to Airflow API fails.
         """
         print(f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns")
 
-        payload: Dict[str, str] = {}
+        payload = {
+            "conf": conf or {},
+            "dag_run_id": task_id,
+            "data_interval_end": datetime.utcnow().isoformat() + "Z",
+            "data_interval_start": datetime.utcnow().isoformat() + "Z",
+            "logical_date": datetime.utcnow().isoformat() + "Z",
+            "note": "Triggered via API"
+        }
 
         print(payload)
 

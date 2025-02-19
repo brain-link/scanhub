@@ -27,6 +27,7 @@ x-airflow-common:
     # - ${AIRFLOW_LOGS}:/opt/airflow/logs
     # - ${AIRFLOW_PLUGINS}:/opt/airflow/plugins
     - ./services/airflow/secrets:/opt/secrets
+    - data_lake:/opt/airflow/data_lake
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
