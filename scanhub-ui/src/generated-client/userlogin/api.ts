@@ -610,7 +610,73 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+         * Check if there are no users in the database.  Returns -------     True, if there are no users in the database.
+         * @summary Check No Users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkNoUsersApiV1UserloginChecknousersGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/userlogin/checknousers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create first user.  Parameters ---------- first_user     pydantic base model of the first user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.     The role should be admin.
+         * @summary Create First User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFirstUserApiV1UserloginCreatefirstuserPost: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'user' is not null or undefined
+            assertParamExists('createFirstUserApiV1UserloginCreatefirstuserPost', 'user', user)
+            const localVarPath = `/api/v1/userlogin/createfirstuser`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(user, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create user database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.
          * @summary Create User
          * @param {User} user 
          * @param {*} [options] Override http request option.
@@ -822,7 +888,32 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+         * Check if there are no users in the database.  Returns -------     True, if there are no users in the database.
+         * @summary Check No Users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkNoUsersApiV1UserloginChecknousersGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkNoUsersApiV1UserloginChecknousersGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.checkNoUsersApiV1UserloginChecknousersGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create first user.  Parameters ---------- first_user     pydantic base model of the first user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.     The role should be admin.
+         * @summary Create First User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createFirstUserApiV1UserloginCreatefirstuserPost(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createFirstUserApiV1UserloginCreatefirstuserPost(user, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.createFirstUserApiV1UserloginCreatefirstuserPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create user database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.
          * @summary Create User
          * @param {User} user 
          * @param {*} [options] Override http request option.
@@ -905,7 +996,26 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+         * Check if there are no users in the database.  Returns -------     True, if there are no users in the database.
+         * @summary Check No Users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkNoUsersApiV1UserloginChecknousersGet(options?: any): AxiosPromise<boolean> {
+            return localVarFp.checkNoUsersApiV1UserloginChecknousersGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create first user.  Parameters ---------- first_user     pydantic base model of the first user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.     The role should be admin.
+         * @summary Create First User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFirstUserApiV1UserloginCreatefirstuserPost(user: User, options?: any): AxiosPromise<any> {
+            return localVarFp.createFirstUserApiV1UserloginCreatefirstuserPost(user, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create user database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.
          * @summary Create User
          * @param {User} user 
          * @param {*} [options] Override http request option.
@@ -975,7 +1085,30 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Create new patient database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.  Returns -------     Patient pydantic output model
+     * Check if there are no users in the database.  Returns -------     True, if there are no users in the database.
+     * @summary Check No Users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public checkNoUsersApiV1UserloginChecknousersGet(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).checkNoUsersApiV1UserloginChecknousersGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create first user.  Parameters ---------- first_user     pydantic base model of the first user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.     The role should be admin.
+     * @summary Create First User
+     * @param {User} user 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public createFirstUserApiV1UserloginCreatefirstuserPost(user: User, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).createFirstUserApiV1UserloginCreatefirstuserPost(user, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create user database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.
      * @summary Create User
      * @param {User} user 
      * @param {*} [options] Override http request option.

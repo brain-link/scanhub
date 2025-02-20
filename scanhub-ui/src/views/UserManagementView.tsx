@@ -26,12 +26,14 @@ import { User, UserRole } from '../generated-client/userlogin'
 import { Alerts } from '../interfaces/components.interface'
 import UserCreateModal from '../components/UserCreateModal'
 import PasswordModal from '../components/PasswordModal'
+import ConfirmDeleteModal from '../components/ConfirmDelteModal'
 
 
 export default function UserManagementView() {
   const [, showNotification] = useContext(NotificationContext)
   const [userCreateModalOpen, setUserCreateModalOpen] = React.useState<boolean>(false)
   const [usernameToResetPasswordFor, setUsernameToResetPasswordFor] = React.useState('')
+  const [userToDelete, setUserToDelete] = React.useState('')
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
   const {
@@ -149,7 +151,8 @@ export default function UserManagementView() {
             label='Delete'
             color='inherit'
             onClick={() => {
-              delteMutation.mutate(row.row.username)
+              // delteMutation.mutate(row.row.username)
+              setUserToDelete(row.row.username)
             }}
           />,
           <GridActionsCellItem
@@ -208,6 +211,16 @@ export default function UserManagementView() {
         }}
         modalType={'modify'}
         item={usernameToResetPasswordFor}
+      />
+
+      <ConfirmDeleteModal 
+        onSubmit={() => delteMutation.mutate(userToDelete)}
+        isOpen={userToDelete != '' ? true : false} 
+        setOpen={(status) => {
+          if (status == false) setUserToDelete('')
+        }}
+        modalType={'modify'}
+        item={userToDelete}
       />
     </Box>
   )

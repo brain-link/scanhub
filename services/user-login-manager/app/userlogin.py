@@ -18,6 +18,7 @@ from scanhub_libraries.security import oauth2_scheme
 from app import dal
 from app.db import UserSQL
 
+
 MAX_INACTIVITY_TIME_SECONDS = 3600          # max time without activity until login token gets invalid
 MAX_SESSION_LENGTH_SECONDS = 3600 * 11      # max session length from login, independent of activity
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
@@ -312,10 +313,26 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user_a
     return [await get_user_out(user) for user in users]
 
 
-@router.post("/createuser", status_code=201, tags=["user"])
-async def create_user(current_user: Annotated[User, Depends(get_current_user_admin)], new_user: User):
+@router.get('/checknousers', status_code=200, tags=["user"])
+async def check_no_users() -> bool:
     """
-    Create new patient database entry (only admins).
+    Check if there are no users in the database.
+
+    Returns
+    -------
+        True, if there are no users in the database.
+    """
+    print(LOG_CALL_DELIMITER)
+    users: list[UserSQL] = await dal.get_all_users()
+    if not (users):
+        # If return is none, list is empty
+        return True
+    return False
+
+
+async def create_user_internal(new_user: User):
+    """
+    Create user database entry (only admins).
 
     Parameters
     ----------
@@ -323,18 +340,7 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         pydantic base model of new user, token_type should be "password" and
         access_token should contain the password of the new user.
         The password of the new user should at least be 12 characters long.
-
-    Returns
-    -------
-        Patient pydantic output model
-
     """
-    # TODO consider requireing a password for this function or at least a very fresh access_token
-    # the password should be entered at performing the action in the UI
-    # or the access_token should be refreshed by re-login with password when changing to the admin panel
-    # this mitigates risk of admins leaving their session unattended
-    print(LOG_CALL_DELIMITER)
-    print("Username:", current_user.username)
     print("Requested new_user.name:", new_user.username)
     print("Requested new_user.first_name:", new_user.first_name)
     print("Requested new_user.last_name", new_user.last_name)
@@ -388,6 +394,53 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         last_login_unixtime=None
     )
     await dal.add_user(new_user_db)
+
+
+@router.post("/createuser", status_code=201, tags=["user"])
+async def create_user(current_user: Annotated[User, Depends(get_current_user_admin)], new_user: User):
+    """
+    Create user database entry (only admins).
+
+    Parameters
+    ----------
+    new_user
+        pydantic base model of new user, token_type should be "password" and
+        access_token should contain the password of the new user.
+        The password of the new user should at least be 12 characters long.
+    """
+    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # the password should be entered at performing the action in the UI
+    # or the access_token should be refreshed by re-login with password when changing to the admin panel
+    # this mitigates risk of admins leaving their session unattended
+    print(LOG_CALL_DELIMITER)
+    print("Username:", current_user.username)
+    await create_user_internal(new_user)
+
+
+
+@router.post("/createfirstuser", status_code=201, tags=["user"])
+async def create_first_user(first_user: User):
+    """
+    Create first user.
+
+    Parameters
+    ----------
+    first_user
+        pydantic base model of the first user, token_type should be "password" and
+        access_token should contain the password of the new user.
+        The password of the new user should at least be 12 characters long.
+        The role should be admin.
+    """
+    if first_user.role != UserRole.admin:
+        raise HTTPException(
+            status_code=400,
+            detail="Role of first user should be admin!")
+    if await check_no_users() is False:
+        raise HTTPException(
+            status_code=400,
+            detail="There is already a user in the system!")
+
+    await create_user_internal(new_user=first_user)
 
 
 @router.delete("/deleteuser", response_model={}, status_code=204, tags=["user"])

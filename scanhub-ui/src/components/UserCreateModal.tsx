@@ -22,7 +22,7 @@ import Option from '@mui/joy/Option';
 
 import { userApi } from '../api'
 import { UserRole, User } from '../generated-client/userlogin'
-import { ModalProps } from '../interfaces/components.interface'
+import { ModalProps, ModalPropsCreateFirstUser } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
@@ -50,19 +50,21 @@ interface SelectFormEntry extends BaseFormEntry {
 
 type FormEntry = TextFormEntry | SelectFormEntry | PasswordFormEntry;
 
-// User form items, order is row wise
-const createUserFormContent: FormEntry[] = [
-  { type: 'text', key: 'username', label: 'Username', placeholder: 'Username', required: true },
-  { type: 'text', key: 'first_name', label: 'First name', placeholder: 'First name', required: true },
-  { type: 'text', key: 'last_name', label: 'Last name', placeholder: 'Last name', required: true },
-  { type: 'text', key: 'email', label: 'e-Mail', placeholder: 'e-Mail', required: false },
-  { type: 'select', key: 'role', label: 'Role', options: Object.values(UserRole) },
-  { type: 'password', key: 'access_token', label: 'Password', placeholder: 'At least 12 characters.', required: true },
-]
 
-
-function UserForm(props: ModalProps) {
+function UserForm(props: ModalProps | ModalPropsCreateFirstUser) {
   // The form is in this separate component to make sure that the state is reset after closing the modal
+
+  const createFirstUser = 'modalType' in props && props.modalType == 'createFirstUser'
+
+  // User form items, order is row wise
+  const createUserFormContent: FormEntry[] = [
+    { type: 'text', key: 'username', label: 'Username', placeholder: 'Username', required: true },
+    { type: 'text', key: 'first_name', label: 'First name', placeholder: 'First name', required: true },
+    { type: 'text', key: 'last_name', label: 'Last name', placeholder: 'Last name', required: true },
+    { type: 'text', key: 'email', label: 'e-Mail', placeholder: 'e-Mail', required: false },
+    { type: 'select', key: 'role', label: 'Role', options: createFirstUser ? [UserRole.Admin] : Object.values(UserRole) },
+    { type: 'password', key: 'access_token', label: 'Password', placeholder: 'At least 12 characters.', required: true },
+  ]
 
   const [, showNotification] = React.useContext(NotificationContext)
   // eslint-disable-next-line camelcase
@@ -78,7 +80,7 @@ function UserForm(props: ModalProps) {
   })
 
   // Post a new record and refetch records table
-  const mutation = useMutation({
+  let mutation = useMutation({
     mutationKey: ['users'],
     mutationFn: async () => {
       await userApi
@@ -100,6 +102,23 @@ function UserForm(props: ModalProps) {
         })
     },
   })
+
+  if (createFirstUser) {
+    mutation = useMutation({
+      mutationKey: ['users'],
+      mutationFn: async () => {
+        await userApi
+          .createFirstUserApiV1UserloginCreatefirstuserPost(user)
+          .then(() => {
+            props.onSubmit()
+            console.log('Created user.')
+          })
+          .catch((err) => {
+            console.log('Error at creating first user.')
+          })
+      },
+    })
+  }
 
   function renderFormEntry(item: FormEntry, index: number) {
     if (item.type == 'text') {
@@ -149,7 +168,7 @@ function UserForm(props: ModalProps) {
   return (
     <>
       <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        Create New User
+        {createFirstUser ? 'Create First User' : 'Create New User'}
       </Typography>
 
       <form
@@ -178,7 +197,7 @@ function UserForm(props: ModalProps) {
 }
 
 
-export default function UserCreateModal(props: ModalProps) {
+export default function UserCreateModal(props: ModalProps | ModalPropsCreateFirstUser) {
   return (
     <Modal
       open={props.isOpen}
