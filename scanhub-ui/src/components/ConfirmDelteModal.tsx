@@ -6,8 +6,6 @@
  * to confirm the deletion of some item.
  */
 import Button from '@mui/joy/Button'
-import FormLabel from '@mui/joy/FormLabel'
-import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
@@ -24,14 +22,14 @@ function ConfirmDeleteForm(props: ModalPropsModify<string>) {
   return (
     <>
       <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        Are you sure you want to delete user "{props.item}"?
+        {'Are you sure you want to delete user ' +  props.item + '?'}
       </Typography>
       <Stack direction='row' spacing={3}>
         <Button
           size='sm'
           color='danger'
           sx={{  }}
-          onClick={(event) => {
+          onClick={() => {
             props.onSubmit()
             props.setOpen(false)
           }}
@@ -42,7 +40,7 @@ function ConfirmDeleteForm(props: ModalPropsModify<string>) {
         <Button
           size='sm'
           sx={{  }}
-          onClick={(event) => {
+          onClick={() => {
             props.setOpen(false)
           }}
         >

@@ -33,9 +33,12 @@ function PasswordForm(props: ModalPropsModify<string>) {
   const [user, ] = React.useContext(LoginContext)
 
   const mutation = useMutation(async () => {
-    await userApi.changePasswordApiV1UserloginChangepasswordPut({ password_of_requester: passwordOfRequester,
-                                                                  username_to_change_password_for: props.item,
-                                                                  newpassword: newPassword1 })
+    await userApi.changePasswordApiV1UserloginChangepasswordPut(
+      {
+        password_of_requester: passwordOfRequester,   // eslint-disable-line camelcase
+        username_to_change_password_for: props.item,  // eslint-disable-line camelcase
+        newpassword: newPassword1
+      })
       .then(() => {
         props.onSubmit()
         showNotification({message: 'Updated password sucessfully.', type: 'success'})
@@ -48,7 +51,7 @@ function PasswordForm(props: ModalPropsModify<string>) {
   return (
     <>
       <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        Change Password for user "{props.item}"
+        {'Change Password for user ' + props.item}
       </Typography>
 
       <Stack spacing={1}>

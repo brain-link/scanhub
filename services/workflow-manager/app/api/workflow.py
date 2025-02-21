@@ -99,7 +99,7 @@ async def process(workflow_id: UUID | str) -> dict[str, str]:
     # URI for the exam manager service
     exam_manager_uri = EXAM_MANAGER_URI
     # Create an asynchronous HTTP client
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         # Fetch the workflow data from the exam manager service
         response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
         # Raise an exception if the request was not successful

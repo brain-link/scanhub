@@ -113,7 +113,7 @@ function UserForm(props: ModalProps | ModalPropsCreateFirstUser) {
             props.onSubmit()
             console.log('Created user.')
           })
-          .catch((err) => {
+          .catch(() => {
             console.log('Error at creating first user.')
           })
       },
