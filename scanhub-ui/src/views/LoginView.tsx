@@ -12,8 +12,10 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import React, { useState } from 'react'
 
-import { loginApi } from '../api'
+import { loginApi, userApi } from '../api'
+import UserCreateModal from '../components/UserCreateModal'
 import { User } from '../generated-client/userlogin'
+
 
 const enum LoginErrorState {
   NoError,
@@ -22,12 +24,23 @@ const enum LoginErrorState {
   OtherError,
 }
 
+
 function Login(props: { onLogin: (user: User) => void }) {
   const [loginErrorState, setLoginErrorState] = useState<LoginErrorState>(LoginErrorState.NoError)
   const [loginRequestInProgress, setLoginRequestInProgress] = useState<boolean>(false)
 
-  const [username, setUsername] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [noUsersInDB, setNoUsersInDB] = useState(false)
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  function checknousers() {
+    userApi
+    .checkNoUsersApiV1UserloginChecknousersGet()
+    .then((result) => {
+      setNoUsersInDB(result.data)
+    })
+  }
 
   React.useEffect(() => {
     console.log('Try autologin with cookie.')
@@ -41,11 +54,20 @@ function Login(props: { onLogin: (user: User) => void }) {
     .catch(() => {
       console.log('Autologin not successfull.')
       setLoginRequestInProgress(false)
+      checknousers()
     })
   }, [])
 
   return (
     <Stack direction='column' justifyContent='center' alignItems='center' spacing={2} sx={{ height: '70vh' }}>
+
+      <UserCreateModal
+        isOpen={noUsersInDB}
+        setOpen={() => { }}
+        onSubmit={checknousers}
+        modalType={'createFirstUser'}
+      />
+
       <Typography level='title-lg' style={{ textAlign: 'center' }}>
         ScanHub
       </Typography>

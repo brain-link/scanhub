@@ -44,32 +44,6 @@ export interface HTTPValidationError {
 export interface LocationInner {
 }
 /**
- * Pydantic definition of a scanstatus.
- * @export
- * @interface ScanStatus
- */
-export interface ScanStatus {
-    /**
-     * 
-     * @type {string}
-     * @memberof ScanStatus
-     */
-    'record_id': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ScanStatus
-     */
-    'status_percent': number;
-}
-/**
- * 
- * @export
- * @interface TaskId
- */
-export interface TaskId {
-}
-/**
  * 
  * @export
  * @interface ValidationError
@@ -210,17 +184,13 @@ export class HealthApi extends BaseAPI {
 export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Download DICOM result.  Parameters ---------- record_id     ID of the record the DICOM file belongs to.  Returns -------     DICOM file response
-         * @summary Download Result
-         * @param {number} recordId 
+         * Hello world endpoint.
+         * @summary Hello World
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadResultApiV1WorkflowmanagerDownloadRecordIdGet: async (recordId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'recordId' is not null or undefined
-            assertParamExists('downloadResultApiV1WorkflowmanagerDownloadRecordIdGet', 'recordId', recordId)
-            const localVarPath = `/api/v1/workflowmanager/download/{record_id}/`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+        helloWorldApiV1WorkflowmanagerHelloGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/workflowmanager/hello/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -248,57 +218,13 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             };
         },
         /**
-         * Receives status for a job. Forwards it to the ui and returns ok.
-         * @summary Forward Status
-         * @param {ScanStatus} scanStatus 
+         * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+         * @summary List Available Tasks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        forwardStatusApiV1WorkflowmanagerForwardStatusPost: async (scanStatus: ScanStatus, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'scanStatus' is not null or undefined
-            assertParamExists('forwardStatusApiV1WorkflowmanagerForwardStatusPost', 'scanStatus', scanStatus)
-            const localVarPath = `/api/v1/workflowmanager/forward-status`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(scanStatus, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Read image file data and content as streaming response.  Parameters ---------- record_id     Record ID the image should be read for  Returns -------     Image file content  Raises ------ HTTPException     File not found
-         * @summary Get Image File
-         * @param {number} recordId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getImageFileApiV1WorkflowmanagerImageRecordIdGet: async (recordId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'recordId' is not null or undefined
-            assertParamExists('getImageFileApiV1WorkflowmanagerImageRecordIdGet', 'recordId', recordId)
-            const localVarPath = `/api/v1/workflowmanager/image/{record_id}/`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+        listAvailableTasksApiV1WorkflowmanagerTasksGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/workflowmanager/tasks/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -332,9 +258,9 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        processApiV1WorkflowmanagerProcessWorkflowIdGet: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        processApiV1WorkflowmanagerProcessWorkflowIdPost: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('processApiV1WorkflowmanagerProcessWorkflowIdGet', 'workflowId', workflowId)
+            assertParamExists('processApiV1WorkflowmanagerProcessWorkflowIdPost', 'workflowId', workflowId)
             const localVarPath = `/api/v1/workflowmanager/process/{workflow_id}/`
                 .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -344,7 +270,7 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -364,16 +290,16 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             };
         },
         /**
-         * Process a task.  Parameters ---------- task_id     UUID of the task to process  Returns -------     Task process response
-         * @summary Process Task
-         * @param {TaskId} taskId 
+         * Endpoint to trigger a task in the orchestration engine.  Args:     task_id (str): The ID of the DAG to be triggered.  Returns -------     dict: A dictionary containing the response from the orchestration engine.
+         * @summary Trigger Task
+         * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost: async (taskId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet', 'taskId', taskId)
-            const localVarPath = `/api/v1/workflowmanager/task/process/{task_id}/`
+            assertParamExists('triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost', 'taskId', taskId)
+            const localVarPath = `/api/v1/workflowmanager/trigger_task/{task_id}/`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -382,7 +308,7 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -461,42 +387,27 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WorkflowManagerApiAxiosParamCreator(configuration)
     return {
         /**
-         * Download DICOM result.  Parameters ---------- record_id     ID of the record the DICOM file belongs to.  Returns -------     DICOM file response
-         * @summary Download Result
-         * @param {number} recordId 
+         * Hello world endpoint.
+         * @summary Hello World
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadResultApiV1WorkflowmanagerDownloadRecordIdGet(recordId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadResultApiV1WorkflowmanagerDownloadRecordIdGet(recordId, options);
+        async helloWorldApiV1WorkflowmanagerHelloGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: string; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.helloWorldApiV1WorkflowmanagerHelloGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.downloadResultApiV1WorkflowmanagerDownloadRecordIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.helloWorldApiV1WorkflowmanagerHelloGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Receives status for a job. Forwards it to the ui and returns ok.
-         * @summary Forward Status
-         * @param {ScanStatus} scanStatus 
+         * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+         * @summary List Available Tasks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async forwardStatusApiV1WorkflowmanagerForwardStatusPost(scanStatus: ScanStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.forwardStatusApiV1WorkflowmanagerForwardStatusPost(scanStatus, options);
+        async listAvailableTasksApiV1WorkflowmanagerTasksGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAvailableTasksApiV1WorkflowmanagerTasksGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.forwardStatusApiV1WorkflowmanagerForwardStatusPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Read image file data and content as streaming response.  Parameters ---------- record_id     Record ID the image should be read for  Returns -------     Image file content  Raises ------ HTTPException     File not found
-         * @summary Get Image File
-         * @param {number} recordId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getImageFileApiV1WorkflowmanagerImageRecordIdGet(recordId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getImageFileApiV1WorkflowmanagerImageRecordIdGet(recordId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.getImageFileApiV1WorkflowmanagerImageRecordIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.listAvailableTasksApiV1WorkflowmanagerTasksGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -506,23 +417,23 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async processApiV1WorkflowmanagerProcessWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.processApiV1WorkflowmanagerProcessWorkflowIdGet(workflowId, options);
+        async processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: string; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.processApiV1WorkflowmanagerProcessWorkflowIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.processApiV1WorkflowmanagerProcessWorkflowIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Process a task.  Parameters ---------- task_id     UUID of the task to process  Returns -------     Task process response
-         * @summary Process Task
-         * @param {TaskId} taskId 
+         * Endpoint to trigger a task in the orchestration engine.  Args:     task_id (str): The ID of the DAG to be triggered.  Returns -------     dict: A dictionary containing the response from the orchestration engine.
+         * @summary Trigger Task
+         * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId, options);
+        async triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -550,34 +461,22 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
     const localVarFp = WorkflowManagerApiFp(configuration)
     return {
         /**
-         * Download DICOM result.  Parameters ---------- record_id     ID of the record the DICOM file belongs to.  Returns -------     DICOM file response
-         * @summary Download Result
-         * @param {number} recordId 
+         * Hello world endpoint.
+         * @summary Hello World
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadResultApiV1WorkflowmanagerDownloadRecordIdGet(recordId: number, options?: any): AxiosPromise<any> {
-            return localVarFp.downloadResultApiV1WorkflowmanagerDownloadRecordIdGet(recordId, options).then((request) => request(axios, basePath));
+        helloWorldApiV1WorkflowmanagerHelloGet(options?: any): AxiosPromise<{ [key: string]: string; }> {
+            return localVarFp.helloWorldApiV1WorkflowmanagerHelloGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Receives status for a job. Forwards it to the ui and returns ok.
-         * @summary Forward Status
-         * @param {ScanStatus} scanStatus 
+         * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+         * @summary List Available Tasks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        forwardStatusApiV1WorkflowmanagerForwardStatusPost(scanStatus: ScanStatus, options?: any): AxiosPromise<any> {
-            return localVarFp.forwardStatusApiV1WorkflowmanagerForwardStatusPost(scanStatus, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Read image file data and content as streaming response.  Parameters ---------- record_id     Record ID the image should be read for  Returns -------     Image file content  Raises ------ HTTPException     File not found
-         * @summary Get Image File
-         * @param {number} recordId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getImageFileApiV1WorkflowmanagerImageRecordIdGet(recordId: number, options?: any): AxiosPromise<any> {
-            return localVarFp.getImageFileApiV1WorkflowmanagerImageRecordIdGet(recordId, options).then((request) => request(axios, basePath));
+        listAvailableTasksApiV1WorkflowmanagerTasksGet(options?: any): AxiosPromise<any> {
+            return localVarFp.listAvailableTasksApiV1WorkflowmanagerTasksGet(options).then((request) => request(axios, basePath));
         },
         /**
          * Process a workflow.  Parameters ---------- workflow_id     UUID of the workflow to process  Returns -------     Workflow process response
@@ -586,18 +485,18 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        processApiV1WorkflowmanagerProcessWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<any> {
-            return localVarFp.processApiV1WorkflowmanagerProcessWorkflowIdGet(workflowId, options).then((request) => request(axios, basePath));
+        processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId: WorkflowId, options?: any): AxiosPromise<{ [key: string]: string; }> {
+            return localVarFp.processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Process a task.  Parameters ---------- task_id     UUID of the task to process  Returns -------     Task process response
-         * @summary Process Task
-         * @param {TaskId} taskId 
+         * Endpoint to trigger a task in the orchestration engine.  Args:     task_id (str): The ID of the DAG to be triggered.  Returns -------     dict: A dictionary containing the response from the orchestration engine.
+         * @summary Trigger Task
+         * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<any> {
-            return localVarFp.processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId, options).then((request) => request(axios, basePath));
+        triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: any): AxiosPromise<object> {
+            return localVarFp.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Upload workflow result.  Parameters ---------- workflow_id     Id of the workflow, which is processed by workflow file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     Notification
@@ -621,39 +520,25 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
  */
 export class WorkflowManagerApi extends BaseAPI {
     /**
-     * Download DICOM result.  Parameters ---------- record_id     ID of the record the DICOM file belongs to.  Returns -------     DICOM file response
-     * @summary Download Result
-     * @param {number} recordId 
+     * Hello world endpoint.
+     * @summary Hello World
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowManagerApi
      */
-    public downloadResultApiV1WorkflowmanagerDownloadRecordIdGet(recordId: number, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).downloadResultApiV1WorkflowmanagerDownloadRecordIdGet(recordId, options).then((request) => request(this.axios, this.basePath));
+    public helloWorldApiV1WorkflowmanagerHelloGet(options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).helloWorldApiV1WorkflowmanagerHelloGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Receives status for a job. Forwards it to the ui and returns ok.
-     * @summary Forward Status
-     * @param {ScanStatus} scanStatus 
+     * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+     * @summary List Available Tasks
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowManagerApi
      */
-    public forwardStatusApiV1WorkflowmanagerForwardStatusPost(scanStatus: ScanStatus, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).forwardStatusApiV1WorkflowmanagerForwardStatusPost(scanStatus, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Read image file data and content as streaming response.  Parameters ---------- record_id     Record ID the image should be read for  Returns -------     Image file content  Raises ------ HTTPException     File not found
-     * @summary Get Image File
-     * @param {number} recordId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowManagerApi
-     */
-    public getImageFileApiV1WorkflowmanagerImageRecordIdGet(recordId: number, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).getImageFileApiV1WorkflowmanagerImageRecordIdGet(recordId, options).then((request) => request(this.axios, this.basePath));
+    public listAvailableTasksApiV1WorkflowmanagerTasksGet(options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).listAvailableTasksApiV1WorkflowmanagerTasksGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -664,20 +549,20 @@ export class WorkflowManagerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof WorkflowManagerApi
      */
-    public processApiV1WorkflowmanagerProcessWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).processApiV1WorkflowmanagerProcessWorkflowIdGet(workflowId, options).then((request) => request(this.axios, this.basePath));
+    public processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Process a task.  Parameters ---------- task_id     UUID of the task to process  Returns -------     Task process response
-     * @summary Process Task
-     * @param {TaskId} taskId 
+     * Endpoint to trigger a task in the orchestration engine.  Args:     task_id (str): The ID of the DAG to be triggered.  Returns -------     dict: A dictionary containing the response from the orchestration engine.
+     * @summary Trigger Task
+     * @param {string} taskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowManagerApi
      */
-    public processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet(taskId, options).then((request) => request(this.axios, this.basePath));
+    public triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -34,6 +34,8 @@ const formContent: {key: keyof BaseExam, label: string, placeholder: string, edi
 
 
 function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPropsCreateModifyFromTemplate<ExamOut>) {
+  // The form is in this separate component to make sure that the state is reset after closing the modal
+  
   const [, showNotification] = React.useContext(NotificationContext)
 
   const initialExam: BaseExam = props.modalType == 'modify' || props.modalType == 'createModifyFromTemplate' ? 

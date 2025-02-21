@@ -12,10 +12,10 @@ fi
 
 set -x  # @echo on
 
+ruff check $fixornot airflow
 ruff check $fixornot base
 ruff check $fixornot device-manager
 ruff check $fixornot exam-manager
-ruff check $fixornot mri/recos
 ruff check $fixornot mri/sequence-manager
 ruff check $fixornot patient-manager
 ruff check $fixornot user-login-manager

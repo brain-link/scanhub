@@ -8,9 +8,8 @@ from uuid import UUID
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, ItemStatus, TaskOut, User, WorkflowOut
-from scanhub_libraries.security import get_current_user
+from scanhub_libraries.security import get_current_user, oauth2_scheme
 
 from app import dal
 from app.db import Exam, Workflow
@@ -22,7 +21,6 @@ from app.db import Exam, Workflow
 # 404 = Not found
 
 PREFIX_PATIENT_MANAGER = "http://patient-manager:8100/api/v1/patient"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 
 

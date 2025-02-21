@@ -25,7 +25,7 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
     mutationKey: ['workflowManagerProcessTask'],
     mutationFn: async () => {
       await workflowManagerApi
-        .processTaskApiV1WorkflowmanagerTaskProcessTaskIdGet((itemSelection.itemId as string))
+        .triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost((itemSelection.itemId as string))
         .then(() => {
           // props.onSubmit()
           showNotification({message: 'Started task', type: 'success'})

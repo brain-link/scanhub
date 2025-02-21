@@ -40,12 +40,12 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 workflows: Dict[str, Dict[str, Any]] = {}
 
 
-@router.get("/hello/")
+@router.get("/hello/", tags=["WorkflowManager"])
 async def hello_world() -> dict[str, str]:
     """Hello world endpoint."""
     return {"message": "Hello, World!"}
 
-@router.post("/trigger_task/{task_id}/")
+@router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
 async def trigger_task(task_id: str) -> dict[str, Any]:
     """
     Endpoint to trigger a task in the orchestration engine.
@@ -65,7 +65,7 @@ async def trigger_task(task_id: str) -> dict[str, Any]:
         logging.error(f"Failed to trigger task: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.get("/tasks/")
+@router.get("/tasks/", tags=["WorkflowManager"])
 async def list_available_tasks():
     """Endpoint to list the available tasks from the orchestration engine.
 
@@ -83,7 +83,7 @@ async def list_available_tasks():
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
-@router.post("/process/{workflow_id}/")
+@router.post("/process/{workflow_id}/", tags=["WorkflowManager"])
 async def process(workflow_id: UUID | str) -> dict[str, str]:
     """Process a workflow.
 
@@ -99,7 +99,7 @@ async def process(workflow_id: UUID | str) -> dict[str, str]:
     # URI for the exam manager service
     exam_manager_uri = EXAM_MANAGER_URI
     # Create an asynchronous HTTP client
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         # Fetch the workflow data from the exam manager service
         response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
         # Raise an exception if the request was not successful
@@ -159,7 +159,7 @@ async def handle_processing_task(task: TaskOut):
 
     return
 
-@router.post("/upload/{workflow_id}/")
+@router.post("/upload/{workflow_id}/", tags=["WorkflowManager"])
 async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[str, str]:
     """Upload workflow result.
 

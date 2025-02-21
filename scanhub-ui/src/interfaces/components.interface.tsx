@@ -66,6 +66,10 @@ export interface ModalPropsCreateModifyFromTemplate<T> extends ModalProps {
   modalType: 'createModifyFromTemplate'
 }
 
+export interface ModalPropsCreateFirstUser extends ModalProps {
+  modalType: 'createFirstUser'
+}
+
 export interface AccordionWithMenuInterface {
   accordionSummary?: ReactNode    // the summary that is always shown
   children?: ReactNode            // the details to expand

@@ -15,7 +15,9 @@ import json
 HOST = "http://localhost:8080"
 PREFIX = HOST + "/api/v1/exam"
 PREFIX_PATIENT_MANAGER = HOST + "/api/v1/patient"
-CREDENTIALS_FORM_DATA = "grant_type=password&username=Max&password=letmein"
+USERNAME = "Max"            #   make sure this user is installed with this password
+PASSWORD = "maxmaxmaxmax"   #   they are not set up by this test routine
+CREDENTIALS_FORM_DATA = "grant_type=password&username=" + USERNAME + "&password=" + PASSWORD
 
 
 PATIENT = {

@@ -23,6 +23,7 @@ import NotificationContext from '../NotificationContext'
 
 
 function WorkflowForm(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
+  // The form is in this separate component to make sure that the state is reset after closing the modal
 
   const initialWorkflow: BaseWorkflow = props.modalType == 'modify' ?
   {...props.item, status: 'UPDATED'}
