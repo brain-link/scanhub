@@ -593,10 +593,11 @@ async def change_password(current_user: Annotated[User, Depends(get_current_user
             detail="The new password should at least be 12 characters long!")
 
     # check password of the requester
-    form_like_template = namedtuple('OAuth2PasswordRequestForm_like', ['username', 'password'])
-    form_like = form_like_template(current_user.username, password_update_request.password_of_requester)
+    login_form = OAuth2PasswordRequestForm(username=current_user.username,
+                                           password=password_update_request.password_of_requester,
+                                           scope='')
     # login(...) raises exception if username or password are wrong, otherwise it sets login-cookie on response
-    await login(form_like, response=response)
+    await login(login_form, response=response)
 
     # only admins may change the password for other users
     if password_update_request.username_to_change_password_for != current_user.username:
