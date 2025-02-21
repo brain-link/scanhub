@@ -15,7 +15,6 @@ Attributes
 .. autoapisummary::
 
    exam-manager.app.exam.PREFIX_PATIENT_MANAGER
-   exam-manager.app.exam.oauth2_scheme
    exam-manager.app.exam.LOG_CALL_DELIMITER
    exam-manager.app.exam.router
 
@@ -56,8 +55,6 @@ Module Contents
 .. py:data:: PREFIX_PATIENT_MANAGER
    :value: 'http://patient-manager:8100/api/v1/patient'
 
-
-.. py:data:: oauth2_scheme
 
 .. py:data:: LOG_CALL_DELIMITER
    :value: '-------------------------------------------------------------------------------'
