@@ -77,9 +77,9 @@ During development you may start scanhub and the tools for development using the
     development-launcher.sh --full-rebuild
 
 
-## Default Username and Password
+### Default Username and Password
 
-For now, a default user needs to be created manually in the user database. The database entry of an example user with username "Max" and password "letmein" is shown in defaultuser.txt and defaultuser.csv
+If there is no user in the database, the software will display a form in the web-interface to create the first user.
 
 
 ## Documentation

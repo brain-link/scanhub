@@ -4,20 +4,19 @@
 """Definition of the user management and login API endpoints (accessible through swagger UI)."""
 
 import time
+from collections import namedtuple
 from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
 from typing import Annotated, Optional
-from collections import namedtuple
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.hash import argon2
-from scanhub_libraries.models import User, UserRole, PasswordUpdateRequest
+from scanhub_libraries.models import PasswordUpdateRequest, User, UserRole
 from scanhub_libraries.security import oauth2_scheme
 
 from app import dal
 from app.db import UserSQL
-
 
 MAX_INACTIVITY_TIME_SECONDS = 3600          # max time without activity until login token gets invalid
 MAX_SESSION_LENGTH_SECONDS = 3600 * 11      # max session length from login, independent of activity
@@ -98,7 +97,8 @@ async def get_current_user_admin(current_user: Annotated[User, Depends(get_curre
     if current_user.role == UserRole.admin:
         return current_user
 
-    # TODO consider requireing a very fresh access_token for get_current_user_admin to go through (could be checked with last_login_unixtime)
+    # consider requireing a very fresh access_token for get_current_user_admin to go through
+    # (could be checked with last_login_unixtime)
     # the access_token should be refreshed by re-login with password when changing to the admin panel
     # this mitigates risk of admins leaving their session unattended
 
@@ -298,7 +298,7 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user_a
     -------
         List of all users. The access_token and token_type properties are set to "" for all of them.
     """
-    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # consider requireing a password for this function or at least a very fresh access_token
     # the password should be entered at performing the action in the UI
     # or the access_token should be refreshed by re-login with password when changing to the admin panel
     # this mitigates risk of admins leaving their session unattended
@@ -408,7 +408,7 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
         access_token should contain the password of the new user.
         The password of the new user should at least be 12 characters long.
     """
-    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # consider requireing a password for this function or at least a very fresh access_token
     # the password should be entered at performing the action in the UI
     # or the access_token should be refreshed by re-login with password when changing to the admin panel
     # this mitigates risk of admins leaving their session unattended
@@ -458,7 +458,7 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found
     """
-    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # consider requireing a password for this function or at least a very fresh access_token
     # the password should be entered at performing the action in the UI
     # or the access_token should be refreshed by re-login with password when changing to the admin panel
     # this mitigates risk of admins leaving their session unattended
@@ -505,7 +505,7 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     HTTPException
         404: Not found if user not found.
     """
-    # TODO consider requireing a password for this function or at least a very fresh access_token
+    # consider requireing a password for this function or at least a very fresh access_token
     # the password should be entered at performing the action in the UI
     # or the access_token should be refreshed by re-login with password when changing to the admin panel
     # this mitigates risk of admins leaving their session unattended
@@ -593,8 +593,8 @@ async def change_password(current_user: Annotated[User, Depends(get_current_user
             detail="The new password should at least be 12 characters long!")
 
     # check password of the requester
-    form_like = namedtuple('OAuth2PasswordRequestForm_like',
-                           ['username', 'password'])(current_user.username, password_update_request.password_of_requester)
+    form_like_template = namedtuple('OAuth2PasswordRequestForm_like', ['username', 'password'])
+    form_like = form_like_template(current_user.username, password_update_request.password_of_requester)
     # login(...) raises exception if username or password are wrong, otherwise it sets login-cookie on response
     await login(form_like, response=response)
 
