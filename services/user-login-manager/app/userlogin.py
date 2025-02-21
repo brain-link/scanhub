@@ -4,7 +4,6 @@
 """Definition of the user management and login API endpoints (accessible through swagger UI)."""
 
 import time
-from collections import namedtuple
 from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
 from typing import Annotated, Optional
