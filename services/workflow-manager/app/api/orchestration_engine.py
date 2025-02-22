@@ -54,6 +54,8 @@ class OrchestrationEngine:
         """
         print(f"{self.airflow_api_url}/api/v1/dags")
 
+        print(f"auth: {self.airflow_username}, {self.airflow_password}")
+
         # TBD: Authentication should be handled in a more secure way
         response = requests.get(
             url=f"{self.airflow_api_url}/api/v1/dags",
