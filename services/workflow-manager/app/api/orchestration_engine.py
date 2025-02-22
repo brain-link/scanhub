@@ -4,12 +4,12 @@
 """Orchestration engine file for the workflow manager service."""
 
 import os
-from typing import Dict
-
 import requests
 from fastapi import HTTPException
+import logging
 from datetime import datetime
-from typing import Dict
+import uuid
+from typing import Dict, Any
 
 
 class OrchestrationEngine:
@@ -20,6 +20,8 @@ class OrchestrationEngine:
         self.engine = os.getenv("ORCHESTRATION_ENGINE")
         self.kestra_api_url = os.getenv("KESTRA_API_URL")
         self.airflow_api_url = os.getenv("AIRFLOW_API_URL")
+        self.airflow_username = os.getenv("AIRFLOW_USERNAME", "airflow")
+        self.airflow_password = os.getenv("AIRFLOW_PASSWORD", "airflow")
 
     def get_available_tasks(self):
         """Retrieve the available tasks from the orchestration engine.
@@ -55,14 +57,14 @@ class OrchestrationEngine:
         # TBD: Authentication should be handled in a more secure way
         response = requests.get(
             url=f"{self.airflow_api_url}/api/v1/dags",
-            auth=("airflow", "airflow"),
+            auth=(self.airflow_username, self.airflow_password),
             timeout=5
         )
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail="Failed to retrieve Airflow DAGs")
         return response.json()
 
-    def trigger_task(self, task_id: str, conf: Dict[str, str] = None):
+    def trigger_task(self, task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]:
         """
         Triggers a task in the orchestration engine.
         Currently, only Airflow is supported.
@@ -82,7 +84,7 @@ class OrchestrationEngine:
         else:
             raise ValueError("Task triggering is only supported for Airflow")
 
-    def _trigger_airflow_task(self, task_id: str, conf: Dict[str, str] = None):
+    def _trigger_airflow_task(self, task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]:
         """
         Trigger an Airflow task.
 
@@ -96,31 +98,35 @@ class OrchestrationEngine:
         Raises:
             HTTPException: If the request to Airflow API fails.
         """
-        print(f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns")
+        logging.info(f"Triggering Airflow DAG {task_id} with conf: {conf}")
+
+        unique_dag_run_id = f"{task_id}_{uuid.uuid4()}"
 
         payload = {
             "conf": conf or {},
-            "dag_run_id": task_id,
+            "dag_run_id": unique_dag_run_id,
             "data_interval_end": datetime.utcnow().isoformat() + "Z",
             "data_interval_start": datetime.utcnow().isoformat() + "Z",
             "logical_date": datetime.utcnow().isoformat() + "Z",
             "note": "Triggered via API"
         }
-
-        print(payload)
+        logging.info(f"Payload: {payload}")
 
         response = requests.post(
             url=f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns",
-            auth=("airflow", "airflow"),
+            auth=(self.airflow_username, self.airflow_password),
             json=payload,
             timeout=5
         )
 
+        logging.info(f"Airflow API response: {response.status_code} - {response.text}")
+
         if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Failed to trigger Airflow task")
+            logging.error(f"Failed to trigger Airflow task: {response.text}")
+            raise HTTPException(status_code=response.status_code, detail=f"Failed to trigger Airflow task: {response.text}")
         return {"message": "Airflow task triggered successfully"}
 
-    def get_task_status(self, task_id: str):
+    def get_task_status(self, task_id: str) -> Dict[str, Any]:
         """Retrieve the status of a task in the orchestration engine.
 
         Currently, only Airflow is supported.
@@ -139,9 +145,9 @@ class OrchestrationEngine:
         if self.engine == "AIRFLOW":
             return self._get_airflow_task_status(task_id)
         else:
-            raise ValueError("Task status is only supported for Airflow")
+            raise ValueError("Task status retrieval is only supported for Airflow")
 
-    def _get_airflow_task_status(self, task_id: str):
+    def _get_airflow_task_status(self, task_id: str) -> Dict[str, Any]:
         """Get the status of an Airflow task.
 
         Args:
@@ -157,7 +163,7 @@ class OrchestrationEngine:
         """
         response = requests.get(
             f"{self.airflow_api_url}/dags/example_workflow/dagRuns/{task_id}",
-            auth=("airflow", "airflow"),
+            auth=(self.airflow_username, self.airflow_password),
             timeout=5
         )
         if response.status_code != 200:

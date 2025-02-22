@@ -161,7 +161,7 @@ async def handle_processing_task(task: TaskOut):
     return
 
 @router.post("/upload_and_trigger/{dag_id}/")
-async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> dict[str, str]:
+async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[str, Any]:
     """
     Upload a file and trigger an Airflow DAG.
 
@@ -174,19 +174,23 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> dict[
 
     Returns
     -------
-        Notification
+        dict: A dictionary containing a message and data.
     """
-    # Define the file location in the shared data lake
-    file_location = f"/app/data_lake/results/{dag_id}/{file.filename}"
-    os.makedirs(os.path.dirname(file_location), exist_ok=True)
-
-    # Save the uploaded file
-    with open(file_location, "wb") as f:
-        f.write(file.file.read())
-
-    # Trigger the Airflow DAG with the filename as a parameter
     try:
+        # Define the file location in the shared data lake
+        file_location = f"/app/data_lake/results/{dag_id}/{file.filename}"
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+
+        # Save the uploaded file
+        with open(file_location, "wb") as f:
+            f.write(file.file.read())
+
+        logging.info(f"File saved to {file_location}")
+
+        # Trigger the Airflow DAG with the filename as a parameter
         response = orchestration_engine.trigger_task(dag_id, conf={"file_path": file_location})
+        logging.info(f"DAG triggered with response: {response}")
+
         return {"message": "File uploaded and DAG triggered successfully", "data": response}
     except Exception as e:
         logging.error(f"Failed to trigger DAG: {e}")
