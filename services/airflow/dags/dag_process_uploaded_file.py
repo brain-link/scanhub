@@ -24,15 +24,25 @@ with DAG(
 ) as dag:
 
     @task()
-    def read_file(file_path: str):
+    def list_directory(directory: str):
+        """
+        Task to list files in a directory.
+        """
+        files = os.listdir(directory)
+        print(f"Files in {directory}: {files}")
+        return files
+
+    @task()
+    def read_file(directory: str, file_name: str):
         """
         Task to read the uploaded file.
         """
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"File not found: {file_path}")
+        full_file_path = f"{directory}/{file_name}"
+        if not os.path.exists(full_file_path):
+            raise FileNotFoundError(f"File not found: {full_file_path}")
 
         # Read the file (assuming it's a CSV for this example)
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(full_file_path)
         print(f"File content:\n{df.head()}")
         return df.to_json()
 
@@ -57,10 +67,15 @@ with DAG(
         print(f"Results saved to {output_path}")
 
     # Define the file paths
-    file_path = '{{ dag_run.conf["file_path"] }}'
-    output_path = '/opt/airflow/data_lake/results/dag_process_uploaded_file/processing_results.json'
+    data_lake_directory = '/opt/airflow/data_lake/'
+    directory = '{{ dag_run.conf["directory"] }}'
+    file_name = '{{ dag_run.conf["file_name"] }}'
+    output_path = f"{data_lake_directory}/results/dag_process_uploaded_file/processing_results.json"
 
     # Define the task dependencies
-    data = read_file(file_path)
+    root_files = list_directory('/')
+    data_lake_files = list_directory(data_lake_directory)
+    files = list_directory(f"{data_lake_directory}{directory}")
+    data = read_file(f"{data_lake_directory}{directory}", file_name)
     results = process_data(data)
     save_results(results, output_path)
