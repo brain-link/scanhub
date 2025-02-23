@@ -34,6 +34,12 @@ Module Contents
    .. py:attribute:: airflow_api_url
 
 
+   .. py:attribute:: airflow_username
+
+
+   .. py:attribute:: airflow_password
+
+
    .. py:method:: get_available_tasks()
 
       Retrieve the available tasks from the orchestration engine.
@@ -64,43 +70,40 @@ Module Contents
 
 
 
-   .. py:method:: trigger_task(task_id: str)
+   .. py:method:: trigger_task(task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]
 
-      Trigger a task in the orchestration engine.
-
+      Triggers a task in the orchestration engine.
       Currently, only Airflow is supported.
 
       Args:
           task_id (str): The ID of the task to be triggered.
+          conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.
 
-      Returns
-      -------
+      Returns:
           dict: A dictionary containing a success message.
 
-      Raises
-      ------
-          ValueError: If the orchestration engine is not Airflow.
+      Raises:
+          HTTPException: If the request to Airflow API fails.
 
 
 
-   .. py:method:: _trigger_airflow_task(task_id: str)
+   .. py:method:: _trigger_airflow_task(task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]
 
       Trigger an Airflow task.
 
       Args:
           task_id (str): The ID of the task to be triggered.
+          conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.
 
-      Returns
-      -------
+      Returns:
           dict: A dictionary containing a success message.
 
-      Raises
-      ------
+      Raises:
           HTTPException: If the request to Airflow API fails.
 
 
 
-   .. py:method:: get_task_status(task_id: str)
+   .. py:method:: get_task_status(task_id: str) -> Dict[str, Any]
 
       Retrieve the status of a task in the orchestration engine.
 
@@ -119,7 +122,7 @@ Module Contents
 
 
 
-   .. py:method:: _get_airflow_task_status(task_id: str)
+   .. py:method:: _get_airflow_task_status(task_id: str) -> Dict[str, Any]
 
       Get the status of an Airflow task.
 

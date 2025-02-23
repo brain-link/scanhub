@@ -474,8 +474,8 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.handle_processing_task" title="workflow-manager.app.api.workflow.handle_processing_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_processing_task</span></code></a>(task)</p></td>
 <td><p>Handle a processing task by triggering the appropriate orchestration engine.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.upload_result" title="workflow-manager.app.api.workflow.upload_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_result</span></code></a>() → dict[str, str])</p></td>
-<td><p>Upload workflow result.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.upload_and_trigger" title="workflow-manager.app.api.workflow.upload_and_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_and_trigger</span></code></a>() → Dict[str, Any])</p></td>
+<td><p>Upload a file and trigger an Airflow DAG.</p></td>
 </tr>
 </tbody>
 </table>
@@ -580,13 +580,13 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_result">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_result" title="Link to this definition">#</a></dt>
-<dd><p>Upload workflow result.</p>
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_and_trigger">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_and_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_and_trigger" title="Link to this definition">#</a></dt>
+<dd><p>Upload a file and trigger an Airflow DAG.</p>
 <section id="id3">
 <h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>workflow_id</dt><dd><p>Id of the workflow, which is processed by workflow</p>
+<dt>dag_id</dt><dd><p>The ID of the DAG to be triggered.</p>
 </dd>
 <dt>file, optional</dt><dd><p>Data upload, e.g. reconstruction result, by default File(…)</p>
 </dd>
@@ -595,7 +595,7 @@
 <section id="id4">
 <h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Notification</p>
+<div><p>dict: A dictionary containing a message and data.</p>
 </div></blockquote>
 </section>
 </dd></dl>
@@ -647,7 +647,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.process"><code class="docutils literal notranslate"><span class="pre">process()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.handle_device_task"><code class="docutils literal notranslate"><span class="pre">handle_device_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.handle_processing_task"><code class="docutils literal notranslate"><span class="pre">handle_processing_task()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.upload_result"><code class="docutils literal notranslate"><span class="pre">upload_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.upload_and_trigger"><code class="docutils literal notranslate"><span class="pre">upload_and_trigger()</span></code></a></li>
 </ul>
 </li>
 </ul>

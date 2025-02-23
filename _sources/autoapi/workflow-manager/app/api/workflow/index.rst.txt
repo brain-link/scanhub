@@ -33,7 +33,7 @@ Functions
    workflow-manager.app.api.workflow.process
    workflow-manager.app.api.workflow.handle_device_task
    workflow-manager.app.api.workflow.handle_processing_task
-   workflow-manager.app.api.workflow.upload_result
+   workflow-manager.app.api.workflow.upload_and_trigger
 
 
 Module Contents
@@ -120,21 +120,21 @@ Module Contents
    Handle a processing task by triggering the appropriate orchestration engine.
 
 
-.. py:function:: upload_result(workflow_id: str, file: fastapi.UploadFile = File(...)) -> dict[str, str]
+.. py:function:: upload_and_trigger(dag_id: str, file: fastapi.UploadFile = File(...)) -> Dict[str, Any]
    :async:
 
 
-   Upload workflow result.
+   Upload a file and trigger an Airflow DAG.
 
    Parameters
    ----------
-   workflow_id
-       Id of the workflow, which is processed by workflow
+   dag_id
+       The ID of the DAG to be triggered.
    file, optional
        Data upload, e.g. reconstruction result, by default File(...)
 
    Returns
    -------
-       Notification
+       dict: A dictionary containing a message and data.
 
 
