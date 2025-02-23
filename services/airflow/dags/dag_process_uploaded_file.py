@@ -1,8 +1,8 @@
 import os
 from datetime import datetime, timedelta
 import json
-import pandas as pd
-
+import numpy as np
+from numpy.fft import fftshift, ifft2
 from airflow import DAG
 from airflow.decorators import task
 from airflow.operators.python import PythonOperator
@@ -40,42 +40,50 @@ with DAG(
         full_file_path = f"{directory}/{file_name}"
         if not os.path.exists(full_file_path):
             raise FileNotFoundError(f"File not found: {full_file_path}")
-
-        # Read the file (assuming it's a CSV for this example)
-        df = pd.read_csv(full_file_path)
-        print(f"File content:\n{df.head()}")
-        return df.to_json()
+        
+        print(f"Verified file: {full_file_path}")
+        return full_file_path
 
     @task()
-    def process_data(data: str):
+    def reconstruct_image(file_path: str):
         """
-        Task to process the data.
+        Task to reconstruct the image from k-space data using FFT.
         """
-        df = pd.read_json(data)
-        # Perform some processing (example: calculate the mean of a column)
-        result = df.mean().to_dict()
-        print(f"Processing result: {result}")
-        return result
+        print(f"Reading file: {file_path}")
+        # Read the numpy array file
+        kspace_data = np.load(file_path)
+        print(f"K-space data shape: {kspace_data.shape}")
+
+        # Perform FFT reconstruction
+        image = np.abs(fftshift(ifft2(kspace_data)))
+        print(f"Reconstructed image shape: {image.shape}")
+
+        # Save the reconstructed image to a file
+        image_file = file_path.replace(".npy", "_reconstructed.npy")
+        np.save(image_file, image)
+        return image_file
 
     @task()
-    def save_results(results: dict, output_path: str):
+    def save_results(image_file: str, output_path: str):
         """
-        Task to save the processing results.
+        Task to save the reconstructed image.
         """
-        with open(output_path, 'w') as f:
-            json.dump(results, f)
-        print(f"Results saved to {output_path}")
+        if not os.path.exists(image_file):
+            raise FileNotFoundError(f"File not found: {image_file}")
+
+        # Load the reconstructed image from the file
+        image = np.load(image_file)
+        np.save(output_path, image)
+        print(f"Reconstructed image saved to {output_path}")
 
     # Define the file paths
     data_lake_directory = '/opt/airflow/data_lake/'
     directory = '{{ dag_run.conf["directory"] }}'
     file_name = '{{ dag_run.conf["file_name"] }}'
-    output_path = f"{data_lake_directory}/results/dag_process_uploaded_file/processing_results.json"
+    output_path = f"{data_lake_directory}/results/dag_process_uploaded_file/reconstructed_image.npy"
 
     # Define the task dependencies
-    root_files = list_directory('/')
-    data_lake_files = list_directory(data_lake_directory)
     files = list_directory(f"{data_lake_directory}{directory}")
-    data = read_file(f"{data_lake_directory}{directory}", file_name)
-    results = process_data(data)
-    save_results(results, output_path)
+    kspace_data_file = read_file(f"{data_lake_directory}{directory}", file_name)
+    image = reconstruct_image(kspace_data_file)
+    save_results(image, output_path)

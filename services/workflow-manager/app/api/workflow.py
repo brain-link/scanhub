@@ -178,7 +178,7 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
     """
     try:
         # Define the file location in the shared data lake
-        directory = f"results/{dag_id}"
+        directory = f"upload/{dag_id}"
         file_location = f"/app/data_lake/{directory}/{file.filename}"
         os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
@@ -187,6 +187,10 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
             f.write(await file.read())
 
         logging.info(f"File saved to {file_location}")
+
+        # Check if the file was successfully uploaded
+        if not os.path.exists(file_location):
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
 
         # Trigger the Airflow DAG with the directory and file name as parameters
         response = orchestration_engine.trigger_task(dag_id, conf={"directory": directory, "file_name": file.filename})
