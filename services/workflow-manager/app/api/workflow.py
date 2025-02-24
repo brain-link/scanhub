@@ -176,6 +176,8 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
     -------
         dict: A dictionary containing a message and data.
     """
+    if file.filename is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="File has no file name.")
     try:
         # Define the file location in the shared data lake
         directory = f"upload/{dag_id}"
