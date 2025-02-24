@@ -508,17 +508,25 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task">
 <span class="sig-name descname"><span class="pre">trigger_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task" title="Link to this definition">#</a></dt>
-<dd><p>Triggers a task in the orchestration engine.
-Currently, only Airflow is supported.</p>
+<dd><p>Triggers a task in the orchestration engine.</p>
+<p>Currently, only Airflow is supported.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.
 conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message.</p>
-</dd>
-<dt>Raises:</dt><dd><p>HTTPException: If the request to Airflow API fails.</p>
-</dd>
 </dl>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing a success message.</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>Raises<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>HTTPException: If the request to Airflow API fails.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -529,11 +537,19 @@ conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.
 conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</p>
 </dd>
-<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message.</p>
-</dd>
-<dt>Raises:</dt><dd><p>HTTPException: If the request to Airflow API fails.</p>
-</dd>
 </dl>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing a success message.</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>HTTPException: If the request to Airflow API fails.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -545,14 +561,14 @@ conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>
 </dd>
 </dl>
-<section id="id3">
-<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: A dictionary containing the task status.</p>
 </div></blockquote>
 </section>
-<section id="id4">
-<h3>Raises<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id8">
+<h3>Raises<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>ValueError: If the orchestration engine is not Airflow.</p>
 </div></blockquote>
@@ -567,14 +583,14 @@ conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</
 <dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>
 </dd>
 </dl>
-<section id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: A dictionary containing the task status.</p>
 </div></blockquote>
 </section>
-<section id="id6">
-<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<section id="id10">
+<h3>Raises<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>HTTPException: If the request to Airflow API fails.</p>
 </div></blockquote>
