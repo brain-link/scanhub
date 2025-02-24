@@ -67,7 +67,7 @@ class OrchestrationEngine:
             raise HTTPException(status_code=response.status_code, detail="Failed to retrieve Airflow DAGs")
         return response.json()
 
-    def trigger_task(self, task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]:
+    def trigger_task(self, task_id: str, conf: Dict[str, str] | None = None) -> Dict[str, Any]:
         """Triggers a task in the orchestration engine.
 
         Currently, only Airflow is supported.
@@ -89,7 +89,7 @@ class OrchestrationEngine:
         else:
             raise ValueError("Task triggering is only supported for Airflow")
 
-    def _trigger_airflow_task(self, task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]:
+    def _trigger_airflow_task(self, task_id: str, conf: Dict[str, str] | None = None) -> Dict[str, Any]:
         """
         Trigger an Airflow task.
 
