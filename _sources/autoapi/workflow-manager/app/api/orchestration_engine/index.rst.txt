@@ -70,7 +70,7 @@ Module Contents
 
 
 
-   .. py:method:: trigger_task(task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]
+   .. py:method:: trigger_task(task_id: str, conf: Dict[str, str] | None = None) -> Dict[str, Any]
 
       Triggers a task in the orchestration engine.
 
@@ -90,7 +90,7 @@ Module Contents
 
 
 
-   .. py:method:: _trigger_airflow_task(task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]
+   .. py:method:: _trigger_airflow_task(task_id: str, conf: Dict[str, str] | None = None) -> Dict[str, Any]
 
       Trigger an Airflow task.
 
