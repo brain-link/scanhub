@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Workflow manager endpoints."""
-import os
 import logging
 import operator
+import os
 from typing import Any, Dict
 from uuid import UUID
 
@@ -100,7 +100,7 @@ async def process(workflow_id: UUID | str) -> dict[str, str]:
     # URI for the exam manager service
     exam_manager_uri = EXAM_MANAGER_URI
     # Create an asynchronous HTTP client
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=5.0)) as client:
         # Fetch the workflow data from the exam manager service
         response = await client.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
         # Raise an exception if the request was not successful
@@ -200,4 +200,4 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
     except Exception as e:
         logging.error(f"Failed to trigger DAG: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-    
+

@@ -1,11 +1,9 @@
 import os
 from datetime import datetime, timedelta
-import json
 import numpy as np
 from numpy.fft import fftshift, ifft2
 from airflow import DAG
 from airflow.decorators import task
-from airflow.operators.python import PythonOperator
 
 default_args = {
     'owner': 'BRAIN-LINK',

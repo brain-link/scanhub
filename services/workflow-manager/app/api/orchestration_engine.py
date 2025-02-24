@@ -3,13 +3,14 @@
 
 """Orchestration engine file for the workflow manager service."""
 
+import logging
 import os
+import uuid
+from datetime import datetime
+from typing import Any, Dict
+
 import requests
 from fastapi import HTTPException
-import logging
-from datetime import datetime
-import uuid
-from typing import Dict, Any
 
 
 class OrchestrationEngine:
@@ -67,18 +68,20 @@ class OrchestrationEngine:
         return response.json()
 
     def trigger_task(self, task_id: str, conf: Dict[str, str] = None) -> Dict[str, Any]:
-        """
-        Triggers a task in the orchestration engine.
+        """Triggers a task in the orchestration engine.
+
         Currently, only Airflow is supported.
 
         Args:
             task_id (str): The ID of the task to be triggered.
             conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing a success message.
 
-        Raises:
+        Raises
+        ------
             HTTPException: If the request to Airflow API fails.
         """
         if self.engine == "AIRFLOW":
@@ -94,10 +97,12 @@ class OrchestrationEngine:
             task_id (str): The ID of the task to be triggered.
             conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary containing a success message.
 
-        Raises:
+        Raises
+        ------
             HTTPException: If the request to Airflow API fails.
         """
         logging.info(f"Triggering Airflow DAG {task_id} with conf: {conf}")
