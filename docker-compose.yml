@@ -27,6 +27,7 @@ x-airflow-common:
     # - ${AIRFLOW_LOGS}:/opt/airflow/logs
     # - ${AIRFLOW_PLUGINS}:/opt/airflow/plugins
     - ./services/airflow/secrets:/opt/secrets
+    - data_lake:/opt/airflow/data_lake
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -55,6 +56,8 @@ services:
       - ORCHESTRATION_ENGINE=AIRFLOW
       - KESTRA_API_URL=http://kestra:8080
       - AIRFLOW_API_URL=http://airflow-webserver:8080
+      - AIRFLOW_USERNAME=airflow
+      - AIRFLOW_PASSWORD=airflow
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflowmanager/health/readiness"]

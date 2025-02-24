@@ -1,9 +1,6 @@
 # [START import_module]
-import os
 import json
 import numpy as np
-import pydicom
-import pydicom._storage_sopclass_uids
 
 
 from datetime import datetime, timedelta
@@ -11,8 +8,6 @@ from datetime import datetime, timedelta
 from airflow.decorators import dag, task
 from airflow.models import Variable
 
-from pydantic import BaseModel, StrictStr
-from pydicom.dataset import Dataset
 # [END import_module]
 
 default_args = {
