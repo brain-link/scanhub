@@ -4,6 +4,7 @@
 """Workflow manager endpoints."""
 import logging
 import operator
+import os
 from typing import Any, Dict
 from uuid import UUID
 
@@ -40,12 +41,12 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 workflows: Dict[str, Dict[str, Any]] = {}
 
 
-@router.get("/hello/", tags=["WorkflowManager"])
+@router.get("/hello/")
 async def hello_world() -> dict[str, str]:
     """Hello world endpoint."""
     return {"message": "Hello, World!"}
 
-@router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
+@router.post("/trigger_task/{task_id}/")
 async def trigger_task(task_id: str) -> dict[str, Any]:
     """
     Endpoint to trigger a task in the orchestration engine.
@@ -65,7 +66,7 @@ async def trigger_task(task_id: str) -> dict[str, Any]:
         logging.error(f"Failed to trigger task: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.get("/tasks/", tags=["WorkflowManager"])
+@router.get("/tasks/")
 async def list_available_tasks():
     """Endpoint to list the available tasks from the orchestration engine.
 
@@ -83,7 +84,7 @@ async def list_available_tasks():
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
-@router.post("/process/{workflow_id}/", tags=["WorkflowManager"])
+@router.post("/process/{workflow_id}/")
 async def process(workflow_id: UUID | str) -> dict[str, str]:
     """Process a workflow.
 
@@ -159,23 +160,46 @@ async def handle_processing_task(task: TaskOut):
 
     return
 
-@router.post("/upload/{workflow_id}/", tags=["WorkflowManager"])
-async def upload_result(workflow_id: str, file: UploadFile = File(...)) -> dict[str, str]:
-    """Upload workflow result.
+@router.post("/upload_and_trigger/{dag_id}/")
+async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[str, Any]:
+    """
+    Upload a file and trigger an Airflow DAG.
 
     Parameters
     ----------
-    workflow_id
-        Id of the workflow, which is processed by workflow
+    dag_id
+        The ID of the DAG to be triggered.
     file, optional
         Data upload, e.g. reconstruction result, by default File(...)
 
     Returns
     -------
-        Notification
+        dict: A dictionary containing a message and data.
     """
-    # Simulate file upload handling
-    file_location = f"/app/data_lake/results/{workflow_id}/{file.filename}"
-    with open(file_location, "wb") as f:
-        f.write(file.file.read())
-    return {"message": "File uploaded successfully"}
+    if file.filename is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="File has no file name.")
+    try:
+        # Define the file location in the shared data lake
+        directory = f"upload/{dag_id}"
+        file_location = f"/app/data_lake/{directory}/{file.filename}"
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+
+        # Save the uploaded file
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+
+        logging.info(f"File saved to {file_location}")
+
+        # Check if the file was successfully uploaded
+        if not os.path.exists(file_location):
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
+
+        # Trigger the Airflow DAG with the directory and file name as parameters
+        response = orchestration_engine.trigger_task(dag_id, conf={"directory": directory, "file_name": file.filename})
+        logging.info(f"DAG triggered with response: {response}")
+
+        return {"message": "File uploaded and DAG triggered successfully", "data": response}
+    except Exception as e:
+        logging.error(f"Failed to trigger DAG: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
