@@ -327,7 +327,6 @@ services:
     restart: always # unless-stopped
     volumes:
       - postgres_data_scanhub:/var/lib/postgresql/data/
-      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     environment:
       POSTGRES_USER: brainlink
       POSTGRES_PASSWORD: 9ArU5*Sr

@@ -31,6 +31,8 @@ import NotificationContext from '../NotificationContext'
 
 
 function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
+  // The form is in this separate component to make sure that the state is reset after closing the modal
+
   const [, showNotification] = React.useContext(NotificationContext)
 
   const initialTask: BaseTask = props.modalType == 'modify' ?

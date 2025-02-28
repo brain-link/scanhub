@@ -354,6 +354,12 @@ class User(BaseModel):
     last_login_unixtime: int | None
 
 
+class PasswordUpdateRequest(BaseModel):
+    password_of_requester: str                 # the password of the user that sends the request
+    username_to_change_password_for: str       # the username of the user whose password is set
+    newpassword: str                           # the new password
+
+
 # @dataclass
 class BasePatient(BaseModel):
     """Patient pydantic base model."""

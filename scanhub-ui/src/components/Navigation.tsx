@@ -4,7 +4,7 @@
  *
  * Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
  */
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
@@ -39,6 +39,7 @@ import ScanhubLogo from '../media/ScanhubLogo.png'
 import { loginApi } from '../api'
 import ConnectionStatus from './ConnectionStatus'
 import { version } from '../utils/Versions'
+import PasswordModal from './PasswordModal'
 
 
 function ColorSchemeToggle() {
@@ -82,6 +83,7 @@ export default function Navigation() {
   const [user, setUser] = useContext(LoginContext)
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 
   // Menu elements
   const menuItems = [
@@ -201,16 +203,15 @@ export default function Navigation() {
             Profile
           </MenuItem>
           <MenuItem
-            key='settings'
-            disabled
+            key='password'
             onClick={() => {
-
+              setPasswordModalOpen(true);
             }}
           >
             <ListItemDecorator>
               <AdminPanelSettingsSharpIcon />
             </ListItemDecorator>{' '}
-            Settings
+            Set Password
           </MenuItem>
           <ListDivider />
           <MenuItem
@@ -233,6 +234,15 @@ export default function Navigation() {
           </MenuItem>
         </Menu>
       </Dropdown>
+
+      <PasswordModal 
+        onSubmit={() => {}} 
+        isOpen={passwordModalOpen} 
+        setOpen={setPasswordModalOpen}
+        modalType={'modify'}
+        item={user?.username ? user.username : ''}
+      />
+
     </Box>
   )
 }
