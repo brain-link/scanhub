@@ -28,6 +28,9 @@ orchestration_engine = OrchestrationEngine()
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
 
+# Read the DATA_LAKE_DIRECTORY environment variable
+data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY', '/default/path/if/not/set')
+
 # In-memory workflow storage
 # {
 #   "workflow_id": {
@@ -180,8 +183,8 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="File has no file name.")
     try:
         # Define the file location in the shared data lake
-        directory = f"upload/{dag_id}"
-        file_location = f"/app/data_lake/{directory}/{file.filename}"
+        directory = f"/upload/{dag_id}"
+        file_location = f"{data_lake_directory}{directory}/{file.filename}"
         os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
         # Save the uploaded file

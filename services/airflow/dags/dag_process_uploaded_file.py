@@ -75,7 +75,7 @@ with DAG(
         print(f"Reconstructed image saved to {output_path}")
 
     # Define the file paths
-    data_lake_directory = '/opt/airflow/data_lake/'
+    data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY', '/opt/airflow/data_lake')
     directory = '{{ dag_run.conf["directory"] }}'
     file_name = '{{ dag_run.conf["file_name"] }}'
     output_path = f"{data_lake_directory}/results/dag_process_uploaded_file/reconstructed_image.npy"
