@@ -4,6 +4,7 @@ import numpy as np
 from numpy.fft import fftshift, ifft2
 from airflow import DAG
 from airflow.decorators import task
+import subprocess
 
 default_args = {
     'owner': 'BRAIN-LINK',
@@ -31,25 +32,37 @@ with DAG(
         return files
 
     @task()
-    def read_file(directory: str, file_name: str):
+    def read_file(file_path: str, file_name: str):
         """
         Task to read the uploaded file.
         """
-        full_file_path = f"{directory}/{file_name}"
+        full_file_path = f"{file_path}/{file_name}"
         if not os.path.exists(full_file_path):
             raise FileNotFoundError(f"File not found: {full_file_path}")
         
         print(f"Verified file: {full_file_path}")
         return full_file_path
+    
+    @task()
+    def create_directories(*directories: str):
+        """
+        Task to create necessary directories.
+        """
+        for directory in directories:
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+                print(f"Created directory: {directory}")
+            else:
+                print(f"Directory already exists: {directory}")
 
     @task()
-    def reconstruct_image(file_path: str):
+    def reconstruct_image(output_path: str, kspace_file: str):
         """
         Task to reconstruct the image from k-space data using FFT.
         """
-        print(f"Reading file: {file_path}")
+        print(f"Reading file: {kspace_file}")
         # Read the numpy array file
-        kspace_data = np.load(file_path)
+        kspace_data = np.load(kspace_file)
         print(f"K-space data shape: {kspace_data.shape}")
 
         # Perform FFT reconstruction
@@ -57,12 +70,13 @@ with DAG(
         print(f"Reconstructed image shape: {image.shape}")
 
         # Save the reconstructed image to a file
-        image_file = file_path.replace(".npy", "_reconstructed.npy")
+        image_file = f"{output_path}/tmp_image.npy"
+        #file_path.replace(".npy", "_reconstructed.npy")
         np.save(image_file, image)
         return image_file
 
     @task()
-    def save_results(image_file: str, output_path: str):
+    def save_results(output_path: str, image_file: str):
         """
         Task to save the reconstructed image.
         """
@@ -71,17 +85,24 @@ with DAG(
 
         # Load the reconstructed image from the file
         image = np.load(image_file)
-        np.save(output_path, image)
+
+        # Save the reconstructed image to a file
+        result_file = f"{output_path}/reconstructed_image.npy"
+        np.save(result_file, image)
         print(f"Reconstructed image saved to {output_path}")
 
     # Define the file paths
-    data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY', '/opt/airflow/data_lake')
-    directory = '{{ dag_run.conf["directory"] }}'
-    file_name = '{{ dag_run.conf["file_name"] }}'
-    output_path = f"{data_lake_directory}/results/dag_process_uploaded_file/reconstructed_image.npy"
+    data_lake_path = os.getenv('DATA_LAKE_DIRECTORY', '/opt/airflow/data_lake')
+    INPUT_DIR = '{{ dag_run.conf["directory"] }}'
+    INPUT_FILE = '{{ dag_run.conf["file_name"] }}'
+
+    input_path = f"{data_lake_path}{INPUT_DIR}"
+    temporary_path = f"{data_lake_path}/temp/dag_process_uploaded_file"
+    output_path = f"{data_lake_path}/results/dag_process_uploaded_file"
 
     # Define the task dependencies
-    files = list_directory(f"{data_lake_directory}{directory}")
-    kspace_data_file = read_file(f"{data_lake_directory}{directory}", file_name)
-    image = reconstruct_image(kspace_data_file)
-    save_results(image, output_path)
+    files = list_directory(input_path)
+    kspace_data_file = read_file(input_path, INPUT_FILE)
+    create_dirs = create_directories(temporary_path, output_path)
+    image_file = reconstruct_image(temporary_path, kspace_data_file)
+    save_results(output_path, image_file)

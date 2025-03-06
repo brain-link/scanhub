@@ -29,7 +29,7 @@ x-airflow-common:
     # - ${AIRFLOW_PLUGINS}:/opt/airflow/plugins
     - ./services/airflow/secrets:/opt/secrets
     - data_lake:/opt/airflow/data_lake
-  user: "${AIRFLOW_UID:-50000}:0"
+  user: "0:0" # run as airflow root to be able to create files #"${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
     airflow-database:
