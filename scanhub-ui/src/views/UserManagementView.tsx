@@ -4,19 +4,19 @@
  *
  * UserManagementView.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
+import * as React from 'react'
+import { useMutation, useQuery } from 'react-query'
+
+import Container from '@mui/system/Container'
+import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
-import LinearProgress from '@mui/joy/LinearProgress'
 import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import Container from '@mui/system/Container'
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
-import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
 
 import NotificationContext from '../NotificationContext'
 import { useContext } from 'react'
@@ -74,7 +74,7 @@ export default function UserManagementView() {
     await userApi
       .updateUserApiV1UserloginUpdateuserPut(user)
       .then(() => {
-        console.log('Modified user:', user.username)
+        showNotification({message: "Modified user " + user.username, type: 'success'})
         setIsUpdating(false)
         refetch()
       })
@@ -91,19 +91,10 @@ export default function UserManagementView() {
       })
   })
 
-  if (isLoading) {
-    return (
-      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <Typography>Loading patients...</Typography>
-        <LinearProgress variant='plain' />
-      </Container>
-    )
-  }
-
   if (isError) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <AlertItem title='Error Loading Patients' type={Alerts.Error} />
+        <AlertItem title='Error Loading Users' type={Alerts.Error} />
       </Container>
     )
   }
@@ -151,7 +142,6 @@ export default function UserManagementView() {
             label='Delete'
             color='inherit'
             onClick={() => {
-              // delteMutation.mutate(row.row.username)
               setUserToDelete(row.row.username)
             }}
           />,
@@ -188,13 +178,13 @@ export default function UserManagementView() {
 
       <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
         <DataGrid
-          rows={users}
+          rows={users ? users : []}
           columns={columns}
           getRowId={(user) => user.username}
           hideFooterSelectedRowCount 
           editMode={'row'}
           rowHeight={40}  // MUI default is 52
-          loading={isUpdating}
+          loading={isUpdating || isLoading}
           processRowUpdate={(updatedUser) => {
             setIsUpdating(true)
             updateMutation.mutate(updatedUser)
@@ -220,7 +210,7 @@ export default function UserManagementView() {
           if (status == false) setUserToDelete('')
         }}
         modalType={'modify'}
-        item={userToDelete}
+        item={'user ' + userToDelete}
       />
     </Box>
   )

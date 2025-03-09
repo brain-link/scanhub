@@ -21,10 +21,6 @@ export interface AlertProps {
   type: Alerts
 }
 
-export interface PatientTableInterface {
-  patients: PatientOut[]
-}
-
 export interface RefetchableItemInterface<T> {
   item: T
   refetchParentData: () => void
