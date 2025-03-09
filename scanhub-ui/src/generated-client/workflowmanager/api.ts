@@ -328,20 +328,20 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             };
         },
         /**
-         * Upload workflow result.  Parameters ---------- workflow_id     Id of the workflow, which is processed by workflow file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     Notification
-         * @summary Upload Result
-         * @param {string} workflowId 
+         * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
+         * @summary Upload And Trigger
+         * @param {string} dagId 
          * @param {File} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost: async (workflowId: string, file: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost', 'workflowId', workflowId)
+        uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost: async (dagId: string, file: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'dagId' is not null or undefined
+            assertParamExists('uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost', 'dagId', dagId)
             // verify required parameter 'file' is not null or undefined
-            assertParamExists('uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost', 'file', file)
-            const localVarPath = `/api/v1/workflowmanager/upload/{workflow_id}/`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
+            assertParamExists('uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost', 'file', file)
+            const localVarPath = `/api/v1/workflowmanager/upload_and_trigger/{dag_id}/`
+                .replace(`{${"dag_id"}}`, encodeURIComponent(String(dagId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -437,17 +437,17 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Upload workflow result.  Parameters ---------- workflow_id     Id of the workflow, which is processed by workflow file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     Notification
-         * @summary Upload Result
-         * @param {string} workflowId 
+         * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
+         * @summary Upload And Trigger
+         * @param {string} dagId 
          * @param {File} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost(workflowId: string, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: string; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost(workflowId, file, options);
+        async uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -499,15 +499,15 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
             return localVarFp.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Upload workflow result.  Parameters ---------- workflow_id     Id of the workflow, which is processed by workflow file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     Notification
-         * @summary Upload Result
-         * @param {string} workflowId 
+         * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
+         * @summary Upload And Trigger
+         * @param {string} dagId 
          * @param {File} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost(workflowId: string, file: File, options?: any): AxiosPromise<{ [key: string]: string; }> {
-            return localVarFp.uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost(workflowId, file, options).then((request) => request(axios, basePath));
+        uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: any): AxiosPromise<object> {
+            return localVarFp.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -566,16 +566,16 @@ export class WorkflowManagerApi extends BaseAPI {
     }
 
     /**
-     * Upload workflow result.  Parameters ---------- workflow_id     Id of the workflow, which is processed by workflow file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     Notification
-     * @summary Upload Result
-     * @param {string} workflowId 
+     * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
+     * @summary Upload And Trigger
+     * @param {string} dagId 
      * @param {File} file 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowManagerApi
      */
-    public uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost(workflowId: string, file: File, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).uploadResultApiV1WorkflowmanagerUploadWorkflowIdPost(workflowId, file, options).then((request) => request(this.axios, this.basePath));
+    public uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
