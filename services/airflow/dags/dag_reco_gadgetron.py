@@ -1,4 +1,5 @@
 import os
+import subprocess
 from datetime import datetime, timedelta
 import numpy as np
 from numpy.fft import fftshift, ifft2
@@ -73,19 +74,32 @@ with DAG(
             return input_file_path
 
     @task()
-    def reco_via_gadgetron(raw_ismrmrd_file: str, reco_config_file: str):
+    def reco_via_gadgetron(raw_ismrmrd_file: str = None, reco_config_file: str = None):
         """
-        Task to reconstruct the image from a raw ismrmrd file using Gadgetron.
+        Task to run `gadgetron --info` inside the Gadgetron container.
+        This will later be expanded to run the full reconstruction process.
         """
-        
+
         print(f"Reconstructing image from {raw_ismrmrd_file} using {reco_config_file}")
+        
+        try:
+            # Run Gadgetron inside the container
+            result = subprocess.run(
+                ["docker", "exec", "gadgetron", "bash", "-c", 
+                "source /opt/conda/bin/activate gadgetron && gadgetron --info"],
+                capture_output=True, text=True, check=True
+            )
 
-        # Call Gadgetron to reconstruct the image
-        # This is a placeholder for the actual reconstruction code
-        # The reconstructed image is saved to a file
+            # Print both stdout and stderr to make sure we capture any error messages
+            print("Gadgetron Info Output:\n", result.stdout.strip())  
+            print("Gadgetron Error Output (if any):\n", result.stderr.strip())
 
-        return image_file
-
+            return result.stdout.strip() if result.stdout.strip() else result.stderr.strip()
+        
+        except subprocess.CalledProcessError as e:
+            print("Error running Gadgetron:", e.stderr)
+            raise
+    
     @task()
     def save_results(output_path: str, image_file: str):
         """

@@ -29,6 +29,7 @@ x-airflow-common:
     # - ${AIRFLOW_PLUGINS}:/opt/airflow/plugins
     - ./services/airflow/secrets:/opt/secrets
     - data_lake:/opt/airflow/data_lake
+    - /var/run/docker.sock:/var/run/docker.sock
   user: "0:0" # run as airflow root to be able to create files #"${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -204,6 +205,20 @@ services:
       sequence-database:
         condition: service_healthy
 
+  # Add the Gadgetron service
+  gadgetron:
+    container_name: gadgetron
+    image: ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:latest
+    ports:
+      - 9002:9002
+    volumes:
+      - data_lake:/data
+    environment:
+      - GADGETRON_HOME=/usr/local/gadgetron
+      - GADGETRON_PORT=9002
+    restart: always
+    depends_on:
+      - scanhub-database
 
   # Airflow services
   airflow-webserver:
