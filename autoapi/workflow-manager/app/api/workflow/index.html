@@ -445,7 +445,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.EXAM_MANAGER_URI" title="workflow-manager.app.api.workflow.EXAM_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.workflows" title="workflow-manager.app.api.workflow.workflows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.data_lake_directory" title="workflow-manager.app.api.workflow.data_lake_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_lake_directory</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.workflows" title="workflow-manager.app.api.workflow.workflows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -474,7 +477,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.handle_processing_task" title="workflow-manager.app.api.workflow.handle_processing_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_processing_task</span></code></a>(task)</p></td>
 <td><p>Handle a processing task by triggering the appropriate orchestration engine.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.upload_and_trigger" title="workflow-manager.app.api.workflow.upload_and_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_and_trigger</span></code></a>() → Dict[str, Any])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.upload_and_trigger" title="workflow-manager.app.api.workflow.upload_and_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_and_trigger</span></code></a>(], file, Any])</p></td>
 <td><p>Upload a file and trigger an Airflow DAG.</p></td>
 </tr>
 </tbody>
@@ -506,6 +509,11 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.EXAM_MANAGER_URI">
 <span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">EXAM_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'host.docker.internal:8004'</span></em><a class="headerlink" href="#workflow-manager.app.api.workflow.EXAM_MANAGER_URI" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.data_lake_directory">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">data_lake_directory</span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.data_lake_directory" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
@@ -581,7 +589,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.upload_and_trigger">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_and_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_and_trigger" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">upload_and_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.upload_and_trigger" title="Link to this definition">#</a></dt>
 <dd><p>Upload a file and trigger an Airflow DAG.</p>
 <section id="id3">
 <h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
@@ -640,6 +648,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.orchestration_engine"><code class="docutils literal notranslate"><span class="pre">orchestration_engine</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">SEQUENCE_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.data_lake_directory"><code class="docutils literal notranslate"><span class="pre">data_lake_directory</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.workflows"><code class="docutils literal notranslate"><span class="pre">workflows</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.hello_world"><code class="docutils literal notranslate"><span class="pre">hello_world()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.trigger_task"><code class="docutils literal notranslate"><span class="pre">trigger_task()</span></code></a></li>

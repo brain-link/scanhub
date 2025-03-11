@@ -19,6 +19,7 @@ Attributes
    workflow-manager.app.api.workflow.orchestration_engine
    workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
+   workflow-manager.app.api.workflow.data_lake_directory
    workflow-manager.app.api.workflow.workflows
 
 
@@ -52,6 +53,8 @@ Module Contents
 .. py:data:: EXAM_MANAGER_URI
    :value: 'host.docker.internal:8004'
 
+
+.. py:data:: data_lake_directory
 
 .. py:data:: workflows
    :type:  Dict[str, Dict[str, Any]]
@@ -120,7 +123,7 @@ Module Contents
    Handle a processing task by triggering the appropriate orchestration engine.
 
 
-.. py:function:: upload_and_trigger(dag_id: str, file: fastapi.UploadFile = File(...)) -> Dict[str, Any]
+.. py:function:: upload_and_trigger(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)], file: fastapi.UploadFile = File(...)) -> Dict[str, Any]
    :async:
 
 
