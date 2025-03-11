@@ -5,7 +5,7 @@ from numpy.fft import fftshift, ifft2
 from airflow import DAG
 from airflow.decorators import task
 import requests
-from zipfile import ZipFile
+from zipfile import ZipFile, is_zipfile
 
 # [END import_module]
 
@@ -63,29 +63,27 @@ with DAG(
         """
         Task to extract the zip file.
         """
-        with ZipFile(input_file_path, 'r') as zip_ref:
-            zip_ref.extractall(temporary_path)
-            print(f"Extracted file: {input_file_path}")
-        return temporary_path
+        if is_zipfile(input_file_path):
+            with ZipFile(input_file_path, 'r') as zip_ref:
+                zip_ref.extractall(temporary_path)
+                print(f"Extracted file: {input_file_path}")
+            return temporary_path
+        else:
+            print(f"File is not a zip file: {input_file_path}")
+            return input_file_path
 
     @task()
-    def reconstruct_image(output_path: str, kspace_file: str):
+    def reco_via_gadgetron(raw_ismrmrd_file: str, reco_config_file: str):
         """
-        Task to reconstruct the image from k-space data using FFT.
+        Task to reconstruct the image from a raw ismrmrd file using Gadgetron.
         """
-        print(f"Reading file: {kspace_file}")
-        # Read the numpy array file
-        kspace_data = np.load(kspace_file)
-        print(f"K-space data shape: {kspace_data.shape}")
+        
+        print(f"Reconstructing image from {raw_ismrmrd_file} using {reco_config_file}")
 
-        # Perform FFT reconstruction
-        image = np.abs(fftshift(ifft2(kspace_data)))
-        print(f"Reconstructed image shape: {image.shape}")
+        # Call Gadgetron to reconstruct the image
+        # This is a placeholder for the actual reconstruction code
+        # The reconstructed image is saved to a file
 
-        # Save the reconstructed image to a file
-        image_file = f"{output_path}/tmp_image.npy"
-        #file_path.replace(".npy", "_reconstructed.npy")
-        np.save(image_file, image)
         return image_file
 
     @task()
@@ -136,6 +134,6 @@ with DAG(
     create_dirs = create_directories(temporary_path, output_path)
     input_file_path = read_file(input_path, INPUT_FILE)
     extracted_path = extract_zip_file(input_file_path, temporary_path)
-    image_file = reconstruct_image(temporary_path, extracted_path)
+    image_file = reco_via_gadgetron(temporary_path, extracted_path)
     result_file = save_results(output_path, image_file)
     notify_workflow_manager_task = notify_workflow_manager(WORKFLOW_MANAGER_ENDPOINT, result_file, USER_TOKEN)
