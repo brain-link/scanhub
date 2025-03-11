@@ -5,7 +5,7 @@
 import logging
 import operator
 import os
-from typing import Any, Dict, Annotated
+from typing import Annotated, Any, Dict
 from uuid import UUID
 
 import httpx
@@ -199,7 +199,7 @@ async def upload_and_trigger(dag_id: str,
         if not os.path.exists(file_location):
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
         # Define the callback endpoint
-        callback_endpoint = f"http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
+        callback_endpoint = "http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
 
         # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
         response = orchestration_engine.trigger_task(
