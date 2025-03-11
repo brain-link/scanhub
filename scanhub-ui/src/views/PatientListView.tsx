@@ -27,7 +27,6 @@ import { PatientOut, Gender } from '../generated-client/patient'
 import { Alerts } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 import ConfirmDeleteModal from '../components/ConfirmDelteModal'
-import { dateCalendarClasses } from '@mui/x-date-pickers'
 
 
 export default function PatientListView() {
@@ -74,7 +73,7 @@ export default function PatientListView() {
     await patientApi
       .updatePatientApiV1PatientPatientIdPut(patient.id, patient)
       .then(() => {
-        showNotification({message: "Modified patient " + patient.first_name + ' ' + 
+        showNotification({message: 'Modified patient ' + patient.first_name + ' ' + 
                                    patient.last_name + ' (' + patient.id + ')', 
                           type: 'success'})
         setIsUpdating(false)

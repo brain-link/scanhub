@@ -74,7 +74,7 @@ export default function UserManagementView() {
     await userApi
       .updateUserApiV1UserloginUpdateuserPut(user)
       .then(() => {
-        showNotification({message: "Modified user " + user.username, type: 'success'})
+        showNotification({message: 'Modified user ' + user.username, type: 'success'})
         setIsUpdating(false)
         refetch()
       })
