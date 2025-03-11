@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // Component interfaces: Pass data and functions between components
 import {  ReactNode } from 'react'
-import { PatientOut } from '../generated-client/patient'
 
 export interface SequenceViewerProps {
   sequence_id: string
@@ -19,10 +18,6 @@ export interface AlertProps {
   title: string
   info?: string
   type: Alerts
-}
-
-export interface PatientTableInterface {
-  patients: PatientOut[]
 }
 
 export interface RefetchableItemInterface<T> {

@@ -41,12 +41,12 @@ EXAM_MANAGER_URI = "host.docker.internal:8004"
 workflows: Dict[str, Dict[str, Any]] = {}
 
 
-@router.get("/hello/")
+@router.get("/hello/", tags=["WorkflowManager"])
 async def hello_world() -> dict[str, str]:
     """Hello world endpoint."""
     return {"message": "Hello, World!"}
 
-@router.post("/trigger_task/{task_id}/")
+@router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
 async def trigger_task(task_id: str) -> dict[str, Any]:
     """
     Endpoint to trigger a task in the orchestration engine.
@@ -66,7 +66,7 @@ async def trigger_task(task_id: str) -> dict[str, Any]:
         logging.error(f"Failed to trigger task: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.get("/tasks/")
+@router.get("/tasks/", tags=["WorkflowManager"])
 async def list_available_tasks():
     """Endpoint to list the available tasks from the orchestration engine.
 
@@ -84,7 +84,7 @@ async def list_available_tasks():
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
-@router.post("/process/{workflow_id}/")
+@router.post("/process/{workflow_id}/", tags=["WorkflowManager"])
 async def process(workflow_id: UUID | str) -> dict[str, str]:
     """Process a workflow.
 
@@ -160,7 +160,7 @@ async def handle_processing_task(task: TaskOut):
 
     return
 
-@router.post("/upload_and_trigger/{dag_id}/")
+@router.post("/upload_and_trigger/{dag_id}/", tags=["WorkflowManager"])
 async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[str, Any]:
     """
     Upload a file and trigger an Airflow DAG.

@@ -5,6 +5,10 @@
  * PatientCreateModal.tsx is responsible for rendering a modal with an interface
  * to create a new patient.
  */
+import * as React from 'react'
+import { useMutation } from 'react-query'
+import dayjs from 'dayjs'
+
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
 import Grid from '@mui/joy/Grid'
@@ -14,14 +18,11 @@ import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Select from '@mui/joy/Select'
 import Option from '@mui/joy/Option';
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
-import { useMutation } from 'react-query'
 
 import LoginContext from '../LoginContext'
 import { BasePatient, Gender } from '../generated-client/patient'
