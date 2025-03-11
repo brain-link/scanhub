@@ -91,8 +91,10 @@ with DAG(
             )
 
             # Print both stdout and stderr to make sure we capture any error messages
-            print("Gadgetron Info Output:\n", result.stdout.strip())  
-            print("Gadgetron Error Output (if any):\n", result.stderr.strip())
+            if result.stdout.strip():
+                print("Gadgetron Info Output:\n", result.stdout.strip())
+            if result.stderr.strip():
+                print("Gadgetron Error Output (if any):\n", result.stderr.strip())
 
             return result.stdout.strip() if result.stdout.strip() else result.stderr.strip()
         
