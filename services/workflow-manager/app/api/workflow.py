@@ -5,7 +5,7 @@
 import logging
 import operator
 import os
-from typing import Any, Dict
+from typing import Any, Dict, Annotated
 from uuid import UUID
 
 import httpx
@@ -164,7 +164,9 @@ async def handle_processing_task(task: TaskOut):
     return
 
 @router.post("/upload_and_trigger/{dag_id}/")
-async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[str, Any]:
+async def upload_and_trigger(dag_id: str,
+                             access_token: Annotated[str, Depends(oauth2_scheme)],
+                             file: UploadFile = File(...)) -> Dict[str, Any]:
     """
     Upload a file and trigger an Airflow DAG.
 
@@ -196,9 +198,19 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
         # Check if the file was successfully uploaded
         if not os.path.exists(file_location):
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
+        # Define the callback endpoint
+        callback_endpoint = f"http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
 
-        # Trigger the Airflow DAG with the directory and file name as parameters
-        response = orchestration_engine.trigger_task(dag_id, conf={"directory": directory, "file_name": file.filename})
+        # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
+        response = orchestration_engine.trigger_task(
+            dag_id,
+            conf={
+                "directory": directory,
+                "file_name": file.filename,
+                "workflow_manager_endpoint": callback_endpoint,
+                "user_token": access_token
+            }
+        )
         logging.info(f"DAG triggered with response: {response}")
 
         return {"message": "File uploaded and DAG triggered successfully", "data": response}
@@ -206,3 +218,35 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
         logging.error(f"Failed to trigger DAG: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
+@router.post("/results_ready/")
+async def results_ready(payload: Dict[str, Any]):
+    """
+    Endpoint to handle the notification that the results are ready.
+
+    Parameters
+    ----------
+    payload : dict
+        A dictionary containing the dag_id and result_file.
+
+    Returns
+    -------
+    dict
+        A dictionary containing a message and the result file path.
+    """
+    try:
+        dag_id = payload.get("dag_id")
+        result_file = payload.get("result_file")
+
+        if not dag_id or not result_file:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing dag_id or result_file in payload")
+
+        print(f"Results ready for DAG {dag_id}: {result_file}")
+        # logging.info(f"Results ready for DAG {dag_id}: {result_file}")
+
+        # Process the result file as needed
+        # For example, you can move the file to a different location, update the database, etc.
+
+        return {"message": "Results processed successfully", "result_file": result_file}
+    except Exception as e:
+        logging.error(f"Failed to process results: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
