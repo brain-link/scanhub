@@ -4,7 +4,7 @@ import numpy as np
 from numpy.fft import fftshift, ifft2
 from airflow import DAG
 from airflow.decorators import task
-import subprocess
+import requests
 
 default_args = {
     'owner': 'BRAIN-LINK',
@@ -90,11 +90,29 @@ with DAG(
         result_file = f"{output_path}/reconstructed_image.npy"
         np.save(result_file, image)
         print(f"Reconstructed image saved to {output_path}")
+        return result_file
+
+    @task()
+    def notify_workflow_manager(endpoint: str, result_file: str, user_token: str, **context):
+        """
+        Task to notify the workflow manager that the results are ready.
+        """
+        print(f"Notifying workflow manager: {endpoint}")
+        payload = {
+            "dag_id": context['dag'].dag_id,
+            "result_file": result_file
+        }
+        response = requests.post(endpoint, json=payload, headers={'Authorization': 'Bearer ' + user_token})
+        if response.status_code != 200:
+            raise Exception(f"Failed to notify workflow manager: {response.status_code}")
+        print(f"Notified workflow manager: {response.text}")
 
     # Define the file paths
     data_lake_path = os.getenv('DATA_LAKE_DIRECTORY', '/opt/airflow/data_lake')
     INPUT_DIR = '{{ dag_run.conf["directory"] }}'
     INPUT_FILE = '{{ dag_run.conf["file_name"] }}'
+    WORKFLOW_MANAGER_ENDPOINT = '{{ dag_run.conf["workflow_manager_endpoint"] }}'
+    USER_TOKEN = '{{ dag_run.conf["user_token"] }}'
 
     input_path = f"{data_lake_path}{INPUT_DIR}"
     temporary_path = f"{data_lake_path}/temp/dag_process_uploaded_file"
@@ -105,4 +123,5 @@ with DAG(
     kspace_data_file = read_file(input_path, INPUT_FILE)
     create_dirs = create_directories(temporary_path, output_path)
     image_file = reconstruct_image(temporary_path, kspace_data_file)
-    save_results(output_path, image_file)
+    result_file = save_results(output_path, image_file)
+    notify_workflow_manager_task = notify_workflow_manager(WORKFLOW_MANAGER_ENDPOINT, result_file, USER_TOKEN)
