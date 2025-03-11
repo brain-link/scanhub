@@ -74,29 +74,53 @@ with DAG(
             return input_file_path
 
     @task()
-    def reco_via_gadgetron(raw_ismrmrd_file: str = None, reco_config_file: str = None):
+    def reco_via_gadgetron(
+        raw_ismrmrd_file: str = "/data/upload/dag_reco_gadgetron/data_ismrmrd_t2.h5",
+        reco_config_file: str = "/data/temp/dag_process_uploaded_file/davids_t2_tse.si/3d-tse_t2.reco.gadgetron.xml",
+        output_file: str = "/data/results/data_ismrmrd_t2.dcm"
+    ):
         """
         Task to run `gadgetron --info` inside the Gadgetron container.
         This will later be expanded to run the full reconstruction process.
         """
 
-        print(f"Reconstructing image from {raw_ismrmrd_file} using {reco_config_file}")
-        
+        print(f"Running Gadgetron reconstruction for {raw_ismrmrd_file} using {reco_config_file}")
+
         try:
-            # Run Gadgetron inside the container
-            result = subprocess.run(
-                ["docker", "exec", "gadgetron", "bash", "-c", 
-                "source /opt/conda/bin/activate gadgetron && gadgetron --info"],
+            # # Step 1: Check Gadgetron system info
+            # gadgetron_info = subprocess.run(
+            #     ["docker", "exec", "gadgetron", "bash", "-c", 
+            #     "source /opt/conda/bin/activate gadgetron && gadgetron --info"],
+            #     capture_output=True, text=True, check=True
+            # )
+
+            # # Print both stdout and stderr to make sure we capture any error messages
+            # if gadgetron_info.stdout.strip():
+            #     print("Gadgetron Info Output:\n", gadgetron_info .stdout.strip())
+            # if gadgetron_info.stderr.strip():
+            #     print("Gadgetron Error Output:\n", gadgetron_info.stderr.strip())
+
+            # Step 2: Run the Gadgetron reconstruction
+            # gadgetron_reco = subprocess.run(
+            #     ["docker", "exec", "gadgetron", "bash", "-c",
+            #     f"source /opt/conda/bin/activate gadgetron && "
+            #     f"gadgetron_ismrmrd_client -v -f {raw_ismrmrd_file} -c {reco_config_file} -o {output_file}"],
+            #     capture_output=True, text=True, check=True
+            # )
+
+            gadgetron_reco = subprocess.run(
+                ["docker", "exec", "gadgetron", "bash", "-c",
+                "source /opt/conda/bin/activate gadgetron && gadgetron_ismrmrd_client -v -f /data/upload/dag_reco_gadgetron/data_ismrmrd_t2.h5 -c /data/temp/dag_process_uploaded_file/davids_t2_tse.si/3d-tse_t2.reco.gadgetron.xml -o /data/results/data_ismrmrd_t2.dcm"],
                 capture_output=True, text=True, check=True
             )
 
             # Print both stdout and stderr to make sure we capture any error messages
-            if result.stdout.strip():
-                print("Gadgetron Info Output:\n", result.stdout.strip())
-            if result.stderr.strip():
-                print("Gadgetron Error Output (if any):\n", result.stderr.strip())
+            if gadgetron_reco.stdout.strip():
+                print("Gadgetron Info Output:\n", gadgetron_reco .stdout.strip())
+            if gadgetron_reco.stderr.strip():
+                print("Gadgetron Error Output:\n", gadgetron_reco.stderr.strip())
 
-            return result.stdout.strip() if result.stdout.strip() else result.stderr.strip()
+            return gadgetron_reco.stdout.strip() if gadgetron_reco.stdout.strip() else gadgetron_reco.stderr.strip()
         
         except subprocess.CalledProcessError as e:
             print("Error running Gadgetron:", e.stderr)
@@ -150,6 +174,6 @@ with DAG(
     create_dirs = create_directories(temporary_path, output_path)
     input_file_path = read_file(input_path, INPUT_FILE)
     extracted_path = extract_zip_file(input_file_path, temporary_path)
-    image_file = reco_via_gadgetron(temporary_path, extracted_path)
+    image_file = reco_via_gadgetron()#temporary_path, extracted_path)
     result_file = save_results(output_path, image_file)
     notify_workflow_manager_task = notify_workflow_manager(WORKFLOW_MANAGER_ENDPOINT, result_file, USER_TOKEN)
