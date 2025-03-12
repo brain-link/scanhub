@@ -148,6 +148,12 @@ export interface BaseTask {
     'status': ItemStatus;
     /**
      * 
+     * @type {number}
+     * @memberof BaseTask
+     */
+    'progress': number;
+    /**
+     * 
      * @type {boolean}
      * @memberof BaseTask
      */
@@ -404,6 +410,12 @@ export interface TaskOut {
      * @memberof TaskOut
      */
     'status': ItemStatus;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskOut
+     */
+    'progress': number;
     /**
      * 
      * @type {boolean}

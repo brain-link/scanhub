@@ -45,6 +45,7 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
       comment: undefined,
       type: TaskType.ProcessingTask,
       status: 'NEW',
+      progress: 0,
       args: {},
       artifacts: {},
       destinations: {},

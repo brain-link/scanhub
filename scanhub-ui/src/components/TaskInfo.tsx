@@ -83,6 +83,11 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
           {task.status}
         </Typography>
 
+        <Typography fontSize='sm'>Progress</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.progress}
+        </Typography>
+
         <Typography fontSize='sm'>Is Template</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {task.is_template ? 'True' : 'False'}

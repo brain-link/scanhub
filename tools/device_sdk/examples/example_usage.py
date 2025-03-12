@@ -15,7 +15,7 @@ async def perform_scan(client, deviceTask):
     print("Initialization status sent.")
 
     for percentage in [0, 25, 50, 75, 100]:
-        await asyncio.sleep(1)
+        await asyncio.sleep(2)
         await client.send_scanning_status(percentage, 
                                           record_id=deviceTask["record_id"], 
                                           user_access_token=deviceTask["user_access_token"])

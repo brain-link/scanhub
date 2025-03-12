@@ -130,6 +130,7 @@ class Task(Base):
     destinations: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
 
     status: Mapped[ItemStatus] = mapped_column(nullable=False)
+    progress: Mapped[int] = mapped_column(nullable=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
 
 

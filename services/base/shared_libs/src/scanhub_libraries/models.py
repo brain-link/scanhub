@@ -263,6 +263,7 @@ class BaseTask(BaseModel):
     artifacts: dict[str, str]
     destinations: dict[str, str]
     status: ItemStatus
+    progress: int
     is_template: bool
 
 

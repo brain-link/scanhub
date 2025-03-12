@@ -23,7 +23,7 @@ import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../generated-client/patient'
-import { ExamOut } from '../generated-client/exam'
+import { ExamOut, TaskType } from '../generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
@@ -65,9 +65,27 @@ function AcquisitionView() {
       return await examApi
         .getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
         .then((result) => {
+          if (itemSelection.itemId != undefined) {
+            result.data.map((exam) => {
+              if (exam.id == itemSelection.itemId) {
+                setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 })
+              }
+              exam.workflows.map((workflow) => {
+                if (workflow.id == itemSelection.itemId) {
+                  setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 })
+                }
+                workflow.tasks.map((task) => {
+                  if (task.id == itemSelection.itemId) {
+                    setItemSelection({ type: 'task', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
+                  }
+                })
+              })
+            })
+          }
           return result.data
         })
     },
+    refetchInterval: 1000
   })
 
   return (
@@ -133,7 +151,7 @@ function AcquisitionView() {
               accordionSummary={
                 <ExamItem 
                   item={exam} 
-                  onClick={() => {setItemSelection({type: 'exam', name: exam.name, itemId: exam.id})}} 
+                  onClick={() => {setItemSelection({type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0})}} 
                   selection={itemSelection}
                 />
               }
@@ -147,18 +165,30 @@ function AcquisitionView() {
                   accordionSummary={
                     <WorkflowItem 
                       item={workflow} 
-                      onClick={() => {setItemSelection({type: 'workflow', name: workflow.name, itemId: workflow.id})}}
+                      onClick={() => {setItemSelection({type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0})}}
                       selection={itemSelection}
                     />
                   }
                   accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetchExams} />}
                 >
-                  {workflow.tasks?.map((task) => (
+                  {workflow.tasks?.sort((taskA, taskB) => {
+                    let a: number = 4
+                    let b: number = 4
+                    if (taskA.type == TaskType.DeviceTaskSdk) a = 1;
+                    if (taskA.type == TaskType.DeviceTaskSimulator) a = 1;
+                    if (taskA.type == TaskType.ReconstructionTask) a = 2;
+                    if (taskA.type == TaskType.ProcessingTask) a = 3;
+                    if (taskB.type == TaskType.DeviceTaskSdk) b = 1;
+                    if (taskB.type == TaskType.DeviceTaskSimulator) b = 1;
+                    if (taskB.type == TaskType.ReconstructionTask) b = 2;
+                    if (taskB.type == TaskType.ProcessingTask) b = 3;
+                    return a - b
+                  }).map((task) => (
                     <TaskItem 
                       key={`task-${task.id}`} 
                       item={task} 
                       refetchParentData={refetchExams}
-                      onClick={() => {setItemSelection({type: 'task', name: task.name, itemId: task.id})}}
+                      onClick={() => {setItemSelection({type: 'task', name: task.name, itemId: task.id, status: task.status, progress: task.progress})}}
                       selection={itemSelection}
                     />
                   ))}

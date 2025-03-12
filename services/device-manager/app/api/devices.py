@@ -238,7 +238,7 @@ Device ID does not match'})
                 if not await dal_update_device(device_id, device_out):
                     await websocket.send_json({'message': 'Error updating device.'})
 
-                if status == 'scanning' and data['progress'] == 100:
+                if status == 'scanning':
                     print("Scanning progress 100% --> set task status to finished")
                     record_id = str(message.get('record_id'))
                     user_access_token = str(message.get('user_access_token'))
@@ -250,7 +250,9 @@ Device ID does not match'})
                         continue
                     task_raw = get_task_response.json()
                     task = TaskOut(**task_raw)
-                    task.status = ItemStatus.FINISHED
+                    if data['progress'] == 100:
+                        task.status = ItemStatus.FINISHED
+                    task.progress = data['progress']
                     put_task_response = requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}",
                                                      data=json.dumps(task, default=jsonable_encoder),
                                                      headers=headers)

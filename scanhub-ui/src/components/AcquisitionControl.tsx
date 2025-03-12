@@ -14,6 +14,7 @@ import * as React from 'react'
 import { useMutation } from 'react-query'
 
 import { workflowManagerApi } from '../api'
+import { ItemStatus } from '../generated-client/exam'
 import { ItemSelection } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
@@ -42,7 +43,7 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
       <IconButton 
         size='sm' 
         variant='plain' 
-        color='neutral'
+        color={'neutral'}
         onClick={() => {
           if (itemSelection.itemId == undefined) {
             showNotification({message: 'No item selected!', type: 'warning'})
@@ -65,7 +66,11 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
             'Select item to start...'}
         </Typography>
         <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
-        <LinearProgress determinate value={60} sx={{marginTop: 1}} />
+        <LinearProgress 
+          determinate value={itemSelection.progress}
+          sx={{marginTop: 1}}
+          color={itemSelection.status == ItemStatus.Finished ? 'success' : 'primary'}
+        />
       </Stack>
     </Box>
   )
