@@ -30,6 +30,7 @@ Classes
    exam-manager.app.db.Exam
    exam-manager.app.db.Workflow
    exam-manager.app.db.Task
+   exam-manager.app.db.Result
 
 
 Functions
@@ -271,6 +272,58 @@ Module Contents
 
    .. py:attribute:: is_template
       :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: results
+      :type:  sqlalchemy.orm.Mapped[list[Result]]
+
+
+.. py:class:: Result
+
+   Bases: :py:obj:`Base`
+
+
+   Abstract result ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'result'
+
+
+
+   .. py:attribute:: __table_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: task_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: progress
+      :type:  sqlalchemy.orm.Mapped[float]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+
+
+   .. py:attribute:: type
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ResultType]
+
+
+   .. py:attribute:: directory
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: filename
+      :type:  sqlalchemy.orm.Mapped[str]
 
 
 .. py:data:: MappedBase

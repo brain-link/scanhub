@@ -1,0 +1,175 @@
+exam-manager.app.api.exam_api
+=============================
+
+.. py:module:: exam-manager.app.api.exam_api
+
+.. autoapi-nested-parse::
+
+   Definition of exam API endpoints accessible through swagger UI.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   exam-manager.app.api.exam_api.PREFIX_PATIENT_MANAGER
+   exam-manager.app.api.exam_api.exam_router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.api.exam_api.create_exam
+   exam-manager.app.api.exam_api.create_exam_from_template
+   exam-manager.app.api.exam_api.get_exam
+   exam-manager.app.api.exam_api.get_all_patient_exams
+   exam-manager.app.api.exam_api.get_all_exam_templates
+   exam-manager.app.api.exam_api.exam_delete
+   exam-manager.app.api.exam_api.update_exam
+
+
+Module Contents
+---------------
+
+.. py:data:: PREFIX_PATIENT_MANAGER
+   :value: 'http://patient-manager:8100/api/v1/patient'
+
+
+.. py:data:: exam_router
+
+.. py:function:: create_exam(payload: scanhub_libraries.models.BaseExam, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
+   :async:
+
+
+   Create a new exam.
+
+   Parameters
+   ----------
+   payload
+       Exam pydantic input model.
+
+   Returns
+   -------
+       Exam pydantic output moddel.
+
+   Raises
+   ------
+   HTTPException
+       404: Creation unsuccessful
+
+
+.. py:function:: create_exam_from_template(payload: scanhub_libraries.models.BaseExam, template_id: uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
+   :async:
+
+
+   Create a new exam from template.
+
+   Parameters
+   ----------
+   payload
+       The potentially modified exam to create.
+   template_id
+       ID of the template, the exam is created from
+
+   Returns
+   -------
+       Exam pydantic output model.
+
+   Raises
+   ------
+   HTTPException
+       404: Creation unsuccessful
+
+
+.. py:function:: get_exam(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ExamOut
+   :async:
+
+
+   Get exam endpoint.
+
+   Parameters
+   ----------
+   exam_id
+       Id of requested exam entry
+
+   Returns
+   -------
+       Exam pydantic output model.
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: get_all_patient_exams(patient_id: uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ExamOut]
+   :async:
+
+
+   Get all exams of a certain patient.
+
+   Parameters
+   ----------
+   patient_id
+       Id of parent
+
+   Returns
+   -------
+       List of exam pydantic output models
+
+
+.. py:function:: get_all_exam_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ExamOut]
+   :async:
+
+
+   Get all exam templates.
+
+   Returns
+   -------
+       List of exam pydantic output models
+
+
+.. py:function:: exam_delete(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
+
+
+   Delete an exam by id. Cascade deletes the associated workflow and tasks.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the exam to be deleted
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: update_exam(exam_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseExam, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ExamOut
+   :async:
+
+
+   Update an existing exam.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the exam to be updated
+   payload
+       Exam pydantic input model
+
+   Returns
+   -------
+       Exam pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+

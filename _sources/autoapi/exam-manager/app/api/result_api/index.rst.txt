@@ -1,0 +1,135 @@
+exam-manager.app.api.result_api
+===============================
+
+.. py:module:: exam-manager.app.api.result_api
+
+.. autoapi-nested-parse::
+
+   Definition of result API endpoints accessible through swagger UI.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   exam-manager.app.api.result_api.result_router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.api.result_api.create_result
+   exam-manager.app.api.result_api.get_result
+   exam-manager.app.api.result_api.get_all_task_results
+   exam-manager.app.api.result_api.delete_result
+   exam-manager.app.api.result_api.update_result
+
+
+Module Contents
+---------------
+
+.. py:data:: result_router
+
+.. py:function:: create_result(payload: scanhub_libraries.models.BaseResult, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
+   :async:
+
+
+   Create a task result.
+
+   Parameters
+   ----------
+   payload
+       Result pydantic input model
+
+   Returns
+   -------
+       Result pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Creation unsuccessful
+
+
+.. py:function:: get_result(result_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
+   :async:
+
+
+   Get an existing result.
+
+   Parameters
+   ----------
+   result_id
+       Id of the result to be returned
+
+   Returns
+   -------
+       Result pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: get_all_task_results(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ResultOut]
+   :async:
+
+
+   Get all existing results of a certain task.
+
+   Parameters
+   ----------
+   task_id
+       Id of parental task
+
+   Returns
+   -------
+       List of task pydantic output model
+
+
+.. py:function:: delete_result(result_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
+
+
+   Delete a task.
+
+   Parameters
+   ----------
+   task_id
+       Id of the task to be deleted
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: update_result(result_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseResult, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
+   :async:
+
+
+   Update an existing result.
+
+   Parameters
+   ----------
+   result_id
+       Id of the result to be updated
+   payload
+       Result pydantic base model/dict
+       If this is the pydantic ResultBase model, only fields in the base model can be updated.
+
+   Returns
+   -------
+       Task pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+

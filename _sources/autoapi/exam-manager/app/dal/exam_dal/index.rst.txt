@@ -1,0 +1,128 @@
+exam-manager.app.dal.exam_dal
+=============================
+
+.. py:module:: exam-manager.app.dal.exam_dal
+
+.. autoapi-nested-parse::
+
+   Data acess layer (DAL) between fastapi endpoint and sql database.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.dal.exam_dal.add_exam_data
+   exam-manager.app.dal.exam_dal.get_exam_data
+   exam-manager.app.dal.exam_dal.get_all_exam_data
+   exam-manager.app.dal.exam_dal.get_all_exam_template_data
+   exam-manager.app.dal.exam_dal.delete_exam_data
+   exam-manager.app.dal.exam_dal.update_exam_data
+
+
+Module Contents
+---------------
+
+.. py:function:: add_exam_data(payload: scanhub_libraries.models.BaseExam, creator: str) -> app.db.Exam
+   :async:
+
+
+   Create new exam.
+
+   Parameters
+   ----------
+   payload
+       Exam pydantic base model
+   creator
+       The username/id of the user who creats this exam
+
+   Returns
+   -------
+       Database orm model of created exam
+
+
+.. py:function:: get_exam_data(exam_id: uuid.UUID) -> app.db.Exam | None
+   :async:
+
+
+   Get exam by id.
+
+   Parameters
+   ----------
+   exam_id
+       Id of requested exam
+
+   Returns
+   -------
+       Database orm model of exam or none
+
+
+.. py:function:: get_all_exam_data(patient_id: uuid.UUID) -> list[app.db.Exam]
+   :async:
+
+
+   Get a list of all exams assigned to a certain patient.
+
+   Parameters
+   ----------
+   patient_id
+       Id of the parent patient entry, exams are assigned to
+
+   Returns
+   -------
+       List of exam data base orm models
+
+
+.. py:function:: get_all_exam_template_data() -> list[app.db.Exam]
+   :async:
+
+
+   Get a list of all exams assigned to a certain patient.
+
+   Parameters
+   ----------
+   patient_id
+       Id of the parent patient entry, exams are assigned to
+
+   Returns
+   -------
+       List of exam data base orm models
+
+
+.. py:function:: delete_exam_data(exam_id: uuid.UUID) -> bool
+   :async:
+
+
+   Delete exam by id. Also deletes associated workflows and tasks.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the exam to be deleted
+
+   Returns
+   -------
+       Success of deletion
+
+
+.. py:function:: update_exam_data(exam_id: uuid.UUID, payload: scanhub_libraries.models.BaseExam) -> app.db.Exam | None
+   :async:
+
+
+   Update existing exam entry.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the database entry to be updated
+
+   payload
+       Pydantic base exam model with data to be updated
+
+   Returns
+   -------
+       Database orm model of updated exam
+
+

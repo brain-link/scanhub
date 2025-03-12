@@ -364,9 +364,10 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">exam-manager.app.api</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dal/index.html">exam-manager.app.dal</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">exam-manager.app.db</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../exam/index.html">exam-manager.app.exam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../helper/index.html">exam-manager.app.helper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../main/index.html">exam-manager.app.main</a></li>
 </ul>
 </div>
@@ -466,6 +467,9 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.db.Task" title="exam-manager.app.db.Task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Task</span></code></a></p></td>
 <td><p>Abstract task ORM model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.Result" title="exam-manager.app.db.Result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Result</span></code></a></p></td>
+<td><p>Abstract result ORM model.</p></td>
 </tr>
 </tbody>
 </table>
@@ -759,6 +763,68 @@
 <span class="sig-name descname"><span class="pre">is_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Task.is_template" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Task.results">
+<span class="sig-name descname"><span class="pre">results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#exam-manager.app.db.Result" title="exam-manager.app.db.Result"><span class="pre">Result</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Task.results" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><a class="headerlink" href="#exam-manager.app.db.Result" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#exam-manager.app.db.Base" title="exam-manager.app.db.Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Abstract result ORM model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.__tablename__">
+<span class="sig-name descname"><span class="pre">__tablename__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'result'</span></em><a class="headerlink" href="#exam-manager.app.db.Result.__tablename__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.__table_args__">
+<span class="sig-name descname"><span class="pre">__table_args__</span></span><a class="headerlink" href="#exam-manager.app.db.Result.__table_args__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.datetime_created">
+<span class="sig-name descname"><span class="pre">datetime_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.datetime_created" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.task_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.progress" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.ItemStatus</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.ResultType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.directory">
+<span class="sig-name descname"><span class="pre">directory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.directory" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Result.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Result.filename" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py data">
@@ -875,6 +941,20 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.destinations"><code class="docutils literal notranslate"><span class="pre">Task.destinations</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.status"><code class="docutils literal notranslate"><span class="pre">Task.status</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.is_template"><code class="docutils literal notranslate"><span class="pre">Task.is_template</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.results"><code class="docutils literal notranslate"><span class="pre">Task.results</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.__tablename__"><code class="docutils literal notranslate"><span class="pre">Result.__tablename__</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.__table_args__"><code class="docutils literal notranslate"><span class="pre">Result.__table_args__</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.id"><code class="docutils literal notranslate"><span class="pre">Result.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.datetime_created"><code class="docutils literal notranslate"><span class="pre">Result.datetime_created</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.task_id"><code class="docutils literal notranslate"><span class="pre">Result.task_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.progress"><code class="docutils literal notranslate"><span class="pre">Result.progress</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.status"><code class="docutils literal notranslate"><span class="pre">Result.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.type"><code class="docutils literal notranslate"><span class="pre">Result.type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.directory"><code class="docutils literal notranslate"><span class="pre">Result.directory</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Result.filename"><code class="docutils literal notranslate"><span class="pre">Result.filename</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.MappedBase"><code class="docutils literal notranslate"><span class="pre">MappedBase</span></code></a></li>
