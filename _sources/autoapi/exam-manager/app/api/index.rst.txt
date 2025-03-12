@@ -3,6 +3,11 @@ exam-manager.app.api
 
 .. py:module:: exam-manager.app.api
 
+.. autoapi-nested-parse::
+
+   Init file.
+
+
 
 Submodules
 ----------

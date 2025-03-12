@@ -463,7 +463,7 @@
 <td><p>Readiness health endpoint.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.main.get_dicom" title="exam-manager.app.main.get_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dicom</span></code></a>(→ fastapi.responses.FileResponse)</p></td>
-<td><p></p></td>
+<td><p>Get DICOM file of a result.</p></td>
 </tr>
 </tbody>
 </table>
@@ -538,7 +538,33 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.main.get_dicom">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.main.</span></span><span class="sig-name descname"><span class="pre">get_dicom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.FileResponse</span></span></span><a class="headerlink" href="#exam-manager.app.main.get_dicom" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Get DICOM file of a result.</p>
+<p>This endpoint in implemented in main without the result_router to omit the user authentification.
+The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend.
+This is not to be done.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>result_id</dt><dd><p>UUID of the result with the dicom.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>DICOM file response</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>Raises<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>Throws exception if result ID is unknown</p>
+</dd>
+<dt>HTTPException</dt><dd><p>Throws exception if DICOM file does not exist</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
 
 </section>
 </section>

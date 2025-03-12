@@ -138,3 +138,20 @@ Module Contents
    :async:
 
 
+   Upload a DICOM file to a result.
+
+   Parameters
+   ----------
+   result_id
+       UUID of the result
+   file
+       Dicom file
+   user
+       User for authentification
+
+   Raises
+   ------
+   HTTPException
+       Throws error if ID of the result is unknown
+
+
