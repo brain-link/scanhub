@@ -14,8 +14,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from . import LOG_CALL_DELIMITER
 from app.db import engine, init_db
-from app.exam import LOG_CALL_DELIMITER, router
+from app.api.exam_api import exam_router
+from app.api.result_api import result_router
+from app.api.workflow_api import workflow_router
+from app.api.task_api import task_router
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
@@ -119,4 +123,7 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
-app.include_router(router, prefix="/api/v1/exam")
+app.include_router(exam_router, prefix="/api/v1/exam")
+app.include_router(workflow_router, prefix="/api/v1/exam")
+app.include_router(task_router, prefix="/api/v1/exam")
+app.include_router(result_router, prefix="/api/v1/exam")
