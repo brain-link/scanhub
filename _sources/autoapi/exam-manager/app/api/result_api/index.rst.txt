@@ -27,6 +27,7 @@ Functions
    exam-manager.app.api.result_api.get_all_task_results
    exam-manager.app.api.result_api.delete_result
    exam-manager.app.api.result_api.update_result
+   exam-manager.app.api.result_api.upload_dicom
 
 
 Module Contents
@@ -131,5 +132,9 @@ Module Contents
    ------
    HTTPException
        404: Not found
+
+
+.. py:function:: upload_dicom(result_id: uuid.UUID | str, file: fastapi.UploadFile, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
 
 

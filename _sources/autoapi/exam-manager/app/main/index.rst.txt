@@ -28,6 +28,7 @@ Functions
    exam-manager.app.main.startup
    exam-manager.app.main.shutdown
    exam-manager.app.main.readiness
+   exam-manager.app.main.get_dicom
 
 
 Module Contents
@@ -92,5 +93,9 @@ Module Contents
    ------
    HTTPException
        500: Any of the exam-tree tables does not exist
+
+
+.. py:function:: get_dicom(result_id: uuid.UUID | str) -> fastapi.responses.FileResponse
+   :async:
 
 

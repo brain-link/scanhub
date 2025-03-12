@@ -459,6 +459,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.update_result" title="exam-manager.app.api.result_api.update_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_result</span></code></a>(]) → scanhub_libraries.models.ResultOut)</p></td>
 <td><p>Update an existing result.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.upload_dicom" title="exam-manager.app.api.result_api.upload_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_dicom</span></code></a>(]) → None)</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -590,6 +593,11 @@ If this is the pydantic ResultBase model, only fields in the base model can be u
 </section>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.result_api.upload_dicom">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.result_api.</span></span><span class="sig-name descname"><span class="pre">upload_dicom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.api.result_api.upload_dicom" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 
@@ -631,6 +639,7 @@ If this is the pydantic ResultBase model, only fields in the base model can be u
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.get_all_task_results"><code class="docutils literal notranslate"><span class="pre">get_all_task_results()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.delete_result"><code class="docutils literal notranslate"><span class="pre">delete_result()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.update_result"><code class="docutils literal notranslate"><span class="pre">update_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.upload_dicom"><code class="docutils literal notranslate"><span class="pre">upload_dicom()</span></code></a></li>
 </ul>
 </li>
 </ul>
