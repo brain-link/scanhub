@@ -20,44 +20,6 @@ import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup'
 import * as cornerstoneTools from 'cornerstone-tools'
 import * as React from 'react'
 
-// Todo: Add tools only once in CornerstoneInit.ts
-export const tools = [
-  // Mouse
-  'Pan',
-  'Zoom',
-  'Rotate',
-  'Wwwc',
-  'Length',
-  'Angle',
-  'Bidirectional',
-  'FreehandRoi',
-  'Eraser',
-  // Scroll
-  {
-    name: 'StackScrollMouseWheel',
-    mode: 'active',
-  },
-  // Right click zoom
-  {
-    name: 'Zoom',
-    mode: 'active',
-    modeOptions: { mouseButtonMask: 2 },
-  },
-  // Touch
-  {
-    name: 'PanMultiTouch',
-    mode: 'active',
-  },
-  {
-    name: 'ZoomTouchPinch',
-    mode: 'active',
-  },
-  {
-    name: 'StackScrollMultiTouch',
-    mode: 'active',
-  },
-]
-
 function DicomViewerToolbar() {
   const [activeTool, setActiveTool] = React.useState<string | null>(null)
 
@@ -69,6 +31,23 @@ function DicomViewerToolbar() {
   // if (activeTool) {
   //   cornerstoneTools.setToolActive(activeTool, { mouseButtonMask: 1 })
   // }
+
+  React.useEffect(() => {
+    cornerstoneTools.init()
+
+    cornerstoneTools.addTool(cornerstoneTools.StackScrollMouseWheelTool);
+    cornerstoneTools.setToolActive('StackScrollMouseWheel', {})
+
+    cornerstoneTools.addTool(cornerstoneTools.PanTool)
+    cornerstoneTools.addTool(cornerstoneTools.ZoomTool)
+    cornerstoneTools.addTool(cornerstoneTools.RotateTool)
+    cornerstoneTools.addTool(cornerstoneTools.WwwcTool)
+    cornerstoneTools.addTool(cornerstoneTools.LengthTool)
+    cornerstoneTools.addTool(cornerstoneTools.AngleTool)
+    cornerstoneTools.addTool(cornerstoneTools.BidirectionalTool)
+    cornerstoneTools.addTool(cornerstoneTools.FreehandRoiTool)
+    cornerstoneTools.addTool(cornerstoneTools.EraserTool)
+  }, [])
 
   React.useEffect(() => {
     if (activeTool) {

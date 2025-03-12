@@ -5,7 +5,7 @@
  * api.tsx contains instances of the different apis.
  */
 import { PatientsApi, HealthApi as PatientManagerHealthApi } from './generated-client/patient'
-import { ExamsApi, WorkflowsApi, TasksApi, HealthApi as ExamManagerHealthApi } from './generated-client/exam'
+import { ExamsApi, WorkflowsApi, TasksApi, ResultsApi, HealthApi as ExamManagerHealthApi } from './generated-client/exam'
 import { WorkflowManagerApi, HealthApi as WorkflowManagerHealthApi } from './generated-client/workflowmanager'
 import { UserApi, LoginApi, HealthApi as UserLoginManagerHealthApi } from './generated-client/userlogin'
 import { DevicesApi, HealthApi as DeviceManagerHealthApi } from './generated-client/device'
@@ -19,6 +19,7 @@ export const patientManagerHealthApi = new PatientManagerHealthApi(undefined, ba
 export const examApi = new ExamsApi(undefined, baseUrls.examService)
 export const workflowsApi = new WorkflowsApi(undefined, baseUrls.examService)
 export const taskApi = new TasksApi(undefined, baseUrls.examService)
+export const resultApi = new ResultsApi(undefined, baseUrls.examService)
 export const examManagerHealthApi = new ExamManagerHealthApi(undefined, baseUrls.examService)
 
 export const workflowManagerApi = new WorkflowManagerApi(undefined, baseUrls.workflowManagerService)
