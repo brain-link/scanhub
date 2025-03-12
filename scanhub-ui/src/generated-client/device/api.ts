@@ -162,6 +162,12 @@ export interface DeviceTask {
      * @memberof DeviceTask
      */
     'parametrized_sequence': ParametrizedSequence;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceTask
+     */
+    'user_access_token': string;
 }
 
 

@@ -257,7 +257,11 @@ async def start_scan(task_type: str,
     )
 
     device_task = DeviceTask(
-        device_id=device_id, record_id=record_id, command=Commands.START, parametrized_sequence=parametrized_sequence
+        device_id=device_id,
+        record_id=record_id,
+        command=Commands.START,
+        parametrized_sequence=parametrized_sequence,
+        user_access_token=access_token
     )
 
     print("Device task:", device_task)

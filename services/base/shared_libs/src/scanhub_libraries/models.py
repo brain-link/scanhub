@@ -132,11 +132,11 @@ class MRISequenceCreate(BaseModel):
 # Might be obsolete, to be updated
 class DeviceTask(BaseModel):
     """Pydantic model definition of a device workflow."""
-
     device_id: str
     record_id: UUID
     command: Commands
     parametrized_sequence: ParametrizedSequence
+    user_access_token: str
 
 
 class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods

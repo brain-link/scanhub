@@ -21,9 +21,10 @@ from typing import Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
-from scanhub_libraries.models import DeviceTask
+from scanhub_libraries.models import DeviceTask, TaskOut, ItemStatus
 from scanhub_libraries.security import get_current_user
 from sqlalchemy import exc
+import requests
 
 from .dal import (
     dal_create_device,
@@ -35,6 +36,10 @@ from .dal import (
 from .models import BaseDevice, DeviceOut, get_device_out
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
+
+
+EXAM_MANAGER_URI = "exam-manager:8000"
+
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 active_connections: list[WebSocket] = []
@@ -188,7 +193,6 @@ async def websocket_endpoint(websocket: WebSocket):
 In this session a device already was registered.'})
                     continue
                 device_data = message.get('data')
-                print("Device data:", device_data)
                 device_id = device_data.get('id')
                 device = BaseDevice(**device_data)
 
@@ -215,36 +219,49 @@ In this session a device already was registered.'})
             # ================ Update device status ===============
             elif command == 'update_status':
                 print("Received command 'update_status'.")
-                status_data = message.get('data')
-                device_id = status_data.get('id')
+                status = str(message.get('status'))
+                data = message.get('data')
+                device_id = message.get('device_id')
                 if device_id_global not in ("", device_id):
                     await websocket.send_json({'message': 'Error updating device. \
 Device ID does not match'})
-                elif not (device_to_update := await dal_get_device(device_id)):
+                    continue
+                if not (device_to_update := await dal_get_device(device_id)):
                     await websocket.send_json({'message': 'Device not registered'})
-                else:
-                    device_out = await get_device_out(device_to_update)
-                    # Update the device's status and last_status_update
-                    if "additional_data" in status_data:
-                        additional_data = status_data.get('additional_data')
-                        device_out.status = str({
-                            "status": status_data.get('status'),
-                            "additional_data": additional_data
-                        })
-                    else:
-                        device_out.status = str({
-                            "status": status_data.get('status'),
-                        })
-                    device_out.datetime_updated = datetime.now()
-                    if not await dal_update_device(device_id, device_out):
-                        await websocket.send_json({'message': 'Error updating device.'})
-                    else:
-                        # Send response to the device
-                        await websocket.send_json({
-                            'command': 'feedback',
-                            'message': 'Device status updated successfully'})
-                        device_id_global = device_id
-                        dict_id_websocket[device_id] = websocket
+                    continue
+                
+                device_out = await get_device_out(device_to_update)
+                # Update the device's status and last_status_update
+                device_out.status = status
+                device_out.datetime_updated = datetime.now()
+
+                if not await dal_update_device(device_id, device_out):
+                    await websocket.send_json({'message': 'Error updating device.'})
+
+                if status == 'scanning' and data['progress'] == 100:
+                    print("Scanning progress 100% --> set task status to finished")
+                    record_id = str(message.get('record_id'))
+                    user_access_token = str(message.get('user_access_token'))
+                    headers = {"Authorization": "Bearer " + user_access_token}
+                    get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}", headers=headers)
+                    print("Get task, status_code:", get_task_response.status_code)
+                    if get_task_response.status_code != 200:
+                        await websocket.send_json({'message': 'Invalild record id for update_status scanning.'})
+                        continue
+                    task_raw = get_task_response.json()
+                    task = TaskOut(**task_raw)
+                    task.status = ItemStatus.FINISHED
+                    put_task_response = requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}",
+                                                     data=json.dumps(task, default=jsonable_encoder),
+                                                     headers=headers)
+                    if put_task_response.status_code != 200:
+                        await websocket.send_json({'message': 'Error at updating task status in DB.'})
+
+                await websocket.send_json({
+                    'command': 'feedback',
+                    'message': 'Device status updated successfully'})
+                # device_id_global = device_id    # (not needed?)
+                # dict_id_websocket[device_id] = websocket   # (not needed?)
             else:
                 print("Received unknown command, which will be ignored:", command)
 

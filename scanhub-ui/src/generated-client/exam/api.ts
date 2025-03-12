@@ -447,8 +447,7 @@ export const TaskType = {
     ProcessingTask: 'PROCESSING_TASK',
     DeviceTaskSimulator: 'DEVICE_TASK_SIMULATOR',
     DeviceTaskSdk: 'DEVICE_TASK_SDK',
-    CertifiedDeviceTask: 'CERTIFIED_DEVICE_TASK',
-    CertifiedProcessingTask: 'CERTIFIED_PROCESSING_TASK'
+    ReconstructionTask: 'RECONSTRUCTION_TASK'
 } as const;
 
 export type TaskType = typeof TaskType[keyof typeof TaskType];

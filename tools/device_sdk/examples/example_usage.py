@@ -8,12 +8,17 @@ async def perform_scan(client, deviceTask):
     # header_xml = ET.fromstring(header_xml_str)
     print(deviceTask)
 
+    if "record_id" not in deviceTask:
+        client.send_error_status("Missing record_id in deviceTask")
+
     await client.send_init_status()
     print("Initialization status sent.")
 
     for percentage in [0, 25, 50, 75, 100]:
         await asyncio.sleep(1)
-        await client.send_scanning_status(percentage)
+        await client.send_scanning_status(percentage, 
+                                          record_id=deviceTask["record_id"], 
+                                          user_access_token=deviceTask["user_access_token"])
         print(f"Scanning progress: {percentage}%")
 
     await client.send_ready_status()

@@ -171,7 +171,7 @@ class Client:
             self.logger.error("An error occurred while handling the start command: %s",
                               str(e))
 
-    async def send_status(self, status, additional_data=None):
+    async def send_status(self, status, data=None, record_id=None, user_access_token=None):
         """
         Sends a status update to the server.
 
@@ -181,31 +181,23 @@ class Client:
         """
         status_data = {
             "command": "update_status",
-            "data": {
-                    "id": self.device_id,
-                    "status": status
-                }
-            }
-        if status == "scanning" and additional_data is not None:
-            status_data["data"]["additional_data"] = {
-                "percentage": additional_data
-            }
-        elif status == "error" and additional_data is not None:
-            status_data["data"]["additional_data"] = {
-                "error_message": additional_data
-            }
-        elif additional_data is not None:
-            status_data["data"]["additional_data"] = additional_data
+            "device_id": self.device_id,
+            "status": status,
+            "data": data,
+            "record_id": record_id,
+            "user_access_token": user_access_token
+        }
         await self.websocket_handler.send_message(json.dumps(status_data))
 
-    async def send_scanning_status(self, percentage):
+    async def send_scanning_status(self, progress, record_id, user_access_token):
         """
         Sends a 'scanning' status with progress percentage.
 
         Args:
-            percentage (int): The scanning progress percentage.
+            progress (int): The scanning progress percentage.
+            record_id (str): The record_id to report progress for.
         """
-        await self.send_status("scanning", additional_data=percentage)
+        await self.send_status("scanning", data={'progress': progress}, record_id=record_id, user_access_token=user_access_token)
 
     async def send_ready_status(self):
         """Sends a 'ready' status to the server."""
@@ -227,7 +219,7 @@ class Client:
         Args:
             error_message (str): The error message to include.
         """
-        await self.send_status("error", additional_data=error_message)
+        await self.send_status("error", data={'error_message': error_message})
 
     async def stop(self):
         """Closes the WebSocket connection."""
