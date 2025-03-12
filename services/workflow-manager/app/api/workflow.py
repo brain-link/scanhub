@@ -5,7 +5,7 @@
 import logging
 import operator
 import os
-from typing import Any, Dict
+from typing import Annotated, Any, Dict
 from uuid import UUID
 
 import httpx
@@ -27,6 +27,9 @@ orchestration_engine = OrchestrationEngine()
 
 SEQUENCE_MANAGER_URI = "host.docker.internal:8003"
 EXAM_MANAGER_URI = "host.docker.internal:8004"
+
+# Read the DATA_LAKE_DIRECTORY environment variable
+data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY', '/default/path/if/not/set')
 
 # In-memory workflow storage
 # {
@@ -161,7 +164,9 @@ async def handle_processing_task(task: TaskOut):
     return
 
 @router.post("/upload_and_trigger/{dag_id}/", tags=["WorkflowManager"])
-async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[str, Any]:
+async def upload_and_trigger(dag_id: str,
+                             access_token: Annotated[str, Depends(oauth2_scheme)],
+                             file: UploadFile = File(...)) -> Dict[str, Any]:
     """
     Upload a file and trigger an Airflow DAG.
 
@@ -180,8 +185,8 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="File has no file name.")
     try:
         # Define the file location in the shared data lake
-        directory = f"upload/{dag_id}"
-        file_location = f"/app/data_lake/{directory}/{file.filename}"
+        directory = f"/upload/{dag_id}"
+        file_location = f"{data_lake_directory}{directory}/{file.filename}"
         os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
         # Save the uploaded file
@@ -193,9 +198,19 @@ async def upload_and_trigger(dag_id: str, file: UploadFile = File(...)) -> Dict[
         # Check if the file was successfully uploaded
         if not os.path.exists(file_location):
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
+        # Define the callback endpoint
+        callback_endpoint = "http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
 
-        # Trigger the Airflow DAG with the directory and file name as parameters
-        response = orchestration_engine.trigger_task(dag_id, conf={"directory": directory, "file_name": file.filename})
+        # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
+        response = orchestration_engine.trigger_task(
+            dag_id,
+            conf={
+                "directory": directory,
+                "file_name": file.filename,
+                "workflow_manager_endpoint": callback_endpoint,
+                "user_token": access_token
+            }
+        )
         logging.info(f"DAG triggered with response: {response}")
 
         return {"message": "File uploaded and DAG triggered successfully", "data": response}
