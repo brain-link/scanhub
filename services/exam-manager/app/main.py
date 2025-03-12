@@ -9,6 +9,7 @@ from fastapi.exception_handlers import (
     http_exception_handler,
     request_validation_exception_handler,
 )
+from fastapi.responses import FileResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
@@ -20,6 +21,10 @@ from app.api.exam_api import exam_router
 from app.api.result_api import result_router
 from app.api.workflow_api import workflow_router
 from app.api.task_api import task_router
+from app.dal import result_dal
+from uuid import UUID
+import os
+import shutil
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
@@ -121,6 +126,24 @@ async def readiness() -> dict:
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
 
     return {"status": "ok"}
+
+@app.get("/api/v1/exam/dicom/{result_id}", response_class=FileResponse, status_code=200, tags=["results"])
+async def get_dicom(result_id: UUID | str) -> FileResponse:
+    print(LOG_CALL_DELIMITER)
+    print("result_id:", result_id)
+    if not (result := await result_dal.get_result_db(result_id)):
+        message = f"Could not find result with ID {result_id}."
+        raise HTTPException(status_code=404, detail=message)
+
+    filename = result.filename if result.filename.endswith(".dcm") else result.filename + ".dcm"
+    file_path = os.path.join(result.directory, filename)
+    print("Loading dicom from: ", file_path)
+
+    if not os.path.exists(file_path):
+        message = f"Could not find DICOM file of result with ID: {result_id}."
+        raise HTTPException(status_code=404, detail=message)
+
+    return FileResponse(file_path, media_type="application/dicom")
 
 
 app.include_router(exam_router, prefix="/api/v1/exam")

@@ -6,9 +6,12 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+# from fastapi.responses import FileResponse
 from scanhub_libraries.models import BaseResult, ResultOut, User, ItemStatus
 from scanhub_libraries.security import get_current_user
+import os
+import shutil
 
 
 from app.dal import result_dal, task_dal
@@ -185,3 +188,25 @@ async def update_result(result_id: UUID | str, payload: BaseResult,
         raise HTTPException(status_code=404, detail=message)
     print("Updated result: ", result_updated.__dict__)
     return ResultOut(**result_updated.__dict__)
+
+
+@result_router.post("/dicom/{result_id}", status_code=200, tags=["results"])
+async def upload_dicom(
+    result_id: UUID | str, 
+    file: UploadFile,
+    user: Annotated[User, Depends(get_current_user)]
+) -> None:
+    print(LOG_CALL_DELIMITER)
+    print("Username:", user.username)
+    print("result_id:", result_id)
+    if not (result := await result_dal.get_result_db(result_id)):
+        message = f"Could not find result with ID {result_id}."
+        raise HTTPException(status_code=404, detail=message)
+
+    filename = result.filename if result.filename.endswith(".dcm") else result.filename + ".dcm"
+    file_path = os.path.join(result.directory, filename)
+    os.makedirs(result.directory, exist_ok=True)
+    print("Saving dicom to: ", file_path)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
