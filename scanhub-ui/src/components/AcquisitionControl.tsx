@@ -5,6 +5,8 @@
  * AcquisitionControl.tsx is responsible for rendering the acquisition trigger and process.
  */
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
@@ -37,6 +39,9 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
     },
   })
 
+  let actionIcon = <PlayCircleIcon />
+  if (itemSelection.status == ItemStatus.Started) actionIcon = <StopCircleIcon />
+  if (itemSelection.status == ItemStatus.Finished) actionIcon = <CheckCircleIcon />
 
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -55,7 +60,7 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
           }
         }}
       >
-        <PlayCircleIcon />
+        {actionIcon}
       </IconButton>
 
       <Stack direction='column' sx={{ flex: 1 }}>

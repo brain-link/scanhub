@@ -24,7 +24,8 @@ from scanhub_libraries.models import (
     SequenceParameters,
     ParametrizedSequence,
     DeviceTask,
-    Commands
+    Commands,
+    ItemStatus
 )
 from scanhub_libraries.security import get_current_user
 
@@ -165,6 +166,11 @@ async def trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2
     print("    datetime_created:    ", patient.datetime_created)
     print("    datetime_updated:    ", patient.datetime_updated)
     print()
+
+    task.status = ItemStatus.STARTED
+    put_task_response = requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}", 
+                                     data=json.dumps(task, default=jsonable_encoder),
+                                     headers=headers)
 
     if task.type == TaskType.DEVICE_TASK_SDK:
         response = await start_scan(task_type=task.type,
