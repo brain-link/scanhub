@@ -11,6 +11,7 @@ from scanhub_libraries.models import BaseTask, ItemStatus, TaskOut, User
 from scanhub_libraries.security import get_current_user
 
 from app.dal import workflow_dal, task_dal
+from app.helper import get_task_out
 
 from app import LOG_CALL_DELIMITER
 
@@ -148,7 +149,7 @@ async def get_task(task_id: UUID | str, user: Annotated[User, Depends(get_curren
         raise HTTPException(status_code=400, detail="Badly formed task_id.")
     if not (task := await task_dal.get_task_data(task_id=_id)):
         raise HTTPException(status_code=404, detail="Task not found")
-    return TaskOut(**task.__dict__)
+    return await get_task_out(data=task)
 
 
 @task_router.get(
@@ -178,9 +179,9 @@ async def get_all_workflow_tasks(
     if not (tasks := await task_dal.get_all_task_data(workflow_id=_id)):
         # Don't raise exception here, list might be empty.
         return []
-    result = [TaskOut(**task.__dict__) for task in tasks]
-    print("List of tasks: ", result)
-    return result
+    tasks = [TaskOut(**task.__dict__) for task in tasks]
+    print("List of tasks: ", tasks)
+    return [await get_task_out(data=task) for task in tasks]
 
 @task_router.get(
     "/task/templates/all",
@@ -269,4 +270,4 @@ async def update_task(task_id: UUID | str, payload: BaseTask,
     if not (task_updated := await task_dal.update_task_data(task_id=_id, payload=payload)):
         message = "Could not update workflow, either because it does not exist, or for another reason."
         raise HTTPException(status_code=404, detail=message)
-    return TaskOut(**task_updated.__dict__)
+    return await get_task_out(data=task_updated)
