@@ -181,7 +181,7 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      <DicomViewer task_id={ itemSelection.type === 'task' ? itemSelection.itemId : undefined} />
+      <DicomViewer taskId={ itemSelection.type === 'task' ? itemSelection.itemId : undefined} />
     </Box>
   )
 }

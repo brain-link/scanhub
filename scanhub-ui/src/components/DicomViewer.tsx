@@ -30,9 +30,9 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 initCornerstone()  // initialize cornerstone before first render cycle
 
 
-function DicomViewer({task_id}: {task_id: string | undefined} ) {
+function DicomViewer({taskId}: {taskId: string | undefined} ) {
 
-  if (task_id === undefined) {
+  if (taskId === undefined) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
         <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
@@ -46,9 +46,9 @@ function DicomViewer({task_id}: {task_id: string | undefined} ) {
     // refetch: refetchResult,
     isError,
   } = useQuery<TaskOut, Error>({
-    queryKey: ['task', task_id],
+    queryKey: ['task', taskId],
     queryFn: async () => {
-      return await taskApi.getTaskApiV1ExamTaskTaskIdGet(task_id).then((result) => {
+      return await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId).then((result) => {
         return result.data
       })
     },
@@ -56,24 +56,24 @@ function DicomViewer({task_id}: {task_id: string | undefined} ) {
 
   if (task === undefined || isError){
     <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-      <AlertItem title={'Could not load task with ID: ' + task_id} type={Alerts.Error} />
+      <AlertItem title={'Could not load task with ID: ' + taskId} type={Alerts.Error} />
     </Container>
   }
   
   if (task?.results && task.results.length > 0){
-    console.log("Task result: ", task.results[task.results.length-1].directory, task.results[task.results.length-1].filename)
+    console.log('Task result: ', task.results[task.results.length-1].directory, task.results[task.results.length-1].filename)
   }
 
   // Set state variables
   const [numberViewports, setNumberViewports] = React.useState<number>(1)
-  const [activeViewportIndex, setActiveViewportIndex] = React.useState<number>(0)
+  const [activeViewportIndex, ] = React.useState<number>(0)
 
   // Define viewport reference
   const dicomElement = React.useRef<HTMLDivElement>(null);
 
   // const dicomImageId = 'wadouri:marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
   const dicomImageId = 'wadouri:http://localhost:8080/api/v1/exam/dicom/' + task?.results[task.results.length-1].id
-  console.log("viewportData: ", dicomImageId)
+  console.log('viewportData: ', dicomImageId)
 
 
   React.useEffect(() => {
@@ -137,7 +137,7 @@ function DicomViewer({task_id}: {task_id: string | undefined} ) {
             >
               <div
                 ref={dicomElement}
-                id="dicomViewport"
+                id='dicomViewport'
                 style={{width: '100%', height: '100%', backgroundColor: 'black'}}
               />
             </Card>
