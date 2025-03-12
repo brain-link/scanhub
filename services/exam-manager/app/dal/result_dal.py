@@ -46,7 +46,6 @@ async def get_result_db(resuld_id: UUID) -> Result | None:
     """
     async with async_session() as session:
         return await session.get(Result, resuld_id)
-    return None
 
 async def get_all_results_db(task_id: UUID) -> list[Result]:
     """Get a list of all results assigned to a certain task.
@@ -63,7 +62,6 @@ async def get_all_results_db(task_id: UUID) -> list[Result]:
     async with async_session() as session:
         result: SQLResult = await session.execute(select(Result).where(Result.task_id == task_id))
         return list(result.scalars().all())
-    return []
 
 async def update_result_db(result_id: UUID, payload: BaseResult) -> Result | None:
     """Update existing result in database.

@@ -4,27 +4,28 @@
 """Exam manager main file."""
 
 
+import os
+from uuid import UUID
+
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import (
     http_exception_handler,
     request_validation_exception_handler,
 )
-from fastapi.responses import FileResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import LOG_CALL_DELIMITER
-from app.db import engine, init_db
 from app.api.exam_api import exam_router
 from app.api.result_api import result_router
-from app.api.workflow_api import workflow_router
 from app.api.task_api import task_router
+from app.api.workflow_api import workflow_router
 from app.dal import result_dal
-from uuid import UUID
-import os
-import shutil
+from app.db import engine, init_db
+
+from . import LOG_CALL_DELIMITER
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
@@ -129,9 +130,32 @@ async def readiness() -> dict:
 
 @app.get("/api/v1/exam/dicom/{result_id}", response_class=FileResponse, status_code=200, tags=["results"])
 async def get_dicom(result_id: UUID | str) -> FileResponse:
+    """Get DICOM file of a result.
+
+    This endpoint in implemented in main without the result_router to omit the user authentification.
+    The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend.
+    This is not to be done.
+
+    Parameters
+    ----------
+    result_id
+        UUID of the result with the dicom.
+
+    Returns
+    -------
+        DICOM file response
+
+    Raises
+    ------
+    HTTPException
+        Throws exception if result ID is unknown
+    HTTPException
+        Throws exception if DICOM file does not exist
+    """
     print(LOG_CALL_DELIMITER)
     print("result_id:", result_id)
-    if not (result := await result_dal.get_result_db(result_id)):
+    _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
+    if not (result := await result_dal.get_result_db(_id)):
         message = f"Could not find result with ID {result_id}."
         raise HTTPException(status_code=404, detail=message)
 

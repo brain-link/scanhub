@@ -1,7 +1,8 @@
 """Helper methods for workflows and exam, require recursive model translation."""
 
-from scanhub_libraries.models import TaskOut, WorkflowOut, ExamOut, ResultOut
-from app.db import Workflow, Exam, Task
+from scanhub_libraries.models import ExamOut, ResultOut, TaskOut, WorkflowOut
+
+from app.db import Exam, Task, Workflow
 
 
 async def get_exam_out_model(data: Exam) -> ExamOut:

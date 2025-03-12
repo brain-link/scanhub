@@ -10,12 +10,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from scanhub_libraries.models import BaseWorkflow, User, WorkflowOut
 from scanhub_libraries.security import get_current_user
 
-from app.dal import exam_dal, workflow_dal
-
-from app.helper import get_workflow_out_model
-from app.api import task_api
-
 from app import LOG_CALL_DELIMITER
+from app.api import task_api
+from app.dal import exam_dal, workflow_dal
+from app.helper import get_workflow_out_model
 
 # Http status codes
 # 200 = Ok: GET, PUT

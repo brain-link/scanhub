@@ -11,6 +11,7 @@ from sqlalchemy.future import select
 
 from app.db import Task, async_session
 
+
 async def add_task_data(payload: BaseTask, creator) -> Task:
     """Add new task to database.
 
@@ -64,7 +65,6 @@ async def get_all_task_data(workflow_id: UUID) -> list[Task]:
     async with async_session() as session:
         result: Result = await session.execute(select(Task).where(Task.workflow_id == workflow_id))
         return list(result.scalars().all())
-    return []
 
 
 async def get_all_task_template_data() -> list[Task]:
@@ -82,7 +82,6 @@ async def get_all_task_template_data() -> list[Task]:
     async with async_session() as session:
         result: Result = await session.execute(select(Task).where(Task.is_template))
         return list(result.scalars().all())
-    return []
 
 
 async def delete_task_data(task_id: UUID) -> bool:

@@ -6,14 +6,12 @@
 from pprint import pprint
 from uuid import UUID
 
-from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow
+from scanhub_libraries.models import BaseExam
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from app.db import (
     Exam,
-    Task,
-    Workflow,
     async_session,
 )
 

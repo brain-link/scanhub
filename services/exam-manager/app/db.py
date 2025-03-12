@@ -8,7 +8,7 @@ import os
 import uuid
 
 from pydantic import BaseModel
-from scanhub_libraries.models import ItemStatus, TaskType, ResultType
+from scanhub_libraries.models import ItemStatus, ResultType, TaskType
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -70,7 +70,7 @@ class Exam(Base):
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
 
 
-class Workflow(Base): # TBD: rename to "Workflow"
+class Workflow(Base):  # TBD: rename to "Workflow"
     """Workflow ORM model."""
 
     __tablename__ = "workflow"

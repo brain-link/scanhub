@@ -3,20 +3,19 @@
 
 """Definition of result API endpoints accessible through swagger UI."""
 
+import os
+import shutil
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
+
 # from fastapi.responses import FileResponse
-from scanhub_libraries.models import BaseResult, ResultOut, User, ItemStatus
+from scanhub_libraries.models import BaseResult, ItemStatus, ResultOut, User
 from scanhub_libraries.security import get_current_user
-import os
-import shutil
-
-
-from app.dal import result_dal, task_dal
 
 from app import LOG_CALL_DELIMITER
+from app.dal import result_dal, task_dal
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -192,14 +191,31 @@ async def update_result(result_id: UUID | str, payload: BaseResult,
 
 @result_router.post("/dicom/{result_id}", status_code=200, tags=["results"])
 async def upload_dicom(
-    result_id: UUID | str, 
+    result_id: UUID | str,
     file: UploadFile,
     user: Annotated[User, Depends(get_current_user)]
 ) -> None:
+    """Upload a DICOM file to a result.
+
+    Parameters
+    ----------
+    result_id
+        UUID of the result
+    file
+        Dicom file
+    user
+        User for authentification
+
+    Raises
+    ------
+    HTTPException
+        Throws error if ID of the result is unknown
+    """
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("result_id:", result_id)
-    if not (result := await result_dal.get_result_db(result_id)):
+    _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
+    if not (result := await result_dal.get_result_db(_id)):
         message = f"Could not find result with ID {result_id}."
         raise HTTPException(status_code=404, detail=message)
 

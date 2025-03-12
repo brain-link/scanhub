@@ -8,13 +8,13 @@ from uuid import UUID
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseExam, BaseTask, BaseWorkflow, ExamOut, ItemStatus, TaskOut, User, WorkflowOut
+from scanhub_libraries.models import BaseExam, ExamOut, User
 from scanhub_libraries.security import get_current_user, oauth2_scheme
 
 from app import LOG_CALL_DELIMITER
-
 from app.api import workflow_api
 from app.dal import exam_dal
+
 # from app.workflow_api import create_workflow_from_template
 # from app.db import Exam, Workflow
 from app.helper import get_exam_out_model
@@ -104,7 +104,7 @@ async def create_exam(payload: BaseExam,
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3)
-        
+
         if getpatient_response.status_code != 200:
             raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
     if payload.is_template is True and payload.patient_id is not None:
