@@ -19,12 +19,12 @@ import json
 from datetime import datetime
 from typing import Dict, List
 
+import requests
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
-from scanhub_libraries.models import DeviceTask, TaskOut, ItemStatus
+from scanhub_libraries.models import DeviceTask, ItemStatus, TaskOut
 from scanhub_libraries.security import get_current_user
 from sqlalchemy import exc
-import requests
 
 from .dal import (
     dal_create_device,
@@ -229,7 +229,7 @@ Device ID does not match'})
                 if not (device_to_update := await dal_get_device(device_id)):
                     await websocket.send_json({'message': 'Device not registered'})
                     continue
-                
+
                 device_out = await get_device_out(device_to_update)
                 # Update the device's status and last_status_update
                 device_out.status = status
@@ -243,7 +243,8 @@ Device ID does not match'})
                     record_id = str(message.get('record_id'))
                     user_access_token = str(message.get('user_access_token'))
                     headers = {"Authorization": "Bearer " + user_access_token}
-                    get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}", headers=headers)
+                    get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}",
+                                                     headers=headers)
                     print("Get task, status_code:", get_task_response.status_code)
                     if get_task_response.status_code != 200:
                         await websocket.send_json({'message': 'Invalild record id for update_status scanning.'})

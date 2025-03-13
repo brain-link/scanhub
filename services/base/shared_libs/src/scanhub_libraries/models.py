@@ -132,6 +132,7 @@ class MRISequenceCreate(BaseModel):
 # Might be obsolete, to be updated
 class DeviceTask(BaseModel):
     """Pydantic model definition of a device workflow."""
+
     device_id: str
     record_id: UUID
     command: Commands
@@ -206,6 +207,12 @@ class TaskType(str, Enum):
     DEVICE_TASK_SDK = "DEVICE_TASK_SDK"
     RECONSTRUCTION_TASK = "RECONSTRUCTION_TASK"
 
+class ResultType(str, Enum):
+    """Result type enum."""
+
+    DICOM = "DICOM"
+    MRD = "MRD"
+    CALIBRATION = "CALIBRATION"
 
 class ItemStatus(str, Enum):
     """Task status enum."""
@@ -215,11 +222,28 @@ class ItemStatus(str, Enum):
     STARTED = "STARTED"
     FINISHED = "FINISHED"
     DELETED = "DELETED"
+    INPROGRESS = "INPROGRESS"
 
+
+class BaseResult(BaseModel):
+    """Result model."""
+
+    task_id: Optional[UUID] = None
+    type: ResultType
+    status: ItemStatus = ItemStatus.NEW
+    directory: str = ""
+    filename: str = ""
+    progress: float = 0.
+
+class ResultOut(BaseResult):
+    """Result output model."""
+
+    id: UUID
+    datetime_created: datetime
 
 class BaseTask(BaseModel):
     """Task model."""
-    
+
     class Config:
         """Base class configuration."""
 
@@ -274,6 +298,7 @@ class TaskOut(BaseTask):
     creator: str
     datetime_created: datetime
     datetime_updated: datetime | None
+    results: list[ResultOut]
 
 
 class BaseWorkflow(BaseModel):
@@ -349,7 +374,7 @@ class User(BaseModel):
     # token_type is a standardized name in OAuth2, don't change it
     # token_type should most of the time be "bearer" as standardized in OAuth2
     # when adding new user, token_type is "password" and access_token contains password
-    token_type: str     
+    token_type: str
     last_activity_unixtime: int | None
     last_login_unixtime: int | None
 

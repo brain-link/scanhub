@@ -15,17 +15,17 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
-    TaskOut,
-    WorkflowOut,
-    ExamOut,
-    PatientOut,
-    TaskType,
     AcquisitionLimits,
-    SequenceParameters,
-    ParametrizedSequence,
-    DeviceTask,
     Commands,
-    ItemStatus
+    DeviceTask,
+    ExamOut,
+    ItemStatus,
+    ParametrizedSequence,
+    PatientOut,
+    SequenceParameters,
+    TaskOut,
+    TaskType,
+    WorkflowOut,
 )
 from scanhub_libraries.security import get_current_user
 
@@ -168,9 +168,10 @@ async def trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2
     print()
 
     task.status = ItemStatus.STARTED
-    put_task_response = requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}", 
-                                     data=json.dumps(task, default=jsonable_encoder),
-                                     headers=headers)
+    requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
+                 data=json.dumps(task, default=jsonable_encoder),
+                 headers=headers)
+    # could check response type here, but may be optional
 
     if task.type == TaskType.DEVICE_TASK_SDK:
         response = await start_scan(task_type=task.type,
@@ -243,7 +244,7 @@ async def start_scan(task_type: str,
         the access token of the current user
 
     Raises
-    -------
+    ------
         HttpException if something goes wrong.
     """
     headers = {"Authorization": "Bearer " + access_token}
@@ -273,9 +274,10 @@ async def start_scan(task_type: str,
     print("Device task:", device_task)
 
     if task_type == "DEVICE_TASK_SIMULATOR":
-        device_ip = await device_location_request(device_id, access_token)
-        print("Device ip: ", device_ip)
-        url = f"http://{device_ip}/api/start-scan"
+        raise RuntimeError("Not implemented at the moment.")
+        # device_ip = await device_location_request(device_id, access_token)
+        # print("Device ip: ", device_ip)
+        # url = f"http://{device_ip}/api/start-scan"
     elif task_type == "DEVICE_TASK_SDK":
         url = f"http://{DEVICE_MANAGER_URI}/api/v1/device/start_scan_via_websocket"
     else:

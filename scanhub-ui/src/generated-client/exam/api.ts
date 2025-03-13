@@ -87,6 +87,51 @@ export interface BaseExam {
 
 
 /**
+ * Result model.
+ * @export
+ * @interface BaseResult
+ */
+export interface BaseResult {
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseResult
+     */
+    'task_id'?: string;
+    /**
+     * 
+     * @type {ResultType}
+     * @memberof BaseResult
+     */
+    'type': ResultType;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof BaseResult
+     */
+    'status'?: ItemStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseResult
+     */
+    'directory'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseResult
+     */
+    'filename'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BaseResult
+     */
+    'progress'?: number;
+}
+
+
+/**
  * Task model.
  * @export
  * @interface BaseTask
@@ -330,7 +375,8 @@ export const ItemStatus = {
     Updated: 'UPDATED',
     Started: 'STARTED',
     Finished: 'FINISHED',
-    Deleted: 'DELETED'
+    Deleted: 'DELETED',
+    Inprogress: 'INPROGRESS'
 } as const;
 
 export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
@@ -343,6 +389,85 @@ export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
  */
 export interface LocationInner {
 }
+/**
+ * 
+ * @export
+ * @interface ResultId
+ */
+export interface ResultId {
+}
+/**
+ * Result output model.
+ * @export
+ * @interface ResultOut
+ */
+export interface ResultOut {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'task_id'?: string;
+    /**
+     * 
+     * @type {ResultType}
+     * @memberof ResultOut
+     */
+    'type': ResultType;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof ResultOut
+     */
+    'status'?: ItemStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'directory'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'filename'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResultOut
+     */
+    'progress'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'datetime_created': string;
+}
+
+
+/**
+ * Result type enum.
+ * @export
+ * @enum {string}
+ */
+
+export const ResultType = {
+    Dicom: 'DICOM',
+    Mrd: 'MRD',
+    Calibration: 'CALIBRATION'
+} as const;
+
+export type ResultType = typeof ResultType[keyof typeof ResultType];
+
+
 /**
  * 
  * @export
@@ -446,6 +571,12 @@ export interface TaskOut {
      * @memberof TaskOut
      */
     'datetime_updated'?: string;
+    /**
+     * 
+     * @type {Array<ResultOut>}
+     * @memberof TaskOut
+     */
+    'results': Array<ResultOut>;
 }
 
 
@@ -1235,6 +1366,577 @@ export class HealthApi extends BaseAPI {
      */
     public readinessApiV1ExamHealthReadinessGet(options?: RawAxiosRequestConfig) {
         return HealthApiFp(this.configuration).readinessApiV1ExamHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * ResultsApi - axios parameter creator
+ * @export
+ */
+export const ResultsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Result
+         * @param {BaseResult} baseResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createResultApiV1ExamResultPost: async (baseResult: BaseResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'baseResult' is not null or undefined
+            assertParamExists('createResultApiV1ExamResultPost', 'baseResult', baseResult)
+            const localVarPath = `/api/v1/exam/result`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseResult, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * @summary Delete Result
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteResultApiV1ExamResultResultIdDelete: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('deleteResultApiV1ExamResultResultIdDelete', 'resultId', resultId)
+            const localVarPath = `/api/v1/exam/result/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+         * @summary Get All Task Results
+         * @param {TaskId} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllTaskResultsApiV1ExamResultAllTaskIdGet: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getAllTaskResultsApiV1ExamResultAllTaskIdGet', 'taskId', taskId)
+            const localVarPath = `/api/v1/exam/result/all/{task_id}`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * @summary Get Dicom
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDicomApiV1ExamDicomResultIdGet: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getDicomApiV1ExamDicomResultIdGet', 'resultId', resultId)
+            const localVarPath = `/api/v1/exam/dicom/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+         * @summary Get Result
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getResultApiV1ExamResultResultIdGet: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getResultApiV1ExamResultResultIdGet', 'resultId', resultId)
+            const localVarPath = `/api/v1/exam/result/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * @summary Update Result
+         * @param {ResultId} resultId 
+         * @param {BaseResult} baseResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateResultApiV1ExamResultResultIdPut: async (resultId: ResultId, baseResult: BaseResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('updateResultApiV1ExamResultResultIdPut', 'resultId', resultId)
+            // verify required parameter 'baseResult' is not null or undefined
+            assertParamExists('updateResultApiV1ExamResultResultIdPut', 'baseResult', baseResult)
+            const localVarPath = `/api/v1/exam/result/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseResult, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+         * @summary Upload Dicom
+         * @param {ResultId} resultId 
+         * @param {File} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadDicomApiV1ExamDicomResultIdPost: async (resultId: ResultId, file: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('uploadDicomApiV1ExamDicomResultIdPost', 'resultId', resultId)
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('uploadDicomApiV1ExamDicomResultIdPost', 'file', file)
+            const localVarPath = `/api/v1/exam/dicom/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ResultsApi - functional programming interface
+ * @export
+ */
+export const ResultsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ResultsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Result
+         * @param {BaseResult} baseResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createResultApiV1ExamResultPost(baseResult: BaseResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createResultApiV1ExamResultPost(baseResult, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createResultApiV1ExamResultPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * @summary Delete Result
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteResultApiV1ExamResultResultIdDelete(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteResultApiV1ExamResultResultIdDelete(resultId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.deleteResultApiV1ExamResultResultIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+         * @summary Get All Task Results
+         * @param {TaskId} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ResultOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getAllTaskResultsApiV1ExamResultAllTaskIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * @summary Get Dicom
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDicomApiV1ExamDicomResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicomApiV1ExamDicomResultIdGet(resultId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicomApiV1ExamDicomResultIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+         * @summary Get Result
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getResultApiV1ExamResultResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getResultApiV1ExamResultResultIdGet(resultId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getResultApiV1ExamResultResultIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * @summary Update Result
+         * @param {ResultId} resultId 
+         * @param {BaseResult} baseResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.updateResultApiV1ExamResultResultIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+         * @summary Upload Dicom
+         * @param {ResultId} resultId 
+         * @param {File} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadDicomApiV1ExamDicomResultIdPost(resultId: ResultId, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadDicomApiV1ExamDicomResultIdPost(resultId, file, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.uploadDicomApiV1ExamDicomResultIdPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ResultsApi - factory interface
+ * @export
+ */
+export const ResultsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ResultsApiFp(configuration)
+    return {
+        /**
+         * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * @summary Create Result
+         * @param {BaseResult} baseResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createResultApiV1ExamResultPost(baseResult: BaseResult, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.createResultApiV1ExamResultPost(baseResult, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * @summary Delete Result
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteResultApiV1ExamResultResultIdDelete(resultId: ResultId, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteResultApiV1ExamResultResultIdDelete(resultId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+         * @summary Get All Task Results
+         * @param {TaskId} taskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<Array<ResultOut>> {
+            return localVarFp.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * @summary Get Dicom
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDicomApiV1ExamDicomResultIdGet(resultId: ResultId, options?: any): AxiosPromise<void> {
+            return localVarFp.getDicomApiV1ExamDicomResultIdGet(resultId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+         * @summary Get Result
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getResultApiV1ExamResultResultIdGet(resultId: ResultId, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.getResultApiV1ExamResultResultIdGet(resultId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * @summary Update Result
+         * @param {ResultId} resultId 
+         * @param {BaseResult} baseResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+         * @summary Upload Dicom
+         * @param {ResultId} resultId 
+         * @param {File} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadDicomApiV1ExamDicomResultIdPost(resultId: ResultId, file: File, options?: any): AxiosPromise<any> {
+            return localVarFp.uploadDicomApiV1ExamDicomResultIdPost(resultId, file, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ResultsApi - object-oriented interface
+ * @export
+ * @class ResultsApi
+ * @extends {BaseAPI}
+ */
+export class ResultsApi extends BaseAPI {
+    /**
+     * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * @summary Create Result
+     * @param {BaseResult} baseResult 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public createResultApiV1ExamResultPost(baseResult: BaseResult, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).createResultApiV1ExamResultPost(baseResult, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+     * @summary Delete Result
+     * @param {ResultId} resultId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public deleteResultApiV1ExamResultResultIdDelete(resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).deleteResultApiV1ExamResultResultIdDelete(resultId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+     * @summary Get All Task Results
+     * @param {TaskId} taskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+     * @summary Get Dicom
+     * @param {ResultId} resultId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public getDicomApiV1ExamDicomResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getDicomApiV1ExamDicomResultIdGet(resultId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+     * @summary Get Result
+     * @param {ResultId} resultId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public getResultApiV1ExamResultResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getResultApiV1ExamResultResultIdGet(resultId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+     * @summary Update Result
+     * @param {ResultId} resultId 
+     * @param {BaseResult} baseResult 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+     * @summary Upload Dicom
+     * @param {ResultId} resultId 
+     * @param {File} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public uploadDicomApiV1ExamDicomResultIdPost(resultId: ResultId, file: File, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).uploadDicomApiV1ExamDicomResultIdPost(resultId, file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
