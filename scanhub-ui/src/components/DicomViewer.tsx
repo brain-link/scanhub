@@ -4,6 +4,9 @@
  *
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
+import * as React from 'react'
+import { useQuery } from 'react-query'
+
 import { taskApi } from '../api'
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
@@ -16,15 +19,14 @@ import Stack from '@mui/joy/Stack'
 import Container from '@mui/joy/Container'
 import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
-import * as React from 'react'
-import { useQuery } from 'react-query'
-
-import DicomViewerToolbar from '../components/DicomViewerTools'
-import initCornerstone from '../utils/InitCornerstone'
-import { TaskOut } from '../generated-client/exam'
 
 import * as cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+
+import DicomViewerToolbar from '../components/DicomViewerTools'
+import initCornerstone from '../utils/InitCornerstone'
+import { TaskOut, ItemStatus, TaskType } from '../generated-client/exam'
+import { Task } from '@mui/icons-material'
 
 
 initCornerstone()  // initialize cornerstone before first render cycle
@@ -99,7 +101,13 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
 
   }, [task])
 
-  if (task === undefined || isError || !task.results || task.results.length == 0) {
+  if (task === undefined || 
+      isError ||
+      !task.results || 
+      task.results.length == 0 || 
+      task.status != ItemStatus.Finished || 
+      task.type != TaskType.ReconstructionTask
+  ) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
         <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />

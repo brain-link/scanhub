@@ -4,6 +4,7 @@
 """Workflow manager endpoints."""
 import datetime
 import json
+import time
 import logging
 import operator
 import os
@@ -11,7 +12,7 @@ from typing import Annotated, Any, Dict
 from uuid import UUID
 
 import requests
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
@@ -65,8 +66,22 @@ async def hello_world() -> dict[str, str]:
     return {"message": "Hello, World!"}
 
 
+def simulate_reconstruction_task(task, headers):
+    print('Simulate reconstruction task.')
+    for percentage in [25, 50, 75, 100]:
+        time.sleep(2)
+        task.progress = percentage
+        if percentage == 100:
+            task.status = ItemStatus.FINISHED
+        requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
+                    data=json.dumps(task, default=jsonable_encoder),
+                    headers=headers)
+
+
 @router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
-async def trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
+async def trigger_task(task_id: str,
+                       backgroundTasks: BackgroundTasks,
+                       access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
     """
     Endpoint to trigger a task in the orchestration engine.
 
@@ -188,12 +203,15 @@ async def trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2
                            access_token=access_token)
         return {"status": "success", "data": "ok"}
     elif task.type == TaskType.RECONSTRUCTION_TASK:
-        try:
-            response = orchestration_engine.trigger_task(task_id)
-            return {"status": "success", "data": response}
-        except Exception as e:
-            logging.error(f"Failed to trigger task: {e}")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        backgroundTasks.add_task(simulate_reconstruction_task, task, headers)
+        return {"status": "success", "data": "ok"}
+
+        # try:
+        #     response = orchestration_engine.trigger_task(task_id)
+        #     return {"status": "success", "data": response}
+        # except Exception as e:
+        #     logging.error(f"Failed to trigger task: {e}")
+        #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     else:
         raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
