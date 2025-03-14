@@ -270,6 +270,10 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
 
 
+   .. py:attribute:: progress
+      :type:  sqlalchemy.orm.Mapped[int]
+
+
    .. py:attribute:: is_template
       :type:  sqlalchemy.orm.Mapped[bool]
 
