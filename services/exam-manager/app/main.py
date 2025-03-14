@@ -159,15 +159,23 @@ async def get_dicom(result_id: UUID | str) -> FileResponse:
         message = f"Could not find result with ID {result_id}."
         raise HTTPException(status_code=404, detail=message)
 
-    filename = result.filename if result.filename.endswith(".dcm") else result.filename + ".dcm"
-    file_path = os.path.join(result.directory, filename)
-    print("Loading dicom from: ", file_path)
+    if result.filename == "pd":
+        print("Return file at filepath:", "/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm")
+        print("os.path.exists:", os.path.exists("/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm"))
+        return FileResponse("/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm", media_type="application/dicom")
+    if result.filename == "t2":
+        return FileResponse("/app/data_lake/dcm_data/t2-series-2/ScalarVolume_10/IMG0033.dcm", media_type="application/dicom")
+    message = f"Could not find DICOM file of result with ID: {result_id}."
+    raise HTTPException(status_code=404, detail=message)
+    # filename = result.filename if result.filename.endswith(".dcm") else result.filename + ".dcm"
+    # file_path = os.path.join(result.directory, filename)
+    # print("Loading dicom from: ", file_path)
 
-    if not os.path.exists(file_path):
-        message = f"Could not find DICOM file of result with ID: {result_id}."
-        raise HTTPException(status_code=404, detail=message)
+    # if not os.path.exists(file_path):
+    #     message = f"Could not find DICOM file of result with ID: {result_id}."
+    #     raise HTTPException(status_code=404, detail=message)
 
-    return FileResponse(file_path, media_type="application/dicom")
+    # return FileResponse(file_path, media_type="application/dicom")
 
 
 app.include_router(exam_router, prefix="/api/v1/exam")

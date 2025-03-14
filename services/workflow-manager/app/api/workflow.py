@@ -27,6 +27,8 @@ from scanhub_libraries.models import (
     TaskOut,
     TaskType,
     WorkflowOut,
+    BaseResult,
+    ResultType
 )
 from scanhub_libraries.security import get_current_user
 
@@ -68,14 +70,25 @@ async def hello_world() -> dict[str, str]:
 
 def simulate_reconstruction_task(task, headers):
     print('Simulate reconstruction task.')
-    for percentage in [25, 50, 75, 100]:
+    for percentage in [25, 50, 75]:
         time.sleep(2)
         task.progress = percentage
-        if percentage == 100:
-            task.status = ItemStatus.FINISHED
         requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
                     data=json.dumps(task, default=jsonable_encoder),
                     headers=headers)
+    time.sleep(2)
+    result = BaseResult(task_id=task.id,
+                        type=ResultType.DICOM,
+                        status=ItemStatus.NEW,
+                        filename=task.args["contrast"])
+    requests.post(f"http://{EXAM_MANAGER_URI}/api/v1/exam/result",
+                  data=json.dumps(result, default=jsonable_encoder),
+                  headers=headers)
+    task.status = ItemStatus.FINISHED
+    task.progress = 100
+    requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
+                data=json.dumps(task, default=jsonable_encoder),
+                headers=headers)
 
 
 @router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
