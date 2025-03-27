@@ -15,10 +15,9 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
-   /autoapi/exam-manager/app/api/index
    /autoapi/exam-manager/app/dal/index
    /autoapi/exam-manager/app/db/index
-   /autoapi/exam-manager/app/helper/index
+   /autoapi/exam-manager/app/exam/index
    /autoapi/exam-manager/app/main/index
 
 

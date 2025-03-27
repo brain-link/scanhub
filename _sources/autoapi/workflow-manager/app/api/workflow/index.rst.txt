@@ -19,8 +19,6 @@ Attributes
    workflow-manager.app.api.workflow.orchestration_engine
    workflow-manager.app.api.workflow.SEQUENCE_MANAGER_URI
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
-   workflow-manager.app.api.workflow.PATIENT_MANAGER_URI
-   workflow-manager.app.api.workflow.DEVICE_MANAGER_URI
    workflow-manager.app.api.workflow.data_lake_directory
    workflow-manager.app.api.workflow.workflows
 
@@ -31,10 +29,7 @@ Functions
 .. autoapisummary::
 
    workflow-manager.app.api.workflow.hello_world
-   workflow-manager.app.api.workflow.simulate_reconstruction_task
    workflow-manager.app.api.workflow.trigger_task
-   workflow-manager.app.api.workflow.calculate_age
-   workflow-manager.app.api.workflow.start_scan
    workflow-manager.app.api.workflow.list_available_tasks
    workflow-manager.app.api.workflow.process
    workflow-manager.app.api.workflow.handle_device_task
@@ -52,19 +47,11 @@ Module Contents
 .. py:data:: orchestration_engine
 
 .. py:data:: SEQUENCE_MANAGER_URI
-   :value: 'sequence-manager:8000'
+   :value: 'host.docker.internal:8003'
 
 
 .. py:data:: EXAM_MANAGER_URI
-   :value: 'exam-manager:8000'
-
-
-.. py:data:: PATIENT_MANAGER_URI
-   :value: 'patient-manager:8100'
-
-
-.. py:data:: DEVICE_MANAGER_URI
-   :value: 'device-manager:8000'
+   :value: 'host.docker.internal:8004'
 
 
 .. py:data:: data_lake_directory
@@ -79,9 +66,7 @@ Module Contents
    Hello world endpoint.
 
 
-.. py:function:: simulate_reconstruction_task(task, headers)
-
-.. py:function:: trigger_task(task_id: str, backgroundTasks: fastapi.BackgroundTasks, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
+.. py:function:: trigger_task(task_id: str) -> dict[str, Any]
    :async:
 
 
@@ -93,48 +78,6 @@ Module Contents
    Returns
    -------
        dict: A dictionary containing the response from the orchestration engine.
-
-
-.. py:function:: calculate_age(birth_date)
-
-   Calculate age in years from birth date.
-
-   Parameters
-   ----------
-   birth_date
-       date of birth as datetime.date object
-
-   Returns
-   -------
-       Age in years as integer
-
-
-.. py:function:: start_scan(task_type: str, device_id: str, sequence_id: str, record_id: str, acquisition_limits: scanhub_libraries.models.AcquisitionLimits, sequence_parameters: scanhub_libraries.models.SequenceParameters, access_token: str)
-   :async:
-
-
-   Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK.
-
-   Parameters
-   ----------
-   task_type
-       the type of the task to be started, must be one of DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK
-   device_id
-       the id of the device to start the task on
-   sequence_id
-       the id of the sequence to start
-   record_id
-       the record id
-   acquisition_limits
-       the acquisition limits as defined in the pydantic model
-   sequence_parameters
-       the sequence parameters
-   access_token
-       the access token of the current user
-
-   Raises
-   ------
-       HttpException if something goes wrong.
 
 
 .. py:function:: list_available_tasks()
