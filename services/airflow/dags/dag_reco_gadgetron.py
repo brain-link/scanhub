@@ -110,7 +110,7 @@ with DAG(
 
             gadgetron_reco = subprocess.run(
                 ["docker", "exec", "gadgetron", "bash", "-c",
-                "source /opt/conda/bin/activate gadgetron && gadgetron_ismrmrd_client -v -f /data/upload/dag_reco_gadgetron/data_ismrmrd_t2.h5 -c /data/temp/dag_process_uploaded_file/davids_t2_tse.si/3d-tse_t2.reco.gadgetron.xml -o /data/results/data_ismrmrd_t2.dcm"],
+                "source /opt/conda/bin/activate gadgetron && gadgetron_ismrmrd_client -v -f /data/upload/dag_reco_gadgetron/data_ismrmrd_t2.h5 -C /data/temp/dag_process_uploaded_file/davids_t2_tse.si/3d-tse_t2.reco.gadgetron.xml -o /data/results/data_ismrmrd_t2.dcm"],
                 capture_output=True, text=True, check=True
             )
 
