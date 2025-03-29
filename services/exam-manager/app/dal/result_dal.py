@@ -45,7 +45,7 @@ async def get_result_db(result_id: UUID) -> Result | None:
         Database orm model with data of requested result
     """
     async with async_session() as session:
-        return await session.get(Result, resuld_id)
+        return await session.get(Result, result_id)
 
 async def get_all_results_db(task_id: UUID) -> list[Result]:
     """Get a list of all results assigned to a certain task.
