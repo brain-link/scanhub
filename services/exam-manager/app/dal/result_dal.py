@@ -32,7 +32,7 @@ async def add_result_db(payload: BaseResult) -> Result:
     return new_result
 
 
-async def get_result_db(resuld_id: UUID) -> Result | None:
+async def get_result_db(result_id: UUID) -> Result | None:
     """Get result by id.
 
     Parameters
