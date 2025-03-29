@@ -1,0 +1,172 @@
+exam-manager.app.api.workflow_api
+=================================
+
+.. py:module:: exam-manager.app.api.workflow_api
+
+.. autoapi-nested-parse::
+
+   Definition of exam API endpoints accessible through swagger UI.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   exam-manager.app.api.workflow_api.workflow_router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.api.workflow_api.create_workflow
+   exam-manager.app.api.workflow_api.create_workflow_from_template
+   exam-manager.app.api.workflow_api.get_workflow
+   exam-manager.app.api.workflow_api.get_all_exam_workflows
+   exam-manager.app.api.workflow_api.get_all_workflow_templates
+   exam-manager.app.api.workflow_api.delete_workflow
+   exam-manager.app.api.workflow_api.update_workflow
+
+
+Module Contents
+---------------
+
+.. py:data:: workflow_router
+
+.. py:function:: create_workflow(payload: scanhub_libraries.models.BaseWorkflow, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
+   :async:
+
+
+   Create new workflow.
+
+   Parameters
+   ----------
+   payload
+       Workflow pydantic input model
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Creation unsuccessful
+
+
+.. py:function:: create_workflow_from_template(exam_id: uuid.UUID, template_id: uuid.UUID, new_workflow_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
+   :async:
+
+
+   Create new workflow from template.
+
+   Parameters
+   ----------
+   exam_id
+       Id of the exam, the workflow is related to
+   template_id
+       ID of the template, the workflow is created from
+   new_workflow_is_template
+       set the is_template property of the new workflow and its tasks
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Creation unsuccessful
+
+
+.. py:function:: get_workflow(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
+   :async:
+
+
+   Get a workflow.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow to be returned
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: get_all_exam_workflows(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.WorkflowOut]
+   :async:
+
+
+   Get all existing workflows of a certain exam.
+
+   Parameters
+   ----------
+   exam_id
+       Id of parent exam
+
+   Returns
+   -------
+       List of workflow pydantic output model
+
+
+.. py:function:: get_all_workflow_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.WorkflowOut]
+   :async:
+
+
+   Get all workflow templates.
+
+   Returns
+   -------
+       List of workflow pydantic output model
+
+
+.. py:function:: delete_workflow(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
+
+
+   Delete a workflow. Cascade delete the associated tasks.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow to be deleted
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+
+.. py:function:: update_workflow(workflow_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseWorkflow, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.WorkflowOut
+   :async:
+
+
+   Update an existing workflow.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the workflow to be updated
+   payload
+       Workflow pydantic indput model
+
+   Returns
+   -------
+       Workflow pydantic output model
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
+
+

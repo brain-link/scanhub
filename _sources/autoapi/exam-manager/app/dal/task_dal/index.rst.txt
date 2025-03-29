@@ -1,0 +1,127 @@
+exam-manager.app.dal.task_dal
+=============================
+
+.. py:module:: exam-manager.app.dal.task_dal
+
+.. autoapi-nested-parse::
+
+   Data acess layer (DAL) between fastapi endpoint and sql database.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.dal.task_dal.add_task_data
+   exam-manager.app.dal.task_dal.get_task_data
+   exam-manager.app.dal.task_dal.get_all_task_data
+   exam-manager.app.dal.task_dal.get_all_task_template_data
+   exam-manager.app.dal.task_dal.delete_task_data
+   exam-manager.app.dal.task_dal.update_task_data
+
+
+Module Contents
+---------------
+
+.. py:function:: add_task_data(payload: scanhub_libraries.models.BaseTask, creator) -> app.db.Task
+   :async:
+
+
+   Add new task to database.
+
+   Parameters
+   ----------
+   payload
+       Task pydantic base model
+   creator
+       The username/id of the user who creats this task
+
+   Returns
+   -------
+       Database orm model of created task
+
+
+.. py:function:: get_task_data(task_id: uuid.UUID) -> app.db.Task | None
+   :async:
+
+
+   Get task by id.
+
+   Parameters
+   ----------
+   task_id
+       Id of the requested task
+
+   Returns
+   -------
+       Database orm model with data of requested task
+
+
+.. py:function:: get_all_task_data(workflow_id: uuid.UUID) -> list[app.db.Task]
+   :async:
+
+
+   Get a list of all tasks assigned to a certain workflow.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the parent workflow entry, tasks are assigned to
+
+   Returns
+   -------
+       List of task data base orm models
+
+
+.. py:function:: get_all_task_template_data() -> list[app.db.Task]
+   :async:
+
+
+   Get a list of all tasks assigned to a certain workflow.
+
+   Parameters
+   ----------
+   workflow_id
+       Id of the parent workflow entry, tasks are assigned to
+
+   Returns
+   -------
+       List of task data base orm models
+
+
+.. py:function:: delete_task_data(task_id: uuid.UUID) -> bool
+   :async:
+
+
+   Delete task by id.
+
+   Parameters
+   ----------
+   task_id
+       Id of the task to be deleted
+
+   Returns
+   -------
+       Success of deletion
+
+
+.. py:function:: update_task_data(task_id: uuid.UUID, payload: scanhub_libraries.models.BaseTask) -> app.db.Task | None
+   :async:
+
+
+   Update existing task in database.
+
+   Parameters
+   ----------
+   task_id
+       Id of the task to be updateed
+   payload
+       Task pydantic base model with data to be updated
+
+   Returns
+   -------
+       Database orm model of updated task
+
+
