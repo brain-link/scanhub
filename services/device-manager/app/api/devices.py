@@ -244,7 +244,8 @@ Device ID does not match'})
                     user_access_token = str(message.get('user_access_token'))
                     headers = {"Authorization": "Bearer " + user_access_token}
                     get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}",
-                                                     headers=headers)
+                                                     headers=headers,
+                                                     timeout=3)
                     print("Get task, status_code:", get_task_response.status_code)
                     if get_task_response.status_code != 200:
                         await websocket.send_json({'message': 'Invalild record id for update_status scanning.'})
@@ -256,7 +257,8 @@ Device ID does not match'})
                     task.progress = data['progress']
                     put_task_response = requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{record_id}",
                                                      data=json.dumps(task, default=jsonable_encoder),
-                                                     headers=headers)
+                                                     headers=headers,
+                                                     timeout=3)
                     if put_task_response.status_code != 200:
                         await websocket.send_json({'message': 'Error at updating task status in DB.'})
 

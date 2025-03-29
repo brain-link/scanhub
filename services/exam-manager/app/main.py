@@ -162,9 +162,11 @@ async def get_dicom(result_id: UUID | str) -> FileResponse:
     if result.filename == "pd":
         print("Return file at filepath:", "/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm")
         print("os.path.exists:", os.path.exists("/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm"))
-        return FileResponse("/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm", media_type="application/dicom")
+        return FileResponse("/app/data_lake/dcm_data/pd-series-2/ScalarVolume_12/IMG0033.dcm",
+                            media_type="application/dicom")
     if result.filename == "t2":
-        return FileResponse("/app/data_lake/dcm_data/t2-series-2/ScalarVolume_10/IMG0033.dcm", media_type="application/dicom")
+        return FileResponse("/app/data_lake/dcm_data/t2-series-2/ScalarVolume_10/IMG0033.dcm",
+                            media_type="application/dicom")
     message = f"Could not find DICOM file of result with ID: {result_id}."
     raise HTTPException(status_code=404, detail=message)
     # filename = result.filename if result.filename.endswith(".dcm") else result.filename + ".dcm"

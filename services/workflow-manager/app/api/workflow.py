@@ -4,31 +4,31 @@
 """Workflow manager endpoints."""
 import datetime
 import json
-import time
 import logging
 import operator
 import os
+import time
 from typing import Annotated, Any, Dict
 from uuid import UUID
 
 import requests
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
     AcquisitionLimits,
+    BaseResult,
     Commands,
     DeviceTask,
     ExamOut,
     ItemStatus,
     ParametrizedSequence,
     PatientOut,
+    ResultType,
     SequenceParameters,
     TaskOut,
     TaskType,
     WorkflowOut,
-    BaseResult,
-    ResultType
 )
 from scanhub_libraries.security import get_current_user
 
@@ -69,13 +69,22 @@ async def hello_world() -> dict[str, str]:
 
 
 def simulate_reconstruction_task(task, headers):
+    """
+    Simulate reconstruction task by updating the task progress and finally creating a result for the task.
+
+    Args:
+        task (Task): The task to simulate and that gets updated in the database when (virtual) progress is made.
+                     The attribute task.args["contrast"] is expected to be present and will be set as the results filename attribute.
+        headers (dict): The headers for calls to the exam-manager.
+    """
     print('Simulate reconstruction task.')
     for percentage in [25, 50, 75]:
         time.sleep(2)
         task.progress = percentage
         requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
                     data=json.dumps(task, default=jsonable_encoder),
-                    headers=headers)
+                    headers=headers,
+                    timeout=3)
     time.sleep(2)
     result = BaseResult(task_id=task.id,
                         type=ResultType.DICOM,
@@ -83,17 +92,19 @@ def simulate_reconstruction_task(task, headers):
                         filename=task.args["contrast"])
     requests.post(f"http://{EXAM_MANAGER_URI}/api/v1/exam/result",
                   data=json.dumps(result, default=jsonable_encoder),
-                  headers=headers)
+                  headers=headers,
+                  timeout=3)
     task.status = ItemStatus.FINISHED
     task.progress = 100
     requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
                 data=json.dumps(task, default=jsonable_encoder),
-                headers=headers)
+                headers=headers,
+                timeout=3)
 
 
 @router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
 async def trigger_task(task_id: str,
-                       backgroundTasks: BackgroundTasks,
+                       background_tasks: BackgroundTasks,
                        access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
     """
     Endpoint to trigger a task in the orchestration engine.
@@ -108,7 +119,7 @@ async def trigger_task(task_id: str,
     print(f"Triggering task: {task_id}")
 
     headers = {"Authorization": "Bearer " + access_token}
-    get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task_id}", headers=headers)
+    get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task_id}", headers=headers, timeout=3)
     if get_task_response.status_code != 200:
         raise HTTPException(status_code=get_task_response.status_code, detail="Failed to fetch task with id=" + str(task_id))
     task_raw = get_task_response.json()
@@ -136,7 +147,7 @@ async def trigger_task(task_id: str,
     print("    datetime_updated:", task.datetime_updated)
     print()
 
-    get_workflow_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{task.workflow_id}", headers=headers)
+    get_workflow_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{task.workflow_id}", headers=headers, timeout=3)
     if get_workflow_response.status_code != 200:
         raise HTTPException(status_code=get_workflow_response.status_code, detail="Failed to fetch workflow with id=" + str(task.workflow_id))
     workflow_raw = get_workflow_response.json()
@@ -155,7 +166,7 @@ async def trigger_task(task_id: str,
     print()
     # print workflow.tasks
 
-    get_exam_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/{workflow.exam_id}", headers=headers)
+    get_exam_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/{workflow.exam_id}", headers=headers, timeout=3)
     if get_exam_response.status_code != 200:
         raise HTTPException(status_code=get_exam_response.status_code, detail="Failed to fetch exam with id=" + str(workflow.exam_id))
     exam_raw = get_exam_response.json()
@@ -177,7 +188,7 @@ async def trigger_task(task_id: str,
     print()
     # print exam.workflows
 
-    get_patient_response = requests.get(f"http://{PATIENT_MANAGER_URI}/api/v1/patient/{exam.patient_id}", headers=headers)
+    get_patient_response = requests.get(f"http://{PATIENT_MANAGER_URI}/api/v1/patient/{exam.patient_id}", headers=headers, timeout=3)
     if get_patient_response.status_code != 200:
         raise HTTPException(status_code=get_patient_response.status_code, detail="Failed to fetch patient with id=" + str(exam.patient_id))
     patient_raw = get_patient_response.json()
@@ -198,25 +209,26 @@ async def trigger_task(task_id: str,
     task.status = ItemStatus.STARTED
     requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
                  data=json.dumps(task, default=jsonable_encoder),
-                 headers=headers)
+                 headers=headers,
+                 timeout=3)
     # could check response type here, but may be optional
 
     if task.type == TaskType.DEVICE_TASK_SDK:
-        response = await start_scan(task_type=task.type,
-                           device_id=task.args["device_id"],
-                           sequence_id=task.args["sequence_id"],
-                           record_id=task.id,
-                           acquisition_limits={
-                               "patient_height": exam.patient_height_cm,
-                               "patient_weight": exam.patient_weight_kg,
-                               "patient_gender": patient.sex,
-                               "patient_age": calculate_age(patient.birth_date),
-                           },
-                           sequence_parameters=json.loads(task.args["sequence_parameters"]),
-                           access_token=access_token)
+        await start_scan(task_type=task.type,
+                         device_id=task.args["device_id"],
+                         sequence_id=task.args["sequence_id"],
+                         record_id=task.id,
+                         acquisition_limits={
+                             "patient_height": exam.patient_height_cm,
+                             "patient_weight": exam.patient_weight_kg,
+                             "patient_gender": patient.sex,
+                             "patient_age": calculate_age(patient.birth_date),
+                         },
+                         sequence_parameters=json.loads(task.args["sequence_parameters"]),
+                         access_token=access_token)
         return {"status": "success", "data": "ok"}
     elif task.type == TaskType.RECONSTRUCTION_TASK:
-        backgroundTasks.add_task(simulate_reconstruction_task, task, headers)
+        background_tasks.add_task(simulate_reconstruction_task, task, headers)
         return {"status": "success", "data": "ok"}
 
         # try:
@@ -281,7 +293,8 @@ async def start_scan(task_type: str,
     headers = {"Authorization": "Bearer " + access_token}
 
     get_sequence_response = requests.get(f"http://{SEQUENCE_MANAGER_URI}/api/v1/mri/sequences/{sequence_id}",
-                                         headers=headers)
+                                         headers=headers,
+                                         timeout=3)
     if get_sequence_response.status_code != 200:
         raise HTTPException(status_code=400, detail="Could not retreive sequence for sequence_id:" + str(sequence_id))
     sequence_json = get_sequence_response.json()
@@ -317,7 +330,7 @@ async def start_scan(task_type: str,
     print("Post device task. URL:", url)
     device_task_string = json.dumps(device_task, default=jsonable_encoder)
     print("Post device task: device_task_string:", device_task_string)
-    response = requests.post(url, data=device_task_string, headers=headers)
+    response = requests.post(url, data=device_task_string, headers=headers, timeout=3)
 
     if response.status_code != 200:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error at starting device task.")
@@ -361,7 +374,7 @@ async def process(workflow_id: UUID | str) -> dict[str, str]:
     # URI for the exam manager service
     exam_manager_uri = EXAM_MANAGER_URI
     # Fetch the workflow data from the exam manager service
-    response = requests.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}")
+    response = requests.get(f"http://{exam_manager_uri}/api/v1/exam/workflow/{workflow_id}", timeout=3)
     # Raise an exception if the request was not successful
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="Failed to fetch workflow data")

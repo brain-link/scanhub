@@ -26,7 +26,6 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import DicomViewerToolbar from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
 import { TaskOut, ItemStatus, TaskType } from '../generated-client/exam'
-import { Task } from '@mui/icons-material'
 
 
 initCornerstone()  // initialize cornerstone before first render cycle
