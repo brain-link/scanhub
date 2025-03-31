@@ -10,7 +10,7 @@ from scanhub_libraries.models import BaseExam
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from app.db import (
+from app.db.postgres import (
     Exam,
     async_session,
 )

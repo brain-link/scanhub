@@ -24,6 +24,10 @@ psycopg2-binary = "^2.9.6"
 python-multipart = "^0.0.6"
 async-sqlalchemy = "^1.0.0"
 types-requests = "^2.32.0.20241016"
+plotly = "^6.0.1"
+pypulseq = "^1.4.2.post1"
+motor = "^3.7.0"
+motor-types = "^1.0.0b4"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"

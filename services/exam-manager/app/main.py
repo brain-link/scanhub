@@ -3,7 +3,6 @@
 
 """Exam manager main file."""
 
-
 import os
 from uuid import UUID
 
@@ -19,11 +18,13 @@ from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.exam_api import exam_router
+from app.api.mri_sequence_api import seq_router
 from app.api.result_api import result_router
 from app.api.task_api import task_router
 from app.api.workflow_api import workflow_router
 from app.dal import result_dal
-from app.db import engine, init_db
+from app.db.mongodb import close_mongo_connection, connect_to_mongo, db
+from app.db.postgres import engine, init_db
 
 from . import LOG_CALL_DELIMITER
 
@@ -93,12 +94,18 @@ async def startup():
             status_code=500,
             detail="SQL-DB: Device table is required but does not exist.",
         )
+    print("Initializing postgres db...")
     init_db()
+    print("Connecting to mongodb...")
+    await connect_to_mongo()
+    
 
 
 @app.on_event("shutdown")
 async def shutdown() -> None:
     """Shutdown function."""
+    print("Closing mongodb connection...")
+    await close_mongo_connection()
     return None
 
 
@@ -123,6 +130,10 @@ async def readiness() -> dict:
 
     if not all(t in existing_tables for t in required_tables):
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
+    
+    # Check mongo db status
+    if db.collection is None:
+        raise HTTPException(status_code=503, detail=f"Database not connected: {str(db.collection)}")
 
     return {"status": "ok"}
 
@@ -182,3 +193,4 @@ app.include_router(exam_router, prefix="/api/v1/exam")
 app.include_router(workflow_router, prefix="/api/v1/exam")
 app.include_router(task_router, prefix="/api/v1/exam")
 app.include_router(result_router, prefix="/api/v1/exam")
+app.include_router(seq_router, prefix="/api/v1/exam")

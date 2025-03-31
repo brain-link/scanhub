@@ -2,7 +2,7 @@
 
 from scanhub_libraries.models import ExamOut, ResultOut, TaskOut, WorkflowOut
 
-from app.db import Exam, Task, Workflow
+from app.db.postgres import Exam, Task, Workflow
 
 
 async def get_exam_out_model(data: Exam) -> ExamOut:

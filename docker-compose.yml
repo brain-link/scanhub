@@ -106,8 +106,16 @@ services:
       - ./services/exam-manager/app/:/app/
       - data_lake:/app/data_lake/
     environment:
+      # postgres database
       - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
       - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
+      # mongo database
+      - MONGODB_USER=root
+      - MONGODB_PASSWORD=example
+      - MONGODB_HOST=sequence-database
+      - MONGODB_PORT=27017
+      - MONGODB_DB=mri_sequences_db
+      - MONGODB_COLLECTION_NAME=mri_sequences
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -174,28 +182,34 @@ services:
 
 
   # MRI Sequence Service
-  sequence-manager:
-    container_name: sequence-manager
-    build: 
-      context: ./services/mri/sequence-manager
-      args: 
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./services/mri/sequence-manager/app/:/app/
-      - data_lake:/app/data_lake/
-    healthcheck:
-      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: ["CMD", "curl", "http://sequence-manager:8000/api/v1/mri/sequences/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      sequence-database:
-        condition: service_healthy
-    secrets:
-      - sequence_database_root_username
-      - sequence_database_root_password
+  # sequence-manager:
+  #   container_name: sequence-manager
+  #   build: 
+  #     context: ./services/mri/sequence-manager
+  #     args: 
+  #       - BASE_IMG=${SCANHUB_BASE_IMAGE}
+  #   command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+  #   volumes:
+  #     - ./services/mri/sequence-manager/app/:/app/
+  #     - data_lake:/app/data_lake/
+  #   ports:
+  #     - 8003:8000
+  #   environment:
+  #     - MONGODB_USER=root
+  #     - MONGODB_PASSWORD=example
+  #     - MONGODB_HOST=sequence-database
+  #     - MONGODB_PORT=27017
+  #     - MONGODB_DB=mri_sequences_db
+  #     - MONGODB_COLLECTION_NAME=mri_sequences
+  #   healthcheck:
+  #     # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
+  #     test: ["CMD", "curl", "http://sequence-manager:8000/api/v1/mri/sequences/health"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+  #   depends_on:
+  #     sequence-database:
+  #       condition: service_healthy
 
 
   # Airflow services
@@ -404,8 +418,8 @@ services:
         condition: service_healthy
       exam-manager: 
         condition: service_healthy
-      sequence-manager:
-        condition: service_started
+      # sequence-manager:
+      #   condition: service_started
       patient-manager:
         condition: service_healthy
       user-login-manager:

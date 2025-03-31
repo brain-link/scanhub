@@ -10,7 +10,7 @@ from scanhub_libraries.models import BaseWorkflow
 from sqlalchemy.engine import Result as SQLResult
 from sqlalchemy.future import select
 
-from app.db import Workflow, async_session
+from app.db.postgres import Workflow, async_session
 
 
 async def add_workflow_data(payload: BaseWorkflow, creator: str) -> Workflow:

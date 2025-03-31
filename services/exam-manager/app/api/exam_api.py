@@ -17,7 +17,7 @@ from app.dal import exam_dal
 
 # from app.workflow_api import create_workflow_from_template
 # from app.db import Exam, Workflow
-from app.helper import get_exam_out_model
+from app.tools.helper import get_exam_out_model
 
 # Http status codes
 # 200 = Ok: GET, PUT

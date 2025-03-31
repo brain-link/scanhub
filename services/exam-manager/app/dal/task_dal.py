@@ -9,7 +9,7 @@ from scanhub_libraries.models import BaseTask
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from app.db import Task, async_session
+from app.db.postgres import Task, async_session
 
 
 async def add_task_data(payload: BaseTask, creator) -> Task:
