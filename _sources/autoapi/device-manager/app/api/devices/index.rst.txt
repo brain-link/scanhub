@@ -23,7 +23,6 @@ Attributes
 .. autoapisummary::
 
    device-manager.app.api.devices.router
-   device-manager.app.api.devices.EXAM_MANAGER_URI
    device-manager.app.api.devices.active_connections
    device-manager.app.api.devices.dict_id_websocket
 
@@ -47,10 +46,6 @@ Module Contents
 ---------------
 
 .. py:data:: router
-
-.. py:data:: EXAM_MANAGER_URI
-   :value: 'exam-manager:8000'
-
 
 .. py:data:: active_connections
    :type:  list[fastapi.WebSocket]
