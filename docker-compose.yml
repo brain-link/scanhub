@@ -30,13 +30,19 @@ x-airflow-common:
     - ./services/airflow/secrets:/opt/secrets
     - data_lake:/opt/airflow/data_lake
     - /var/run/docker.sock:/var/run/docker.sock
-  user: "0:0" # run as airflow root to be able to create files #"${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
     airflow-database:
       condition: service_healthy
 
 services:
+  init-data-lake:
+    image: busybox
+    command: ["chmod", "-R", "777", "/data"]
+    volumes:
+      - data_lake:/data
+    user: "0:0"
+    restart: no
 
   # SERVICES
   # Workflow manager, device manager and exam manager create data tables in postgres DB
@@ -218,6 +224,7 @@ services:
       - GADGETRON_PORT=9002
     restart: always
     depends_on:
+      - init-data-lake
       - scanhub-database
 
   # Airflow services
@@ -317,6 +324,8 @@ services:
     user: "0:0"
     volumes:
       - .:/sources
+    depends_on:
+      - init-data-lake
 
   # DATABASES
   # Airflow Postgres Database:
