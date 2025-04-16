@@ -19,7 +19,7 @@ export const patientManagerHealthApi = new PatientManagerHealthApi(undefined, ba
 export const examApi = new ExamsApi(undefined, baseUrls.examService)
 export const workflowsApi = new WorkflowsApi(undefined, baseUrls.examService)
 export const taskApi = new TasksApi(undefined, baseUrls.examService)
-export const resultApi = new ResultsApi(undefined, baseUrls.examService)
+// export const resultApi = new ResultsApi(undefined, baseUrls.examService)
 export const examManagerHealthApi = new ExamManagerHealthApi(undefined, baseUrls.examService)
 
 export const workflowManagerApi = new WorkflowManagerApi(undefined, baseUrls.workflowManagerService)

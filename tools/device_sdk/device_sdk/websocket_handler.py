@@ -10,7 +10,9 @@ Classes:
 
 import asyncio
 import logging
-import websockets
+from websockets.asyncio.client import connect
+from websockets.exceptions import InvalidURI, InvalidHandshake, InvalidStatus, ConnectionClosed
+
 
 class WebSocketHandler:
     """
@@ -20,10 +22,12 @@ class WebSocketHandler:
     Attributes:
         uri (str): The WebSocket server URI (device-manager) to connect to.
         websocket (websockets.WebSocketClientProtocol): The WebSocket connection object.
+        device_id (str): The device ID to send when opening the connection.
+        device_token (str): The device token to send when opening the connection.
         reconnect_delay (int): Delay in seconds before retrying connection upon failure.
         logger (logging.Logger): Logger instance for logging events.
     """
-    def __init__(self, uri, reconnect_delay=5):
+    def __init__(self, uri, device_id, device_token, reconnect_delay=5):
         """
         Initializes the WebSocketHandler instance.
 
@@ -34,6 +38,8 @@ class WebSocketHandler:
                                              Defaults to 5.
         """
         self.uri = uri
+        self.device_id = device_id
+        self.device_token = device_token
         self.websocket = None
         self.reconnect_delay = reconnect_delay
         self.logger = logging.getLogger(__name__)
@@ -47,22 +53,14 @@ class WebSocketHandler:
 
         Logs specific connection-related errors and retries accordingly.
         """
-        while True:
-            try:
-                self.websocket = await websockets.connect(self.uri)
-                self.logger.info("WebSocket connection established.")
-                break
-            except (websockets.exceptions.InvalidURI, websockets.exceptions.InvalidHandshake) as e:
-                self.logger.error("WebSocket connection error: %s. \
-                                  Check the URI or server configuration.", e)
-                break
-            except ConnectionError as e:
-                self.logger.error(
-                    "Failed to connect to WebSocket: %s. Retrying in %d seconds...",
-                    e,
-                    self.reconnect_delay,
-                )
-                await asyncio.sleep(self.reconnect_delay)
+        self.websocket = await connect(
+            self.uri,
+            additional_headers={
+                "device-id": self.device_id,
+                "device-token": self.device_token
+            }
+        )
+        self.logger.info("WebSocket connection established.")
 
     async def send_message(self, message):
         """
@@ -76,7 +74,7 @@ class WebSocketHandler:
         """
         try:
             await self.websocket.send(message)
-        except websockets.ConnectionClosed as e:
+        except ConnectionClosed as e:
             self.logger.error("Failed to send message, connection closed: %s", e)
             raise ConnectionError("Connection closed while trying to send a message.") from e
 
@@ -92,7 +90,7 @@ class WebSocketHandler:
         """
         try:
             return await self.websocket.recv()
-        except websockets.ConnectionClosed as e:
+        except ConnectionClosed as e:
             self.logger.error("Connection closed: %s", e)
             return None
 

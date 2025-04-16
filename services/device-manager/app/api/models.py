@@ -4,29 +4,49 @@
 """Pydantic models of device."""
 
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel  # noqa
 
 from api.db import Device
 
 
-class BaseDevice(BaseModel):
-    """Device pydantic base model."""
+class DeviceDetails(BaseModel):
+    """Device details pydantic model (to be sent by the device)."""
 
-    id: str
     name: str
     manufacturer: str
     modality: str
     status: str
-    site: str | None
+    site: str
     ip_address: str
 
 
-class DeviceOut(BaseDevice):
+class DeviceCreationRequest(BaseModel):
+    """Device registration request pydantic model (to be sent by user first adding the device to the platform)."""
+
+    title: str
+    description: str
+
+
+class DeviceOut(BaseModel):
     """Device pydantic output model."""
 
+    id: UUID
     datetime_created: datetime
     datetime_updated: datetime | None
+
+    # attributes from DeviceCreationRequest
+    title: str
+    description: str
+
+    # attributes from DeviceDetails
+    status: str
+    name: str | None
+    manufacturer: str | None
+    modality: str | None
+    site: str | None
+    ip_address: str | None
 
 
 async def get_device_out(data: Device) -> DeviceOut:
@@ -43,12 +63,16 @@ async def get_device_out(data: Device) -> DeviceOut:
     """
     return DeviceOut(
         id=data.id,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
+
         name=data.name,
         manufacturer=data.manufacturer,
         modality=data.modality,
         status=data.status,
         site=data.site,
         ip_address=data.ip_address,
-        datetime_created=data.datetime_created,
-        datetime_updated=data.datetime_updated,
+
+        title=data.title,
+        description=data.description
     )

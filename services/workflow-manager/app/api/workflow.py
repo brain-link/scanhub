@@ -215,7 +215,7 @@ async def trigger_task(task_id: str,
 
     if task.type == TaskType.DEVICE_TASK_SDK:
         await start_scan(task_type=task.type,
-                         device_id=task.args["device_id"],
+                         device_id=UUID(task.args["device_id"]),
                          sequence_id=task.args["sequence_id"],
                          record_id=task.id,
                          acquisition_limits={
@@ -261,7 +261,7 @@ def calculate_age(birth_date):
 
 
 async def start_scan(task_type: str,
-                     device_id: str,
+                     device_id: UUID,
                      sequence_id: str,
                      record_id: str,
                      acquisition_limits: AcquisitionLimits,

@@ -133,7 +133,7 @@ class MRISequenceCreate(BaseModel):
 class DeviceTask(BaseModel):
     """Pydantic model definition of a device workflow."""
 
-    device_id: str
+    device_id: UUID
     record_id: UUID
     command: Commands
     parametrized_sequence: ParametrizedSequence

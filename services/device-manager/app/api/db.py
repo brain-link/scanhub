@@ -5,6 +5,7 @@
 
 import datetime
 import os
+import uuid
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -31,21 +32,25 @@ class Device(Base):  # type: ignore
 
     __tablename__ = "device"
 
-    id: Mapped[str] = mapped_column(primary_key=True)
-
-    name: Mapped[str] = mapped_column(nullable=False)
-    manufacturer: Mapped[str] = mapped_column(nullable=False)
-    modality: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[str] = mapped_column(nullable=False)
-    site: Mapped[str] = mapped_column(nullable=True)
-    ip_address: Mapped[str] = mapped_column(nullable=False)
-
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
+
+    title: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    token_hash: Mapped[str] = mapped_column(nullable=False, unique=True)
+    salt: Mapped[str] = mapped_column(nullable=False)
+
+    status: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=True)
+    manufacturer: Mapped[str] = mapped_column(nullable=True)
+    modality: Mapped[str] = mapped_column(nullable=True)
+    site: Mapped[str] = mapped_column(nullable=True)
+    ip_address: Mapped[str] = mapped_column(nullable=True)
 
     def update(self, data: dict):
         """Update attributes of orm model.

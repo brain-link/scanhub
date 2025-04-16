@@ -4,15 +4,13 @@
 """Definition of the user management and login API endpoints (accessible through swagger UI)."""
 
 import time
-from hashlib import scrypt, sha256
 from secrets import compare_digest, token_hex
 from typing import Annotated, Optional
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
-from passlib.hash import argon2
 from scanhub_libraries.models import PasswordUpdateRequest, User, UserRole
-from scanhub_libraries.security import oauth2_scheme
+from scanhub_libraries.security import compute_complex_password_hash, oauth2_scheme
 
 from app import dal
 from app.db import UserSQL
@@ -107,30 +105,6 @@ async def get_current_user_admin(current_user: Annotated[User, Depends(get_curre
         detail="User is not admin.",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
-
-def compute_complex_password_hash(password: str, salt: str) -> str:
-    """
-    Compute a complex password hash with salt.
-
-    It should take quite a bit of computation to guard against brute force attacks.
-    """
-    start_time = time.time()
-    # plain sha256 hash from python standard library (not enough for brute force attack)
-    password_plain_hash = sha256(bytes(password, 'utf8')).hexdigest()
-    # scrypt from python standard library function (designed for password digestion)
-    password_scrypt_hash = scrypt(password=bytes(password_plain_hash, 'utf8'),
-                                  salt=bytes(salt, 'utf8'),
-                                  n=256, r=128, p=32)
-    # argon2 from passlib (recommended memory intensive password digest, current year is 2024)
-    password_argon2_hash = argon2.using(salt=bytes(salt, 'utf8')).hash(secret=password_scrypt_hash)
-    # another round of plain sha256 from python standard library, why not
-    password_final_hash = sha256(bytes(password_argon2_hash, 'utf-8')).hexdigest()
-    if (time.time() - start_time < 0.1):
-        print("WARNING: compute_complex_password_hash is faster than 0.1 sec, \
-              consider increasing the parameters to ensure security of password hashes.")
-    return password_final_hash
-
 
 
 @router.post("/loginfromcookie", tags=["login"])

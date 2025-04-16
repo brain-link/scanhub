@@ -6,9 +6,9 @@ import {  ReactNode } from 'react'
 import {  ItemStatus } from '../generated-client/exam'
 
 
-export interface SequenceViewerProps {
-  sequence_id: string
-}
+// export interface SequenceViewerProps {
+//   sequence_id: string
+// }
 
 export enum Alerts {
   Success = 'success',
