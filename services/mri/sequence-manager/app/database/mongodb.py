@@ -4,10 +4,9 @@
 """MongoDB database handle."""
 
 import logging
+import os
 
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
-
-from core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -37,18 +36,27 @@ async def connect_to_mongo():
     logger.info("Connecting to MongoDB...")
 
     # global db
+    mongodb_username_filepath = "/run/secrets/sequence_database_root_username"
+    mongodb_password_filepath = "/run/secrets/sequence_database_root_password"
+    if (os.path.exists(mongodb_username_filepath) and \
+        os.path.exists(mongodb_password_filepath)
+    ):
+        with open(mongodb_username_filepath) as file:
+            mongodb_username = file.readline().strip()
+        with open(mongodb_password_filepath) as file:
+            mongodb_password = file.readline().strip()
+        db_uri = f"mongodb://{mongodb_username}:{mongodb_password}@sequence-database:27017"
+        client: AsyncIOMotorClient = AsyncIOMotorClient(db_uri)
 
-    connection_string = f"mongodb://{settings.MONGODB_HOST}:{settings.MONGODB_PORT}"
+        if client_info := await client.server_info():
+            logger.info(client_info)
+        else:
+            logger.info("Unable to connect to the server.")
 
-    client: AsyncIOMotorClient = AsyncIOMotorClient(connection_string)
-
-    if client_info := await client.server_info():
-        logger.info(client_info)
+        db.client = client["mri_sequences_db"]
+        db.collection = client["mri_sequences_db"]["mri_sequences"]
     else:
-        logger.info("Unable to connect to the server.")
-
-    db.client = client[settings.MONGODB_DB]
-    db.collection = client[settings.MONGODB_DB][settings.MONGODB_COLLECTION_NAME]
+        raise RuntimeError("Database secrets for connection missing.")
 
 
 async def close_mongo_connection():

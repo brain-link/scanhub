@@ -8,6 +8,8 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    # TODO move the passwords contained here in a secret and
+    # load that secret at runtime instead of putting it in the environment variable here
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
     # For backward compatibility, with Airflow <2.3
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
@@ -52,11 +54,11 @@ services:
     ports:
       - 8001:8000
     environment:
-      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
       - ORCHESTRATION_ENGINE=AIRFLOW
       - KESTRA_API_URL=http://kestra:8080
       - AIRFLOW_API_URL=http://airflow-webserver:8080
+      # TODO move the username and password in a secret and
+      # load that secret at runtime instead of putting it in the environment variable here
       - AIRFLOW_USERNAME=airflow
       - AIRFLOW_PASSWORD=airflow
       - DATA_LAKE_DIRECTORY=/app/data_lake
@@ -82,9 +84,6 @@ services:
       - data_lake:/app/data_lake/
     ports:
       - 8002:8000
-    environment:
-      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://device-manager:8000/api/v1/device/health/readiness"]
@@ -94,6 +93,10 @@ services:
     depends_on:
       scanhub-database:
         condition: service_healthy
+    secrets:
+      - scanhub_database_postgres_user
+      - scanhub_database_postgres_password
+      - scanhub_database_postgres_db_name
 
   exam-manager:
     container_name: exam-manager
@@ -124,6 +127,10 @@ services:
         condition: service_healthy
       workflow-manager:
         condition: service_healthy
+    secrets:
+      - scanhub_database_postgres_user
+      - scanhub_database_postgres_password
+      - scanhub_database_postgres_db_name
 
   patient-manager:
     container_name: patient-manager
@@ -134,9 +141,6 @@ services:
     - ./services/patient-manager/app:/app/
     ports:
       - 8100:8100
-    environment:
-      - DB_URI=postgresql://brainlink:data@patient-database/patients-data
-      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:data@patient-database/patients-data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://patient-manager:8100/api/v1/patient/health/readiness"]
@@ -146,6 +150,10 @@ services:
     depends_on:
       patient-database:
         condition: service_healthy
+    secrets:
+      - patient_database_postgres_user
+      - patient_database_postgres_password
+      - patient_database_postgres_db_name
 
   user-login-manager:
     container_name: user-login-manager
@@ -160,9 +168,6 @@ services:
       - data_lake:/app/data_lake/
     ports:
       - 8005:8000
-    environment:
-      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://user-login-manager:8000/api/v1/userlogin/health/readiness"]
@@ -172,6 +177,10 @@ services:
     depends_on:
       scanhub-database:
         condition: service_healthy
+    secrets:
+      - scanhub_database_postgres_user
+      - scanhub_database_postgres_password
+      - scanhub_database_postgres_db_name
 
 
   # MRI Sequence Service
@@ -187,13 +196,6 @@ services:
       - data_lake:/app/data_lake/
     ports:
       - 8003:8000
-    environment:
-      - MONGODB_USER=root
-      - MONGODB_PASSWORD=example
-      - MONGODB_HOST=sequence-database
-      - MONGODB_PORT=27017
-      - MONGODB_DB=mri_sequences_db
-      - MONGODB_COLLECTION_NAME=mri_sequences
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://sequence-manager:8000/api/v1/mri/sequences/health"]
@@ -203,6 +205,9 @@ services:
     depends_on:
       sequence-database:
         condition: service_healthy
+    secrets:
+      - sequence_database_root_username
+      - sequence_database_root_password
 
 
   # Airflow services
@@ -292,6 +297,8 @@ services:
         chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins}
         exec /entrypoint airflow version
     # yamllint enable rule:line-length
+    # TODO move the username and password in a secret and
+    # load that secret at runtime instead of putting it in the environment variable here
     environment:
       <<: *airflow-common-env
       _AIRFLOW_DB_UPGRADE: 'true'
@@ -309,6 +316,8 @@ services:
     container_name: airflow-db
     image: postgres:15.2-bullseye
     environment:
+      # TODO move the username, password and db_name in a secret and
+      # load that secret at runtime instead of putting it in the environment variable here
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
@@ -330,9 +339,9 @@ services:
     volumes:
       - postgres_data_scanhub:/var/lib/postgresql/data/
     environment:
-      POSTGRES_USER: brainlink
-      POSTGRES_PASSWORD: 9ArU5*Sr
-      POSTGRES_DB: sh_db
+      POSTGRES_USER_FILE: /run/secrets/scanhub_database_postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/scanhub_database_postgres_password
+      POSTGRES_DB_FILE: /run/secrets/scanhub_database_postgres_db_name
     healthcheck:  
       # Workflow, device and exam microservices depend on healthy postgres database
       test: ["CMD-SHELL", "pg_isready"]
@@ -342,6 +351,10 @@ services:
       start_period: 5s 
     ports:
       - "5433:5432"
+    secrets:
+      - scanhub_database_postgres_user
+      - scanhub_database_postgres_password
+      - scanhub_database_postgres_db_name
 
   # Patient database
   patient-database:
@@ -351,9 +364,9 @@ services:
     volumes:
       - postgres_data_patient:/var/lib/postgresql/data/
     environment:
-      POSTGRES_USER: brainlink
-      POSTGRES_DB: patients-data
-      POSTGRES_PASSWORD: data
+      POSTGRES_USER_FILE: /run/secrets/patient_database_postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/patient_database_postgres_password
+      POSTGRES_DB_FILE: /run/secrets/patient_database_postgres_db_name
     ports:
       - "5432:5432"
     healthcheck:  
@@ -362,7 +375,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 5s 
+      start_period: 5s
+    secrets:
+      - patient_database_postgres_user
+      - patient_database_postgres_password
+      - patient_database_postgres_db_name
 
 
   # MRI Sequence mongo database: Contains (pulseq) mri sequence files
@@ -372,9 +389,9 @@ services:
     restart: always # unless-stopped
     volumes:
       - mongodb_data_sequence:/data/db
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: root
-    #   MONGO_INITDB_ROOT_PASSWORD: 9ArU5*Sr
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/sequence_database_root_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/sequence_database_root_password
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh sequence-database:27017/test --quiet
       interval: 5s
@@ -383,6 +400,9 @@ services:
       start_period: 20s
     ports:
       - "27017:27017"
+    secrets:
+      - sequence_database_root_username
+      - sequence_database_root_password
 
 
   # API Gateway
@@ -438,3 +458,22 @@ volumes:
   postgres_data_scanhub:
   postgres_data_patient:
   airflow-db-volume:
+
+
+secrets:
+  scanhub_database_postgres_user:
+    file: secrets/scanhub_database_postgres_user.txt
+  scanhub_database_postgres_password:
+    file: secrets/scanhub_database_postgres_password.txt
+  scanhub_database_postgres_db_name:
+    file: secrets/scanhub_database_postgres_db_name.txt
+  patient_database_postgres_user:
+    file: secrets/patient_database_postgres_user.txt
+  patient_database_postgres_password:
+    file: secrets/patient_database_postgres_password.txt
+  patient_database_postgres_db_name:
+    file: secrets/patient_database_postgres_db_name.txt
+  sequence_database_root_username:
+    file: secrets/sequence_database_root_username.txt
+  sequence_database_root_password:
+    file: secrets/sequence_database_root_password.txt

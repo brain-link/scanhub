@@ -340,7 +340,7 @@ export interface XYZ {
 export const DevicesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create device database entry. Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+         * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
          * @summary Create Device
          * @param {DeviceCreationRequest} deviceCreationRequest 
          * @param {*} [options] Override http request option.
@@ -540,7 +540,7 @@ export const DevicesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DevicesApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create device database entry. Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+         * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
          * @summary Create Device
          * @param {DeviceCreationRequest} deviceCreationRequest 
          * @param {*} [options] Override http request option.
@@ -614,7 +614,7 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DevicesApiFp(configuration)
     return {
         /**
-         * Create device database entry. Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+         * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
          * @summary Create Device
          * @param {DeviceCreationRequest} deviceCreationRequest 
          * @param {*} [options] Override http request option.
@@ -673,7 +673,7 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
  */
 export class DevicesApi extends BaseAPI {
     /**
-     * Create device database entry. Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+     * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
      * @summary Create Device
      * @param {DeviceCreationRequest} deviceCreationRequest 
      * @param {*} [options] Override http request option.
