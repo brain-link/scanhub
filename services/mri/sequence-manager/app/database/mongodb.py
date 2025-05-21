@@ -37,7 +37,7 @@ async def connect_to_mongo():
 
     # global db
     mongodb_username_filepath = "/run/secrets/sequence_database_root_username"
-    mongodb_password_filepath = "/run/secrets/sequence_database_root_password"
+    mongodb_password_filepath = "/run/secrets/sequence_database_root_password"  # noqa: S105
     if (os.path.exists(mongodb_username_filepath) and \
         os.path.exists(mongodb_password_filepath)
     ):

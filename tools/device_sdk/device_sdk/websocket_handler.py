@@ -10,6 +10,8 @@ Classes:
 
 import asyncio
 import logging
+import ssl
+
 from websockets.asyncio.client import connect
 from websockets.exceptions import InvalidURI, InvalidHandshake, InvalidStatus, ConnectionClosed
 
@@ -25,9 +27,10 @@ class WebSocketHandler:
         device_id (str): The device ID to send when opening the connection.
         device_token (str): The device token to send when opening the connection.
         reconnect_delay (int): Delay in seconds before retrying connection upon failure.
+        ca_file (str | None): Filepath to a ca_file to verify the server.
         logger (logging.Logger): Logger instance for logging events.
     """
-    def __init__(self, uri, device_id, device_token, reconnect_delay=5):
+    def __init__(self, uri, device_id, device_token, reconnect_delay=5, ca_file=None):
         """
         Initializes the WebSocketHandler instance.
 
@@ -42,6 +45,7 @@ class WebSocketHandler:
         self.device_token = device_token
         self.websocket = None
         self.reconnect_delay = reconnect_delay
+        self.ca_file = ca_file
         self.logger = logging.getLogger(__name__)
 
     async def connect(self):
@@ -58,7 +62,8 @@ class WebSocketHandler:
             additional_headers={
                 "device-id": self.device_id,
                 "device-token": self.device_token
-            }
+            },
+            ssl=ssl.create_default_context(cafile=self.ca_file)
         )
         self.logger.info("WebSocket connection established.")
 

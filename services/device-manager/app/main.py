@@ -21,9 +21,18 @@ app = FastAPI(
     docs_url="/api/v1/device/docs",
 )
 
+# To be done: Specify specific origins:
+#   Wildcard ["*"] excludes eeverything that involves credentials
+#   Better specify explicitly the allowed origins
+#   See: https://fastapi.tiangolo.com/tutorial/cors/
+origins = [
+    "http://localhost",       # frontend via nginx-proxy
+    "https://localhost",      # frontend via nginx-proxy
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

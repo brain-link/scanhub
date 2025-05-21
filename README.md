@@ -52,23 +52,23 @@ Make sure that there is an internet connection, then apply the following steps:
     cd services/base
     docker build -t scanhub-base .
     cd ../..
-    docker compose --profile with-frontend build --build-arg BASE_IMG=scanhub-base:latest
+    docker compose build --build-arg BASE_IMG=scanhub-base:latest
 
 The Scanhub containers are built using a base image. The above commands create this base image from the latest state of the code on the local computer. To alternatively use a base image from ghcr.io/brain-link/scanhub/scanhub-base:latest, you may run only:
 
-    docker compose --profile with-frontend build
+    docker compose build
 
 ### Starting Scanhub:
 
 Run:
 
-    docker compose --profile with-frontend up --detach
+    docker compose up --detach
 
 ### Stopping Scanhub:
 
 Run:
 
-    docker compose --profile with-frontend down
+    docker compose down
 
 ### Starting Scanhub and tools for development
 

@@ -17,7 +17,7 @@ Base: DeclarativeMeta = declarative_base()
 
 
 postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
-postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"
+postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
 postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
 if (os.path.exists(postgres_user_filepath) and \
     os.path.exists(postgres_password_filepath) and \

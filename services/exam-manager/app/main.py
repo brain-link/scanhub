@@ -32,10 +32,8 @@ from . import LOG_CALL_DELIMITER
 #   Better specify explicitly the allowed origins
 #   See: https://fastapi.tiangolo.com/tutorial/cors/
 ORIGINS = [
-    "http://localhost",
-    "http://localhost:3000",  # frontned
-    "http://localhost:8100",  # patient-manager
-    "http://localhost:8080",  # nginx
+    "http://localhost",       # frontend via nginx-proxy
+    "https://localhost",      # frontend via nginx-proxy
 ]
 
 
@@ -134,7 +132,7 @@ async def get_dicom(result_id: UUID | str) -> FileResponse:
 
     This endpoint in implemented in main without the result_router to omit the user authentification.
     The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend.
-    This is not to be done.
+    This is not to be done. TODO fix it!
 
     Parameters
     ----------

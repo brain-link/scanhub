@@ -36,7 +36,7 @@ class Client:
         logger (logging.Logger): Logger for the class.
     """
     def __init__(self, websocket_uri, device_id, device_token, name, manufacturer, modality, 
-                 status, site, ip_address, reconnect_delay=5):
+                 status, site, ip_address, reconnect_delay=5, ca_file=None):
         """
         Initializes the Client instance.
 
@@ -50,9 +50,10 @@ class Client:
             site (str): Device location.
             ip_address (str): Device IP address.
             reconnect_delay (int, optional): Delay in seconds for reconnect attempts. Defaults to 5.
+            ca_file (str | None): Filepath to a ca_file to verify the server.
         """
         self.websocket_uri = websocket_uri
-        self.websocket_handler = WebSocketHandler(websocket_uri, device_id, device_token)
+        self.websocket_handler = WebSocketHandler(websocket_uri, device_id, device_token, ca_file=ca_file)
         self.device_id = device_id  # Unique ID for the device
         self.device_token = device_token
         self.name = name
