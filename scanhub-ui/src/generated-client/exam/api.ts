@@ -1494,7 +1494,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
          * @summary Get Dicom
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -1708,7 +1708,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
          * @summary Get Dicom
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -1802,7 +1802,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
          * @summary Get Dicom
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -1890,7 +1890,7 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done.  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+     * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
      * @summary Get Dicom
      * @param {ResultId} resultId 
      * @param {*} [options] Override http request option.
