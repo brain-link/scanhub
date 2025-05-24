@@ -11,7 +11,8 @@ const baseUrls = {
   workflowManagerService: 'https://localhost',
   userloginService: 'https://localhost',
   deviceService: 'https://localhost',
-  sequenceService: 'https://localhost'
+  sequenceService: 'https://localhost',
+  nginxUrl: 'https://localhost'
 }
 
 export default baseUrls

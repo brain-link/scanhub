@@ -41,9 +41,9 @@ https://github.com/user-attachments/assets/da900b3b-e9b3-45bf-a6bb-85f69f3d5f73
 
 ## Installation + Start & Stop
 
-Scanhub is deployed using Docker and Docker Compose. Make sure they are installed. There exist multiple forms of the Docker Compose tool. The version used here should be callable with "docker compose" for the helper scripts to work. If you want to install tools for development of Scanhub on Linux (Ubuntu/Mint), you may use the install-tools.sh script.
+Scanhub is deployed using Docker and Docker Compose. Make sure they are installed. There are some optional helper scripts like development-launcher.sh in this repository. If you use them, note that there are different versions of Docker Compose that are either called with "docker-compose" or "docker compose" and the helper scripts use the second form. If you want to install tools for development of Scanhub on Linux (Ubuntu/Mint), you may use the install-tools.sh script.
 
-On the first installation, the Scanhub containers need to be built with Docker and Docker Compose. The containers also need to be built again after making certain changes during development, in particular after making changes to the base container, after installing libraries or when changing other structural aspects. When the containers are built, Scanhub can be started and stopped with Docker Compose.
+On the first installation of Scanhub, the Scanhub containers need to be built with Docker and Docker Compose. The containers also need to be built again after making certain changes during development, in particular after making changes to the base container, after installing libraries or when changing other structural aspects. When the containers are built, Scanhub can be started and stopped with Docker Compose.
 
 ### Building Scanhub:
 
@@ -58,17 +58,22 @@ The Scanhub containers are built using a base image. The above commands create t
 
     docker compose build
 
+
 ### Starting Scanhub:
 
 Run:
 
     docker compose up --detach
 
+Open your browser and navigate to the default address "localhost". By default Scanhub uses a self-signed https certificate that will cause a security warning by the browser. You may ignore this warning for localhost during development. For production deployment see section "Deployment".
+
+
 ### Stopping Scanhub:
 
 Run:
 
     docker compose down
+
 
 ### Starting Scanhub and tools for development
 
@@ -79,7 +84,38 @@ During development you may start scanhub and the tools for development using the
 
 ### Default Username and Password
 
-If there is no user in the database, the software will display a form in the web-interface to create the first user.
+If there is no user in the database, the software will display a form in the web-interface to create the first user. The password needs to have at least 12 characters.
+
+
+### Deployment
+
+Please mind the section about the "State of development".
+
+Deployment was not testet yet! The following list gives an indication about some of the steps needed to deploy scanhub productively:
+
+- Get a server (either on-site or in a datacenter/cloud)
+- Get a domain name (e.g. scanhub.yourinstitution.com)
+- Create a new private key (e.g. with openSSL). Keep this key private! Make sure not to commit it to the repository during development!
+- Replace the default private key in secrets/privatekey.pem with your new private key
+- Get a server certificate for your domain name (likely from the place where you got your domain name)
+- Replace the default certificate in secrets/certificate.pem with your new certificate
+- Change the default usernames and default passwords in all the configuration files in the folder secrets/
+- In infrastructure/nginx_config.conf put your domain name as server_name in place of localhost (line 5 and line 21)
+- In infrastructure/nginx_config.conf put your domain name in place of localhost as redirect target from http to https (line 8)
+- In scanhub-ui/src/utils/Urls.tsx put your domain name in place of localhost
+- In services/device-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- In services/exam-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- In services/mri/sequence-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- In services/patient-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- In services/user-login-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- In services/workflow-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- Build the Scanhub Containers as described in section "Installation + Start & Stop"
+- Set up a service to automatically start Scanhub when booting the system
+- Consider setting up monitoring of the servers resources etc.
+- Consider limiting the number of connections, configure multiple workers/servers, load-balancing, etc.
+- Consider removing the --reload option in the uvicorn commands in docker-compose.yml (6 occurances)
+- Check for memory leaks when running the application over several days, consider automatic reboots
+- Maybe put some development effort in the commented code in scanhub-ui/Dockerfile with the production flag
 
 
 ## Documentation

@@ -26,6 +26,7 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import DicomViewerToolbar from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
 import { TaskOut, ItemStatus, TaskType } from '../generated-client/exam'
+import baseUrls from '../utils/Urls'
 
 
 initCornerstone()  // initialize cornerstone before first render cycle
@@ -79,7 +80,7 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
 
   // const dicomImageId = 'wadouri:marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
   const resultId = task?.results?.length ? task?.results?.[task.results.length-1].id : ''
-  const dicomImageId = 'wadouri:https://localhost/api/v1/exam/dicom/' + resultId
+  const dicomImageId = 'wadouri:' + baseUrls.examService + '/api/v1/exam/dicom/' + resultId
   console.log('viewportData: ', dicomImageId)
 
   React.useEffect(() => {
