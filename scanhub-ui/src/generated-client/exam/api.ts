@@ -24,6 +24,337 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
+ * Pydantic definition of AcquisitionLimits.
+ * @export
+ * @interface AcquisitionLimits
+ */
+export interface AcquisitionLimits {
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_weight': number;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof AcquisitionLimits
+     */
+    'Gender'?: Gender;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionLimits
+     */
+    'patient_age': number;
+}
+
+
+/**
+ * Pydantic definition of acquisition parameters.
+ * @export
+ * @interface AcquisitionParameter
+ */
+export interface AcquisitionParameter {
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof AcquisitionParameter
+     */
+    'fov_scaling'?: XYZ;
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof AcquisitionParameter
+     */
+    'fov_offset'?: XYZ;
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof AcquisitionParameter
+     */
+    'fov_rotation'?: XYZ;
+}
+/**
+ * Acquisition Task output model.
+ * @export
+ * @interface AcquisitionTaskOut
+ */
+export interface AcquisitionTaskOut {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof AcquisitionTaskOut
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'description': string;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof AcquisitionTaskOut
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'destination': string;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof AcquisitionTaskOut
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionTaskOut
+     */
+    'progress': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AcquisitionTaskOut
+     */
+    'is_template': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'device_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'sequence_id': string;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof AcquisitionTaskOut
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof AcquisitionTaskOut
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'creator': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'datetime_created': string;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof AcquisitionTaskOut
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {Array<ResultOut>}
+     * @memberof AcquisitionTaskOut
+     */
+    'results': Array<ResultOut>;
+}
+
+
+/**
+ * Acquisition task model.
+ * @export
+ * @interface BaseAcquisitionTask
+ */
+export interface BaseAcquisitionTask {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof BaseAcquisitionTask
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseAcquisitionTask
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseAcquisitionTask
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseAcquisitionTask
+     */
+    'task_type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseAcquisitionTask
+     */
+    'destination': string;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof BaseAcquisitionTask
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {number}
+     * @memberof BaseAcquisitionTask
+     */
+    'progress': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BaseAcquisitionTask
+     */
+    'is_template': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseAcquisitionTask
+     */
+    'device_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseAcquisitionTask
+     */
+    'sequence_id': string;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof BaseAcquisitionTask
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof BaseAcquisitionTask
+     */
+    'acquisition_limits': AcquisitionLimits;
+}
+
+
+/**
+ * Workflow task model.
+ * @export
+ * @interface BaseDAGTask
+ */
+export interface BaseDAGTask {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof BaseDAGTask
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseDAGTask
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseDAGTask
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseDAGTask
+     */
+    'task_type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseDAGTask
+     */
+    'destination': string;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof BaseDAGTask
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {number}
+     * @memberof BaseDAGTask
+     */
+    'progress': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BaseDAGTask
+     */
+    'is_template': boolean;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof BaseDAGTask
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseDAGTask
+     */
+    'dag_id': string;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof BaseDAGTask
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof BaseDAGTask
+     */
+    'parameter'?: Parameter;
+}
+
+
+/**
  * Exam base model.
  * @export
  * @interface BaseExam
@@ -31,10 +362,10 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 export interface BaseExam {
     /**
      * 
-     * @type {string}
+     * @type {PatientId}
      * @memberof BaseExam
      */
-    'patient_id'?: string;
+    'patient_id'?: PatientId;
     /**
      * 
      * @type {string}
@@ -49,28 +380,28 @@ export interface BaseExam {
     'description': string;
     /**
      * 
-     * @type {string}
+     * @type {Indication}
      * @memberof BaseExam
      */
-    'indication'?: string;
+    'indication': Indication;
     /**
      * 
-     * @type {number}
+     * @type {PatientHeightCm}
      * @memberof BaseExam
      */
-    'patient_height_cm'?: number;
+    'patient_height_cm': PatientHeightCm;
     /**
      * 
-     * @type {number}
+     * @type {PatientWeightKg}
      * @memberof BaseExam
      */
-    'patient_weight_kg'?: number;
+    'patient_weight_kg': PatientWeightKg;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof BaseExam
      */
-    'comment'?: string;
+    'comment': Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -94,10 +425,10 @@ export interface BaseExam {
 export interface BaseResult {
     /**
      * 
-     * @type {string}
+     * @type {TaskId1}
      * @memberof BaseResult
      */
-    'task_id'?: string;
+    'task_id'?: TaskId1;
     /**
      * 
      * @type {ResultType}
@@ -132,81 +463,6 @@ export interface BaseResult {
 
 
 /**
- * Task model.
- * @export
- * @interface BaseTask
- */
-export interface BaseTask {
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseTask
-     */
-    'workflow_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseTask
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseTask
-     */
-    'description': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseTask
-     */
-    'comment'?: string;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof BaseTask
-     */
-    'type': TaskType;
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof BaseTask
-     */
-    'args': { [key: string]: string; };
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof BaseTask
-     */
-    'artifacts': { [key: string]: string; };
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof BaseTask
-     */
-    'destinations': { [key: string]: string; };
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof BaseTask
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {number}
-     * @memberof BaseTask
-     */
-    'progress': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseTask
-     */
-    'is_template': boolean;
-}
-
-
-/**
  * Workflow base model.
  * @export
  * @interface BaseWorkflow
@@ -214,10 +470,10 @@ export interface BaseTask {
 export interface BaseWorkflow {
     /**
      * 
-     * @type {string}
+     * @type {ExamId1}
      * @memberof BaseWorkflow
      */
-    'exam_id'?: string;
+    'exam_id'?: ExamId1;
     /**
      * 
      * @type {string}
@@ -232,10 +488,10 @@ export interface BaseWorkflow {
     'description': string;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof BaseWorkflow
      */
-    'comment'?: string;
+    'comment': Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -254,9 +510,155 @@ export interface BaseWorkflow {
 /**
  * 
  * @export
+ * @interface Comment
+ */
+export interface Comment {
+}
+/**
+ * 
+ * @export
+ * @interface CreatedAt
+ */
+export interface CreatedAt {
+}
+/**
+ * Workflow Task output model.
+ * @export
+ * @interface DAGTaskOut
+ */
+export interface DAGTaskOut {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof DAGTaskOut
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'description': string;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof DAGTaskOut
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'destination': string;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof DAGTaskOut
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {number}
+     * @memberof DAGTaskOut
+     */
+    'progress': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof DAGTaskOut
+     */
+    'is_template': boolean;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof DAGTaskOut
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'dag_id': string;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof DAGTaskOut
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof DAGTaskOut
+     */
+    'parameter'?: Parameter;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'creator': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DAGTaskOut
+     */
+    'datetime_created': string;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof DAGTaskOut
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {Array<ResultOut>}
+     * @memberof DAGTaskOut
+     */
+    'results': Array<ResultOut>;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface DatetimeUpdated
+ */
+export interface DatetimeUpdated {
+}
+/**
+ * 
+ * @export
+ * @interface Description
+ */
+export interface Description {
+}
+/**
+ * 
+ * @export
  * @interface ExamId
  */
 export interface ExamId {
+}
+/**
+ * 
+ * @export
+ * @interface ExamId1
+ */
+export interface ExamId1 {
 }
 /**
  * Exam output model.
@@ -266,10 +668,10 @@ export interface ExamId {
 export interface ExamOut {
     /**
      * 
-     * @type {string}
+     * @type {PatientId}
      * @memberof ExamOut
      */
-    'patient_id'?: string;
+    'patient_id'?: PatientId;
     /**
      * 
      * @type {string}
@@ -284,28 +686,28 @@ export interface ExamOut {
     'description': string;
     /**
      * 
-     * @type {string}
+     * @type {Indication}
      * @memberof ExamOut
      */
-    'indication'?: string;
+    'indication': Indication;
     /**
      * 
-     * @type {number}
+     * @type {PatientHeightCm}
      * @memberof ExamOut
      */
-    'patient_height_cm'?: number;
+    'patient_height_cm': PatientHeightCm;
     /**
      * 
-     * @type {number}
+     * @type {PatientWeightKg}
      * @memberof ExamOut
      */
-    'patient_weight_kg'?: number;
+    'patient_weight_kg': PatientWeightKg;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof ExamOut
      */
-    'comment'?: string;
+    'comment': Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -338,16 +740,174 @@ export interface ExamOut {
     'datetime_created': string;
     /**
      * 
-     * @type {string}
+     * @type {DatetimeUpdated}
      * @memberof ExamOut
      */
-    'datetime_updated'?: string;
+    'datetime_updated': DatetimeUpdated;
     /**
      * 
      * @type {Array<WorkflowOut>}
      * @memberof ExamOut
      */
     'workflows': Array<WorkflowOut>;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface FileExtension
+ */
+export interface FileExtension {
+}
+/**
+ * Pydantic definition of genders.
+ * @export
+ * @enum {string}
+ */
+
+export const Gender = {
+    Male: 'MALE',
+    Female: 'FEMALE',
+    Other: 'OTHER',
+    NotGiven: 'NOT_GIVEN'
+} as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
+
+
+/**
+ * 
+ * @export
+ * @interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+ */
+export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'name': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'description': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'destination': any;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'progress': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'is_template': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'device_id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'sequence_id': any;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'creator': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'datetime_created': any;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'results': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'dag_id': any;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'parameter'?: Parameter;
 }
 
 
@@ -363,6 +923,27 @@ export interface HTTPValidationError {
      * @memberof HTTPValidationError
      */
     'detail'?: Array<ValidationError>;
+}
+/**
+ * 
+ * @export
+ * @interface Id
+ */
+export interface Id {
+}
+/**
+ * 
+ * @export
+ * @interface Indication
+ */
+export interface Indication {
+}
+/**
+ * 
+ * @export
+ * @interface InputResultId
+ */
+export interface InputResultId {
 }
 /**
  * Task status enum.
@@ -383,12 +964,640 @@ export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
 
 
 /**
+ * A class representing an MRI sequence definition file and its associated metadata.  Attributes ----------     id: The unique identifier for the MRI sequence, autogenerated by MongoDB.     name: The name of the MRI sequence.     description: A brief description of the MRI sequence.     sequence_type: The type of MRI sequence, such as T1-weighted, T2-weighted, etc.     created_at: The timestamp of when the MRI sequence was created.     updated_at: The timestamp of when the MRI sequence was last updated.     tags: A list of tags or keywords associated with the MRI sequence, useful for searching and filtering.     file: The MRI sequence definition file content or a reference to the stored file,     such as a GridFS identifier or an S3 URL.     file_extension: The file extension of the MRI sequence definition file.
+ * @export
+ * @interface MRISequence
+ */
+export interface MRISequence {
+    /**
+     * 
+     * @type {Id}
+     * @memberof MRISequence
+     */
+    '_id': Id;
+    /**
+     * 
+     * @type {string}
+     * @memberof MRISequence
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Description}
+     * @memberof MRISequence
+     */
+    'description': Description;
+    /**
+     * 
+     * @type {SequenceType}
+     * @memberof MRISequence
+     */
+    'sequence_type': SequenceType;
+    /**
+     * 
+     * @type {CreatedAt}
+     * @memberof MRISequence
+     */
+    'created_at': CreatedAt;
+    /**
+     * 
+     * @type {UpdatedAt}
+     * @memberof MRISequence
+     */
+    'updated_at': UpdatedAt;
+    /**
+     * 
+     * @type {Tags}
+     * @memberof MRISequence
+     */
+    'tags': Tags;
+    /**
+     * 
+     * @type {any}
+     * @memberof MRISequence
+     */
+    'file': any;
+    /**
+     * 
+     * @type {FileExtension}
+     * @memberof MRISequence
+     */
+    'file_extension': FileExtension;
+}
+/**
  * 
  * @export
- * @interface LocationInner
+ * @interface Parameter
  */
-export interface LocationInner {
+export interface Parameter {
 }
+/**
+ * 
+ * @export
+ * @interface PatientHeightCm
+ */
+export interface PatientHeightCm {
+}
+/**
+ * 
+ * @export
+ * @interface PatientId
+ */
+export interface PatientId {
+}
+/**
+ * 
+ * @export
+ * @interface PatientWeightKg
+ */
+export interface PatientWeightKg {
+}
+/**
+ * @type Payload
+ * @export
+ */
+export type Payload = { task_type: 'ACQUISITION' } & BaseAcquisitionTask | { task_type: 'DAG' } & BaseDAGTask;
+
+/**
+ * 
+ * @export
+ * @interface ResponseCreateTaskApiV1ExamTaskNewPost
+ */
+export interface ResponseCreateTaskApiV1ExamTaskNewPost {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'name': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'description': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'destination': any;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'progress': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'is_template': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'device_id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'sequence_id': any;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'creator': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'datetime_created': any;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'results': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'dag_id': any;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'parameter'?: Parameter;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+ */
+export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'name': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'description': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'destination': any;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'progress': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'is_template': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'device_id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'sequence_id': any;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'creator': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'datetime_created': any;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'results': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'dag_id': any;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'parameter'?: Parameter;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface ResponseGetTaskApiV1ExamTaskTaskIdGet
+ */
+export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'name': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'description': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'destination': any;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'progress': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'is_template': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'device_id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'sequence_id': any;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'creator': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'datetime_created': any;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'results': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'dag_id': any;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'parameter'?: Parameter;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+ */
+export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
+    /**
+     * 
+     * @type {WorkflowId1}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'workflow_id'?: WorkflowId1;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'name': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'description': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'destination': any;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'progress': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'is_template': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'device_id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'sequence_id': any;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {AcquisitionLimits}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'acquisition_limits': AcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'id': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'creator': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'datetime_created': any;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'datetime_updated': DatetimeUpdated;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'results': any;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'dag_type': TaskType;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'dag_id': any;
+    /**
+     * 
+     * @type {InputResultId}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'input_result_id'?: InputResultId;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'parameter'?: Parameter;
+}
+
+
 /**
  * 
  * @export
@@ -404,10 +1613,10 @@ export interface ResultId {
 export interface ResultOut {
     /**
      * 
-     * @type {string}
+     * @type {TaskId1}
      * @memberof ResultOut
      */
-    'task_id'?: string;
+    'task_id'?: TaskId1;
     /**
      * 
      * @type {ResultType}
@@ -471,115 +1680,31 @@ export type ResultType = typeof ResultType[keyof typeof ResultType];
 /**
  * 
  * @export
+ * @interface SequenceType
+ */
+export interface SequenceType {
+}
+/**
+ * 
+ * @export
+ * @interface Tags
+ */
+export interface Tags {
+}
+/**
+ * 
+ * @export
  * @interface TaskId
  */
 export interface TaskId {
 }
 /**
- * Task output model.
+ * 
  * @export
- * @interface TaskOut
+ * @interface TaskId1
  */
-export interface TaskOut {
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'workflow_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'description': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'comment'?: string;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof TaskOut
-     */
-    'type': TaskType;
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof TaskOut
-     */
-    'args': { [key: string]: string; };
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof TaskOut
-     */
-    'artifacts': { [key: string]: string; };
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof TaskOut
-     */
-    'destinations': { [key: string]: string; };
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof TaskOut
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {number}
-     * @memberof TaskOut
-     */
-    'progress': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskOut
-     */
-    'is_template': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'datetime_created': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskOut
-     */
-    'datetime_updated'?: string;
-    /**
-     * 
-     * @type {Array<ResultOut>}
-     * @memberof TaskOut
-     */
-    'results': Array<ResultOut>;
+export interface TaskId1 {
 }
-
-
 /**
  * Task type enum.
  * @export
@@ -587,10 +1712,10 @@ export interface TaskOut {
  */
 
 export const TaskType = {
-    ProcessingTask: 'PROCESSING_TASK',
-    DeviceTaskSimulator: 'DEVICE_TASK_SIMULATOR',
-    DeviceTaskSdk: 'DEVICE_TASK_SDK',
-    ReconstructionTask: 'RECONSTRUCTION_TASK'
+    Acquisition: 'ACQUISITION',
+    Dag: 'DAG',
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
 } as const;
 
 export type TaskType = typeof TaskType[keyof typeof TaskType];
@@ -599,15 +1724,22 @@ export type TaskType = typeof TaskType[keyof typeof TaskType];
 /**
  * 
  * @export
+ * @interface UpdatedAt
+ */
+export interface UpdatedAt {
+}
+/**
+ * 
+ * @export
  * @interface ValidationError
  */
 export interface ValidationError {
     /**
      * 
-     * @type {Array<LocationInner>}
+     * @type {Array<ValidationErrorLocInner>}
      * @memberof ValidationError
      */
-    'loc': Array<LocationInner>;
+    'loc': Array<ValidationErrorLocInner>;
     /**
      * 
      * @type {string}
@@ -624,9 +1756,23 @@ export interface ValidationError {
 /**
  * 
  * @export
+ * @interface ValidationErrorLocInner
+ */
+export interface ValidationErrorLocInner {
+}
+/**
+ * 
+ * @export
  * @interface WorkflowId
  */
 export interface WorkflowId {
+}
+/**
+ * 
+ * @export
+ * @interface WorkflowId1
+ */
+export interface WorkflowId1 {
 }
 /**
  * Workflow output model.
@@ -636,10 +1782,10 @@ export interface WorkflowId {
 export interface WorkflowOut {
     /**
      * 
-     * @type {string}
+     * @type {ExamId1}
      * @memberof WorkflowOut
      */
-    'exam_id'?: string;
+    'exam_id'?: ExamId1;
     /**
      * 
      * @type {string}
@@ -654,10 +1800,10 @@ export interface WorkflowOut {
     'description': string;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof WorkflowOut
      */
-    'comment'?: string;
+    'comment': Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -690,19 +1836,44 @@ export interface WorkflowOut {
     'datetime_created': string;
     /**
      * 
-     * @type {string}
+     * @type {DatetimeUpdated}
      * @memberof WorkflowOut
      */
-    'datetime_updated'?: string;
+    'datetime_updated': DatetimeUpdated;
     /**
      * 
-     * @type {Array<TaskOut>}
+     * @type {Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>}
      * @memberof WorkflowOut
      */
-    'tasks': Array<TaskOut>;
+    'tasks': Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>;
 }
 
 
+/**
+ * Pydantic definition of coordinates.
+ * @export
+ * @interface XYZ
+ */
+export interface XYZ {
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'x': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'y': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof XYZ
+     */
+    'z': number;
+}
 
 /**
  * ExamsApi - axios parameter creator
@@ -1372,6 +2543,534 @@ export class HealthApi extends BaseAPI {
 
 
 /**
+ * MriSequencesApi - axios parameter creator
+ * @export
+ */
+export const MriSequencesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+         * @summary Delete Mri Sequence Endpoint
+         * @param {string} mriSequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete: async (mriSequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mriSequenceId' is not null or undefined
+            assertParamExists('deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete', 'mriSequenceId', mriSequenceId)
+            const localVarPath = `/api/v1/sequence/{mri_sequence_id}`
+                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+         * @summary Get Mri Sequence By Id Endpoint
+         * @param {string} mriSequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet: async (mriSequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mriSequenceId' is not null or undefined
+            assertParamExists('getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet', 'mriSequenceId', mriSequenceId)
+            const localVarPath = `/api/v1/sequence/{mri_sequence_id}`
+                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence File By Id Endpoint
+         * @param {string} mriSequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet: async (mriSequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mriSequenceId' is not null or undefined
+            assertParamExists('getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet', 'mriSequenceId', mriSequenceId)
+            const localVarPath = `/api/v1/sequence/mri-sequence-file/{mri_sequence_id}`
+                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+         * @summary Get Mri Sequences Endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequencesEndpointApiV1SequenceGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/sequence/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+         * @summary Update Mri Sequence Endpoint
+         * @param {string} mriSequenceId 
+         * @param {MRISequence} mRISequence 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut: async (mriSequenceId: string, mRISequence: MRISequence, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mriSequenceId' is not null or undefined
+            assertParamExists('updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut', 'mriSequenceId', mriSequenceId)
+            // verify required parameter 'mRISequence' is not null or undefined
+            assertParamExists('updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut', 'mRISequence', mRISequence)
+            const localVarPath = `/api/v1/sequence/{mri_sequence_id}`
+                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(mRISequence, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+         * @summary Upload Mri Sequence File
+         * @param {File} file 
+         * @param {string} name 
+         * @param {string} [description] 
+         * @param {string} [sequenceType] 
+         * @param {Array<string>} [tags] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadMriSequenceFileApiV1SequencePost: async (file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('uploadMriSequenceFileApiV1SequencePost', 'file', file)
+            // verify required parameter 'name' is not null or undefined
+            assertParamExists('uploadMriSequenceFileApiV1SequencePost', 'name', name)
+            const localVarPath = `/api/v1/sequence/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+            if (name !== undefined) { 
+                localVarFormParams.append('name', name as any);
+            }
+    
+            if (description !== undefined) { 
+                localVarFormParams.append('description', description as any);
+            }
+    
+            if (sequenceType !== undefined) { 
+                localVarFormParams.append('sequence_type', sequenceType as any);
+            }
+                if (tags) {
+                localVarFormParams.append('tags', tags.join(COLLECTION_FORMATS.csv));
+            }
+
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MriSequencesApi - functional programming interface
+ * @export
+ */
+export const MriSequencesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MriSequencesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+         * @summary Delete Mri Sequence Endpoint
+         * @param {string} mriSequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+         * @summary Get Mri Sequence By Id Endpoint
+         * @param {string} mriSequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequence>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence File By Id Endpoint
+         * @param {string} mriSequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId, name, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+         * @summary Get Mri Sequences Endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMriSequencesEndpointApiV1SequenceGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MRISequence>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequencesEndpointApiV1SequenceGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequencesEndpointApiV1SequenceGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+         * @summary Update Mri Sequence Endpoint
+         * @param {string} mriSequenceId 
+         * @param {MRISequence} mRISequence 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId: string, mRISequence: MRISequence, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequence>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId, mRISequence, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+         * @summary Upload Mri Sequence File
+         * @param {File} file 
+         * @param {string} name 
+         * @param {string} [description] 
+         * @param {string} [sequenceType] 
+         * @param {Array<string>} [tags] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadMriSequenceFileApiV1SequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequence>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadMriSequenceFileApiV1SequencePost(file, name, description, sequenceType, tags, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.uploadMriSequenceFileApiV1SequencePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MriSequencesApi - factory interface
+ * @export
+ */
+export const MriSequencesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MriSequencesApiFp(configuration)
+    return {
+        /**
+         * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+         * @summary Delete Mri Sequence Endpoint
+         * @param {string} mriSequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+         * @summary Get Mri Sequence By Id Endpoint
+         * @param {string} mriSequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId: string, options?: any): AxiosPromise<MRISequence> {
+            return localVarFp.getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence File By Id Endpoint
+         * @param {string} mriSequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId: string, name?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId, name, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+         * @summary Get Mri Sequences Endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequencesEndpointApiV1SequenceGet(options?: any): AxiosPromise<Array<MRISequence>> {
+            return localVarFp.getMriSequencesEndpointApiV1SequenceGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+         * @summary Update Mri Sequence Endpoint
+         * @param {string} mriSequenceId 
+         * @param {MRISequence} mRISequence 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId: string, mRISequence: MRISequence, options?: any): AxiosPromise<MRISequence> {
+            return localVarFp.updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId, mRISequence, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+         * @summary Upload Mri Sequence File
+         * @param {File} file 
+         * @param {string} name 
+         * @param {string} [description] 
+         * @param {string} [sequenceType] 
+         * @param {Array<string>} [tags] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadMriSequenceFileApiV1SequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequence> {
+            return localVarFp.uploadMriSequenceFileApiV1SequencePost(file, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MriSequencesApi - object-oriented interface
+ * @export
+ * @class MriSequencesApi
+ * @extends {BaseAPI}
+ */
+export class MriSequencesApi extends BaseAPI {
+    /**
+     * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+     * @summary Delete Mri Sequence Endpoint
+     * @param {string} mriSequenceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+     * @summary Get Mri Sequence By Id Endpoint
+     * @param {string} mriSequenceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+     * @summary Get Mri Sequence File By Id Endpoint
+     * @param {string} mriSequenceId 
+     * @param {string} [name] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId, name, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+     * @summary Get Mri Sequences Endpoint
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getMriSequencesEndpointApiV1SequenceGet(options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequencesEndpointApiV1SequenceGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+     * @summary Update Mri Sequence Endpoint
+     * @param {string} mriSequenceId 
+     * @param {MRISequence} mRISequence 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId: string, mRISequence: MRISequence, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId, mRISequence, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+     * @summary Upload Mri Sequence File
+     * @param {File} file 
+     * @param {string} name 
+     * @param {string} [description] 
+     * @param {string} [sequenceType] 
+     * @param {Array<string>} [tags] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public uploadMriSequenceFileApiV1SequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).uploadMriSequenceFileApiV1SequencePost(file, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * ResultsApi - axios parameter creator
  * @export
  */
@@ -1951,13 +3650,13 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Task
-         * @param {BaseTask} baseTask 
+         * @param {Payload} payload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskApiV1ExamTaskNewPost: async (baseTask: BaseTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'baseTask' is not null or undefined
-            assertParamExists('createTaskApiV1ExamTaskNewPost', 'baseTask', baseTask)
+        createTaskApiV1ExamTaskNewPost: async (payload: Payload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'payload' is not null or undefined
+            assertParamExists('createTaskApiV1ExamTaskNewPost', 'payload', payload)
             const localVarPath = `/api/v1/exam/task/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1981,7 +3680,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseTask, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(payload, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2195,15 +3894,15 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Update Task
          * @param {TaskId} taskId 
-         * @param {BaseTask} baseTask 
+         * @param {Payload} payload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskApiV1ExamTaskTaskIdPut: async (taskId: TaskId, baseTask: BaseTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateTaskApiV1ExamTaskTaskIdPut: async (taskId: TaskId, payload: Payload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'taskId', taskId)
-            // verify required parameter 'baseTask' is not null or undefined
-            assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'baseTask', baseTask)
+            // verify required parameter 'payload' is not null or undefined
+            assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'payload', payload)
             const localVarPath = `/api/v1/exam/task/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2228,7 +3927,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseTask, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(payload, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2248,12 +3947,12 @@ export const TasksApiFp = function(configuration?: Configuration) {
         /**
          * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Task
-         * @param {BaseTask} baseTask 
+         * @param {Payload} payload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskApiV1ExamTaskNewPost(baseTask: BaseTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskApiV1ExamTaskNewPost(baseTask, options);
+        async createTaskApiV1ExamTaskNewPost(payload: Payload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseCreateTaskApiV1ExamTaskNewPost>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskApiV1ExamTaskNewPost(payload, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskApiV1ExamTaskNewPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2267,7 +3966,7 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
+        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseCreateTaskFromTemplateApiV1ExamTaskPost>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskFromTemplateApiV1ExamTaskPost']?.[localVarOperationServerIndex]?.url;
@@ -2292,7 +3991,7 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskOut>>> {
+        async getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
@@ -2305,7 +4004,7 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskOut>>> {
+        async getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet']?.[localVarOperationServerIndex]?.url;
@@ -2318,7 +4017,7 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
+        async getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseGetTaskApiV1ExamTaskTaskIdGet>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTaskApiV1ExamTaskTaskIdGet(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getTaskApiV1ExamTaskTaskIdGet']?.[localVarOperationServerIndex]?.url;
@@ -2328,12 +4027,12 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Update Task
          * @param {TaskId} taskId 
-         * @param {BaseTask} baseTask 
+         * @param {Payload} payload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseTask: BaseTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskApiV1ExamTaskTaskIdPut(taskId, baseTask, options);
+        async updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, payload: Payload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseUpdateTaskApiV1ExamTaskTaskIdPut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskApiV1ExamTaskTaskIdPut(taskId, payload, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTaskApiV1ExamTaskTaskIdPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2351,12 +4050,12 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
         /**
          * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
          * @summary Create Task
-         * @param {BaseTask} baseTask 
+         * @param {Payload} payload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskApiV1ExamTaskNewPost(baseTask: BaseTask, options?: any): AxiosPromise<TaskOut> {
-            return localVarFp.createTaskApiV1ExamTaskNewPost(baseTask, options).then((request) => request(axios, basePath));
+        createTaskApiV1ExamTaskNewPost(payload: Payload, options?: any): AxiosPromise<ResponseCreateTaskApiV1ExamTaskNewPost> {
+            return localVarFp.createTaskApiV1ExamTaskNewPost(payload, options).then((request) => request(axios, basePath));
         },
         /**
          * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
@@ -2367,7 +4066,7 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<TaskOut> {
+        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<ResponseCreateTaskFromTemplateApiV1ExamTaskPost> {
             return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2386,7 +4085,7 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<TaskOut>> {
+        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>> {
             return localVarFp.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2396,7 +4095,7 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<Array<TaskOut>> {
+        getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>> {
             return localVarFp.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2406,19 +4105,19 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<TaskOut> {
+        getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<ResponseGetTaskApiV1ExamTaskTaskIdGet> {
             return localVarFp.getTaskApiV1ExamTaskTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Update Task
          * @param {TaskId} taskId 
-         * @param {BaseTask} baseTask 
+         * @param {Payload} payload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseTask: BaseTask, options?: any): AxiosPromise<TaskOut> {
-            return localVarFp.updateTaskApiV1ExamTaskTaskIdPut(taskId, baseTask, options).then((request) => request(axios, basePath));
+        updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, payload: Payload, options?: any): AxiosPromise<ResponseUpdateTaskApiV1ExamTaskTaskIdPut> {
+            return localVarFp.updateTaskApiV1ExamTaskTaskIdPut(taskId, payload, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2433,13 +4132,13 @@ export class TasksApi extends BaseAPI {
     /**
      * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
      * @summary Create Task
-     * @param {BaseTask} baseTask 
+     * @param {Payload} payload 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public createTaskApiV1ExamTaskNewPost(baseTask: BaseTask, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskApiV1ExamTaskNewPost(baseTask, options).then((request) => request(this.axios, this.basePath));
+    public createTaskApiV1ExamTaskNewPost(payload: Payload, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTaskApiV1ExamTaskNewPost(payload, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2507,13 +4206,13 @@ export class TasksApi extends BaseAPI {
      * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
      * @summary Update Task
      * @param {TaskId} taskId 
-     * @param {BaseTask} baseTask 
+     * @param {Payload} payload 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseTask: BaseTask, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).updateTaskApiV1ExamTaskTaskIdPut(taskId, baseTask, options).then((request) => request(this.axios, this.basePath));
+    public updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, payload: Payload, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).updateTaskApiV1ExamTaskTaskIdPut(taskId, payload, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

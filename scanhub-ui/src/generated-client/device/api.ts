@@ -318,19 +318,19 @@ export interface XYZ {
      * @type {number}
      * @memberof XYZ
      */
-    'X': number;
+    'x': number;
     /**
      * 
      * @type {number}
      * @memberof XYZ
      */
-    'Y': number;
+    'y': number;
     /**
      * 
      * @type {number}
      * @memberof XYZ
      */
-    'Z': number;
+    'z': number;
 }
 
 /**
