@@ -3,12 +3,10 @@
 
 """MRI sequence endpoints."""
 
-import json
+
 import os
 import tempfile
-from os.path import exists
 from pathlib import Path
-
 from bson.binary import Binary
 from fastapi import (
     APIRouter,
@@ -20,14 +18,11 @@ from fastapi import (
     UploadFile,
     status,
 )
-import plotly
 from fastapi.responses import FileResponse
-from pypulseq import Sequence  # type: ignore
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.models import MRISequence, MRISequenceCreate
 from app.db.mongodb import get_mongo_database
 from app.dal import mri_sequence_dal
-from app.tools.mri_sequence_plot import get_sequence_plot
 
 seq_router = APIRouter(
     dependencies=[Depends(get_current_user)]
@@ -37,7 +32,7 @@ async def mri_sequence_form(
     name: str = Form(...),
     description: str = Form(None),
     sequence_type: str = Form(None),
-    tags=["mri sequences"],
+    tags: list[str] = Form([]),
 ) -> MRISequenceCreate:
     """Convert the form data to an MRISequenceCreate object.
 
@@ -57,34 +52,15 @@ async def mri_sequence_form(
     MRISequenceCreate
         The MRI sequence data.
     """
-    tags_list = json.loads(tags) if tags else []
     return MRISequenceCreate(
-        name=name, description=description, sequence_type=sequence_type, tags=tags_list
+        name=name,
+        description=description,
+        sequence_type=sequence_type,
+        tags=tags,
     )
 
 
 @seq_router.post("/", response_model=MRISequence, status_code=status.HTTP_201_CREATED, tags=["mri sequences"])
-async def create_mri_sequence_endpoint(
-    mri_sequence: MRISequence, database=Depends(get_mongo_database)
-):
-    """Create a new MRI sequence and store it in the database.
-
-    Parameters
-    ----------
-    mri_sequence : MRISequence
-        The MRI sequence data to store.
-    database : AsyncIOMotorDatabase
-        The MongoDB database handle.
-
-    Returns
-    -------
-    MRISequence
-        The created MRI sequence.
-    """
-    return await mri_sequence_dal.create_mri_sequence(database, mri_sequence)
-
-
-@seq_router.post("/upload", response_model=MRISequence, status_code=status.HTTP_201_CREATED, tags=["mri sequences"])
 async def upload_mri_sequence_file(
     mri_sequence: MRISequenceCreate = Depends(mri_sequence_form),
     file: UploadFile = File(...),
@@ -141,7 +117,11 @@ async def get_mri_sequences_endpoint(database=Depends(get_mongo_database)):
     List[MRISequence]
         The list of MRI sequences.
     """
-    return await mri_sequence_dal.get_mri_sequences(database)
+    if not (sequences := await mri_sequence_dal.get_mri_sequences(database)):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No sequences found."
+        )
+    return sequences
 
 
 @seq_router.get("/{mri_sequence_id}", response_model=MRISequence, tags=["mri sequences"])
@@ -283,50 +263,91 @@ async def delete_mri_sequence_endpoint(
         )
 
 
-@seq_router.get("/mri-sequence-plot/{seq_id}", tags=["mri sequences"],)
-async def plot_mri_sequence(seq_id: str, database=Depends(get_mongo_database)) -> str:
-    """Generate plotly sequence plot data.
+# @seq_router.get("/mri-sequence-plot/{seq_id}", tags=["mri sequences"],)
+# async def plot_mri_sequence(seq_id: str, database=Depends(get_mongo_database)) -> str:
+#     """Generate plotly sequence plot data.
 
-    Parameters
-    ----------
-    seq_id
-        Id of the sequence to be plotted
+#     Parameters
+#     ----------
+#     seq_id
+#         Id of the sequence to be plotted
 
-    Returns
-    -------
-        List of plot data models for plotly
-    """
-    filename = f"data_lake/mri-sequence-{seq_id}"
+#     Returns
+#     -------
+#         List of plot data models for plotly
+#     """
+#     filename = f"data_lake/mri-sequence-{seq_id}"
 
-    # Check if pulseq file already exist, request it from database if not
-    if not exists(filename + ".seq"):
-        if mri_seq := await mri_sequence_dal.get_mri_sequence_by_id(database, seq_id):
-            with open(filename + ".seq", mode="w", encoding="utf8") as file_handle:
-                file_handle.write(mri_seq.file.decode("utf-8"))
-            print("WRITTEN PULSEQ FILE")
-        else:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+#     # Check if pulseq file already exist, request it from database if not
+#     if not exists(filename + ".seq"):
+#         if mri_seq := await mri_sequence_dal.get_mri_sequence_by_id(database, seq_id):
+#             with open(filename + ".seq", mode="w", encoding="utf8") as file_handle:
+#                 file_handle.write(mri_seq.file.decode("utf-8"))
+#             print("WRITTEN PULSEQ FILE")
+#         else:
+#             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    # Generate plotly json string from sequence object, if json file does not already exists
-    if not exists(filename + ".json"):
-        seq = Sequence()
-        try:
-            seq.read(filename + ".seq")
-        except Exception as exc:
-            print(
-                "Could not read pulseq file. The uploaded pulseq file is probably not compatible."
-            )
-            raise HTTPException(
-                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
-            ) from exc
+#     # Generate plotly json string from sequence object, if json file does not already exists
+#     if not exists(filename + ".json"):
+#         seq = Sequence()
+#         try:
+#             seq.read(filename + ".seq")
+#         except Exception as exc:
+#             print(
+#                 "Could not read pulseq file. The uploaded pulseq file is probably not compatible."
+#             )
+#             raise HTTPException(
+#                 status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+#             ) from exc
 
-        fig = get_sequence_plot(seq)
-        plot_data = plotly.io.to_json(fig, pretty=True)
+#         fig = get_sequence_plot(seq)
+#         plot_data = plotly.io.to_json(fig, pretty=True)
 
-        with open(filename + ".json", mode="w", encoding="utf8") as file_handle:
-            file_handle.write(plot_data)
-    else:
-        with open(filename + ".json", mode="r", encoding="utf8") as file_handle:
-            plot_data = json.dumps(json.loads(file_handle.read()), indent=2)
+#         with open(filename + ".json", mode="w", encoding="utf8") as file_handle:
+#             file_handle.write(plot_data)
+#     else:
+#         with open(filename + ".json", mode="r", encoding="utf8") as file_handle:
+#             plot_data = json.dumps(json.loads(file_handle.read()), indent=2)
 
-    return plot_data
+#     return plot_data
+
+
+# @seq_router.get("/{sequence_id}/plot", response_class=FileResponse, tags=["mri sequences"])
+# async def get_sequence_plot(
+#     sequence_id: str,
+#     database=Depends(get_mongo_database),
+# ):
+#     """
+#     Generate and return a plot of the MRI sequence.
+
+#     Parameters
+#     ----------
+#     sequence_id : str
+#         The ID of the sequence in the database.
+
+#     Returns
+#     -------
+#     FileResponse
+#         The PNG image of the plotted sequence.
+#     """
+#     sequence: MRISequence = await mri_sequence_dal.get_mri_sequence_by_id(database, sequence_id)
+
+#     if not (sequence or sequence.file):
+#         raise HTTPException(status_code=404, detail="Sequence not found or has no file")
+
+#     # Write the binary file to a temporary file
+#     with NamedTemporaryFile(suffix=".seq", delete=False) as temp_seq_file:
+#         temp_seq_file.write(sequence.file)
+#         temp_seq_path = temp_seq_file.name
+
+#     # Read and plot the sequence
+#     try:
+#         seq = Sequence()
+#         seq.read(temp_seq_path)
+#         seq.plot(save=True)
+
+#     finally:
+#         os.remove(temp_seq_path)  # Clean up the .seq file
+
+#     return FileResponse("seq_plot1.jpg", media_type="image/jpg", filename="sequence_plot_adc.jpg")
+#     # return FileResponse("seq_plot2.jpg", media_type="image/jpg", filename="sequence_plot_grad.jpg")
