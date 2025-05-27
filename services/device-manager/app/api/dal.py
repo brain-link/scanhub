@@ -5,6 +5,7 @@
 
 from uuid import UUID
 
+from scanhub_libraries.models import BaseDevice, DeviceOut
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
