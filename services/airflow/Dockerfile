@@ -7,6 +7,10 @@ USER root
 # Copy the requirements.txt file into the container
 COPY requirements.txt /requirements.txt
 
+# Install gdcm to fix dicom (add P10 header info) after it was created
+RUN apt-get -y update \
+    && apt-get -y install libgdcm-tools
+
 # Switch to the airflow user to install the additional packages
 USER airflow
 
