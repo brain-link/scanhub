@@ -8,7 +8,7 @@ import os
 import uuid
 
 from pydantic import BaseModel
-from scanhub_libraries.models import ItemStatus, TaskType
+from scanhub_libraries.models import ItemStatus, ResultType, TaskType
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -70,7 +70,7 @@ class Exam(Base):
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
 
 
-class Workflow(Base): # TBD: rename to "Workflow"
+class Workflow(Base):  # TBD: rename to "Workflow"
     """Workflow ORM model."""
 
     __tablename__ = "workflow"
@@ -131,7 +131,24 @@ class Task(Base):
 
     status: Mapped[ItemStatus] = mapped_column(nullable=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
+    results: Mapped[list["Result"]] = relationship(lazy="selectin")
 
+class Result(Base):
+    """Abstract result ORM model."""
+
+    __tablename__ = "result"
+    __table_args__ = {"extend_existing": True}
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    datetime_created: Mapped[datetime.datetime] = mapped_column(
+        server_default=func.now(),  # pylint: disable=not-callable
+    )
+    task_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("task.id"), nullable=True)
+    progress: Mapped[float] = mapped_column(nullable=False, default=0.0)
+    status: Mapped[ItemStatus] = mapped_column(nullable=False, default=ItemStatus.NEW)
+    type: Mapped[ResultType] = mapped_column(nullable=False)
+    directory: Mapped[str] = mapped_column(nullable=False, default="")
+    filename: Mapped[str] = mapped_column(nullable=False, default="")
 
 # Create automap base
 MappedBase = automap_base()
