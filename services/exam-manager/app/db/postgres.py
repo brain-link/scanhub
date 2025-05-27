@@ -8,7 +8,7 @@ import os
 import uuid
 
 from pydantic import BaseModel
-from scanhub_libraries.models import ItemStatus, ResultType, TaskType, AcquisitionParameter, AcquisitionLimits
+from scanhub_libraries.models import AcquisitionLimits, AcquisitionParameter, ItemStatus, ResultType, TaskType
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base

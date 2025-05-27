@@ -3,9 +3,10 @@
 
 """MongoDB database handle."""
 
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
-from app.db.mongodb_config import settings
 from fastapi import HTTPException, status
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
+
+from app.db.mongodb_config import settings
 
 
 class Database:
@@ -18,6 +19,7 @@ class Database:
     collection : AsyncIOMotorCollection
         The MongoDB collection.
     """
+
     # TODO: Can the client really take two different types?
     client: AsyncIOMotorClient | AsyncIOMotorDatabase | None = None
     collection: AsyncIOMotorCollection | None = None

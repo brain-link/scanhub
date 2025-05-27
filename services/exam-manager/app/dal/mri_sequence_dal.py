@@ -9,7 +9,6 @@ from typing import Any
 from bson import ObjectId
 from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
-
 from scanhub_libraries.models import MRISequence
 
 

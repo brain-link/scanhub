@@ -1,12 +1,11 @@
 """Helper methods for workflows and exam, require recursive model translation."""
 
-from scanhub_libraries.models import ExamOut, ResultOut, WorkflowOut, AcquisitionTaskOut, DAGTaskOut, TaskType
-
-from app.db.postgres import Exam, Workflow, Task, DAGTask, AcquisitionTask
+from pprint import pprint
 
 from fastapi import HTTPException
+from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut, ExamOut, ResultOut, TaskType, WorkflowOut
 
-from pprint import pprint
+from app.db.postgres import AcquisitionTask, DAGTask, Exam, Task, Workflow
 
 
 async def get_exam_out_model(data: Exam) -> ExamOut:

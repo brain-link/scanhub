@@ -3,17 +3,25 @@
 
 """Definition of exam API endpoints accessible through swagger UI."""
 
-from typing import Annotated, Union
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Body
-from scanhub_libraries.models import BaseTask, ItemStatus, TaskOut, User, AcquisitionTaskOut, DAGTaskOut, BaseAcquisitionTask, BaseDAGTask
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import Field
+from scanhub_libraries.models import (
+    AcquisitionTaskOut,
+    BaseAcquisitionTask,
+    BaseDAGTask,
+    BaseTask,
+    DAGTaskOut,
+    ItemStatus,
+    User,
+)
 from scanhub_libraries.security import get_current_user
 
 from app import LOG_CALL_DELIMITER
 from app.dal import task_dal, workflow_dal
 from app.tools.helper import get_task_out
-from pydantic import Field
 
 # Http status codes
 # 200 = Ok: GET, PUT

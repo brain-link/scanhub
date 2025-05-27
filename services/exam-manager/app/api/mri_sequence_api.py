@@ -7,6 +7,7 @@
 import os
 import tempfile
 from pathlib import Path
+
 from bson.binary import Binary
 from fastapi import (
     APIRouter,
@@ -19,10 +20,11 @@ from fastapi import (
     status,
 )
 from fastapi.responses import FileResponse
-from scanhub_libraries.security import get_current_user
 from scanhub_libraries.models import MRISequence, MRISequenceCreate
-from app.db.mongodb import get_mongo_database
+from scanhub_libraries.security import get_current_user
+
 from app.dal import mri_sequence_dal
+from app.db.mongodb import get_mongo_database
 
 seq_router = APIRouter(
     dependencies=[Depends(get_current_user)]

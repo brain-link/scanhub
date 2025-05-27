@@ -98,7 +98,7 @@ async def startup():
     init_db()
     print("Connecting to mongodb...")
     await connect_to_mongo()
-    
+
 
 
 @app.on_event("shutdown")
@@ -130,7 +130,7 @@ async def readiness() -> dict:
 
     if not all(t in existing_tables for t in required_tables):
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
-    
+
     # Check mongo db status
     if db.collection is None:
         raise HTTPException(status_code=503, detail=f"Database not connected: {str(db.collection)}")
@@ -193,4 +193,4 @@ app.include_router(exam_router, prefix="/api/v1/exam")
 app.include_router(workflow_router, prefix="/api/v1/exam")
 app.include_router(task_router, prefix="/api/v1/exam")
 app.include_router(result_router, prefix="/api/v1/exam")
-app.include_router(seq_router, prefix="/api/v1/exam")
+app.include_router(seq_router, prefix="/api/v1/sequence")
