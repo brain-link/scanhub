@@ -8,8 +8,7 @@ import os
 import uuid
 from typing import Literal
 
-from pydantic import BaseModel
-from scanhub_libraries.models import Gender
+from scanhub_libraries.models import Gender, BasePatient
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -67,7 +66,7 @@ class Patient(Base):
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
-    def update(self, data: BaseModel):
+    def update(self, data: BasePatient) -> None:
         """Update a patient entry.
 
         Parameters
