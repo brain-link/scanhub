@@ -45,7 +45,7 @@ LOG_CALL_DELIMITER = "----------------------------------------------------------
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
-dict_id_websocket: Dict[str, WebSocket] = {}
+dict_id_websocket: Dict[UUID, WebSocket] = {}
 
 
 @router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])
@@ -66,7 +66,7 @@ async def get_devices(current_user: Annotated[User, Depends(get_current_user)]) 
 
 
 @router.get('/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
-async def get_device(current_user: Annotated[User, Depends(get_current_user)], device_id: str):
+async def get_device(current_user: Annotated[User, Depends(get_current_user)], device_id: UUID):
     """
     Retrieve a specific device.
 
@@ -130,7 +130,7 @@ async def create_device(current_user: Annotated[User, Depends(get_current_user)]
 
 
 @router.delete('/{device_id}', response_model={}, status_code=204, tags=["devices"])
-async def delete_device(device_id: str):
+async def delete_device(device_id: UUID):
     """
     Delete a device.
 
@@ -204,7 +204,7 @@ async def websocket_endpoint(websocket: WebSocket,
     Args
     ----
         websocket (WebSocket): The WebSocket connection object.
-        device_id (str): The device_id.
+        device_id (UUID): The device_id.
     """
     await websocket.accept()
     print('Device connected on websocket.')
