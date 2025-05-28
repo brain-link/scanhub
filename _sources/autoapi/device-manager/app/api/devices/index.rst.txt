@@ -22,8 +22,9 @@ Attributes
 
 .. autoapisummary::
 
+   device-manager.app.api.devices.EXAM_MANAGER_URI
+   device-manager.app.api.devices.LOG_CALL_DELIMITER
    device-manager.app.api.devices.router
-   device-manager.app.api.devices.active_connections
    device-manager.app.api.devices.dict_id_websocket
 
 
@@ -33,29 +34,31 @@ Functions
 .. autoapisummary::
 
    device-manager.app.api.devices.get_devices
-   device-manager.app.api.devices.get_device_ip_address
    device-manager.app.api.devices.get_device
-   device-manager.app.api.devices.get_device_status
+   device-manager.app.api.devices.create_device
    device-manager.app.api.devices.delete_device
    device-manager.app.api.devices.start_scan_via_websocket
+   device-manager.app.api.devices.connection_with_valid_id_and_token
    device-manager.app.api.devices.websocket_endpoint
-   device-manager.app.api.devices.websocket_endpoint_legacy
 
 
 Module Contents
 ---------------
 
+.. py:data:: EXAM_MANAGER_URI
+   :value: 'exam-manager:8000'
+
+
+.. py:data:: LOG_CALL_DELIMITER
+   :value: '-------------------------------------------------------------------------------'
+
+
 .. py:data:: router
-
-.. py:data:: active_connections
-   :type:  list[fastapi.WebSocket]
-   :value: []
-
 
 .. py:data:: dict_id_websocket
    :type:  Dict[str, fastapi.WebSocket]
 
-.. py:function:: get_devices() -> list[device-manager.app.api.models.DeviceOut]
+.. py:function:: get_devices(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[device-manager.app.api.models.DeviceOut]
    :async:
 
 
@@ -66,22 +69,7 @@ Module Contents
        List[Device]: The list of registered devices.
 
 
-.. py:function:: get_device_ip_address(device_id: str)
-   :async:
-
-
-   Retrieve the IP address of a specific device.
-
-   Args
-   -------
-       device_id (str): The ID of the device.
-
-   Returns
-   -------
-       dict: The response containing the IP address of the device.
-
-
-.. py:function:: get_device(device_id: str)
+.. py:function:: get_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], device_id: str)
    :async:
 
 
@@ -96,19 +84,28 @@ Module Contents
        dict: The response containing the information about the device
 
 
-.. py:function:: get_device_status(device_id: str)
+.. py:function:: create_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], request: device-manager.app.api.models.DeviceCreationRequest)
    :async:
 
 
-   Retrieve the status of a specific device.
+   Create device database entry.
 
-   Args
-   -------
-       device_id (str): The ID of the device.
+   Only devices which are created by a user via this endpoint and have the device_id and device_token
+   that result from this call configured correctly can later connect and register.
 
-   Returns
-   -------
-       dict: The response containing the status of the device.
+   Parameters
+   ----------
+   request:
+       DeviceCreationRequest to create device in Scanhub.
+       Further details of the device are later provided by the device itself.
+
+   Return
+   ------
+   device_token:
+       the token of the device which the user should copy manually to the configuration file of the device.
+
+   device_id:
+       the id of the device, should be copied to the devices config file together with the device_token.
 
 
 .. py:function:: delete_device(device_id: str)
@@ -139,7 +136,19 @@ Module Contents
 
 
 
-.. py:function:: websocket_endpoint(websocket: fastapi.WebSocket)
+.. py:function:: connection_with_valid_id_and_token(device_id: Annotated[uuid.UUID, Header()], device_token: Annotated[str, Header()])
+   :async:
+
+
+   Check if the given device_id and device_token belong to an existing device in the database.
+
+   Args
+   ----
+       device_id (UUID): The device_id to check against the database.
+       device_token (str): The device_token to check against the database.
+
+
+.. py:function:: websocket_endpoint(websocket: fastapi.WebSocket, device_id: Annotated[uuid.UUID, Depends(connection_with_valid_id_and_token)])
    :async:
 
 
@@ -148,16 +157,6 @@ Module Contents
    Args
    ----
        websocket (WebSocket): The WebSocket connection object.
-
-
-.. py:function:: websocket_endpoint_legacy(websocket: fastapi.WebSocket)
-   :async:
-
-
-   Websocket endpoint for device communication (legacy). Used for old way over acquisition-manager.
-
-   Args
-   ----
-       websocket (WebSocket): The WebSocket connection object.
+       device_id (str): The device_id.
 
 

@@ -40,7 +40,7 @@ Module Contents
        Database orm model of created result
 
 
-.. py:function:: get_result_db(resuld_id: uuid.UUID) -> app.db.Result | None
+.. py:function:: get_result_db(result_id: uuid.UUID) -> app.db.Result | None
    :async:
 
 

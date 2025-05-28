@@ -14,11 +14,12 @@ Attributes
 
 .. autoapisummary::
 
-   exam-manager.app.db.engine
+   exam-manager.app.db.postgres_user_filepath
+   exam-manager.app.db.postgres_password_filepath
+   exam-manager.app.db.postgres_db_name_filepath
+   exam-manager.app.db.postgres_user
    exam-manager.app.db.MappedBase
    exam-manager.app.db.Device
-   exam-manager.app.db.async_engine
-   exam-manager.app.db.async_session
 
 
 Classes
@@ -63,7 +64,19 @@ Module Contents
 
 
 
-.. py:data:: engine
+.. py:data:: postgres_user_filepath
+   :value: '/run/secrets/scanhub_database_postgres_user'
+
+
+.. py:data:: postgres_password_filepath
+   :value: '/run/secrets/scanhub_database_postgres_password'
+
+
+.. py:data:: postgres_db_name_filepath
+   :value: '/run/secrets/scanhub_database_postgres_db_name'
+
+
+.. py:data:: postgres_user
 
 .. py:function:: init_db() -> None
 
@@ -270,6 +283,10 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
 
 
+   .. py:attribute:: progress
+      :type:  sqlalchemy.orm.Mapped[int]
+
+
    .. py:attribute:: is_template
       :type:  sqlalchemy.orm.Mapped[bool]
 
@@ -329,8 +346,4 @@ Module Contents
 .. py:data:: MappedBase
 
 .. py:data:: Device
-
-.. py:data:: async_engine
-
-.. py:data:: async_session
 

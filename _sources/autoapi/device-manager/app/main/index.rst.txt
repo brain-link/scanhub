@@ -15,6 +15,7 @@ Attributes
 .. autoapisummary::
 
    device-manager.app.main.app
+   device-manager.app.main.origins
 
 
 Functions
@@ -32,6 +33,10 @@ Module Contents
 ---------------
 
 .. py:data:: app
+
+.. py:data:: origins
+   :value: ['http://localhost', 'https://localhost']
+
 
 .. py:function:: custom_http_exception_handler(request, exc)
    :async:

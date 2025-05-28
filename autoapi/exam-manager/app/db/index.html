@@ -433,19 +433,22 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.engine" title="exam-manager.app.db.engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">engine</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.postgres_user_filepath" title="exam-manager.app.db.postgres_user_filepath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">postgres_user_filepath</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.db.MappedBase" title="exam-manager.app.db.MappedBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MappedBase</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.db.postgres_password_filepath" title="exam-manager.app.db.postgres_password_filepath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">postgres_password_filepath</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.Device" title="exam-manager.app.db.Device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Device</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.postgres_db_name_filepath" title="exam-manager.app.db.postgres_db_name_filepath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">postgres_db_name_filepath</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.db.async_engine" title="exam-manager.app.db.async_engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">async_engine</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.db.postgres_user" title="exam-manager.app.db.postgres_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">postgres_user</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.async_session" title="exam-manager.app.db.async_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">async_session</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.db.MappedBase" title="exam-manager.app.db.MappedBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MappedBase</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.db.Device" title="exam-manager.app.db.Device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Device</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -509,8 +512,23 @@
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="exam-manager.app.db.engine">
-<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">engine</span></span><a class="headerlink" href="#exam-manager.app.db.engine" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="exam-manager.app.db.postgres_user_filepath">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">postgres_user_filepath</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/run/secrets/scanhub_database_postgres_user'</span></em><a class="headerlink" href="#exam-manager.app.db.postgres_user_filepath" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="exam-manager.app.db.postgres_password_filepath">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">postgres_password_filepath</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/run/secrets/scanhub_database_postgres_password'</span></em><a class="headerlink" href="#exam-manager.app.db.postgres_password_filepath" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="exam-manager.app.db.postgres_db_name_filepath">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">postgres_db_name_filepath</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/run/secrets/scanhub_database_postgres_db_name'</span></em><a class="headerlink" href="#exam-manager.app.db.postgres_db_name_filepath" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="exam-manager.app.db.postgres_user">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">postgres_user</span></span><a class="headerlink" href="#exam-manager.app.db.postgres_user" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -759,6 +777,11 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="exam-manager.app.db.Task.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Task.progress" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="exam-manager.app.db.Task.is_template">
 <span class="sig-name descname"><span class="pre">is_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sqlalchemy.orm.Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exam-manager.app.db.Task.is_template" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -837,16 +860,6 @@
 <span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">Device</span></span><a class="headerlink" href="#exam-manager.app.db.Device" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="exam-manager.app.db.async_engine">
-<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">async_engine</span></span><a class="headerlink" href="#exam-manager.app.db.async_engine" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="exam-manager.app.db.async_session">
-<span class="sig-prename descclassname"><span class="pre">exam-manager.app.db.</span></span><span class="sig-name descname"><span class="pre">async_session</span></span><a class="headerlink" href="#exam-manager.app.db.async_session" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
 </section>
 </section>
 
@@ -887,7 +900,10 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Base.update"><code class="docutils literal notranslate"><span class="pre">Base.update()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.engine"><code class="docutils literal notranslate"><span class="pre">engine</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.postgres_user_filepath"><code class="docutils literal notranslate"><span class="pre">postgres_user_filepath</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.postgres_password_filepath"><code class="docutils literal notranslate"><span class="pre">postgres_password_filepath</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.postgres_db_name_filepath"><code class="docutils literal notranslate"><span class="pre">postgres_db_name_filepath</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.postgres_user"><code class="docutils literal notranslate"><span class="pre">postgres_user</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.init_db"><code class="docutils literal notranslate"><span class="pre">init_db()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Exam"><code class="docutils literal notranslate"><span class="pre">Exam</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Exam.__tablename__"><code class="docutils literal notranslate"><span class="pre">Exam.__tablename__</span></code></a></li>
@@ -940,6 +956,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.artifacts"><code class="docutils literal notranslate"><span class="pre">Task.artifacts</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.destinations"><code class="docutils literal notranslate"><span class="pre">Task.destinations</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.status"><code class="docutils literal notranslate"><span class="pre">Task.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.progress"><code class="docutils literal notranslate"><span class="pre">Task.progress</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.is_template"><code class="docutils literal notranslate"><span class="pre">Task.is_template</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Task.results"><code class="docutils literal notranslate"><span class="pre">Task.results</span></code></a></li>
 </ul>
@@ -959,8 +976,6 @@
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.MappedBase"><code class="docutils literal notranslate"><span class="pre">MappedBase</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.Device"><code class="docutils literal notranslate"><span class="pre">Device</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.async_engine"><code class="docutils literal notranslate"><span class="pre">async_engine</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.db.async_session"><code class="docutils literal notranslate"><span class="pre">async_session</span></code></a></li>
 </ul>
 </li>
 </ul>

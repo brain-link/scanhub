@@ -430,10 +430,13 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.models.BaseDevice" title="device-manager.app.api.models.BaseDevice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseDevice</span></code></a></p></td>
-<td><p>Device pydantic base model.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.models.DeviceDetails" title="device-manager.app.api.models.DeviceDetails"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceDetails</span></code></a></p></td>
+<td><p>Device details pydantic model (to be sent by the device).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.models.DeviceOut" title="device-manager.app.api.models.DeviceOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceOut</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.models.DeviceCreationRequest" title="device-manager.app.api.models.DeviceCreationRequest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceCreationRequest</span></code></a></p></td>
+<td><p>Device registration request pydantic model (to be sent by user first adding the device to the platform).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.models.DeviceOut" title="device-manager.app.api.models.DeviceOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceOut</span></code></a></p></td>
 <td><p>Device pydantic output model.</p></td>
 </tr>
 </tbody>
@@ -454,43 +457,55 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.models.</span></span><span class="sig-name descname"><span class="pre">BaseDevice</span></span><a class="headerlink" href="#device-manager.app.api.models.BaseDevice" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.models.</span></span><span class="sig-name descname"><span class="pre">DeviceDetails</span></span><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
-<p>Device pydantic base model.</p>
+<p>Device details pydantic model (to be sent by the device).</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.id">
-<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.id" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails.name" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.name" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails.manufacturer">
+<span class="sig-name descname"><span class="pre">manufacturer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails.manufacturer" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.manufacturer">
-<span class="sig-name descname"><span class="pre">manufacturer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.manufacturer" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails.modality">
+<span class="sig-name descname"><span class="pre">modality</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails.modality" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.modality">
-<span class="sig-name descname"><span class="pre">modality</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.modality" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails.status" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.status">
-<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.status" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails.site">
+<span class="sig-name descname"><span class="pre">site</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails.site" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.site">
-<span class="sig-name descname"><span class="pre">site</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.site" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceDetails.ip_address">
+<span class="sig-name descname"><span class="pre">ip_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceDetails.ip_address" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceCreationRequest">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.models.</span></span><span class="sig-name descname"><span class="pre">DeviceCreationRequest</span></span><a class="headerlink" href="#device-manager.app.api.models.DeviceCreationRequest" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Device registration request pydantic model (to be sent by user first adding the device to the platform).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceCreationRequest.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceCreationRequest.title" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="device-manager.app.api.models.BaseDevice.ip_address">
-<span class="sig-name descname"><span class="pre">ip_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.BaseDevice.ip_address" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceCreationRequest.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceCreationRequest.description" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -498,8 +513,13 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.models.</span></span><span class="sig-name descname"><span class="pre">DeviceOut</span></span><a class="headerlink" href="#device-manager.app.api.models.DeviceOut" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#device-manager.app.api.models.BaseDevice" title="device-manager.app.api.models.BaseDevice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseDevice</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
 <p>Device pydantic output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.datetime_created">
 <span class="sig-name descname"><span class="pre">datetime_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.datetime_created" title="Link to this definition">#</a></dt>
@@ -508,6 +528,46 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.datetime_updated">
 <span class="sig-name descname"><span class="pre">datetime_updated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.datetime_updated" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.title" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.manufacturer">
+<span class="sig-name descname"><span class="pre">manufacturer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.manufacturer" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.modality">
+<span class="sig-name descname"><span class="pre">modality</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.modality" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.site">
+<span class="sig-name descname"><span class="pre">site</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.site" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="device-manager.app.api.models.DeviceOut.ip_address">
+<span class="sig-name descname"><span class="pre">ip_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#device-manager.app.api.models.DeviceOut.ip_address" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -566,19 +626,32 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice"><code class="docutils literal notranslate"><span class="pre">BaseDevice</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.id"><code class="docutils literal notranslate"><span class="pre">BaseDevice.id</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.name"><code class="docutils literal notranslate"><span class="pre">BaseDevice.name</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.manufacturer"><code class="docutils literal notranslate"><span class="pre">BaseDevice.manufacturer</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.modality"><code class="docutils literal notranslate"><span class="pre">BaseDevice.modality</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.status"><code class="docutils literal notranslate"><span class="pre">BaseDevice.status</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.site"><code class="docutils literal notranslate"><span class="pre">BaseDevice.site</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.BaseDevice.ip_address"><code class="docutils literal notranslate"><span class="pre">BaseDevice.ip_address</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails"><code class="docutils literal notranslate"><span class="pre">DeviceDetails</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails.name"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails.manufacturer"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.manufacturer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails.modality"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.modality</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails.status"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails.site"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.site</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceDetails.ip_address"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.ip_address</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceCreationRequest"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceCreationRequest.title"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest.title</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceCreationRequest.description"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest.description</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut"><code class="docutils literal notranslate"><span class="pre">DeviceOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.id"><code class="docutils literal notranslate"><span class="pre">DeviceOut.id</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">DeviceOut.datetime_created</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.datetime_updated"><code class="docutils literal notranslate"><span class="pre">DeviceOut.datetime_updated</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.title"><code class="docutils literal notranslate"><span class="pre">DeviceOut.title</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.description"><code class="docutils literal notranslate"><span class="pre">DeviceOut.description</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.status"><code class="docutils literal notranslate"><span class="pre">DeviceOut.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.name"><code class="docutils literal notranslate"><span class="pre">DeviceOut.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.manufacturer"><code class="docutils literal notranslate"><span class="pre">DeviceOut.manufacturer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.modality"><code class="docutils literal notranslate"><span class="pre">DeviceOut.modality</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.site"><code class="docutils literal notranslate"><span class="pre">DeviceOut.site</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.DeviceOut.ip_address"><code class="docutils literal notranslate"><span class="pre">DeviceOut.ip_address</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.models.get_device_out"><code class="docutils literal notranslate"><span class="pre">get_device_out()</span></code></a></li>

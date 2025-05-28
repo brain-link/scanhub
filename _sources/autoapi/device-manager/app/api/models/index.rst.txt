@@ -14,7 +14,8 @@ Classes
 
 .. autoapisummary::
 
-   device-manager.app.api.models.BaseDevice
+   device-manager.app.api.models.DeviceDetails
+   device-manager.app.api.models.DeviceCreationRequest
    device-manager.app.api.models.DeviceOut
 
 
@@ -29,16 +30,12 @@ Functions
 Module Contents
 ---------------
 
-.. py:class:: BaseDevice
+.. py:class:: DeviceDetails
 
    Bases: :py:obj:`pydantic.BaseModel`
 
 
-   Device pydantic base model.
-
-
-   .. py:attribute:: id
-      :type:  str
+   Device details pydantic model (to be sent by the device).
 
 
    .. py:attribute:: name
@@ -58,19 +55,39 @@ Module Contents
 
 
    .. py:attribute:: site
-      :type:  str | None
+      :type:  str
 
 
    .. py:attribute:: ip_address
       :type:  str
 
 
+.. py:class:: DeviceCreationRequest
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Device registration request pydantic model (to be sent by user first adding the device to the platform).
+
+
+   .. py:attribute:: title
+      :type:  str
+
+
+   .. py:attribute:: description
+      :type:  str
+
+
 .. py:class:: DeviceOut
 
-   Bases: :py:obj:`BaseDevice`
+   Bases: :py:obj:`pydantic.BaseModel`
 
 
    Device pydantic output model.
+
+
+   .. py:attribute:: id
+      :type:  uuid.UUID
 
 
    .. py:attribute:: datetime_created
@@ -79,6 +96,38 @@ Module Contents
 
    .. py:attribute:: datetime_updated
       :type:  datetime.datetime | None
+
+
+   .. py:attribute:: title
+      :type:  str
+
+
+   .. py:attribute:: description
+      :type:  str
+
+
+   .. py:attribute:: status
+      :type:  str
+
+
+   .. py:attribute:: name
+      :type:  str | None
+
+
+   .. py:attribute:: manufacturer
+      :type:  str | None
+
+
+   .. py:attribute:: modality
+      :type:  str | None
+
+
+   .. py:attribute:: site
+      :type:  str | None
+
+
+   .. py:attribute:: ip_address
+      :type:  str | None
 
 
 .. py:function:: get_device_out(data: api.db.Device) -> DeviceOut

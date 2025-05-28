@@ -24,7 +24,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: dal_create_device(payload: api.models.BaseDevice) -> api.db.Device
+.. py:function:: dal_create_device(request: api.models.DeviceCreationRequest, token_hash: str, salt: str) -> api.db.Device
    :async:
 
 
@@ -34,12 +34,9 @@ Module Contents
    ---------
        payload {BaseDevice} -- Pydantic base model to create a new database entry
 
-   Returns
-   -------
-       Device -- Database orm model
 
 
-.. py:function:: dal_get_device(device_id: str) -> api.db.Device | None
+.. py:function:: dal_get_device(device_id: uuid.UUID) -> api.db.Device | None
    :async:
 
 
@@ -47,7 +44,7 @@ Module Contents
 
    Arguments
    ---------
-       device_id {str} -- Identifier of the device
+       device_id {UUID} -- Identifier of the device
 
    Returns
    -------
@@ -65,7 +62,7 @@ Module Contents
        List[Device] -- List of database orm models
 
 
-.. py:function:: dal_delete_device(device_id: str) -> bool
+.. py:function:: dal_delete_device(device_id: uuid.UUID) -> bool
    :async:
 
 
@@ -73,14 +70,14 @@ Module Contents
 
    Parameters
    ----------
-       device_id {str} -- Identifier of the device to be deleted
+       device_id {UUID} -- Identifier of the device to be deleted
 
    Returns
    -------
        bool -- Success of delete event
 
 
-.. py:function:: dal_update_device(device_id: str, payload: api.models.DeviceOut) -> api.db.Device | None
+.. py:function:: dal_update_device(device_id: uuid.UUID, payload: dict) -> api.db.Device | None
    :async:
 
 
@@ -88,11 +85,11 @@ Module Contents
 
    Parameters
    ----------
-       id {str} -- Identifier of device
-       payload {BaseDevice} -- Pydantic base model, data to be updated
+       id {UUID} -- Identifier of device
+       payload {dict} -- Dict with the fields to update.
 
    Returns
    -------
-       Device -- Updated database orm model
+       Device -- Updated database orm model.
 
 
