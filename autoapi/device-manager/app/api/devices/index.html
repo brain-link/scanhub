@@ -500,7 +500,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.dict_id_websocket">
-<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dict_id_websocket</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">fastapi.WebSocket</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#device-manager.app.api.devices.dict_id_websocket" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">dict_id_websocket</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">fastapi.WebSocket</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#device-manager.app.api.devices.dict_id_websocket" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -517,7 +517,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.get_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.get_device" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.get_device" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve a specific device.</p>
 <section id="args">
 <h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
@@ -560,7 +560,7 @@ Further details of the device are later provided by the device itself.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.delete_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.delete_device" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.delete_device" title="Link to this definition">#</a></dt>
 <dd><p>Delete a device.</p>
 <section id="id2">
 <h3>Args<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
@@ -610,7 +610,7 @@ device_token (str): The device_token to check against the database.</p>
 <h3>Args<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>websocket (WebSocket): The WebSocket connection object.
-device_id (str): The device_id.</p>
+device_id (UUID): The device_id.</p>
 </div></blockquote>
 </section>
 </dd></dl>

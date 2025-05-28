@@ -56,7 +56,7 @@ Module Contents
 .. py:data:: router
 
 .. py:data:: dict_id_websocket
-   :type:  Dict[str, fastapi.WebSocket]
+   :type:  Dict[uuid.UUID, fastapi.WebSocket]
 
 .. py:function:: get_devices(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[device-manager.app.api.models.DeviceOut]
    :async:
@@ -69,7 +69,7 @@ Module Contents
        List[Device]: The list of registered devices.
 
 
-.. py:function:: get_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], device_id: str)
+.. py:function:: get_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], device_id: uuid.UUID)
    :async:
 
 
@@ -108,7 +108,7 @@ Module Contents
        the id of the device, should be copied to the devices config file together with the device_token.
 
 
-.. py:function:: delete_device(device_id: str)
+.. py:function:: delete_device(device_id: uuid.UUID)
    :async:
 
 
@@ -157,6 +157,6 @@ Module Contents
    Args
    ----
        websocket (WebSocket): The WebSocket connection object.
-       device_id (str): The device_id.
+       device_id (UUID): The device_id.
 
 
