@@ -3,11 +3,12 @@
 
 """MRI sequence endpoints."""
 
-
+import datetime
 import os
 import tempfile
 from pathlib import Path
 
+from bson import ObjectId
 from bson.binary import Binary
 from fastapi import (
     APIRouter,
@@ -20,10 +21,10 @@ from fastapi import (
     status,
 )
 from fastapi.responses import FileResponse
-from scanhub_libraries.models import MRISequence, MRISequenceCreate
+from scanhub_libraries.models import BaseMRISequence, MRISequenceOut
 from scanhub_libraries.security import get_current_user
 
-from app.dal import mri_sequence_dal
+# from app.dal import mri_sequence_dal
 from app.db.mongodb import get_mongo_database
 
 seq_router = APIRouter(
@@ -32,10 +33,10 @@ seq_router = APIRouter(
 
 async def mri_sequence_form(
     name: str = Form(...),
-    description: str = Form(None),
-    sequence_type: str = Form(None),
+    description: str | None = Form(None),
+    sequence_type: str | None = Form(None),
     tags: list[str] = Form([]),
-) -> MRISequenceCreate:
+) -> BaseMRISequence:
     """Convert the form data to an MRISequenceCreate object.
 
     Parameters
@@ -54,7 +55,7 @@ async def mri_sequence_form(
     MRISequenceCreate
         The MRI sequence data.
     """
-    return MRISequenceCreate(
+    return BaseMRISequence(
         name=name,
         description=description,
         sequence_type=sequence_type,
@@ -62,11 +63,38 @@ async def mri_sequence_form(
     )
 
 
-@seq_router.post("/", response_model=MRISequence, status_code=status.HTTP_201_CREATED, tags=["mri sequences"])
-async def upload_mri_sequence_file(
-    mri_sequence: MRISequenceCreate = Depends(mri_sequence_form),
-    file: UploadFile = File(...),
+@seq_router.get("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"])
+async def get_mri_sequence_by_id(
+    sequence_id: str,
     database=Depends(get_mongo_database),
+) -> MRISequenceOut:
+    """Retrieve an MRI sequence by its ID.
+
+    Parameters
+    ----------
+    sequence_id : str
+        The ID of the MRI sequence to retrieve.
+    database : AsyncIOMotorDatabase
+        The MongoDB database handle.
+
+    Returns
+    -------
+    MRISequence
+        The retrieved MRI sequence.
+    """
+    if sequence := await database.collection.find_one({"_id": ObjectId(sequence_id)}):
+        sequence["_id"] = str(sequence["_id"])  # Convert ObjectId to str
+        return MRISequenceOut(**sequence)
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND, detail=f"MRI sequence with ID {sequence_id} not found."
+    )
+
+
+@seq_router.post("/sequence", response_model=MRISequenceOut, status_code=status.HTTP_201_CREATED, tags=["mri sequences"])
+async def create_mri_sequence(
+    sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
+    file: UploadFile = File(...),
+    database=Depends(get_mongo_database)
 ):
     """Upload an MRI sequence file and store it with the provided metadata.
 
@@ -91,22 +119,22 @@ async def upload_mri_sequence_file(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Invalid sequence file extension",
         )
-
     # Read the content of the uploaded file
     file_content = await file.read()
 
-    # Convert the MRISequenceCreate object to an MRISequence object
-    mri_sequence_with_file = MRISequence(
-        **mri_sequence.dict(), file=Binary(file_content)
-    )
-    mri_sequence_with_file.file_extension = file_extension
+    payload = sequence_meta.dict(by_alias=True)
+    payload["created_at"] = datetime.datetime.now(datetime.timezone.utc)
+    payload["file"] = Binary(file_content)
+    payload["file_extension"] = file_extension
 
-    # Store the MRI sequence with the uploaded file in the database
-    return await mri_sequence_dal.create_mri_sequence(database, mri_sequence_with_file)
+    if not (result := await database.collection.insert_one(payload)):
+        raise HTTPException(status_code=500, detail="Failed to insert sequence.")
+
+    return await get_mri_sequence_by_id(result.inserted_id, database)
 
 
-@seq_router.get("/", response_model=list[MRISequence], tags=["mri sequences"],)
-async def get_mri_sequences_endpoint(database=Depends(get_mongo_database)):
+@seq_router.get("/sequences/all", response_model=list[MRISequenceOut], tags=["mri sequences"],)
+async def get_all_mri_sequences(database=Depends(get_mongo_database)):
     """Retrieve a list of all MRI sequences from the database.
 
     Parameters
@@ -119,41 +147,22 @@ async def get_mri_sequences_endpoint(database=Depends(get_mongo_database)):
     List[MRISequence]
         The list of MRI sequences.
     """
-    if not (sequences := await mri_sequence_dal.get_mri_sequences(database)):
+    cursor = database.collection.find()
+    if not (sequences := [{**seq, "_id": str(seq["_id"])} async for seq in cursor]):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="No sequences found."
         )
-    return sequences
+    if (sequences_out := [MRISequenceOut(**seq) for seq in sequences]):
+        return sequences_out
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Invalid sequence definition(s). Could not cast to MRISequenceOut.",
+    )
 
 
-@seq_router.get("/{mri_sequence_id}", response_model=MRISequence, tags=["mri sequences"])
-async def get_mri_sequence_by_id_endpoint(
-    mri_sequence_id: str, database=Depends(get_mongo_database)
-):
-    """Retrieve an MRI sequence by its ID.
-
-    Parameters
-    ----------
-    mri_sequence_id : str
-        The ID of the MRI sequence to retrieve.
-    database : AsyncIOMotorDatabase
-        The MongoDB database handle.
-
-    Returns
-    -------
-    MRISequence
-        The retrieved MRI sequence.
-    """
-    if not (mri_sequence := await mri_sequence_dal.get_mri_sequence_by_id(database, mri_sequence_id)):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
-        )
-    return mri_sequence
-
-
-@seq_router.get("/mri-sequence-file/{mri_sequence_id}", tags=["mri sequences"])
-async def get_mri_sequence_file_by_id_endpoint(
-    mri_sequence_id: str,
+@seq_router.get("/sequence/{sequence_id}/file", tags=["mri sequences"])
+async def get_mri_sequence_file_by_id(
+    sequence_id: str,
     background_tasks: BackgroundTasks,
     name: str = "sequence",
     database=Depends(get_mongo_database),
@@ -162,7 +171,7 @@ async def get_mri_sequence_file_by_id_endpoint(
 
     Parameters
     ----------
-    mri_sequence_id : str
+    sequence_id : str
         The ID of the MRI sequence to retrieve.
     background_tasks : BackgroundTasks
         The background tasks to run.
@@ -176,17 +185,13 @@ async def get_mri_sequence_file_by_id_endpoint(
     FileResponse
         The retrieved MRI sequence file.
     """
-    mri_sequence = await mri_sequence_dal.get_mri_sequence_by_id(database, mri_sequence_id)
-
-    if mri_sequence:
+    if mri_sequence := await get_mri_sequence_by_id(sequence_id, database):
         binary_data = mri_sequence.file
         file_extension = mri_sequence.file_extension
 
         # Create a temporary file
-        # temp_file = tempfile.NamedTemporaryFile(delete=False)
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(binary_data)
-        # temp_file.close()
 
         # Create a FileResponse with the temporary file and the retrieved file extension
         response = FileResponse(
@@ -210,15 +215,17 @@ async def get_mri_sequence_file_by_id_endpoint(
     raise HTTPException(status_code=404, detail="Binary data not found")
 
 
-@seq_router.put("/{mri_sequence_id}", response_model=MRISequence, tags=["mri sequences"],)
+@seq_router.put("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"],)
 async def update_mri_sequence_endpoint(
-    mri_sequence_id: str, mri_sequence: MRISequence, database=Depends(get_mongo_database)
+    sequence_id: str,
+    sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
+    database=Depends(get_mongo_database),
 ):
     """Update an MRI sequence with new data.
 
     Parameters
     ----------
-    mri_sequence_id : str
+    sequence_id : str
         The ID of the MRI sequence to update.
     mri_sequence : MRISequence
         The updated MRI sequence data.
@@ -230,26 +237,28 @@ async def update_mri_sequence_endpoint(
     MRISequence
         The updated MRI sequence.
     """
-    if not (
-        updated_mri_sequence := await mri_sequence_dal.update_mri_sequence(
-            database, mri_sequence_id, mri_sequence
-        )
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
-        )
-    return updated_mri_sequence
+    update_fields = {k: v for k, v in sequence_meta.dict(by_alias=True).items() if v is not None}
+    update_fields["updated_at"] = datetime.datetime.now(datetime.timezone.utc)
+    result = await database.collection.update_one(
+        {"_id": ObjectId(sequence_id)},
+        {"$set": update_fields}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found.")
+    if result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update sequence.")
+    return await get_mri_sequence_by_id(sequence_id, database)
 
 
-@seq_router.delete("/{mri_sequence_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["mri sequences"],)
+@seq_router.delete("/sequence/{sequence_id}", status_code=status.HTTP_202_ACCEPTED, tags=["mri sequences"],)
 async def delete_mri_sequence_endpoint(
-    mri_sequence_id: str, database=Depends(get_mongo_database)
+    sequence_id: str, database=Depends(get_mongo_database)
 ):
     """Delete an MRI sequence by its ID.
 
     Parameters
     ----------
-    mri_sequence_id : str
+    sequence_id : str
         The ID of the MRI sequence to delete.
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
@@ -258,8 +267,9 @@ async def delete_mri_sequence_endpoint(
     -------
     None
     """
-    deleted_count = await mri_sequence_dal.delete_mri_sequence(database, mri_sequence_id)
-    if deleted_count == 0:
+    # deleted_count = await mri_sequence_dal.delete_mri_sequence(database, sequence_id)
+    result = await database.collection.delete_one({"_id": ObjectId(sequence_id)})
+    if result.deleted_count == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
         )
