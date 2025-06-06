@@ -9,15 +9,14 @@ import { useContext } from 'react'
 import { useQuery, useMutation } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
-import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import ImportContactsIcon from '@mui/icons-material/ImportContacts';
+import AddSharpIcon from '@mui/icons-material/AddSharp'
+import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined';
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
-import Sheet from '@mui/joy/Sheet'
 import { DataGrid, GridColDef, GridCellParams, GridActionsCellItem } from '@mui/x-data-grid'
 
 import { patientApi } from '../api'
@@ -106,16 +105,12 @@ export default function PatientListView() {
 
   const columns: GridColDef<PatientOut>[] = [
     {
-      field: 'open',
-      type: 'actions',
-      headerName: 'Open',
-      width: 80,
-      cellClassName: 'actions',
+      field: 'open', type: 'actions', headerName: '', width: 80, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
             key='1'
-            icon={<ImportContactsIcon />}
+            icon={<OpenInBrowserOutlinedIcon />}
             label='Show'
             color='inherit'
             onClick={() => {
@@ -125,27 +120,16 @@ export default function PatientListView() {
         ]
       },
     },
-    { field: 'id', headerName: 'ID', width: 300, editable: false },
+    { field: 'id', headerName: 'ID', width: 200, editable: false },
     { field: 'first_name', headerName: 'First Name', width: 200, editable: true },
     { field: 'last_name', headerName: 'Last Name', width: 200, editable: true },
     { field: 'birth_date', headerName: 'Birthday', width: 150, editable: true },
-    {
-      field: 'sex',
-      type: 'singleSelect',
-      headerName: 'Sex',
-      width: 100,
-      editable: true,
-      valueOptions: Object.values(Gender),
-    },
+    { field: 'sex', type: 'singleSelect', headerName: 'Sex', width: 100, editable: true, valueOptions: Object.values(Gender) },
     { field: 'datetime_created', headerName: 'Added (date/time)', width: 200, editable: false },
     { field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 200, editable: false },
     { field: 'comment', headerName: 'Comment', width: 300, editable: true },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Delete',
-      width: 100,
-      cellClassName: 'actions',
+      field: 'actions', type: 'actions', headerName: '', width: 100, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -179,14 +163,15 @@ export default function PatientListView() {
         </IconButton>
       </Stack>
 
-      <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
+      <div style={{ height:'80vh', width: '100%'}}>
         <DataGrid
           rows={patients ? patients : []}
           columns={columns}
           hideFooterSelectedRowCount
           editMode={'row'}
-          rowHeight={40}  // MUI default is 52
+          rowHeight={45}  // MUI default is 52
           loading={isUpdating || isLoading}
+          autoPageSize= {true}
           processRowUpdate={(updatedPatient, oldPatient) => {
             if (isNaN(Date.parse(updatedPatient.birth_date))) {
               showNotification({message: 'Invalid date format for birth-date.', type: 'warning'})
@@ -204,8 +189,13 @@ export default function PatientListView() {
               navigate(`/${params.row.id}`)
             }
           }}
+          sx={{
+            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+              outline: "none !important",
+            },
+          }}
         />
-      </Sheet>
+      </div>
 
       <ConfirmDeleteModal 
         onSubmit={() => {

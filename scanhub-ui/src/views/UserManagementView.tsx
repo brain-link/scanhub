@@ -104,36 +104,20 @@ export default function UserManagementView() {
     { field: 'first_name', headerName: 'First name', width: 200, editable: true },
     { field: 'last_name', headerName: 'Last name', width: 200, editable: true },
     { field: 'email', headerName: 'e-Mail', width: 200, editable: true },
-    {
-      field: 'role',
-      type: 'singleSelect',
-      headerName: 'Role',
-      width: 200,
-      editable: true,
-      valueOptions: Object.values(UserRole),
+    { 
+      field: 'role', type: 'singleSelect', headerName: 'Role', width: 200, editable: true,
+      valueOptions: Object.values(UserRole)
     },
-    {
-      field: 'last_activity_unixtime',
-      headerName: 'Last Activity Time',
-      width: 200,
-      editable: false,
-      filterable: false,
+    { 
+      field: 'last_activity_unixtime', headerName: 'Last Activity Time', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
-      field: 'last_login_unixtime',
-      headerName: 'Last Login Time',
-      width: 200,
-      editable: false,
-      filterable: false,
+      field: 'last_login_unixtime' ,headerName: 'Last Login Time', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Delete / Set Password',
-      width: 200,
-      cellClassName: 'actions',
+      field: 'actions', type: 'actions', headerName: '', width: 200, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -176,22 +160,28 @@ export default function UserManagementView() {
         </IconButton>
       </Stack>
 
-      <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
+      <div style={{ height:'80vh', width: '100%'}}>
         <DataGrid
           rows={users ? users : []}
           columns={columns}
           getRowId={(user) => user.username}
           hideFooterSelectedRowCount 
           editMode={'row'}
-          rowHeight={40}  // MUI default is 52
+          rowHeight={45}  // MUI default is 52
+          autoPageSize= {true}
           loading={isUpdating || isLoading}
           processRowUpdate={(updatedUser) => {
             setIsUpdating(true)
             updateMutation.mutate(updatedUser)
             return updatedUser
           }}
+          sx={{
+            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+              outline: "none !important",
+            },
+          }}
         />
-      </Sheet>
+      </div>
 
       <PasswordModal 
         onSubmit={() => {}} 
