@@ -2,13 +2,13 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Pydantic models of acquisition control."""
+# TODO: Add docstrings to all models and fields, such that they can be shown in the OpenAPI documentation
 from datetime import date, datetime
 from enum import Enum
-from typing import Any, Optional
 from uuid import UUID
-from typing import Literal
+from typing import Literal, Any
 
-from pydantic import BaseModel, ConfigDict, Field, Extra  # noqa
+from pydantic import BaseModel, ConfigDict, Field  # noqa
 
 
 class Gender(str, Enum):
@@ -49,7 +49,7 @@ class AcquisitionLimits(BaseModel):
 
     patient_height: int
     patient_weight: int
-    patient_gender: Gender = Field(None, alias="Gender")
+    patient_gender: Gender = Field(Gender.NOT_GIVEN)
     patient_age: int
 
 
@@ -91,13 +91,13 @@ class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
 class BaseDevice(BaseModel):
     """Device base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     name: str
     manufacturer: str
     modality: str
     status: str
-    site: str | None
+    site: str | None = None
     ip_address: str
 
 
@@ -106,7 +106,7 @@ class DeviceOut(BaseDevice):
 
     id: str
     datetime_created: datetime
-    datetime_updated: datetime | None
+    datetime_updated: datetime | None = None
 
 
 class TaskEvent(BaseModel):
@@ -147,7 +147,7 @@ class ItemStatus(str, Enum):
 class BaseResult(BaseModel):
     """Result model."""
 
-    task_id: Optional[UUID] = None
+    task_id: UUID | None = None
     type: ResultType
     status: ItemStatus = ItemStatus.NEW
     directory: str = ""
@@ -161,11 +161,11 @@ class ResultOut(BaseResult):
     datetime_created: datetime
 
 class BaseTask(BaseModel):
-    """Task model."""
+    """Task base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
-    workflow_id: Optional[UUID] = None
+    workflow_id: UUID | None = None
     name: str
     description: str
     task_type: TaskType
@@ -181,14 +181,14 @@ class TaskOut(BaseTask):
     id: UUID
     creator: str
     datetime_created: datetime
-    datetime_updated: datetime | None
+    datetime_updated: datetime | None = None
     results: list[ResultOut]
 
 
 class BaseAcquisitionTask(BaseTask):
-    """Acquisition task model."""
+    """Represents a task for data acquisition in the system."""
 
-    task_type: Literal[TaskType.ACQUISITION]
+    task_type: Literal[TaskType.ACQUISITION] = TaskType.ACQUISITION
     device_id: UUID
     sequence_id: UUID
     acquisition_parameter: AcquisitionParameter
@@ -204,7 +204,7 @@ class AcquisitionTaskOut(TaskOut, BaseAcquisitionTask):
 class BaseDAGTask(BaseTask):
     """Workflow task model."""
 
-    task_type: Literal[TaskType.DAG]
+    task_type: Literal[TaskType.DAG] = TaskType.DAG
     dag_type: TaskType
     dag_id: str
     input_result_id: UUID | None = None
@@ -220,12 +220,12 @@ class DAGTaskOut(TaskOut, BaseDAGTask):
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
-    exam_id: Optional[UUID] = None
+    exam_id: UUID | None = None
     name: str
     description: str
-    comment: str | None
+    comment: str | None = None
     status: ItemStatus
     is_template: bool
 
@@ -236,22 +236,22 @@ class WorkflowOut(BaseWorkflow):
     id: UUID
     creator: str
     datetime_created: datetime
-    datetime_updated: datetime | None
+    datetime_updated: datetime | None = None
     tasks: list[AcquisitionTaskOut | DAGTaskOut]
 
 
 class BaseExam(BaseModel):
     """Exam base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
-    patient_id: Optional[UUID] = None
+    patient_id: UUID | None = None
     name: str
     description: str
-    indication: str | None
-    patient_height_cm: int | None
-    patient_weight_kg: int | None
-    comment: str | None
+    indication: str | None = None
+    patient_height_cm: int | None = None
+    patient_weight_kg: int | None = None
+    comment: str | None = None
     status: ItemStatus
     is_template: bool
 
@@ -262,7 +262,7 @@ class ExamOut(BaseExam):
     id: UUID
     creator: str
     datetime_created: datetime
-    datetime_updated: datetime | None
+    datetime_updated: datetime | None = None
     workflows: list[WorkflowOut]
 
 
@@ -277,7 +277,7 @@ class User(BaseModel):
     username: str
     first_name: str
     last_name: str
-    email: str | None
+    email: str | None = None
     role: UserRole
     # access_token is a standardized name in OAuth2, don't change it
     access_token: str
@@ -285,8 +285,8 @@ class User(BaseModel):
     # token_type should most of the time be "bearer" as standardized in OAuth2
     # when adding new user, token_type is "password" and access_token contains password
     token_type: str
-    last_activity_unixtime: int | None
-    last_login_unixtime: int | None
+    last_activity_unixtime: int | None = None
+    last_login_unixtime: int | None = None
 
 
 class PasswordUpdateRequest(BaseModel):
@@ -298,15 +298,15 @@ class PasswordUpdateRequest(BaseModel):
 class BasePatient(BaseModel):
     """Patient pydantic base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     first_name: str
     last_name: str
     birth_date: date
     sex: Gender
     issuer: str
-    status: Literal["NEW", "UPDATED", "DELETED"]
-    comment: str | None
+    status: ItemStatus = ItemStatus.NEW
+    comment: str | None = None
 
 
 class PatientOut(BasePatient):
@@ -314,28 +314,18 @@ class PatientOut(BasePatient):
 
     patient_id: UUID = Field(alias="id")
     datetime_created: datetime
-    datetime_updated: datetime | None
+    datetime_updated: datetime | None = None
 
 
 class BaseMRISequence(BaseModel):
-    """A class representing an MRI sequence definition file and its associated metadata.
+    """Base model for MRI sequence."""
 
-    Attributes
-    ----------
-        id: The unique identifier for the MRI sequence, autogenerated by MongoDB.
-        name: The name of the MRI sequence.
-        description: A brief description of the MRI sequence.
-        sequence_type: The type of MRI sequence, such as T1-weighted, T2-weighted, etc.
-        created_at: The timestamp of when the MRI sequence was created.
-        updated_at: The timestamp of when the MRI sequence was last updated.
-        tags: A list of tags or keywords associated with the MRI sequence, useful for searching and filtering.
-    """
-
+    model_config = ConfigDict(extra="ignore")
+    
     name: str
     description: str | None = None
     sequence_type: str | None = None
-    tags: list[str] | None = None
-    model_config = ConfigDict(extra=Extra.ignore)
+    tags: list[str] = []
 
 
 class MRISequenceOut(BaseMRISequence):

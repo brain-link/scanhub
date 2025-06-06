@@ -37,23 +37,18 @@ async def mri_sequence_form(
     sequence_type: str | None = Form(None),
     tags: list[str] = Form([]),
 ) -> BaseMRISequence:
-    """Convert the form data to an MRISequenceCreate object.
+    """Convert form data to BaseMRISequence model.
 
     Parameters
     ----------
     name : str
         The name of the MRI sequence.
-    description : str
-        The description of the MRI sequence.
-    sequence_type : str
-        The type of the MRI sequence.
-    tags : str
-        The tags of the MRI sequence.
-
-    Returns
-    -------
-    MRISequenceCreate
-        The MRI sequence data.
+    description : str | None
+        A description of the MRI sequence.
+    sequence_type : str | None
+        The type of the MRI sequence (e.g., "imaging", "calibration", etc.).
+    tags : list[str]
+        A list of tags associated with the MRI sequence.
     """
     return BaseMRISequence(
         name=name,
@@ -90,7 +85,12 @@ async def get_mri_sequence_by_id(
     )
 
 
-@seq_router.post("/sequence", response_model=MRISequenceOut, status_code=status.HTTP_201_CREATED, tags=["mri sequences"])
+@seq_router.post(
+    "/sequence",
+    response_model=MRISequenceOut,
+    status_code=status.HTTP_201_CREATED,
+    tags=["mri sequences"],
+)
 async def create_mri_sequence(
     sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
     file: UploadFile = File(...),
@@ -148,16 +148,11 @@ async def get_all_mri_sequences(database=Depends(get_mongo_database)):
         The list of MRI sequences.
     """
     cursor = database.collection.find()
-    if not (sequences := [{**seq, "_id": str(seq["_id"])} async for seq in cursor]):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="No sequences found."
-        )
-    if (sequences_out := [MRISequenceOut(**seq) for seq in sequences]):
-        return sequences_out
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="Invalid sequence definition(s). Could not cast to MRISequenceOut.",
-    )
+    sequences = []
+    async for seq in cursor:
+        seq_dict = {**seq, "_id": str(seq["_id"])}
+        sequences.append(MRISequenceOut(**seq_dict))
+    return sequences
 
 
 @seq_router.get("/sequence/{sequence_id}/file", tags=["mri sequences"])
@@ -218,7 +213,7 @@ async def get_mri_sequence_file_by_id(
 @seq_router.put("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"],)
 async def update_mri_sequence_endpoint(
     sequence_id: str,
-    sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
+    sequence_meta: BaseMRISequence,
     database=Depends(get_mongo_database),
 ):
     """Update an MRI sequence with new data.
@@ -237,7 +232,7 @@ async def update_mri_sequence_endpoint(
     MRISequence
         The updated MRI sequence.
     """
-    update_fields = {k: v for k, v in sequence_meta.dict(by_alias=True).items() if v is not None}
+    update_fields = {k: v for k, v in sequence_meta.dict(by_alias=True).items() if v and v is not None}
     update_fields["updated_at"] = datetime.datetime.now(datetime.timezone.utc)
     result = await database.collection.update_one(
         {"_id": ObjectId(sequence_id)},
@@ -252,8 +247,9 @@ async def update_mri_sequence_endpoint(
 
 @seq_router.delete("/sequence/{sequence_id}", status_code=status.HTTP_202_ACCEPTED, tags=["mri sequences"],)
 async def delete_mri_sequence_endpoint(
-    sequence_id: str, database=Depends(get_mongo_database)
-):
+    sequence_id: str,
+    database=Depends(get_mongo_database),
+) -> None:
     """Delete an MRI sequence by its ID.
 
     Parameters
