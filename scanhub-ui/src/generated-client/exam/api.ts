@@ -46,7 +46,7 @@ export interface AcquisitionLimits {
      * @type {Gender}
      * @memberof AcquisitionLimits
      */
-    'Gender'?: Gender;
+    'patient_gender'?: Gender;
     /**
      * 
      * @type {number}
@@ -182,7 +182,7 @@ export interface AcquisitionTaskOut {
      * @type {DatetimeUpdated}
      * @memberof AcquisitionTaskOut
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {Array<ResultOut>}
@@ -193,7 +193,7 @@ export interface AcquisitionTaskOut {
 
 
 /**
- * Acquisition task model.
+ * Represents a task for data acquisition in the system.
  * @export
  * @interface BaseAcquisitionTask
  */
@@ -221,7 +221,7 @@ export interface BaseAcquisitionTask {
      * @type {string}
      * @memberof BaseAcquisitionTask
      */
-    'task_type': string;
+    'task_type'?: string;
     /**
      * 
      * @type {string}
@@ -274,7 +274,7 @@ export interface BaseAcquisitionTask {
 
 
 /**
- * Workflow task model.
+ * Workflow task model.  Attributes:     task_type (Literal[TaskType.DAG]): Specifies that this is a DAG task.     dag_type (TaskType): Type of the DAG (e.g., RECONSTRUCTION, PROCESSING).     dag_id (str): Unique identifier of the DAG.     input_result_id (UUID | None): Optional UUID of the input result.     parameter (dict | None): Optional dictionary of parameters for the DAG.  Example schema: {     \"task_type\": \"DAG\",     \"dag_type\": \"RECONSTRUCTION\",     \"dag_id\": \"recon-dag-001\",     \"input_result_id\": \"<result-uuid>\",     \"parameter\": {         \"threshold\": 0.01     } }
  * @export
  * @interface BaseDAGTask
  */
@@ -302,7 +302,7 @@ export interface BaseDAGTask {
      * @type {string}
      * @memberof BaseDAGTask
      */
-    'task_type': string;
+    'task_type'?: string;
     /**
      * 
      * @type {string}
@@ -383,25 +383,25 @@ export interface BaseExam {
      * @type {Indication}
      * @memberof BaseExam
      */
-    'indication': Indication;
+    'indication'?: Indication;
     /**
      * 
      * @type {PatientHeightCm}
      * @memberof BaseExam
      */
-    'patient_height_cm': PatientHeightCm;
+    'patient_height_cm'?: PatientHeightCm;
     /**
      * 
      * @type {PatientWeightKg}
      * @memberof BaseExam
      */
-    'patient_weight_kg': PatientWeightKg;
+    'patient_weight_kg'?: PatientWeightKg;
     /**
      * 
      * @type {Comment}
      * @memberof BaseExam
      */
-    'comment': Comment;
+    'comment'?: Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -417,6 +417,37 @@ export interface BaseExam {
 }
 
 
+/**
+ * Base model for MRI sequence.
+ * @export
+ * @interface BaseMRISequence
+ */
+export interface BaseMRISequence {
+    /**
+     * 
+     * @type {string}
+     * @memberof BaseMRISequence
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Description}
+     * @memberof BaseMRISequence
+     */
+    'description'?: Description;
+    /**
+     * 
+     * @type {SequenceType}
+     * @memberof BaseMRISequence
+     */
+    'sequence_type'?: SequenceType;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof BaseMRISequence
+     */
+    'tags'?: Array<string>;
+}
 /**
  * Result model.
  * @export
@@ -491,7 +522,7 @@ export interface BaseWorkflow {
      * @type {Comment}
      * @memberof BaseWorkflow
      */
-    'comment': Comment;
+    'comment'?: Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -513,13 +544,6 @@ export interface BaseWorkflow {
  * @interface Comment
  */
 export interface Comment {
-}
-/**
- * 
- * @export
- * @interface CreatedAt
- */
-export interface CreatedAt {
 }
 /**
  * Workflow Task output model.
@@ -622,7 +646,7 @@ export interface DAGTaskOut {
      * @type {DatetimeUpdated}
      * @memberof DAGTaskOut
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {Array<ResultOut>}
@@ -689,25 +713,25 @@ export interface ExamOut {
      * @type {Indication}
      * @memberof ExamOut
      */
-    'indication': Indication;
+    'indication'?: Indication;
     /**
      * 
      * @type {PatientHeightCm}
      * @memberof ExamOut
      */
-    'patient_height_cm': PatientHeightCm;
+    'patient_height_cm'?: PatientHeightCm;
     /**
      * 
      * @type {PatientWeightKg}
      * @memberof ExamOut
      */
-    'patient_weight_kg': PatientWeightKg;
+    'patient_weight_kg'?: PatientWeightKg;
     /**
      * 
      * @type {Comment}
      * @memberof ExamOut
      */
-    'comment': Comment;
+    'comment'?: Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -743,7 +767,7 @@ export interface ExamOut {
      * @type {DatetimeUpdated}
      * @memberof ExamOut
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {Array<WorkflowOut>}
@@ -877,7 +901,7 @@ export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInne
      * @type {DatetimeUpdated}
      * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {any}
@@ -927,13 +951,6 @@ export interface HTTPValidationError {
 /**
  * 
  * @export
- * @interface Id
- */
-export interface Id {
-}
-/**
- * 
- * @export
  * @interface Indication
  */
 export interface Indication {
@@ -964,65 +981,65 @@ export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
 
 
 /**
- * A class representing an MRI sequence definition file and its associated metadata.  Attributes ----------     id: The unique identifier for the MRI sequence, autogenerated by MongoDB.     name: The name of the MRI sequence.     description: A brief description of the MRI sequence.     sequence_type: The type of MRI sequence, such as T1-weighted, T2-weighted, etc.     created_at: The timestamp of when the MRI sequence was created.     updated_at: The timestamp of when the MRI sequence was last updated.     tags: A list of tags or keywords associated with the MRI sequence, useful for searching and filtering.     file: The MRI sequence definition file content or a reference to the stored file,     such as a GridFS identifier or an S3 URL.     file_extension: The file extension of the MRI sequence definition file.
+ * Output model for MRI sequence.
  * @export
- * @interface MRISequence
+ * @interface MRISequenceOut
  */
-export interface MRISequence {
-    /**
-     * 
-     * @type {Id}
-     * @memberof MRISequence
-     */
-    '_id': Id;
+export interface MRISequenceOut {
     /**
      * 
      * @type {string}
-     * @memberof MRISequence
+     * @memberof MRISequenceOut
      */
     'name': string;
     /**
      * 
      * @type {Description}
-     * @memberof MRISequence
+     * @memberof MRISequenceOut
      */
-    'description': Description;
+    'description'?: Description;
     /**
      * 
      * @type {SequenceType}
-     * @memberof MRISequence
+     * @memberof MRISequenceOut
      */
-    'sequence_type': SequenceType;
+    'sequence_type'?: SequenceType;
     /**
      * 
-     * @type {CreatedAt}
-     * @memberof MRISequence
+     * @type {Array<string>}
+     * @memberof MRISequenceOut
      */
-    'created_at': CreatedAt;
+    'tags'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MRISequenceOut
+     */
+    '_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MRISequenceOut
+     */
+    'created_at': string;
     /**
      * 
      * @type {UpdatedAt}
-     * @memberof MRISequence
+     * @memberof MRISequenceOut
      */
-    'updated_at': UpdatedAt;
-    /**
-     * 
-     * @type {Tags}
-     * @memberof MRISequence
-     */
-    'tags': Tags;
+    'updated_at'?: UpdatedAt;
     /**
      * 
      * @type {any}
-     * @memberof MRISequence
+     * @memberof MRISequenceOut
      */
     'file': any;
     /**
      * 
      * @type {FileExtension}
-     * @memberof MRISequence
+     * @memberof MRISequenceOut
      */
-    'file_extension': FileExtension;
+    'file_extension'?: FileExtension;
 }
 /**
  * 
@@ -1159,7 +1176,7 @@ export interface ResponseCreateTaskApiV1ExamTaskNewPost {
      * @type {DatetimeUpdated}
      * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {any}
@@ -1294,7 +1311,7 @@ export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
      * @type {DatetimeUpdated}
      * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {any}
@@ -1429,7 +1446,7 @@ export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
      * @type {DatetimeUpdated}
      * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {any}
@@ -1564,7 +1581,7 @@ export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
      * @type {DatetimeUpdated}
      * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {any}
@@ -1687,13 +1704,6 @@ export interface SequenceType {
 /**
  * 
  * @export
- * @interface Tags
- */
-export interface Tags {
-}
-/**
- * 
- * @export
  * @interface TaskId
  */
 export interface TaskId {
@@ -1803,7 +1813,7 @@ export interface WorkflowOut {
      * @type {Comment}
      * @memberof WorkflowOut
      */
-    'comment': Comment;
+    'comment'?: Comment;
     /**
      * 
      * @type {ItemStatus}
@@ -1839,7 +1849,7 @@ export interface WorkflowOut {
      * @type {DatetimeUpdated}
      * @memberof WorkflowOut
      */
-    'datetime_updated': DatetimeUpdated;
+    'datetime_updated'?: DatetimeUpdated;
     /**
      * 
      * @type {Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>}
@@ -2549,205 +2559,8 @@ export class HealthApi extends BaseAPI {
 export const MriSequencesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
-         * @summary Delete Mri Sequence Endpoint
-         * @param {string} mriSequenceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete: async (mriSequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'mriSequenceId' is not null or undefined
-            assertParamExists('deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete', 'mriSequenceId', mriSequenceId)
-            const localVarPath = `/api/v1/sequence/{mri_sequence_id}`
-                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
-         * @summary Get Mri Sequence By Id Endpoint
-         * @param {string} mriSequenceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet: async (mriSequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'mriSequenceId' is not null or undefined
-            assertParamExists('getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet', 'mriSequenceId', mriSequenceId)
-            const localVarPath = `/api/v1/sequence/{mri_sequence_id}`
-                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
-         * @summary Get Mri Sequence File By Id Endpoint
-         * @param {string} mriSequenceId 
-         * @param {string} [name] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet: async (mriSequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'mriSequenceId' is not null or undefined
-            assertParamExists('getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet', 'mriSequenceId', mriSequenceId)
-            const localVarPath = `/api/v1/sequence/mri-sequence-file/{mri_sequence_id}`
-                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (name !== undefined) {
-                localVarQueryParameter['name'] = name;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
-         * @summary Get Mri Sequences Endpoint
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMriSequencesEndpointApiV1SequenceGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/sequence/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
-         * @summary Update Mri Sequence Endpoint
-         * @param {string} mriSequenceId 
-         * @param {MRISequence} mRISequence 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut: async (mriSequenceId: string, mRISequence: MRISequence, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'mriSequenceId' is not null or undefined
-            assertParamExists('updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut', 'mriSequenceId', mriSequenceId)
-            // verify required parameter 'mRISequence' is not null or undefined
-            assertParamExists('updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut', 'mRISequence', mRISequence)
-            const localVarPath = `/api/v1/sequence/{mri_sequence_id}`
-                .replace(`{${"mri_sequence_id"}}`, encodeURIComponent(String(mriSequenceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(mRISequence, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
-         * @summary Upload Mri Sequence File
+         * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
          * @param {string} [description] 
@@ -2756,12 +2569,12 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadMriSequenceFileApiV1SequencePost: async (file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMriSequenceApiV1ExamSequencePost: async (file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
-            assertParamExists('uploadMriSequenceFileApiV1SequencePost', 'file', file)
+            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'file', file)
             // verify required parameter 'name' is not null or undefined
-            assertParamExists('uploadMriSequenceFileApiV1SequencePost', 'name', name)
-            const localVarPath = `/api/v1/sequence/`;
+            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'name', name)
+            const localVarPath = `/api/v1/exam/sequence`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2812,6 +2625,203 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Delete an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+         * @summary Delete Mri Sequence Endpoint
+         * @param {string} sequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete: async (sequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sequenceId' is not null or undefined
+            assertParamExists('deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/exam/sequence/{sequence_id}`
+                .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+         * @summary Get All Mri Sequences
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllMriSequencesApiV1ExamSequencesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/exam/sequences/all`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+         * @summary Get Mri Sequence By Id
+         * @param {string} sequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceByIdApiV1ExamSequenceSequenceIdGet: async (sequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sequenceId' is not null or undefined
+            assertParamExists('getMriSequenceByIdApiV1ExamSequenceSequenceIdGet', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/exam/sequence/{sequence_id}`
+                .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve an MRI sequence file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence File By Id
+         * @param {string} sequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet: async (sequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sequenceId' is not null or undefined
+            assertParamExists('getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/exam/sequence/{sequence_id}/file`
+                .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+         * @summary Update Mri Sequence Endpoint
+         * @param {string} sequenceId 
+         * @param {BaseMRISequence} baseMRISequence 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut: async (sequenceId: string, baseMRISequence: BaseMRISequence, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sequenceId' is not null or undefined
+            assertParamExists('updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut', 'sequenceId', sequenceId)
+            // verify required parameter 'baseMRISequence' is not null or undefined
+            assertParamExists('updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut', 'baseMRISequence', baseMRISequence)
+            const localVarPath = `/api/v1/exam/sequence/{sequence_id}`
+                .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseMRISequence, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2823,74 +2833,8 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MriSequencesApiAxiosParamCreator(configuration)
     return {
         /**
-         * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
-         * @summary Delete Mri Sequence Endpoint
-         * @param {string} mriSequenceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
-         * @summary Get Mri Sequence By Id Endpoint
-         * @param {string} mriSequenceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequence>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
-         * @summary Get Mri Sequence File By Id Endpoint
-         * @param {string} mriSequenceId 
-         * @param {string} [name] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId, name, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
-         * @summary Get Mri Sequences Endpoint
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getMriSequencesEndpointApiV1SequenceGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MRISequence>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequencesEndpointApiV1SequenceGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequencesEndpointApiV1SequenceGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
-         * @summary Update Mri Sequence Endpoint
-         * @param {string} mriSequenceId 
-         * @param {MRISequence} mRISequence 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId: string, mRISequence: MRISequence, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequence>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId, mRISequence, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
-         * @summary Upload Mri Sequence File
+         * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
          * @param {string} [description] 
@@ -2899,10 +2843,76 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadMriSequenceFileApiV1SequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequence>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadMriSequenceFileApiV1SequencePost(file, name, description, sequenceType, tags, options);
+        async createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.uploadMriSequenceFileApiV1SequencePost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequenceApiV1ExamSequencePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+         * @summary Delete Mri Sequence Endpoint
+         * @param {string} sequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+         * @summary Get All Mri Sequences
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllMriSequencesApiV1ExamSequencesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MRISequenceOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllMriSequencesApiV1ExamSequencesAllGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getAllMriSequencesApiV1ExamSequencesAllGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+         * @summary Get Mri Sequence By Id
+         * @param {string} sequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceByIdApiV1ExamSequenceSequenceIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve an MRI sequence file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence File By Id
+         * @param {string} sequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+         * @summary Update Mri Sequence Endpoint
+         * @param {string} sequenceId 
+         * @param {BaseMRISequence} baseMRISequence 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId: string, baseMRISequence: BaseMRISequence, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId, baseMRISequence, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2916,59 +2926,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
     const localVarFp = MriSequencesApiFp(configuration)
     return {
         /**
-         * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
-         * @summary Delete Mri Sequence Endpoint
-         * @param {string} mriSequenceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
-         * @summary Get Mri Sequence By Id Endpoint
-         * @param {string} mriSequenceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId: string, options?: any): AxiosPromise<MRISequence> {
-            return localVarFp.getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
-         * @summary Get Mri Sequence File By Id Endpoint
-         * @param {string} mriSequenceId 
-         * @param {string} [name] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId: string, name?: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId, name, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
-         * @summary Get Mri Sequences Endpoint
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMriSequencesEndpointApiV1SequenceGet(options?: any): AxiosPromise<Array<MRISequence>> {
-            return localVarFp.getMriSequencesEndpointApiV1SequenceGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
-         * @summary Update Mri Sequence Endpoint
-         * @param {string} mriSequenceId 
-         * @param {MRISequence} mRISequence 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId: string, mRISequence: MRISequence, options?: any): AxiosPromise<MRISequence> {
-            return localVarFp.updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId, mRISequence, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
-         * @summary Upload Mri Sequence File
+         * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
          * @param {string} [description] 
@@ -2977,8 +2936,59 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadMriSequenceFileApiV1SequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequence> {
-            return localVarFp.uploadMriSequenceFileApiV1SequencePost(file, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
+        createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+         * @summary Delete Mri Sequence Endpoint
+         * @param {string} sequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId: string, options?: any): AxiosPromise<any> {
+            return localVarFp.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+         * @summary Get All Mri Sequences
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllMriSequencesApiV1ExamSequencesAllGet(options?: any): AxiosPromise<Array<MRISequenceOut>> {
+            return localVarFp.getAllMriSequencesApiV1ExamSequencesAllGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+         * @summary Get Mri Sequence By Id
+         * @param {string} sequenceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId: string, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve an MRI sequence file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence File By Id
+         * @param {string} sequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+         * @summary Update Mri Sequence Endpoint
+         * @param {string} sequenceId 
+         * @param {BaseMRISequence} baseMRISequence 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId: string, baseMRISequence: BaseMRISequence, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId, baseMRISequence, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2991,69 +3001,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
  */
 export class MriSequencesApi extends BaseAPI {
     /**
-     * Delete an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
-     * @summary Delete Mri Sequence Endpoint
-     * @param {string} mriSequenceId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MriSequencesApi
-     */
-    public deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).deleteMriSequenceEndpointApiV1SequenceMriSequenceIdDelete(mriSequenceId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieve an MRI sequence by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
-     * @summary Get Mri Sequence By Id Endpoint
-     * @param {string} mriSequenceId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MriSequencesApi
-     */
-    public getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getMriSequenceByIdEndpointApiV1SequenceMriSequenceIdGet(mriSequenceId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieve an MRI sequence file by its ID.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
-     * @summary Get Mri Sequence File By Id Endpoint
-     * @param {string} mriSequenceId 
-     * @param {string} [name] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MriSequencesApi
-     */
-    public getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getMriSequenceFileByIdEndpointApiV1SequenceMriSequenceFileMriSequenceIdGet(mriSequenceId, name, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
-     * @summary Get Mri Sequences Endpoint
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MriSequencesApi
-     */
-    public getMriSequencesEndpointApiV1SequenceGet(options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getMriSequencesEndpointApiV1SequenceGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Update an MRI sequence with new data.  Parameters ---------- mri_sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
-     * @summary Update Mri Sequence Endpoint
-     * @param {string} mriSequenceId 
-     * @param {MRISequence} mRISequence 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MriSequencesApi
-     */
-    public updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId: string, mRISequence: MRISequence, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).updateMriSequenceEndpointApiV1SequenceMriSequenceIdPut(mriSequenceId, mRISequence, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
-     * @summary Upload Mri Sequence File
+     * @summary Create Mri Sequence
      * @param {File} file 
      * @param {string} name 
      * @param {string} [description] 
@@ -3063,8 +3012,69 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public uploadMriSequenceFileApiV1SequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).uploadMriSequenceFileApiV1SequencePost(file, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
+    public createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
+     * @summary Delete Mri Sequence Endpoint
+     * @param {string} sequenceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
+     * @summary Get All Mri Sequences
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getAllMriSequencesApiV1ExamSequencesAllGet(options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getAllMriSequencesApiV1ExamSequencesAllGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
+     * @summary Get Mri Sequence By Id
+     * @param {string} sequenceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve an MRI sequence file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+     * @summary Get Mri Sequence File By Id
+     * @param {string} sequenceId 
+     * @param {string} [name] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
+     * @summary Update Mri Sequence Endpoint
+     * @param {string} sequenceId 
+     * @param {BaseMRISequence} baseMRISequence 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId: string, baseMRISequence: BaseMRISequence, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId, baseMRISequence, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

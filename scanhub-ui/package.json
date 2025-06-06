@@ -69,12 +69,7 @@
     "lint": "eslint ./src/**/*.tsx",
     "lint:fix": "eslint --fix './src/**/*.tsx'",
     "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc",
-    "generate-patient-client": "rm -rf src/generated-client/patient; curl https://localhost/api/v1/patient/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/patient-openapi.json; openapi-generator-cli generate -i openapi-jsons/patient-openapi.json -g typescript-axios -o src/generated-client/patient --additional-properties=supportsES6=true",
-    "generate-exam-client": "rm -rf src/generated-client/exam; curl https://localhost/api/v1/exam/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/exam-openapi.json; openapi-generator-cli generate -i openapi-jsons/exam-openapi.json -g typescript-axios -o src/generated-client/exam --additional-properties=supportsES6=true",
-    "generate-userlogin-client": "rm -rf src/generated-client/userlogin; curl https://localhost/api/v1/userlogin/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/userlogin-openapi.json; openapi-generator-cli generate -i openapi-jsons/userlogin-openapi.json -g typescript-axios -o src/generated-client/userlogin --additional-properties=supportsES6=true",
-    "generate-workflowmanager-client": "rm -rf src/generated-client/workflow; curl https://localhost/api/v1/workflowmanager/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/workflowmanager-openapi.json; openapi-generator-cli generate -i openapi-jsons/workflowmanager-openapi.json -g typescript-axios -o src/generated-client/workflowmanager --additional-properties=supportsES6=true",
-    "generate-devices-client": "rm -rf src/generated-client/device; curl https://localhost/api/v1/device/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/device-openapi.json; openapi-generator-cli generate -i openapi-jsons/device-openapi.json -g typescript-axios -o src/generated-client/device --additional-properties=supportsES6=true",
-    "generate-all-clients": "rm -rf src/generated-client; yarn generate-patient-client; yarn generate-exam-client; yarn generate-userlogin-client; yarn generate-workflowmanager-client; yarn generate-devices-client",
+    "generate-all-clients": "./src/scripts/generate-all-clients.sh",
     "ts-unused-exports": "ts-unused-exports tsconfig.json --excludePathsFromReport=rc/generated-client"
   },
   "browserslist": {
