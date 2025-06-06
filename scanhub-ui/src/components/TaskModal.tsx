@@ -23,8 +23,8 @@ import * as React from 'react'
 import { useMutation, useQuery } from 'react-query'
 
 import { deviceApi, sequenceApi, taskApi } from '../api'
-import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
-import { MRISequence } from '../generated-client/sequence/api'
+import { MRISequence, BaseTask, TaskOut, TaskType } from '../generated-client/exam'
+
 import { DeviceOut } from '../generated-client/device/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'

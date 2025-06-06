@@ -19,8 +19,7 @@ import {
   examManagerHealthApi,
   workflowManagerHealthApi,
   userLoginManagerHealthApi,
-  deviceManagerHealthApi,
-  sequenceManagerHealthApi } from '../api'
+  deviceManagerHealthApi } from '../api'
 import NotificationContext from '../NotificationContext'
 import useHealthCheck from '../utils/Healthcheck'
 import baseUrls from '../utils/Urls'
@@ -140,29 +139,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
       },
     })
 
-    const {
-      // data,
-      isError: sequenceManagerHealthIsError
-    } = useQuery<unknown>({
-      queryKey: ['sequenceManagerHealth'],
-      refetchInterval: 5000,
-      retry: 0,
-      queryFn: async () => {
-        return await sequenceManagerHealthApi
-        .healthCheckApiV1MriSequencesHealthGet({timeout: 1000})
-        .then((result) => {
-          if (sequenceManagerHealthIsError && result.data.status == 'ok') {
-            showNotification({message: 'Reconnected to sequence-manager after connection loss.', type: 'success'})
-          }
-          // return result.data
-        })
-        .catch(() => {
-          return Promise.reject('Error at health check of sequence-manager.')
-        })
-      },
-    })
-
-    const nginxProxyIsError = useHealthCheck(baseUrls.nginxUrl)
+    const nginxProxyIsError = useHealthCheck('http://localhost:8080')
   
     let statusColor: 'primary' | 'warning' | 'danger';
     statusColor = 'primary';
@@ -225,11 +202,6 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
             <Typography fontSize='sm'>Device Manager</Typography>
             <Typography level='body-sm' textColor='text.primary'>
               {deviceManagerHealthIsError ? 'NOT REACHABLE' : 'OK'}
-            </Typography>
-
-            <Typography fontSize='sm'>Sequence Manager</Typography>
-            <Typography level='body-sm' textColor='text.primary'>
-              {sequenceManagerHealthIsError ? 'NOT REACHABLE' : 'OK'}
             </Typography>
 
             <Typography fontSize='sm'>Microservice Proxy</Typography>

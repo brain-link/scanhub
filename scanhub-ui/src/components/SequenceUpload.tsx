@@ -20,29 +20,30 @@ import Typography from '@mui/joy/Typography'
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
 import { ModalProps } from '../interfaces/components.interface'
-import { MRISequence } from '../generated-client/sequence/api'
+import { BaseMRISequence } from '../generated-client/exam/api'
+
 
 
 function SequenceUploadForm(props: ModalProps) {
 
   const [, showNotification] = useContext(NotificationContext)
 
-  const [sequence, setSequence] = React.useState<MRISequence>({
-    _id: '',
+  const [sequence, setSequence] = React.useState<BaseMRISequence>({
     name: '',
     description: '',
     sequence_type: '',  // eslint-disable-line camelcase
-    tags: [],
-    file: null,
-    file_extension: '.seq',   // eslint-disable-line camelcase
+    tags: []
   })
+  const [file, setFile] = React.useState<File | null>(null)
 
-  const uploadSequence = useMutation(async (sequence: MRISequence) => {
-    if (sequence.file == undefined || sequence.file == null) {
+  const uploadSequence = useMutation(async (sequence: BaseMRISequence) => {
+    if (file == undefined || file == null) {
       showNotification({message: 'No file selected for upload.', type: 'warning'})
     }
     else {
-      await sequenceApi.uploadMriSequenceFileApiV1MriSequencesUploadPost(sequence.file, sequence.name, sequence.description, sequence.sequence_type)
+      await sequenceApi.createMriSequenceApiV1ExamSequencePost(
+        file, sequence.name, sequence.description as string, sequence.sequence_type as string
+      )
       .then(() => {
         showNotification({message: 'Sequence uploaded.', type: 'success'})
         props.onSubmit()
@@ -83,7 +84,7 @@ function SequenceUploadForm(props: ModalProps) {
           name='sequence_type'
           onChange={(e) => setSequence({ ...sequence, [e.target.name]: e.target.value })}
           placeholder='Sequence type'
-          defaultValue={sequence.sequence_type ? sequence.sequence_type : ''}
+          defaultValue={sequence.sequence_type ? String(sequence.sequence_type) : ''}
           required
         />
 
@@ -93,7 +94,7 @@ function SequenceUploadForm(props: ModalProps) {
             {'Selected file: '}
           </Typography>
           <Typography sx={{fontStyle: 'italic'}}>
-            {sequence.file ? sequence.file?.name : '---'}
+            {file ? file?.name : '---'}
           </Typography>
         </Stack>
         <Button color='primary' aria-label='upload picture' component='label'>
@@ -103,7 +104,7 @@ function SequenceUploadForm(props: ModalProps) {
             type='file'
             onChange={(e) => {
               e.preventDefault()
-              setSequence({ ...sequence, file: e.target.files ? e.target.files[0] : null })
+              setFile(e.target.files ? e.target.files[0] : null)
             }}
           />
           Upload sequence
@@ -114,7 +115,7 @@ function SequenceUploadForm(props: ModalProps) {
           sx={{ maxWidth: 120 }}
           onClick={(event) => {
             event.preventDefault()
-            if (sequence.file == undefined || sequence.file == null) {
+            if (file == undefined || file == null) {
               showNotification({message: 'No file selected for upload.', type: 'warning'})
             }
             else if (sequence.name == '') {

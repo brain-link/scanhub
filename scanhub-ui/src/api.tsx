@@ -5,11 +5,10 @@
  * api.tsx contains instances of the different apis.
  */
 import { PatientsApi, HealthApi as PatientManagerHealthApi } from './generated-client/patient'
-import { ExamsApi, WorkflowsApi, TasksApi, ResultsApi, HealthApi as ExamManagerHealthApi } from './generated-client/exam'
+import { ExamsApi, WorkflowsApi, TasksApi, ResultsApi, MriSequencesApi, HealthApi as ExamManagerHealthApi } from './generated-client/exam'
 import { WorkflowManagerApi, HealthApi as WorkflowManagerHealthApi } from './generated-client/workflowmanager'
 import { UserApi, LoginApi, HealthApi as UserLoginManagerHealthApi } from './generated-client/userlogin'
 import { DevicesApi, HealthApi as DeviceManagerHealthApi } from './generated-client/device'
-import { MRISequencesApi, HealthApi as SequenceManagerHealthApi } from './generated-client/sequence'
 import baseUrls from './utils/Urls'
 
 
@@ -19,7 +18,8 @@ export const patientManagerHealthApi = new PatientManagerHealthApi(undefined, ba
 export const examApi = new ExamsApi(undefined, baseUrls.examService)
 export const workflowsApi = new WorkflowsApi(undefined, baseUrls.examService)
 export const taskApi = new TasksApi(undefined, baseUrls.examService)
-// export const resultApi = new ResultsApi(undefined, baseUrls.examService)
+export const resultApi = new ResultsApi(undefined, baseUrls.examService)
+export const sequenceApi = new MriSequencesApi(undefined, baseUrls.examService)
 export const examManagerHealthApi = new ExamManagerHealthApi(undefined, baseUrls.examService)
 
 export const workflowManagerApi = new WorkflowManagerApi(undefined, baseUrls.workflowManagerService)
@@ -31,6 +31,3 @@ export const userLoginManagerHealthApi = new UserLoginManagerHealthApi(undefined
 
 export const deviceApi = new DevicesApi(undefined, baseUrls.deviceService)
 export const deviceManagerHealthApi = new DeviceManagerHealthApi(undefined, baseUrls.deviceService)
-
-export const sequenceApi = new MRISequencesApi(undefined, baseUrls.sequenceService)
-export const sequenceManagerHealthApi = new SequenceManagerHealthApi(undefined, baseUrls.sequenceService)
