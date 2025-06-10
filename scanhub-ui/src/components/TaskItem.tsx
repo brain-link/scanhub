@@ -7,7 +7,6 @@
 import * as React from 'react'
 import { useMutation } from 'react-query'
 
-import AssignmentIcon from '@mui/icons-material/Assignment'
 import Typography from '@mui/joy/Typography'
 import Tooltip from '@mui/joy/Tooltip'
 import Box from '@mui/joy/Box'
@@ -15,12 +14,14 @@ import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
 import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
+import DatasetRoundedIcon from '@mui/icons-material/DatasetRounded';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/joy/Button'
 
-import { TaskOut, ItemStatus } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
@@ -33,7 +34,7 @@ export default function TaskItem(
     refetchParentData, 
     selection, 
     onClick
-  }: RefetchableItemInterface<TaskOut> & SelectableItemInterface<TaskOut>
+  }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut> & SelectableItemInterface<AcquisitionTaskOut | DAGTaskOut>
 ) {
   return (
     <Box
@@ -60,7 +61,9 @@ export default function TaskItem(
           variant={(selection.type == 'task' && selection.itemId == task.id) ? 'outlined' : 'plain'}
           onClick={onClick}
         >
-          <AssignmentIcon fontSize='small' />
+          {
+            task.task_type === TaskType.Acquisition ? <DatasetRoundedIcon fontSize='small' /> : <AccountTreeRoundedIcon fontSize='small' />
+          }
           <Box 
             sx={{
               marginLeft: 0.5,
@@ -94,7 +97,7 @@ export default function TaskItem(
 }
 
 
-function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<TaskOut>) {
+function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut>) {
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
 
