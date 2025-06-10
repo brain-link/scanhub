@@ -17,7 +17,8 @@ import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import SchemaIcon from '@mui/icons-material/Schema'
+// import SchemaIcon from '@mui/icons-material/Schema'
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import Button from '@mui/joy/Button'
 
 import { WorkflowOut } from '../generated-client/exam'
@@ -48,7 +49,7 @@ export default function WorkflowItem({ item: workflow, selection, onClick }: Sel
         variant={(selection.type == 'workflow' && selection.itemId == workflow.id) ? 'outlined' : 'plain'}
         onClick={onClick}
       >
-        <SchemaIcon fontSize='small' />
+        <InsertDriveFileOutlinedIcon fontSize='small' />
         <Box 
           sx={{
             marginLeft: 0.5,

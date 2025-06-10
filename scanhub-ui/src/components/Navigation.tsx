@@ -11,6 +11,7 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import HomeMiniIcon from '@mui/icons-material/HomeMini';
+import TripOriginRoundedIcon from '@mui/icons-material/TripOriginRounded';
 import LineStyleIcon from '@mui/icons-material/LineStyle'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
@@ -89,7 +90,7 @@ export default function Navigation() {
   const menuItems = [
     { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon /> },
     { id: 1, text: 'Templates', link: '/templates', icon: <ListAltIcon /> },
-    { id: 2, text: 'Devices', link: '/devices', icon: <HomeMiniIcon /> },
+    { id: 2, text: 'Devices', link: '/devices', icon: <TripOriginRoundedIcon /> },
     { id: 3, text: 'Sequences', link: '/sequences', icon: <LineStyleIcon /> },
   ]
   if (user && user.role == UserRole.Admin) {
