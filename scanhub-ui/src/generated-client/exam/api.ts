@@ -67,19 +67,19 @@ export interface AcquisitionParameter {
      * @type {XYZ}
      * @memberof AcquisitionParameter
      */
-    'fov_scaling'?: XYZ;
+    'fov_scaling': XYZ;
     /**
      * 
      * @type {XYZ}
      * @memberof AcquisitionParameter
      */
-    'fov_offset'?: XYZ;
+    'fov_offset': XYZ;
     /**
      * 
      * @type {XYZ}
      * @memberof AcquisitionParameter
      */
-    'fov_rotation'?: XYZ;
+    'fov_rotation': XYZ;
 }
 /**
  * Acquisition Task output model.
@@ -137,10 +137,10 @@ export interface AcquisitionTaskOut {
     'is_template': boolean;
     /**
      * 
-     * @type {string}
+     * @type {DeviceId}
      * @memberof AcquisitionTaskOut
      */
-    'device_id': string;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {string}
@@ -153,12 +153,6 @@ export interface AcquisitionTaskOut {
      * @memberof AcquisitionTaskOut
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof AcquisitionTaskOut
-     */
-    'acquisition_limits': AcquisitionLimits;
     /**
      * 
      * @type {string}
@@ -189,6 +183,45 @@ export interface AcquisitionTaskOut {
      * @memberof AcquisitionTaskOut
      */
     'results': Array<ResultOut>;
+    /**
+     * 
+     * @type {AcquisitionTaskOutAcquisitionLimits}
+     * @memberof AcquisitionTaskOut
+     */
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface AcquisitionTaskOutAcquisitionLimits
+ */
+export interface AcquisitionTaskOutAcquisitionLimits {
+    /**
+     * 
+     * @type {any}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_height': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_weight': any;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_gender'?: Gender;
+    /**
+     * 
+     * @type {any}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_age': any;
 }
 
 
@@ -221,7 +254,7 @@ export interface BaseAcquisitionTask {
      * @type {string}
      * @memberof BaseAcquisitionTask
      */
-    'task_type'?: string;
+    'task_type': string;
     /**
      * 
      * @type {string}
@@ -248,10 +281,10 @@ export interface BaseAcquisitionTask {
     'is_template': boolean;
     /**
      * 
-     * @type {string}
+     * @type {DeviceId}
      * @memberof BaseAcquisitionTask
      */
-    'device_id': string;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {string}
@@ -264,17 +297,11 @@ export interface BaseAcquisitionTask {
      * @memberof BaseAcquisitionTask
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof BaseAcquisitionTask
-     */
-    'acquisition_limits': AcquisitionLimits;
 }
 
 
 /**
- * Workflow task model.  Attributes:     task_type (Literal[TaskType.DAG]): Specifies that this is a DAG task.     dag_type (TaskType): Type of the DAG (e.g., RECONSTRUCTION, PROCESSING).     dag_id (str): Unique identifier of the DAG.     input_result_id (UUID | None): Optional UUID of the input result.     parameter (dict | None): Optional dictionary of parameters for the DAG.  Example schema: {     \"task_type\": \"DAG\",     \"dag_type\": \"RECONSTRUCTION\",     \"dag_id\": \"recon-dag-001\",     \"input_result_id\": \"<result-uuid>\",     \"parameter\": {         \"threshold\": 0.01     } }
+ * Workflow task model.
  * @export
  * @interface BaseDAGTask
  */
@@ -302,7 +329,7 @@ export interface BaseDAGTask {
      * @type {string}
      * @memberof BaseDAGTask
      */
-    'task_type'?: string;
+    'task_type': string;
     /**
      * 
      * @type {string}
@@ -329,10 +356,10 @@ export interface BaseDAGTask {
     'is_template': boolean;
     /**
      * 
-     * @type {TaskType}
+     * @type {string}
      * @memberof BaseDAGTask
      */
-    'dag_type': TaskType;
+    'dag_type': BaseDAGTaskDagTypeEnum;
     /**
      * 
      * @type {string}
@@ -353,6 +380,12 @@ export interface BaseDAGTask {
     'parameter'?: Parameter;
 }
 
+export const BaseDAGTaskDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type BaseDAGTaskDagTypeEnum = typeof BaseDAGTaskDagTypeEnum[keyof typeof BaseDAGTaskDagTypeEnum];
 
 /**
  * Exam base model.
@@ -601,10 +634,10 @@ export interface DAGTaskOut {
     'is_template': boolean;
     /**
      * 
-     * @type {TaskType}
+     * @type {string}
      * @memberof DAGTaskOut
      */
-    'dag_type': TaskType;
+    'dag_type': DAGTaskOutDagTypeEnum;
     /**
      * 
      * @type {string}
@@ -655,6 +688,12 @@ export interface DAGTaskOut {
     'results': Array<ResultOut>;
 }
 
+export const DAGTaskOutDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type DAGTaskOutDagTypeEnum = typeof DAGTaskOutDagTypeEnum[keyof typeof DAGTaskOutDagTypeEnum];
 
 /**
  * 
@@ -669,6 +708,13 @@ export interface DatetimeUpdated {
  * @interface Description
  */
 export interface Description {
+}
+/**
+ * 
+ * @export
+ * @interface DeviceId
+ */
+export interface DeviceId {
 }
 /**
  * 
@@ -856,10 +902,10 @@ export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInne
     'is_template': any;
     /**
      * 
-     * @type {any}
+     * @type {DeviceId}
      * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
      */
-    'device_id': any;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {any}
@@ -872,12 +918,6 @@ export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInne
      * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'acquisition_limits': AcquisitionLimits;
     /**
      * 
      * @type {any}
@@ -910,10 +950,16 @@ export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInne
     'results': any;
     /**
      * 
-     * @type {TaskType}
+     * @type {AcquisitionTaskOutAcquisitionLimits}
      * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
      */
-    'dag_type': TaskType;
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
+     */
+    'dag_type': GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum;
     /**
      * 
      * @type {any}
@@ -934,6 +980,12 @@ export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInne
     'parameter'?: Parameter;
 }
 
+export const GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum = typeof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum[keyof typeof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum];
 
 /**
  * 
@@ -1131,10 +1183,10 @@ export interface ResponseCreateTaskApiV1ExamTaskNewPost {
     'is_template': any;
     /**
      * 
-     * @type {any}
+     * @type {DeviceId}
      * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
      */
-    'device_id': any;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {any}
@@ -1147,12 +1199,6 @@ export interface ResponseCreateTaskApiV1ExamTaskNewPost {
      * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'acquisition_limits': AcquisitionLimits;
     /**
      * 
      * @type {any}
@@ -1185,10 +1231,16 @@ export interface ResponseCreateTaskApiV1ExamTaskNewPost {
     'results': any;
     /**
      * 
-     * @type {TaskType}
+     * @type {AcquisitionTaskOutAcquisitionLimits}
      * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
      */
-    'dag_type': TaskType;
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
+     */
+    'dag_type': ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum;
     /**
      * 
      * @type {any}
@@ -1209,6 +1261,12 @@ export interface ResponseCreateTaskApiV1ExamTaskNewPost {
     'parameter'?: Parameter;
 }
 
+export const ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum = typeof ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum[keyof typeof ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum];
 
 /**
  * 
@@ -1266,10 +1324,10 @@ export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
     'is_template': any;
     /**
      * 
-     * @type {any}
+     * @type {DeviceId}
      * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
      */
-    'device_id': any;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {any}
@@ -1282,12 +1340,6 @@ export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
      * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'acquisition_limits': AcquisitionLimits;
     /**
      * 
      * @type {any}
@@ -1320,10 +1372,16 @@ export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
     'results': any;
     /**
      * 
-     * @type {TaskType}
+     * @type {AcquisitionTaskOutAcquisitionLimits}
      * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
      */
-    'dag_type': TaskType;
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
+     */
+    'dag_type': ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum;
     /**
      * 
      * @type {any}
@@ -1344,6 +1402,12 @@ export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
     'parameter'?: Parameter;
 }
 
+export const ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum = typeof ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum[keyof typeof ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum];
 
 /**
  * 
@@ -1401,10 +1465,10 @@ export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
     'is_template': any;
     /**
      * 
-     * @type {any}
+     * @type {DeviceId}
      * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
      */
-    'device_id': any;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {any}
@@ -1417,12 +1481,6 @@ export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
      * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'acquisition_limits': AcquisitionLimits;
     /**
      * 
      * @type {any}
@@ -1455,10 +1513,16 @@ export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
     'results': any;
     /**
      * 
-     * @type {TaskType}
+     * @type {AcquisitionTaskOutAcquisitionLimits}
      * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
      */
-    'dag_type': TaskType;
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
+     */
+    'dag_type': ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum;
     /**
      * 
      * @type {any}
@@ -1479,6 +1543,12 @@ export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
     'parameter'?: Parameter;
 }
 
+export const ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum = typeof ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum[keyof typeof ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum];
 
 /**
  * 
@@ -1536,10 +1606,10 @@ export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
     'is_template': any;
     /**
      * 
-     * @type {any}
+     * @type {DeviceId}
      * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
      */
-    'device_id': any;
+    'device_id'?: DeviceId;
     /**
      * 
      * @type {any}
@@ -1552,12 +1622,6 @@ export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
      * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
      */
     'acquisition_parameter': AcquisitionParameter;
-    /**
-     * 
-     * @type {AcquisitionLimits}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'acquisition_limits': AcquisitionLimits;
     /**
      * 
      * @type {any}
@@ -1590,10 +1654,16 @@ export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
     'results': any;
     /**
      * 
-     * @type {TaskType}
+     * @type {AcquisitionTaskOutAcquisitionLimits}
      * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
      */
-    'dag_type': TaskType;
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+    /**
+     * 
+     * @type {any}
+     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
+     */
+    'dag_type': ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum;
     /**
      * 
      * @type {any}
@@ -1614,6 +1684,12 @@ export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
     'parameter'?: Parameter;
 }
 
+export const ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum = {
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum = typeof ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum[keyof typeof ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum];
 
 /**
  * 
@@ -2563,13 +2639,13 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
-         * @param {string} [description] 
-         * @param {string} [sequenceType] 
+         * @param {Description} [description] 
+         * @param {SequenceType} [sequenceType] 
          * @param {Array<string>} [tags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost: async (file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMriSequenceApiV1ExamSequencePost: async (file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('createMriSequenceApiV1ExamSequencePost', 'file', file)
             // verify required parameter 'name' is not null or undefined
@@ -2601,11 +2677,11 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
             }
     
             if (description !== undefined) { 
-                localVarFormParams.append('description', description as any);
+                localVarFormParams.append('description', new Blob([JSON.stringify(description)], { type: "application/json", }));
             }
     
             if (sequenceType !== undefined) { 
-                localVarFormParams.append('sequence_type', sequenceType as any);
+                localVarFormParams.append('sequence_type', new Blob([JSON.stringify(sequenceType)], { type: "application/json", }));
             }
                 if (tags) {
                 localVarFormParams.append('tags', tags.join(COLLECTION_FORMATS.csv));
@@ -2837,13 +2913,13 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
-         * @param {string} [description] 
-         * @param {string} [sequenceType] 
+         * @param {Description} [description] 
+         * @param {SequenceType} [sequenceType] 
          * @param {Array<string>} [tags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+        async createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequenceApiV1ExamSequencePost']?.[localVarOperationServerIndex]?.url;
@@ -2930,13 +3006,13 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
-         * @param {string} [description] 
-         * @param {string} [sequenceType] 
+         * @param {Description} [description] 
+         * @param {SequenceType} [sequenceType] 
          * @param {Array<string>} [tags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
+        createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
             return localVarFp.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3005,14 +3081,14 @@ export class MriSequencesApi extends BaseAPI {
      * @summary Create Mri Sequence
      * @param {File} file 
      * @param {string} name 
-     * @param {string} [description] 
-     * @param {string} [sequenceType] 
+     * @param {Description} [description] 
+     * @param {SequenceType} [sequenceType] 
      * @param {Array<string>} [tags] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+    public createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options?: RawAxiosRequestConfig) {
         return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
     }
 
