@@ -39,9 +39,9 @@ class XYZ(BaseModel):
 class AcquisitionParameter(BaseModel):
     """Pydantic definition of acquisition parameters."""
 
-    fov_scaling: XYZ = XYZ(x=1., y=1., z=1.)
-    fov_offset: XYZ = XYZ(x=0., y=0., z=0.)
-    fov_rotation: XYZ = XYZ(x=0., y=0., z=0.)
+    fov_scaling: XYZ
+    fov_offset: XYZ
+    fov_rotation: XYZ
 
 
 class AcquisitionLimits(BaseModel):
@@ -188,24 +188,23 @@ class TaskOut(BaseTask):
 class BaseAcquisitionTask(BaseTask):
     """Represents a task for data acquisition in the system."""
 
-    task_type: Literal[TaskType.ACQUISITION] = TaskType.ACQUISITION
-    device_id: UUID
-    sequence_id: UUID
+    task_type: Literal[TaskType.ACQUISITION]
+    device_id: UUID | None = None
+    sequence_id: str    # sequence ID is a mongo db ObjectId, which is not a UUID
     acquisition_parameter: AcquisitionParameter
-    acquisition_limits: AcquisitionLimits
 
 
 class AcquisitionTaskOut(TaskOut, BaseAcquisitionTask):
     """Acquisition Task output model."""
 
-    pass
+    acquisition_limits: AcquisitionLimits | None = None
 
 
 class BaseDAGTask(BaseTask):
     """Workflow task model."""
 
-    task_type: Literal[TaskType.DAG] = TaskType.DAG
-    dag_type: TaskType
+    task_type: Literal[TaskType.DAG]
+    dag_type: Literal[TaskType.RECONSTRUCTION, TaskType.PROCESSING]
     dag_id: str
     input_result_id: UUID | None = None
     parameter: dict | None = None

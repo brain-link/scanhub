@@ -104,6 +104,7 @@ async def create_task_from_template(
     HTTPException
         404: Creation unsuccessful
     """
+    # TODO: Check if all optional parameters like device_id, acquisition_parameter etc. are set.
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("workflow_id:", workflow_id)

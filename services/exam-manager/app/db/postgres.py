@@ -101,8 +101,9 @@ class Workflow(Base):  # TBD: rename to "Workflow"
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
-    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
-
+    tasks: Mapped[list["Task"]] = relationship(
+        "Task", lazy="selectin", cascade="all, delete-orphan"
+    )
     exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
@@ -128,7 +129,7 @@ class Task(Base):
     workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    task_type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
+    task_type: Mapped[TaskType] = mapped_column(nullable=False)
     destination: Mapped[str] = mapped_column(nullable=False, default="")
     status: Mapped[ItemStatus] = mapped_column(nullable=False)
     progress: Mapped[int] = mapped_column(nullable=False)
@@ -137,7 +138,8 @@ class Task(Base):
 
     __mapper_args__ = {
         "polymorphic_identity": "task",
-        "polymorphic_on": task_type,
+        "polymorphic_on": "task_type",
+        "with_polymorphic": "*",
     }
 
 class AcquisitionTask(Task):
@@ -150,10 +152,10 @@ class AcquisitionTask(Task):
     id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("task.id", ondelete="CASCADE"), primary_key=True, default=uuid.uuid4
     )
-    sequence_id: Mapped[uuid.UUID] = mapped_column(nullable=False)
-    device_id: Mapped[uuid.UUID] = mapped_column(nullable=False)
+    sequence_id: Mapped[str] = mapped_column(nullable=False)
+    device_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     acquisition_parameter: Mapped[AcquisitionParameter] = mapped_column(type_=JSON, nullable=False)
-    acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=False)
+    acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=True)
 
 class DAGTask(Task):
     """DAG task ORM model."""
