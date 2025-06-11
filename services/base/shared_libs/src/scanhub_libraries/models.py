@@ -334,8 +334,8 @@ class BaseMRISequence(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
     name: str
-    description: str | None = None
-    sequence_type: str | None = None
+    description: str
+    sequence_type: str
     tags: list[str] = []
 
 

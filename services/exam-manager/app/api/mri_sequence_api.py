@@ -33,8 +33,8 @@ seq_router = APIRouter(
 
 async def mri_sequence_form(
     name: str = Form(...),
-    description: str | None = Form(None),
-    sequence_type: str | None = Form(None),
+    description: str = Form(""),
+    sequence_type: str = Form(""),
     tags: list[str] = Form([]),
 ) -> BaseMRISequence:
     """Convert form data to BaseMRISequence model.
