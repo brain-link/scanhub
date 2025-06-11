@@ -27,10 +27,8 @@ app = FastAPI(
 #   Better specify explicitly the allowed origins
 #   See: https://fastapi.tiangolo.com/tutorial/cors/
 origins = [
-    "http://localhost",
-    "http://localhost:3000",  # frontned
-    "http://localhost:8100",  # patient-manager
-    "http://localhost:8080",  # nginx
+    "http://localhost",       # frontend via nginx-proxy
+    "https://localhost",      # frontend via nginx-proxy
 ]
 
 app.add_middleware(

@@ -5,6 +5,7 @@
 
 import datetime
 import os
+import uuid
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -14,10 +15,28 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 # Create base for device
 Base: DeclarativeMeta = declarative_base()
 
-if db_uri := os.getenv("DB_URI"):
+
+postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
+postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
+postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
+if (os.path.exists(postgres_user_filepath) and \
+    os.path.exists(postgres_password_filepath) and \
+    os.path.exists(postgres_db_name_filepath) \
+):
+    with open(postgres_user_filepath) as file:
+        postgres_user = file.readline().strip()
+    with open(postgres_password_filepath) as file:
+        postgres_password = file.readline().strip()
+    with open(postgres_db_name_filepath) as file:
+        postgres_db_name = file.readline().strip()
+    db_uri = f"postgresql://{postgres_user}:{postgres_password}@scanhub-database/{postgres_db_name}"
+    db_uri_async = f"postgresql+asyncpg://{postgres_user}:{postgres_password}@scanhub-database/{postgres_db_name}"
     engine = create_engine(db_uri, echo=False)
+    # Create async engine and session, echo=True generates console output
+    async_engine = create_async_engine(db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT")
+    async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 else:
-    raise RuntimeError("Database URI not defined.")
+    raise RuntimeError("Database secrets for connection missing.")
 
 
 def init_db() -> None:
@@ -31,21 +50,25 @@ class Device(Base):  # type: ignore
 
     __tablename__ = "device"
 
-    id: Mapped[str] = mapped_column(primary_key=True)
-
-    name: Mapped[str] = mapped_column(nullable=False)
-    manufacturer: Mapped[str] = mapped_column(nullable=False)
-    modality: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[str] = mapped_column(nullable=False)
-    site: Mapped[str] = mapped_column(nullable=True)
-    ip_address: Mapped[str] = mapped_column(nullable=False)
-
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
+
+    title: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    token_hash: Mapped[str] = mapped_column(nullable=False, unique=True)
+    salt: Mapped[str] = mapped_column(nullable=False)
+
+    status: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=True)
+    manufacturer: Mapped[str] = mapped_column(nullable=True)
+    modality: Mapped[str] = mapped_column(nullable=True)
+    site: Mapped[str] = mapped_column(nullable=True)
+    ip_address: Mapped[str] = mapped_column(nullable=True)
 
     def update(self, data: dict):
         """Update attributes of orm model.
@@ -56,14 +79,3 @@ class Device(Base):  # type: ignore
         """
         for key, value in data.items():
             setattr(self, key, value)
-
-
-if db_uri_async := os.getenv("DB_URI_ASYNC"):
-    # Create async engine and session, echo=True generates console output
-    async_engine = create_async_engine(
-        db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT"
-    )
-else:
-    raise RuntimeError("Database URI not defined.")
-
-async_session = async_sessionmaker(async_engine, expire_on_commit=False)

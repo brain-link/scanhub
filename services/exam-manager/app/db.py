@@ -32,10 +32,27 @@ class Base(DeclarativeBase):
 
 
 
-if db_uri := os.getenv("DB_URI"):
+postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
+postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
+postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
+if (os.path.exists(postgres_user_filepath) and \
+    os.path.exists(postgres_password_filepath) and \
+    os.path.exists(postgres_db_name_filepath) \
+):
+    with open(postgres_user_filepath) as file:
+        postgres_user = file.readline().strip()
+    with open(postgres_password_filepath) as file:
+        postgres_password = file.readline().strip()
+    with open(postgres_db_name_filepath) as file:
+        postgres_db_name = file.readline().strip()
+    db_uri = f"postgresql://{postgres_user}:{postgres_password}@scanhub-database/{postgres_db_name}"
+    db_uri_async = f"postgresql+asyncpg://{postgres_user}:{postgres_password}@scanhub-database/{postgres_db_name}"
     engine = create_engine(db_uri, echo=False)
+    # Create async engine and session, echo=True generates console output
+    async_engine = create_async_engine(db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT")
+    async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 else:
-    raise RuntimeError("Database URI not defined.")
+    raise RuntimeError("Database secrets for connection missing.")
 
 
 def init_db() -> None:
@@ -130,6 +147,7 @@ class Task(Base):
     destinations: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
 
     status: Mapped[ItemStatus] = mapped_column(nullable=False)
+    progress: Mapped[int] = mapped_column(nullable=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
     results: Mapped[list["Result"]] = relationship(lazy="selectin")
 
@@ -159,12 +177,3 @@ try:
     Device = MappedBase.classes.device
 except AttributeError as error:
     raise AttributeError("Could not find device and/or workflow table(s).") from error
-
-
-if db_uri_async := os.getenv("DB_URI_ASYNC"):
-    # Create async engine and session, echo=True generates console output
-    async_engine = create_async_engine(db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT")
-else:
-    raise RuntimeError("Database URI not defined.")
-
-async_session = async_sessionmaker(async_engine, expire_on_commit=False)

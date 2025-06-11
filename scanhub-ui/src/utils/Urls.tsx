@@ -6,12 +6,13 @@
  */
 
 const baseUrls = {
-  patientService: 'http://localhost:8080',
-  examService: 'http://localhost:8080',
-  workflowManagerService: 'http://localhost:8080',
-  userloginService: 'http://localhost:8080',
-  deviceService: 'http://localhost:8080',
-  sequenceService: 'http://localhost:8080'
+  patientService: 'https://localhost',
+  examService: 'https://localhost',
+  workflowManagerService: 'https://localhost',
+  userloginService: 'https://localhost',
+  deviceService: 'https://localhost',
+  sequenceService: 'https://localhost',
+  nginxUrl: 'https://localhost'
 }
 
 export default baseUrls

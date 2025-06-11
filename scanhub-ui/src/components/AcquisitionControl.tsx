@@ -5,6 +5,8 @@
  * AcquisitionControl.tsx is responsible for rendering the acquisition trigger and process.
  */
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
@@ -14,6 +16,7 @@ import * as React from 'react'
 import { useMutation } from 'react-query'
 
 import { workflowManagerApi } from '../api'
+import { ItemStatus } from '../generated-client/exam'
 import { ItemSelection } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
@@ -36,13 +39,16 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
     },
   })
 
+  let actionIcon = <PlayCircleIcon />
+  if (itemSelection.status == ItemStatus.Started) actionIcon = <StopCircleIcon />
+  if (itemSelection.status == ItemStatus.Finished) actionIcon = <CheckCircleIcon />
 
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
       <IconButton 
         size='sm' 
         variant='plain' 
-        color='neutral'
+        color={'neutral'}
         onClick={() => {
           if (itemSelection.itemId == undefined) {
             showNotification({message: 'No item selected!', type: 'warning'})
@@ -54,7 +60,7 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
           }
         }}
       >
-        <PlayCircleIcon />
+        {actionIcon}
       </IconButton>
 
       <Stack direction='column' sx={{ flex: 1 }}>
@@ -65,7 +71,11 @@ function AcquisitionControl({ itemSelection } : { itemSelection: ItemSelection }
             'Select item to start...'}
         </Typography>
         <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
-        <LinearProgress determinate value={60} sx={{marginTop: 1}} />
+        <LinearProgress 
+          determinate value={itemSelection.progress}
+          sx={{marginTop: 1}}
+          color={itemSelection.status == ItemStatus.Finished ? 'success' : 'primary'}
+        />
       </Stack>
     </Box>
   )

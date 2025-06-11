@@ -193,6 +193,12 @@ export interface BaseTask {
     'status': ItemStatus;
     /**
      * 
+     * @type {number}
+     * @memberof BaseTask
+     */
+    'progress': number;
+    /**
+     * 
      * @type {boolean}
      * @memberof BaseTask
      */
@@ -531,6 +537,12 @@ export interface TaskOut {
     'status': ItemStatus;
     /**
      * 
+     * @type {number}
+     * @memberof TaskOut
+     */
+    'progress': number;
+    /**
+     * 
      * @type {boolean}
      * @memberof TaskOut
      */
@@ -575,13 +587,10 @@ export interface TaskOut {
  */
 
 export const TaskType = {
-    RecoTask: 'RECO_TASK',
+    ProcessingTask: 'PROCESSING_TASK',
     DeviceTaskSimulator: 'DEVICE_TASK_SIMULATOR',
     DeviceTaskSdk: 'DEVICE_TASK_SDK',
-    ProcessingTask: 'PROCESSING_TASK',
-    CertifiedDeviceTask: 'CERTIFIED_DEVICE_TASK',
-    CertifiedRecoTask: 'CERTIFIED_RECO_TASK',
-    CertifiedProcessingTask: 'CERTIFIED_PROCESSING_TASK'
+    ReconstructionTask: 'RECONSTRUCTION_TASK'
 } as const;
 
 export type TaskType = typeof TaskType[keyof typeof TaskType];
@@ -1485,6 +1494,40 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * @summary Get Dicom
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDicomApiV1ExamDicomResultIdGet: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getDicomApiV1ExamDicomResultIdGet', 'resultId', resultId)
+            const localVarPath = `/api/v1/exam/dicom/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Get Result
          * @param {ResultId} resultId 
@@ -1566,6 +1609,55 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+         * @summary Upload Dicom
+         * @param {ResultId} resultId 
+         * @param {File} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadDicomApiV1ExamDicomResultIdPost: async (resultId: ResultId, file: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('uploadDicomApiV1ExamDicomResultIdPost', 'resultId', resultId)
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('uploadDicomApiV1ExamDicomResultIdPost', 'file', file)
+            const localVarPath = `/api/v1/exam/dicom/{result_id}`
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1616,6 +1708,19 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * @summary Get Dicom
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDicomApiV1ExamDicomResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicomApiV1ExamDicomResultIdGet(resultId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicomApiV1ExamDicomResultIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Get Result
          * @param {ResultId} resultId 
@@ -1640,6 +1745,20 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ResultsApi.updateResultApiV1ExamResultResultIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+         * @summary Upload Dicom
+         * @param {ResultId} resultId 
+         * @param {File} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadDicomApiV1ExamDicomResultIdPost(resultId: ResultId, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadDicomApiV1ExamDicomResultIdPost(resultId, file, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.uploadDicomApiV1ExamDicomResultIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1683,6 +1802,16 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+         * @summary Get Dicom
+         * @param {ResultId} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDicomApiV1ExamDicomResultIdGet(resultId: ResultId, options?: any): AxiosPromise<void> {
+            return localVarFp.getDicomApiV1ExamDicomResultIdGet(resultId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
          * @summary Get Result
          * @param {ResultId} resultId 
@@ -1702,6 +1831,17 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          */
         updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: any): AxiosPromise<ResultOut> {
             return localVarFp.updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+         * @summary Upload Dicom
+         * @param {ResultId} resultId 
+         * @param {File} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadDicomApiV1ExamDicomResultIdPost(resultId: ResultId, file: File, options?: any): AxiosPromise<any> {
+            return localVarFp.uploadDicomApiV1ExamDicomResultIdPost(resultId, file, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1750,6 +1890,18 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
+     * Get DICOM file of a result.  This endpoint in implemented in main without the result_router to omit the user authentification. The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend. This is not to be done. TODO fix it!  Parameters ---------- result_id     UUID of the result with the dicom.  Returns -------     DICOM file response  Raises ------ HTTPException     Throws exception if result ID is unknown HTTPException     Throws exception if DICOM file does not exist
+     * @summary Get Dicom
+     * @param {ResultId} resultId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public getDicomApiV1ExamDicomResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getDicomApiV1ExamDicomResultIdGet(resultId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
      * @summary Get Result
      * @param {ResultId} resultId 
@@ -1772,6 +1924,19 @@ export class ResultsApi extends BaseAPI {
      */
     public updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: RawAxiosRequestConfig) {
         return ResultsApiFp(this.configuration).updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
+     * @summary Upload Dicom
+     * @param {ResultId} resultId 
+     * @param {File} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public uploadDicomApiV1ExamDicomResultIdPost(resultId: ResultId, file: File, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).uploadDicomApiV1ExamDicomResultIdPost(resultId, file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

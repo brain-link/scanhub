@@ -13,9 +13,19 @@ app = FastAPI(
     docs_url="/api/v1/workflowmanager/docs",
 )
 
+# To be done: Specify specific origins:
+#   Wildcard ["*"] excludes eeverything that involves credentials
+#   Better specify explicitly the allowed origins
+#   See: https://fastapi.tiangolo.com/tutorial/cors/
+ORIGINS = [
+    "http://localhost",       # frontend via nginx-proxy
+    "https://localhost",      # frontend via nginx-proxy
+]
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

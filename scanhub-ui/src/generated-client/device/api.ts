@@ -72,6 +72,25 @@ export type Commands = typeof Commands[keyof typeof Commands];
 
 
 /**
+ * Device registration request pydantic model (to be sent by user first adding the device to the platform).
+ * @export
+ * @interface DeviceCreationRequest
+ */
+export interface DeviceCreationRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceCreationRequest
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceCreationRequest
+     */
+    'description': string;
+}
+/**
  * Device pydantic output model.
  * @export
  * @interface DeviceOut
@@ -88,19 +107,25 @@ export interface DeviceOut {
      * @type {string}
      * @memberof DeviceOut
      */
-    'name': string;
+    'datetime_created': string;
     /**
      * 
      * @type {string}
      * @memberof DeviceOut
      */
-    'manufacturer': string;
+    'datetime_updated'?: string;
     /**
      * 
      * @type {string}
      * @memberof DeviceOut
      */
-    'modality': string;
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'description': string;
     /**
      * 
      * @type {string}
@@ -112,25 +137,31 @@ export interface DeviceOut {
      * @type {string}
      * @memberof DeviceOut
      */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'manufacturer'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'modality'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
     'site'?: string;
     /**
      * 
      * @type {string}
      * @memberof DeviceOut
      */
-    'ip_address': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'datetime_created': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'datetime_updated'?: string;
+    'ip_address'?: string;
 }
 /**
  * Pydantic model definition of a device workflow.
@@ -162,6 +193,12 @@ export interface DeviceTask {
      * @memberof DeviceTask
      */
     'parametrized_sequence': ParametrizedSequence;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceTask
+     */
+    'user_access_token': string;
 }
 
 
@@ -303,6 +340,46 @@ export interface XYZ {
 export const DevicesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+         * @summary Create Device
+         * @param {DeviceCreationRequest} deviceCreationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDeviceApiV1DeviceCreatedevicePost: async (deviceCreationRequest: DeviceCreationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deviceCreationRequest' is not null or undefined
+            assertParamExists('createDeviceApiV1DeviceCreatedevicePost', 'deviceCreationRequest', deviceCreationRequest)
+            const localVarPath = `/api/v1/device/createdevice`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deviceCreationRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Delete a device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response indicating the success or failure of the deletion.
          * @summary Delete Device
          * @param {string} deviceId 
@@ -351,82 +428,6 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'deviceId' is not null or undefined
             assertParamExists('getDeviceApiV1DeviceDeviceIdGet', 'deviceId', deviceId)
             const localVarPath = `/api/v1/device/{device_id}`
-                .replace(`{${"device_id"}}`, encodeURIComponent(String(deviceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieve the IP address of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the IP address of the device.
-         * @summary Get Device Ip Address
-         * @param {string} deviceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet: async (deviceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'deviceId' is not null or undefined
-            assertParamExists('getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet', 'deviceId', deviceId)
-            const localVarPath = `/api/v1/device/{device_id}/ip_address`
-                .replace(`{${"device_id"}}`, encodeURIComponent(String(deviceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieve the status of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the status of the device.
-         * @summary Get Device Status
-         * @param {string} deviceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDeviceStatusApiV1DeviceDeviceIdStatusGet: async (deviceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'deviceId' is not null or undefined
-            assertParamExists('getDeviceStatusApiV1DeviceDeviceIdStatusGet', 'deviceId', deviceId)
-            const localVarPath = `/api/v1/device/{device_id}/status`
                 .replace(`{${"device_id"}}`, encodeURIComponent(String(deviceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -539,6 +540,19 @@ export const DevicesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DevicesApiAxiosParamCreator(configuration)
     return {
         /**
+         * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+         * @summary Create Device
+         * @param {DeviceCreationRequest} deviceCreationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest: DeviceCreationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.createDeviceApiV1DeviceCreatedevicePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Delete a device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response indicating the success or failure of the deletion.
          * @summary Delete Device
          * @param {string} deviceId 
@@ -562,32 +576,6 @@ export const DevicesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDeviceApiV1DeviceDeviceIdGet(deviceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDeviceApiV1DeviceDeviceIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Retrieve the IP address of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the IP address of the device.
-         * @summary Get Device Ip Address
-         * @param {string} deviceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet(deviceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet(deviceId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Retrieve the status of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the status of the device.
-         * @summary Get Device Status
-         * @param {string} deviceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getDeviceStatusApiV1DeviceDeviceIdStatusGet(deviceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDeviceStatusApiV1DeviceDeviceIdStatusGet(deviceId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDeviceStatusApiV1DeviceDeviceIdStatusGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -626,6 +614,16 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DevicesApiFp(configuration)
     return {
         /**
+         * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+         * @summary Create Device
+         * @param {DeviceCreationRequest} deviceCreationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest: DeviceCreationRequest, options?: any): AxiosPromise<any> {
+            return localVarFp.createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Delete a device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response indicating the success or failure of the deletion.
          * @summary Delete Device
          * @param {string} deviceId 
@@ -644,26 +642,6 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          */
         getDeviceApiV1DeviceDeviceIdGet(deviceId: string, options?: any): AxiosPromise<DeviceOut> {
             return localVarFp.getDeviceApiV1DeviceDeviceIdGet(deviceId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Retrieve the IP address of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the IP address of the device.
-         * @summary Get Device Ip Address
-         * @param {string} deviceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet(deviceId: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet(deviceId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Retrieve the status of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the status of the device.
-         * @summary Get Device Status
-         * @param {string} deviceId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDeviceStatusApiV1DeviceDeviceIdStatusGet(deviceId: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getDeviceStatusApiV1DeviceDeviceIdStatusGet(deviceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve the list of registered devices.  Returns -------     List[Device]: The list of registered devices.
@@ -695,6 +673,18 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
  */
 export class DevicesApi extends BaseAPI {
     /**
+     * Create device database entry.  Only devices which are created by a user via this endpoint and have the device_id and device_token that result from this call configured correctly can later connect and register.  Parameters ---------- request:     DeviceCreationRequest to create device in Scanhub.     Further details of the device are later provided by the device itself.  Return ------ device_token:     the token of the device which the user should copy manually to the configuration file of the device.  device_id:     the id of the device, should be copied to the devices config file together with the device_token.
+     * @summary Create Device
+     * @param {DeviceCreationRequest} deviceCreationRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevicesApi
+     */
+    public createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest: DeviceCreationRequest, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Delete a device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response indicating the success or failure of the deletion.
      * @summary Delete Device
      * @param {string} deviceId 
@@ -716,30 +706,6 @@ export class DevicesApi extends BaseAPI {
      */
     public getDeviceApiV1DeviceDeviceIdGet(deviceId: string, options?: RawAxiosRequestConfig) {
         return DevicesApiFp(this.configuration).getDeviceApiV1DeviceDeviceIdGet(deviceId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieve the IP address of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the IP address of the device.
-     * @summary Get Device Ip Address
-     * @param {string} deviceId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DevicesApi
-     */
-    public getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet(deviceId: string, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).getDeviceIpAddressApiV1DeviceDeviceIdIpAddressGet(deviceId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieve the status of a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the status of the device.
-     * @summary Get Device Status
-     * @param {string} deviceId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DevicesApi
-     */
-    public getDeviceStatusApiV1DeviceDeviceIdStatusGet(deviceId: string, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).getDeviceStatusApiV1DeviceDeviceIdStatusGet(deviceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

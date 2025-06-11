@@ -4,6 +4,9 @@
  *
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
+import * as React from 'react'
+import { useQuery } from 'react-query'
+
 import { taskApi } from '../api'
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
@@ -16,15 +19,14 @@ import Stack from '@mui/joy/Stack'
 import Container from '@mui/joy/Container'
 import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
-import * as React from 'react'
-import { useQuery } from 'react-query'
-
-import DicomViewerToolbar from '../components/DicomViewerTools'
-import initCornerstone from '../utils/InitCornerstone'
-import { TaskOut } from '../generated-client/exam'
 
 import * as cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+
+import DicomViewerToolbar from '../components/DicomViewerTools'
+import initCornerstone from '../utils/InitCornerstone'
+import { TaskOut, ItemStatus, TaskType } from '../generated-client/exam'
+import baseUrls from '../utils/Urls'
 
 
 initCornerstone()  // initialize cornerstone before first render cycle
@@ -32,13 +34,13 @@ initCornerstone()  // initialize cornerstone before first render cycle
 
 function DicomViewer({taskId}: {taskId: string | undefined} ) {
 
-  if (taskId === undefined) {
-    return (
-      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
-      </Container>
-    )
-  }
+  // if (taskId === undefined) {
+  //   return (
+  //     <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+  //       <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
+  //     </Container>
+  //   )
+  // }
 
   // Query the result by id
   const {
@@ -48,17 +50,22 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   } = useQuery<TaskOut, Error>({
     queryKey: ['task', taskId],
     queryFn: async () => {
-      return await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId).then((result) => {
-        return result.data
-      })
+      if (taskId) {
+        return await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId).then((result) => {
+          return result.data
+        })
+      }
+      else {
+        throw 'no-task-id-given'
+      }
     },
   })
 
-  if (task === undefined || isError){
-    <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-      <AlertItem title={'Could not load task with ID: ' + taskId} type={Alerts.Error} />
-    </Container>
-  }
+  // if (task === undefined || isError){
+  //   <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+  //     <AlertItem title={'Could not load task with ID: ' + taskId} type={Alerts.Error} />
+  //   </Container>
+  // }
   
   if (task?.results && task.results.length > 0){
     console.log('Task result: ', task.results[task.results.length-1].directory, task.results[task.results.length-1].filename)
@@ -72,9 +79,9 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   const dicomElement = React.useRef<HTMLDivElement>(null);
 
   // const dicomImageId = 'wadouri:marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
-  const dicomImageId = 'wadouri:http://localhost:8080/api/v1/exam/dicom/' + task?.results[task.results.length-1].id
+  const resultId = task?.results?.length ? task?.results?.[task.results.length-1].id : ''
+  const dicomImageId = 'wadouri:' + baseUrls.examService + '/api/v1/exam/dicom/' + resultId
   console.log('viewportData: ', dicomImageId)
-
 
   React.useEffect(() => {
     cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
@@ -93,6 +100,20 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
     enableViewport();
 
   }, [task])
+
+  if (task === undefined || 
+      isError ||
+      !task.results || 
+      task.results.length == 0 || 
+      task.status != ItemStatus.Finished || 
+      task.type != TaskType.ReconstructionTask
+  ) {
+    return (
+      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+        <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
+      </Container>
+    )
+  }
 
   return (
     <Stack

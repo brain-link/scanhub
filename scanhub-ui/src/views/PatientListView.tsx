@@ -217,8 +217,8 @@ export default function PatientListView() {
         }}
         modalType={'modify'}
         item={patientToDelete != undefined ? 
-                'patient ' + patientToDelete.first_name + ' ' + 
-                 patientToDelete.last_name + ' (' + patientToDelete.id + ')'
+                'Patient \'' + patientToDelete.first_name + ' ' + 
+                 patientToDelete.last_name + '\' with ID \'' + patientToDelete.id + '\''
               : ''}
       />
     </Box>

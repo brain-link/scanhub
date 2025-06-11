@@ -1,6 +1,5 @@
 #!/bin/bash
 # Script to launch scanhub and the development tools. It shuts down scanhub after exiting the development session.
-# It starts the scanhub containers, except the frontend container, which is started with this script directly. It also starts firefox, pgadmin4 and vscode (flatpack), which need to be installed.
 # Use option --full-rebuild on first install, after making changes to the base container, after installing libraries or when changing other structural aspects.
 cd $(dirname $0)
 
@@ -48,18 +47,11 @@ echo
 echo starting firefox in 15 seconds
 echo starting pgadmin4 in 2 seconds
 echo starting vscode for scanhub in 2 seconds
-sleep 15 && firefox localhost:8080 &
+sleep 15 && firefox localhost &
 sleep 2 && /usr/pgadmin4/bin/pgadmin4 >> /dev/null 2>&1 &
 sleep 2 && /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=code-oss --file-forwarding com.visualstudio.code-oss --unity-launch @@ . @@ >> /dev/null 2>&1
 
-echo
-cd scanhub-ui
-echo scanhub-ui/: yarn start
-echo To stop, press Ctrl-C, wait for parcel to rebuild, press Ctrl-C again, wait for complete shutdown!
-yarn start
-cd ..
-# read -p "Press enter to stop the containers."
-
+read -p "Press enter to stop the containers."
 
 echo
 echo scanhub: docker compose down

@@ -20,7 +20,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/joy/Button'
 
-import { TaskOut } from '../generated-client/exam'
+import { TaskOut, ItemStatus } from '../generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
@@ -54,8 +54,9 @@ export default function TaskItem(
             width: '100%', 
             display: 'flex',
             justifyContent: 'flex-start',
-            p: 0.5
+            p: 0.5,
           }}
+          color={task.status == ItemStatus.Finished ? 'success' : 'primary'}
           variant={(selection.type == 'task' && selection.itemId == task.id) ? 'outlined' : 'plain'}
           onClick={onClick}
         >

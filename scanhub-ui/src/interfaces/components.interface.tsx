@@ -3,9 +3,12 @@
 // Component interfaces: Pass data and functions between components
 import {  ReactNode } from 'react'
 
-export interface SequenceViewerProps {
-  sequence_id: string
-}
+import {  ItemStatus } from '../generated-client/exam'
+
+
+// export interface SequenceViewerProps {
+//   sequence_id: string
+// }
 
 export enum Alerts {
   Success = 'success',
@@ -28,10 +31,12 @@ export interface RefetchableItemInterface<T> {
 export interface ItemSelection {
   type: 'exam' | 'workflow' | 'task' | undefined, 
   name: string | undefined,
-  itemId: string | undefined
+  itemId: string | undefined,
+  status: ItemStatus,
+  progress: number
 }
 
-export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined }
+export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined, status: ItemStatus.New, progress: 0 }
 
 export interface SelectableItemInterface<T> {
   item: T

@@ -133,10 +133,11 @@ class MRISequenceCreate(BaseModel):
 class DeviceTask(BaseModel):
     """Pydantic model definition of a device workflow."""
 
-    device_id: str
+    device_id: UUID
     record_id: UUID
     command: Commands
     parametrized_sequence: ParametrizedSequence
+    user_access_token: str
 
 
 class ScanJob(BaseModel):  # pylint: disable=too-few-public-methods
@@ -201,13 +202,10 @@ class TaskEvent(BaseModel):
 class TaskType(str, Enum):
     """Task type enum."""
 
-    RECO_TASK = "RECO_TASK"
+    PROCESSING_TASK = "PROCESSING_TASK"
     DEVICE_TASK_SIMULATOR = "DEVICE_TASK_SIMULATOR"
     DEVICE_TASK_SDK = "DEVICE_TASK_SDK"
-    PROCESSING_TASK = "PROCESSING_TASK"
-    CERTIFIED_DEVICE_TASK = "CERTIFIED_DEVICE_TASK"
-    CERTIFIED_RECO_TASK = "CERTIFIED_RECO_TASK"
-    CERTIFIED_PROCESSING_TASK = "CERTIFIED_PROCESSING_TASK"
+    RECONSTRUCTION_TASK = "RECONSTRUCTION_TASK"
 
 class ResultType(str, Enum):
     """Result type enum."""
@@ -289,6 +287,7 @@ class BaseTask(BaseModel):
     artifacts: dict[str, str]
     destinations: dict[str, str]
     status: ItemStatus
+    progress: int
     is_template: bool
 
 

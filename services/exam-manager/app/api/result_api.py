@@ -93,8 +93,8 @@ async def get_result(
     try:
         _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
     except ValueError:
-        raise HTTPException(status_code=400, detail="Badly formed task_id.")
-    if not (result := await result_dal.get_result_db(resuld_id=_id)):
+        raise HTTPException(status_code=400, detail="Badly formed result_id.")
+    if not (result := await result_dal.get_result_db(result_id=_id)):
         raise HTTPException(status_code=404, detail="Result not found")
     return ResultOut(**result.__dict__)
 

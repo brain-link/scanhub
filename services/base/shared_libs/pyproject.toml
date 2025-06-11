@@ -9,7 +9,8 @@ requires-python = ">=3.10"
 dependencies = [
   "pydantic",
   "sqlalchemy",
-  "fastapi"
+  "fastapi",
+  "passlib[argon2] (>=1.7.4,<2.0.0)",
 ]
 
 [project.urls]

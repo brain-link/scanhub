@@ -24,7 +24,6 @@ kafka-python = "^2.0.2"
 psycopg2-binary = "^2.9.6"
 python-multipart = "^0.0.6"
 async-sqlalchemy = "^1.0.0"
-passlib = {extras = ["argon2"], version = "^1.7.4"}
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"

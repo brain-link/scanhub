@@ -17,13 +17,13 @@ then
     docker build -t scanhub-base .
     cd ../..
     echo
-    echo docker compose --profile with-frontend build --build-arg BASE_IMG=scanhub-base:latest
-    docker compose --profile with-frontend build --build-arg BASE_IMG=scanhub-base:latest
+    echo docker compose build --build-arg BASE_IMG=scanhub-base:latest
+    docker compose build --build-arg BASE_IMG=scanhub-base:latest
 fi
 
 echo
-echo docker compose --profile with-frontend up --detach
-docker compose --profile with-frontend up --detach
+echo docker compose up --detach
+docker compose up --detach
 
 if [ "$1" == --full-rebuild ]
 then
@@ -51,8 +51,8 @@ cd ..
 
 
 echo
-echo scanhub: docker compose --profile with-frontend down
-docker compose --profile with-frontend down
+echo scanhub: docker compose down
+docker compose down
 
 echo
 echo run_all_tests.sh is done, bye!

@@ -210,7 +210,7 @@ export default function UserManagementView() {
           if (status == false) setUserToDelete('')
         }}
         modalType={'modify'}
-        item={'user ' + userToDelete}
+        item={'User \'' + userToDelete + '\''}
       />
     </Box>
   )

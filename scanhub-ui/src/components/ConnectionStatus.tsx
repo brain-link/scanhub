@@ -23,6 +23,7 @@ import {
   sequenceManagerHealthApi } from '../api'
 import NotificationContext from '../NotificationContext'
 import useHealthCheck from '../utils/Healthcheck'
+import baseUrls from '../utils/Urls'
 
 
 export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button' | 'page'}) {
@@ -161,7 +162,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
       },
     })
 
-    const nginxProxyIsError = useHealthCheck('http://localhost:8080')
+    const nginxProxyIsError = useHealthCheck(baseUrls.nginxUrl)
   
     let statusColor: 'primary' | 'warning' | 'danger';
     statusColor = 'primary';
