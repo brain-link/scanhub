@@ -23,18 +23,26 @@ from uuid import UUID
 import requests
 from fastapi import APIRouter, Depends, Header, HTTPException, WebSocket, WebSocketDisconnect, WebSocketException
 from fastapi.encoders import jsonable_encoder
-from scanhub_libraries.models import DeviceTask, ItemStatus, TaskOut, User
+from scanhub_libraries.models import (
+    DeviceCreationRequest,
+    DeviceDetails,
+    DeviceOut,
+    DeviceTask,
+    ItemStatus,
+    TaskOut,
+    User,
+)
 from scanhub_libraries.security import compute_complex_password_hash, get_current_user
 from sqlalchemy import exc
 
-from .dal import (
+from app.api.dal import (
     dal_create_device,
     dal_delete_device,
     dal_get_all_devices,
     dal_get_device,
     dal_update_device,
 )
-from .models import DeviceCreationRequest, DeviceDetails, DeviceOut, get_device_out
+from app.api.db import Device
 
 EXAM_MANAGER_URI = "exam-manager:8000"
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
@@ -62,14 +70,16 @@ async def get_device_out(data: Device) -> DeviceOut:
     """
     return DeviceOut(
         id=data.id,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
         name=data.name,
         manufacturer=data.manufacturer,
         modality=data.modality,
         status=data.status,
         site=data.site,
         ip_address=data.ip_address,
-        datetime_created=data.datetime_created,
-        datetime_updated=data.datetime_updated,
+        title=data.title,
+        description=data.description
     )
 
 
