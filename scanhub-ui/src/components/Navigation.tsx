@@ -22,6 +22,7 @@ import PersonSharpIcon from '@mui/icons-material/PersonSharp'
 import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp'
 import Avatar from '@mui/joy/Avatar'
 import Box from '@mui/joy/Box'
+import Chip from '@mui/joy/Chip'
 import Button from '@mui/joy/Button'
 import IconButton from '@mui/joy/IconButton'
 import ListDivider from '@mui/joy/ListDivider'
@@ -153,15 +154,15 @@ export default function Navigation() {
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
         <ColorSchemeToggle />
         <ConnectionStatus buttonOrPage='button'/>
-
-        <Box sx={{background: 'Orange', border: '1px solid black', borderRadius: '3px', padding: '3px', textWrapMode: 'nowrap'}}>
-          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
-            {'Version ' + version}
-          </Typography>
-          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
-            {'Not for clinical use!'}
-          </Typography>
-        </Box>
+        <Chip
+          variant='soft'
+          color='warning'
+          size='sm'
+          sx={{px: 2, py: 0.5, width: 'fit-content'}}
+        >
+            {'v' + version + ' not for clinical use!'}
+        </Chip>
+          
       </Box>
 
       {/* User menu */}
