@@ -10,7 +10,6 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import ListAltIcon from '@mui/icons-material/ListAlt'
-import HomeMiniIcon from '@mui/icons-material/HomeMini';
 import TripOriginRoundedIcon from '@mui/icons-material/TripOriginRounded';
 import LineStyleIcon from '@mui/icons-material/LineStyle'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'

@@ -14,7 +14,6 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
-import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
@@ -176,8 +175,8 @@ export default function UserManagementView() {
             return updatedUser
           }}
           sx={{
-            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-              outline: "none !important",
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
             },
           }}
         />

@@ -12,7 +12,6 @@ import IconButton from '@mui/joy/IconButton'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import LinearProgress from '@mui/joy/LinearProgress'
-import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
@@ -179,8 +178,8 @@ export default function DeviceView() {
             return updatedUser
           }}
           sx={{
-            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-              outline: "none !important",
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
             },
           }}
         />

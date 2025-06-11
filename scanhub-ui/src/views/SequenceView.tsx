@@ -181,8 +181,8 @@ export default function SequenceView() {
             }
           }}
           sx={{
-            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-              outline: "none !important",
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
             },
           }}
         />

@@ -10,7 +10,7 @@ import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-import { AcquisitionTaskOut, DAGTaskOut, AcquisitionParameter, AcquisitionTaskOutAcquisitionLimits, TaskType } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../generated-client/exam'
 
 
 function capitalize(str: string){
@@ -57,7 +57,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         </Typography>
 
         {
-          task.task_type === TaskType.Acquisition && "device_id" in task &&
+          task.task_type === TaskType.Acquisition && 'device_id' in task &&
           <>
             <Typography fontSize='sm'>Device ID</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -67,7 +67,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Acquisition && "sequence_id" in task &&
+          task.task_type === TaskType.Acquisition && 'sequence_id' in task &&
           <>
             <Typography fontSize='sm'>Sequence ID</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -77,7 +77,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Acquisition && "acquisition_parameter" in task && task.acquisition_parameter &&
+          task.task_type === TaskType.Acquisition && 'acquisition_parameter' in task && task.acquisition_parameter &&
           <>
             <Typography fontSize='sm'>Acquisition parameter</Typography>
             <Stack direction='column'>
@@ -95,7 +95,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Dag && "dag_id" in task &&
+          task.task_type === TaskType.Dag && 'dag_id' in task &&
           <>
             <Typography fontSize='sm'>DAG ID</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -105,7 +105,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Dag && "input_result_id" in task &&
+          task.task_type === TaskType.Dag && 'input_result_id' in task &&
           <>
             <Typography fontSize='sm'>Input</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -115,7 +115,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Dag && "parameter" in task &&
+          task.task_type === TaskType.Dag && 'parameter' in task &&
           <>
             <Typography fontSize='sm'>Parameter</Typography>
             <Stack direction='column'>

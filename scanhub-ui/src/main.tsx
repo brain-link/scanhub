@@ -19,19 +19,6 @@ import NotificationContextProvider from './NotificationContextProvider'
 import { RouteConfiguration } from './Routes'
 
 const queryClient = new QueryClient()
-// const root = ReactDOM.createRoot(document.getElementById('root')!)
-
-// root.render(
-//   <React.StrictMode>
-//     <QueryClientProvider client={queryClient}>
-//       <BrowserRouter>
-//         <LoginContextProvider>
-//           <RouteConfiguration />
-//         </LoginContextProvider>
-//       </BrowserRouter>
-//     </QueryClientProvider>
-//   </React.StrictMode>,
-// )
 
 ReactDOM.createRoot(document.querySelector('#root')!).render(
   <React.StrictMode>

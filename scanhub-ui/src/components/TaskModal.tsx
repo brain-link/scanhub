@@ -4,16 +4,12 @@
  *
  * TaskModal.tsx is responsible for rendering a modal with an interface to create a new task or to modify an existing task.
  */
-import AddSharpIcon from '@mui/icons-material/AddSharp'
-import ClearIcon from '@mui/icons-material/Clear'
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab, { tabClasses } from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
 import Button from '@mui/joy/Button'
-import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
-import IconButton from '@mui/joy/IconButton'
 import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
@@ -49,14 +45,14 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
 
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const [task, setTask] = React.useState<BaseAcquisitionTask & { task_type: "ACQUISITION" }>(
+  const [task, setTask] = React.useState<BaseAcquisitionTask & { task_type: 'ACQUISITION' }>(
     props.modalType == 'modify'
-      ? { ...(props.item as BaseAcquisitionTask), status: ItemStatus.Updated, task_type: "ACQUISITION" }
+      ? { ...(props.item as BaseAcquisitionTask), status: ItemStatus.Updated, task_type: 'ACQUISITION' }
       : {
           workflow_id: props.parentId,              // eslint-disable-line camelcase
           name: '',
           description: '',
-          task_type: "ACQUISITION",
+          task_type: 'ACQUISITION',
           destination: '',
           status: ItemStatus.New,
           progress: 0,
@@ -327,14 +323,14 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
   // The form is in this separate component to make sure that the state is reset after closing the modal
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const [task, setTask] = React.useState<BaseDAGTask & { task_type: "DAG" }>(
+  const [task, setTask] = React.useState<BaseDAGTask & { task_type: 'DAG' }>(
     props.modalType == 'modify'
-      ? { ...(props.item as BaseDAGTask), status: ItemStatus.Updated, task_type: "DAG" }
+      ? { ...(props.item as BaseDAGTask), status: ItemStatus.Updated, task_type: 'DAG' }
       : {
           workflow_id: props.parentId,              // eslint-disable-line camelcase
           name: '',
           description: '',
-          task_type: "DAG",
+          task_type: 'DAG',
           destination: '',
           status: ItemStatus.New,
           progress: 0,
@@ -448,8 +444,8 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
                 }
               }}
             >
-              <Option key={"reconstruction"} value={TaskType.Reconstruction}>Reconstruction</Option>
-              <Option key={"processing"} value={TaskType.Processing}>Processing</Option>
+              <Option key={'reconstruction'} value={TaskType.Reconstruction}>Reconstruction</Option>
+              <Option key={'processing'} value={TaskType.Processing}>Processing</Option>
             </Select>
           </Stack>
 
@@ -504,7 +500,7 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Acq
           }}
         />
         {
-          props.modalType === 'modify' && "item" in props ? 
+          props.modalType === 'modify' && 'item' in props ? 
             (props.item.task_type === TaskType.Acquisition ?
               <AcquisitionTaskForm {...props as ModalPropsModify<AcquisitionTaskOut>} /> :
               (props.item.task_type === TaskType.Dag && <DagTaskForm {...props as ModalPropsModify<DAGTaskOut>} />)) :

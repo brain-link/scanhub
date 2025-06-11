@@ -22,7 +22,6 @@ import {
   deviceManagerHealthApi } from '../api'
 import NotificationContext from '../NotificationContext'
 import useHealthCheck from '../utils/Healthcheck'
-import baseUrls from '../utils/Urls'
 
 
 export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button' | 'page'}) {
