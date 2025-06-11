@@ -6,7 +6,7 @@
  * to create a new patient.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 
 import Button from '@mui/joy/Button'
@@ -79,13 +79,16 @@ function PatientForm(props: ModalProps) {
   })
 
   // Post a new record and refetch records table
-  const mutation = useMutation(async () => {
-    await patientApi
-      .createPatientApiV1PatientPost(patient)
-      .then((response) => {
-        props.onSubmit()
-        showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})
-      })
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await patientApi
+        .createPatientApiV1PatientPost(patient)
+        .then((response) => {
+          props.onSubmit()
+          showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})
+        }
+      )
+    }
   })
 
   function renderFormEntry(item: FormEntry, index: number) {

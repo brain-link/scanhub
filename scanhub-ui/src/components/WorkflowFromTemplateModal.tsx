@@ -8,16 +8,15 @@
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
-import DialogTitle from '@mui/material/DialogTitle'
+import DialogTitle from '@mui/joy/DialogTitle'
 import * as React from 'react'
-import { useMutation } from 'react-query'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 
 import { workflowsApi } from '../api'
 import { WorkflowOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import WorkflowItem from './WorkflowItem'
-import { Stack } from '@mui/material'
+import Stack from '@mui/joy/Stack'
 
 export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
 
@@ -32,12 +31,13 @@ export default function WorkflowFromTemplateModal(props: ModalPropsCreate) {
     },
   })
 
-  const mutation = useMutation(async (id: string) => {
-    await workflowsApi
-      .createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, props.createTemplate)
+  const mutation = useMutation({
+    mutationFn: async (id: string) => {
+      await workflowsApi.createWorkflowFromTemplateApiV1ExamWorkflowPost(String(props.parentId), id, props.createTemplate)
       .then(() => {
         props.onSubmit()
       })
+    }
   })
 
   return (

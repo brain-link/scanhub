@@ -15,7 +15,7 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation, UseMutationResult } from 'react-query'
+import { useMutation, UseMutationResult } from '@tanstack/react-query'
 
 import { examApi } from '../api'
 import { BaseExam, ExamOut } from '../generated-client/exam'
@@ -57,31 +57,37 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
 
   let mutation: UseMutationResult<void, unknown, void, unknown>;
   if (props.modalType == 'modify') {
-    mutation = useMutation(async () => {
-      await examApi
-      .updateExamApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Updated Exam.', type: 'success'})
-      })
+    mutation = useMutation({
+      mutationFn: async () => {
+        await examApi
+        .updateExamApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
+        .then(() => {
+          props.onSubmit()
+          showNotification({message: 'Updated Exam.', type: 'success'})
+        })
+      }
     })
   } else if (props.modalType == 'create') {
-    mutation = useMutation(async () => {
-      await examApi
-      .createExamApiV1ExamNewPost(exam)
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Created Exam.', type: 'success'})
-      })
+    mutation = useMutation({
+      mutationFn: async () => {
+        await examApi
+        .createExamApiV1ExamNewPost(exam)
+        .then(() => {
+          props.onSubmit()
+          showNotification({message: 'Created Exam.', type: 'success'})
+        })
+      }
     })
   } else if (props.modalType == 'createModifyFromTemplate') {
-    mutation = useMutation(async () => {
-      await examApi
-      .createExamFromTemplateApiV1ExamPost(props.item.id, exam)
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Created Exam from Template.', type: 'success'})
-      })
+    mutation = useMutation({
+      mutationFn: async () => {
+        await examApi
+        .createExamFromTemplateApiV1ExamPost(props.item.id, exam)
+        .then(() => {
+          props.onSubmit()
+          showNotification({message: 'Created Exam from Template.', type: 'success'})
+        })
+      }
     })
   }
 

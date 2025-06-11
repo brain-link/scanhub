@@ -5,7 +5,7 @@
  * DeviceView.tsx is responsible for rendering the devices table and for managing the device registration.
  */
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
@@ -48,9 +48,9 @@ export default function DeviceView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, string>(async (deviceId) => {
-    await deviceApi
-      .deleteDeviceApiV1DeviceDeviceIdDelete(deviceId)
+  const delteMutation = useMutation<unknown, unknown, string>({
+    mutationFn: async (deviceId) => {
+      await deviceApi.deleteDeviceApiV1DeviceDeviceIdDelete(deviceId)
       .then(() => {
         showNotification({message: 'Deleted device.', type: 'success'})
         refetch()
@@ -64,6 +64,7 @@ export default function DeviceView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
   // const updateMutation = useMutation<unknown, unknown, User>(async (user) => {

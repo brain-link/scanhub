@@ -5,7 +5,7 @@
  * SequenceUpload.tsx is responsible for rendering an interface to upload a new sequence.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 
 import Button from '@mui/joy/Button'
@@ -36,11 +36,12 @@ function SequenceUploadForm(props: ModalProps) {
   })
   const [file, setFile] = React.useState<File | null>(null)
 
-  const uploadSequence = useMutation(async (sequence: BaseMRISequence) => {
-    if (file == undefined || file == null) {
-      showNotification({message: 'No file selected for upload.', type: 'warning'})
-    }
-    else {
+  const uploadSequence = useMutation<void, Error, BaseMRISequence>({
+    mutationFn: async (sequence: BaseMRISequence) => {
+      if (file == undefined || file == null) {
+        showNotification({message: 'No file selected for upload.', type: 'warning'})
+        return
+      }
       await sequenceApi.createMriSequenceApiV1ExamSequencePost(
         file, sequence.name, sequence.description as string, sequence.sequence_type as string
       )

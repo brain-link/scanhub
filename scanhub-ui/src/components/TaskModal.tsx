@@ -20,7 +20,7 @@ import Stack from '@mui/joy/Stack'
 import Textarea from '@mui/joy/Textarea'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { deviceApi, sequenceApi, taskApi, workflowManagerApi } from '../api'
 import { 
@@ -70,23 +70,25 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
   // Post a new/modified task and reset
   const mutation = 
     props.modalType == 'modify' ?
-      useMutation(async () => {
-        await taskApi
-          .updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
           .then(() => {
             props.onSubmit()
             showNotification({message: 'Updated acquisition task.', type: 'success'})
           })
+        }
       })
     :
-      useMutation(async () => {
-        await taskApi
-          .createTaskApiV1ExamTaskNewPost(task)
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.createTaskApiV1ExamTaskNewPost(task)
           .then(() => {
             console.log('Created task', task)
             props.onSubmit()
             showNotification({message: 'Created acquisition ask.', type: 'success'})
           })
+        }
       })
 
   const {
@@ -343,23 +345,25 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
   // Post a new/modified task and reset
   const mutation = 
     props.modalType == 'modify' ?
-      useMutation(async () => {
-        await taskApi
-          .updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
           .then(() => {
             props.onSubmit()
             showNotification({message: 'Updated DAG task.', type: 'success'})
           })
+        }
       })
     :
-      useMutation(async () => {
-        await taskApi
-          .createTaskApiV1ExamTaskNewPost(task)
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.createTaskApiV1ExamTaskNewPost(task)
           .then(() => {
             console.log('Created task', task)
             props.onSubmit()
             showNotification({message: 'Created DAG task.', type: 'success'})
           })
+        }
       })
 
   const {

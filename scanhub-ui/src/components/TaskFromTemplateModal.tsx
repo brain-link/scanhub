@@ -6,8 +6,8 @@
  * task template selection interface to generate a new task.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
-import { useQuery } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
@@ -31,12 +31,13 @@ export default function TaskFromTemplateModal(props: ModalPropsCreate) {
     },
   })
 
-  const mutation = useMutation(async (id: string) => {
-    await taskApi
-      .createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, props.createTemplate)
+  const mutation = useMutation({
+    mutationFn: async (id: string) => {
+      await taskApi.createTaskFromTemplateApiV1ExamTaskPost(String(props.parentId), id, props.createTemplate)
       .then(() => {
         props.onSubmit()
       })
+    }
   })
 
   return (

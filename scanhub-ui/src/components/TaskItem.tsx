@@ -5,7 +5,7 @@
  * TaskItem.tsx is responsible for rendering a single task item.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'
 import Tooltip from '@mui/joy/Tooltip'
@@ -101,12 +101,13 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
 
-  const deleteTask = useMutation(async () => {
-    await taskApi
-      .deleteTaskApiV1ExamTaskTaskIdDelete(task.id)
+  const deleteTask = useMutation({
+    mutationFn: async () => {
+      await taskApi.deleteTaskApiV1ExamTaskTaskIdDelete(task.id)
       .then(() => {
         refetchParentData()
       })
+    }
   })
 
   return (

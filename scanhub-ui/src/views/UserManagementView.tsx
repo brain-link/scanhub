@@ -5,7 +5,7 @@
  * UserManagementView.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import Container from '@mui/system/Container'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
@@ -51,9 +51,9 @@ export default function UserManagementView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, string>(async (username) => {
-    await userApi
-      .userDeleteApiV1UserloginDeleteuserDelete(username)
+  const delteMutation = useMutation<unknown, unknown, string>({
+    mutationFn: async (username) => {
+      await userApi.userDeleteApiV1UserloginDeleteuserDelete(username)
       .then(() => {
         showNotification({message: 'Deleted user ' + username, type: 'success'})
         refetch()
@@ -67,11 +67,12 @@ export default function UserManagementView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
-  const updateMutation = useMutation<unknown, unknown, User>(async (user) => {
-    await userApi
-      .updateUserApiV1UserloginUpdateuserPut(user)
+  const updateMutation = useMutation<unknown, unknown, User>({
+    mutationFn: async (user) => {
+      await userApi.updateUserApiV1UserloginUpdateuserPut(user)
       .then(() => {
         showNotification({message: 'Modified user ' + user.username, type: 'success'})
         setIsUpdating(false)
@@ -88,6 +89,7 @@ export default function UserManagementView() {
         refetch()
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
   if (isError) {

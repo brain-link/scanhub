@@ -5,7 +5,7 @@
  * Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
  */
 import React, { useContext, useState } from 'react'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'

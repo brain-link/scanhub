@@ -6,7 +6,7 @@
  */
 import * as React from 'react'
 import { useContext } from 'react'
-import { useQuery, useMutation } from 'react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/joy/Box'
@@ -50,9 +50,9 @@ export default function PatientListView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, PatientOut>(async (patient) => {
-    await patientApi
-      .deletePatientApiV1PatientPatientIdDelete(patient.id)
+  const delteMutation = useMutation<unknown, unknown, PatientOut>({
+    mutationFn: async (patient) => {
+      await patientApi.deletePatientApiV1PatientPatientIdDelete(patient.id)
       .then(() => {
         showNotification({message: 'Deleted patient ' + patient.first_name + ' ' + patient.last_name + ' (' + patient.id + ')', type: 'success'})
         refetch()
@@ -66,14 +66,15 @@ export default function PatientListView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
-  const updateMutation = useMutation<unknown, unknown, PatientOut>(async (patient) => {
-    await patientApi
-      .updatePatientApiV1PatientPatientIdPut(patient.id, patient)
+  const updateMutation = useMutation<unknown, unknown, PatientOut>({
+    mutationFn: async (patient) => {
+      await patientApi.updatePatientApiV1PatientPatientIdPut(patient.id, patient)
       .then(() => {
         showNotification({message: 'Modified patient ' + patient.first_name + ' ' + 
-                                   patient.last_name + ' (' + patient.id + ')', 
+                                    patient.last_name + ' (' + patient.id + ')', 
                           type: 'success'})
         setIsUpdating(false)
         refetch()
@@ -93,6 +94,7 @@ export default function PatientListView() {
         showNotification({message: errorMessage, type: 'warning'})
       })
       // don't catch error here to make sure it propagates to onRowUpdate
+    }
   })
 
   if (isError) {

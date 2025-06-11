@@ -9,7 +9,7 @@ import axios, { AxiosError } from 'axios'
 import { Outlet } from 'react-router-dom'
 import Box from '@mui/joy/Box'
 import Snackbar from '@mui/joy/Snackbar'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 import NotificationContext from '../NotificationContext'
 import Navigation from '../components/Navigation'

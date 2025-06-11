@@ -5,7 +5,7 @@
  * SequenceView.tsx is responsible for rendering the sequence table and for adding, modifying and removing sequences.
  */
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import IconButton from '@mui/joy/IconButton'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
@@ -53,8 +53,9 @@ export default function SequenceView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, MRISequenceOut>(async (sequence) => {
-    await sequenceApi.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequence._id)
+  const delteMutation = useMutation<unknown, unknown, MRISequenceOut>({
+    mutationFn: async (sequence) => {
+      await sequenceApi.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequence._id)
       .then(() => {
         showNotification({message: 'Deleted sequence ' + sequence.name, type: 'success'})
         refetch()
@@ -68,10 +69,12 @@ export default function SequenceView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
-  const updateMutation = useMutation<unknown, unknown, MRISequenceOut>(async (sequence) => {
-    await sequenceApi.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequence._id, sequence as BaseMRISequence)
+  const updateMutation = useMutation<unknown, unknown, MRISequenceOut>({
+    mutationFn: async (sequence) => {
+      await sequenceApi.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequence._id, sequence as BaseMRISequence)
       .then(() => {
         showNotification({message: 'Modified sequence ' + sequence.name, type: 'success'})
         setIsUpdating(false)
@@ -88,6 +91,7 @@ export default function SequenceView() {
         refetch()
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
   if (isLoading) {

@@ -6,11 +6,11 @@
  * ConnectionStatus.tsx checks the connection to the backend services and displays either a small button that indicates the status or a full overview page.
  */
 import React, { useContext } from 'react'
-import { useQuery } from 'react-query'
-import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
 import IconButton from '@mui/joy/IconButton'
-import LanIcon from '@mui/icons-material/Lan';
+import LanIcon from '@mui/icons-material/Lan'
 import Typography from '@mui/joy/Typography'
 import Box from '@mui/joy/Box';
 
@@ -42,7 +42,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (patientManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to patient-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
             return Promise.reject('Error at health check of patient-manager.')
@@ -64,7 +64,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (examManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to exam-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
             return Promise.reject('Error at health check of exam-manager.')
@@ -86,7 +86,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (workflowManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to workflow-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
             return Promise.reject('Error at health check of workflow-manager.')
@@ -108,7 +108,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (userLoginHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to user-login-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
           return Promise.reject('Error at health check of user-login-manager.')
@@ -130,7 +130,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (deviceManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to device-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
           return Promise.reject('Error at health check of device-manager.')

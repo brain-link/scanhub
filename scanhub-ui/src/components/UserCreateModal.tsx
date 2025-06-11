@@ -6,7 +6,7 @@
  * to create a new user.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'

@@ -6,7 +6,7 @@
  * of a workflow item.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'
 import Tooltip from '@mui/joy/Tooltip'
@@ -77,12 +77,13 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
   const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)
   const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
 
-  const deleteWorkflow = useMutation(async () => {
-    await workflowsApi
-      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id)
+  const deleteWorkflow = useMutation({
+    mutationFn: async () => {
+      await workflowsApi.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id)
       .then(() => {
         refetchParentData()
       })
+    }
   })
 
   return (
