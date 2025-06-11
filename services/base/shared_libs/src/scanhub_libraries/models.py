@@ -88,8 +88,20 @@ class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
     status_percent: int
 
 
-class BaseDevice(BaseModel):
-    """Device base model."""
+class DeviceCreationRequest(BaseModel):
+    """
+    Device registration request pydantic model
+    (to be sent by user first adding the device to the platform).
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    title: str
+    description: str
+
+
+class DeviceDetails(BaseModel):
+    """Device details pydantic model (to be sent by the device)."""
 
     model_config = ConfigDict(extra="ignore")
 
@@ -97,14 +109,14 @@ class BaseDevice(BaseModel):
     manufacturer: str
     modality: str
     status: str
-    site: str | None = None
+    site: str
     ip_address: str
 
 
-class DeviceOut(BaseDevice):
-    """Devicee output model."""
+class DeviceOut(DeviceCreationRequest, DeviceDetails):
+    """Device pydantic output model."""
 
-    id: str
+    id: UUID
     datetime_created: datetime
     datetime_updated: datetime | None = None
 
