@@ -464,16 +464,16 @@ export interface BaseMRISequence {
     'name': string;
     /**
      * 
-     * @type {Description}
+     * @type {string}
      * @memberof BaseMRISequence
      */
-    'description'?: Description;
+    'description': string;
     /**
      * 
-     * @type {SequenceType}
+     * @type {string}
      * @memberof BaseMRISequence
      */
-    'sequence_type'?: SequenceType;
+    'sequence_type': string;
     /**
      * 
      * @type {Array<string>}
@@ -701,13 +701,6 @@ export type DAGTaskOutDagTypeEnum = typeof DAGTaskOutDagTypeEnum[keyof typeof DA
  * @interface DatetimeUpdated
  */
 export interface DatetimeUpdated {
-}
-/**
- * 
- * @export
- * @interface Description
- */
-export interface Description {
 }
 /**
  * 
@@ -1046,16 +1039,16 @@ export interface MRISequenceOut {
     'name': string;
     /**
      * 
-     * @type {Description}
+     * @type {string}
      * @memberof MRISequenceOut
      */
-    'description'?: Description;
+    'description': string;
     /**
      * 
-     * @type {SequenceType}
+     * @type {string}
      * @memberof MRISequenceOut
      */
-    'sequence_type'?: SequenceType;
+    'sequence_type': string;
     /**
      * 
      * @type {Array<string>}
@@ -1770,13 +1763,6 @@ export const ResultType = {
 export type ResultType = typeof ResultType[keyof typeof ResultType];
 
 
-/**
- * 
- * @export
- * @interface SequenceType
- */
-export interface SequenceType {
-}
 /**
  * 
  * @export
@@ -2639,13 +2625,13 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
-         * @param {Description} [description] 
-         * @param {SequenceType} [sequenceType] 
+         * @param {string} [description] 
+         * @param {string} [sequenceType] 
          * @param {Array<string>} [tags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost: async (file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMriSequenceApiV1ExamSequencePost: async (file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('createMriSequenceApiV1ExamSequencePost', 'file', file)
             // verify required parameter 'name' is not null or undefined
@@ -2677,11 +2663,11 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
             }
     
             if (description !== undefined) { 
-                localVarFormParams.append('description', new Blob([JSON.stringify(description)], { type: "application/json", }));
+                localVarFormParams.append('description', description as any);
             }
     
             if (sequenceType !== undefined) { 
-                localVarFormParams.append('sequence_type', new Blob([JSON.stringify(sequenceType)], { type: "application/json", }));
+                localVarFormParams.append('sequence_type', sequenceType as any);
             }
                 if (tags) {
                 localVarFormParams.append('tags', tags.join(COLLECTION_FORMATS.csv));
@@ -2913,13 +2899,13 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
-         * @param {Description} [description] 
-         * @param {SequenceType} [sequenceType] 
+         * @param {string} [description] 
+         * @param {string} [sequenceType] 
          * @param {Array<string>} [tags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+        async createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequenceApiV1ExamSequencePost']?.[localVarOperationServerIndex]?.url;
@@ -3006,13 +2992,13 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @summary Create Mri Sequence
          * @param {File} file 
          * @param {string} name 
-         * @param {Description} [description] 
-         * @param {SequenceType} [sequenceType] 
+         * @param {string} [description] 
+         * @param {string} [sequenceType] 
          * @param {Array<string>} [tags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
+        createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
             return localVarFp.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3081,14 +3067,14 @@ export class MriSequencesApi extends BaseAPI {
      * @summary Create Mri Sequence
      * @param {File} file 
      * @param {string} name 
-     * @param {Description} [description] 
-     * @param {SequenceType} [sequenceType] 
+     * @param {string} [description] 
+     * @param {string} [sequenceType] 
      * @param {Array<string>} [tags] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: Description, sequenceType?: SequenceType, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+    public createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
         return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
     }
 
