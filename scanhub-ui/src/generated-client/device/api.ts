@@ -46,7 +46,7 @@ export interface AcquisitionLimits {
      * @type {Gender}
      * @memberof AcquisitionLimits
      */
-    'Gender'?: Gender;
+    'patient_gender'?: Gender;
     /**
      * 
      * @type {number}
@@ -89,6 +89,12 @@ export interface DeviceCreationRequest {
      * @memberof DeviceCreationRequest
      */
     'description': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof DeviceCreationRequest
+     */
+    'model_config'?: object;
 }
 /**
  * Device pydantic output model.
@@ -96,6 +102,60 @@ export interface DeviceCreationRequest {
  * @interface DeviceOut
  */
 export interface DeviceOut {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'manufacturer': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'modality': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'status': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'site': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'ip_address': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof DeviceOut
+     */
+    'model_config'?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceOut
+     */
+    'description': string;
     /**
      * 
      * @type {string}
@@ -114,54 +174,6 @@ export interface DeviceOut {
      * @memberof DeviceOut
      */
     'datetime_updated'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'description': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'status': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'manufacturer'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'modality'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'site'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'ip_address'?: string;
 }
 /**
  * Pydantic model definition of a device workflow.

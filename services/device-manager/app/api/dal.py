@@ -9,7 +9,7 @@ from scanhub_libraries.models import DeviceCreationRequest
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from app.api.db import Device, async_session
+from api.db import Device, async_session
 
 
 async def dal_create_device(request: DeviceCreationRequest, token_hash: str, salt: str) -> Device:

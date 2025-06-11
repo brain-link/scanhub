@@ -35,14 +35,14 @@ from scanhub_libraries.models import (
 from scanhub_libraries.security import compute_complex_password_hash, get_current_user
 from sqlalchemy import exc
 
-from app.api.dal import (
+from api.dal import (
     dal_create_device,
     dal_delete_device,
     dal_get_all_devices,
     dal_get_device,
     dal_update_device,
 )
-from app.api.db import Device
+from api.db import Device
 
 EXAM_MANAGER_URI = "exam-manager:8000"
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"

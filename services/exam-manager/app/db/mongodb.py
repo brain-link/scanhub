@@ -39,6 +39,7 @@ async def connect_to_mongo():
         with open(mongodb_password_filepath) as file:
             mongodb_password = file.readline().strip()
         db_uri = f"mongodb://{mongodb_username}:{mongodb_password}@sequence-database:27017"
+        print(f"Connecting to MongoDB at {db_uri}")
     else:
         raise RuntimeError("Database secrets for connection missing.")
 

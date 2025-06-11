@@ -100,7 +100,6 @@ services:
       context: ./services/exam-manager
       args: 
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
-        # - BASE_IMG=scanhub-base
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/exam-manager/app/:/app/
@@ -172,7 +171,6 @@ services:
       - scanhub_database_postgres_user
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
-
 
   # Airflow services
   airflow-webserver:
@@ -380,8 +378,6 @@ services:
         condition: service_healthy
       exam-manager: 
         condition: service_healthy
-      # sequence-manager:
-      #   condition: service_started
       patient-manager:
         condition: service_healthy
       user-login-manager:

@@ -64,7 +64,8 @@
     "typescript": "*"
   },
   "scripts": {
-    "start": "parcel index.html -p 3000 --no-hmr",
+    "start": "parcel index.html -p 3000 && parcel watch index.html",
+    "start-no-hmr": "parcel index.html -p 3000 --no-hmr",
     "build": "parcel build index.html",
     "lint": "eslint ./src/**/*.tsx",
     "lint:fix": "eslint --fix './src/**/*.tsx'",
