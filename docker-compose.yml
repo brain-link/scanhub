@@ -105,17 +105,6 @@ services:
     volumes:
       - ./services/exam-manager/app/:/app/
       - data_lake:/app/data_lake/
-    environment:
-      # postgres database
-      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      # mongo database
-      - MONGODB_USER=root
-      - MONGODB_PASSWORD=example
-      - MONGODB_HOST=sequence-database
-      - MONGODB_PORT=27017
-      - MONGODB_DB=mri_sequences_db
-      - MONGODB_COLLECTION_NAME=mri_sequences
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -130,9 +119,13 @@ services:
       workflow-manager:
         condition: service_healthy
     secrets:
+      # ScanHub postgres database
       - scanhub_database_postgres_user
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
+      # ScanHub sequence database
+      - sequence_database_root_username
+      - sequence_database_root_password
 
   patient-manager:
     container_name: patient-manager
