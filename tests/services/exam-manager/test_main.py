@@ -6,7 +6,8 @@
 import requests
 import json
 
-PREFIX = "https://localhost"
+# PREFIX = "https://localhost"
+PREFIX = "https://localhost:8443"
 
 
 def test_readiness():

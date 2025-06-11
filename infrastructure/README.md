@@ -4,26 +4,29 @@ This file configures NGINX as a reverse proxy for the ScanHub application ecosys
 
 ---
 
-## HTTP Server Block (`listen 80`)
+## HTTP Server Block
 
 **Purpose:** Redirect all HTTP traffic to HTTPS for secure communication.
 
 **Configuration:**
-- `listen 80;` — Listens for incoming HTTP requests on port 80.
+- `listen 8080;` — Listens for incoming HTTP requests on port 8080.
+For production, the default port 80 could be used for http requests.
 - `server_name localhost;` — Responds to requests for `localhost`.
 - `location /` — Redirects all requests to the HTTPS version of the site.
-  - `return 301 https://localhost;` — Issues a permanent redirect to HTTPS.
+  - `return 301 https://localhost:8443;` — Issues a permanent redirect to HTTPS.
 - `location /health` — Provides a simple health check endpoint.
   - Returns HTTP 200 with the body `ok`.
 
 ---
 
-## HTTPS Server Block (`listen 443 ssl`)
+## HTTPS Server Block
 
 **Purpose:** Handles all secure (HTTPS) traffic, SSL termination, and reverse proxying to backend services.
 
 **Configuration:**
-- `listen 443 ssl;` — Listens for HTTPS requests on port 443.
+- `listen 8443 ssl;` — Listens for HTTPS requests on port 8443.
+For production, the default port 443 could be used for http requests.
+Using a custom port simplifies the setup with a remote connection, as port forwarding works seamlessly with 8443.
 - `server_name localhost;` — Responds to requests for `localhost`.
 - `ssl_certificate` and `ssl_certificate_key` — Paths to SSL certificate and private key.
 - `ssl_protocols` and `ssl_ciphers` — Enforces secure TLS protocols and strong ciphers.
@@ -38,6 +41,7 @@ This file configures NGINX as a reverse proxy for the ScanHub application ecosys
 
 - `location /` — Proxies all root requests to the ScanHub UI frontend.
 - `proxy_pass http://scanhub-ui:3000/;` — Forwards requests to the UI service.
+When running the UI seperately (i.e. not using docker), this needs to be replaced by `proxy_pass http://host.docker.internal:3000/;`.
 
 ### API Routing
 

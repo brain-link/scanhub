@@ -12,7 +12,8 @@ import json
 # TODO implement tests for status DELETED
 
 
-HOST = "https://localhost"
+# HOST = "https://localhost"
+HOST = "https://localhost:8443"  # for local development with custom port
 PREFIX = HOST + "/api/v1/exam"
 PREFIX_PATIENT_MANAGER = HOST + "/api/v1/patient"
 USERNAME = "Max"            #   make sure this user is installed with this password

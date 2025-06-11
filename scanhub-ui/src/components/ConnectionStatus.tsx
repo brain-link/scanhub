@@ -139,7 +139,8 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
       },
     })
 
-    const nginxProxyIsError = useHealthCheck('http://localhost:8080')
+    const nginxProxyIsError = useHealthCheck('https://localhost:8443')
+    // const nginxProxyIsError = useHealthCheck('https://localhost')
   
     let statusColor: 'primary' | 'warning' | 'danger';
     statusColor = 'primary';
