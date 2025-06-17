@@ -12,19 +12,33 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { examApi } from '../api'
-import { ExamOut } from '../generated-client/exam'
+import { ExamOut, WorkflowOut} from '../generated-client/exam'
 import ExamModal from '../components/ExamModal'
-import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED } from '../interfaces/components.interface'
+import WorkflowModal from '../components/WorkflowModal'
+import TaskModal from '../components/TaskModal'
 
 
 export default function TemplatesView() {
-  const [modalOpen, setModalOpen] = React.useState(false)
+  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
+  const [taskModalOpen, setTaskModalOpen] = React.useState(false)
 
-  const { data: exams, refetch } = useQuery<ExamOut[]>({
+  const [selectedExam, setSelectedExam] = React.useState<undefined | number>(undefined)
+  const [selectedWorkflow, setSelectedWorkflow] = React.useState<undefined | number>(undefined)
+
+  // Reset selectedWorkflow and selectedTask when selectedExam changes to undefined
+  React.useEffect(() => {
+    if (!selectedExam) {
+      setSelectedWorkflow(undefined)
+    }
+  }, [selectedExam])
+
+
+  const { data: exams, refetch: refetchExams } = useQuery<ExamOut[]>({
     queryKey: ['allExamTemplates'],
     queryFn: async () => {
       return await examApi
@@ -36,39 +50,98 @@ export default function TemplatesView() {
   })
 
   return (
-    <Stack direction='column' alignContent='center' width='50vw' margin='auto' spacing={2} sx={{ p: 2 }}>
-      <Button startDecorator={<Add />} onClick={() => setModalOpen(true)}>
-        Create Exam Template
-      </Button>
+    <Stack direction="row" alignItems="flex-start" width='100vw'>
 
-      <ExamModal
-        isOpen={modalOpen}
-        setOpen={setModalOpen}
-        onSubmit={() => refetch()}
-        modalType='create'
-        createTemplate={true}
-        parentId={undefined}
-      />
+      <Stack direction='column' alignContent='center' flex={1} spacing={2} sx={{ p: 2 }}>
+        <Button startDecorator={<Add />} onClick={() => setExamModalOpen(true)}>
+          Create Exam Template
+        </Button>
 
-      {exams?.map((exam) => (
-        <AccordionWithMenu 
-          key={`exam-${exam.id}`}
-          accordionSummary={<ExamItem item={exam} onClick={() => {}} selection={ITEM_UNSELECTED} />}
-          accordionMenu={<ExamMenu item={exam} refetchParentData={refetch} />}
-        >
-          {exam.workflows?.map((workflow) => (
-            <AccordionWithMenu 
-              key={`workflow-${workflow.id}`}
-              accordionSummary={<WorkflowItem item={workflow} onClick={() => {}} selection={ITEM_UNSELECTED} />}
-              accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetch} />}
-            >
-              {workflow.tasks?.map((task) => (
-                <TaskItem key={`task-${task.id}`} item={task} refetchParentData={refetch} onClick={() => {}} selection={ITEM_UNSELECTED} />
-              ))}
-            </AccordionWithMenu>
-          ))}
-        </AccordionWithMenu>
-      ))}
+        <ExamModal
+          isOpen={examModalOpen}
+          setOpen={setExamModalOpen}
+          onSubmit={() => refetchExams()}
+          modalType='create'
+          createTemplate={true}
+          parentId={undefined}
+        />
+        {
+          exams?.map((exam, index) => (
+            <Stack direction="row" key={`exam-${exam.id}`}>
+              <ExamItem 
+                item={exam}
+                onClick={() => {selectedExam === index ? setSelectedExam(undefined) : setSelectedExam(index)}}
+                selection={selectedExam === index ? {
+                  type: "exam",
+                  name: exams[index].name,
+                  itemId: exams[index].id,
+                  status: exams[index].status
+                } : ITEM_UNSELECTED}
+              />
+              <ExamMenu item={exam} refetchParentData={refetchExams} />
+            </Stack>
+          ))
+        }
+      </Stack>
+
+      <Stack direction='column' alignContent='center' flex={1} spacing={2} sx={{ p: 2 }}>
+        <Button startDecorator={<Add />} onClick={() => setWorkflowModalOpen(true)} disabled={selectedExam === undefined}>
+          Create Workflow Template
+        </Button>
+
+        <WorkflowModal
+          isOpen={workflowModalOpen}
+          setOpen={setWorkflowModalOpen}
+          onSubmit={() => refetchExams()}
+          modalType='create'
+          createTemplate={true}
+          parentId={exams && selectedExam !== undefined ? exams[selectedExam].id : undefined}
+        />
+        {
+          exams && selectedExam !== undefined && exams[selectedExam]?.workflows?.map((workflow: WorkflowOut, index: number) => (
+            <Stack direction="row" key={`workflow-${workflow.id}`}>
+              <WorkflowItem 
+                item={workflow}
+                onClick={() => {selectedWorkflow === index ? setSelectedWorkflow(undefined) : setSelectedWorkflow(index)}}
+                selection={ selectedWorkflow === index ? {
+                  type: "workflow",
+                  name: exams[selectedExam].workflows[index].name,
+                  itemId: exams[selectedExam].workflows[index].id,
+                  status: exams[selectedExam].workflows[index].status
+                } : ITEM_UNSELECTED }
+              />
+              <WorkflowMenu item={workflow} refetchParentData={refetchExams} />
+            </Stack>
+          ))
+        }
+      </Stack>
+
+      <Stack direction='column' alignContent='center' flex={1} spacing={2} sx={{ p: 2 }}>
+        <Button startDecorator={<Add />} onClick={() => setTaskModalOpen(true)} disabled={selectedWorkflow === undefined}>
+          Create Task Template
+        </Button>
+
+        <TaskModal
+          isOpen={taskModalOpen}
+          setOpen={setTaskModalOpen}
+          onSubmit={() => refetchExams()}
+          modalType='create'
+          createTemplate={true}
+          parentId={exams && selectedExam !== undefined && selectedWorkflow !== undefined ? exams[selectedExam].workflows[selectedWorkflow].id : undefined}
+        />
+        {
+          exams && selectedExam !== undefined && selectedWorkflow !== undefined && exams[selectedExam].workflows[selectedWorkflow]?.tasks?.map((task, index) => (
+            <TaskItem 
+              key={`task-${task.id}`}
+              item={task}
+              refetchParentData={refetchExams}
+              onClick={() => {}}
+              selection={ITEM_UNSELECTED}
+            />
+          ))
+        }
+      </Stack>
+
     </Stack>
   )
 }
