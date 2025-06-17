@@ -13,6 +13,7 @@ from scanhub_libraries.models import (
     BaseAcquisitionTask,
     BaseDAGTask,
     BaseTask,
+    TaskType,
     DAGTaskOut,
     ItemStatus,
     User,
@@ -117,9 +118,13 @@ async def create_task_from_template(
             status_code=400,
             detail="Request to create task from task instance instead of task template."
         )
-    new_task = BaseTask(**template.__dict__)
-    # if not TaskStatus.PENDING in new_task.status:
-    #     new_task[TaskStatus.PENDING] = "New task instance."
+    if isinstance(template, AcquisitionTaskOut):
+        new_task = BaseAcquisitionTask(**template.__dict__)
+    elif isinstance(template, DAGTaskOut):
+        new_task = BaseDAGTask(**template.__dict__)
+    else:
+        raise TypeError("Invalid task type.")
+
     new_task.is_template = new_task_is_template
     new_task.workflow_id = workflow_id
     if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
@@ -220,9 +225,7 @@ async def get_all_task_templates(
     if not (tasks := await task_dal.get_all_task_template_data()):
         # Don't raise exception here, list might be empty.
         return []
-    # result = [TaskOut(**task.__dict__) for task in tasks]
     result = [await get_task_out(data=task) for task in tasks]
-    print("List of tasks: ", result)
     return result
 
 
