@@ -15,7 +15,7 @@ import IconButton from '@mui/joy/IconButton'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import { examApi, patientApi } from '../api'
@@ -23,8 +23,9 @@ import AcquisitionControl from '../components/AcquisitionControl'
 import DicomViewer from '../components/DicomViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../generated-client/patient'
-import { ExamOut, TaskType } from '../generated-client/exam'
+import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
+import NotificationContext from '../NotificationContext'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
 import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
@@ -37,11 +38,12 @@ function AcquisitionView() {
 
   const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
+  const [, showNotification] = React.useContext(NotificationContext)
 
   // useQuery for caching the fetched data
   const {
     data: patient,
-    // refetch: refetchPatient,
+    refetchPatient: refetchPatient,
     isLoading: patientLoading,
     isError: patientError,
   } = useQuery<PatientOut, Error>({
@@ -145,7 +147,7 @@ function AcquisitionView() {
             flexDirection: 'column',
           }}
         >
-          {exams?.map((exam) => (
+          {exams?.map((exam: ExamOut) => (
             <AccordionWithMenu 
               key={`exam-${exam.id}`}
               accordionSummary={
@@ -159,7 +161,7 @@ function AcquisitionView() {
                 <ExamMenu item={exam} refetchParentData={refetchExams} />
               }
             >
-              {exam.workflows?.map((workflow) => (
+              {exam.workflows?.map((workflow: WorkflowOut) => (
                 <AccordionWithMenu 
                   key={`workflow-${workflow.id}`}
                   accordionSummary={
@@ -174,16 +176,14 @@ function AcquisitionView() {
                   {workflow.tasks?.sort((taskA, taskB) => {
                     let a: number = 4
                     let b: number = 4
-                    if (taskA.type == TaskType.DeviceTaskSdk) a = 1;
-                    if (taskA.type == TaskType.DeviceTaskSimulator) a = 1;
-                    if (taskA.type == TaskType.ReconstructionTask) a = 2;
-                    if (taskA.type == TaskType.ProcessingTask) a = 3;
-                    if (taskB.type == TaskType.DeviceTaskSdk) b = 1;
-                    if (taskB.type == TaskType.DeviceTaskSimulator) b = 1;
-                    if (taskB.type == TaskType.ReconstructionTask) b = 2;
-                    if (taskB.type == TaskType.ProcessingTask) b = 3;
+                    if (taskA.task_type == TaskType.Acquisition) a = 1;
+                    if (taskA.task_type == TaskType.Dag) a = 2;
+                    if (taskA.dag_type && taskA.dag_type == TaskType.Processing) a = 3;
+                    if (taskB.task_type == TaskType.Acquisition) b = 1;
+                    if (taskB.task_type == TaskType.Dag) b = 2;
+                    if (taskB.dag_type && taskB.dag_type == TaskType.Processing) b = 3;
                     return a - b
-                  }).map((task) => (
+                  }).map((task: AcquisitionTaskOut | DAGTaskOut) => (
                     <TaskItem 
                       key={`task-${task.id}`} 
                       item={task} 
@@ -199,7 +199,7 @@ function AcquisitionView() {
         </Box>
 
         <Divider />
-        <AcquisitionControl itemSelection={itemSelection}/>
+        <AcquisitionControl itemSelection={itemSelection} onAction={() => true}/>
       </Sheet>
 
       <ExamFromTemplateModal

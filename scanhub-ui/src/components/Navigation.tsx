@@ -57,7 +57,7 @@ function ColorSchemeToggle() {
   return (
     <IconButton
       id='toggle-mode'
-      variant='outlined'
+      variant='plain'
       color='primary'
       size='sm'
       onClick={() => {
@@ -150,9 +150,8 @@ export default function Navigation() {
         ))}
       </>
 
-      <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
-        <ColorSchemeToggle />
-        <ConnectionStatus buttonOrPage='button'/>
+      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1}}>
+        
         <Chip
           variant='soft'
           color='warning'
@@ -161,6 +160,8 @@ export default function Navigation() {
         >
             {'v' + version + ' not for clinical use!'}
         </Chip>
+        <ConnectionStatus buttonOrPage='button'/>
+        <ColorSchemeToggle />
           
       </Box>
 

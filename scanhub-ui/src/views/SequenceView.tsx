@@ -112,6 +112,20 @@ export default function SequenceView() {
   }
 
   const columns: GridColDef<MRISequenceOut>[] = [
+    {
+      field: 'actions', type: 'actions', headerName: '', width: 50, cellClassName: 'actions', filterable: false,
+      getActions: (row) => [
+        <GridActionsCellItem
+          key='2'
+          icon={<FileOpenOutlinedIcon />}
+          label='Open'
+          color='inherit'
+          onClick={() => {
+            setSequenceOpen(row.row as MRISequenceOut)
+          }}
+        />,
+      ]
+    },
     { field: '_id', headerName: 'ID', width: 200, editable: false },
     { field: 'name', headerName: 'Name', width: 200, editable: true },
     { field: 'description', headerName: 'Description', width: 500, editable: true },
@@ -125,7 +139,7 @@ export default function SequenceView() {
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : '')
     },
     {
-      field: 'actions', type: 'actions', headerName: '', width: 150, cellClassName: 'actions', filterable: false,
+      field: 'actions', type: 'actions', headerName: '', width: 50, cellClassName: 'actions', filterable: false,
       getActions: (row) => [
         <GridActionsCellItem
           key='1'
@@ -133,16 +147,7 @@ export default function SequenceView() {
           label='Delete'
           color='inherit'
           onClick={() => { setSequenceToDelete(row.row) }}
-        />,
-        <GridActionsCellItem
-          key='2'
-          icon={<FileOpenOutlinedIcon />}
-          label='Open'
-          color='inherit'
-          onClick={() => {
-            setSequenceOpen(row.row as MRISequenceOut)
-          }}
-        />,
+        />
       ]
     },
   ]

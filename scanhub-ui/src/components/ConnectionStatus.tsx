@@ -155,7 +155,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     if (buttonOrPage == 'button') {
       return (
         <IconButton
-          variant='outlined'
+          variant='plain'
           color={statusColor}
           size='sm'
           onClick={() => {

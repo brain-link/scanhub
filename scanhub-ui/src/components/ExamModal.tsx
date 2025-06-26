@@ -28,8 +28,6 @@ const formContent: {key: keyof BaseExam, label: string, placeholder: string, edi
   { key: 'description', label: 'Description', placeholder: 'What is included in the examination', editForTemplates: true },
   { key: 'indication', label: 'Indication', placeholder: 'Why the examination is done', editForTemplates: false },
   { key: 'comment', label: 'Comment', placeholder: 'Any remarks about this specific execution of the examination', editForTemplates: false },
-  { key: 'patient_height_cm', label: 'Patient height [cm]', placeholder: 'Number between 10 and 300 (no comma)', editForTemplates: false },
-  { key: 'patient_weight_kg', label: 'Patient weight [kg]', placeholder: 'Number between 1 and 500 (no comma)', editForTemplates: false },
 ]
 
 

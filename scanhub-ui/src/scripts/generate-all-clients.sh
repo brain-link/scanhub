@@ -16,6 +16,7 @@ echo "Fetching OpenAPI JSON files from API endpoints..."
 # curl https://localhost/api/v1/userlogin/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/userlogin-openapi.json
 # curl https://localhost/api/v1/workflowmanager/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/workflowmanager-openapi.json
 # curl https://localhost/api/v1/device/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/device-openapi.json
+
 # Use curl with custom port (8443) if your API is running on that port, used for development
 curl https://localhost:8443/api/v1/patient/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/patient-openapi.json
 curl https://localhost:8443/api/v1/exam/openapi.json --cacert ../secrets/certificate.pem --output openapi-jsons/exam-openapi.json

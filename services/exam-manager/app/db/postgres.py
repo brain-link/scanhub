@@ -27,7 +27,7 @@ class Base(DeclarativeBase):
         data
             Data to be written
         """
-        for key, value in data.dict().items():
+        for key, value in data.model_dump().items():
             setattr(self, key, value)
 
 
