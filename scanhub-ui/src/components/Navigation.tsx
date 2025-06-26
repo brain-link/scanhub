@@ -150,8 +150,9 @@ export default function Navigation() {
         ))}
       </>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1}}>
-        
+      <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
+        <ColorSchemeToggle />
+        <ConnectionStatus buttonOrPage='button'/>
         <Chip
           variant='soft'
           color='warning'
@@ -160,9 +161,6 @@ export default function Navigation() {
         >
             {'v' + version + ' not for clinical use!'}
         </Chip>
-        <ConnectionStatus buttonOrPage='button'/>
-        <ColorSchemeToggle />
-          
       </Box>
 
       {/* User menu */}

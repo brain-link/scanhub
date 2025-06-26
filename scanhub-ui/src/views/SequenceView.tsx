@@ -113,7 +113,7 @@ export default function SequenceView() {
 
   const columns: GridColDef<MRISequenceOut>[] = [
     {
-      field: 'actions', type: 'actions', headerName: '', width: 50, cellClassName: 'actions', filterable: false,
+      field: 'open', type: 'actions', headerName: '', width: 50, cellClassName: 'open', filterable: false,
       getActions: (row) => [
         <GridActionsCellItem
           key='2'
@@ -126,7 +126,7 @@ export default function SequenceView() {
         />,
       ]
     },
-    { field: '_id', headerName: 'ID', width: 200, editable: false },
+    { field: '_id', headerName: 'ID', width: 100, editable: false },
     { field: 'name', headerName: 'Name', width: 200, editable: true },
     { field: 'description', headerName: 'Description', width: 500, editable: true },
     { field: 'sequence_type', headerName: 'Type', width: 200, editable: true },
@@ -139,7 +139,7 @@ export default function SequenceView() {
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : '')
     },
     {
-      field: 'actions', type: 'actions', headerName: '', width: 50, cellClassName: 'actions', filterable: false,
+      field: 'delete', type: 'actions', headerName: '', width: 50, cellClassName: 'delete', filterable: false,
       getActions: (row) => [
         <GridActionsCellItem
           key='1'

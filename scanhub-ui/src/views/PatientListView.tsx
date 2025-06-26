@@ -122,7 +122,7 @@ export default function PatientListView() {
         ]
       },
     },
-    { field: 'id', headerName: 'ID', width: 200, editable: false },
+    { field: 'id', headerName: 'ID', width: 100, editable: false },
     { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
     { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
     { field: 'birth_date', headerName: 'Birthday', width: 100, editable: true },
