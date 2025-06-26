@@ -18,7 +18,6 @@ uvicorn = {extras = ["standard"], version = "^0.17.5"}
 asyncpg = "^0.25.0"
 psycopg2-binary = "^2.9.6"
 async-sqlalchemy = "^1.0.0"
-fastapi = "^0.95.2"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"

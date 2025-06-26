@@ -50,8 +50,8 @@ export default function PatientListView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, PatientOut>({
-    mutationFn: async (patient) => {
+  const deleteMutation = useMutation<unknown, unknown, PatientOut>({
+    mutationFn: async (patient: PatientOut) => {
       await patientApi.deletePatientApiV1PatientPatientIdDelete(patient.id)
       .then(() => {
         showNotification({message: 'Deleted patient ' + patient.first_name + ' ' + patient.last_name + ' (' + patient.id + ')', type: 'success'})
@@ -70,7 +70,7 @@ export default function PatientListView() {
   })
 
   const updateMutation = useMutation<unknown, unknown, PatientOut>({
-    mutationFn: async (patient) => {
+    mutationFn: async (patient: PatientOut) => {
       await patientApi.updatePatientApiV1PatientPatientIdPut(patient.id, patient)
       .then(() => {
         showNotification({message: 'Modified patient ' + patient.first_name + ' ' + 
@@ -107,7 +107,7 @@ export default function PatientListView() {
 
   const columns: GridColDef<PatientOut>[] = [
     {
-      field: 'open', type: 'actions', headerName: '', width: 80, cellClassName: 'actions',
+      field: 'open', type: 'actions', headerName: '', width: 50, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -123,10 +123,12 @@ export default function PatientListView() {
       },
     },
     { field: 'id', headerName: 'ID', width: 200, editable: false },
-    { field: 'first_name', headerName: 'First Name', width: 200, editable: true },
-    { field: 'last_name', headerName: 'Last Name', width: 200, editable: true },
-    { field: 'birth_date', headerName: 'Birthday', width: 150, editable: true },
+    { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
+    { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
+    { field: 'birth_date', headerName: 'Birthday', width: 100, editable: true },
     { field: 'sex', type: 'singleSelect', headerName: 'Sex', width: 100, editable: true, valueOptions: Object.values(Gender) },
+    { field: 'height', headerName: 'Height (cm)', width: 100, editable: true },
+    { field: 'weight', headerName: 'Weight (kg)', width: 100, editable: true },
     { field: 'datetime_created', headerName: 'Added (date/time)', width: 200, editable: false },
     { field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 200, editable: false },
     { field: 'comment', headerName: 'Comment', width: 300, editable: true },
@@ -201,7 +203,7 @@ export default function PatientListView() {
 
       <ConfirmDeleteModal 
         onSubmit={() => {
-          if (patientToDelete != undefined) delteMutation.mutate(patientToDelete)
+          if (patientToDelete != undefined) deleteMutation.mutate(patientToDelete)
         }}
         isOpen={patientToDelete != undefined ? true : false} 
         setOpen={(status) => {

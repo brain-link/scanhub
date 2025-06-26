@@ -55,31 +55,42 @@ export interface BasePatient {
     'sex': Gender;
     /**
      * 
+     * @type {number}
+     * @memberof BasePatient
+     */
+    'height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BasePatient
+     */
+    'weight': number;
+    /**
+     * 
      * @type {string}
      * @memberof BasePatient
      */
     'issuer': string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof BasePatient
      */
-    'status': BasePatientStatusEnum;
+    'status'?: ItemStatus;
     /**
      * 
      * @type {string}
      * @memberof BasePatient
      */
     'comment'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof BasePatient
+     */
+    'model_config'?: object;
 }
 
-export const BasePatientStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type BasePatientStatusEnum = typeof BasePatientStatusEnum[keyof typeof BasePatientStatusEnum];
 
 /**
  * Pydantic definition of genders.
@@ -110,6 +121,24 @@ export interface HTTPValidationError {
      */
     'detail'?: Array<ValidationError>;
 }
+/**
+ * Task status enum.
+ * @export
+ * @enum {string}
+ */
+
+export const ItemStatus = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Started: 'STARTED',
+    Finished: 'FINISHED',
+    Deleted: 'DELETED',
+    Inprogress: 'INPROGRESS'
+} as const;
+
+export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
+
+
 /**
  * 
  * @export
@@ -149,22 +178,40 @@ export interface PatientOut {
     'sex': Gender;
     /**
      * 
+     * @type {number}
+     * @memberof PatientOut
+     */
+    'height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatientOut
+     */
+    'weight': number;
+    /**
+     * 
      * @type {string}
      * @memberof PatientOut
      */
     'issuer': string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof PatientOut
      */
-    'status': PatientOutStatusEnum;
+    'status'?: ItemStatus;
     /**
      * 
      * @type {string}
      * @memberof PatientOut
      */
     'comment'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof PatientOut
+     */
+    'model_config'?: object;
     /**
      * 
      * @type {string}
@@ -185,13 +232,6 @@ export interface PatientOut {
     'datetime_updated'?: string;
 }
 
-export const PatientOutStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type PatientOutStatusEnum = typeof PatientOutStatusEnum[keyof typeof PatientOutStatusEnum];
 
 /**
  * 

@@ -34,6 +34,8 @@ async def get_patient_out(data: db.Patient) -> PatientOut:
         last_name=data.last_name,
         birth_date=data.birth_date,
         sex=data.sex,
+        height=data.height,
+        weight=data.weight,
         issuer=data.issuer,
         status=data.status,
         comment=data.comment,

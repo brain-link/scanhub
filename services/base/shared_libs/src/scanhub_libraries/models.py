@@ -260,8 +260,6 @@ class BaseExam(BaseModel):
     name: str
     description: str
     indication: str | None = None
-    patient_height_cm: int | None = None
-    patient_weight_kg: int | None = None
     comment: str | None = None
     status: ItemStatus
     is_template: bool
@@ -315,6 +313,8 @@ class BasePatient(BaseModel):
     last_name: str
     birth_date: date
     sex: Gender
+    height: float
+    weight: float
     issuer: str
     status: ItemStatus = ItemStatus.NEW
     comment: str | None = None

@@ -51,12 +51,15 @@ class Patient(Base):
     """Patient ORM model."""
 
     __tablename__ = 'patients'
-    patient_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    __table_args__ = {"extend_existing": True}
 
+    patient_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str] = mapped_column(nullable=False)
     birth_date: Mapped[datetime.date] = mapped_column(nullable=False)
     sex: Mapped[Gender] = mapped_column(nullable=False)
+    height: Mapped[float] = mapped_column(nullable=False)
+    weight: Mapped[float] = mapped_column(nullable=False)
     issuer: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[Literal["NEW", "UPDATED", "DELETED"]] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
@@ -74,5 +77,5 @@ class Patient(Base):
         data
             Data to be written
         """
-        for key, value in data.dict().items():
+        for key, value in data.model_dump().items():
             setattr(self, key, value)
