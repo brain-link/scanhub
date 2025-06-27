@@ -22,7 +22,7 @@ import ExamModal from './ExamModal'
 
 export default function ExamFromTemplateModal(props: ModalPropsCreate) {
 
-  const [examForModification, setExamForModification] = React.useState<ExamOut | undefined>(undefined);
+  const [selectedExam, setSelectedExam] = React.useState<ExamOut | undefined>(undefined);
 
   const { data: exams } = useQuery<ExamOut[]>({
     queryKey: ['exams'],
@@ -58,7 +58,7 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
                 key={idx}
                 item={exam}
                 onClick={() => {
-                  setExamForModification({ ...exam, 'patient_id': props.parentId, 'is_template': props.createTemplate })
+                  setSelectedExam({ ...exam, 'patient_id': props.parentId, 'is_template': props.createTemplate })
                 }}
                 selection={ITEM_UNSELECTED} 
               />
@@ -69,13 +69,13 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
   }
 
   return (
-    examForModification ? 
+    selectedExam ? 
       <ExamModal
-        item={examForModification}
+        item={selectedExam}
         isOpen={true}
         setOpen={(status) => {
           if (status == false) {
-            setExamForModification(undefined)  // reset state
+            setSelectedExam(undefined)  // reset state
           }
           props.setOpen(status)
         }}

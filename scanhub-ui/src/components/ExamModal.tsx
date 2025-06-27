@@ -23,11 +23,11 @@ import { ModalPropsCreate, ModalPropsCreateModifyFromTemplate, ModalPropsModify 
 import NotificationContext from '../NotificationContext'
 
 
-const formContent: {key: keyof BaseExam, label: string, placeholder: string, editForTemplates: boolean}[] = [
-  { key: 'name', label: 'Exam Name', placeholder: 'Name of the examination', editForTemplates: true },
-  { key: 'description', label: 'Description', placeholder: 'What is included in the examination', editForTemplates: true },
-  { key: 'indication', label: 'Indication', placeholder: 'Why the examination is done', editForTemplates: false },
-  { key: 'comment', label: 'Comment', placeholder: 'Any remarks about this specific execution of the examination', editForTemplates: false },
+const formContent: {key: keyof BaseExam, label: string, placeholder: string, editForTemplates: boolean, required: boolean}[] = [
+  { key: 'name', label: 'Exam Name', placeholder: 'Name of the examination', editForTemplates: true, required: true },
+  { key: 'description', label: 'Description', placeholder: 'What is included in the examination', editForTemplates: true, required: true },
+  { key: 'indication', label: 'Indication', placeholder: 'Why the examination is done', editForTemplates: false, required: false },
+  { key: 'comment', label: 'Comment', placeholder: 'Any remarks about this specific execution of the examination', editForTemplates: false, required: false },
 ]
 
 
@@ -111,48 +111,36 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
                   placeholder={entry.placeholder}
                   defaultValue={exam[entry.key]?.toString()}
+                  required={entry.required}
                 />
               </Grid>
             :
               undefined
           ))}
-        </Grid>
 
-        <Button
-          size='sm'
-          sx={{ maxWidth: 120 }}
-          onClick={(event) => {
-            event.preventDefault()
-            if (exam.name == '') {
-              showNotification({message: 'Name must not be empty.', type: 'warning'})
-            } else if (exam.description == '') {
-              showNotification({message: 'Description must not be empty.', type: 'warning'})
-            } else if (!exam.is_template && (exam.indication == undefined || exam.indication == '')) {
-              showNotification({message: 'Indication must not be empty.', type: 'warning'})
-            // } else if (!exam.is_template && (exam.comment == undefined || exam.comment == '')) {
-            //   showNotification({message: 'Comment must not be empty.', type: 'warning'})
-            } else if (!exam.is_template
-                        && (exam.patient_height_cm == null
-                            || !Number.isInteger(Number(exam.patient_height_cm))
-                            || Number(exam.patient_height_cm) < 10
-                            || Number(exam.patient_height_cm) > 300)
-                      ) {
-              showNotification({message: 'Ivalid patient height (must be a number between 10 and 300 and without comma).', type: 'warning'})
-            } else if (!exam.is_template
-              && (exam.patient_weight_kg == null
-                  || !Number.isInteger(Number(exam.patient_weight_kg))
-                  || Number(exam.patient_weight_kg) < 1
-                  || Number(exam.patient_weight_kg) > 500)
-            ) {
-              showNotification({message: 'Ivalid patient weight (must be a number between 10 and 500 and without comma).', type: 'warning'})
-            } else {
-              mutation.mutate()
-              props.setOpen(false)
-            } 
-          }}
-        >
-          Save
-        </Button>
+          <Grid md={12} display="flex" justifyContent="flex-end">
+            <Button
+              size='sm'
+              sx={{ width: 120 }}
+              onClick={(event) => {
+                event.preventDefault()
+                if (exam.name == '') {
+                  showNotification({message: 'Name must not be empty.', type: 'warning'})
+                } else if (exam.description == '') {
+                  showNotification({message: 'Description must not be empty.', type: 'warning'})
+                } else if (!exam.is_template && (exam.indication == undefined || exam.indication == '')) {
+                  showNotification({message: 'Indication must not be empty.', type: 'warning'})
+                } else {
+                  mutation.mutate()
+                  props.setOpen(false)
+                } 
+              }}
+            >
+            Save
+            </Button>
+          </Grid>
+
+        </Grid>
       </Stack>
     </>
   )

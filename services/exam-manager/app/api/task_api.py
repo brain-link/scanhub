@@ -118,9 +118,9 @@ async def create_task_from_template(
             status_code=400,
             detail="Request to create task from task instance instead of task template."
         )
-    if isinstance(template, AcquisitionTaskOut):
+    if template.task_type is TaskType.ACQUISITION:
         new_task = BaseAcquisitionTask(**template.__dict__)
-    elif isinstance(template, DAGTaskOut):
+    elif template.task_type is TaskType.DAG:
         new_task = BaseDAGTask(**template.__dict__)
     else:
         raise TypeError("Invalid task type.")
