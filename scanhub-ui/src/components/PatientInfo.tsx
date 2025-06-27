@@ -12,9 +12,9 @@ import * as React from 'react'
 // import client from '../client/queries';
 // import { Patient } from '../interfaces/data.interface'
 import { PatientOut } from '../generated-client/patient'
+import { getAgeFromDate } from '../utils/Calc'
 
-function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolean; isError: boolean }) {
-  const { patient, isLoading, isError } = props
+function PatientInfo({ patient, isLoading, isError }: { patient: PatientOut | undefined; isLoading: boolean; isError: boolean }) {
 
   if (isLoading) {
     // TODO: Beautify
@@ -27,6 +27,9 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
   }
 
   if (patient) {
+
+    const patient_birth_date = new Date(patient.birth_date)
+
     return (
       <Box
         sx={{
@@ -40,39 +43,44 @@ function PatientInfo(props: { patient: PatientOut | undefined; isLoading: boolea
           },
         }}
       >
-        <Typography level='body-sm'>ID</Typography>
+        {/* <Typography level='body-sm'>ID</Typography>
         <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
           {patient.id}
-        </Typography>
+        </Typography> */}
 
-        <Typography level='body-sm'>First Name</Typography>
+        <Typography level='body-sm'>Name</Typography>
         <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
-          {patient.first_name}
-        </Typography>
-
-        <Typography level='body-sm'>Last Name</Typography>
-        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
-          {patient.last_name}
+          {patient.last_name + ", " + patient.first_name}
         </Typography>
 
         <Typography level='body-sm'>Birthday</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(patient.birth_date).toLocaleDateString()}
+          {patient_birth_date.toLocaleDateString() + ` (${getAgeFromDate(patient_birth_date)})`}
         </Typography>
 
-        <Typography level='body-sm'>Sex</Typography>
+        <Typography level='body-sm'>Gender</Typography>
         <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
           {patient.sex}
         </Typography>
 
-        <Typography level='body-sm'>Added on</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {new Date(patient.datetime_created).toLocaleDateString()}
+        <Typography level='body-sm'>Height</Typography>
+        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
+          {patient.height + " cm"}
         </Typography>
 
-        <Typography level='body-sm'>Updated on</Typography>
+        <Typography level='body-sm'>Weight</Typography>
+        <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
+          {patient.weight + " kg"}
+        </Typography>
+
+        {/* <Typography level='body-sm'>Added on</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {patient.datetime_updated ? new Date(patient.datetime_updated).toDateString() : '-'}
+          {new Date(patient.datetime_created).toLocaleDateString()}
+        </Typography> */}
+
+        <Typography level='body-sm'>Last update</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {patient.datetime_updated ? new Date(patient.datetime_updated).toLocaleString() : '-'}
         </Typography>
       </Box>
     )

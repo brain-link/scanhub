@@ -10,28 +10,30 @@ import FormLabel from '@mui/joy/FormLabel'
 import Input from '@mui/joy/Input'
 
 import Stack from '@mui/joy/Stack'
-import Textarea from '@mui/joy/Textarea'
+import Modal from '@mui/joy/Modal'
+import Grid from '@mui/joy/Grid'
+import ModalClose from '@mui/joy/ModalClose'
+import ModalDialog from '@mui/joy/ModalDialog'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { patientApi } from '../api'
-import { AcquisitionLimits } from '../generated-client/exam'
-import { PatientOut } from '../generated-client/patient'
+import { BasePatient, PatientOut } from '../generated-client/patient'
 
-import { ModalPropsModify } from '../interfaces/components.interface'
+import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
-function AcquisitionLimitForm(props: ModalPropsModify<PatientOut>)
+function ConfirmAcquisitionLimitsForm(props: ModalProps & { item: PatientOut })
 {
 
   const [, showNotification] = React.useContext(NotificationContext)
-  const [limits, setLimits] = React.useState<AcquisitionLimits>(props.item.acquisition_limits as AcquisitionLimits);
+  const [patient, setPatient] = React.useState<BasePatient>({...props.item, status: 'UPDATED'})
 
-  const mutation = useMutation<unknown, unknown, PatientOut>({
+  const mutation = useMutation({
     mutationFn: async () => {
-      await patientApi.updatePatientApiV1PatientPatientIdPut(props.item.id, {acquisition_limits: limits})
+      await patientApi.updatePatientApiV1PatientPatientIdPut(props.item.id, patient)
       .then(() => {
         showNotification({message: 'Updated patient acquisition limits.', type: 'success'})
         props.onSubmit()
@@ -58,40 +60,71 @@ function AcquisitionLimitForm(props: ModalPropsModify<PatientOut>)
         Confirm Acquisition Limits
       </Typography>
 
-      <Stack direction='column' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
+      <Grid container rowSpacing={1.5} columnSpacing={5}>
 
-        <Stack spacing={1}>
-          <FormLabel>Height</FormLabel>
+        <Grid md={6}>
+          <FormLabel sx={{ mb: 1 }}>Patient height / cm</FormLabel>
           <Input
-            name={'patient_height'}
-            onChange={(e) => setLimits({ ...limits, [e.target.name]: e.target.value })}
-            value={limits.patient_height}
+            type="number"
+            defaultValue={patient.height}
+            slotProps={{ input: {min: 0, max: 999, step: 5} }}
+            onChange={(e) => setPatient({ ...patient, height: parseFloat(e.target.value) })}
           />
-        </Stack>
+        </Grid>
         
-        <Stack spacing={1}>
-          <FormLabel>Weight</FormLabel>
-          <Textarea
-            minRows={2}
-            name={'patient_weight'}
-            onChange={(e) => setLimits({ ...limits, [e.target.name]: e.target.value })}
-            defaultValue={limits.patient_weight}
+        <Grid md={6}>
+          <FormLabel sx={{ mb: 1 }}>Patient weight / kg</FormLabel>
+          <Input
+            type="number"
+            defaultValue={patient.weight}
+            slotProps={{ input: {min: 0, max: 999, step: 5} }}
+            onChange={(e) => setPatient({ ...patient, weight: parseFloat(e.target.value) })}
           />
-        </Stack>
+        </Grid>
 
-        <Button
-          size='sm'
-          sx={{ maxWidth: 120 }}
-          onClick={(event) => {
-            event.preventDefault()
-            mutation.mutate()
-            props.setOpen(false)
-            }
-          }
-        >
-          Confirm
-        </Button>
-      </Stack>
+        <Grid md={12} display="flex" justifyContent="flex-end">
+          <Button
+            size='sm'
+            sx={{ maxWidth: 120 }}
+            onClick={(event) => {
+              event.preventDefault()
+              mutation.mutate()
+              props.onSubmit()
+              props.setOpen(false)
+            }}
+          >
+            Confirm
+          </Button>
+        </Grid>
+      </Grid>
     </>
+  )
+}
+
+
+export default function ConfirmAcquisitionLimitsModal(props: ModalProps & { item: PatientOut }) {
+  return (
+    <Modal
+      open={props.isOpen}   // open=False unmounts children, resetting the state of the form
+      color='neutral'
+      onClose={() => props.setOpen(false)}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <ModalDialog
+        aria-labelledby='basic-modal-dialog-title'
+        aria-describedby='basic-modal-dialog-description'
+        sx={{ width: '70vw', borderRadius: 'md', p: 5 }}
+      >
+        <ModalClose
+          sx={{
+            top: '10px',
+            right: '10px',
+            borderRadius: '50%',
+            bgcolor: 'background.body',
+          }}
+        />
+        <ConfirmAcquisitionLimitsForm {...props} />
+      </ModalDialog>
+    </Modal>
   )
 }

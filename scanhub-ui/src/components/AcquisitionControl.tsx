@@ -16,12 +16,14 @@ import * as React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { workflowManagerApi } from '../api'
-import { ItemStatus } from '../generated-client/exam'
+import { AcquisitionLimits, ItemStatus } from '../generated-client/exam'
 import { ItemSelection } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
-function AcquisitionControl({ itemSelection, onAction }: { itemSelection: ItemSelection, onAction: () => boolean }) {
+function AcquisitionControl({ itemSelection, openConfirmModal }: { 
+  itemSelection: ItemSelection, openConfirmModal: (onConfirmed: () => void) => void
+}){
   const [, showNotification] = React.useContext(NotificationContext)
 
   const processTaskMutation = useMutation({
@@ -49,19 +51,17 @@ function AcquisitionControl({ itemSelection, onAction }: { itemSelection: ItemSe
         variant='plain' 
         color={'neutral'}
         onClick={() => {
-          // Execute the callback first, continue only if true is returned
-          if (onAction && !onAction()) {
-            return
-          }
-          // By now, only tasks can be executed
-          if (itemSelection.itemId == undefined) {
-            showNotification({message: 'No item selected!', type: 'warning'})
-          } else if (itemSelection.type == 'task') {
-            processTaskMutation.mutate()
-          } else {
-            // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
-            showNotification({message: 'Acquisition trigger not implemented for this item type!', type: 'warning'})
-          }
+          openConfirmModal(() => {
+            // By now, only tasks can be executed
+            if (itemSelection.itemId == undefined) {
+              showNotification({message: 'No item selected!', type: 'warning'})
+            } else if (itemSelection.type == 'task') {
+              processTaskMutation.mutate()
+            } else {
+              // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
+              showNotification({message: 'Acquisition trigger not implemented for this item type!', type: 'warning'})
+            }
+          })
         }}
       >
         {actionIcon}

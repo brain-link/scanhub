@@ -15,15 +15,17 @@ import IconButton from '@mui/joy/IconButton'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import { examApi, patientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
+import ConfirmAcquisitionLimitsModal from '../components/AcquisitionLimitsModal'
 import DicomViewer from '../components/DicomViewer'
+import { getAgeFromDate } from '../utils/Calc'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../generated-client/patient'
-import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../generated-client/exam'
+import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut, AcquisitionLimits } from '../generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import NotificationContext from '../NotificationContext'
 import AccordionWithMenu from '../components/AccordionWithMenu'
@@ -31,28 +33,35 @@ import ExamItem, { ExamMenu } from '../components/ExamItem'
 import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
+import Container from '@mui/joy/Container'
+import AlertItem from '../components/AlertItem'
+import { Alerts } from '../interfaces/components.interface'
 
 
 function AcquisitionView() {
   const params = useParams()
 
   const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
+  const [confirmAcquisitionLimitsModalOpen, setConfirmAcquisitionLimitsModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
-  const [, showNotification] = React.useContext(NotificationContext)
+  const [onAcquisitionLimitsConfirm, setOnAcquisitionLimitsConfirm] = React.useState<() => void>(() => () => {});
+  // const [, showNotification] = React.useContext(NotificationContext)
 
   // useQuery for caching the fetched data
   const {
     data: patient,
-    refetchPatient: refetchPatient,
+    refetch: refetchPatient,
     isLoading: patientLoading,
     isError: patientError,
-  } = useQuery<PatientOut, Error>({
+  } = useQuery<PatientOut>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!)
+      .then((result) => {
         return result.data
       })
     },
+    refetchInterval: 1000
   })
 
   // Query all exams of the patient
@@ -64,8 +73,7 @@ function AcquisitionView() {
   } = useQuery<ExamOut[], Error>({
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
-      return await examApi
-        .getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
+      return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
         .then((result) => {
           if (itemSelection.itemId != undefined) {
             result.data.map((exam) => {
@@ -89,6 +97,15 @@ function AcquisitionView() {
     },
     refetchInterval: 1000
   })
+
+  if (patientError || patient == undefined) {
+    // Catch undefined patient
+    return (
+      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+        <AlertItem title='Error getting patient information / patient undefined.' type={Alerts.Error} />
+      </Container>
+    )
+  }
 
   return (
     <Box
@@ -199,7 +216,25 @@ function AcquisitionView() {
         </Box>
 
         <Divider />
-        <AcquisitionControl itemSelection={itemSelection} onAction={() => true}/>
+        
+        <ConfirmAcquisitionLimitsModal
+          item={patient}
+          isOpen={confirmAcquisitionLimitsModalOpen}
+          setOpen={setConfirmAcquisitionLimitsModalOpen}
+          onSubmit={() => {
+            refetchPatient()
+            onAcquisitionLimitsConfirm()
+          }}
+        />     
+
+        <AcquisitionControl 
+          itemSelection={itemSelection}
+          openConfirmModal={(callback: () => void) => {
+            setOnAcquisitionLimitsConfirm(() => callback);
+            setConfirmAcquisitionLimitsModalOpen(true);
+          }}
+        />
+
       </Sheet>
 
       <ExamFromTemplateModal

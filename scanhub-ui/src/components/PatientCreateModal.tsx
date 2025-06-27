@@ -118,7 +118,7 @@ function PatientForm(props: ModalProps) {
                 onChange={(_, value) => setPatient({ ...patient, sex: value ? value : Gender.NotGiven})}
                 required
               >
-                {Object.values(Gender).map((option) => 
+                {Object.values(Gender).map((option: Gender) => 
                   <Option key={option} value={option}>{option}</Option>
                 )}
               </Select>
@@ -129,7 +129,7 @@ function PatientForm(props: ModalProps) {
               <Input
                 type="number"
                 placeholder='Patient height / cm'
-                slotProps={{ input: {min: 0, max: 9999, step: 5} }}
+                slotProps={{ input: {min: 0, max: 999, step: 5} }}
                 onChange={(e) => setPatient({ ...patient, height: parseFloat(e.target.value) })}
               />
             </Grid>
@@ -139,7 +139,7 @@ function PatientForm(props: ModalProps) {
               <Input
                 type="number"
                 placeholder='Patient weight / kg'
-                slotProps={{ input: {min: 0, max: 9999, step: 5} }}
+                slotProps={{ input: {min: 0, max: 999, step: 5} }}
                 onChange={(e) => setPatient({ ...patient, weight: parseFloat(e.target.value) })}
               />
             </Grid>
@@ -152,11 +152,14 @@ function PatientForm(props: ModalProps) {
                 onChange={(e) => setPatient({ ...patient, comment: e.target.value })}
               />
             </Grid>
+            
+            <Grid md={12} display="flex" justifyContent="flex-end">
+              <Button size='sm' type='submit' sx={{ width: 120 }}>
+              Save
+              </Button>
+            </Grid>
 
           </Grid>
-          <Button size='sm' type='submit' sx={{ maxWidth: 100 }}>
-            Submit
-          </Button>
         </Stack>
       </form>
     </>
