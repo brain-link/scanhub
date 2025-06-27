@@ -376,7 +376,7 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
     queryFn: async () => {
       const result = await workflowManagerApi.listAvailableTasksApiV1WorkflowmanagerTasksGet();
       // Map to only include dag_id and dag_display_name
-      return result.data.tasks.dags.map((dag: any) => ({
+      return result.data.tasks.dags.map((dag: { dag_id: string; dag_display_name: string }) => ({
         dag_id: dag.dag_id,
         dag_display_name: dag.dag_display_name,
       }));

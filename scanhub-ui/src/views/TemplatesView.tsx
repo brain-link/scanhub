@@ -72,7 +72,7 @@ export default function TemplatesView() {
                 item={exam}
                 onClick={() => {selectedExam === index ? setSelectedExam(undefined) : setSelectedExam(index)}}
                 selection={selectedExam === index ? {
-                  type: "exam",
+                  type: 'exam',
                   name: exams[index].name,
                   itemId: exams[index].id,
                   status: exams[index].status
@@ -104,7 +104,7 @@ export default function TemplatesView() {
                 item={workflow}
                 onClick={() => {selectedWorkflow === index ? setSelectedWorkflow(undefined) : setSelectedWorkflow(index)}}
                 selection={ selectedWorkflow === index ? {
-                  type: "workflow",
+                  type: 'workflow',
                   name: exams[selectedExam].workflows[index].name,
                   itemId: exams[selectedExam].workflows[index].id,
                   status: exams[selectedExam].workflows[index].status
@@ -130,7 +130,7 @@ export default function TemplatesView() {
           parentId={exams && selectedExam !== undefined && selectedWorkflow !== undefined ? exams[selectedExam].workflows[selectedWorkflow].id : undefined}
         />
         {
-          exams && selectedExam !== undefined && selectedWorkflow !== undefined && exams[selectedExam].workflows[selectedWorkflow]?.tasks?.map((task, index) => (
+          exams && selectedExam !== undefined && selectedWorkflow !== undefined && exams[selectedExam].workflows[selectedWorkflow]?.tasks?.map((task) => (
             <TaskItem 
               key={`task-${task.id}`}
               item={task}

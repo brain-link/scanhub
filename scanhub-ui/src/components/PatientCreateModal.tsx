@@ -135,7 +135,7 @@ function PatientForm(props: ModalProps) {
             </Grid>
 
             <Grid md={6}>
-              <FormLabel sx={{marginBottom: 1}}>{"Weight (kg)"}</FormLabel>
+              <FormLabel sx={{marginBottom: 1}}>{'Weight (kg)'}</FormLabel>
               <Input
                 type="number"
                 placeholder='Patient weight / kg'

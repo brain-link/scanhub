@@ -50,7 +50,7 @@ function PatientInfo({ patient, isLoading, isError }: { patient: PatientOut | un
 
         <Typography level='body-sm'>Name</Typography>
         <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
-          {patient.last_name + ", " + patient.first_name}
+          {patient.last_name + ', ' + patient.first_name}
         </Typography>
 
         <Typography level='body-sm'>Birthday</Typography>
@@ -65,12 +65,12 @@ function PatientInfo({ patient, isLoading, isError }: { patient: PatientOut | un
 
         <Typography level='body-sm'>Height</Typography>
         <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
-          {patient.height + " cm"}
+          {patient.height + ' cm'}
         </Typography>
 
         <Typography level='body-sm'>Weight</Typography>
         <Typography level='body-sm' textColor='text.primary' sx={{overflow: 'auto'}}>
-          {patient.weight + " kg"}
+          {patient.weight + ' kg'}
         </Typography>
 
         {/* <Typography level='body-sm'>Added on</Typography>
