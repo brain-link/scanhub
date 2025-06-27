@@ -12,10 +12,9 @@ from scanhub_libraries.models import (
     AcquisitionTaskOut,
     BaseAcquisitionTask,
     BaseDAGTask,
-    BaseTask,
-    TaskType,
     DAGTaskOut,
     ItemStatus,
+    TaskType,
     User,
 )
 from scanhub_libraries.security import get_current_user

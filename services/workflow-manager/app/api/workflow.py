@@ -17,9 +17,9 @@ import logging
 import operator
 import os
 import time
+from datetime import date
 from typing import Annotated, Any, Dict
 from uuid import UUID
-from datetime import date
 
 import requests
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
@@ -27,8 +27,9 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
     AcquisitionLimits,
+    AcquisitionTaskOut,
     BaseResult,
-    Commands,
+    DAGTaskOut,
     ExamOut,
     ItemStatus,
     PatientOut,
@@ -36,9 +37,6 @@ from scanhub_libraries.models import (
     TaskOut,
     TaskType,
     WorkflowOut,
-    AcquisitionLimits,
-    AcquisitionTaskOut,
-    DAGTaskOut
 )
 from scanhub_libraries.security import get_current_user
 

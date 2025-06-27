@@ -8,7 +8,7 @@ import os
 import uuid
 from typing import Literal
 
-from scanhub_libraries.models import Gender, BasePatient
+from scanhub_libraries.models import BasePatient, Gender
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
