@@ -1,0 +1,85 @@
+exam-manager.app.db.mongodb
+===========================
+
+.. py:module:: exam-manager.app.db.mongodb
+
+.. autoapi-nested-parse::
+
+   MongoDB database handle.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   exam-manager.app.db.mongodb.db
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   exam-manager.app.db.mongodb.Database
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.db.mongodb.connect_to_mongo
+   exam-manager.app.db.mongodb.close_mongo_connection
+   exam-manager.app.db.mongodb.get_mongo_database
+
+
+Module Contents
+---------------
+
+.. py:class:: Database
+
+   MongoDB database handle.
+
+   Attributes
+   ----------
+   client : AsyncIOMotorClient
+       The MongoDB client.
+   collection : AsyncIOMotorCollection
+       The MongoDB collection.
+
+
+   .. py:attribute:: client
+      :type:  motor.motor_asyncio.AsyncIOMotorClient | motor.motor_asyncio.AsyncIOMotorDatabase | None
+      :value: None
+
+
+
+   .. py:attribute:: collection
+      :type:  motor.motor_asyncio.AsyncIOMotorCollection | None
+      :value: None
+
+
+
+.. py:data:: db
+
+.. py:function:: connect_to_mongo()
+   :async:
+
+
+   Connect to MongoDB using the configuration settings.
+
+
+.. py:function:: close_mongo_connection()
+   :async:
+
+
+   Close the connection to MongoDB.
+
+
+.. py:function:: get_mongo_database() -> Database
+
+   Dependency for getting a handle to the MongoDB database.
+
+

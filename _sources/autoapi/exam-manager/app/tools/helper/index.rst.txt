@@ -1,7 +1,7 @@
-exam-manager.app.helper
-=======================
+exam-manager.app.tools.helper
+=============================
 
-.. py:module:: exam-manager.app.helper
+.. py:module:: exam-manager.app.tools.helper
 
 .. autoapi-nested-parse::
 
@@ -14,15 +14,15 @@ Functions
 
 .. autoapisummary::
 
-   exam-manager.app.helper.get_exam_out_model
-   exam-manager.app.helper.get_workflow_out_model
-   exam-manager.app.helper.get_task_out
+   exam-manager.app.tools.helper.get_exam_out_model
+   exam-manager.app.tools.helper.get_workflow_out_model
+   exam-manager.app.tools.helper.get_task_out
 
 
 Module Contents
 ---------------
 
-.. py:function:: get_exam_out_model(data: app.db.Exam) -> scanhub_libraries.models.ExamOut
+.. py:function:: get_exam_out_model(data: app.db.postgres.Exam) -> scanhub_libraries.models.ExamOut
    :async:
 
 
@@ -38,7 +38,7 @@ Module Contents
        Exam pydantic model
 
 
-.. py:function:: get_workflow_out_model(data: app.db.Workflow) -> scanhub_libraries.models.WorkflowOut
+.. py:function:: get_workflow_out_model(data: app.db.postgres.Workflow) -> scanhub_libraries.models.WorkflowOut
    :async:
 
 
@@ -54,7 +54,7 @@ Module Contents
        Workflow pydantic model
 
 
-.. py:function:: get_task_out(data: app.db.Task) -> scanhub_libraries.models.TaskOut
+.. py:function:: get_task_out(data: app.db.postgres.DAGTask | app.db.postgres.AcquisitionTask | app.db.postgres.Task) -> scanhub_libraries.models.DAGTaskOut | scanhub_libraries.models.AcquisitionTaskOut
    :async:
 
 

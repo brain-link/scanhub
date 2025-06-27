@@ -16,6 +16,7 @@ Submodules
    :maxdepth: 1
 
    /autoapi/exam-manager/app/api/exam_api/index
+   /autoapi/exam-manager/app/api/mri_sequence_api/index
    /autoapi/exam-manager/app/api/result_api/index
    /autoapi/exam-manager/app/api/task_api/index
    /autoapi/exam-manager/app/api/workflow_api/index

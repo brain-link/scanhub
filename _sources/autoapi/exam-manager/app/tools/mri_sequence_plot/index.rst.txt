@@ -1,0 +1,83 @@
+exam-manager.app.tools.mri_sequence_plot
+========================================
+
+.. py:module:: exam-manager.app.tools.mri_sequence_plot
+
+.. autoapi-nested-parse::
+
+   Utility function to create a sequence plot with plotly.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   exam-manager.app.tools.mri_sequence_plot.TraceData
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.tools.mri_sequence_plot.get_sequence_plot
+   exam-manager.app.tools.mri_sequence_plot.generate_plotly_figure
+
+
+Module Contents
+---------------
+
+.. py:class:: TraceData
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Numpy model for trace data.
+
+
+   .. py:attribute:: x
+      :type:  list[float]
+
+
+   .. py:attribute:: y
+      :type:  list[float]
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+.. py:function:: get_sequence_plot(seq: pypulseq.Sequence, time_range: tuple[float, float] = (0.0, np.inf), time_factor=1000.0) -> list[TraceData]
+
+   Compute a sequence dictionary from pulseq sequence object.
+
+   Parameters
+   ----------
+   seq
+       pypulseq sequence object
+   time_range, optional
+       time span of the sequence plot, by default (0., np.inf)
+   time_factor, optional
+       time prefix, by default 1e3
+
+   Returns
+   -------
+       list of plot data models
+
+
+.. py:function:: generate_plotly_figure(traces: list[TraceData])
+
+   Generate plotly figure of traces.
+
+   Parameters
+   ----------
+   traces
+       List of trace data
+
+   Returns
+   -------
+       Plotly figure
+
+

@@ -36,7 +36,7 @@ Module Contents
 
 .. py:data:: task_router
 
-.. py:function:: create_task(payload: scanhub_libraries.models.BaseTask, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
+.. py:function:: create_task(payload: Annotated[scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask, Field(discriminator='task_type')], user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut
    :async:
 
 
@@ -57,7 +57,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: create_task_from_template(workflow_id: uuid.UUID, template_id: uuid.UUID, new_task_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
+.. py:function:: create_task_from_template(workflow_id: uuid.UUID, template_id: uuid.UUID, new_task_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut
    :async:
 
 
@@ -82,7 +82,7 @@ Module Contents
        404: Creation unsuccessful
 
 
-.. py:function:: get_task(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
+.. py:function:: get_task(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut
    :async:
 
 
@@ -103,7 +103,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: get_all_workflow_tasks(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.TaskOut]
+.. py:function:: get_all_workflow_tasks(workflow_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut]
    :async:
 
 
@@ -119,7 +119,7 @@ Module Contents
        List of task pydantic output model
 
 
-.. py:function:: get_all_task_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.TaskOut]
+.. py:function:: get_all_task_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut]
    :async:
 
 
@@ -147,7 +147,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: update_task(task_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseTask, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.TaskOut
+.. py:function:: update_task(task_id: uuid.UUID | str, payload: Annotated[scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask, Field(discriminator='task_type')], user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut
    :async:
 
 

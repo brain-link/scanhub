@@ -25,7 +25,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: add_exam_data(payload: scanhub_libraries.models.BaseExam, creator: str) -> app.db.Exam
+.. py:function:: add_exam_data(payload: scanhub_libraries.models.BaseExam, creator: str) -> app.db.postgres.Exam
    :async:
 
 
@@ -43,7 +43,7 @@ Module Contents
        Database orm model of created exam
 
 
-.. py:function:: get_exam_data(exam_id: uuid.UUID) -> app.db.Exam | None
+.. py:function:: get_exam_data(exam_id: uuid.UUID) -> app.db.postgres.Exam | None
    :async:
 
 
@@ -59,7 +59,7 @@ Module Contents
        Database orm model of exam or none
 
 
-.. py:function:: get_all_exam_data(patient_id: uuid.UUID) -> list[app.db.Exam]
+.. py:function:: get_all_exam_data(patient_id: uuid.UUID) -> list[app.db.postgres.Exam]
    :async:
 
 
@@ -75,7 +75,7 @@ Module Contents
        List of exam data base orm models
 
 
-.. py:function:: get_all_exam_template_data() -> list[app.db.Exam]
+.. py:function:: get_all_exam_template_data() -> list[app.db.postgres.Exam]
    :async:
 
 
@@ -107,7 +107,7 @@ Module Contents
        Success of deletion
 
 
-.. py:function:: update_exam_data(exam_id: uuid.UUID, payload: scanhub_libraries.models.BaseExam) -> app.db.Exam | None
+.. py:function:: update_exam_data(exam_id: uuid.UUID, payload: scanhub_libraries.models.BaseExam) -> app.db.postgres.Exam | None
    :async:
 
 

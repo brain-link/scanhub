@@ -33,6 +33,7 @@ Functions
 
 .. autoapisummary::
 
+   device-manager.app.api.devices.get_device_out
    device-manager.app.api.devices.get_devices
    device-manager.app.api.devices.get_device
    device-manager.app.api.devices.create_device
@@ -58,7 +59,23 @@ Module Contents
 .. py:data:: dict_id_websocket
    :type:  Dict[uuid.UUID, fastapi.WebSocket]
 
-.. py:function:: get_devices(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[device-manager.app.api.models.DeviceOut]
+.. py:function:: get_device_out(data: api.db.Device) -> scanhub_libraries.models.DeviceOut
+   :async:
+
+
+   Get pydantic device output model helper function.
+
+   Parameters
+   ----------
+   data
+       Database model
+
+   Returns
+   -------
+       Pydantic output model
+
+
+.. py:function:: get_devices(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.DeviceOut]
    :async:
 
 
@@ -84,7 +101,7 @@ Module Contents
        dict: The response containing the information about the device
 
 
-.. py:function:: create_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], request: device-manager.app.api.models.DeviceCreationRequest)
+.. py:function:: create_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], request: scanhub_libraries.models.DeviceCreationRequest)
    :async:
 
 

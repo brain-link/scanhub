@@ -18,6 +18,5 @@ Submodules
    /autoapi/device-manager/app/api/dal/index
    /autoapi/device-manager/app/api/db/index
    /autoapi/device-manager/app/api/devices/index
-   /autoapi/device-manager/app/api/models/index
 
 

@@ -7,6 +7,13 @@ workflow-manager.app.api.workflow
 
    Workflow manager endpoints.
 
+   TODO: How to handle tasks, and where to trigger the device task?
+   - There should be one endpoint for task, workflow and exam
+   - The endpoint processes the list, i.e. all the contained tasks
+   - Does it help to store an index with each task?
+   - Which endpoint triggers the acquisition? (devicem manager?)
+   - cleanup: currently there is trigger_task(...) (used by frontend) and process(...)
+
 
 
 Attributes
@@ -33,7 +40,7 @@ Functions
    workflow-manager.app.api.workflow.hello_world
    workflow-manager.app.api.workflow.simulate_reconstruction_task
    workflow-manager.app.api.workflow.trigger_task
-   workflow-manager.app.api.workflow.calculate_age
+   workflow-manager.app.api.workflow.calc_age_from_date
    workflow-manager.app.api.workflow.start_scan
    workflow-manager.app.api.workflow.list_available_tasks
    workflow-manager.app.api.workflow.process
@@ -103,21 +110,21 @@ Module Contents
        dict: A dictionary containing the response from the orchestration engine.
 
 
-.. py:function:: calculate_age(birth_date)
+.. py:function:: calc_age_from_date(birth_date: datetime.date) -> int
 
-   Calculate age in years from birth date.
+   Calculate age in years from a given birth date.
 
    Parameters
    ----------
    birth_date
-       date of birth as datetime.date object
+       Date of birth
 
    Returns
    -------
-       Age in years as integer
+       Age in years as int
 
 
-.. py:function:: start_scan(task_type: str, device_id: uuid.UUID, sequence_id: str, record_id: str, acquisition_limits: scanhub_libraries.models.AcquisitionLimits, sequence_parameters: scanhub_libraries.models.SequenceParameters, access_token: str)
+.. py:function:: start_scan(task: scanhub_libraries.models.AcquisitionTaskOut, access_token: str)
    :async:
 
 

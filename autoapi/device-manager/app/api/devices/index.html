@@ -456,25 +456,28 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_devices" title="device-manager.app.api.devices.get_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_devices</span></code></a>(...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device_out" title="device-manager.app.api.devices.get_device_out"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device_out</span></code></a>(→ scanhub_libraries.models.DeviceOut)</p></td>
+<td><p>Get pydantic device output model helper function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_devices" title="device-manager.app.api.devices.get_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_devices</span></code></a>(]) → list[scanhub_libraries.models.DeviceOut])</p></td>
 <td><p>Retrieve the list of registered devices.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device" title="device-manager.app.api.devices.get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device</span></code></a>(current_user, device_id)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.get_device" title="device-manager.app.api.devices.get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device</span></code></a>(current_user, device_id)</p></td>
 <td><p>Retrieve a specific device.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.create_device" title="device-manager.app.api.devices.create_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_device</span></code></a>(current_user, request)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.create_device" title="device-manager.app.api.devices.create_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_device</span></code></a>(current_user, request)</p></td>
 <td><p>Create device database entry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.delete_device" title="device-manager.app.api.devices.delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_device</span></code></a>(device_id)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.delete_device" title="device-manager.app.api.devices.delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_device</span></code></a>(device_id)</p></td>
 <td><p>Delete a device.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.start_scan_via_websocket" title="device-manager.app.api.devices.start_scan_via_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan_via_websocket</span></code></a>(device_task)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.start_scan_via_websocket" title="device-manager.app.api.devices.start_scan_via_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan_via_websocket</span></code></a>(device_task)</p></td>
 <td><p>Start a scan via a websocket that was already opened by the device.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.connection_with_valid_id_and_token" title="device-manager.app.api.devices.connection_with_valid_id_and_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token</span></code></a>(device_id, device_token)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.connection_with_valid_id_and_token" title="device-manager.app.api.devices.connection_with_valid_id_and_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token</span></code></a>(device_id, device_token)</p></td>
 <td><p>Check if the given device_id and device_token belong to an existing device in the database.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.websocket_endpoint" title="device-manager.app.api.devices.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket, device_id)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.websocket_endpoint" title="device-manager.app.api.devices.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket, device_id)</p></td>
 <td><p>Websocket endpoint for device communication.</p></td>
 </tr>
 </tbody>
@@ -504,11 +507,30 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.devices.get_devices">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[device-manager.app.api.models.DeviceOut]</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.get_devices" title="Link to this definition">#</a></dt>
-<dd><p>Retrieve the list of registered devices.</p>
+<dt class="sig sig-object py" id="device-manager.app.api.devices.get_device_out">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_device_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../db/index.html#device-manager.app.api.db.Device" title="device-manager.app.api.db.Device"><span class="pre">api.db.Device</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.DeviceOut</span></span></span><a class="headerlink" href="#device-manager.app.api.devices.get_device_out" title="Link to this definition">#</a></dt>
+<dd><p>Get pydantic device output model helper function.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>data</dt><dd><p>Database model</p>
+</dd>
+</dl>
+</section>
 <section id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Pydantic output model</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.devices.get_devices">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">get_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.DeviceOut</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#device-manager.app.api.devices.get_devices" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve the list of registered devices.</p>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>List[Device]: The list of registered devices.</p>
 </div></blockquote>
@@ -525,8 +547,8 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: The response containing the information about the device</p>
 </div></blockquote>
@@ -535,12 +557,12 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.create_device">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">create_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">device</span> <span class="pre">-</span> <span class="pre">manager.app.api.models.DeviceCreationRequest</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.create_device" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">create_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.DeviceCreationRequest</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.create_device" title="Link to this definition">#</a></dt>
 <dd><p>Create device database entry.</p>
 <p>Only devices which are created by a user via this endpoint and have the device_id and device_token
 that result from this call configured correctly can later connect and register.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>request:</dt><dd><p>DeviceCreationRequest to create device in Scanhub.
 Further details of the device are later provided by the device itself.</p>
@@ -562,14 +584,14 @@ Further details of the device are later provided by the device itself.</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.delete_device">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.delete_device" title="Link to this definition">#</a></dt>
 <dd><p>Delete a device.</p>
-<section id="id2">
-<h3>Args<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h3>Args<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id3">
-<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: The response indicating the success or failure of the deletion.</p>
 </div></blockquote>
@@ -580,8 +602,8 @@ Further details of the device are later provided by the device itself.</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.start_scan_via_websocket">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">start_scan_via_websocket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.DeviceTask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.start_scan_via_websocket" title="Link to this definition">#</a></dt>
 <dd><p>Start a scan via a websocket that was already opened by the device.</p>
-<section id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>device_task</dt><dd><p>Details of the scan and the device to scan on.</p>
 </dd>
@@ -593,8 +615,8 @@ Further details of the device are later provided by the device itself.</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.connection_with_valid_id_and_token">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">connection_with_valid_id_and_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Header</span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Header</span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.connection_with_valid_id_and_token" title="Link to this definition">#</a></dt>
 <dd><p>Check if the given device_id and device_token belong to an existing device in the database.</p>
-<section id="id5">
-<h3>Args<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>Args<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>device_id (UUID): The device_id to check against the database.
 device_token (str): The device_token to check against the database.</p>
@@ -606,8 +628,8 @@ device_token (str): The device_token to check against the database.</p>
 <dt class="sig sig-object py" id="device-manager.app.api.devices.websocket_endpoint">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">websocket_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">connection_with_valid_id_and_token</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.websocket_endpoint" title="Link to this definition">#</a></dt>
 <dd><p>Websocket endpoint for device communication.</p>
-<section id="id6">
-<h3>Args<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<section id="id8">
+<h3>Args<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>websocket (WebSocket): The WebSocket connection object.
 device_id (UUID): The device_id.</p>
@@ -654,6 +676,7 @@ device_id (UUID): The device_id.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.LOG_CALL_DELIMITER"><code class="docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.dict_id_websocket"><code class="docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_device_out"><code class="docutils literal notranslate"><span class="pre">get_device_out()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_devices"><code class="docutils literal notranslate"><span class="pre">get_devices()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.get_device"><code class="docutils literal notranslate"><span class="pre">get_device()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.create_device"><code class="docutils literal notranslate"><span class="pre">create_device()</span></code></a></li>

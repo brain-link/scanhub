@@ -25,7 +25,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: add_task_data(payload: scanhub_libraries.models.BaseTask, creator) -> app.db.Task
+.. py:function:: add_task_data(payload: scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask, creator) -> app.db.postgres.AcquisitionTask | app.db.postgres.DAGTask
    :async:
 
 
@@ -43,7 +43,7 @@ Module Contents
        Database orm model of created task
 
 
-.. py:function:: get_task_data(task_id: uuid.UUID) -> app.db.Task | None
+.. py:function:: get_task_data(task_id: uuid.UUID) -> scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask | None
    :async:
 
 
@@ -59,7 +59,7 @@ Module Contents
        Database orm model with data of requested task
 
 
-.. py:function:: get_all_task_data(workflow_id: uuid.UUID) -> list[app.db.Task]
+.. py:function:: get_all_task_data(workflow_id: uuid.UUID) -> list[scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask]
    :async:
 
 
@@ -75,7 +75,7 @@ Module Contents
        List of task data base orm models
 
 
-.. py:function:: get_all_task_template_data() -> list[app.db.Task]
+.. py:function:: get_all_task_template_data() -> list[scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask]
    :async:
 
 
@@ -107,7 +107,7 @@ Module Contents
        Success of deletion
 
 
-.. py:function:: update_task_data(task_id: uuid.UUID, payload: scanhub_libraries.models.BaseTask) -> app.db.Task | None
+.. py:function:: update_task_data(task_id: uuid.UUID, payload: scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask) -> scanhub_libraries.models.BaseAcquisitionTask | scanhub_libraries.models.BaseDAGTask | None
    :async:
 
 

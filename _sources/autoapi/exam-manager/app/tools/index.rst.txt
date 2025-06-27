@@ -1,0 +1,21 @@
+exam-manager.app.tools
+======================
+
+.. py:module:: exam-manager.app.tools
+
+.. autoapi-nested-parse::
+
+   Initialization file for the tools module of the exam service.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/exam-manager/app/tools/helper/index
+   /autoapi/exam-manager/app/tools/mri_sequence_plot/index
+
+

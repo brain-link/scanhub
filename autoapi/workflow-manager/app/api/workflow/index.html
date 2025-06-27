@@ -426,6 +426,12 @@
   <section id="module-workflow-manager.app.api.workflow">
 <span id="workflow-manager-app-api-workflow"></span><h1>workflow-manager.app.api.workflow<a class="headerlink" href="#module-workflow-manager.app.api.workflow" title="Link to this heading">#</a></h1>
 <p>Workflow manager endpoints.</p>
+<p>TODO: How to handle tasks, and where to trigger the device task?
+- There should be one endpoint for task, workflow and exam
+- The endpoint processes the list, i.e. all the contained tasks
+- Does it help to store an index with each task?
+- Which endpoint triggers the acquisition? (devicem manager?)
+- cleanup: currently there is trigger_task(…) (used by frontend) and process(…)</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -474,10 +480,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.trigger_task" title="workflow-manager.app.api.workflow.trigger_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trigger_task</span></code></a>(]) → dict[str, Any])</p></td>
 <td><p>Endpoint to trigger a task in the orchestration engine.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.calculate_age" title="workflow-manager.app.api.workflow.calculate_age"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_age</span></code></a>(birth_date)</p></td>
-<td><p>Calculate age in years from birth date.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.calc_age_from_date" title="workflow-manager.app.api.workflow.calc_age_from_date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_age_from_date</span></code></a>(→ int)</p></td>
+<td><p>Calculate age in years from a given birth date.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.start_scan" title="workflow-manager.app.api.workflow.start_scan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan</span></code></a>(task_type, device_id, sequence_id, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.start_scan" title="workflow-manager.app.api.workflow.start_scan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan</span></code></a>(task, access_token)</p></td>
 <td><p>Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.workflow.list_available_tasks" title="workflow-manager.app.api.workflow.list_available_tasks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_available_tasks</span></code></a>()</p></td>
@@ -583,27 +589,27 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.calculate_age">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">calculate_age</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">birth_date</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.calculate_age" title="Link to this definition">#</a></dt>
-<dd><p>Calculate age in years from birth date.</p>
+<dt class="sig sig-object py" id="workflow-manager.app.api.workflow.calc_age_from_date">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">calc_age_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">birth_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.date</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#workflow-manager.app.api.workflow.calc_age_from_date" title="Link to this definition">#</a></dt>
+<dd><p>Calculate age in years from a given birth date.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>birth_date</dt><dd><p>date of birth as datetime.date object</p>
+<dt>birth_date</dt><dd><p>Date of birth</p>
 </dd>
 </dl>
 </section>
 <section id="id1">
 <h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Age in years as integer</p>
+<div><p>Age in years as int</p>
 </div></blockquote>
 </section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.workflow.start_scan">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">start_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acquisition_limits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionLimits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.SequenceParameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.start_scan" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.workflow.</span></span><span class="sig-name descname"><span class="pre">start_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.workflow.start_scan" title="Link to this definition">#</a></dt>
 <dd><p>Load the device and sequence data from the database and start the scan for task types DEVICE_TASK_SIMULATOR and DEVICE_TASK_SDK.</p>
 <section id="id2">
 <h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
@@ -744,7 +750,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.hello_world"><code class="docutils literal notranslate"><span class="pre">hello_world()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.simulate_reconstruction_task"><code class="docutils literal notranslate"><span class="pre">simulate_reconstruction_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.trigger_task"><code class="docutils literal notranslate"><span class="pre">trigger_task()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.calculate_age"><code class="docutils literal notranslate"><span class="pre">calculate_age()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.calc_age_from_date"><code class="docutils literal notranslate"><span class="pre">calc_age_from_date()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.start_scan"><code class="docutils literal notranslate"><span class="pre">start_scan()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.list_available_tasks"><code class="docutils literal notranslate"><span class="pre">list_available_tasks()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.workflow.process"><code class="docutils literal notranslate"><span class="pre">process()</span></code></a></li>

@@ -34,7 +34,7 @@ Module Contents
 .. py:data:: app
 
 .. py:data:: ORIGINS
-   :value: ['http://localhost', 'https://localhost']
+   :value: ['http://localhost:8080', 'https://localhost:8443']
 
 
 .. py:function:: startup() -> None

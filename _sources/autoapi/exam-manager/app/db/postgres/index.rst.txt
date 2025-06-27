@@ -1,0 +1,414 @@
+exam-manager.app.db.postgres
+============================
+
+.. py:module:: exam-manager.app.db.postgres
+
+.. autoapi-nested-parse::
+
+   Database file for the MRI sequence manager service.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   exam-manager.app.db.postgres.postgres_user_filepath
+   exam-manager.app.db.postgres.postgres_password_filepath
+   exam-manager.app.db.postgres.postgres_db_name_filepath
+   exam-manager.app.db.postgres.postgres_user
+   exam-manager.app.db.postgres.MappedBase
+   exam-manager.app.db.postgres.Device
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   exam-manager.app.db.postgres.Base
+   exam-manager.app.db.postgres.Exam
+   exam-manager.app.db.postgres.Workflow
+   exam-manager.app.db.postgres.Task
+   exam-manager.app.db.postgres.AcquisitionTask
+   exam-manager.app.db.postgres.DAGTask
+   exam-manager.app.db.postgres.Result
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.db.postgres.init_db
+
+
+Module Contents
+---------------
+
+.. py:class:: Base
+
+   Bases: :py:obj:`sqlalchemy.orm.DeclarativeBase`
+
+
+   Declarative base class.
+
+
+   .. py:method:: update(data: pydantic.BaseModel) -> None
+
+      Update a exam entry.
+
+      Parameters
+      ----------
+      data
+          Data to be written
+
+
+
+.. py:data:: postgres_user_filepath
+   :value: '/run/secrets/scanhub_database_postgres_user'
+
+
+.. py:data:: postgres_password_filepath
+   :value: '/run/secrets/scanhub_database_postgres_password'
+
+
+.. py:data:: postgres_db_name_filepath
+   :value: '/run/secrets/scanhub_database_postgres_db_name'
+
+
+.. py:data:: postgres_user
+
+.. py:function:: init_db() -> None
+
+   Initialize the database.
+
+
+.. py:class:: Exam
+
+   Bases: :py:obj:`Base`
+
+
+   Abstract exam ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'exam'
+
+
+
+   .. py:attribute:: __table_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: datetime_updated
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: workflows
+      :type:  sqlalchemy.orm.Mapped[list[Workflow]]
+
+
+   .. py:attribute:: patient_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: name
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: description
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: indication
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: patient_height_cm
+      :type:  sqlalchemy.orm.Mapped[int]
+
+
+   .. py:attribute:: patient_weight_kg
+      :type:  sqlalchemy.orm.Mapped[int]
+
+
+   .. py:attribute:: comment
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+
+
+   .. py:attribute:: is_template
+      :type:  sqlalchemy.orm.Mapped[bool]
+
+
+.. py:class:: Workflow
+
+   Bases: :py:obj:`Base`
+
+
+   Workflow ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'workflow'
+
+
+
+   .. py:attribute:: __table_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: datetime_updated
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: tasks
+      :type:  sqlalchemy.orm.Mapped[list[Task]]
+
+
+   .. py:attribute:: exam_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: name
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: description
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: comment
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+
+
+   .. py:attribute:: is_template
+      :type:  sqlalchemy.orm.Mapped[bool]
+
+
+.. py:class:: Task
+
+   Bases: :py:obj:`Base`
+
+
+   Abstract task ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'task'
+
+
+
+   .. py:attribute:: __table_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: creator
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: datetime_updated
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: workflow_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: name
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: description
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: task_type
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.TaskType]
+
+
+   .. py:attribute:: destination
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+
+
+   .. py:attribute:: progress
+      :type:  sqlalchemy.orm.Mapped[int]
+
+
+   .. py:attribute:: is_template
+      :type:  sqlalchemy.orm.Mapped[bool]
+
+
+   .. py:attribute:: results
+      :type:  sqlalchemy.orm.Mapped[list[Result]]
+
+
+   .. py:attribute:: __mapper_args__
+
+
+.. py:class:: AcquisitionTask
+
+   Bases: :py:obj:`Task`
+
+
+   Acquisition task ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'acquisition_task'
+
+
+
+   .. py:attribute:: __mapper_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: sequence_id
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: device_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: acquisition_parameter
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.AcquisitionParameter]
+
+
+   .. py:attribute:: acquisition_limits
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.AcquisitionLimits]
+
+
+.. py:class:: DAGTask
+
+   Bases: :py:obj:`Task`
+
+
+   DAG task ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'dag_task'
+
+
+
+   .. py:attribute:: __mapper_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: dag_type
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.TaskType]
+
+
+   .. py:attribute:: dag_id
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: input_result_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: parameter
+      :type:  sqlalchemy.orm.Mapped[dict]
+
+
+.. py:class:: Result
+
+   Bases: :py:obj:`Base`
+
+
+   Abstract result ORM model.
+
+
+   .. py:attribute:: __tablename__
+      :value: 'result'
+
+
+
+   .. py:attribute:: __table_args__
+
+
+   .. py:attribute:: id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: task_id
+      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+
+
+   .. py:attribute:: progress
+      :type:  sqlalchemy.orm.Mapped[float]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+
+
+   .. py:attribute:: type
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ResultType]
+
+
+   .. py:attribute:: directory
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: filename
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+.. py:data:: MappedBase
+
+.. py:data:: Device
+

@@ -24,7 +24,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: dal_create_device(request: api.models.DeviceCreationRequest, token_hash: str, salt: str) -> api.db.Device
+.. py:function:: dal_create_device(request: scanhub_libraries.models.DeviceCreationRequest, token_hash: str, salt: str) -> api.db.Device
    :async:
 
 
