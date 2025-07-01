@@ -21,6 +21,10 @@ function capitalize(str: string){
 
 
 function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
+
+  const datetime_created = new Date(task.datetime_created)
+  const datetime_updated = task.datetime_updated ? new Date(String(task.datetime_updated)) : undefined
+
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box
@@ -105,11 +109,11 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Dag && 'input_result_id' in task &&
+          task.task_type === TaskType.Dag && 'input_id' in task &&
           <>
             <Typography fontSize='sm'>Input</Typography>
             <Typography level='body-sm' textColor='text.primary'>
-              {task.input_result_id ? String(task.input_result_id) : '-'}
+              {task.input_id ? String(task.input_id) : '-'}
             </Typography>
           </>
         }
@@ -150,14 +154,12 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
           {task.creator}
         </Typography>
 
-        <Typography fontSize='sm'>Created</Typography>
+        <Typography level='body-sm'>Last update</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(task.datetime_created).toLocaleString()}
-        </Typography>
-
-        <Typography fontSize='sm'>Updated</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {task.datetime_updated ? new Date(String(task.datetime_updated)).toLocaleString() : '-'}
+          {
+            datetime_updated ? datetime_updated.toLocaleDateString() + ', ' + datetime_updated.toLocaleTimeString()
+            : datetime_created.toLocaleDateString() + ', ' + datetime_created.toLocaleTimeString()
+          }
         </Typography>
 
       </Box>

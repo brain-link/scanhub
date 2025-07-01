@@ -29,13 +29,14 @@ function PatientInfo({ patient, isLoading, isError }: { patient: PatientOut | un
   if (patient) {
 
     const patient_birth_date = new Date(patient.birth_date)
+    const datetime_create = new Date(patient.datetime_created)
+    const datetime_updated = patient.datetime_updated ? new Date(String(patient.datetime_updated)) : undefined
 
     return (
       <Box
         sx={{
           rowGap: 0.4,
           columnGap: 2,
-          // p: 1,
           display: 'grid',
           gridTemplateColumns: 'auto 1fr',
           '& > *:nth-of-type(odd)': {
@@ -73,14 +74,12 @@ function PatientInfo({ patient, isLoading, isError }: { patient: PatientOut | un
           {patient.weight + ' kg'}
         </Typography>
 
-        {/* <Typography level='body-sm'>Added on</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {new Date(patient.datetime_created).toLocaleDateString()}
-        </Typography> */}
-
         <Typography level='body-sm'>Last update</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {patient.datetime_updated ? new Date(patient.datetime_updated).toLocaleString() : '-'}
+          {
+            datetime_updated ? datetime_updated.toLocaleDateString() + ', ' + datetime_updated.toLocaleTimeString()
+            : datetime_create.toLocaleDateString() + ', ' + datetime_create.toLocaleTimeString()
+          }
         </Typography>
       </Box>
     )
