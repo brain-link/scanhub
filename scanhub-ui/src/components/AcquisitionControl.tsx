@@ -55,7 +55,7 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
             // By now, only tasks can be executed
             if (itemSelection.itemId == undefined) {
               showNotification({message: 'No item selected!', type: 'warning'})
-            } else if (itemSelection.type == 'task') {
+            } else if (itemSelection.type == 'DAG' || itemSelection.type == 'ACQUISITION') {
               processTaskMutation.mutate()
             } else {
               // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow

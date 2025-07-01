@@ -58,7 +58,7 @@ export default function TaskItem(
             p: 0.5,
           }}
           color={task.status == ItemStatus.Finished ? 'success' : 'primary'}
-          variant={(selection.type == 'task' && selection.itemId == task.id) ? 'outlined' : 'plain'}
+          variant={((selection.type == 'DAG' || selection.type == 'ACQUISITION') && selection.itemId == task.id) ? 'outlined' : 'plain'}
           onClick={onClick}
         >
           {

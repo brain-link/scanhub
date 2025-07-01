@@ -84,7 +84,13 @@ function AcquisitionView() {
                 }
                 workflow.tasks.map((task) => {
                   if (task.id == itemSelection.itemId) {
-                    setItemSelection({ type: 'task', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
+                    setItemSelection({
+                      type: task.task_type == TaskType.Acquisition ? 'ACQUISITION' : 'DAG',
+                      name: task.name,
+                      itemId: task.id,
+                      status: task.status,
+                      progress: task.progress
+                    })
                   }
                 })
               })
@@ -203,7 +209,13 @@ function AcquisitionView() {
                       key={`task-${task.id}`} 
                       item={task} 
                       refetchParentData={refetchExams}
-                      onClick={() => {setItemSelection({type: 'task', name: task.name, itemId: task.id, status: task.status, progress: task.progress})}}
+                      onClick={() => {setItemSelection({
+                        type: task.task_type == TaskType.Acquisition ? 'ACQUISITION' : 'DAG',
+                        name: task.name,
+                        itemId: task.id,
+                        status: task.status,
+                        progress: task.progress
+                      })}}
                       selection={itemSelection}
                     />
                   ))}
@@ -228,8 +240,14 @@ function AcquisitionView() {
         <AcquisitionControl 
           itemSelection={itemSelection}
           openConfirmModal={(callback: () => void) => {
-            setOnAcquisitionLimitsConfirm(() => callback);
-            setConfirmAcquisitionLimitsModalOpen(true);
+            if (itemSelection.type == 'ACQUISITION'){
+              // Only require confirmation in case of acquisition tasks
+              setOnAcquisitionLimitsConfirm(() => callback);
+              setConfirmAcquisitionLimitsModalOpen(true);
+            }
+            else {
+              callback()
+            }
           }}
         />
 
@@ -244,7 +262,7 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      <DicomViewer taskId={ itemSelection.type === 'task' ? itemSelection.itemId : undefined} />
+      <DicomViewer taskId={ itemSelection.type == 'DAG' ? itemSelection.itemId : undefined} />
     </Box>
   )
 }
