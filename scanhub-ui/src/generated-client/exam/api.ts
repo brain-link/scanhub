@@ -368,10 +368,10 @@ export interface BaseDAGTask {
     'dag_id': string;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof BaseDAGTask
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}
@@ -417,18 +417,6 @@ export interface BaseExam {
      * @memberof BaseExam
      */
     'indication'?: Indication;
-    /**
-     * 
-     * @type {PatientHeightCm}
-     * @memberof BaseExam
-     */
-    'patient_height_cm'?: PatientHeightCm;
-    /**
-     * 
-     * @type {PatientWeightKg}
-     * @memberof BaseExam
-     */
-    'patient_weight_kg'?: PatientWeightKg;
     /**
      * 
      * @type {Comment}
@@ -646,10 +634,10 @@ export interface DAGTaskOut {
     'dag_id': string;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof DAGTaskOut
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}
@@ -753,18 +741,6 @@ export interface ExamOut {
      * @memberof ExamOut
      */
     'indication'?: Indication;
-    /**
-     * 
-     * @type {PatientHeightCm}
-     * @memberof ExamOut
-     */
-    'patient_height_cm'?: PatientHeightCm;
-    /**
-     * 
-     * @type {PatientWeightKg}
-     * @memberof ExamOut
-     */
-    'patient_weight_kg'?: PatientWeightKg;
     /**
      * 
      * @type {Comment}
@@ -961,10 +937,10 @@ export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInne
     'dag_id': any;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}
@@ -1003,9 +979,9 @@ export interface Indication {
 /**
  * 
  * @export
- * @interface InputResultId
+ * @interface InputId
  */
-export interface InputResultId {
+export interface InputId {
 }
 /**
  * Task status enum.
@@ -1096,23 +1072,9 @@ export interface Parameter {
 /**
  * 
  * @export
- * @interface PatientHeightCm
- */
-export interface PatientHeightCm {
-}
-/**
- * 
- * @export
  * @interface PatientId
  */
 export interface PatientId {
-}
-/**
- * 
- * @export
- * @interface PatientWeightKg
- */
-export interface PatientWeightKg {
 }
 /**
  * @type Payload
@@ -1242,10 +1204,10 @@ export interface ResponseCreateTaskApiV1ExamTaskNewPost {
     'dag_id': any;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}
@@ -1383,10 +1345,10 @@ export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
     'dag_id': any;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}
@@ -1524,10 +1486,10 @@ export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
     'dag_id': any;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}
@@ -1665,10 +1627,10 @@ export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
     'dag_id': any;
     /**
      * 
-     * @type {InputResultId}
+     * @type {InputId}
      * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
      */
-    'input_result_id'?: InputResultId;
+    'input_id'?: InputId;
     /**
      * 
      * @type {Parameter}

@@ -15,12 +15,12 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/joy/Stack'
 
 import { taskApi } from '../api'
-import { TaskOut } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut } from '../generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import TaskTemplateItem from './TaskItem'
 
 export default function TaskFromTemplateModal(props: ModalPropsCreate) {
-  const { data: tasks } = useQuery<TaskOut[]>({
+  const { data: tasks } = useQuery<(AcquisitionTaskOut | DAGTaskOut)[]>({
     queryKey: ['allTaskTemplates'],
     queryFn: async () => {
       return await taskApi

@@ -14,14 +14,17 @@ import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
+import Tooltip from '@mui/joy/Tooltip'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
 import Stack from '@mui/joy/Stack'
+import Grid from '@mui/joy/Grid'
 import Textarea from '@mui/joy/Textarea'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import TaskInfo from './TaskInfo';
 import { deviceApi, sequenceApi, taskApi, workflowManagerApi } from '../api'
 import { 
   MRISequenceOut,
@@ -383,6 +386,32 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
     },
   })
 
+  const {
+    data: inputTasks,
+    // isLoading: isLoadingDevices,
+    // isError: isErrorDevices,
+    // refetch: refetchDevices,
+  } = useQuery<(AcquisitionTaskOut | DAGTaskOut)[]>({
+    queryKey: ['inputTasks'],
+    queryFn: async () => {
+      const workflowId = props.modalType == 'create' ? props.parentId : props.item.workflow_id
+      if (workflowId) {
+        return await taskApi
+          .getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId)
+          .then((result) => {
+            if (props.modalType == 'modify') {
+              // Filter out the current task being modified
+              return (result.data as (AcquisitionTaskOut | DAGTaskOut)[]).filter(
+                (task) => task.id !== props.item.id
+              );
+            }
+            return result.data as (AcquisitionTaskOut | DAGTaskOut)[]
+          })
+      }
+      return []
+    },
+  })
+
   const title = props.modalType == 'modify' ? 'Update DAG Task' : 'Create New DAG Task'
 
   return (
@@ -391,30 +420,30 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
         {title}
       </Typography>
 
-      <Stack direction='column' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
-        
-        <Stack spacing={1}>
-          <FormLabel>Name</FormLabel>
-          <Input
-            name={'name'}
-            onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-            value={task.name}
-          />
-        </Stack>
-        
-        <Stack spacing={1}>
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            minRows={2}
-            name={'description'}
-            onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-            defaultValue={task.description}
-          />
-        </Stack>
-        
-        <Stack spacing={4} direction={'row'}>
 
-          <Stack spacing={1}>
+      <Stack spacing={1}>
+        <Grid container rowSpacing={1.5} columnSpacing={5}>
+          <Grid md={12}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              name={'name'}
+              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+              value={task.name}
+            />
+          </Grid>
+
+        
+          <Grid md={12}>
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              minRows={2}
+              name={'description'}
+              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+              defaultValue={task.description}
+            />
+          </Grid>
+
+          <Grid md={4}>
             <FormLabel>DAG</FormLabel>
             <Select
               value={task.dag_id ? task.dag_id : null}
@@ -434,9 +463,9 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
                 )
               })}
             </Select>
-          </Stack>
+          </Grid>
 
-          <Stack spacing={1}>
+          <Grid md={4}>
             <FormLabel>DAG Type</FormLabel>
             <Select
               value={task.dag_type ? task.dag_type : null}
@@ -451,30 +480,61 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
               <Option key={'reconstruction'} value={TaskType.Reconstruction}>Reconstruction</Option>
               <Option key={'processing'} value={TaskType.Processing}>Processing</Option>
             </Select>
-          </Stack>
+          </Grid>
 
-        </Stack>
+          <Grid md={4}>
+            <FormLabel>Input</FormLabel>
+            <Select
+              value={task.input_id ? task.input_id : null}
+              placeholder={'Select an input...'}
+              size='sm'
+              onChange={(event, value) => {
+                if (value) {
+                  setTask({ ...task, 'input_id': value })
+                }
+              }}
+            >
+              {inputTasks?.map((inputTask) => {
+                return (
+                  <Tooltip
+                    key={`tooltip-${inputTask.id}`}
+                    placement='right'
+                    variant='outlined'
+                    arrow
+                    title={<TaskInfo data={inputTask} />}
+                  >
+                    <Option key={`option-${inputTask.id}`} value={inputTask.id}>
+                      {inputTask.name}
+                    </Option>
+                  </Tooltip>
+                )
+              })}
+            </Select>
+          </Grid>
         
+          <Grid md={12}>
+            <Button
+              size='sm'
+              sx={{ maxWidth: 120 }}
+              onClick={(event) => {
+                event.preventDefault()
+                if (task.name == '') {
+                  showNotification({message: 'Task name must not be empty.', type: 'warning'})
+                }
+                else if (task.description == '') {
+                  showNotification({message: 'Task description must not be empty.', type: 'warning'})
+                }
+                else {
+                  mutation.mutate()
+                  props.setOpen(false)
+                }
+              }}
+            >
+              Save
+            </Button>
+          </Grid>
 
-        <Button
-          size='sm'
-          sx={{ maxWidth: 120 }}
-          onClick={(event) => {
-            event.preventDefault()
-            if (task.name == '') {
-              showNotification({message: 'Task name must not be empty.', type: 'warning'})
-            }
-            else if (task.description == '') {
-              showNotification({message: 'Task description must not be empty.', type: 'warning'})
-            }
-            else {
-              mutation.mutate()
-              props.setOpen(false)
-            }
-          }}
-        >
-          Save
-        </Button>
+        </Grid>
       </Stack>
     </>
   )

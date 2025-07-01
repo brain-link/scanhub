@@ -169,7 +169,7 @@ class DAGTask(Task):
     )
     dag_type: Mapped[TaskType] = mapped_column(nullable=False)
     dag_id: Mapped[str] = mapped_column(nullable=False)
-    input_result_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
+    input_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
 class Result(Base):

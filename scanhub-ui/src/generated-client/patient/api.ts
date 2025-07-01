@@ -79,19 +79,27 @@ export interface BasePatient {
     'status'?: ItemStatus;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof BasePatient
      */
-    'comment'?: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof BasePatient
-     */
-    'model_config'?: object;
+    'comment'?: Comment;
 }
 
 
+/**
+ * 
+ * @export
+ * @interface Comment
+ */
+export interface Comment {
+}
+/**
+ * 
+ * @export
+ * @interface DatetimeUpdated
+ */
+export interface DatetimeUpdated {
+}
 /**
  * Pydantic definition of genders.
  * @export
@@ -139,13 +147,6 @@ export const ItemStatus = {
 export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
 
 
-/**
- * 
- * @export
- * @interface LocationInner
- */
-export interface LocationInner {
-}
 /**
  * Patient pydantic output model.
  * @export
@@ -202,16 +203,10 @@ export interface PatientOut {
     'status'?: ItemStatus;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof PatientOut
      */
-    'comment'?: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof PatientOut
-     */
-    'model_config'?: object;
+    'comment'?: Comment;
     /**
      * 
      * @type {string}
@@ -226,10 +221,10 @@ export interface PatientOut {
     'datetime_created': string;
     /**
      * 
-     * @type {string}
+     * @type {DatetimeUpdated}
      * @memberof PatientOut
      */
-    'datetime_updated'?: string;
+    'datetime_updated'?: DatetimeUpdated;
 }
 
 
@@ -241,10 +236,10 @@ export interface PatientOut {
 export interface ValidationError {
     /**
      * 
-     * @type {Array<LocationInner>}
+     * @type {Array<ValidationErrorLocInner>}
      * @memberof ValidationError
      */
-    'loc': Array<LocationInner>;
+    'loc': Array<ValidationErrorLocInner>;
     /**
      * 
      * @type {string}
@@ -257,6 +252,13 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationErrorLocInner
+ */
+export interface ValidationErrorLocInner {
 }
 
 /**

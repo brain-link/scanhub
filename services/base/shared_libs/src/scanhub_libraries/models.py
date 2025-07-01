@@ -218,7 +218,7 @@ class BaseDAGTask(BaseTask):
     task_type: Literal[TaskType.DAG]
     dag_type: Literal[TaskType.RECONSTRUCTION, TaskType.PROCESSING]
     dag_id: str
-    input_result_id: UUID | None = None
+    input_id: UUID | None = None
     parameter: dict | None = None
 
 

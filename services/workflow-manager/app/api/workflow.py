@@ -173,12 +173,14 @@ async def trigger_task(task_id: str,
                  timeout=3)
     # could check response type here, but may be optional
 
-    if task.type == TaskType.ACQUISITION:
+    if task.task_type == TaskType.ACQUISITION:
         # TODO: This could be done in device manager?
-        await start_scan(task, access_token=access_token)
+        # await start_scan(task, access_token=access_token)
+        print("SCANNING...")
         return {"status": "success", "data": "ok"}
-    elif task.type == TaskType.RECONSTRUCTION:
-        background_tasks.add_task(simulate_reconstruction_task, task, headers)
+    elif task.task_type == TaskType.DAG:
+        # background_tasks.add_task(simulate_reconstruction_task, task, headers)
+        print("PROCESSING...")
         return {"status": "success", "data": "ok"}
 
         # try:
