@@ -352,7 +352,7 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: input_result_id
+   .. py:attribute:: input_id
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
