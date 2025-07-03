@@ -187,14 +187,30 @@ async def trigger_task(task_id: str,
     elif task.task_type == TaskType.DAG:
         # background_tasks.add_task(simulate_reconstruction_task, task, headers)
         print("PROCESSING...")
-        return {"status": "success", "data": "ok"}
+        try:
+            # Check if the file was successfully uploaded
+            # if not os.path.exists(file_location):
+            #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
+            # Define the callback endpoint
+            callback_endpoint = "http://localhost:8443/api/v1/workflowmanager/results_ready/" #"http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
 
-        # try:
-        #     response = orchestration_engine.trigger_task(task_id)
-        #     return {"status": "success", "data": response}
-        # except Exception as e:
-        #     logging.error(f"Failed to trigger task: {e}")
-        #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+            # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
+            response = orchestration_engine.trigger_task(
+                task.dag_id,
+                conf={
+                    "directory": "tmp",#directory,
+                    "file_name": "file",#file.filename,
+                    "workflow_manager_endpoint": callback_endpoint,
+                    "user_token": access_token
+                }
+            )
+            print(f"DAG triggered with response: {response}")
+
+            return {"message": "DAG triggered successfully", "data": response}
+        except Exception as e:
+            logging.error(f"Failed to trigger DAG: {e}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
     else:
         raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
