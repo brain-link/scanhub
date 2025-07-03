@@ -13,6 +13,9 @@ import { ExamOut } from '../generated-client/exam'
 
 function ExamInfo({ exam }: { exam: ExamOut }) {
 
+  const datetime_created = new Date(exam.datetime_created)
+  const datetime_updated = exam.datetime_updated ? new Date(String(exam.datetime_updated)) : undefined
+
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box
@@ -39,22 +42,12 @@ function ExamInfo({ exam }: { exam: ExamOut }) {
 
         <Typography fontSize='sm'>Indication</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.indication}
-        </Typography>
-
-        <Typography fontSize='sm'>Patient height [cm]</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {exam.patient_height_cm}
-        </Typography>
-
-        <Typography fontSize='sm'>Patient weight [kg]</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {exam.patient_weight_kg}
+          {exam.indication ? String(exam.indication) : '-'}
         </Typography>
 
         <Typography fontSize='sm'>Comment</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.comment}
+          {exam.comment ? String(exam.comment) : '-'}
         </Typography>
 
         <Typography fontSize='sm'>Status</Typography>
@@ -77,14 +70,12 @@ function ExamInfo({ exam }: { exam: ExamOut }) {
           {exam.creator}
         </Typography>
 
-        <Typography fontSize='sm'>Created</Typography>
+        <Typography level='body-sm'>Last update</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(exam.datetime_created).toLocaleString()}
-        </Typography>
-
-        <Typography fontSize='sm'>Updated</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {exam.datetime_updated ? new Date(exam.datetime_updated).toLocaleString() : '-'}
+          {
+            datetime_updated ? datetime_updated.toLocaleDateString() + ', ' + datetime_updated.toLocaleTimeString()
+            : datetime_created.toLocaleDateString() + ', ' + datetime_created.toLocaleTimeString()
+          }
         </Typography>
       </Box>
     </Box>

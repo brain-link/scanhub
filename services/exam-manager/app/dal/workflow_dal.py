@@ -9,8 +9,9 @@ from uuid import UUID
 from scanhub_libraries.models import BaseWorkflow
 from sqlalchemy.engine import Result as SQLResult
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
-from app.db import Workflow, async_session
+from app.db.postgres import Workflow, async_session
 
 
 async def add_workflow_data(payload: BaseWorkflow, creator: str) -> Workflow:
@@ -68,7 +69,9 @@ async def get_all_workflow_data(exam_id: UUID) -> list[Workflow]:
         List of workflow data base orm models
     """
     async with async_session() as session:
-        result: SQLResult = await session.execute(select(Workflow).where(Workflow.exam_id == exam_id))
+        result: SQLResult = await session.execute(
+            select(Workflow).options(selectinload(Workflow.tasks)).where(Workflow.exam_id == exam_id)
+        )
         workflows = list(result.scalars().all())
     return workflows
 
@@ -86,7 +89,9 @@ async def get_all_workflows_template_data() -> list[Workflow]:
         List of workflow data base orm models
     """
     async with async_session() as session:
-        result: SQLResult = await session.execute(select(Workflow).where(Workflow.is_template))
+        result: SQLResult = await session.execute(
+            select(Workflow).options(selectinload(Workflow.tasks)).where(Workflow.is_template)
+        )
         workflows = list(result.scalars().all())
     return workflows
 

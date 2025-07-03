@@ -11,7 +11,7 @@ import '@fontsource/roboto/700.css'
 import { StyledEngineProvider } from '@mui/joy/styles'
 import * as React from 'react'
 import ReactDOM from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 
 import LoginContextProvider from './LoginContextProvider'
@@ -19,19 +19,6 @@ import NotificationContextProvider from './NotificationContextProvider'
 import { RouteConfiguration } from './Routes'
 
 const queryClient = new QueryClient()
-// const root = ReactDOM.createRoot(document.getElementById('root')!)
-
-// root.render(
-//   <React.StrictMode>
-//     <QueryClientProvider client={queryClient}>
-//       <BrowserRouter>
-//         <LoginContextProvider>
-//           <RouteConfiguration />
-//         </LoginContextProvider>
-//       </BrowserRouter>
-//     </QueryClientProvider>
-//   </React.StrictMode>,
-// )
 
 ReactDOM.createRoot(document.querySelector('#root')!).render(
   <React.StrictMode>

@@ -44,4 +44,4 @@ WORKDIR /app
 COPY --from=BUILD_IMAGE /app /app
 
 # Start the app
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "start-no-hmr" ]

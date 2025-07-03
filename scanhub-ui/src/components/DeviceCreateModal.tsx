@@ -6,7 +6,7 @@
  * to create a new device.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -53,15 +53,17 @@ function DeviceForm(props: ModalProps) {
   })
 
   // Post a new record and refetch records table
-  const mutation = useMutation(async () => {
-    await deviceApi
-      .createDeviceApiV1DeviceCreatedevicePost(device)
-      .then((response) => {
-        props.onSubmit()
-        setDeviceToken(response.data.device_token)
-        setDeviceId(response.data.device_id)
-        showNotification({message: 'Device created.', type: 'success'})
-      })
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await deviceApi
+        .createDeviceApiV1DeviceCreatedevicePost(device)
+        .then((response) => {
+          props.onSubmit()
+          setDeviceToken(response.data.device_token)
+          setDeviceId(response.data.device_id)
+          showNotification({message: 'Device created.', type: 'success'})
+        })
+    }
   })
 
   function renderFormEntry(item: TextFormEntry, index: number) {

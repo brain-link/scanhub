@@ -5,7 +5,7 @@
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
 import * as React from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { taskApi } from '../api'
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
@@ -25,7 +25,7 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 
 import DicomViewerToolbar from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
-import { TaskOut, ItemStatus, TaskType } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../generated-client/exam'
 import baseUrls from '../utils/Urls'
 
 
@@ -47,7 +47,7 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
     data: task,
     // refetch: refetchResult,
     isError,
-  } = useQuery<TaskOut, Error>({
+  } = useQuery<AcquisitionTaskOut | DAGTaskOut, Error>({
     queryKey: ['task', taskId],
     queryFn: async () => {
       if (taskId) {
@@ -106,7 +106,7 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
       !task.results || 
       task.results.length == 0 || 
       task.status != ItemStatus.Finished || 
-      task.type != TaskType.ReconstructionTask
+      task.task_type != TaskType.Reconstruction
   ) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>

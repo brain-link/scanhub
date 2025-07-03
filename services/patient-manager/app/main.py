@@ -27,8 +27,10 @@ app = FastAPI(
 #   Better specify explicitly the allowed origins
 #   See: https://fastapi.tiangolo.com/tutorial/cors/
 ORIGINS = [
-    "http://localhost",       # frontend via nginx-proxy
-    "https://localhost",      # frontend via nginx-proxy
+    # "http://localhost",       # frontend via nginx-proxy with default port
+    # "https://localhost",      # frontend via nginx-proxy with default port
+    "http://localhost:8080",    # frontend via nginx-proxy with custom port
+    "https://localhost:8443",   # frontend via nginx-proxy with custom port
 ]
 
 app.add_middleware(

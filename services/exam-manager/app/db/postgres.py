@@ -8,7 +8,7 @@ import os
 import uuid
 
 from pydantic import BaseModel
-from scanhub_libraries.models import ItemStatus, ResultType, TaskType
+from scanhub_libraries.models import AcquisitionLimits, AcquisitionParameter, ItemStatus, ResultType, TaskType
 from sqlalchemy import JSON, ForeignKey, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -27,7 +27,7 @@ class Base(DeclarativeBase):
         data
             Data to be written
         """
-        for key, value in data.dict().items():
+        for key, value in data.model_dump().items():
             setattr(self, key, value)
 
 
@@ -101,8 +101,9 @@ class Workflow(Base):  # TBD: rename to "Workflow"
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
-    tasks: Mapped[list["Task"]] = relationship(lazy="selectin")
-
+    tasks: Mapped[list["Task"]] = relationship(
+        "Task", lazy="selectin", cascade="all, delete-orphan"
+    )
     exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
@@ -125,31 +126,51 @@ class Task(Base):
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
-
     workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    comment: Mapped[str] = mapped_column(nullable=True)
-    type: Mapped[TaskType] = mapped_column(type_=JSON, nullable=False)
-
-    # Arguments and parameters
-    # Example: "args": {"arg1": "x", "arg2": "y"}
-    args: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
-
-    # Input and output artifacts with export destination
-    # Example: {"input": [{"name": "env_HOLOSCAN_INPUT_PATH", "value": "{{ context.input.dicom }}"}]}
-    # https://github.com/Project-MONAI/monai-deploy/blob/main/deploy/monai-deploy-express/sample-workflows/hello-world.json
-    # implemention of input and output artifacts for artifact types as replacement for string
-    artifacts: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
-
-    # List of task destinations, which are for example used to create the chain of topics in the kafka message broker,
-    # i.e., target topics
-    destinations: Mapped[dict[str, str]] = mapped_column(type_=JSON, nullable=True)
-
+    task_type: Mapped[TaskType] = mapped_column(nullable=False)
+    destination: Mapped[str] = mapped_column(nullable=False, default="")
     status: Mapped[ItemStatus] = mapped_column(nullable=False)
     progress: Mapped[int] = mapped_column(nullable=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
-    results: Mapped[list["Result"]] = relationship(lazy="selectin")
+    results: Mapped[list["Result"]] = relationship("Result", lazy="selectin", cascade="all, delete-orphan")
+
+    __mapper_args__ = {
+        "polymorphic_identity": "task",
+        "polymorphic_on": "task_type",
+        "with_polymorphic": "*",
+    }
+
+class AcquisitionTask(Task):
+    """Acquisition task ORM model."""
+
+    __tablename__ = "acquisition_task"
+    __mapper_args__ = {
+        "polymorphic_identity": "ACQUISITION",
+    }
+    id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("task.id", ondelete="CASCADE"), primary_key=True, default=uuid.uuid4
+    )
+    sequence_id: Mapped[str] = mapped_column(nullable=False)
+    device_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
+    acquisition_parameter: Mapped[AcquisitionParameter] = mapped_column(type_=JSON, nullable=False)
+    acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=True)
+
+class DAGTask(Task):
+    """DAG task ORM model."""
+
+    __tablename__ = "dag_task"
+    __mapper_args__ = {
+        "polymorphic_identity": "DAG",
+    }
+    id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("task.id", ondelete="CASCADE"), primary_key=True
+    )
+    dag_type: Mapped[TaskType] = mapped_column(nullable=False)
+    dag_id: Mapped[str] = mapped_column(nullable=False)
+    input_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
+    parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
 class Result(Base):
     """Abstract result ORM model."""

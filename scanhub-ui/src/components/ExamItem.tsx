@@ -4,11 +4,11 @@
  *
  * ExamItem.tsx is responsible for rendering a single exam item.
  */
-import ListAltIcon from '@mui/icons-material/ListAlt'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import FolderIcon from '@mui/icons-material/Folder';
 import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
 import MenuButton from '@mui/joy/MenuButton'
@@ -48,7 +48,7 @@ export default function ExamItem({ item: exam, selection, onClick }: SelectableI
         variant={(selection.type == 'exam' && selection.itemId == exam.id) ? 'outlined' : 'plain'}
         onClick={onClick}
       >
-        <ListAltIcon fontSize='small' />
+        <FolderIcon fontSize='small' />
         <Box 
           sx={{
             marginLeft: 0.5,
@@ -78,12 +78,14 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
   const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)
   const [examModalOpen, setExamModalOpen] = React.useState(false)
 
-  const deleteExam = useMutation(async () => {
-    await examApi
-      .examDeleteApiV1ExamExamIdDelete(exam.id)
-      .then(() => {
-        refetchParentData()
-      })
+  const deleteExam = useMutation({
+    mutationFn: async () => {
+      await examApi
+        .examDeleteApiV1ExamExamIdDelete(exam.id)
+        .then(() => {
+          refetchParentData()
+        })
+    }
   })
 
   return (

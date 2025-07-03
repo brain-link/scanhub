@@ -5,12 +5,12 @@
  * Navigation.tsx is responsible for rendering the navigation bar at the top of the page.
  */
 import React, { useContext, useState } from 'react'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import ListAltIcon from '@mui/icons-material/ListAlt'
-import HomeMiniIcon from '@mui/icons-material/HomeMini';
+import TripOriginRoundedIcon from '@mui/icons-material/TripOriginRounded';
 import LineStyleIcon from '@mui/icons-material/LineStyle'
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded'
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded'
@@ -21,6 +21,7 @@ import PersonSharpIcon from '@mui/icons-material/PersonSharp'
 import RecentActorsSharpIcon from '@mui/icons-material/RecentActorsSharp'
 import Avatar from '@mui/joy/Avatar'
 import Box from '@mui/joy/Box'
+import Chip from '@mui/joy/Chip'
 import Button from '@mui/joy/Button'
 import IconButton from '@mui/joy/IconButton'
 import ListDivider from '@mui/joy/ListDivider'
@@ -56,7 +57,7 @@ function ColorSchemeToggle() {
   return (
     <IconButton
       id='toggle-mode'
-      variant='outlined'
+      variant='plain'
       color='primary'
       size='sm'
       onClick={() => {
@@ -89,7 +90,7 @@ export default function Navigation() {
   const menuItems = [
     { id: 0, text: 'Patients', link: '/', icon: <RecentActorsSharpIcon /> },
     { id: 1, text: 'Templates', link: '/templates', icon: <ListAltIcon /> },
-    { id: 2, text: 'Devices', link: '/devices', icon: <HomeMiniIcon /> },
+    { id: 2, text: 'Devices', link: '/devices', icon: <TripOriginRoundedIcon /> },
     { id: 3, text: 'Sequences', link: '/sequences', icon: <LineStyleIcon /> },
   ]
   if (user && user.role == UserRole.Admin) {
@@ -152,15 +153,14 @@ export default function Navigation() {
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
         <ColorSchemeToggle />
         <ConnectionStatus buttonOrPage='button'/>
-
-        <Box sx={{background: 'Orange', border: '1px solid black', borderRadius: '3px', padding: '3px', textWrapMode: 'nowrap'}}>
-          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
-            {'Version ' + version}
-          </Typography>
-          <Typography sx={{ fontSize: '10pt', color: 'black', fontWeight: 'bold', textAlign: 'center'}}>
-            {'Not for clinical use!'}
-          </Typography>
-        </Box>
+        <Chip
+          variant='soft'
+          color='warning'
+          size='sm'
+          sx={{px: 2, py: 0.5, width: 'fit-content'}}
+        >
+            {'v' + version + ' not for clinical use!'}
+        </Chip>
       </Box>
 
       {/* User menu */}

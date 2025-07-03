@@ -9,7 +9,7 @@ from scanhub_libraries.models import BaseResult
 from sqlalchemy.engine import Result as SQLResult
 from sqlalchemy.future import select
 
-from app.db import Result, async_session
+from app.db.postgres import Result, async_session
 
 
 async def add_result_db(payload: BaseResult) -> Result:

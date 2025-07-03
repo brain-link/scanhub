@@ -14,7 +14,7 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { userApi } from '../api'
 import { ModalPropsModify } from '../interfaces/components.interface'
@@ -32,20 +32,23 @@ function PasswordForm(props: ModalPropsModify<string>) {
   const [, showNotification] = React.useContext(NotificationContext)
   const [user, ] = React.useContext(LoginContext)
 
-  const mutation = useMutation(async () => {
-    await userApi.changePasswordApiV1UserloginChangepasswordPut(
-      {
-        password_of_requester: passwordOfRequester,   // eslint-disable-line camelcase
-        username_to_change_password_for: props.item,  // eslint-disable-line camelcase
-        newpassword: newPassword1
-      })
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Updated password sucessfully.', type: 'success'})
-      })
-      .catch(() => {
-        showNotification({message: 'Error at updating password! Maybe your password was wrong.', type: 'warning'})
-      })
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await userApi.changePasswordApiV1UserloginChangepasswordPut(
+        {
+          password_of_requester: passwordOfRequester,   // eslint-disable-line camelcase
+          username_to_change_password_for: props.item,  // eslint-disable-line camelcase
+          newpassword: newPassword1
+        }
+      ).then(() => {
+          props.onSubmit()
+          showNotification({message: 'Updated password sucessfully.', type: 'success'})
+        }
+      ).catch(() => {
+          showNotification({message: 'Error at updating password! Maybe your password was wrong.', type: 'warning'})
+        }
+      )
+    }
   })
 
   return (

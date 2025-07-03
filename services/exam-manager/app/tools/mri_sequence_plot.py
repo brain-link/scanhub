@@ -156,7 +156,7 @@ def generate_plotly_figure(traces: list[TraceData]):
                 x=trace.x,
                 y=trace.y,
                 name=trace.name,
-                yaxis=f"y{len(traces)-k}",
+                yaxis=f"y{len(traces) - k}",
                 mode="lines",
             )
         )

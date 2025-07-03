@@ -6,18 +6,17 @@
  */
 import * as React from 'react'
 import { useContext } from 'react'
-import { useQuery, useMutation } from 'react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
-import AddSharpIcon from '@mui/icons-material/AddSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import ImportContactsIcon from '@mui/icons-material/ImportContacts';
+import AddSharpIcon from '@mui/icons-material/AddSharp'
+import OpenInBrowserOutlinedIcon from '@mui/icons-material/OpenInBrowserOutlined';
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
-import Sheet from '@mui/joy/Sheet'
 import { DataGrid, GridColDef, GridCellParams, GridActionsCellItem } from '@mui/x-data-grid'
 
 import { patientApi } from '../api'
@@ -51,9 +50,9 @@ export default function PatientListView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, PatientOut>(async (patient) => {
-    await patientApi
-      .deletePatientApiV1PatientPatientIdDelete(patient.id)
+  const deleteMutation = useMutation<unknown, unknown, PatientOut>({
+    mutationFn: async (patient: PatientOut) => {
+      await patientApi.deletePatientApiV1PatientPatientIdDelete(patient.id)
       .then(() => {
         showNotification({message: 'Deleted patient ' + patient.first_name + ' ' + patient.last_name + ' (' + patient.id + ')', type: 'success'})
         refetch()
@@ -67,14 +66,15 @@ export default function PatientListView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
-  const updateMutation = useMutation<unknown, unknown, PatientOut>(async (patient) => {
-    await patientApi
-      .updatePatientApiV1PatientPatientIdPut(patient.id, patient)
+  const updateMutation = useMutation<unknown, unknown, PatientOut>({
+    mutationFn: async (patient: PatientOut) => {
+      await patientApi.updatePatientApiV1PatientPatientIdPut(patient.id, patient)
       .then(() => {
         showNotification({message: 'Modified patient ' + patient.first_name + ' ' + 
-                                   patient.last_name + ' (' + patient.id + ')', 
+                                    patient.last_name + ' (' + patient.id + ')', 
                           type: 'success'})
         setIsUpdating(false)
         refetch()
@@ -94,6 +94,7 @@ export default function PatientListView() {
         showNotification({message: errorMessage, type: 'warning'})
       })
       // don't catch error here to make sure it propagates to onRowUpdate
+    }
   })
 
   if (isError) {
@@ -106,16 +107,12 @@ export default function PatientListView() {
 
   const columns: GridColDef<PatientOut>[] = [
     {
-      field: 'open',
-      type: 'actions',
-      headerName: 'Open',
-      width: 80,
-      cellClassName: 'actions',
+      field: 'open', type: 'actions', headerName: '', width: 50, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
             key='1'
-            icon={<ImportContactsIcon />}
+            icon={<OpenInBrowserOutlinedIcon />}
             label='Show'
             color='inherit'
             onClick={() => {
@@ -125,27 +122,18 @@ export default function PatientListView() {
         ]
       },
     },
-    { field: 'id', headerName: 'ID', width: 300, editable: false },
-    { field: 'first_name', headerName: 'First Name', width: 200, editable: true },
-    { field: 'last_name', headerName: 'Last Name', width: 200, editable: true },
-    { field: 'birth_date', headerName: 'Birthday', width: 150, editable: true },
-    {
-      field: 'sex',
-      type: 'singleSelect',
-      headerName: 'Sex',
-      width: 100,
-      editable: true,
-      valueOptions: Object.values(Gender),
-    },
+    { field: 'id', headerName: 'ID', width: 100, editable: false },
+    { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
+    { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
+    { field: 'birth_date', headerName: 'Birthday', width: 100, editable: true },
+    { field: 'sex', type: 'singleSelect', headerName: 'Sex', width: 100, editable: true, valueOptions: Object.values(Gender) },
+    { field: 'height', headerName: 'Height (cm)', width: 100, editable: true },
+    { field: 'weight', headerName: 'Weight (kg)', width: 100, editable: true },
     { field: 'datetime_created', headerName: 'Added (date/time)', width: 200, editable: false },
     { field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 200, editable: false },
     { field: 'comment', headerName: 'Comment', width: 300, editable: true },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Delete',
-      width: 100,
-      cellClassName: 'actions',
+      field: 'actions', type: 'actions', headerName: '', width: 100, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -179,14 +167,15 @@ export default function PatientListView() {
         </IconButton>
       </Stack>
 
-      <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
+      <div style={{ height:'80vh', width: '100%'}}>
         <DataGrid
           rows={patients ? patients : []}
           columns={columns}
           hideFooterSelectedRowCount
           editMode={'row'}
-          rowHeight={40}  // MUI default is 52
+          rowHeight={45}  // MUI default is 52
           loading={isUpdating || isLoading}
+          autoPageSize= {true}
           processRowUpdate={(updatedPatient, oldPatient) => {
             if (isNaN(Date.parse(updatedPatient.birth_date))) {
               showNotification({message: 'Invalid date format for birth-date.', type: 'warning'})
@@ -204,12 +193,17 @@ export default function PatientListView() {
               navigate(`/${params.row.id}`)
             }
           }}
+          sx={{
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
+            },
+          }}
         />
-      </Sheet>
+      </div>
 
       <ConfirmDeleteModal 
         onSubmit={() => {
-          if (patientToDelete != undefined) delteMutation.mutate(patientToDelete)
+          if (patientToDelete != undefined) deleteMutation.mutate(patientToDelete)
         }}
         isOpen={patientToDelete != undefined ? true : false} 
         setOpen={(status) => {

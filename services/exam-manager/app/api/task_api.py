@@ -7,12 +7,21 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseTask, ItemStatus, TaskOut, User
+from pydantic import Field
+from scanhub_libraries.models import (
+    AcquisitionTaskOut,
+    BaseAcquisitionTask,
+    BaseDAGTask,
+    DAGTaskOut,
+    ItemStatus,
+    TaskType,
+    User,
+)
 from scanhub_libraries.security import get_current_user
 
 from app import LOG_CALL_DELIMITER
 from app.dal import task_dal, workflow_dal
-from app.helper import get_task_out
+from app.tools.helper import get_task_out
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -21,13 +30,14 @@ from app.helper import get_task_out
 # 404 = Not found
 
 
+task_router = APIRouter(dependencies=[Depends(get_current_user)])
 
-task_router = APIRouter(
-    dependencies=[Depends(get_current_user)]
-)
 
-@task_router.post("/task/new", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def create_task(payload: BaseTask, user: Annotated[User, Depends(get_current_user)]) -> TaskOut:
+@task_router.post("/task/new", response_model=AcquisitionTaskOut | DAGTaskOut, status_code=201, tags=["tasks"])
+async def create_task(
+    payload: Annotated[BaseAcquisitionTask | BaseDAGTask, Field(discriminator="task_type")],
+    user: Annotated[User, Depends(get_current_user)],
+) -> AcquisitionTaskOut | DAGTaskOut:
     """Create a new task.
 
     Parameters
@@ -62,14 +72,18 @@ async def create_task(payload: BaseTask, user: Annotated[User, Depends(get_curre
         raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
     if not (task := await task_dal.add_task_data(payload=payload, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create task")
-    result = TaskOut(**task.__dict__)
-    print("Task created: ", result)
-    return result
+
+    print("Task created: ", task)
+    return await get_task_out(data=task)
 
 
-@task_router.post("/task", response_model=TaskOut, status_code=201, tags=["tasks"])
-async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_task_is_template: bool,
-                                    user: Annotated[User, Depends(get_current_user)]) -> TaskOut:
+@task_router.post("/task", response_model=AcquisitionTaskOut | DAGTaskOut, status_code=201, tags=["tasks"])
+async def create_task_from_template(
+    workflow_id: UUID,
+    template_id: UUID,
+    new_task_is_template: bool,
+    user: Annotated[User, Depends(get_current_user)],
+) -> AcquisitionTaskOut | DAGTaskOut:
     """Create a new task from template.
 
     Parameters
@@ -90,6 +104,7 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
     HTTPException
         404: Creation unsuccessful
     """
+    # TODO: Check if all optional parameters like device_id, acquisition_parameter etc. are set.
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("workflow_id:", workflow_id)
@@ -102,9 +117,13 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
             status_code=400,
             detail="Request to create task from task instance instead of task template."
         )
-    new_task = BaseTask(**template.__dict__)
-    # if not TaskStatus.PENDING in new_task.status:
-    #     new_task[TaskStatus.PENDING] = "New task instance."
+    if template.task_type is TaskType.ACQUISITION:
+        new_task = BaseAcquisitionTask(**template.__dict__)
+    elif template.task_type is TaskType.DAG:
+        new_task = BaseDAGTask(**template.__dict__)
+    else:
+        raise TypeError("Invalid task type.")
+
     new_task.is_template = new_task_is_template
     new_task.workflow_id = workflow_id
     if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
@@ -116,13 +135,16 @@ async def create_task_from_template(workflow_id: UUID, template_id: UUID, new_ta
         )
     if not (task := await task_dal.add_task_data(payload=new_task, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create task.")
-    result = TaskOut(**task.__dict__)
-    print("Task created: ", result)
-    return result
+
+    print("Task created: ", task)
+    return await get_task_out(data=task)
 
 
-@task_router.get("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def get_task(task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> TaskOut:
+@task_router.get("/task/{task_id}", response_model=AcquisitionTaskOut | DAGTaskOut, status_code=200, tags=["tasks"])
+async def get_task(
+    task_id: UUID | str,
+    user: Annotated[User, Depends(get_current_user)]
+    ) -> AcquisitionTaskOut | DAGTaskOut:
     """Get an existing task.
 
     Parameters
@@ -153,13 +175,14 @@ async def get_task(task_id: UUID | str, user: Annotated[User, Depends(get_curren
 
 @task_router.get(
     "/task/all/{workflow_id}",
-    response_model=list[TaskOut],
+    response_model=list[AcquisitionTaskOut | DAGTaskOut],
     status_code=200,
     tags=["tasks"],
 )
 async def get_all_workflow_tasks(
     workflow_id: UUID | str,
-    user: Annotated[User, Depends(get_current_user)]) -> list[TaskOut]:
+    user: Annotated[User, Depends(get_current_user)],
+) -> list[AcquisitionTaskOut | DAGTaskOut]:
     """Get all existing tasks of a certain workflow.
 
     Parameters
@@ -178,17 +201,18 @@ async def get_all_workflow_tasks(
     if not (tasks := await task_dal.get_all_task_data(workflow_id=_id)):
         # Don't raise exception here, list might be empty.
         return []
-    tasks = [TaskOut(**task.__dict__) for task in tasks]
     print("List of tasks: ", tasks)
     return [await get_task_out(data=task) for task in tasks]
 
 @task_router.get(
     "/task/templates/all",
-    response_model=list[TaskOut],
+    response_model=list[AcquisitionTaskOut | DAGTaskOut],
     status_code=200,
     tags=["tasks"],
 )
-async def get_all_task_templates(user: Annotated[User, Depends(get_current_user)]) -> list[TaskOut]:
+async def get_all_task_templates(
+    user: Annotated[User, Depends(get_current_user)],
+) -> list[AcquisitionTaskOut | DAGTaskOut]:
     """Get all existing task templates.
 
     Returns
@@ -200,13 +224,15 @@ async def get_all_task_templates(user: Annotated[User, Depends(get_current_user)
     if not (tasks := await task_dal.get_all_task_template_data()):
         # Don't raise exception here, list might be empty.
         return []
-    result = [TaskOut(**task.__dict__) for task in tasks]
-    print("List of tasks: ", result)
+    result = [await get_task_out(data=task) for task in tasks]
     return result
 
 
-@task_router.delete("/task/{task_id}", response_model={}, status_code=204, tags=["tasks"])
-async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
+@task_router.delete("/task/{task_id}", response_model=None, status_code=204, tags=["tasks"])
+async def delete_task(
+    task_id: UUID | str,
+    user: Annotated[User, Depends(get_current_user)]
+) -> None:
     """Delete a task.
 
     Parameters
@@ -228,9 +254,12 @@ async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_cur
         raise HTTPException(status_code=404, detail=message)
 
 
-@task_router.put("/task/{task_id}", response_model=TaskOut, status_code=200, tags=["tasks"])
-async def update_task(task_id: UUID | str, payload: BaseTask,
-                      user: Annotated[User, Depends(get_current_user)]) -> TaskOut:
+@task_router.put("/task/{task_id}", response_model=AcquisitionTaskOut | DAGTaskOut, status_code=200, tags=["tasks"])
+async def update_task(
+    task_id: UUID | str,
+    payload: Annotated[BaseAcquisitionTask | BaseDAGTask, Field(discriminator="task_type")],
+    user: Annotated[User, Depends(get_current_user)],
+) -> AcquisitionTaskOut | DAGTaskOut:
     """Update an existing task.
 
     Parameters

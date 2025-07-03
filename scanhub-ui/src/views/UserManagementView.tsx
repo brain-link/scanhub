@@ -5,7 +5,7 @@
  * UserManagementView.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import Container from '@mui/system/Container'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
@@ -14,7 +14,6 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
-import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
@@ -52,9 +51,9 @@ export default function UserManagementView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, string>(async (username) => {
-    await userApi
-      .userDeleteApiV1UserloginDeleteuserDelete(username)
+  const delteMutation = useMutation<unknown, unknown, string>({
+    mutationFn: async (username) => {
+      await userApi.userDeleteApiV1UserloginDeleteuserDelete(username)
       .then(() => {
         showNotification({message: 'Deleted user ' + username, type: 'success'})
         refetch()
@@ -68,11 +67,12 @@ export default function UserManagementView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
-  const updateMutation = useMutation<unknown, unknown, User>(async (user) => {
-    await userApi
-      .updateUserApiV1UserloginUpdateuserPut(user)
+  const updateMutation = useMutation<unknown, unknown, User>({
+    mutationFn: async (user) => {
+      await userApi.updateUserApiV1UserloginUpdateuserPut(user)
       .then(() => {
         showNotification({message: 'Modified user ' + user.username, type: 'success'})
         setIsUpdating(false)
@@ -89,6 +89,7 @@ export default function UserManagementView() {
         refetch()
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
   if (isError) {
@@ -104,36 +105,20 @@ export default function UserManagementView() {
     { field: 'first_name', headerName: 'First name', width: 200, editable: true },
     { field: 'last_name', headerName: 'Last name', width: 200, editable: true },
     { field: 'email', headerName: 'e-Mail', width: 200, editable: true },
-    {
-      field: 'role',
-      type: 'singleSelect',
-      headerName: 'Role',
-      width: 200,
-      editable: true,
-      valueOptions: Object.values(UserRole),
+    { 
+      field: 'role', type: 'singleSelect', headerName: 'Role', width: 200, editable: true,
+      valueOptions: Object.values(UserRole)
     },
-    {
-      field: 'last_activity_unixtime',
-      headerName: 'Last Activity Time',
-      width: 200,
-      editable: false,
-      filterable: false,
+    { 
+      field: 'last_activity_unixtime', headerName: 'Last Activity Time', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
-      field: 'last_login_unixtime',
-      headerName: 'Last Login Time',
-      width: 200,
-      editable: false,
-      filterable: false,
+      field: 'last_login_unixtime' ,headerName: 'Last Login Time', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Delete / Set Password',
-      width: 200,
-      cellClassName: 'actions',
+      field: 'actions', type: 'actions', headerName: '', width: 200, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -176,22 +161,28 @@ export default function UserManagementView() {
         </IconButton>
       </Stack>
 
-      <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
+      <div style={{ height:'80vh', width: '100%'}}>
         <DataGrid
           rows={users ? users : []}
           columns={columns}
           getRowId={(user) => user.username}
           hideFooterSelectedRowCount 
           editMode={'row'}
-          rowHeight={40}  // MUI default is 52
+          rowHeight={45}  // MUI default is 52
+          autoPageSize= {true}
           loading={isUpdating || isLoading}
           processRowUpdate={(updatedUser) => {
             setIsUpdating(true)
             updateMutation.mutate(updatedUser)
             return updatedUser
           }}
+          sx={{
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
+            },
+          }}
         />
-      </Sheet>
+      </div>
 
       <PasswordModal 
         onSubmit={() => {}} 

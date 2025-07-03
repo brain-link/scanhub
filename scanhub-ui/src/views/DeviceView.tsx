@@ -5,14 +5,13 @@
  * DeviceView.tsx is responsible for rendering the devices table and for managing the device registration.
  */
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import LinearProgress from '@mui/joy/LinearProgress'
-import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
@@ -49,9 +48,9 @@ export default function DeviceView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, string>(async (deviceId) => {
-    await deviceApi
-      .deleteDeviceApiV1DeviceDeviceIdDelete(deviceId)
+  const delteMutation = useMutation<unknown, unknown, string>({
+    mutationFn: async (deviceId) => {
+      await deviceApi.deleteDeviceApiV1DeviceDeviceIdDelete(deviceId)
       .then(() => {
         showNotification({message: 'Deleted device.', type: 'success'})
         refetch()
@@ -65,6 +64,7 @@ export default function DeviceView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
   // const updateMutation = useMutation<unknown, unknown, User>(async (user) => {
@@ -117,19 +117,11 @@ export default function DeviceView() {
     { field: 'site', headerName: 'Site', width: 200, editable: false },
     { field: 'ip_address', headerName: 'IP Address', width: 200, editable: false },
     {
-      field: 'datetime_created',
-      headerName: 'Added (date/time)',
-      width: 200,
-      editable: false,
-      filterable: false,
+      field: 'datetime_created', headerName: 'Added (date/time)', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
-      field: 'datetime_updated',
-      headerName: 'Last updated (date/time)',
-      width: 200,
-      editable: false,
-      filterable: false,
+      field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
@@ -171,22 +163,28 @@ export default function DeviceView() {
         </IconButton>
       </Stack>
 
-      <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
+      <div style={{ height:'80vh', width: '100%'}}>
         <DataGrid
           rows={devices}
           columns={columns}
           // getRowId={(user) => user.username}
           hideFooterSelectedRowCount 
           editMode={'row'}
-          rowHeight={40}  // MUI default is 52
+          rowHeight={45}  // MUI default is 52
           // loading={isUpdating}
+          autoPageSize= {true}
           processRowUpdate={(updatedUser) => {
             // setIsUpdating(true)
             // updateMutation.mutate(updatedUser)
             return updatedUser
           }}
+          sx={{
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
+            },
+          }}
         />
-      </Sheet>
+      </div>
       <ConfirmDeleteModal 
         onSubmit={() => {if (deviceToDelete) delteMutation.mutate(deviceToDelete.id)}}
         isOpen={deviceToDelete != undefined}

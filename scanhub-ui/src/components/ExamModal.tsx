@@ -15,7 +15,7 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation, UseMutationResult } from 'react-query'
+import { useMutation, UseMutationResult } from '@tanstack/react-query'
 
 import { examApi } from '../api'
 import { BaseExam, ExamOut } from '../generated-client/exam'
@@ -23,13 +23,11 @@ import { ModalPropsCreate, ModalPropsCreateModifyFromTemplate, ModalPropsModify 
 import NotificationContext from '../NotificationContext'
 
 
-const formContent: {key: keyof BaseExam, label: string, placeholder: string, editForTemplates: boolean}[] = [
-  { key: 'name', label: 'Exam Name', placeholder: 'Name of the examination', editForTemplates: true },
-  { key: 'description', label: 'Description', placeholder: 'What is included in the examination', editForTemplates: true },
-  { key: 'indication', label: 'Indication', placeholder: 'Why the examination is done', editForTemplates: false },
-  { key: 'comment', label: 'Comment', placeholder: 'Any remarks about this specific execution of the examination', editForTemplates: false },
-  { key: 'patient_height_cm', label: 'Patient height [cm]', placeholder: 'Number between 10 and 300 (no comma)', editForTemplates: false },
-  { key: 'patient_weight_kg', label: 'Patient weight [kg]', placeholder: 'Number between 1 and 500 (no comma)', editForTemplates: false },
+const formContent: {key: keyof BaseExam, label: string, placeholder: string, editForTemplates: boolean, required: boolean}[] = [
+  { key: 'name', label: 'Exam Name', placeholder: 'Name of the examination', editForTemplates: true, required: true },
+  { key: 'description', label: 'Description', placeholder: 'What is included in the examination', editForTemplates: true, required: true },
+  { key: 'indication', label: 'Indication', placeholder: 'Why the examination is done', editForTemplates: false, required: false },
+  { key: 'comment', label: 'Comment', placeholder: 'Any remarks about this specific execution of the examination', editForTemplates: false, required: false },
 ]
 
 
@@ -57,31 +55,37 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
 
   let mutation: UseMutationResult<void, unknown, void, unknown>;
   if (props.modalType == 'modify') {
-    mutation = useMutation(async () => {
-      await examApi
-      .updateExamApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Updated Exam.', type: 'success'})
-      })
+    mutation = useMutation({
+      mutationFn: async () => {
+        await examApi
+        .updateExamApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
+        .then(() => {
+          props.onSubmit()
+          showNotification({message: 'Updated Exam.', type: 'success'})
+        })
+      }
     })
   } else if (props.modalType == 'create') {
-    mutation = useMutation(async () => {
-      await examApi
-      .createExamApiV1ExamNewPost(exam)
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Created Exam.', type: 'success'})
-      })
+    mutation = useMutation({
+      mutationFn: async () => {
+        await examApi
+        .createExamApiV1ExamNewPost(exam)
+        .then(() => {
+          props.onSubmit()
+          showNotification({message: 'Created Exam.', type: 'success'})
+        })
+      }
     })
   } else if (props.modalType == 'createModifyFromTemplate') {
-    mutation = useMutation(async () => {
-      await examApi
-      .createExamFromTemplateApiV1ExamPost(props.item.id, exam)
-      .then(() => {
-        props.onSubmit()
-        showNotification({message: 'Created Exam from Template.', type: 'success'})
-      })
+    mutation = useMutation({
+      mutationFn: async () => {
+        await examApi
+        .createExamFromTemplateApiV1ExamPost(props.item.id, exam)
+        .then(() => {
+          props.onSubmit()
+          showNotification({message: 'Created Exam from Template.', type: 'success'})
+        })
+      }
     })
   }
 
@@ -107,48 +111,36 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
                   onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
                   placeholder={entry.placeholder}
                   defaultValue={exam[entry.key]?.toString()}
+                  required={entry.required}
                 />
               </Grid>
             :
               undefined
           ))}
-        </Grid>
 
-        <Button
-          size='sm'
-          sx={{ maxWidth: 120 }}
-          onClick={(event) => {
-            event.preventDefault()
-            if (exam.name == '') {
-              showNotification({message: 'Name must not be empty.', type: 'warning'})
-            } else if (exam.description == '') {
-              showNotification({message: 'Description must not be empty.', type: 'warning'})
-            } else if (!exam.is_template && (exam.indication == undefined || exam.indication == '')) {
-              showNotification({message: 'Indication must not be empty.', type: 'warning'})
-            // } else if (!exam.is_template && (exam.comment == undefined || exam.comment == '')) {
-            //   showNotification({message: 'Comment must not be empty.', type: 'warning'})
-            } else if (!exam.is_template
-                        && (exam.patient_height_cm == null
-                            || !Number.isInteger(Number(exam.patient_height_cm))
-                            || Number(exam.patient_height_cm) < 10
-                            || Number(exam.patient_height_cm) > 300)
-                      ) {
-              showNotification({message: 'Ivalid patient height (must be a number between 10 and 300 and without comma).', type: 'warning'})
-            } else if (!exam.is_template
-              && (exam.patient_weight_kg == null
-                  || !Number.isInteger(Number(exam.patient_weight_kg))
-                  || Number(exam.patient_weight_kg) < 1
-                  || Number(exam.patient_weight_kg) > 500)
-            ) {
-              showNotification({message: 'Ivalid patient weight (must be a number between 10 and 500 and without comma).', type: 'warning'})
-            } else {
-              mutation.mutate()
-              props.setOpen(false)
-            } 
-          }}
-        >
-          Save
-        </Button>
+          <Grid md={12} display="flex" justifyContent="flex-end">
+            <Button
+              size='sm'
+              sx={{ width: 120 }}
+              onClick={(event) => {
+                event.preventDefault()
+                if (exam.name == '') {
+                  showNotification({message: 'Name must not be empty.', type: 'warning'})
+                } else if (exam.description == '') {
+                  showNotification({message: 'Description must not be empty.', type: 'warning'})
+                } else if (!exam.is_template && (exam.indication == undefined || exam.indication == '')) {
+                  showNotification({message: 'Indication must not be empty.', type: 'warning'})
+                } else {
+                  mutation.mutate()
+                  props.setOpen(false)
+                } 
+              }}
+            >
+            Save
+            </Button>
+          </Grid>
+
+        </Grid>
       </Stack>
     </>
   )

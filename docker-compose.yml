@@ -100,14 +100,10 @@ services:
       context: ./services/exam-manager
       args: 
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
-        # - BASE_IMG=scanhub-base
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./services/exam-manager/app/:/app/
       - data_lake:/app/data_lake/
-    environment:
-      - DB_URI=postgresql://brainlink:9ArU5*Sr@scanhub-database/sh_db
-      - DB_URI_ASYNC=postgresql+asyncpg://brainlink:9ArU5*Sr@scanhub-database/sh_db
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -122,14 +118,20 @@ services:
       workflow-manager:
         condition: service_healthy
     secrets:
+      # ScanHub postgres database
       - scanhub_database_postgres_user
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
+      # ScanHub sequence database
+      - sequence_database_root_username
+      - sequence_database_root_password
 
   patient-manager:
     container_name: patient-manager
     build: 
       context: ./services/patient-manager
+      args: 
+          - BASE_IMG=${SCANHUB_BASE_IMAGE}
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8100
     volumes:
     - ./services/patient-manager/app:/app/
@@ -171,32 +173,6 @@ services:
       - scanhub_database_postgres_user
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
-
-
-  # MRI Sequence Service
-  sequence-manager:
-    container_name: sequence-manager
-    build: 
-      context: ./services/mri/sequence-manager
-      args: 
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./services/mri/sequence-manager/app/:/app/
-      - data_lake:/app/data_lake/
-    healthcheck:
-      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: ["CMD", "curl", "http://sequence-manager:8000/api/v1/mri/sequences/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      sequence-database:
-        condition: service_healthy
-    secrets:
-      - sequence_database_root_username
-      - sequence_database_root_password
-
 
   # Airflow services
   airflow-webserver:
@@ -388,8 +364,12 @@ services:
     container_name: api-gateway
     image: nginx:latest
     ports:
-      - "443:443"
-      - "80:80"
+      # Use for development:
+      - "8080:8080"
+      - "8443:8443"
+      # Use for production:
+      # - "443:443"
+      # - "80:80"
     volumes:
       - ./infrastructure/nginx_config.conf:/etc/nginx/conf.d/default.conf
     healthcheck:
@@ -404,8 +384,6 @@ services:
         condition: service_healthy
       exam-manager: 
         condition: service_healthy
-      sequence-manager:
-        condition: service_started
       patient-manager:
         condition: service_healthy
       user-login-manager:

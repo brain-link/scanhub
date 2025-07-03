@@ -6,7 +6,7 @@
  * of a workflow item.
  */
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'
 import Tooltip from '@mui/joy/Tooltip'
@@ -17,7 +17,8 @@ import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import SchemaIcon from '@mui/icons-material/Schema'
+// import SchemaIcon from '@mui/icons-material/Schema'
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import Button from '@mui/joy/Button'
 
 import { WorkflowOut } from '../generated-client/exam'
@@ -48,7 +49,7 @@ export default function WorkflowItem({ item: workflow, selection, onClick }: Sel
         variant={(selection.type == 'workflow' && selection.itemId == workflow.id) ? 'outlined' : 'plain'}
         onClick={onClick}
       >
-        <SchemaIcon fontSize='small' />
+        <InsertDriveFileOutlinedIcon fontSize='small' />
         <Box 
           sx={{
             marginLeft: 0.5,
@@ -76,12 +77,13 @@ export function WorkflowMenu({ item: workflow, refetchParentData }: RefetchableI
   const [taskCreateNewModalOpen, setTaskCreateNewModalOpen] = React.useState(false)
   const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
 
-  const deleteWorkflow = useMutation(async () => {
-    await workflowsApi
-      .deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id)
+  const deleteWorkflow = useMutation({
+    mutationFn: async () => {
+      await workflowsApi.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflow.id)
       .then(() => {
         refetchParentData()
       })
+    }
   })
 
   return (

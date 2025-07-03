@@ -15,42 +15,51 @@ import IconButton from '@mui/joy/IconButton'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import { examApi, patientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
+import ConfirmAcquisitionLimitsModal from '../components/AcquisitionLimitsModal'
 import DicomViewer from '../components/DicomViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../generated-client/patient'
-import { ExamOut, TaskType } from '../generated-client/exam'
+import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
 import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
+import Container from '@mui/joy/Container'
+import AlertItem from '../components/AlertItem'
+import { Alerts } from '../interfaces/components.interface'
 
 
 function AcquisitionView() {
   const params = useParams()
 
   const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
+  const [confirmAcquisitionLimitsModalOpen, setConfirmAcquisitionLimitsModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
+  const [onAcquisitionLimitsConfirm, setOnAcquisitionLimitsConfirm] = React.useState<() => void>(() => () => {});
+  // const [, showNotification] = React.useContext(NotificationContext)
 
   // useQuery for caching the fetched data
   const {
     data: patient,
-    // refetch: refetchPatient,
+    refetch: refetchPatient,
     isLoading: patientLoading,
     isError: patientError,
-  } = useQuery<PatientOut, Error>({
+  } = useQuery<PatientOut>({
     queryKey: ['patient', params.patientId],
     queryFn: async () => {
-      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!).then((result) => {
+      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!)
+      .then((result) => {
         return result.data
       })
     },
+    refetchInterval: 1000
   })
 
   // Query all exams of the patient
@@ -62,8 +71,7 @@ function AcquisitionView() {
   } = useQuery<ExamOut[], Error>({
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
-      return await examApi
-        .getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
+      return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
         .then((result) => {
           if (itemSelection.itemId != undefined) {
             result.data.map((exam) => {
@@ -76,7 +84,13 @@ function AcquisitionView() {
                 }
                 workflow.tasks.map((task) => {
                   if (task.id == itemSelection.itemId) {
-                    setItemSelection({ type: 'task', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
+                    setItemSelection({
+                      type: task.task_type == TaskType.Acquisition ? 'ACQUISITION' : 'DAG',
+                      name: task.name,
+                      itemId: task.id,
+                      status: task.status,
+                      progress: task.progress
+                    })
                   }
                 })
               })
@@ -87,6 +101,15 @@ function AcquisitionView() {
     },
     refetchInterval: 1000
   })
+
+  if (patientError || patient == undefined) {
+    // Catch undefined patient
+    return (
+      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+        <AlertItem title='Error getting patient information / patient undefined.' type={Alerts.Error} />
+      </Container>
+    )
+  }
 
   return (
     <Box
@@ -145,7 +168,7 @@ function AcquisitionView() {
             flexDirection: 'column',
           }}
         >
-          {exams?.map((exam) => (
+          {exams?.map((exam: ExamOut) => (
             <AccordionWithMenu 
               key={`exam-${exam.id}`}
               accordionSummary={
@@ -159,7 +182,7 @@ function AcquisitionView() {
                 <ExamMenu item={exam} refetchParentData={refetchExams} />
               }
             >
-              {exam.workflows?.map((workflow) => (
+              {exam.workflows?.map((workflow: WorkflowOut) => (
                 <AccordionWithMenu 
                   key={`workflow-${workflow.id}`}
                   accordionSummary={
@@ -174,21 +197,25 @@ function AcquisitionView() {
                   {workflow.tasks?.sort((taskA, taskB) => {
                     let a: number = 4
                     let b: number = 4
-                    if (taskA.type == TaskType.DeviceTaskSdk) a = 1;
-                    if (taskA.type == TaskType.DeviceTaskSimulator) a = 1;
-                    if (taskA.type == TaskType.ReconstructionTask) a = 2;
-                    if (taskA.type == TaskType.ProcessingTask) a = 3;
-                    if (taskB.type == TaskType.DeviceTaskSdk) b = 1;
-                    if (taskB.type == TaskType.DeviceTaskSimulator) b = 1;
-                    if (taskB.type == TaskType.ReconstructionTask) b = 2;
-                    if (taskB.type == TaskType.ProcessingTask) b = 3;
+                    if (taskA.task_type == TaskType.Acquisition) a = 1;
+                    if (taskA.task_type == TaskType.Dag) a = 2;
+                    if (taskA.dag_type && taskA.dag_type == TaskType.Processing) a = 3;
+                    if (taskB.task_type == TaskType.Acquisition) b = 1;
+                    if (taskB.task_type == TaskType.Dag) b = 2;
+                    if (taskB.dag_type && taskB.dag_type == TaskType.Processing) b = 3;
                     return a - b
-                  }).map((task) => (
+                  }).map((task: AcquisitionTaskOut | DAGTaskOut) => (
                     <TaskItem 
                       key={`task-${task.id}`} 
                       item={task} 
                       refetchParentData={refetchExams}
-                      onClick={() => {setItemSelection({type: 'task', name: task.name, itemId: task.id, status: task.status, progress: task.progress})}}
+                      onClick={() => {setItemSelection({
+                        type: task.task_type == TaskType.Acquisition ? 'ACQUISITION' : 'DAG',
+                        name: task.name,
+                        itemId: task.id,
+                        status: task.status,
+                        progress: task.progress
+                      })}}
                       selection={itemSelection}
                     />
                   ))}
@@ -199,7 +226,31 @@ function AcquisitionView() {
         </Box>
 
         <Divider />
-        <AcquisitionControl itemSelection={itemSelection}/>
+        
+        <ConfirmAcquisitionLimitsModal
+          item={patient}
+          isOpen={confirmAcquisitionLimitsModalOpen}
+          setOpen={setConfirmAcquisitionLimitsModalOpen}
+          onSubmit={() => {
+            refetchPatient()
+            onAcquisitionLimitsConfirm()
+          }}
+        />     
+
+        <AcquisitionControl 
+          itemSelection={itemSelection}
+          openConfirmModal={(callback: () => void) => {
+            if (itemSelection.type == 'ACQUISITION'){
+              // Only require confirmation in case of acquisition tasks
+              setOnAcquisitionLimitsConfirm(() => callback);
+              setConfirmAcquisitionLimitsModalOpen(true);
+            }
+            else {
+              callback()
+            }
+          }}
+        />
+
       </Sheet>
 
       <ExamFromTemplateModal
@@ -211,7 +262,7 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      <DicomViewer taskId={ itemSelection.type === 'task' ? itemSelection.itemId : undefined} />
+      <DicomViewer taskId={ itemSelection.type == 'DAG' ? itemSelection.itemId : undefined} />
     </Box>
   )
 }

@@ -39,22 +39,15 @@ export interface HTTPValidationError {
 /**
  * 
  * @export
- * @interface LocationInner
- */
-export interface LocationInner {
-}
-/**
- * 
- * @export
  * @interface ValidationError
  */
 export interface ValidationError {
     /**
      * 
-     * @type {Array<LocationInner>}
+     * @type {Array<ValidationErrorLocInner>}
      * @memberof ValidationError
      */
-    'loc': Array<LocationInner>;
+    'loc': Array<ValidationErrorLocInner>;
     /**
      * 
      * @type {string}
@@ -67,6 +60,13 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationErrorLocInner
+ */
+export interface ValidationErrorLocInner {
 }
 /**
  * 
@@ -430,7 +430,7 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost']?.[localVarOperationServerIndex]?.url;
@@ -444,7 +444,7 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost']?.[localVarOperationServerIndex]?.url;
@@ -495,7 +495,7 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: any): AxiosPromise<object> {
+        triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: any): AxiosPromise<{ [key: string]: any; }> {
             return localVarFp.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -506,7 +506,7 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: any): AxiosPromise<object> {
+        uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: any): AxiosPromise<{ [key: string]: any; }> {
             return localVarFp.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options).then((request) => request(axios, basePath));
         },
     };

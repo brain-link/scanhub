@@ -23,18 +23,26 @@ from uuid import UUID
 import requests
 from fastapi import APIRouter, Depends, Header, HTTPException, WebSocket, WebSocketDisconnect, WebSocketException
 from fastapi.encoders import jsonable_encoder
-from scanhub_libraries.models import DeviceTask, ItemStatus, TaskOut, User
+from scanhub_libraries.models import (
+    DeviceCreationRequest,
+    DeviceDetails,
+    DeviceOut,
+    DeviceTask,
+    ItemStatus,
+    TaskOut,
+    User,
+)
 from scanhub_libraries.security import compute_complex_password_hash, get_current_user
 from sqlalchemy import exc
 
-from .dal import (
+from api.dal import (
     dal_create_device,
     dal_delete_device,
     dal_get_all_devices,
     dal_get_device,
     dal_update_device,
 )
-from .models import DeviceCreationRequest, DeviceDetails, DeviceOut, get_device_out
+from api.db import Device
 
 EXAM_MANAGER_URI = "exam-manager:8000"
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
@@ -46,6 +54,34 @@ router = APIRouter(dependencies=[Depends(get_current_user)])
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 dict_id_websocket: Dict[UUID, WebSocket] = {}
+
+
+async def get_device_out(data: Device) -> DeviceOut:
+    """Get pydantic device output model helper function.
+
+    Parameters
+    ----------
+    data
+        Database model
+
+    Returns
+    -------
+        Pydantic output model
+    """
+    return DeviceOut(
+        id=data.id,
+        datetime_created=data.datetime_created,
+        datetime_updated=data.datetime_updated,
+        name=data.name,
+        manufacturer=data.manufacturer,
+        modality=data.modality,
+        status=data.status,
+        site=data.site,
+        ip_address=data.ip_address,
+        title=data.title,
+        description=data.description
+    )
+
 
 
 @router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])

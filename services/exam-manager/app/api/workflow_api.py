@@ -13,7 +13,7 @@ from scanhub_libraries.security import get_current_user
 from app import LOG_CALL_DELIMITER
 from app.api import task_api
 from app.dal import exam_dal, workflow_dal
-from app.helper import get_workflow_out_model
+from app.tools.helper import get_workflow_out_model
 
 # Http status codes
 # 200 = Ok: GET, PUT

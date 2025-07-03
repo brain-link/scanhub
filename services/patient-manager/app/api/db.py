@@ -8,8 +8,7 @@ import os
 import uuid
 from typing import Literal
 
-from pydantic import BaseModel
-from scanhub_libraries.models import Gender
+from scanhub_libraries.models import BasePatient, Gender
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -52,12 +51,15 @@ class Patient(Base):
     """Patient ORM model."""
 
     __tablename__ = 'patients'
-    patient_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    __table_args__ = {"extend_existing": True}
 
+    patient_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     first_name: Mapped[str] = mapped_column(nullable=False)
     last_name: Mapped[str] = mapped_column(nullable=False)
     birth_date: Mapped[datetime.date] = mapped_column(nullable=False)
     sex: Mapped[Gender] = mapped_column(nullable=False)
+    height: Mapped[float] = mapped_column(nullable=False)
+    weight: Mapped[float] = mapped_column(nullable=False)
     issuer: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[Literal["NEW", "UPDATED", "DELETED"]] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
@@ -67,7 +69,7 @@ class Patient(Base):
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
-    def update(self, data: BaseModel):
+    def update(self, data: BasePatient) -> None:
         """Update a patient entry.
 
         Parameters
@@ -75,5 +77,5 @@ class Patient(Base):
         data
             Data to be written
         """
-        for key, value in data.dict().items():
+        for key, value in data.model_dump().items():
             setattr(self, key, value)

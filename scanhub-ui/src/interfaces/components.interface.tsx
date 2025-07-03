@@ -29,11 +29,11 @@ export interface RefetchableItemInterface<T> {
 }
 
 export interface ItemSelection {
-  type: 'exam' | 'workflow' | 'task' | undefined, 
+  type: 'exam' | 'workflow' | 'DAG' | 'ACQUISITION' | undefined, 
   name: string | undefined,
   itemId: string | undefined,
   status: ItemStatus,
-  progress: number
+  progress?: number
 }
 
 export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined, status: ItemStatus.New, progress: 0 }
