@@ -174,10 +174,16 @@ async def trigger_task(task_id: str,
     # could check response type here, but may be optional
 
     if task.task_type == TaskType.ACQUISITION:
-        # TODO: This could be done in device manager?
-        # await start_scan(task, access_token=access_token)
-        print("SCANNING...")
-        return {"status": "success", "data": "ok"}
+        response = requests.post(
+            f"http://{DEVICE_MANAGER_URI}/api/v1/device/start_scan_via_websocket",
+            data=json.dumps(task, default=jsonable_encoder),
+            headers=headers,
+            timeout=3
+        )
+        if response.status_code != 200:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error at starting device task.")
+        print("Device task started successfully.")
+        return {"status": "success", "data": "Device task started successfully."}
     elif task.task_type == TaskType.DAG:
         # background_tasks.add_task(simulate_reconstruction_task, task, headers)
         print("PROCESSING...")
