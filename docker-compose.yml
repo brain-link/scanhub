@@ -181,37 +181,6 @@ services:
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
 
-
-  # MRI Sequence Service
-  sequence-manager:
-    container_name: sequence-manager
-    build: 
-      context: ./services/mri/sequence-manager
-      args: 
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./services/mri/sequence-manager/app/:/app/
-      - data_lake:/app/data_lake/
-    ports:
-      - 8003:8000
-    environment:
-      - MONGODB_USER=root
-      - MONGODB_PASSWORD=example
-      - MONGODB_HOST=sequence-database
-      - MONGODB_PORT=27017
-      - MONGODB_DB=mri_sequences_db
-      - MONGODB_COLLECTION_NAME=mri_sequences
-    healthcheck:
-      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: ["CMD", "curl", "http://sequence-manager:8000/api/v1/mri/sequences/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      sequence-database:
-        condition: service_healthy
-
   # Add the Gadgetron service
   gadgetron:
     container_name: gadgetron
