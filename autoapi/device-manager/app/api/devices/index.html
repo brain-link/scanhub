@@ -436,16 +436,19 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.EXAM_MANAGER_URI" title="device-manager.app.api.devices.EXAM_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.oauth2_scheme" title="device-manager.app.api.devices.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.LOG_CALL_DELIMITER" title="device-manager.app.api.devices.LOG_CALL_DELIMITER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.EXAM_MANAGER_URI" title="device-manager.app.api.devices.EXAM_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.router" title="device-manager.app.api.devices.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.LOG_CALL_DELIMITER" title="device-manager.app.api.devices.LOG_CALL_DELIMITER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dict_id_websocket" title="device-manager.app.api.devices.dict_id_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.router" title="device-manager.app.api.devices.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.dict_id_websocket" title="device-manager.app.api.devices.dict_id_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -471,7 +474,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.delete_device" title="device-manager.app.api.devices.delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_device</span></code></a>(device_id)</p></td>
 <td><p>Delete a device.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.start_scan_via_websocket" title="device-manager.app.api.devices.start_scan_via_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan_via_websocket</span></code></a>(device_task)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.devices.start_scan_via_websocket" title="device-manager.app.api.devices.start_scan_via_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan_via_websocket</span></code></a>(task, access_token)</p></td>
 <td><p>Start a scan via a websocket that was already opened by the device.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.devices.connection_with_valid_id_and_token" title="device-manager.app.api.devices.connection_with_valid_id_and_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token</span></code></a>(device_id, device_token)</p></td>
@@ -486,6 +489,11 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="device-manager.app.api.devices.oauth2_scheme">
+<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#device-manager.app.api.devices.oauth2_scheme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.EXAM_MANAGER_URI">
 <span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">EXAM_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'exam-manager:8000'</span></em><a class="headerlink" href="#device-manager.app.api.devices.EXAM_MANAGER_URI" title="Link to this definition">#</a></dt>
@@ -600,7 +608,7 @@ Further details of the device are later provided by the device itself.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="device-manager.app.api.devices.start_scan_via_websocket">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">start_scan_via_websocket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.DeviceTask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.start_scan_via_websocket" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.devices.</span></span><span class="sig-name descname"><span class="pre">start_scan_via_websocket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.devices.start_scan_via_websocket" title="Link to this definition">#</a></dt>
 <dd><p>Start a scan via a websocket that was already opened by the device.</p>
 <section id="id6">
 <h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
@@ -672,6 +680,7 @@ device_id (UUID): The device_id.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.LOG_CALL_DELIMITER"><code class="docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.devices.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>

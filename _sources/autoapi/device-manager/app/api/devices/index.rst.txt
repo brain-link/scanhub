@@ -22,6 +22,7 @@ Attributes
 
 .. autoapisummary::
 
+   device-manager.app.api.devices.oauth2_scheme
    device-manager.app.api.devices.EXAM_MANAGER_URI
    device-manager.app.api.devices.LOG_CALL_DELIMITER
    device-manager.app.api.devices.router
@@ -45,6 +46,8 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:data:: oauth2_scheme
 
 .. py:data:: EXAM_MANAGER_URI
    :value: 'exam-manager:8000'
@@ -140,7 +143,7 @@ Module Contents
        dict: The response indicating the success or failure of the deletion.
 
 
-.. py:function:: start_scan_via_websocket(device_task: scanhub_libraries.models.DeviceTask)
+.. py:function:: start_scan_via_websocket(task: scanhub_libraries.models.AcquisitionTaskOut, access_token: Annotated[str, Depends(oauth2_scheme)])
    :async:
 
 
