@@ -23,11 +23,13 @@ from uuid import UUID
 import requests
 from fastapi import APIRouter, Depends, Header, HTTPException, WebSocket, WebSocketDisconnect, WebSocketException
 from fastapi.encoders import jsonable_encoder
+from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
+    AcquisitionTaskOut,
+    MRISequenceOut,
     DeviceCreationRequest,
     DeviceDetails,
     DeviceOut,
-    DeviceTask,
     ItemStatus,
     TaskOut,
     User,
@@ -43,6 +45,8 @@ from api.dal import (
     dal_update_device,
 )
 from api.db import Device
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 EXAM_MANAGER_URI = "exam-manager:8000"
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
@@ -183,7 +187,10 @@ async def delete_device(device_id: UUID):
 
 
 @router.post('/start_scan_via_websocket', response_model={}, status_code=200, tags=["devices"])
-async def start_scan_via_websocket(device_task: DeviceTask):
+async def start_scan_via_websocket(
+    task: AcquisitionTaskOut,
+    access_token: Annotated[str, Depends(oauth2_scheme)]
+):
     """Start a scan via a websocket that was already opened by the device.
 
     Parameters
@@ -192,14 +199,37 @@ async def start_scan_via_websocket(device_task: DeviceTask):
         Details of the scan and the device to scan on.
 
     """
-    print("start_scan_via_websocket")
-    print("device_task:", device_task)
-    if device_task.device_id in dict_id_websocket:
-        websocket = dict_id_websocket[device_task.device_id]
-        await websocket.send_text(json.dumps({'command': 'start', 'data': device_task}, default=jsonable_encoder))
-        return
-    else:
-        raise HTTPException(status_code=503, detail='Device offline.')
+    headers = {"Authorization": "Bearer " + access_token}
+    print("Start scan via websocket with task:", task)
+
+    # Get pulseq sequence
+    get_seq_response = requests.get(
+        f"http://{EXAM_MANAGER_URI}/api/v1/exam/sequence/{task.sequence_id}", headers=headers, timeout=3
+    )
+    if not get_seq_response.status_code == 200:
+        raise HTTPException(status_code=404, detail="Sequence not found")
+
+    payload = {
+        "trace_id": task.id,
+        "mrd_header": "",
+        "sequence": MRISequenceOut(**get_seq_response.json()),
+        "acquisition_parameter": task.acquisition_parameter,
+        "acquisition_limits": task.acquisition_limits,
+    }
+
+    print("Device payload: ", payload)
+    return
+        
+    # if task.device_id in dict_id_websocket:
+    #     websocket = dict_id_websocket[task.device_id]
+    #     await websocket.send_text(
+    #         json.dumps(
+    #             {'command': 'start', 'data': task},
+    #             default=jsonable_encoder
+    #         ))
+    #     return
+    # else:
+    #     raise HTTPException(status_code=503, detail='Device offline.')
 
 
 async def connection_with_valid_id_and_token(device_id: Annotated[UUID, Header()],
