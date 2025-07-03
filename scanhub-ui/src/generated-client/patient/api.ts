@@ -55,32 +55,51 @@ export interface BasePatient {
     'sex': Gender;
     /**
      * 
+     * @type {number}
+     * @memberof BasePatient
+     */
+    'height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BasePatient
+     */
+    'weight': number;
+    /**
+     * 
      * @type {string}
      * @memberof BasePatient
      */
     'issuer': string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof BasePatient
      */
-    'status': BasePatientStatusEnum;
+    'status'?: ItemStatus;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof BasePatient
      */
-    'comment'?: string;
+    'comment'?: Comment;
 }
 
-export const BasePatientStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
 
-export type BasePatientStatusEnum = typeof BasePatientStatusEnum[keyof typeof BasePatientStatusEnum];
-
+/**
+ * 
+ * @export
+ * @interface Comment
+ */
+export interface Comment {
+}
+/**
+ * 
+ * @export
+ * @interface DatetimeUpdated
+ */
+export interface DatetimeUpdated {
+}
 /**
  * Pydantic definition of genders.
  * @export
@@ -111,12 +130,23 @@ export interface HTTPValidationError {
     'detail'?: Array<ValidationError>;
 }
 /**
- * 
+ * Task status enum.
  * @export
- * @interface LocationInner
+ * @enum {string}
  */
-export interface LocationInner {
-}
+
+export const ItemStatus = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Started: 'STARTED',
+    Finished: 'FINISHED',
+    Deleted: 'DELETED',
+    Inprogress: 'INPROGRESS'
+} as const;
+
+export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
+
+
 /**
  * Patient pydantic output model.
  * @export
@@ -149,22 +179,34 @@ export interface PatientOut {
     'sex': Gender;
     /**
      * 
+     * @type {number}
+     * @memberof PatientOut
+     */
+    'height': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatientOut
+     */
+    'weight': number;
+    /**
+     * 
      * @type {string}
      * @memberof PatientOut
      */
     'issuer': string;
     /**
      * 
-     * @type {string}
+     * @type {ItemStatus}
      * @memberof PatientOut
      */
-    'status': PatientOutStatusEnum;
+    'status'?: ItemStatus;
     /**
      * 
-     * @type {string}
+     * @type {Comment}
      * @memberof PatientOut
      */
-    'comment'?: string;
+    'comment'?: Comment;
     /**
      * 
      * @type {string}
@@ -179,19 +221,12 @@ export interface PatientOut {
     'datetime_created': string;
     /**
      * 
-     * @type {string}
+     * @type {DatetimeUpdated}
      * @memberof PatientOut
      */
-    'datetime_updated'?: string;
+    'datetime_updated'?: DatetimeUpdated;
 }
 
-export const PatientOutStatusEnum = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Deleted: 'DELETED'
-} as const;
-
-export type PatientOutStatusEnum = typeof PatientOutStatusEnum[keyof typeof PatientOutStatusEnum];
 
 /**
  * 
@@ -201,10 +236,10 @@ export type PatientOutStatusEnum = typeof PatientOutStatusEnum[keyof typeof Pati
 export interface ValidationError {
     /**
      * 
-     * @type {Array<LocationInner>}
+     * @type {Array<ValidationErrorLocInner>}
      * @memberof ValidationError
      */
-    'loc': Array<LocationInner>;
+    'loc': Array<ValidationErrorLocInner>;
     /**
      * 
      * @type {string}
@@ -217,6 +252,13 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationErrorLocInner
+ */
+export interface ValidationErrorLocInner {
 }
 
 /**

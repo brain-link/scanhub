@@ -1,5 +1,5 @@
 // Collection of MRI modality related data interfaces
-import Plotly from 'plotly.js'
+// import Plotly from 'plotly.js'
 
 // export interface MRISequence {    // replaced with definition from generated client
 //   _id: string
@@ -13,13 +13,13 @@ import Plotly from 'plotly.js'
 //   file_extension?: string
 // }
 
-export interface FileResponse {
-  filename: string
-  contentType: string
-  content: Blob
-}
+// export interface FileResponse {
+//   filename: string
+//   contentType: string
+//   content: Blob
+// }
 
-export interface PlotData {
-  layout: Plotly.Layout
-  data: Plotly.Data[]
-}
+// export interface PlotData {
+//   layout: Plotly.Layout
+//   data: Plotly.Data[]
+// }

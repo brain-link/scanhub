@@ -10,10 +10,21 @@ import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-import { TaskOut } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../generated-client/exam'
 
 
-function TaskInfo({ data: task }: { data: TaskOut }) {
+function capitalize(str: string){
+  if (!str)
+    return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+
+function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
+
+  const datetime_created = new Date(task.datetime_created)
+  const datetime_updated = task.datetime_updated ? new Date(String(task.datetime_updated)) : undefined
+
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box
@@ -28,6 +39,11 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
           },
         }}
       >
+        <Typography fontSize='sm'>ID</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.id}
+        </Typography>
+
         <Typography fontSize='sm'>Name</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {task.name}
@@ -38,49 +54,94 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
           {task.description}
         </Typography>
 
-        <Typography fontSize='sm'>Comment</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {task.comment}
-        </Typography>
-
         <Typography fontSize='sm'>Type</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {task.type}
+            {capitalize(task.task_type)}
+          {task.task_type === TaskType.Dag && 'dag_type' in task && task.dag_type ? `, ${capitalize(task.dag_type)}` : ''}
         </Typography>
 
-        <Typography fontSize='sm'>Arguments</Typography>
-        <Stack direction='column'>
-          {task.args &&
-            Object.entries(task.args).map((arg, index) => (
-              <Typography key={index} level='body-sm' textColor='text.primary'>
-                {arg[0]}: {arg[1]}
-              </Typography>
-            ))}
-        </Stack>
+        {
+          task.task_type === TaskType.Acquisition && 'device_id' in task &&
+          <>
+            <Typography fontSize='sm'>Device ID</Typography>
+            <Typography level='body-sm' textColor='text.primary'>
+              {task.device_id ? String(task.device_id) : '-'}
+            </Typography>
+          </>
+        }
 
-        <Typography fontSize='sm'>Artifacts</Typography>
-        <Stack direction='column'>
-          {task.artifacts &&
-            Object.entries(task.artifacts).map((artifact, index) => (
-              <Typography key={index} level='body-sm' textColor='text.primary'>
-                {artifact[0]}: {artifact[1]}
-              </Typography>
-            ))}
-        </Stack>
+        {
+          task.task_type === TaskType.Acquisition && 'sequence_id' in task &&
+          <>
+            <Typography fontSize='sm'>Sequence ID</Typography>
+            <Typography level='body-sm' textColor='text.primary'>
+              {task.sequence_id ? String(task.sequence_id) : '-'}
+            </Typography>
+          </>
+        }
 
-        <Typography fontSize='sm'>Destinations</Typography>
-        <Stack direction='column'>
-          {task.destinations &&
-            Object.entries(task.destinations).map((destination, index) => (
-              <Typography key={index} level='body-sm' textColor='text.primary'>
-                {destination[0]}: {destination[1]}
+        {
+          task.task_type === TaskType.Acquisition && 'acquisition_parameter' in task && task.acquisition_parameter &&
+          <>
+            <Typography fontSize='sm'>Acquisition parameter</Typography>
+            <Stack direction='column'>
+              <Typography level='body-sm' textColor='text.primary'>
+                FoV scaling: x={task.acquisition_parameter.fov_scaling?.x}, y={task.acquisition_parameter.fov_scaling?.y}, z={task.acquisition_parameter.fov_scaling?.z}
               </Typography>
-            ))}
-        </Stack>
+              <Typography level='body-sm' textColor='text.primary'>
+                FoV offset: x={task.acquisition_parameter.fov_offset?.x}, y={task.acquisition_parameter.fov_offset?.y}, z={task.acquisition_parameter.fov_offset?.z}
+              </Typography>
+              <Typography level='body-sm' textColor='text.primary'>
+                FoV rotation: x={task.acquisition_parameter.fov_rotation?.x}, y={task.acquisition_parameter.fov_rotation?.y}, z={task.acquisition_parameter.fov_rotation?.z}
+              </Typography>
+            </Stack>
+          </>
+        }
+
+        {
+          task.task_type === TaskType.Dag && 'dag_id' in task &&
+          <>
+            <Typography fontSize='sm'>DAG ID</Typography>
+            <Typography level='body-sm' textColor='text.primary'>
+              {task.dag_id}
+            </Typography>
+          </>
+        }
+
+        {
+          task.task_type === TaskType.Dag && 'input_id' in task &&
+          <>
+            <Typography fontSize='sm'>Input</Typography>
+            <Typography level='body-sm' textColor='text.primary'>
+              {task.input_id ? String(task.input_id) : '-'}
+            </Typography>
+          </>
+        }
+
+        {
+          task.task_type === TaskType.Dag && 'parameter' in task &&
+          <>
+            <Typography fontSize='sm'>Parameter</Typography>
+            <Stack direction='column'>
+              {
+                task.parameter && Object.entries(task.parameter).map((arg, index) => (
+                  <Typography key={index} level='body-sm' textColor='text.primary'>
+                    {arg[0]}: {arg[1]}
+                  </Typography>
+                ))
+              }
+            </Stack>
+          </>
+        }
 
         <Typography fontSize='sm'>Status</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {task.status}
+          {capitalize(task.status)}
+        </Typography>
+
+        <Typography fontSize='sm'>Progress</Typography>
+        <Typography level='body-sm' textColor='text.primary'>
+          {task.progress}
         </Typography>
 
         <Typography fontSize='sm'>Is Template</Typography>
@@ -88,24 +149,17 @@ function TaskInfo({ data: task }: { data: TaskOut }) {
           {task.is_template ? 'True' : 'False'}
         </Typography>
 
-        <Typography fontSize='sm'>ID</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {task.id}
-        </Typography>
-
         <Typography fontSize='sm'>Creator</Typography>
         <Typography level='body-sm' textColor='text.primary'>
           {task.creator}
         </Typography>
 
-        <Typography fontSize='sm'>Created</Typography>
+        <Typography level='body-sm'>Last update</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(task.datetime_created).toLocaleString()}
-        </Typography>
-
-        <Typography fontSize='sm'>Updated</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {task.datetime_updated ? new Date(task.datetime_updated).toLocaleString() : '-'}
+          {
+            datetime_updated ? datetime_updated.toLocaleDateString() + ', ' + datetime_updated.toLocaleTimeString()
+            : datetime_created.toLocaleDateString() + ', ' + datetime_created.toLocaleTimeString()
+          }
         </Typography>
 
       </Box>

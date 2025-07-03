@@ -13,6 +13,9 @@ import { WorkflowOut } from '../generated-client/exam'
 
 function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
 
+  const datetime_created = new Date(workflow.datetime_created)
+  const datetime_updated = workflow.datetime_updated ? new Date(String(workflow.datetime_updated)) : undefined
+
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
       <Box
@@ -39,7 +42,7 @@ function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
 
         <Typography fontSize='sm'>Comment</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {workflow.comment}
+          {workflow.comment ? String(workflow.comment) : ''}
         </Typography>
 
         <Typography fontSize='sm'>Status</Typography>
@@ -62,14 +65,12 @@ function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
           {workflow.creator}
         </Typography>
 
-        <Typography fontSize='sm'>Created</Typography>
+        <Typography level='body-sm'>Last update</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {new Date(workflow.datetime_created).toLocaleString()}
-        </Typography>
-
-        <Typography fontSize='sm'>Updated</Typography>
-        <Typography level='body-sm' textColor='text.primary'>
-          {workflow.datetime_updated ? new Date(workflow.datetime_updated).toLocaleString() : '-'}
+          {
+            datetime_updated ? datetime_updated.toLocaleDateString() + ', ' + datetime_updated.toLocaleTimeString()
+            : datetime_created.toLocaleDateString() + ', ' + datetime_created.toLocaleTimeString()
+          }
         </Typography>
       </Box>
     </Box>

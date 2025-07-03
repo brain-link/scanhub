@@ -10,7 +10,7 @@ from fastapi import APIRouter, BackgroundTasks
 from pydantic import BaseModel, Json
 import requests
 
-# TODO: Move to scanhub-tools
+# TODO: Replace by acquisition task
 class ScanRequest(BaseModel):  # pylint: disable=too-few-public-methods
     """Pydantic definition of data to receive"""
     record_id: str

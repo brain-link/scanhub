@@ -48,8 +48,7 @@ async def get_patient(patient_id: UUID) -> (Patient | None):
         Patient database entry
     """
     async with async_session() as session:
-        patient = await session.get(Patient, patient_id)
-    return patient
+        return await session.get(Patient, patient_id)
 
 
 async def get_all_patients() -> list[Patient]:
@@ -61,8 +60,7 @@ async def get_all_patients() -> list[Patient]:
     """
     async with async_session() as session:
         result = await session.execute(select(Patient))
-        patients = list(result.scalars().all())
-    return patients
+    return list(result.scalars().all())
 
 
 async def delete_patient(patient_id: UUID) -> bool:
@@ -97,7 +95,7 @@ async def update_patient(patient_id: UUID, payload: BasePatient) -> (Patient | N
     -------
         Updated database entry
     """
-    # TODO verify payload.issuer
+    # TODO(<schote>): verify payload.issuer
     async with async_session() as session:
         if (patient := await session.get(Patient, patient_id)):
             patient.update(payload)

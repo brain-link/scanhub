@@ -22,11 +22,11 @@ class Client:
     Attributes:
         websocket_uri (str): The URI of the WebSocket server (device-manager).
         websocket_handler (WebSocketHandler): Manages the WebSocket connection.
-        device_id (str): Unique identifier for the device.
+        device_id (UUID): The Device ID. Copy it from Scanhub.
+        device_token (str): The device-token used to authenticate the device. Copy it from Scanhub.
         name (str): Name of the device.
         manufacturer (str): Manufacturer of the device.
         modality (str): Device modality.
-        status (str): Current device status.
         site (str): Location of the device.
         ip_address (str): Device IP address.
         reconnect_delay (int): Delay in seconds before reconnect attempts.
@@ -35,29 +35,30 @@ class Client:
         error_handler (callable): Callback for handling error messages.
         logger (logging.Logger): Logger for the class.
     """
-    def __init__(self, websocket_uri, device_id, name, manufacturer, modality, 
-                 status, site, ip_address, reconnect_delay=5):
+    def __init__(self, websocket_uri, device_id, device_token, name, manufacturer, modality, 
+                 status, site, ip_address, reconnect_delay=5, ca_file=None):
         """
         Initializes the Client instance.
 
         Args:
             websocket_uri (str): URI of the WebSocket server (device-manager).
-            device_id (str): Unique ID for the device.
+            device_id (UUID): The Device ID. Copy it from Scanhub.
+            device_token (str): The device-token used to authenticate the device. Copy it from Scanhub.
             name (str): Name of the device.
             manufacturer (str): Device manufacturer.
             modality (str): Device modality type.
-            status (str): Initial device status.
             site (str): Device location.
             ip_address (str): Device IP address.
             reconnect_delay (int, optional): Delay in seconds for reconnect attempts. Defaults to 5.
+            ca_file (str | None): Filepath to a ca_file to verify the server.
         """
         self.websocket_uri = websocket_uri
-        self.websocket_handler = WebSocketHandler(websocket_uri)
+        self.websocket_handler = WebSocketHandler(websocket_uri, device_id, device_token, ca_file=ca_file)
         self.device_id = device_id  # Unique ID for the device
+        self.device_token = device_token
         self.name = name
         self.manufacturer = manufacturer
         self.modality = modality
-        self.status = status
         self.site = site
         self.ip_address = ip_address
         self.reconnect_delay = reconnect_delay
@@ -83,17 +84,9 @@ class Client:
 
         Retries the connection and registration process upon failure after a delay.
         """
-        while True:
-            try:
-                await self.websocket_handler.connect()
-                self.logger.info("WebSocket connection established.")
-                await self.register_device()
-                break  # Exit loop if connection and registration are successful
-            except Exception as e:
-                self.logger.error("Failed to connect or register: %s. Retrying in %d seconds...",
-                                  e,
-                                  self.reconnect_delay)
-                await asyncio.sleep(self.reconnect_delay)
+        await self.websocket_handler.connect()
+        self.logger.info("WebSocket connection established.")
+        await self.register_device()
 
     async def register_device(self):
         """
@@ -104,11 +97,10 @@ class Client:
         registration_data = {
             "command": "register",
             "data": {
-                "id": self.device_id,  # Include device ID in the registration data
+                "status": 'REGISTERED',
                 "name": self.name,
                 "manufacturer": self.manufacturer,
                 "modality": self.modality,
-                "status": self.status,
                 "site": self.site,
                 "ip_address": self.ip_address
             }
@@ -171,7 +163,7 @@ class Client:
             self.logger.error("An error occurred while handling the start command: %s",
                               str(e))
 
-    async def send_status(self, status, additional_data=None):
+    async def send_status(self, status, data=None, record_id=None, user_access_token=None):
         """
         Sends a status update to the server.
 
@@ -181,44 +173,26 @@ class Client:
         """
         status_data = {
             "command": "update_status",
-            "data": {
-                    "id": self.device_id,
-                    "status": status
-                }
-            }
-        if status == "scanning" and additional_data is not None:
-            status_data["data"]["additional_data"] = {
-                "percentage": additional_data
-            }
-        elif status == "error" and additional_data is not None:
-            status_data["data"]["additional_data"] = {
-                "error_message": additional_data
-            }
-        elif additional_data is not None:
-            status_data["data"]["additional_data"] = additional_data
+            "status": status,
+            "data": data,
+            "record_id": record_id,
+            "user_access_token": user_access_token
+        }
         await self.websocket_handler.send_message(json.dumps(status_data))
 
-    async def send_scanning_status(self, percentage):
+    async def send_scanning_status(self, progress, record_id, user_access_token):
         """
         Sends a 'scanning' status with progress percentage.
 
         Args:
-            percentage (int): The scanning progress percentage.
+            progress (int): The scanning progress percentage.
+            record_id (str): The record_id to report progress for.
         """
-        await self.send_status("scanning", additional_data=percentage)
+        await self.send_status("SCANNING", data={'progress': progress}, record_id=record_id, user_access_token=user_access_token)
 
     async def send_ready_status(self):
         """Sends a 'ready' status to the server."""
-        await self.send_status("ready")
-
-    async def send_init_status(self):
-        """Sends an 'init' status to the server."""
-        self.logger.info("send init status")
-        await self.send_status("init")
-
-    async def send_offline_status(self):
-        """Sends an 'offline' status to the server."""
-        await self.send_status("offline")
+        await self.send_status("READY")
 
     async def send_error_status(self, error_message):
         """
@@ -227,7 +201,7 @@ class Client:
         Args:
             error_message (str): The error message to include.
         """
-        await self.send_status("error", additional_data=error_message)
+        await self.send_status("ERROR", data={'error_message': error_message})
 
     async def stop(self):
         """Closes the WebSocket connection."""

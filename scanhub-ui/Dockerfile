@@ -42,7 +42,6 @@ WORKDIR /app
 
 # copy from build image
 COPY --from=BUILD_IMAGE /app /app
-EXPOSE 3000
 
 # Start the app
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "start-no-hmr" ]

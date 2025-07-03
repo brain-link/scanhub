@@ -12,10 +12,13 @@ import json
 # TODO implement tests for status DELETED
 
 
-HOST = "http://localhost:8080"
+# HOST = "https://localhost"
+HOST = "https://localhost:8443"  # for local development with custom port
 PREFIX = HOST + "/api/v1/exam"
 PREFIX_PATIENT_MANAGER = HOST + "/api/v1/patient"
-CREDENTIALS_FORM_DATA = "grant_type=password&username=Max&password=letmein"
+USERNAME = "Max"            #   make sure this user is installed with this password
+PASSWORD = "maxmaxmaxmax"   #   they are not set up by this test routine
+CREDENTIALS_FORM_DATA = "grant_type=password&username=" + USERNAME + "&password=" + PASSWORD
 
 
 PATIENT = {
@@ -81,6 +84,7 @@ TASK_TEMPLATE = {
         "RAWDATA FANTASIA": "FANTASY EXPORT INTERFACE 1"
     },
     "status": "NEW",
+    "progress": 50,
     "is_template": True,
 }
 
@@ -88,10 +92,11 @@ TASK_TEMPLATE = {
 def login():
     """ Get access token. """
     response = requests.post(
-        "http://localhost:8080/api/v1/userlogin/login", 
+        HOST + "/api/v1/userlogin/login", 
         data=CREDENTIALS_FORM_DATA,
         headers={"Content-Type": "application/x-www-form-urlencoded"},
-        timeout=3)
+        timeout=3,
+        verify=False)
     assert response.status_code == 200
     response_json = response.json()
     return response_json["access_token"]
@@ -124,7 +129,7 @@ def test_invalid_and_no_token():
     ]
     def run_requests(headers, comment):
         for i, req in enumerate(request_list):
-            response = requests.request(req[0], PREFIX + req[1], headers=headers)
+            response = requests.request(req[0], PREFIX + req[1], headers=headers, verify=False)
             assert response.status_code == 401, \
                 f"{comment}: request {i}: " + \
                 "request not rejected with status_code 401."
@@ -134,7 +139,7 @@ def test_invalid_and_no_token():
 
     
 def test_invalid_and_no_token_with_openapijson():
-    openapijson_response = requests.get(PREFIX + "/openapi.json")
+    openapijson_response = requests.get(PREFIX + "/openapi.json", verify=False)
     assert openapijson_response.status_code == 200
     openapijson = openapijson_response.json()
     path_dict = openapijson["paths"]
@@ -142,13 +147,18 @@ def test_invalid_and_no_token_with_openapijson():
         for path in path_dict:
             if path == "/api/v1/exam/health/readiness":
                 continue
+            if path.count("{") == 1 and path.count("}") == 1 and path.endswith("}"):
+                path_for_request = path[0:path.find("{")] + "c7b7c2ba-e6ca-4354-a1e9-697478565148"
+            else:
+                path_for_request = path
             for method in path_dict[path]:
                 response = requests.request(
                     method.upper(), 
-                    HOST + path, 
-                    headers=headers)
+                    HOST + path_for_request, 
+                    headers=headers,
+                    verify=False)
                 assert response.status_code == 401, \
-                    f"{comment}: request {HOST}{path}:" + \
+                    f"{comment}: request {HOST}{path_for_request}:" + \
                     "request not rejected with status_code 401."
     run_requests({"Authorization": "Bearer " + "wrongaccesstoken"}, "With wrong token")
     run_requests({}, "Without token")
@@ -160,7 +170,7 @@ def test_create_exam():
     headers = {"Authorization": "Bearer " + access_token}
     patient_1 = PATIENT.copy()
     postpatient_1_response = requests.post(
-        PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+        PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
     assert postpatient_1_response.status_code == 201
     postpatient_1_response_json = postpatient_1_response.json()
 
@@ -170,18 +180,18 @@ def test_create_exam():
         exam_1["is_template"] = False
         exam_1["patient_id"] = postpatient_1_response_json["id"]
         postexam_1_response = requests.post(
-            PREFIX + "/new", json=exam_1, headers=headers)
+            PREFIX + "/new", json=exam_1, headers=headers, verify=False)
         exam_2 = EXAM_TEMPLATE.copy()
         exam_2["patient_id"] = postpatient_1_response_json["id"]
         exam_2["status"] = "UPDATED"
         exam_2["is_template"] = False
         postexam_2_response = requests.post(
-            PREFIX + "/new", json=exam_2, headers=headers)
+            PREFIX + "/new", json=exam_2, headers=headers, verify=False)
         exam_3 = EXAM_TEMPLATE.copy()
         exam_3["patient_id"] = "4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5"
         exam_3["is_template"] = False
         postexam_3_response = requests.post(
-            PREFIX + "/new", json=exam_3, headers=headers)
+            PREFIX + "/new", json=exam_3, headers=headers, verify=False)
 
     # check
         assert postexam_1_response.status_code == 201
@@ -190,7 +200,8 @@ def test_create_exam():
             assert postexam_1_response_json[key] == exam_1[key]
         getexam_response = requests.get(
             PREFIX + "/" + postexam_1_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getexam_response.status_code == 200
         getexam_response_json = getexam_response.json()
         for key in exam_1.keys():
@@ -206,14 +217,16 @@ def test_create_exam():
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
 
         if postexam_1_response.status_code == 201:
             deleteexam_1_response = requests.delete(
                 PREFIX + "/" + 
                 postexam_1_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_1_response.status_code == 204
 
 
@@ -227,23 +240,23 @@ def test_create_exam_from_template():
     patient_1 = PATIENT.copy()
     try:
         postnewtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postnewtemplate_response.status_code == 201
         postnewtemplate_response_json = postnewtemplate_response.json()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
-        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
         exam_template_2 = EXAM_TEMPLATE.copy()
         exam_template_2["name"] = "Automated test exam template 2"
         postexamtemplate_2_response = requests.post(
-            PREFIX + "/new", json=exam_template_2, headers=headers)
+            PREFIX + "/new", json=exam_template_2, headers=headers, verify=False)
         assert postexamtemplate_2_response.status_code == 201
         postexamtemplate_2_response_json = postexamtemplate_2_response.json()
         workflow_template_1 = WORKFLOW_TEMPLATE.copy()
@@ -254,11 +267,11 @@ def test_create_exam_from_template():
         workflow_template_2["name"] = "Automated test workflow template 2"
         workflow_template_2["comment"] = "Belongs to 'automated test exam template 2'."
         postworkflowtemplate_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers, verify=False)
         assert postworkflowtemplate_1_response.status_code == 201
         postworkflowtemplate_1_response_json = postworkflowtemplate_1_response.json()
         postworkflowtemplate_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers, verify=False)
         assert postworkflowtemplate_2_response.status_code == 201
         postworkflowtemplate_2_response_json = postworkflowtemplate_2_response.json()
         task_template_1 = TASK_TEMPLATE.copy()
@@ -272,16 +285,16 @@ def test_create_exam_from_template():
         task_template_4["name"] = "Automated test task template 4"
         task_template_4["workflow_id"] = postworkflowtemplate_2_response_json["id"]
         posttasktemplate_2_response = requests.post(
-            PREFIX + "/task/new", json=task_template_1, headers=headers)
+            PREFIX + "/task/new", json=task_template_1, headers=headers, verify=False)
         assert posttasktemplate_2_response.status_code == 201
         posttasktemplate_2_response = requests.post(
-            PREFIX + "/task/new", json=task_template_2, headers=headers)
+            PREFIX + "/task/new", json=task_template_2, headers=headers, verify=False)
         assert posttasktemplate_2_response.status_code == 201
         posttasktemplate_2_response = requests.post(
-            PREFIX + "/task/new", json=task_template_3, headers=headers)
+            PREFIX + "/task/new", json=task_template_3, headers=headers, verify=False)
         assert posttasktemplate_2_response.status_code == 201
         posttasktemplate_2_response = requests.post(
-            PREFIX + "/task/new", json=task_template_4, headers=headers)
+            PREFIX + "/task/new", json=task_template_4, headers=headers, verify=False)
         assert posttasktemplate_2_response.status_code == 201
 
     # act
@@ -292,7 +305,8 @@ def test_create_exam_from_template():
             PREFIX + "/",
             json=examfromtemplate_1_request,
             params={"template_id": postnewtemplate_response_json["id"]},
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert postexamfromtemplate_1_response.status_code == 201
         postexamfromtemplate_1_response_json = postexamfromtemplate_1_response.json()
         examfromtemplate_2_request = postnewtemplate_response_json.copy()
@@ -303,11 +317,13 @@ def test_create_exam_from_template():
             PREFIX + "/",
             json=examfromtemplate_2_request,
             params={"template_id": postnewtemplate_response_json["id"]},
-            headers=headers)
+            headers=headers,
+            verify=False)
         putupdatedtemplate_response = requests.put(
             PREFIX + "/" + postnewtemplate_response_json["id"],
             json=updated_template,
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert putupdatedtemplate_response.status_code == 200
         putupdatedtemplate_response_json = putupdatedtemplate_response.json()
         examfromupdatedtemplate_request = putupdatedtemplate_response_json.copy()
@@ -318,7 +334,8 @@ def test_create_exam_from_template():
             PREFIX + "/",
             json=examfromupdatedtemplate_request,
             params={"template_id": putupdatedtemplate_response_json["id"]},
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert postexamfromupdatedtemplate_response.status_code == 201
         postexamfromupdatedtemplate_response_json = \
             postexamfromupdatedtemplate_response.json()
@@ -329,7 +346,8 @@ def test_create_exam_from_template():
             PREFIX + "/",
             json=examfrominstance_request,
             params={"template_id": postexam_response_json["id"]},
-            headers=headers)
+            headers=headers,
+            verify=False)
         examfromtemplate_3_request = postexamtemplate_2_response_json.copy()
         examfromtemplate_3_request["patient_id"] = postpatient_1_response_json["id"]
         examfromtemplate_3_request["is_template"] = False
@@ -337,7 +355,8 @@ def test_create_exam_from_template():
             PREFIX + "/",
             json=examfromtemplate_3_request,
             params={"template_id": postexamtemplate_2_response_json["id"]},
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert postexamfromtemplate_3_response.status_code == 201
         postexamfromtemplate_3_response_json = postexamfromtemplate_3_response.json()
 
@@ -350,7 +369,8 @@ def test_create_exam_from_template():
         assert postexamfromtemplate_1_response_json["is_template"] is False
         getexam_response = requests.get(
             PREFIX + "/" + postexamfromtemplate_1_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getexam_response.status_code == 200
         getexam_response_json = getexam_response.json()
         for key in exam_template.keys():
@@ -415,7 +435,8 @@ def test_create_exam_from_template():
         assert t4_index >= 0, "Task missing in response of create from template"
         getexam_3_response = requests.get(
             PREFIX + "/" + postexamfromtemplate_3_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getexam_3_response.status_code == 200
         getexam_3_response_json = getexam_3_response.json()
         for key in exam_template_2.keys():
@@ -461,38 +482,45 @@ def test_create_exam_from_template():
         if postnewtemplate_response.status_code == 201:
             deleteexamtemplate_response = requests.delete(
                 PREFIX + "/" + postnewtemplate_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexamtemplate_response.status_code == 204
         if postexamfromtemplate_1_response.status_code == 201:
             deleteexam_1_response = requests.delete(
                 PREFIX + "/" + postexamfromtemplate_1_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_1_response.status_code == 204
         if postexamfromupdatedtemplate_response.status_code == 201:
             deleteexam_2_response = requests.delete(
                 PREFIX + "/" + postexamfromupdatedtemplate_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_2_response.status_code == 204
         if postexam_response.status_code == 201:
             deleteexam_3_response = requests.delete(
                 PREFIX + "/" + postexam_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_3_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
         if postexamtemplate_2_response.status_code == 201:
             deleteexamtemplate_2_response = requests.delete(
                 PREFIX + "/" + postexamtemplate_2_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexamtemplate_2_response.status_code == 204
         if postexamfromtemplate_3_response.status_code == 201:
             deleteexamfromtemplate_3_response = requests.delete(
                 PREFIX + "/" + postexamfromtemplate_3_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexamfromtemplate_3_response.status_code == 204
 
 
@@ -500,10 +528,10 @@ def test_get_exam():
     # Successfully getting an exam is already tested in test_create_exam.
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    getexam_response = requests.get(PREFIX + "/123", headers=headers)
+    getexam_response = requests.get(PREFIX + "/123", headers=headers, verify=False)
     assert getexam_response.status_code == 400   # invalid uuid format
     getexam_response = requests.get(
-        PREFIX + "/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers)
+        PREFIX + "/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers, verify=False)
     assert getexam_response.status_code == 404
 
 
@@ -514,11 +542,11 @@ def test_get_all_patient_exams():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         postpatient_1A_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1A_response.status_code == 201
         postpatient_1A_response_json = postpatient_1A_response.json()
         exam1 = EXAM_TEMPLATE.copy()
@@ -530,18 +558,18 @@ def test_get_all_patient_exams():
         exam3["description"] = "test description 3"
         exam3["patient_id"] = postpatient_1A_response_json["id"]
         postnewexam1_response = requests.post(
-            PREFIX + "/new", json=exam1, headers=headers)
+            PREFIX + "/new", json=exam1, headers=headers, verify=False)
         postnewexam2_response = requests.post(
-            PREFIX + "/new", json=exam2, headers=headers)
+            PREFIX + "/new", json=exam2, headers=headers, verify=False)
         postnewexam3_response = requests.post(
-            PREFIX + "/new", json=exam3, headers=headers)
+            PREFIX + "/new", json=exam3, headers=headers, verify=False)
         assert postnewexam1_response.status_code == 201
         assert postnewexam2_response.status_code == 201
         assert postnewexam3_response.status_code == 201
 
     # act
         getallexams_response = requests.get(
-            PREFIX + "/all/" + str(postpatient_1_response_json["id"]), headers=headers)
+            PREFIX + "/all/" + str(postpatient_1_response_json["id"]), headers=headers, verify=False)
 
     # check
         assert getallexams_response.status_code == 200
@@ -566,27 +594,29 @@ def test_get_all_patient_exams():
     finally:
         if postnewexam1_response.status_code == 201:
             deleteexam1_response = requests.delete(
-                PREFIX + "/" + postnewexam1_response.json()["id"], headers=headers)
+                PREFIX + "/" + postnewexam1_response.json()["id"], headers=headers, verify=False)
             assert deleteexam1_response.status_code == 204
         if postnewexam2_response.status_code == 201:
             deleteexam2_response = requests.delete(
-                PREFIX + "/" + postnewexam2_response.json()["id"], headers=headers)
+                PREFIX + "/" + postnewexam2_response.json()["id"], headers=headers, verify=False)
             assert deleteexam2_response.status_code == 204
         if postnewexam3_response.status_code == 201:
             deleteexam3_response = requests.delete(
-                PREFIX + "/" + postnewexam3_response.json()["id"], headers=headers)
+                PREFIX + "/" + postnewexam3_response.json()["id"], headers=headers, verify=False)
             assert deleteexam3_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
         if postpatient_1A_response.status_code == 201:
             deletepatient_1A_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1A_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1A_response.status_code == 204
 
 
@@ -599,21 +629,21 @@ def test_get_all_exam_templates():
     exam_template_2["description"] = "description 2"
     try:
         getalltemplatesbefore_response = requests.get(
-            PREFIX + "/templates/all", headers=headers)
+            PREFIX + "/templates/all", headers=headers, verify=False)
         assert getalltemplatesbefore_response.status_code == 200
         getalltemplatesbefore_response_json = getalltemplatesbefore_response.json()
         postnewtemplate_1_response = requests.post(
-            PREFIX + "/new", json=exam_template_1, headers=headers)
+            PREFIX + "/new", json=exam_template_1, headers=headers, verify=False)
         assert postnewtemplate_1_response.status_code == 201
         postnewtemplate_1_response_json = postnewtemplate_1_response.json()
         postnewtemplate_2_response = requests.post(
-            PREFIX + "/new", json=exam_template_2, headers=headers)
+            PREFIX + "/new", json=exam_template_2, headers=headers, verify=False)
         assert postnewtemplate_2_response.status_code == 201
         postnewtemplate_2_response_json = postnewtemplate_2_response.json()
 
     # act
         getalltemplates_response = requests.get(
-            PREFIX + "/templates/all", headers=headers)
+            PREFIX + "/templates/all", headers=headers, verify=False)
 
     # check
         assert getalltemplates_response.status_code == 200
@@ -639,11 +669,11 @@ def test_get_all_exam_templates():
     finally:
         if postnewtemplate_1_response.status_code == 201:
             deleteexamtemplate_1_presponse = requests.delete(
-                PREFIX + "/" + postnewtemplate_1_response_json["id"], headers=headers)
+                PREFIX + "/" + postnewtemplate_1_response_json["id"], headers=headers, verify=False)
             assert deleteexamtemplate_1_presponse.status_code == 204
         if postnewtemplate_2_response.status_code == 201:
             deleteexamtemplate_2_presponse = requests.delete(
-                PREFIX + "/" + postnewtemplate_2_response_json["id"], headers=headers)
+                PREFIX + "/" + postnewtemplate_2_response_json["id"], headers=headers, verify=False)
             assert deleteexamtemplate_2_presponse.status_code == 204
 
 
@@ -654,54 +684,59 @@ def test_delete_exam():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
         postnewexam_response = requests.post(
-            PREFIX + "/new", json=exam, headers=headers)
+            PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
         exam_2 = exam.copy()
         exam_2["name"] = "Automated test exam 2"
         postnewexam_2_response = requests.post(
-            PREFIX + "/new", json=exam_2, headers=headers)
+            PREFIX + "/new", json=exam_2, headers=headers, verify=False)
         assert postnewexam_2_response.status_code == 201
         postnewexam_2_response_json = postnewexam_2_response.json()
         exam_template = EXAM_TEMPLATE.copy()
         postnewtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postnewtemplate_response.status_code == 201
         postnewtemplate_response_json = postnewtemplate_response.json()
 
         # act
         deleteexam_response = requests.delete(
             PREFIX + "/" + postnewexam_response_json["id"],
-            headers=headers
+            headers=headers,
+            verify=False
         )
         assert deleteexam_response.status_code == 204
         deleteexamtemplate_presponse = requests.delete(
             PREFIX + "/" + postnewtemplate_response_json["id"],
             headers=headers,
+            verify=False
         )
         assert deleteexamtemplate_presponse.status_code == 204
 
     # check
         getexam_response = requests.get(
             PREFIX + "/" + postnewexam_response_json["id"],
-            headers=headers
+            headers=headers,
+            verify=False
         )
         assert getexam_response.status_code == 404
         getexam_2_response = requests.get(
             PREFIX + "/" + postnewexam_2_response_json["id"], 
-            headers=headers
+            headers=headers,
+            verify=False
         )
         assert getexam_2_response.status_code == 200
         getexamtemplate_response = requests.get(
             PREFIX + "/" + postnewtemplate_response_json["id"], 
-            headers=headers
+            headers=headers,
+            verify=False
         )
         assert getexamtemplate_response.status_code == 404
 
@@ -711,13 +746,15 @@ def test_delete_exam():
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers
+                headers=headers,
+                verify=False
             )
             assert deletepatient_1_response.status_code == 204
         if postnewexam_2_response.status_code == 201:
             deleteexam_2_response = requests.delete(
                 PREFIX + "/" + postnewexam_2_response_json["id"], 
-                headers=headers
+                headers=headers,
+                verify=False
             )
             assert deleteexam_2_response.status_code == 204
 
@@ -729,17 +766,17 @@ def test_update_exam():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         postpatient_1A_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1A_response.status_code == 201
         postpatient_1A_response_json = postpatient_1A_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
-        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postexam_response.status_code == 201
         update_request_1 = {
             "patient_id": postpatient_1A_response_json["id"],
@@ -764,7 +801,8 @@ def test_update_exam():
         updateexam_response = requests.put(
             PREFIX + "/" + postexam_response_json["id"],
             json=update_request_1,
-            headers=headers
+            headers=headers,
+            verify=False
         )
 
     # check
@@ -774,7 +812,8 @@ def test_update_exam():
             assert updateexam_response[key] == update_request_1[key]
         getexam_response = requests.get(
             PREFIX + "/" + postexam_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getexam_response.status_code == 200
         getexam_response_json = getexam_response.json()
         for key in update_request_1.keys():
@@ -785,7 +824,8 @@ def test_update_exam():
         updateexam_2_response = requests.put(
             PREFIX + "/" + postexam_response_json["id"], 
             json=update_request_2, 
-            headers=headers
+            headers=headers,
+            verify=False
         )
     # check
         assert updateexam_2_response.status_code == 403, \
@@ -795,7 +835,8 @@ def test_update_exam():
         updateexam_3_response = requests.put(
             PREFIX + "/" + postexam_response_json["id"], 
             json=update_request_3, 
-            headers=headers
+            headers=headers,
+            verify=False
         )
     # check
         assert updateexam_3_response.status_code == 400, \
@@ -807,19 +848,22 @@ def test_update_exam():
             deleteexam_response = requests.delete(
                 PREFIX + "/" + 
                 postexam_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
         if postpatient_1A_response.status_code == 201:
             deletepatient_1A_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1A_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1A_response.status_code == 204
 
 
@@ -830,16 +874,16 @@ def test_create_workflow():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
         exam_template = EXAM_TEMPLATE.copy()
-        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers, verify=False)
         postexamtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
         assert postexamtemplate_response.status_code == 201
@@ -859,17 +903,17 @@ def test_create_workflow():
 
     # act
         postworkflow_response_1 = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         postworkflow_response_2 = requests.post(
-            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers, verify=False)
         postworkflow_response_3 = requests.post(
-            PREFIX + "/workflow/new", json=workflow_3, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_3, headers=headers, verify=False)
         postworkflow_response_4 = requests.post(
-            PREFIX + "/workflow/new", json=workflow_4, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_4, headers=headers, verify=False)
         postworkflow_response_5 = requests.post(
-            PREFIX + "/workflow/new", json=workflow_5, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_5, headers=headers, verify=False)
         postworkflow_response_6 = requests.post(
-            PREFIX + "/workflow/new", json=workflow_6, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_6, headers=headers, verify=False)
 
     # check
         assert postworkflow_response_1.status_code == 400, \
@@ -888,7 +932,8 @@ def test_create_workflow():
             assert postworkflow_response_json_3[key] == workflow_3[key]
         getworkflow_response = requests.get(
             PREFIX + "/workflow/" + postworkflow_response_json_3["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getworkflow_response.status_code == 200
         getworkflow_response_json = getworkflow_response.json()
         for key in workflow_3.keys():
@@ -898,18 +943,19 @@ def test_create_workflow():
     finally:
         if postexam_response.status_code == 201:
             deleteexam_response = requests.delete(
-                PREFIX + "/" + postexam_response_json["id"], headers=headers)
+                PREFIX + "/" + postexam_response_json["id"], headers=headers, verify=False)
             assert deleteexam_response.status_code == 204
         if postexamtemplate_response.status_code == 201:
             postexamtemplate_response_json = postexamtemplate_response.json()
             deleteexamtemplate_response = requests.delete(
-                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers, verify=False)
             assert deleteexamtemplate_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
         # deleting an exam, recursively deletes the corresponding workflows
 
@@ -921,31 +967,31 @@ def test_create_workflow_from_template():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
-        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
         exam_template = EXAM_TEMPLATE.copy()
         postexamtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
         workflow_template = WORKFLOW_TEMPLATE.copy()
         workflow_template["exam_id"] = postexamtemplate_response_json["id"]
         postnewtemplate_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template, headers=headers, verify=False)
         assert postnewtemplate_response.status_code == 201
         postnewtemplate_response_json = postnewtemplate_response.json()
         workflow = WORKFLOW_TEMPLATE.copy()
         workflow["exam_id"] = postexam_response_json["id"]
         workflow["is_template"] = False
         postworkflow_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow, headers=headers)
+            PREFIX + "/workflow/new", json=workflow, headers=headers, verify=False)
         assert postworkflow_response.status_code == 201
         postworkflow_response_json = postworkflow_response.json()
 
@@ -957,7 +1003,8 @@ def test_create_workflow_from_template():
                 "template_id": postnewtemplate_response_json["id"],
                 "new_workflow_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
         postworkflowfromtemplate_fail_1_response = requests.post(
             PREFIX + "/workflow",
             params={
@@ -965,7 +1012,8 @@ def test_create_workflow_from_template():
                 "template_id": postworkflow_response_json["id"],
                 "new_workflow_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
         postworkflowfromtemplate_fail_2_response = requests.post(
             PREFIX + "/workflow",
             params={
@@ -973,7 +1021,8 @@ def test_create_workflow_from_template():
                 "template_id": postnewtemplate_response_json["id"],
                 "new_workflow_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
         postworkflowfromtemplate_fail_3_response = requests.post(
             PREFIX + "/workflow",
             params={
@@ -981,7 +1030,8 @@ def test_create_workflow_from_template():
                 "template_id": postnewtemplate_response_json["id"],
                 "new_workflow_is_template": True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
         postworkflowtemplatefromtemplate_response = requests.post(
             PREFIX + "/workflow",
             params={
@@ -989,7 +1039,8 @@ def test_create_workflow_from_template():
                 "template_id": postnewtemplate_response_json["id"],
                 "new_workflow_is_template": True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
 
     # check
         assert postworkflowfromtemplate_response.status_code == 201
@@ -1004,7 +1055,8 @@ def test_create_workflow_from_template():
         assert postworkflowfromtemplate_response_json["is_template"] is False
         getworkflow_response = requests.get(
             PREFIX + "/workflow/" + postworkflowfromtemplate_response_json["id"], 
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getworkflow_response.status_code == 200
         getworkflow_response_json = getworkflow_response.json()
         for key in workflow_template.keys():
@@ -1028,7 +1080,8 @@ def test_create_workflow_from_template():
         putupdatedworkflowtemplate_response = requests.put(
             PREFIX + "/workflow/" + postworkflow_response_json["id"],
             json=updated_workflow_template,
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert putupdatedworkflowtemplate_response.status_code == 200
 
     # act
@@ -1039,7 +1092,8 @@ def test_create_workflow_from_template():
                 "template_id": putupdatedworkflowtemplate_response.json()["id"],
                 "new_workflow_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
 
     # check
         assert postworkflowfromupdatedtemplate_response.status_code == 201
@@ -1050,17 +1104,18 @@ def test_create_workflow_from_template():
     finally:
         # deleting exam recursively deletes associated workflows
         deleteexam_response = requests.delete(
-            PREFIX + "/" + postexam_response_json["id"], headers=headers)
+            PREFIX + "/" + postexam_response_json["id"], headers=headers, verify=False)
         assert deleteexam_response.status_code == 204
         if postexamtemplate_response.status_code == 201:
             deleteexamtemplate_response = requests.delete(
-                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers, verify=False)
             assert deleteexamtemplate_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -1068,10 +1123,10 @@ def test_get_workflow():
     # Successfully getting a workflow is already tested in test_create_workflow.
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    getworkflow_response = requests.get(PREFIX + "/workflow/123", headers=headers)
+    getworkflow_response = requests.get(PREFIX + "/workflow/123", headers=headers, verify=False)
     assert getworkflow_response.status_code == 400   # invalid uuid format
     getworkflow_response = requests.get(
-        PREFIX + "/workflow/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers)
+        PREFIX + "/workflow/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers, verify=False)
     assert getworkflow_response.status_code == 404
 
 
@@ -1082,7 +1137,7 @@ def test_get_all_exam_workflows():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam1 = EXAM_TEMPLATE.copy()
@@ -1091,9 +1146,9 @@ def test_get_all_exam_workflows():
         exam2 = exam1.copy()
         exam2["site"] = "test site 2"
         postnewexam1_response = requests.post(
-            PREFIX + "/new", json=exam1, headers=headers)
+            PREFIX + "/new", json=exam1, headers=headers, verify=False)
         postnewexam2_response = requests.post(
-            PREFIX + "/new", json=exam2, headers=headers)
+            PREFIX + "/new", json=exam2, headers=headers, verify=False)
         assert postnewexam1_response.status_code == 201
         assert postnewexam2_response.status_code == 201
         postnewexam1_response_json = postnewexam1_response.json()
@@ -1107,11 +1162,11 @@ def test_get_all_exam_workflows():
         workflow_3["name"] = "Automated test workflow 3"
         workflow_3["exam_id"] = postnewexam2_response_json["id"]
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         postworkflow_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers, verify=False)
         postworkflow_3_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_3, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_3, headers=headers, verify=False)
         assert postworkflow_1_response.status_code == 201
         assert postworkflow_2_response.status_code == 201
         assert postworkflow_3_response.status_code == 201
@@ -1119,11 +1174,11 @@ def test_get_all_exam_workflows():
     # act
         getallworkflows_response = requests.get(
             PREFIX + "/workflow/all/" + str(postnewexam1_response_json["id"]), 
-            headers=headers)
+            headers=headers, verify=False)
         # could enforce error when requesting workflows for non existing exam
         # getallworkflowswrongid_response = requests.get(
         #     PREFIX + "/workflow/all/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", 
-        #     headers=headers)
+        #     headers=headers, verify=False)
 
     # check
         assert getallworkflows_response.status_code == 200
@@ -1148,17 +1203,17 @@ def test_get_all_exam_workflows():
     finally:
         if postnewexam1_response.status_code == 201:
             deleteexam1_response = requests.delete(
-                PREFIX + "/" + postnewexam1_response.json()["id"], headers=headers)
+                PREFIX + "/" + postnewexam1_response.json()["id"], headers=headers, verify=False)
             assert deleteexam1_response.status_code == 204
         if postnewexam2_response.status_code == 201:
             deleteexam2_response = requests.delete(
-                PREFIX + "/" + postnewexam2_response.json()["id"], headers=headers)
+                PREFIX + "/" + postnewexam2_response.json()["id"], headers=headers, verify=False)
             assert deleteexam2_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -1172,7 +1227,7 @@ def test_get_all_workflow_templates():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam_1 = exam_template_1.copy()
@@ -1180,19 +1235,20 @@ def test_get_all_workflow_templates():
         exam_1["patient_id"] = postpatient_1_response_json["id"]
         getallworkflowtemplatesbefore_response = requests.get(
             PREFIX + "/workflow/templates/all",
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getallworkflowtemplatesbefore_response.status_code == 200
 
         postnewexamtemplate_1_response = requests.post(
-            PREFIX + "/new", json=exam_template_1, headers=headers)
+            PREFIX + "/new", json=exam_template_1, headers=headers, verify=False)
         assert postnewexamtemplate_1_response.status_code == 201
         postnewexamtemplate_1_response_json = postnewexamtemplate_1_response.json()
         postnewexamtemplate_2_response = requests.post(
-            PREFIX + "/new", json=exam_template_2, headers=headers)
+            PREFIX + "/new", json=exam_template_2, headers=headers, verify=False)
         assert postnewexamtemplate_2_response.status_code == 201
         postnewexamtemplate_2_response_json = postnewexamtemplate_2_response.json()
         postnewexam_1_response = requests.post(
-            PREFIX + "/new", json=exam_1, headers=headers)
+            PREFIX + "/new", json=exam_1, headers=headers, verify=False)
         assert postnewexam_1_response.status_code == 201
         postnewexam_1_response_json = postnewexam_1_response.json()
         workflow_template_1 = WORKFLOW_TEMPLATE.copy()
@@ -1207,13 +1263,13 @@ def test_get_all_workflow_templates():
         workflow_1["exam_id"] = postnewexam_1_response_json["id"]
         workflow_1["is_template"] = False
         postworkflowtemplate_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers, verify=False)
         postworkflowtemplate_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers, verify=False)
         postworkflowtemplate_3_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_3, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_3, headers=headers, verify=False)
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         assert postworkflowtemplate_1_response.status_code == 201
         assert postworkflowtemplate_2_response.status_code == 201
         assert postworkflowtemplate_3_response.status_code == 201
@@ -1222,7 +1278,8 @@ def test_get_all_workflow_templates():
     # act
         getallworkflowtemplates_response = requests.get(
             PREFIX + "/workflow/templates/all",
-            headers=headers)
+            headers=headers,
+            verify=False)
 
     # check
         assert getallworkflowtemplates_response.status_code == 200
@@ -1252,25 +1309,29 @@ def test_get_all_workflow_templates():
             deleteexamtemplate_1_presponse = requests.delete(
                 PREFIX + "/" + postnewexamtemplate_1_response_json["id"],
                 headers=headers,
+                verify=False
             )
             assert deleteexamtemplate_1_presponse.status_code == 204
         if postnewexamtemplate_2_response.status_code == 201:
             deleteexamtemplate_2_presponse = requests.delete(
                 PREFIX + "/" + postnewexamtemplate_2_response_json["id"],
                 headers=headers,
+                verify=False
             )
             assert deleteexamtemplate_2_presponse.status_code == 204
         if postnewexam_1_response.status_code == 201:
             deleteexam_1_presponse = requests.delete(
                 PREFIX + "/" + postnewexam_1_response_json["id"],
                 headers=headers,
+                verify=False
             )
             assert deleteexam_1_presponse.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -1281,19 +1342,19 @@ def test_delete_workflow():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
         postnewexam_response = requests.post(
-            PREFIX + "/new", json=exam, headers=headers)
+            PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
         exam_template = EXAM_TEMPLATE.copy()
         postnewexamtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postnewexamtemplate_response.status_code == 201
         postnewexamtemplate_response_json = postnewexamtemplate_response.json()
         workflow_1 = WORKFLOW_TEMPLATE.copy()
@@ -1304,26 +1365,28 @@ def test_delete_workflow():
         workflow_template_1 = WORKFLOW_TEMPLATE.copy()
         workflow_template_1["exam_id"] = postnewexamtemplate_response_json["id"]
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         assert postworkflow_1_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
         postworkflow_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers, verify=False)
         assert postworkflow_2_response.status_code == 201
         postworkflow_2_response_json = postworkflow_2_response.json()
         postworkflow_template_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers, verify=False)
         assert postworkflow_template_response.status_code == 201
         postworkflow_template_response_json = postworkflow_template_response.json()
 
     # act
         deleteworkflow_1_response = requests.delete(
             PREFIX + "/workflow/" + postworkflow_1_response_json["id"], 
-            headers=headers
+            headers=headers,
+            verify=False
         )
         deleteworkflow_template_response = requests.delete(
             PREFIX + "/workflow/" + postworkflow_template_response_json["id"], 
-            headers=headers
+            headers=headers,
+            verify=False
         )
 
     # check
@@ -1331,15 +1394,18 @@ def test_delete_workflow():
         assert deleteworkflow_template_response.status_code == 204
         getworkflow_1_response = requests.get(
             PREFIX + "/workflow/" + postworkflow_1_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getworkflow_1_response.status_code == 404
         getworkflow_2_response = requests.get(
             PREFIX + "/workflow/" + postworkflow_2_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getworkflow_2_response.status_code == 200
         getworkflowtemplate_response = requests.get(
             PREFIX + "/" + postworkflow_template_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getworkflowtemplate_response.status_code == 404
 
     # cleanup
@@ -1348,18 +1414,21 @@ def test_delete_workflow():
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
         if postnewexam_response.status_code == 201:
             deleteexam_response = requests.delete(
                 PREFIX + "/" + postnewexam_response_json["id"],
-                headers=headers
+                headers=headers,
+                verify=False
             )
             assert deleteexam_response.status_code == 204
         if postnewexamtemplate_response.status_code:
             deleteexamtemplate_presponse = requests.delete(
                 PREFIX + "/" + postnewexamtemplate_response_json["id"],
-                headers=headers
+                headers=headers,
+                verify=False
             )
             assert deleteexamtemplate_presponse.status_code == 204
 
@@ -1371,27 +1440,27 @@ def test_update_workflow():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam_1 = EXAM_TEMPLATE.copy()
         exam_1["patient_id"] = postpatient_1_response_json["id"]
         exam_1["is_template"] = False
         postexam_1_response = requests.post(
-            PREFIX + "/new", json=exam_1, headers=headers)
+            PREFIX + "/new", json=exam_1, headers=headers, verify=False)
         assert postexam_1_response.status_code == 201
         postexam_1_response_json = postexam_1_response.json()
         exam_2 = exam_1.copy()
         exam_2["name"] = "Automated test exam 2"
         postexam_2_response = requests.post(
-            PREFIX + "/new", json=exam_2, headers=headers)
+            PREFIX + "/new", json=exam_2, headers=headers, verify=False)
         assert postexam_2_response.status_code == 201
         postexam_2_response_json = postexam_2_response.json()
         workflow = WORKFLOW_TEMPLATE.copy()
         workflow["exam_id"] = postexam_1_response_json["id"]
         workflow["is_template"] = False
         postworkflow_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow, headers=headers)
+            PREFIX + "/workflow/new", json=workflow, headers=headers, verify=False)
         assert postworkflow_response.status_code == 201
         postworkflow_response_json = postworkflow_response.json()
         update_request_1 = {
@@ -1414,7 +1483,8 @@ def test_update_workflow():
         updateworkflow_response_1 = requests.put(
             PREFIX + "/workflow/" + postworkflow_response_json["id"],
             json=update_request_1,
-            headers=headers
+            headers=headers,
+            verify=False
         )
 
     # check
@@ -1424,7 +1494,8 @@ def test_update_workflow():
             assert updateworkflow_response_1_json[key] == update_request_1[key]
         getworkflow_response_1 = requests.get(
             PREFIX + "/workflow/" + postworkflow_response_json["id"],
-            headers=headers)
+            headers=headers,
+            verify=False)
         assert getworkflow_response_1.status_code == 200
         getworkflow_response_1_json = getworkflow_response_1.json()
         for key in update_request_1.keys():
@@ -1435,7 +1506,8 @@ def test_update_workflow():
         updateworkflow_response_2 = requests.put(
             PREFIX + "/workflow/" + postworkflow_response_json["id"],
             json=update_request_2,
-            headers=headers
+            headers=headers,
+            verify=False
         )
     # check
         assert updateworkflow_response_2.status_code == 403, \
@@ -1445,7 +1517,8 @@ def test_update_workflow():
         updateworkflow_response_3 = requests.put(
             PREFIX + "/workflow/" + postworkflow_response_json["id"],
             json=update_request_3,
-            headers=headers
+            headers=headers,
+            verify=False
         )
     # check
         assert updateworkflow_response_3.status_code == 400, \
@@ -1455,7 +1528,8 @@ def test_update_workflow():
         updateworkflow_response_4 = requests.put(
             PREFIX + "/workflow/" + postworkflow_response_json["id"],
             json=update_request_4,
-            headers=headers
+            headers=headers,
+            verify=False
         )
     # check
         assert updateworkflow_response_4.status_code == 400, \
@@ -1467,19 +1541,22 @@ def test_update_workflow():
             deleteexam_1_response = requests.delete(
                 PREFIX + "/" + 
                 postexam_1_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_1_response.status_code == 204
         if postexam_2_response.status_code == 201:
             deleteexam_2_response = requests.delete(
                 PREFIX + "/" + 
                 postexam_2_response_json["id"],
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deleteexam_2_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers,
+                verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -1490,16 +1567,16 @@ def test_create_task():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
         exam_template = EXAM_TEMPLATE.copy()
-        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers, verify=False)
         postexamtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
         assert postexamtemplate_response.status_code == 201
@@ -1510,9 +1587,9 @@ def test_create_task():
         workflow_template_1 = WORKFLOW_TEMPLATE.copy()
         workflow_template_1["exam_id"] = postexamtemplate_response_json["id"]
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         postworkflowtemplate_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers, verify=False)
         assert postworkflow_1_response.status_code == 201
         assert postworkflowtemplate_1_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
@@ -1533,17 +1610,17 @@ def test_create_task():
 
     # act
         posttask_1_response = requests.post(
-            PREFIX + "/task/new", json=task_1, headers=headers)
+            PREFIX + "/task/new", json=task_1, headers=headers, verify=False)
         posttask_2_response = requests.post(
-            PREFIX + "/task/new", json=task_2, headers=headers)
+            PREFIX + "/task/new", json=task_2, headers=headers, verify=False)
         posttask_3_response = requests.post(
-            PREFIX + "/task/new", json=task_3, headers=headers)
+            PREFIX + "/task/new", json=task_3, headers=headers, verify=False)
         posttask_4_response = requests.post(
-            PREFIX + "/task/new", json=task_4, headers=headers)
+            PREFIX + "/task/new", json=task_4, headers=headers, verify=False)
         posttask_5_response = requests.post(
-            PREFIX + "/task/new", json=task_5, headers=headers)
+            PREFIX + "/task/new", json=task_5, headers=headers, verify=False)
         posttask_6_response = requests.post(
-            PREFIX + "/task/new", json=task_6, headers=headers)
+            PREFIX + "/task/new", json=task_6, headers=headers, verify=False)
 
     # check
         assert posttask_1_response.status_code == 201
@@ -1551,7 +1628,7 @@ def test_create_task():
         for key in task_1.keys():
             assert posttask_1_response_json[key] == task_1[key]
         gettask_1_response = requests.get(
-            PREFIX + "/task/" + posttask_1_response_json["id"], headers=headers)
+            PREFIX + "/task/" + posttask_1_response_json["id"], headers=headers, verify=False)
         assert gettask_1_response.status_code == 200
         gettask_1_response_json = gettask_1_response.json()
         for key in task_1.keys():
@@ -1577,18 +1654,18 @@ def test_create_task():
     finally:
         if postexam_response.status_code == 201:
             deleteexam_response = requests.delete(
-                PREFIX + "/" + postexam_response_json["id"], headers=headers)
+                PREFIX + "/" + postexam_response_json["id"], headers=headers, verify=False)
             assert deleteexam_response.status_code == 204
         if postexamtemplate_response.status_code == 201:
             postexamtemplate_response_json = postexamtemplate_response.json()
             deleteexamtemplate_response = requests.delete(
-                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers, verify=False)
             assert deleteexamtemplate_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204
         # deleting an exam, recursively deletes the corresponding workflows and tasks
 
@@ -1601,37 +1678,37 @@ def test_create_task_from_template():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
-        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers)
+        postexam_response = requests.post(PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postexam_response.status_code == 201
         postexam_response_json = postexam_response.json()
         exam_template = EXAM_TEMPLATE.copy()
         postexamtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postexamtemplate_response.status_code == 201
         postexamtemplate_response_json = postexamtemplate_response.json()
         workflow_template = WORKFLOW_TEMPLATE.copy()
         workflow_template["exam_id"] = postexamtemplate_response_json["id"]
         postworkflowtemplate_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template, headers=headers, verify=False)
         assert postworkflowtemplate_response.status_code == 201
         postworkflowtemplate_response_json = postworkflowtemplate_response.json()
         workflow = WORKFLOW_TEMPLATE.copy()
         workflow["exam_id"] = postexam_response_json["id"]
         workflow["is_template"] = False
         postworkflow_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow, headers=headers)
+            PREFIX + "/workflow/new", json=workflow, headers=headers, verify=False)
         assert postworkflow_response.status_code == 201
         postworkflow_response_json = postworkflow_response.json()
         task_template = TASK_TEMPLATE.copy()
         task_template["workflow_id"] = postworkflowtemplate_response_json["id"]
         posttasktemplate_response = requests.post(
-            PREFIX + "/task/new", json=task_template, headers=headers)
+            PREFIX + "/task/new", json=task_template, headers=headers, verify=False)
         assert posttasktemplate_response.status_code == 201
         posttasktemplate_response_json = posttasktemplate_response.json()
         task = task_template.copy()
@@ -1639,7 +1716,7 @@ def test_create_task_from_template():
         task["name"] = "Automated test task"
         task["is_template"] = False
         posttask_response = requests.post(
-            PREFIX + "/task/new", json=task, headers=headers)
+            PREFIX + "/task/new", json=task, headers=headers, verify=False)
         assert posttask_response.status_code == 201
         posttask_response_json = posttask_response.json()
 
@@ -1651,7 +1728,8 @@ def test_create_task_from_template():
                 "template_id": posttasktemplate_response_json["id"],
                 "new_task_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers,
+            verify=False)
         posttaskfromtemplate_fail_1_response = requests.post(
             PREFIX + "/task",
             params={
@@ -1659,7 +1737,7 @@ def test_create_task_from_template():
                 "template_id": posttask_response_json["id"],
                 "new_task_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers, verify=False)
         posttaskfromtemplate_fail_2_response = requests.post(
             PREFIX + "/task",
             params={
@@ -1667,7 +1745,7 @@ def test_create_task_from_template():
                 "template_id": posttasktemplate_response_json["id"],
                 "new_task_is_template": False   # could also check with True
             },
-            headers=headers)
+            headers=headers, verify=False)
         posttaskfromtemplate_fail_3_response = requests.post(
             PREFIX + "/task",
             params={
@@ -1675,7 +1753,7 @@ def test_create_task_from_template():
                 "template_id": posttasktemplate_response_json["id"],
                 "new_task_is_template": True
             },
-            headers=headers)
+            headers=headers, verify=False)
         posttasktemplatefromtemplate_response = requests.post(
             PREFIX + "/task",
             params={
@@ -1683,7 +1761,7 @@ def test_create_task_from_template():
                 "template_id": posttasktemplate_response_json["id"],
                 "new_task_is_template": True
             },
-            headers=headers)
+            headers=headers, verify=False)
 
     # check
         assert posttaskfromtemplate_response.status_code == 201
@@ -1696,7 +1774,7 @@ def test_create_task_from_template():
         assert posttaskfromtemplate_response_json["is_template"] is False
         gettask_response = requests.get(
             PREFIX + "/task/" + posttaskfromtemplate_response_json["id"], 
-            headers=headers)
+            headers=headers, verify=False)
         assert gettask_response.status_code == 200
         gettask_response_json = gettask_response.json()
         for key in task_template.keys():
@@ -1719,7 +1797,7 @@ def test_create_task_from_template():
         # putupdatedworkflowtemplate_response = requests.put(
         #     PREFIX + "/workflow/" + postworkflow_response_json["id"],
         #     json=updated_workflow_template,
-        #     headers=headers)
+        #     headers=headers, verify=False)
         # assert putupdatedworkflowtemplate_response.status_code == 200
 
     # act
@@ -1730,7 +1808,7 @@ def test_create_task_from_template():
         #         "template_id": putupdatedworkflowtemplate_response.json()["id"],
         #         "new_workflow_is_template": False   # could also check with True
         #     },
-        #     headers=headers)
+        #     headers=headers, verify=False)
 
     # check
         # assert postworkflowfromupdatedtemplate_response.status_code == 201
@@ -1741,17 +1819,17 @@ def test_create_task_from_template():
     finally:
         # deleting exam recursively deletes associated workflows and tasks
         deleteexam_response = requests.delete(
-            PREFIX + "/" + postexam_response_json["id"], headers=headers)
+            PREFIX + "/" + postexam_response_json["id"], headers=headers, verify=False)
         assert deleteexam_response.status_code == 204
         if postexamtemplate_response.status_code == 201:
             deleteexamtemplate_response = requests.delete(
-                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers)
+                PREFIX + "/" + postexamtemplate_response_json["id"], headers=headers, verify=False)
             assert deleteexamtemplate_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -1759,10 +1837,10 @@ def test_get_task():
     # Successfully getting a task is already tested in test_create_task.
     access_token = login()
     headers = {"Authorization": "Bearer " + access_token}
-    gettask_response = requests.get(PREFIX + "/task/123", headers=headers)
+    gettask_response = requests.get(PREFIX + "/task/123", headers=headers, verify=False)
     assert gettask_response.status_code == 400   # invalid uuid format
     gettask_response = requests.get(
-        PREFIX + "/task/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers)
+        PREFIX + "/task/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", headers=headers, verify=False)
     assert gettask_response.status_code == 404
 
 
@@ -1773,14 +1851,14 @@ def test_get_all_workflow_tasks():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
         postnewexam_response = requests.post(
-            PREFIX + "/new", json=exam, headers=headers)
+            PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
         workflow_1 = WORKFLOW_TEMPLATE.copy()
@@ -1789,9 +1867,9 @@ def test_get_all_workflow_tasks():
         workflow_2 = workflow_1.copy()
         workflow_2["name"] = "Automated test workflow 2"
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         postworkflow_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers, verify=False)
         assert postworkflow_1_response.status_code == 201
         assert postworkflow_2_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
@@ -1805,11 +1883,11 @@ def test_get_all_workflow_tasks():
         task_3["name"] = "Automated test task 3"
         task_3["workflow_id"] = postworkflow_2_response_json["id"]
         posttask_1_response = requests.post(
-            PREFIX + "/task/new", json=task_1, headers=headers)
+            PREFIX + "/task/new", json=task_1, headers=headers, verify=False)
         posttask_2_response = requests.post(
-            PREFIX + "/task/new", json=task_2, headers=headers)
+            PREFIX + "/task/new", json=task_2, headers=headers, verify=False)
         posttask_3_response = requests.post(
-            PREFIX + "/task/new", json=task_3, headers=headers)
+            PREFIX + "/task/new", json=task_3, headers=headers, verify=False)
         assert posttask_1_response.status_code == 201
         assert posttask_2_response.status_code == 201
         assert posttask_3_response.status_code == 201
@@ -1817,11 +1895,11 @@ def test_get_all_workflow_tasks():
     # act
         getalltasks_response = requests.get(
             PREFIX + "/task/all/" + str(postworkflow_1_response_json["id"]), 
-            headers=headers)
+            headers=headers, verify=False)
         # could enforce error when requesting tasks for non existing workflow
         # getalltaskswrongid_response = requests.get(
         #     PREFIX + "/task/all/4969f66f-862e-4d4e-a6ff-a0a3fd1a14f5", 
-        #     headers=headers)
+        #     headers=headers, verify=False)
 
     # check
         assert getalltasks_response.status_code == 200
@@ -1846,13 +1924,13 @@ def test_get_all_workflow_tasks():
     finally:
         if postnewexam_response.status_code == 201:
             deleteexam1_response = requests.delete(
-                PREFIX + "/" + postnewexam_response.json()["id"], headers=headers)
+                PREFIX + "/" + postnewexam_response.json()["id"], headers=headers, verify=False)
             assert deleteexam1_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -1866,7 +1944,7 @@ def test_get_all_task_templates():
         exam_template_2["name"] = "Automated test template 2"
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam_1 = exam_template_1.copy()
@@ -1874,18 +1952,18 @@ def test_get_all_task_templates():
         exam_1["patient_id"] = postpatient_1_response_json["id"]
         getalltasktemplatesbefore_response = requests.get(
             PREFIX + "/task/templates/all",
-            headers=headers)
+            headers=headers, verify=False)
         assert getalltasktemplatesbefore_response.status_code == 200
         postnewexamtemplate_1_response = requests.post(
-            PREFIX + "/new", json=exam_template_1, headers=headers)
+            PREFIX + "/new", json=exam_template_1, headers=headers, verify=False)
         assert postnewexamtemplate_1_response.status_code == 201
         postnewexamtemplate_1_response_json = postnewexamtemplate_1_response.json()
         postnewexamtemplate_2_response = requests.post(
-            PREFIX + "/new", json=exam_template_2, headers=headers)
+            PREFIX + "/new", json=exam_template_2, headers=headers, verify=False)
         assert postnewexamtemplate_2_response.status_code == 201
         postnewexamtemplate_2_response_json = postnewexamtemplate_2_response.json()
         postnewexam_1_response = requests.post(
-            PREFIX + "/new", json=exam_1, headers=headers)
+            PREFIX + "/new", json=exam_1, headers=headers, verify=False)
         assert postnewexam_1_response.status_code == 201
         postnewexam_1_response_json = postnewexam_1_response.json()
         workflow_template_1 = WORKFLOW_TEMPLATE.copy()
@@ -1900,13 +1978,13 @@ def test_get_all_task_templates():
         workflow_1["exam_id"] = postnewexam_1_response_json["id"]
         workflow_1["is_template"] = False
         postworkflowtemplate_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers, verify=False)
         postworkflowtemplate_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_2, headers=headers, verify=False)
         postworkflowtemplate_3_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_3, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_3, headers=headers, verify=False)
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         assert postworkflowtemplate_1_response.status_code == 201
         assert postworkflowtemplate_2_response.status_code == 201
         assert postworkflowtemplate_3_response.status_code == 201
@@ -1928,13 +2006,13 @@ def test_get_all_task_templates():
         task_1["is_template"] = False
         task_1["workflow_id"] = postworkflow_1_response_json["id"]
         posttasktemplate_1_response = requests.post(
-            PREFIX + "/task/new", json=task_template_1, headers=headers)
+            PREFIX + "/task/new", json=task_template_1, headers=headers, verify=False)
         posttasktemplate_2_response = requests.post(
-            PREFIX + "/task/new", json=task_template_2, headers=headers)
+            PREFIX + "/task/new", json=task_template_2, headers=headers, verify=False)
         posttasktemplate_3_response = requests.post(
-            PREFIX + "/task/new", json=task_template_3, headers=headers)
+            PREFIX + "/task/new", json=task_template_3, headers=headers, verify=False)
         posttask_1_response = requests.post(
-            PREFIX + "/task/new", json=task_1, headers=headers)
+            PREFIX + "/task/new", json=task_1, headers=headers, verify=False)
         assert posttasktemplate_1_response.status_code == 201
         assert posttasktemplate_2_response.status_code == 201
         assert posttasktemplate_3_response.status_code == 201
@@ -1943,7 +2021,7 @@ def test_get_all_task_templates():
     # act
         getalltasktemplates_response = requests.get(
             PREFIX + "/task/templates/all",
-            headers=headers)
+            headers=headers, verify=False)
 
     # check
         assert getalltasktemplates_response.status_code == 200
@@ -1971,26 +2049,26 @@ def test_get_all_task_templates():
         if postnewexamtemplate_1_response.status_code == 201:
             deleteexamtemplate_1_presponse = requests.delete(
                 PREFIX + "/" + postnewexamtemplate_1_response_json["id"],
-                headers=headers,
+                headers=headers, verify=False,
             )
             assert deleteexamtemplate_1_presponse.status_code == 204
         if postnewexamtemplate_2_response.status_code == 201:
             deleteexamtemplate_2_presponse = requests.delete(
                 PREFIX + "/" + postnewexamtemplate_2_response_json["id"],
-                headers=headers,
+                headers=headers, verify=False,
             )
             assert deleteexamtemplate_2_presponse.status_code == 204
         if postnewexam_1_response.status_code == 201:
             deleteexam_1_presponse = requests.delete(
                 PREFIX + "/" + postnewexam_1_response_json["id"],
-                headers=headers,
+                headers=headers, verify=False,
             )
             assert deleteexam_1_presponse.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -2001,19 +2079,19 @@ def test_delete_task():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam = EXAM_TEMPLATE.copy()
         exam["patient_id"] = postpatient_1_response_json["id"]
         exam["is_template"] = False
         postnewexam_response = requests.post(
-            PREFIX + "/new", json=exam, headers=headers)
+            PREFIX + "/new", json=exam, headers=headers, verify=False)
         assert postnewexam_response.status_code == 201
         postnewexam_response_json = postnewexam_response.json()
         exam_template = EXAM_TEMPLATE.copy()
         postnewexamtemplate_response = requests.post(
-            PREFIX + "/new", json=exam_template, headers=headers)
+            PREFIX + "/new", json=exam_template, headers=headers, verify=False)
         assert postnewexamtemplate_response.status_code == 201
         postnewexamtemplate_response_json = postnewexamtemplate_response.json()
         workflow_1 = WORKFLOW_TEMPLATE.copy()
@@ -2024,15 +2102,15 @@ def test_delete_task():
         workflow_template_1 = WORKFLOW_TEMPLATE.copy()
         workflow_template_1["exam_id"] = postnewexamtemplate_response_json["id"]
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         assert postworkflow_1_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
         postworkflow_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers, verify=False)
         assert postworkflow_2_response.status_code == 201
         postworkflow_2_response_json = postworkflow_2_response.json()
         postworkflow_template_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_template_1, headers=headers, verify=False)
         assert postworkflow_template_response.status_code == 201
         postworkflow_template_response_json = postworkflow_template_response.json()
         task_1 = TASK_TEMPLATE.copy()
@@ -2046,26 +2124,26 @@ def test_delete_task():
         task_template["workflow_id"] = postworkflow_template_response_json["id"]
         task_template["is_template"] = True
         posttask_1_response = requests.post(
-            PREFIX + "/task/new", json=task_1, headers=headers)
+            PREFIX + "/task/new", json=task_1, headers=headers, verify=False)
         assert posttask_1_response.status_code == 201
         posttask_1_response_json = posttask_1_response.json()
         posttask_2_response = requests.post(
-            PREFIX + "/task/new", json=task_2, headers=headers)
+            PREFIX + "/task/new", json=task_2, headers=headers, verify=False)
         assert posttask_1_response.status_code == 201
         posttask_2_response_json = posttask_2_response.json()
         posttask_template_response = requests.post(
-            PREFIX + "/task/new", json=task_template, headers=headers)
+            PREFIX + "/task/new", json=task_template, headers=headers, verify=False)
         assert posttask_template_response.status_code == 201
         posttask_template_response_json = posttask_template_response.json()
 
     # act
         deletetask_1_response = requests.delete(
             PREFIX + "/task/" + posttask_1_response_json["id"], 
-            headers=headers
+            headers=headers, verify=False
         )
         deletetask_template_response = requests.delete(
             PREFIX + "/task/" + posttask_template_response_json["id"], 
-            headers=headers
+            headers=headers, verify=False
         )
 
     # check
@@ -2073,27 +2151,27 @@ def test_delete_task():
         assert deletetask_template_response.status_code == 204
         gettask_1_response = requests.get(
             PREFIX + "/task/" + posttask_1_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert gettask_1_response.status_code == 404
         gettask_2_response = requests.get(
             PREFIX + "/task/" + posttask_2_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert gettask_2_response.status_code == 200
         gettasktemplate_response = requests.get(
             PREFIX + "/task/" + posttask_template_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert gettasktemplate_response.status_code == 404
 
     # act
         if postnewexam_response.status_code == 201:
             deleteexam_response = requests.delete(
                 PREFIX + "/" + postnewexam_response_json["id"],
-                headers=headers
+                headers=headers, verify=False
             )
         if postnewexamtemplate_response.status_code:
             deleteexamtemplate_presponse = requests.delete(
                 PREFIX + "/" + postnewexamtemplate_response_json["id"],
-                headers=headers
+                headers=headers, verify=False
             )
 
     # check
@@ -2101,23 +2179,23 @@ def test_delete_task():
         assert deleteexamtemplate_presponse.status_code == 204
         gettask_2_response = requests.get(
             PREFIX + "/task/" + posttask_2_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert gettask_2_response.status_code == 404
         getworkflow_1_response = requests.get(
             PREFIX + "/workflow/" + postworkflow_1_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert getworkflow_1_response.status_code == 404
         getworkflow_2_response = requests.get(
             PREFIX + "/workflow/" + postworkflow_2_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert getworkflow_2_response.status_code == 404
         getexam_1_response = requests.get(
             PREFIX + "/exam/" + postnewexam_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert getexam_1_response.status_code == 404
         getexamtemplate_response = requests.get(
             PREFIX + "/exam/" + postnewexamtemplate_response_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert getexamtemplate_response.status_code == 404
 
     # cleanup
@@ -2126,7 +2204,7 @@ def test_delete_task():
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204
 
 
@@ -2137,20 +2215,20 @@ def test_update_task():
     try:
         patient_1 = PATIENT.copy()
         postpatient_1_response = requests.post(
-            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers)
+            PREFIX_PATIENT_MANAGER + "/", json=patient_1, headers=headers, verify=False)
         assert postpatient_1_response.status_code == 201
         postpatient_1_response_json = postpatient_1_response.json()
         exam_1 = EXAM_TEMPLATE.copy()
         exam_1["patient_id"] = postpatient_1_response_json["id"]
         exam_1["is_template"] = False
         postexam_1_response = requests.post(
-            PREFIX + "/new", json=exam_1, headers=headers)
+            PREFIX + "/new", json=exam_1, headers=headers, verify=False)
         assert postexam_1_response.status_code == 201
         postexam_1_response_json = postexam_1_response.json()
         exam_2 = exam_1.copy()
         exam_2["name"] = "Automated test exam 2"
         postexam_2_response = requests.post(
-            PREFIX + "/new", json=exam_2, headers=headers)
+            PREFIX + "/new", json=exam_2, headers=headers, verify=False)
         assert postexam_2_response.status_code == 201
         postexam_2_response_json = postexam_2_response.json()
         workflow_1 = WORKFLOW_TEMPLATE.copy()
@@ -2160,18 +2238,18 @@ def test_update_task():
         workflow_2["name"] = "Automated test workflow 2"
         workflow_2["exam_id"] = postexam_2_response_json["id"]
         postworkflow_1_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_1, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_1, headers=headers, verify=False)
         assert postworkflow_1_response.status_code == 201
         postworkflow_1_response_json = postworkflow_1_response.json()
         postworkflow_2_response = requests.post(
-            PREFIX + "/workflow/new", json=workflow_2, headers=headers)
+            PREFIX + "/workflow/new", json=workflow_2, headers=headers, verify=False)
         assert postworkflow_2_response.status_code == 201
         postworkflow_2_response_json = postworkflow_2_response.json()
         task_1 = TASK_TEMPLATE.copy()
         task_1["workflow_id"] = postworkflow_1_response_json["id"]
         task_1["is_template"] = False
         posttask_1_response = requests.post(
-            PREFIX + "/task/new", json=task_1, headers=headers)
+            PREFIX + "/task/new", json=task_1, headers=headers, verify=False)
         assert posttask_1_response.status_code == 201
         posttask_1_response_json = posttask_1_response.json()
         update_request_1 = {
@@ -2179,7 +2257,7 @@ def test_update_task():
             "name": "Automated test task updated",
             "description": "some task description updated",
             "comment": "some test comment updated",
-            "type": "CERTIFIED_DEVICE_TASK",
+            "type": "RECONSTRUCTION_TASK",
             "args": {
                 "arg1": "updated",
                 "arg2 updated": "val2",
@@ -2206,6 +2284,7 @@ def test_update_task():
                 "RAWDATA FANTASIA updated": "FANTASY EXPORT INTERFACE 1"
             },
             "status": "FINISHED",
+            "progress": 77,
             "is_template": False,
         }
         # update_request_2 = update_request_1.copy()
@@ -2220,7 +2299,7 @@ def test_update_task():
         updatetask_response_1 = requests.put(
             PREFIX + "/task/" + posttask_1_response_json["id"],
             json=update_request_1,
-            headers=headers
+            headers=headers, verify=False
         )
 
     # check
@@ -2230,7 +2309,7 @@ def test_update_task():
             assert updatetask_response_1_json[key] == update_request_1[key]
         gettask_response_1 = requests.get(
             PREFIX + "/task/" + updatetask_response_1_json["id"],
-            headers=headers)
+            headers=headers, verify=False)
         assert gettask_response_1.status_code == 200
         gettask_response_1_json = gettask_response_1.json()
         for key in update_request_1.keys():
@@ -2241,7 +2320,7 @@ def test_update_task():
     #     updatetask_response_2 = requests.put(
     #         PREFIX + "/task/" + posttask_1_response_json["id"],
     #         json=update_request_2,
-    #         headers=headers
+    #         headers=headers, verify=False
     #     )
     # # check
     #     assert updatetask_response_2.status_code == 403, \
@@ -2251,7 +2330,7 @@ def test_update_task():
         updatetask_response_3 = requests.put(
             PREFIX + "/task/" + posttask_1_response_json["id"],
             json=update_request_3,
-            headers=headers
+            headers=headers, verify=False
         )
     # check
         assert updatetask_response_3.status_code == 400, \
@@ -2261,7 +2340,7 @@ def test_update_task():
         updatetask_response_4 = requests.put(
             PREFIX + "/task/" + posttask_1_response_json["id"],
             json=update_request_4,
-            headers=headers
+            headers=headers, verify=False
         )
     # check
         assert updatetask_response_4.status_code == 400, \
@@ -2273,17 +2352,17 @@ def test_update_task():
             deleteexam_1_response = requests.delete(
                 PREFIX + "/" + 
                 postexam_1_response_json["id"],
-                headers=headers)
+                headers=headers, verify=False)
             assert deleteexam_1_response.status_code == 204
         if postexam_2_response.status_code == 201:
             deleteexam_2_response = requests.delete(
                 PREFIX + "/" + 
                 postexam_2_response_json["id"],
-                headers=headers)
+                headers=headers, verify=False)
             assert deleteexam_2_response.status_code == 204
         if postpatient_1_response.status_code == 201:
             deletepatient_1_response = requests.delete(
                 PREFIX_PATIENT_MANAGER + "/" + 
                 str(postpatient_1_response_json["id"]),
-                headers=headers)
+                headers=headers, verify=False)
             assert deletepatient_1_response.status_code == 204

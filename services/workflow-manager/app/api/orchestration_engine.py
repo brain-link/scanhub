@@ -3,7 +3,6 @@
 
 """Orchestration engine file for the workflow manager service."""
 
-import logging
 import os
 import uuid
 from datetime import datetime
@@ -105,7 +104,7 @@ class OrchestrationEngine:
         ------
             HTTPException: If the request to Airflow API fails.
         """
-        logging.info(f"Triggering Airflow DAG {task_id} with conf: {conf}")
+        print(f"Triggering Airflow DAG {task_id} with conf: {conf}")
 
         unique_dag_run_id = f"{task_id}_{uuid.uuid4()}"
 
@@ -117,19 +116,23 @@ class OrchestrationEngine:
             "logical_date": datetime.utcnow().isoformat() + "Z",
             "note": "Triggered via API"
         }
-        logging.info(f"Payload: {payload}")
+        print(f"Payload: {payload}")
+
+        request_url = f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns"
+
+        print("request_url:", request_url)
 
         response = requests.post(
-            url=f"{self.airflow_api_url}/api/v1/dags/{task_id}/dagRuns",
+            url=request_url,
             auth=(self.airflow_username, self.airflow_password),
             json=payload,
             timeout=5
         )
 
-        logging.info(f"Airflow API response: {response.status_code} - {response.text}")
+        print(f"Airflow API response: {response.status_code} - {response.text}")
 
         if response.status_code != 200:
-            logging.error(f"Failed to trigger Airflow task: {response.text}")
+            print(f"Failed to trigger Airflow task: {response.text}")
             raise HTTPException(status_code=response.status_code, detail=f"Failed to trigger Airflow task: {response.text}")
         return {"message": "Airflow task triggered successfully"}
 

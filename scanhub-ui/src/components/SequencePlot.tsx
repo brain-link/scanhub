@@ -9,7 +9,7 @@
 // import Typography from '@mui/joy/Typography'
 // import React from 'react'
 // import Plot from 'react-plotly.js'
-// import { useQuery } from 'react-query'
+// import { useQuery } from '@tanstack/react-query'
 
 // import sequenceClient from '../client/sequence-api'
 // import { SequenceViewerProps } from '../interfaces/components.interface'

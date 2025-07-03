@@ -14,7 +14,7 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { workflowsApi } from '../api'
 import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
@@ -23,6 +23,7 @@ import NotificationContext from '../NotificationContext'
 
 
 function WorkflowForm(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
+  // The form is in this separate component to make sure that the state is reset after closing the modal
 
   const initialWorkflow: BaseWorkflow = props.modalType == 'modify' ?
   {...props.item, status: 'UPDATED'}
@@ -42,22 +43,24 @@ function WorkflowForm(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
 
   const mutation = 
   props.modalType == 'modify' ?
-      useMutation(async () => {
-        await workflowsApi
-          .updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
+      useMutation({
+        mutationFn: async () => {
+          await workflowsApi.updateWorkflowApiV1ExamWorkflowWorkflowIdPut(props.item.id, workflow)
           .then(() => {
             props.onSubmit()
             showNotification({message: 'Updated Workflow.', type: 'success'})
           })
+        }
       })
     :
-      useMutation(async () => {
-        await workflowsApi
-          .createWorkflowApiV1ExamWorkflowNewPost(workflow)
+      useMutation({
+        mutationFn: async () => {
+          await workflowsApi.createWorkflowApiV1ExamWorkflowNewPost(workflow)
           .then(() => {
             props.onSubmit()
             showNotification({message: 'Created Workflow.', type: 'success'})
           })
+        }
       })
 
   const title = 'item' in props ? 'Update Workflow' : 'Create New Workflow'

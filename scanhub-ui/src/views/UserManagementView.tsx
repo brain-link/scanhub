@@ -4,18 +4,18 @@
  *
  * UserManagementView.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
-import AddSharpIcon from '@mui/icons-material/AddSharp'
-import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import Box from '@mui/joy/Box'
-import IconButton from '@mui/joy/IconButton'
-import LinearProgress from '@mui/joy/LinearProgress'
-import Sheet from '@mui/joy/Sheet'
-import Stack from '@mui/joy/Stack'
-import Typography from '@mui/joy/Typography'
+import * as React from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+
 import Container from '@mui/system/Container'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
-import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import AddSharpIcon from '@mui/icons-material/AddSharp'
+import DeleteIcon from '@mui/icons-material/DeleteOutlined'
+import AdminPanelSettingsSharpIcon from '@mui/icons-material/AdminPanelSettingsSharp'
+import Box from '@mui/joy/Box'
+import IconButton from '@mui/joy/IconButton'
+import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
 
 import NotificationContext from '../NotificationContext'
 import { useContext } from 'react'
@@ -24,10 +24,15 @@ import AlertItem from '../components/AlertItem'
 import { User, UserRole } from '../generated-client/userlogin'
 import { Alerts } from '../interfaces/components.interface'
 import UserCreateModal from '../components/UserCreateModal'
+import PasswordModal from '../components/PasswordModal'
+import ConfirmDeleteModal from '../components/ConfirmDelteModal'
+
 
 export default function UserManagementView() {
   const [, showNotification] = useContext(NotificationContext)
-  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
+  const [userCreateModalOpen, setUserCreateModalOpen] = React.useState<boolean>(false)
+  const [usernameToResetPasswordFor, setUsernameToResetPasswordFor] = React.useState('')
+  const [userToDelete, setUserToDelete] = React.useState('')
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
 
   const {
@@ -46,9 +51,9 @@ export default function UserManagementView() {
     },
   })
 
-  const delteMutation = useMutation<unknown, unknown, string>(async (username) => {
-    await userApi
-      .userDeleteApiV1UserloginDeleteuserDelete(username)
+  const delteMutation = useMutation<unknown, unknown, string>({
+    mutationFn: async (username) => {
+      await userApi.userDeleteApiV1UserloginDeleteuserDelete(username)
       .then(() => {
         showNotification({message: 'Deleted user ' + username, type: 'success'})
         refetch()
@@ -62,13 +67,14 @@ export default function UserManagementView() {
         }
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
 
-  const updateMutation = useMutation<unknown, unknown, User>(async (user) => {
-    await userApi
-      .updateUserApiV1UserloginUpdateuserPut(user)
+  const updateMutation = useMutation<unknown, unknown, User>({
+    mutationFn: async (user) => {
+      await userApi.updateUserApiV1UserloginUpdateuserPut(user)
       .then(() => {
-        console.log('Modified user:', user.username)
+        showNotification({message: 'Modified user ' + user.username, type: 'success'})
         setIsUpdating(false)
         refetch()
       })
@@ -83,21 +89,13 @@ export default function UserManagementView() {
         refetch()
         showNotification({message: errorMessage, type: 'warning'})
       })
+    }
   })
-
-  if (isLoading) {
-    return (
-      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <Typography>Loading patients...</Typography>
-        <LinearProgress variant='plain' />
-      </Container>
-    )
-  }
 
   if (isError) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <AlertItem title='Error Loading Patients' type={Alerts.Error} />
+        <AlertItem title='Error Loading Users' type={Alerts.Error} />
       </Container>
     )
   }
@@ -107,36 +105,20 @@ export default function UserManagementView() {
     { field: 'first_name', headerName: 'First name', width: 200, editable: true },
     { field: 'last_name', headerName: 'Last name', width: 200, editable: true },
     { field: 'email', headerName: 'e-Mail', width: 200, editable: true },
-    {
-      field: 'role',
-      type: 'singleSelect',
-      headerName: 'Role',
-      width: 200,
-      editable: true,
-      valueOptions: Object.values(UserRole),
+    { 
+      field: 'role', type: 'singleSelect', headerName: 'Role', width: 200, editable: true,
+      valueOptions: Object.values(UserRole)
     },
-    {
-      field: 'last_activity_unixtime',
-      headerName: 'Last Activity Time',
-      width: 200,
-      editable: false,
-      filterable: false,
+    { 
+      field: 'last_activity_unixtime', headerName: 'Last Activity Time', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
-      field: 'last_login_unixtime',
-      headerName: 'Last Login Time',
-      width: 200,
-      editable: false,
-      filterable: false,
+      field: 'last_login_unixtime' ,headerName: 'Last Login Time', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value * 1000).toLocaleString() : ''),
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Delete',
-      width: 150,
-      cellClassName: 'actions',
+      field: 'actions', type: 'actions', headerName: '', width: 200, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -145,7 +127,16 @@ export default function UserManagementView() {
             label='Delete'
             color='inherit'
             onClick={() => {
-              delteMutation.mutate(row.id.toString())
+              setUserToDelete(row.row.username)
+            }}
+          />,
+          <GridActionsCellItem
+            key='2'
+            icon={<AdminPanelSettingsSharpIcon />}
+            label='setpassword'
+            color='inherit'
+            onClick={() => {
+              setUsernameToResetPasswordFor(row.row.username)
             }}
           />,
         ]
@@ -156,8 +147,8 @@ export default function UserManagementView() {
   return (
     <Box sx={{ p: 3, width: '100%'}}>
       <UserCreateModal
-        isOpen={dialogOpen}
-        setOpen={setDialogOpen}
+        isOpen={userCreateModalOpen}
+        setOpen={setUserCreateModalOpen}
         onSubmit={() => {
           refetch()
         }}
@@ -166,26 +157,52 @@ export default function UserManagementView() {
       <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 2 }}> 
         <Typography level='title-md'>List of Users</Typography> 
         <IconButton size='sm' variant='outlined'>
-          <AddSharpIcon onClick={() => setDialogOpen(true)} />
+          <AddSharpIcon onClick={() => setUserCreateModalOpen(true)} />
         </IconButton>
       </Stack>
 
-      <Sheet variant='outlined' sx={{ p: 1, borderRadius: 'sm' }}>
+      <div style={{ height:'80vh', width: '100%'}}>
         <DataGrid
-          rows={users}
+          rows={users ? users : []}
           columns={columns}
           getRowId={(user) => user.username}
           hideFooterSelectedRowCount 
           editMode={'row'}
-          rowHeight={40}  // MUI default is 52
-          loading={isUpdating}
+          rowHeight={45}  // MUI default is 52
+          autoPageSize= {true}
+          loading={isUpdating || isLoading}
           processRowUpdate={(updatedUser) => {
             setIsUpdating(true)
             updateMutation.mutate(updatedUser)
             return updatedUser
           }}
+          sx={{
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: 'none !important',
+            },
+          }}
         />
-      </Sheet>
+      </div>
+
+      <PasswordModal 
+        onSubmit={() => {}} 
+        isOpen={usernameToResetPasswordFor != '' ? true : false} 
+        setOpen={(status) => {
+          if (status == false) setUsernameToResetPasswordFor('')
+        }}
+        modalType={'modify'}
+        item={usernameToResetPasswordFor}
+      />
+
+      <ConfirmDeleteModal 
+        onSubmit={() => delteMutation.mutate(userToDelete)}
+        isOpen={userToDelete != '' ? true : false} 
+        setOpen={(status) => {
+          if (status == false) setUserToDelete('')
+        }}
+        modalType={'modify'}
+        item={'User \'' + userToDelete + '\''}
+      />
     </Box>
   )
 }

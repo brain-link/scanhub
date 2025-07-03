@@ -3,43 +3,48 @@
 
 """Device data access layer."""
 
-from pprint import pprint
+from uuid import UUID
 
+from scanhub_libraries.models import DeviceCreationRequest
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from api.db import Device, async_session
-from api.models import BaseDevice, DeviceOut
 
 
-async def dal_create_device(payload: BaseDevice) -> Device:
+async def dal_create_device(request: DeviceCreationRequest, token_hash: str, salt: str) -> Device:
     """Add a new device to the database.
 
     Arguments
     ---------
         payload {BaseDevice} -- Pydantic base model to create a new database entry
 
-    Returns
-    -------
-        Device -- Database orm model
     """
-    new_device = Device(**payload.dict())
+    new_device = Device(
+        title=request.title,
+        description=request.description,
+        token_hash=token_hash,
+        salt=salt,
+        name=None,
+        manufacturer=None,
+        modality=None,
+        status="NEW",
+        site=None,
+        ip_address=None
+    )
     async with async_session() as session:
         session.add(new_device)
         await session.commit()
         await session.refresh(new_device)
-    # Debug
-    print("***** NEW DEVICE *****")
-    pprint(new_device.__dict__)
     return new_device
 
 
-async def dal_get_device(device_id: str) -> (Device | None):
+async def dal_get_device(device_id: UUID) -> (Device | None):
     """Fetch a device from database.
 
     Arguments
     ---------
-        device_id {str} -- Identifier of the device
+        device_id {UUID} -- Identifier of the device
 
     Returns
     -------
@@ -63,12 +68,12 @@ async def dal_get_all_devices() -> list[Device]:
     return devices
 
 
-async def dal_delete_device(device_id: str) -> bool:
+async def dal_delete_device(device_id: UUID) -> bool:
     """Delete a device by identifier.
 
     Parameters
     ----------
-        device_id {str} -- Identifier of the device to be deleted
+        device_id {UUID} -- Identifier of the device to be deleted
 
     Returns
     -------
@@ -82,21 +87,21 @@ async def dal_delete_device(device_id: str) -> bool:
         return False
 
 
-async def dal_update_device(device_id: str, payload: DeviceOut) -> (Device | None):
+async def dal_update_device(device_id: UUID, payload: dict) -> (Device | None):
     """Update an existing device in database.
 
     Parameters
     ----------
-        id {str} -- Identifier of device
-        payload {BaseDevice} -- Pydantic base model, data to be updated
+        id {UUID} -- Identifier of device
+        payload {dict} -- Dict with the fields to update.
 
     Returns
     -------
-        Device -- Updated database orm model
+        Device -- Updated database orm model.
     """
     async with async_session() as session:
         if device := await session.get(Device, device_id):
-            device.update(payload.dict())
+            device.update(payload)
             await session.commit()
             await session.refresh(device)
             return device

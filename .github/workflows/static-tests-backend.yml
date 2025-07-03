@@ -22,7 +22,6 @@ jobs:
           "workflow-manager",
           "device-manager",
           "user-login-manager",
-          "mri/sequence-manager",
           "patient-manager",
         ]
 

@@ -6,11 +6,11 @@
  * ConnectionStatus.tsx checks the connection to the backend services and displays either a small button that indicates the status or a full overview page.
  */
 import React, { useContext } from 'react'
-import { useQuery } from 'react-query'
-import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
 import IconButton from '@mui/joy/IconButton'
-import LanIcon from '@mui/icons-material/Lan';
+import LanIcon from '@mui/icons-material/Lan'
 import Typography from '@mui/joy/Typography'
 import Box from '@mui/joy/Box';
 
@@ -19,8 +19,7 @@ import {
   examManagerHealthApi,
   workflowManagerHealthApi,
   userLoginManagerHealthApi,
-  deviceManagerHealthApi,
-  sequenceManagerHealthApi } from '../api'
+  deviceManagerHealthApi } from '../api'
 import NotificationContext from '../NotificationContext'
 import useHealthCheck from '../utils/Healthcheck'
 
@@ -43,7 +42,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (patientManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to patient-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
             return Promise.reject('Error at health check of patient-manager.')
@@ -65,7 +64,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (examManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to exam-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
             return Promise.reject('Error at health check of exam-manager.')
@@ -87,7 +86,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (workflowManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to workflow-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
             return Promise.reject('Error at health check of workflow-manager.')
@@ -109,7 +108,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (userLoginHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to user-login-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
           return Promise.reject('Error at health check of user-login-manager.')
@@ -131,7 +130,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
           if (deviceManagerHealthIsError && result.data.status == 'ok') {
             showNotification({message: 'Reconnected to device-manager after connection loss.', type: 'success'})
           }
-          // return result.data
+          return result.data
         })
         .catch(() => {
           return Promise.reject('Error at health check of device-manager.')
@@ -139,29 +138,8 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
       },
     })
 
-    const {
-      // data,
-      isError: sequenceManagerHealthIsError
-    } = useQuery<unknown>({
-      queryKey: ['sequenceManagerHealth'],
-      refetchInterval: 5000,
-      retry: 0,
-      queryFn: async () => {
-        return await sequenceManagerHealthApi
-        .healthCheckApiV1MriSequencesHealthGet({timeout: 1000})
-        .then((result) => {
-          if (sequenceManagerHealthIsError && result.data.status == 'ok') {
-            showNotification({message: 'Reconnected to sequence-manager after connection loss.', type: 'success'})
-          }
-          // return result.data
-        })
-        .catch(() => {
-          return Promise.reject('Error at health check of sequence-manager.')
-        })
-      },
-    })
-
-    const nginxProxyIsError = useHealthCheck('http://localhost:8080')
+    const nginxProxyIsError = useHealthCheck('https://localhost:8443')
+    // const nginxProxyIsError = useHealthCheck('https://localhost')
   
     let statusColor: 'primary' | 'warning' | 'danger';
     statusColor = 'primary';
@@ -177,7 +155,7 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
     if (buttonOrPage == 'button') {
       return (
         <IconButton
-          variant='outlined'
+          variant='plain'
           color={statusColor}
           size='sm'
           onClick={() => {
@@ -224,11 +202,6 @@ export default function ConnectionStatus({buttonOrPage}: {buttonOrPage: 'button'
             <Typography fontSize='sm'>Device Manager</Typography>
             <Typography level='body-sm' textColor='text.primary'>
               {deviceManagerHealthIsError ? 'NOT REACHABLE' : 'OK'}
-            </Typography>
-
-            <Typography fontSize='sm'>Sequence Manager</Typography>
-            <Typography level='body-sm' textColor='text.primary'>
-              {sequenceManagerHealthIsError ? 'NOT REACHABLE' : 'OK'}
             </Typography>
 
             <Typography fontSize='sm'>Microservice Proxy</Typography>

@@ -4,113 +4,94 @@
  *
  * TaskModal.tsx is responsible for rendering a modal with an interface to create a new task or to modify an existing task.
  */
-import AddSharpIcon from '@mui/icons-material/AddSharp'
-import ClearIcon from '@mui/icons-material/Clear'
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab, { tabClasses } from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
 import Button from '@mui/joy/Button'
-import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
-import IconButton from '@mui/joy/IconButton'
 import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
+import Tooltip from '@mui/joy/Tooltip'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
 import Stack from '@mui/joy/Stack'
+import Grid from '@mui/joy/Grid'
 import Textarea from '@mui/joy/Textarea'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { deviceApi, sequenceApi, taskApi } from '../api'
-import { BaseTask, TaskOut, TaskType } from '../generated-client/exam'
-import { MRISequence } from '../generated-client/sequence/api'
+import TaskInfo from './TaskInfo';
+import { deviceApi, sequenceApi, taskApi, workflowManagerApi } from '../api'
+import { 
+  MRISequenceOut,
+  BaseAcquisitionTask,
+  AcquisitionTaskOut,
+  TaskType,
+  ItemStatus,
+  AcquisitionParameter,
+  DAGTaskOut,
+  BaseDAGTask
+} from '../generated-client/exam'
+
 import { DeviceOut } from '../generated-client/device/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
-function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
+function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<AcquisitionTaskOut>)
+{
+  // The form is in this separate component to make sure that the state is reset after closing the modal
+
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const initialTask: BaseTask = props.modalType == 'modify' ?
-    {...props.item, status: 'UPDATED'}
-  :
-    {
-      workflow_id: props.parentId,              // eslint-disable-line camelcase
-      name: '',
-      description: '',
-      comment: undefined,
-      type: TaskType.ProcessingTask,
-      status: 'NEW',
-      args: {},
-      artifacts: {},
-      destinations: {},
-      is_template: props.createTemplate,        // eslint-disable-line camelcase
-    }
-
-  const [task, setTask] = React.useState<BaseTask>(initialTask);
-
-  let sequenceParametersJson: {fov: {[key: string]: number}, fov_offset: {[key: string]: number}};
-  try {
-    sequenceParametersJson = JSON.parse(task.args.sequence_parameters);
-    if (sequenceParametersJson == undefined
-      || sequenceParametersJson.fov == undefined
-      || sequenceParametersJson.fov.X == undefined
-      || sequenceParametersJson.fov.Y == undefined
-      || sequenceParametersJson.fov.Z == undefined
-      || sequenceParametersJson.fov_offset == undefined
-      || sequenceParametersJson.fov_offset.X == undefined
-      || sequenceParametersJson.fov_offset.Y == undefined
-      || sequenceParametersJson.fov_offset.Z == undefined) {
-        throw Error()
-      }
-  } catch {
-    sequenceParametersJson = {
-      'fov': {
-        'X': 0,
-        'Y': 0,
-        'Z': 0
-      },
-      'fov_offset': {
-        'X': 0,
-        'Y': 0,
-        'Z': 0
-      }
-    }
-  }
-
-  // New argument
-  const [argKey, setArgKey] = React.useState<string>('')
-  const [argVal, setArgVal] = React.useState<string>('')
-
-  // New Destination
-  const [destinationKey, setDestinationKey] = React.useState<string>('')
-  const [destinationVal, setDestinationVal] = React.useState<string>('')
-
-  // New Artifact
-  const [artifactKey, setArtifactKey] = React.useState<string>('')
-  const [artifactVal, setArtifactVal] = React.useState<string>('')
+  const [task, setTask] = React.useState<BaseAcquisitionTask & { task_type: 'ACQUISITION' }>(
+    props.modalType == 'modify'
+      ? { ...(props.item as BaseAcquisitionTask), status: ItemStatus.Updated, task_type: 'ACQUISITION' }
+      : {
+          workflow_id: props.parentId,              // eslint-disable-line camelcase
+          name: '',
+          description: '',
+          task_type: 'ACQUISITION',
+          destination: '',
+          status: ItemStatus.New,
+          progress: 0,
+          is_template: props.createTemplate,        // eslint-disable-line camelcase
+          device_id: undefined,
+          sequence_id: '',
+          acquisition_parameter: {
+            fov_scaling: { x: 1., y: 1., z: 1. },
+            fov_offset: { x: 0., y: 0., z: 0. },
+            fov_rotation: { x: 0., y: 0., z: 0. },
+          } as AcquisitionParameter,
+        }
+  );
 
   // Post a new/modified task and reset
   const mutation = 
     props.modalType == 'modify' ?
-      useMutation(async () => {
-        await taskApi
-          .updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
           .then(() => {
             props.onSubmit()
-            showNotification({message: 'Updated Task.', type: 'success'})
+            showNotification({message: 'Updated acquisition task.', type: 'success'})
           })
+        }
       })
     :
-      useMutation(async () => {
-        await taskApi
-          .createTaskApiV1ExamTaskNewPost(task)
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.createTaskApiV1ExamTaskNewPost(task)
           .then(() => {
+            console.log('Created task', task)
             props.onSubmit()
-            showNotification({message: 'Created Task.', type: 'success'})
+            showNotification({message: 'Created acquisition ask.', type: 'success'})
           })
+        }
       })
 
   const {
@@ -118,11 +99,10 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
     // isLoading: isLoadingSequences,
     // isError: isErrorSequences,
     // refetch: refetchSequences,
-  } = useQuery<MRISequence[]>({
+  } = useQuery<MRISequenceOut[]>({
     queryKey: ['sequences'],
     queryFn: async () => {
-      return await sequenceApi
-        .getMriSequencesEndpointApiV1MriSequencesGet()
+      return await sequenceApi.getAllMriSequencesApiV1ExamSequencesAllGet()
         .then((result) => {
           return result.data
         })
@@ -145,7 +125,7 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
     },
   })
 
-  const title = props.modalType == 'modify' ? 'Update Task' : 'Create New Task'
+  const title = props.modalType == 'modify' ? 'Update Acquisition Task' : 'Create New Acquisition Task'
 
   return (
     <>
@@ -153,7 +133,8 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
         {title}
       </Typography>
 
-      <Stack direction='row' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
+      <Stack direction='column' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
+        
         <Stack spacing={1}>
           <FormLabel>Name</FormLabel>
           <Input
@@ -162,24 +143,7 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
             value={task.name}
           />
         </Stack>
-        <Stack spacing={1}>
-          <FormLabel>Type</FormLabel>
-          <Select
-            defaultValue={task.type}
-            placeholder={task.type}
-            size='sm'
-            onChange={(e: React.SyntheticEvent | null, key: TaskType | null) => {
-              // Only set type if key is not null
-              key ? setTask({ ...task, ['type']: TaskType[key as keyof typeof TaskType] }) : () => {}
-            }}
-          >
-            {Object.keys(TaskType).map((key) => (
-              <Option key={key} value={key}>
-                {TaskType[key as keyof typeof TaskType]}
-              </Option>
-            ))}
-          </Select>
-        </Stack>
+        
         <Stack spacing={1}>
           <FormLabel>Description</FormLabel>
           <Textarea
@@ -189,286 +153,395 @@ function TaskForm(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
             defaultValue={task.description}
           />
         </Stack>
-        {
-          !task.is_template ?
-            <Stack spacing={1}>
-              <FormLabel>Comment</FormLabel>
-              <Textarea
-                minRows={2}
-                name={'comment'}
-                onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-                defaultValue={task.comment}
-              />
-            </Stack>
-          :
-            undefined
-        }
+        
+        <Stack spacing={4} direction={'row'}>
+
+          <Stack spacing={1}>
+            <FormLabel>Sequence</FormLabel>
+            <Select
+              value={task.sequence_id ? task.sequence_id : null}
+              placeholder={'Select a sequence...'}
+              size='sm'
+              onChange={(event, value) => {
+                if (value) {
+                  setTask({ ...task, 'sequence_id': value.toString() })
+                }
+              }}
+            >
+              {sequences?.map((sequence) => {
+                return (
+                  <Option key={sequence.name + ' (' + sequence._id + ')'} value={sequence._id}>
+                    {sequence.name}
+                  </Option>
+                )
+              })}
+            </Select>
+          </Stack>
+          
+          <Stack spacing={1}>
+            <FormLabel>Device</FormLabel>
+            <Select
+              value={task.device_id ? task.device_id : null}
+              placeholder={'Select a device...'}
+              size='sm'
+              onChange={(event, value) => {
+                if (value) {
+                  setTask({ ...task, 'device_id': value.toString() })
+                }
+              }}
+            >
+              {devices?.map((device) => {
+                return (
+                  <Option key={device.id} value={device.id}>
+                    {device.name}
+                  </Option>
+                )
+              })}
+            </Select>
+          </Stack>
+
+        </Stack>
+
+        <Stack spacing={1}>
+          <FormLabel>Field of View Offset</FormLabel>
+          <Stack spacing={1} direction={'row'}>
+            {(['x', 'y', 'z'] as const).map((index) => (
+              <React.Fragment key={'FovOffset' + index}>
+                <FormLabel key={'FormLabelFovOffset' + index}>{index}</FormLabel>
+                <Input
+                  key={'InputFovOffset' + index}
+                  type="number"
+                  size='sm'
+                  slotProps={ {input: {min: -10000, max: 10000}} }
+                  value={task.acquisition_parameter.fov_offset?.[index] ?? 0}
+                  endDecorator="px"
+                  onChange={(event) => {
+                    setTask(prevTask => ({
+                      ...prevTask,
+                      acquisition_parameter: {
+                        ...prevTask.acquisition_parameter,
+                        fov_offset: {
+                          x: index === 'x' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_offset.x,
+                          y: index === 'y' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_offset.y,
+                          z: index === 'z' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_offset.z,
+                        }
+                      }
+                    }))
+                  }}
+                />
+              </React.Fragment>
+            ))}
+          </Stack>
+        </Stack>
+
+        <Stack spacing={1}>
+          <FormLabel>Field of View Scaling</FormLabel>
+          <Stack spacing={1} direction={'row'}>
+            {(['x', 'y', 'z'] as const).map((index) => (
+              <React.Fragment key={'FovScaling' + index}>
+                <FormLabel key={'FormLabelFovScaling' + index}>{index}</FormLabel>
+                <Input
+                  key={'InputFovScaling' + index}
+                  type="number"
+                  size='sm'
+                  slotProps={ {input: {min: 0, max: 100}} }
+                  value={task.acquisition_parameter.fov_scaling?.[index] ?? 0}
+                  endDecorator="px"
+                  onChange={(event) => {
+                    setTask(prevTask => ({
+                      ...prevTask,
+                      acquisition_parameter: {
+                        ...prevTask.acquisition_parameter,
+                        fov_scaling: {
+                          x: index === 'x' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_scaling.x,
+                          y: index === 'y' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_scaling.y,
+                          z: index === 'z' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_scaling.z,
+                        }
+                      }
+                    }))
+                  }}
+                />
+              </React.Fragment>
+            ))}
+          </Stack>
+        </Stack>
+
+        <Stack spacing={1}>
+          <FormLabel>Field of View Rotation</FormLabel>
+          <Stack spacing={1} direction={'row'}>
+            {(['x', 'y', 'z'] as const).map((index) => (
+              <React.Fragment key={'FovRotation' + index}>
+                <FormLabel key={'FormLabelFovRotation' + index}>{index}</FormLabel>
+                <Input
+                  key={'InputFovRotation' + index}
+                  type="number"
+                  size='sm'
+                  slotProps={ {input: {min: 0, max: 360}} }
+                  value={task.acquisition_parameter.fov_rotation?.[index] ?? 0}
+                  endDecorator="px"
+                  onChange={(event) => {
+                    setTask(prevTask => ({
+                      ...prevTask,
+                      acquisition_parameter: {
+                        ...prevTask.acquisition_parameter,
+                        fov_rotation: {
+                          x: index === 'x' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_rotation.x,
+                          y: index === 'y' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_rotation.y,
+                          z: index === 'z' ? event.target.valueAsNumber : prevTask.acquisition_parameter.fov_rotation.z,
+                        }
+                      }
+                    }))
+                  }}
+                />
+              </React.Fragment>
+            ))}
+          </Stack>
+        </Stack>
+
+        <Button
+          size='sm'
+          sx={{ maxWidth: 120 }}
+          onClick={(event) => {
+            event.preventDefault()
+            if (task.name == '') {
+              showNotification({message: 'Task name must not be empty.', type: 'warning'})
+            }
+            else if (task.description == '') {
+              showNotification({message: 'Task description must not be empty.', type: 'warning'})
+            }
+            else {
+              mutation.mutate()
+              props.setOpen(false)
+            }
+          }}
+        >
+          Save
+        </Button>
       </Stack>
-
-      {
-        (task.type == TaskType.DeviceTaskSimulator || task.type == TaskType.DeviceTaskSdk) ?
-          <Stack direction='row' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
-            <Stack spacing={1}>
-              <FormLabel>Sequence</FormLabel>
-              <Select
-                value={task.args.sequence_id ? task.args.sequence_id : null}
-                placeholder={'Select a sequence...'}
-                size='sm'
-                onChange={(event, value) => {
-                  if (value) {
-                    setTask({ ...task, args: { ...task.args, 'sequence_id': value.toString() } })
-                  }
-                }}
-              >
-                {sequences?.map((sequence) => {
-                  return (
-                    <Option key={sequence.name + ' (' + sequence._id + ')'} value={sequence._id}>
-                      {sequence.name}
-                    </Option>
-                  )
-                })}
-              </Select>
-            </Stack>
-            <Stack spacing={1}>
-              <FormLabel>Device</FormLabel>
-              <Select
-                value={task.args.device_id ? task.args.device_id : null}
-                placeholder={'Select a device...'}
-                size='sm'
-                onChange={(event, value) => {
-                  if (value) {
-                    setTask({ ...task, args: { ...task.args, 'device_id': value.toString() } })
-                  }
-                }}
-              >
-                {devices?.map((device) => {
-                  return (
-                    <Option key={device.id} value={device.id}>
-                      {device.name}
-                    </Option>
-                  )
-                })}
-              </Select>
-            </Stack>
-            <Stack spacing={1}>
-              <FormLabel>Field of View</FormLabel>
-              <Stack spacing={1} direction={'row'}>
-                {['X', 'Y', 'Z'].map((index) => [
-                  <FormLabel key={'FormLabelFov' + index}>{index}</FormLabel>,
-                  <Input
-                    key={'InputFov' + index}
-                    type="number"
-                    size='sm'
-                    slotProps={ {input: {min: 0, max: 30000}} }
-                    value={sequenceParametersJson.fov[index]}
-                    endDecorator="px"
-                    onChange={(event) => {
-                      sequenceParametersJson.fov[index] = event.target.valueAsNumber
-                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequenceParametersJson) } })
-                    }}
-                  />
-                  ])}
-              </Stack>
-            </Stack>
-            <Stack spacing={1}>
-              <FormLabel>Field of View Offset</FormLabel>
-              <Stack spacing={1} direction={'row'}>
-                {['X', 'Y', 'Z'].map((index) => [
-                  <FormLabel key={'FormLabelFovOffset' + index}>{index}</FormLabel>,
-                  <Input
-                    key={'InputFovOffset' + index}
-                    type="number"
-                    size='sm'
-                    slotProps={ {input: {min: 0, max: 30000}} }
-                    value={sequenceParametersJson.fov_offset[index]}
-                    endDecorator="px"
-                    onChange={(event) => {
-                      sequenceParametersJson.fov_offset[index] = event.target.valueAsNumber
-                      setTask({...task, args: { ...task.args, 'sequence_parameters': JSON.stringify(sequenceParametersJson) } })
-                    }}
-                  />
-                  ])}
-              </Stack>
-            </Stack>
-          </Stack>
-        : undefined
-      }
-
-      <Stack direction='row' spacing={4} useFlexGap sx={{ flexWrap: 'wrap' }}>
-
-        <Stack spacing={1}>
-          <FormLabel>Arguments</FormLabel>
-          <Stack direction='row' spacing={1}>
-            <FormControl>
-              <FormLabel>Key</FormLabel>
-              <Input onChange={(e) => setArgKey(e.target.value)} size='sm' value={argKey} />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Value</FormLabel>
-              <Stack direction='row' spacing={1}>
-                <Input onChange={(e) => setArgVal(e.target.value)} size='sm' value={argVal} />
-                <IconButton
-                  onClick={() => {
-                    setTask({ ...task, args: { ...task.args, [argKey]: argVal } })
-                    setArgKey('')
-                    setArgVal('')
-                  }}
-                  size='sm'
-                >
-                  <AddSharpIcon />
-                </IconButton>
-              </Stack>
-            </FormControl>
-          </Stack>
-
-          {task &&
-            Object.entries(task.args).map((arg, index) => (
-              <Stack direction='row' spacing={2} alignItems='center' key={index}>
-                <Typography level='body-sm' textColor='text.tertiary'>
-                  {arg[0]}: {arg[1]}
-                </Typography>
-                <IconButton
-                  size='sm'
-                  onClick={() => {
-                    setTask((prevTask) => {
-                      const tmpArgs = { ...prevTask.args }
-                      delete tmpArgs[arg[0]]
-                      return { ...prevTask, args: tmpArgs }
-                    })
-                  }}
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Stack>
-            ))}
-        </Stack>
-
-        <Stack spacing={1}>
-          <FormLabel>Destinations</FormLabel>
-
-          <Stack direction='row' spacing={1}>
-            <FormControl>
-              <FormLabel>Key</FormLabel>
-              <Input onChange={(e) => setDestinationKey(e.target.value)} size='sm' value={destinationKey} />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Value</FormLabel>
-              <Stack direction='row' spacing={1}>
-                <Input onChange={(e) => setDestinationVal(e.target.value)} size='sm' value={destinationVal} />
-                <IconButton
-                  onClick={() => {
-                    setTask({ ...task, destinations: { ...task.destinations, [destinationKey]: destinationVal } })
-                    setDestinationKey('')
-                    setDestinationVal('')
-                  }}
-                  size='sm'
-                >
-                  <AddSharpIcon />
-                </IconButton>
-              </Stack>
-            </FormControl>
-          </Stack>
-
-          {task &&
-            Object.entries(task.destinations).map((destination, index) => (
-              <Stack direction='row' spacing={2} alignItems='center' key={index}>
-                <Typography level='body-sm' textColor='text.tertiary'>
-                  {destination[0]}: {destination[1]}
-                </Typography>
-                <IconButton
-                  size='sm'
-                  onClick={() => {
-                    setTask((prevTask) => {
-                      const tmpDestinations = { ...prevTask.destinations }
-                      delete tmpDestinations[destination[0]]
-                      return { ...prevTask, destinations: tmpDestinations }
-                    })
-                  }}
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Stack>
-            ))}
-        </Stack>
-
-        <Stack spacing={1}>
-          <FormLabel>Artifacts</FormLabel>
-
-          <Stack direction='row' spacing={1}>
-            <FormControl>
-              <FormLabel>Key</FormLabel>
-              <Input onChange={(e) => setArtifactKey(e.target.value)} size='sm' value={artifactKey} />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Value</FormLabel>
-              <Stack direction='row' spacing={1}>
-                <Input onChange={(e) => setArtifactVal(e.target.value)} size='sm' value={artifactVal} />
-                <IconButton
-                  onClick={() => {
-                    setTask({ ...task, artifacts: { ...task.artifacts, [artifactKey]: artifactVal } })
-                    setArtifactKey('')
-                    setArtifactVal('')
-                  }}
-                  size='sm'
-                >
-                  <AddSharpIcon />
-                </IconButton>
-              </Stack>
-            </FormControl>
-          </Stack>
-
-          {task &&
-            Object.entries(task.artifacts).map((artifact, index) => (
-              <Stack direction='row' spacing={2} alignItems='center' key={index}>
-                <Typography level='body-sm' textColor='text.tertiary'>
-                  {artifact[0]}: {artifact[1]}
-                </Typography>
-                <IconButton
-                  size='sm'
-                  onClick={() => {
-                    setTask((prevTask) => {
-                      const tmpArtifacts = { ...prevTask.artifacts }
-                      delete tmpArtifacts[artifact[0]]
-                      return { ...prevTask, artifacts: tmpArtifacts }
-                    })
-                  }}
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Stack>
-            ))}
-        </Stack>
-      </Stack>
-
-      <Button
-        size='sm'
-        sx={{ maxWidth: 120 }}
-        onClick={(event) => {
-          event.preventDefault()
-          if (task.name == '') {
-            showNotification({message: 'Task name must not be empty.', type: 'warning'})
-          }
-          else if (task.description == '') {
-            showNotification({message: 'Task description must not be empty.', type: 'warning'})
-          }
-          else {
-            mutation.mutate()
-            props.setOpen(false)
-          }
-        }}
-      >
-        Save
-      </Button>
     </>
   )
 }
 
 
-export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<TaskOut>) {
+function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
+{
+  // The form is in this separate component to make sure that the state is reset after closing the modal
+  const [, showNotification] = React.useContext(NotificationContext)
 
+  const [task, setTask] = React.useState<BaseDAGTask & { task_type: 'DAG' }>(
+    props.modalType == 'modify'
+      ? { ...(props.item as BaseDAGTask), status: ItemStatus.Updated, task_type: 'DAG' }
+      : {
+          workflow_id: props.parentId,              // eslint-disable-line camelcase
+          name: '',
+          description: '',
+          task_type: 'DAG',
+          destination: '',
+          status: ItemStatus.New,
+          progress: 0,
+          is_template: props.createTemplate,        // eslint-disable-line camelcase
+          dag_type: TaskType.Reconstruction,
+          dag_id: '',
+        }
+  );
+
+  // Post a new/modified task and reset
+  const mutation = 
+    props.modalType == 'modify' ?
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
+          .then(() => {
+            props.onSubmit()
+            showNotification({message: 'Updated DAG task.', type: 'success'})
+          })
+        }
+      })
+    :
+      useMutation({
+        mutationFn: async () => {
+          await taskApi.createTaskApiV1ExamTaskNewPost(task)
+          .then(() => {
+            console.log('Created task', task)
+            props.onSubmit()
+            showNotification({message: 'Created DAG task.', type: 'success'})
+          })
+        }
+      })
+
+  const {
+    data: dags,
+    // isLoading: isLoadingDags,
+    // isError: isErrorDags,
+    // refetch: refetchDags,
+  } = useQuery<Array<{ dag_id: string; dag_display_name: string }>>({
+    queryKey: ['dags'],
+    queryFn: async () => {
+      const result = await workflowManagerApi.listAvailableTasksApiV1WorkflowmanagerTasksGet();
+      // Map to only include dag_id and dag_display_name
+      return result.data.tasks.dags.map((dag: { dag_id: string; dag_display_name: string }) => ({
+        dag_id: dag.dag_id,
+        dag_display_name: dag.dag_display_name,
+      }));
+    },
+  })
+
+  const {
+    data: inputTasks,
+    // isLoading: isLoadingDevices,
+    // isError: isErrorDevices,
+    // refetch: refetchDevices,
+  } = useQuery<(AcquisitionTaskOut | DAGTaskOut)[]>({
+    queryKey: ['inputTasks'],
+    queryFn: async () => {
+      const workflowId = props.modalType == 'create' ? props.parentId : props.item.workflow_id
+      if (workflowId) {
+        return await taskApi
+          .getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId)
+          .then((result) => {
+            if (props.modalType == 'modify') {
+              // Filter out the current task being modified
+              return (result.data as (AcquisitionTaskOut | DAGTaskOut)[]).filter(
+                (task) => task.id !== props.item.id
+              );
+            }
+            return result.data as (AcquisitionTaskOut | DAGTaskOut)[]
+          })
+      }
+      return []
+    },
+  })
+
+  const title = props.modalType == 'modify' ? 'Update DAG Task' : 'Create New DAG Task'
+
+  return (
+    <>
+      <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
+        {title}
+      </Typography>
+
+
+      <Stack spacing={1}>
+        <Grid container rowSpacing={1.5} columnSpacing={5}>
+          <Grid md={12}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              name={'name'}
+              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+              value={task.name}
+            />
+          </Grid>
+
+        
+          <Grid md={12}>
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              minRows={2}
+              name={'description'}
+              onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
+              defaultValue={task.description}
+            />
+          </Grid>
+
+          <Grid md={4}>
+            <FormLabel>DAG</FormLabel>
+            <Select
+              value={task.dag_id ? task.dag_id : null}
+              placeholder={'Select a DAG...'}
+              size='sm'
+              onChange={(event, value) => {
+                if (value) {
+                  setTask({ ...task, 'dag_id': value })
+                }
+              }}
+            >
+              {dags?.map((dag) => {
+                return (
+                  <Option key={dag.dag_id} value={dag.dag_id}>
+                    {dag.dag_display_name}
+                  </Option>
+                )
+              })}
+            </Select>
+          </Grid>
+
+          <Grid md={4}>
+            <FormLabel>DAG Type</FormLabel>
+            <Select
+              value={task.dag_type ? task.dag_type : null}
+              defaultValue={TaskType.Reconstruction}
+              size='sm'
+              onChange={(_, value) => {
+                if (value) {
+                  setTask({ ...task, 'dag_type': value })
+                }
+              }}
+            >
+              <Option key={'reconstruction'} value={TaskType.Reconstruction}>Reconstruction</Option>
+              <Option key={'processing'} value={TaskType.Processing}>Processing</Option>
+            </Select>
+          </Grid>
+
+          <Grid md={4}>
+            <FormLabel>Input</FormLabel>
+            <Select
+              value={task.input_id ? task.input_id : null}
+              placeholder={'Select an input...'}
+              size='sm'
+              onChange={(event, value) => {
+                if (value) {
+                  setTask({ ...task, 'input_id': value })
+                }
+              }}
+            >
+              {inputTasks?.map((inputTask) => {
+                return (
+                  <Tooltip
+                    key={`tooltip-${inputTask.id}`}
+                    placement='right'
+                    variant='outlined'
+                    arrow
+                    title={<TaskInfo data={inputTask} />}
+                  >
+                    <Option key={`option-${inputTask.id}`} value={inputTask.id}>
+                      {inputTask.name}
+                    </Option>
+                  </Tooltip>
+                )
+              })}
+            </Select>
+          </Grid>
+        
+          <Grid md={12}>
+            <Button
+              size='sm'
+              sx={{ maxWidth: 120 }}
+              onClick={(event) => {
+                event.preventDefault()
+                if (task.name == '') {
+                  showNotification({message: 'Task name must not be empty.', type: 'warning'})
+                }
+                else if (task.description == '') {
+                  showNotification({message: 'Task description must not be empty.', type: 'warning'})
+                }
+                else {
+                  mutation.mutate()
+                  props.setOpen(false)
+                }
+              }}
+            >
+              Save
+            </Button>
+          </Grid>
+
+        </Grid>
+      </Stack>
+    </>
+  )
+}
+
+
+export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<AcquisitionTaskOut | DAGTaskOut>) {
 
   return (
     <Modal
@@ -490,7 +563,36 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Tas
             bgcolor: 'background.body',
           }}
         />
-        <TaskForm {...props} />
+        {
+          props.modalType === 'modify' && 'item' in props ? 
+            (props.item.task_type === TaskType.Acquisition ?
+              <AcquisitionTaskForm {...props as ModalPropsModify<AcquisitionTaskOut>} /> :
+              (props.item.task_type === TaskType.Dag && <DagTaskForm {...props as ModalPropsModify<DAGTaskOut>} />)) :
+          <Tabs aria-label="tabs" defaultValue={0} sx={{ bgcolor: 'transparent' }}>
+            <TabList
+              disableUnderline
+              sx={{
+                p: 0.5,
+                gap: 0.5,
+                borderRadius: 'xl',
+                bgcolor: 'background.level1',
+                [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                  boxShadow: 'sm',
+                  bgcolor: 'background.surface',
+                },
+              }}
+            >
+              <Tab disableIndicator>Acquisition task</Tab>
+              <Tab disableIndicator>DAG task</Tab>
+            </TabList>
+            <TabPanel value={0}>
+              <AcquisitionTaskForm {...props as ModalPropsCreate} />
+            </TabPanel>
+            <TabPanel value={1}>
+              <DagTaskForm {...props as ModalPropsCreate} />
+            </TabPanel>
+          </Tabs>
+        }
       </ModalDialog>
     </Modal>
   )
