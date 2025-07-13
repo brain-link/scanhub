@@ -24,14 +24,16 @@ class Database:
     client: AsyncIOMotorClient | AsyncIOMotorDatabase | None = None
     collection: AsyncIOMotorCollection | None = None
 
+
 # Create a global database handle.
 db = Database()
+
 
 async def connect_to_mongo():
     """Connect to MongoDB using the configuration settings."""
     mongodb_username_filepath = "/run/secrets/sequence_database_root_username"
     mongodb_password_filepath = "/run/secrets/sequence_database_root_password"  # noqa: S105
-    if (os.path.exists(mongodb_username_filepath) and \
+    if (os.path.exists(mongodb_username_filepath) and
         os.path.exists(mongodb_password_filepath)
     ):
         with open(mongodb_username_filepath) as file:

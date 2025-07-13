@@ -102,7 +102,6 @@ async def startup():
     await connect_to_mongo()
 
 
-
 @app.on_event("shutdown")
 async def shutdown() -> None:
     """Shutdown function."""
@@ -138,6 +137,7 @@ async def readiness() -> dict:
         raise HTTPException(status_code=503, detail=f"Database not connected: {str(db.collection)}")
 
     return {"status": "ok"}
+
 
 @app.get("/api/v1/exam/dicom/{result_id}", response_class=FileResponse, status_code=200, tags=["results"])
 async def get_dicom(result_id: UUID | str) -> FileResponse:

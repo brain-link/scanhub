@@ -45,6 +45,7 @@ LOG_CALL_DELIMITER = "----------------------------------------------------------
 # to websockets but only to regular http endpoints.
 router = APIRouter()
 
+
 @router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])
 async def get_devices(current_user: Annotated[User, Depends(get_current_user)]) -> list[DeviceOut]:
     """

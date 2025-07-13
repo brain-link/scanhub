@@ -17,6 +17,7 @@ from app.db.postgres import (
 
 # ----- Exam data access layer
 
+
 async def add_exam_data(payload: BaseExam, creator: str) -> Exam:
     """Create new exam.
 

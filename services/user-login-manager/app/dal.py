@@ -52,7 +52,6 @@ async def update_user_data(username: str, data: dict) -> (UserSQL | None):
         return None
 
 
-
 async def get_user_from_token(access_token: str) -> (UserSQL | None):
     """Get user from token.
 

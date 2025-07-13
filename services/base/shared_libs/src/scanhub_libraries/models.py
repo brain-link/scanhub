@@ -11,7 +11,7 @@ from enum import Enum
 from uuid import UUID
 from typing import Literal, Any
 
-from pydantic import BaseModel, ConfigDict, Field  # noqa
+from pydantic import BaseModel, ConfigDict, Field, Extra  # noqa
 
 
 class Gender(str, Enum):
@@ -62,7 +62,7 @@ class DeviceCreationRequest(BaseModel):
     (to be sent by user first adding the device to the platform).
     """
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
 
     name: str
     description: str
@@ -70,7 +70,7 @@ class DeviceCreationRequest(BaseModel):
 class DeviceDetails(BaseModel):
     """Device creation request pydantic model."""
     
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
 
     device_name: str | None = None
     serial_number: str | None = None
@@ -121,7 +121,7 @@ class ItemStatus(str, Enum):
 class BaseMRISequence(BaseModel):
     """Base model for MRI sequence."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
     
     name: str
     description: str
@@ -143,13 +143,13 @@ class MRISequenceOut(BaseMRISequence):
 class BaseResult(BaseModel):
     """Result model."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
     task_id: UUID
     
 class SetResult(BaseModel):
     """Update result model."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
     type: ResultType
     directory: str
     filename: str
@@ -165,7 +165,7 @@ class ResultOut(BaseResult, SetResult):
 class BaseTask(BaseModel):
     """Task base model."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
 
     workflow_id: UUID | None = None
     name: str
@@ -229,7 +229,7 @@ class DAGTaskOut(TaskOut, BaseDAGTask):
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
 
     exam_id: UUID | None = None
     name: str
@@ -252,7 +252,7 @@ class WorkflowOut(BaseWorkflow):
 class BaseExam(BaseModel):
     """Exam base model."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
 
     patient_id: UUID | None = None
     name: str
@@ -305,7 +305,7 @@ class PasswordUpdateRequest(BaseModel):
 class BasePatient(BaseModel):
     """Patient pydantic base model."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra=Extra.ignore)
 
     first_name: str
     last_name: str

@@ -205,6 +205,7 @@ async def get_all_workflow_tasks(
     print("List of tasks: ", tasks)
     return [await get_task_out(data=task) for task in tasks]
 
+
 @task_router.get(
     "/task/templates/all",
     response_model=list[AcquisitionTaskOut | DAGTaskOut],

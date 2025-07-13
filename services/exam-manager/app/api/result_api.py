@@ -27,6 +27,7 @@ result_router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
+
 @result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
 async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
     """Create a task result.
@@ -58,6 +59,7 @@ async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends
         raise HTTPException(status_code=404, detail="Could not create result")
     result_out = ResultOut(**result.__dict__)
     return result_out
+
 
 @result_router.get(
     "/result/{result_id}",
@@ -95,6 +97,7 @@ async def get_result(
         raise HTTPException(status_code=404, detail="Result not found")
     return ResultOut(**result.__dict__)
 
+
 @result_router.get(
     "/result/all/{task_id}",
     response_model=list[ResultOut],
@@ -126,6 +129,7 @@ async def get_all_task_results(
     print("List of tasks: ", result)
     return result
 
+
 @result_router.delete("/result/{result_id}", response_model={}, status_code=204, tags=["results"])
 async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
     """Delete a task.
@@ -147,6 +151,7 @@ async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get
     if not await result_dal.delete_result_db(result_id=_id):
         message = "Could not delete result, either because it does not exist, or for another reason."
         raise HTTPException(status_code=404, detail=message)
+
 
 @result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
 async def set_result(

@@ -53,6 +53,7 @@ router = APIRouter()
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 dict_id_websocket: Dict[UUID, WebSocket] = {}
 
+
 @router.post('/start_scan_via_websocket', response_model={}, status_code=200, tags=["devices"])
 async def start_scan_via_websocket(
     task: AcquisitionTaskOut,
@@ -124,6 +125,7 @@ async def connection_with_valid_id_and_token(websocket: WebSocket) -> UUID:
 # but only to regular http endpoints.
 # pylint: disable=locally-disabled, too-many-branches
 # TODO improve overall logic and resilience
+
 
 @router.websocket('/ws')
 async def websocket_endpoint(

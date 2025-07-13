@@ -13,7 +13,6 @@ TODO: How to handle tasks, and where to trigger the device task?
 import json
 import logging
 import os
-from datetime import date
 from typing import Annotated, Any, Dict
 
 import requests
@@ -31,6 +30,7 @@ from scanhub_libraries.models import (
     WorkflowOut,
 )
 from scanhub_libraries.security import get_current_user
+from scanhub_libraries.utils import calc_age_from_date
 
 from .orchestration_engine import OrchestrationEngine
 
@@ -44,6 +44,11 @@ orchestration_engine = OrchestrationEngine()
 EXAM_MANAGER_URI = "exam-manager:8000"
 PATIENT_MANAGER_URI = "patient-manager:8100"
 DEVICE_MANAGER_URI = "device-manager:8000"
+
+
+router = APIRouter(dependencies=[Depends(get_current_user)])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+orchestration_engine = OrchestrationEngine()
 
 
 # Read the DATA_LAKE_DIRECTORY environment variable
@@ -69,6 +74,7 @@ async def trigger_task(task_id: str,
         raise HTTPException(status_code=get_task_response.status_code, detail="Failed to fetch task with id=" + str(task_id))
     task_raw = get_task_response.json()
     print(f"\n>>>>>\nTriggering task: {task_raw}\n")
+    task: AcquisitionTaskOut | DAGTaskOut
     if task_raw["task_type"] == "ACQUISITION":
         task = AcquisitionTaskOut(**task_raw)
     elif task_raw["task_type"] == "DAG":
@@ -98,8 +104,8 @@ async def trigger_task(task_id: str,
 
     if task.task_type == TaskType.ACQUISITION:
         task.acquisition_limits = AcquisitionLimits(
-            patient_height=patient.height,
-            patient_weight=patient.weight,
+            patient_height=int(patient.height),
+            patient_weight=int(patient.weight),
             patient_gender=patient.sex,
             patient_age=calc_age_from_date(patient.birth_date)
         )
@@ -207,6 +213,25 @@ async def callback_results_ready(dag_id: str, access_token: Annotated[str, Depen
 
 
 # Test endpoint to upload a file and trigger a DAG
+@router.get("/tasks/", tags=["WorkflowManager"])
+async def list_available_tasks():
+    """Endpoint to list the available tasks from the orchestration engine.
+
+    Currently, only Airflow is supported.
+
+    Returns
+    -------
+        dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+    """
+    try:
+        tasks = orchestration_engine.get_available_tasks()
+        return {"tasks": tasks}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+
+
 @router.post("/upload_and_trigger/{dag_id}/", tags=["WorkflowManager"])
 async def upload_and_trigger(dag_id: str,
                              access_token: Annotated[str, Depends(oauth2_scheme)],

@@ -32,6 +32,7 @@ exam_router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
+
 @exam_router.post("/new", response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam(payload: BaseExam,
                       user: Annotated[User, Depends(get_current_user)],

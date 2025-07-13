@@ -31,13 +31,12 @@ class Base(DeclarativeBase):
             setattr(self, key, value)
 
 
-
 postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
 postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
 postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
-if (os.path.exists(postgres_user_filepath) and \
-    os.path.exists(postgres_password_filepath) and \
-    os.path.exists(postgres_db_name_filepath) \
+if (os.path.exists(postgres_user_filepath) and
+    os.path.exists(postgres_password_filepath) and
+    os.path.exists(postgres_db_name_filepath)
 ):
     with open(postgres_user_filepath) as file:
         postgres_user = file.readline().strip()
@@ -142,6 +141,7 @@ class Task(Base):
         "with_polymorphic": "*",
     }
 
+
 class AcquisitionTask(Task):
     """Acquisition task ORM model."""
 
@@ -156,6 +156,7 @@ class AcquisitionTask(Task):
     device_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     acquisition_parameter: Mapped[AcquisitionParameter] = mapped_column(type_=JSON, nullable=False)
     acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=True)
+
 
 class DAGTask(Task):
     """DAG task ORM model."""
@@ -172,6 +173,7 @@ class DAGTask(Task):
     input_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
+
 class Result(Base):
     """Abstract result ORM model."""
 
@@ -187,6 +189,7 @@ class Result(Base):
     type: Mapped[ResultType] = mapped_column(nullable=True, default=ResultType.NOT_SET)
     directory: Mapped[str] = mapped_column(nullable=True, default="")
     filename: Mapped[str] = mapped_column(nullable=True, default="")
+
 
 # Create automap base
 MappedBase = automap_base()

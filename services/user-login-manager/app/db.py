@@ -25,9 +25,9 @@ class Base(DeclarativeBase):
 postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
 postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
 postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
-if (os.path.exists(postgres_user_filepath) and \
-    os.path.exists(postgres_password_filepath) and \
-    os.path.exists(postgres_db_name_filepath) \
+if (os.path.exists(postgres_user_filepath) and
+    os.path.exists(postgres_password_filepath) and
+    os.path.exists(postgres_db_name_filepath)
 ):
     with open(postgres_user_filepath) as file:
         postgres_user = file.readline().strip()
@@ -70,7 +70,6 @@ class UserSQL(Base):
     last_activity_unixtime: Mapped[int] = mapped_column(nullable=True)
     # time of last login, used for forced logout
     last_login_unixtime: Mapped[int] = mapped_column(nullable=True)
-
 
 
 # # Create automap base

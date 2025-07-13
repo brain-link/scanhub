@@ -36,9 +36,11 @@ sphinx_rtd_theme = "*"
 
 
 [tool.poetry.group.lint.dependencies]
-ruff = "^0.1.11"
-mypy = "^1.8.0"
+ruff = "^0.12.3"
+mypy = "^1.16.1"
 
+[tool.setuptools.package-data]
+"app" = ["py.typed"]
 
 [tool.ruff]
 src = ["app"]
@@ -64,5 +66,3 @@ warn_no_return = true
 warn_unreachable = true
 python_version = "3.10"
 ignore_missing_imports = true
-mypy_path = "app"
-explicit_package_bases = true   # TODO: Fix imports
