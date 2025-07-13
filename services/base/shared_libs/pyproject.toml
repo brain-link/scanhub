@@ -18,3 +18,6 @@ Homepage = "https://github.com/brain-link/scanhub"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/scanhub_libraries"]
+
+[tool.setuptools.package-data]
+"scanhub_libraries" = ["py.typed"]
