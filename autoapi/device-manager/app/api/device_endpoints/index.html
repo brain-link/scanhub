@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>exam-manager.app.dal.task_dal &#8212; ScanHub Documentation</title>
+    <title>device-manager.app.api.device_endpoints &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/exam-manager/app/dal/task_dal/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/device-manager/app/api/device_endpoints/index';</script>
     <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -364,11 +364,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">exam-manager.app.api</a></li>
-<li class="toctree-l1 current active"><a class="reference internal" href="../index.html">exam-manager.app.dal</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../db/index.html">exam-manager.app.db</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../main/index.html">exam-manager.app.main</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">exam-manager.app.tools</a></li>
+<li class="toctree-l1 current active"><a class="reference internal" href="../index.html">device-manager.app.api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../main/index.html">device-manager.app.main</a></li>
 </ul>
 </div>
 </nav></div>
@@ -409,7 +406,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">exam-manager.app.dal.task_dal</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">device-manager.app.api.device_endpoints</span></li>
   </ul>
 </nav>
 </div>
@@ -426,30 +423,47 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-exam-manager.app.dal.task_dal">
-<span id="exam-manager-app-dal-task-dal"></span><h1>exam-manager.app.dal.task_dal<a class="headerlink" href="#module-exam-manager.app.dal.task_dal" title="Link to this heading">#</a></h1>
-<p>Data acess layer (DAL) between fastapi endpoint and sql database.</p>
+  <section id="module-device-manager.app.api.device_endpoints">
+<span id="device-manager-app-api-device-endpoints"></span><h1>device-manager.app.api.device_endpoints<a class="headerlink" href="#module-device-manager.app.api.device_endpoints" title="Link to this heading">#</a></h1>
+<p>Device API Endpoints.</p>
+<p>This module defines the API routes and WebSocket endpoints for managing devices.
+It includes functionalities for:
+- CRUD operations on devices.
+- Device registration and status updates via WebSocket.</p>
+<p>Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.oauth2_scheme" title="device-manager.app.api.device_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER" title="device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.router" title="device-manager.app.api.device_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.dal.task_dal.add_task_data" title="exam-manager.app.dal.task_dal.add_task_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_task_data</span></code></a>(...)</p></td>
-<td><p>Add new task to database.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.get_devices" title="device-manager.app.api.device_endpoints.get_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_devices</span></code></a>(]) → list[scanhub_libraries.models.DeviceOut])</p></td>
+<td><p>Retrieve the list of registered devices.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.dal.task_dal.get_task_data" title="exam-manager.app.dal.task_dal.get_task_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_task_data</span></code></a>(→ app.db.postgres.Task | None)</p></td>
-<td><p>Get task by id.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.get_device" title="device-manager.app.api.device_endpoints.get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device</span></code></a>(current_user, device_id)</p></td>
+<td><p>Retrieve a specific device.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.dal.task_dal.get_all_task_data" title="exam-manager.app.dal.task_dal.get_all_task_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_task_data</span></code></a>(→ list[app.db.postgres.Task])</p></td>
-<td><p>Get a list of all tasks assigned to a certain workflow.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.create_device" title="device-manager.app.api.device_endpoints.create_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_device</span></code></a>(], request)</p></td>
+<td><p>Create device database entry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.dal.task_dal.get_all_task_template_data" title="exam-manager.app.dal.task_dal.get_all_task_template_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_task_template_data</span></code></a>(→ list[app.db.postgres.Task])</p></td>
-<td><p>Get a list of all tasks assigned to a certain workflow.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.dal.task_dal.delete_task_data" title="exam-manager.app.dal.task_dal.delete_task_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_task_data</span></code></a>(→ bool)</p></td>
-<td><p>Delete task by id.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.dal.task_dal.update_task_data" title="exam-manager.app.dal.task_dal.update_task_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_task_data</span></code></a>(→ app.db.postgres.Task | None)</p></td>
-<td><p>Update existing task in database.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_endpoints.delete_device" title="device-manager.app.api.device_endpoints.delete_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_device</span></code></a>(device_id, current_user)</p></td>
+<td><p>Delete a device.</p></td>
 </tr>
 </tbody>
 </table>
@@ -457,120 +471,90 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.oauth2_scheme">
+<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#device-manager.app.api.device_endpoints.oauth2_scheme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER">
+<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">LOG_CALL_DELIMITER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'-------------------------------------------------------------------------------'</span></em><a class="headerlink" href="#device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.router">
+<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#device-manager.app.api.device_endpoints.router" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.dal.task_dal.add_task_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.task_dal.</span></span><span class="sig-name descname"><span class="pre">add_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseAcquisitionTask</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.BaseDAGTask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creator</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask" title="exam-manager.app.db.postgres.AcquisitionTask"><span class="pre">app.db.postgres.AcquisitionTask</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../db/postgres/index.html#exam-manager.app.db.postgres.DAGTask" title="exam-manager.app.db.postgres.DAGTask"><span class="pre">app.db.postgres.DAGTask</span></a></span></span><a class="headerlink" href="#exam-manager.app.dal.task_dal.add_task_data" title="Link to this definition">#</a></dt>
-<dd><p>Add new task to database.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>payload</dt><dd><p>Task pydantic base model</p>
-</dd>
-<dt>creator</dt><dd><p>The username/id of the user who creats this task</p>
-</dd>
-</dl>
-</section>
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.get_devices">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">get_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.DeviceOut</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#device-manager.app.api.device_endpoints.get_devices" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve the list of registered devices.</p>
 <section id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Database orm model of created task</p>
+<div><p>List[Device]: The list of registered devices.</p>
 </div></blockquote>
 </section>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.dal.task_dal.get_task_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.task_dal.</span></span><span class="sig-name descname"><span class="pre">get_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../db/postgres/index.html#exam-manager.app.db.postgres.Task" title="exam-manager.app.db.postgres.Task"><span class="pre">app.db.postgres.Task</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.dal.task_dal.get_task_data" title="Link to this definition">#</a></dt>
-<dd><p>Get task by id.</p>
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.get_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.device_endpoints.get_device" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve a specific device.</p>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>device_id (str): The ID of the device.</p>
+</div></blockquote>
+</section>
 <section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: The response containing the information about the device</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.create_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">create_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.DeviceCreationRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.StreamingResponse</span></span></span><a class="headerlink" href="#device-manager.app.api.device_endpoints.create_device" title="Link to this definition">#</a></dt>
+<dd><p>Create device database entry.</p>
+<p>Only devices which are created by a user via this endpoint and have the device_id and device_token
+that result from this call configured correctly can later connect and register.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>task_id</dt><dd><p>Id of the requested task</p>
+<dt>request:</dt><dd><p>DeviceCreationRequest to create device in Scanhub.
+Further details of the device are later provided by the device itself.</p>
 </dd>
 </dl>
 </section>
+<section id="return">
+<h3>Return<a class="headerlink" href="#return" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>device_token:</dt><dd><p>the token of the device which the user should copy manually to the configuration file of the device.</p>
+</dd>
+<dt>device_id:</dt><dd><p>the id of the device, should be copied to the devices config file together with the device_token.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.device_endpoints.delete_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_endpoints.</span></span><span class="sig-name descname"><span class="pre">delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.device_endpoints.delete_device" title="Link to this definition">#</a></dt>
+<dd><p>Delete a device.</p>
 <section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<h3>Args<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Database orm model with data of requested task</p>
+<div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.dal.task_dal.get_all_task_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.task_dal.</span></span><span class="sig-name descname"><span class="pre">get_all_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../db/postgres/index.html#exam-manager.app.db.postgres.Task" title="exam-manager.app.db.postgres.Task"><span class="pre">app.db.postgres.Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#exam-manager.app.dal.task_dal.get_all_task_data" title="Link to this definition">#</a></dt>
-<dd><p>Get a list of all tasks assigned to a certain workflow.</p>
 <section id="id3">
-<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>workflow_id</dt><dd><p>Id of the parent workflow entry, tasks are assigned to</p>
-</dd>
-</dl>
-</section>
-<section id="id4">
-<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>List of task data base orm models</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.dal.task_dal.get_all_task_template_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.task_dal.</span></span><span class="sig-name descname"><span class="pre">get_all_task_template_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../db/postgres/index.html#exam-manager.app.db.postgres.Task" title="exam-manager.app.db.postgres.Task"><span class="pre">app.db.postgres.Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#exam-manager.app.dal.task_dal.get_all_task_template_data" title="Link to this definition">#</a></dt>
-<dd><p>Get a list of all tasks assigned to a certain workflow.</p>
-<section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>workflow_id</dt><dd><p>Id of the parent workflow entry, tasks are assigned to</p>
-</dd>
-</dl>
-</section>
-<section id="id6">
-<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>List of task data base orm models</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.dal.task_dal.delete_task_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.task_dal.</span></span><span class="sig-name descname"><span class="pre">delete_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#exam-manager.app.dal.task_dal.delete_task_data" title="Link to this definition">#</a></dt>
-<dd><p>Delete task by id.</p>
-<section id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>task_id</dt><dd><p>Id of the task to be deleted</p>
-</dd>
-</dl>
-</section>
-<section id="id8">
-<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Success of deletion</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.dal.task_dal.update_task_data">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.dal.task_dal.</span></span><span class="sig-name descname"><span class="pre">update_task_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseAcquisitionTask</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.BaseDAGTask</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../db/postgres/index.html#exam-manager.app.db.postgres.Task" title="exam-manager.app.db.postgres.Task"><span class="pre">app.db.postgres.Task</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.dal.task_dal.update_task_data" title="Link to this definition">#</a></dt>
-<dd><p>Update existing task in database.</p>
-<section id="id9">
-<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>task_id</dt><dd><p>Id of the task to be updateed</p>
-</dd>
-<dt>payload</dt><dd><p>Task pydantic base model with data to be updated</p>
-</dd>
-</dl>
-</section>
-<section id="id10">
-<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Database orm model of updated task</p>
+<div><p>dict: The response indicating the success or failure of the deletion.</p>
 </div></blockquote>
 </section>
 </dd></dl>
@@ -607,14 +591,16 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.dal.task_dal.add_task_data"><code class="docutils literal notranslate"><span class="pre">add_task_data()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.dal.task_dal.get_task_data"><code class="docutils literal notranslate"><span class="pre">get_task_data()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.dal.task_dal.get_all_task_data"><code class="docutils literal notranslate"><span class="pre">get_all_task_data()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.dal.task_dal.get_all_task_template_data"><code class="docutils literal notranslate"><span class="pre">get_all_task_template_data()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.dal.task_dal.delete_task_data"><code class="docutils literal notranslate"><span class="pre">delete_task_data()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.dal.task_dal.update_task_data"><code class="docutils literal notranslate"><span class="pre">update_task_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER"><code class="docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.get_devices"><code class="docutils literal notranslate"><span class="pre">get_devices()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.get_device"><code class="docutils literal notranslate"><span class="pre">get_device()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.create_device"><code class="docutils literal notranslate"><span class="pre">create_device()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_endpoints.delete_device"><code class="docutils literal notranslate"><span class="pre">delete_device()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -624,7 +610,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../../../_sources/autoapi/exam-manager/app/dal/task_dal/index.rst.txt"
+      <li><a href="../../../../../_sources/autoapi/device-manager/app/api/device_endpoints/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

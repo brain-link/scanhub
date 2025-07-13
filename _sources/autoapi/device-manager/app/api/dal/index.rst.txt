@@ -7,6 +7,13 @@ device-manager.app.api.dal
 
    Device data access layer.
 
+   Provides functions to interact with the device database, including creating,
+   updating, retrieving, and deleting device records. It uses SQLAlchemy for
+   asynchronous database operations and Pydantic models for data validation.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
 
 
 Functions
@@ -24,7 +31,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: dal_create_device(request: scanhub_libraries.models.DeviceCreationRequest, token_hash: str, salt: str) -> api.db.Device
+.. py:function:: dal_create_device(request: scanhub_libraries.models.DeviceCreationRequest, token_hash: str, salt: str) -> app.api.db.Device
    :async:
 
 
@@ -36,7 +43,7 @@ Module Contents
 
 
 
-.. py:function:: dal_get_device(device_id: uuid.UUID) -> api.db.Device | None
+.. py:function:: dal_get_device(device_id: uuid.UUID) -> app.api.db.Device | None
    :async:
 
 
@@ -51,7 +58,7 @@ Module Contents
        Device -- Database orm model
 
 
-.. py:function:: dal_get_all_devices() -> list[api.db.Device]
+.. py:function:: dal_get_all_devices() -> list[app.api.db.Device]
    :async:
 
 
@@ -77,7 +84,7 @@ Module Contents
        bool -- Success of delete event
 
 
-.. py:function:: dal_update_device(device_id: uuid.UUID, payload: dict) -> api.db.Device | None
+.. py:function:: dal_update_device(device_id: uuid.UUID, payload: dict) -> app.api.db.Device | None
    :async:
 
 

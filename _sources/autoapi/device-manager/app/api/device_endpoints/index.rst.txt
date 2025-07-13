@@ -1,0 +1,116 @@
+device-manager.app.api.device_endpoints
+=======================================
+
+.. py:module:: device-manager.app.api.device_endpoints
+
+.. autoapi-nested-parse::
+
+   Device API Endpoints.
+
+   This module defines the API routes and WebSocket endpoints for managing devices.
+   It includes functionalities for:
+   - CRUD operations on devices.
+   - Device registration and status updates via WebSocket.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device-manager.app.api.device_endpoints.oauth2_scheme
+   device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER
+   device-manager.app.api.device_endpoints.router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device-manager.app.api.device_endpoints.get_devices
+   device-manager.app.api.device_endpoints.get_device
+   device-manager.app.api.device_endpoints.create_device
+   device-manager.app.api.device_endpoints.delete_device
+
+
+Module Contents
+---------------
+
+.. py:data:: oauth2_scheme
+
+.. py:data:: LOG_CALL_DELIMITER
+   :value: '-------------------------------------------------------------------------------'
+
+
+.. py:data:: router
+
+.. py:function:: get_devices(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.DeviceOut]
+   :async:
+
+
+   Retrieve the list of registered devices.
+
+   Returns
+   -------
+       List[Device]: The list of registered devices.
+
+
+.. py:function:: get_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], device_id: uuid.UUID)
+   :async:
+
+
+   Retrieve a specific device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response containing the information about the device
+
+
+.. py:function:: create_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], request: scanhub_libraries.models.DeviceCreationRequest) -> fastapi.responses.StreamingResponse
+   :async:
+
+
+   Create device database entry.
+
+   Only devices which are created by a user via this endpoint and have the device_id and device_token
+   that result from this call configured correctly can later connect and register.
+
+   Parameters
+   ----------
+   request:
+       DeviceCreationRequest to create device in Scanhub.
+       Further details of the device are later provided by the device itself.
+
+   Return
+   ------
+   device_token:
+       the token of the device which the user should copy manually to the configuration file of the device.
+
+   device_id:
+       the id of the device, should be copied to the devices config file together with the device_token.
+
+
+.. py:function:: delete_device(device_id: uuid.UUID, current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)])
+   :async:
+
+
+   Delete a device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response indicating the success or failure of the deletion.
+
+
