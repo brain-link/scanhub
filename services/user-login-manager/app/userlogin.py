@@ -223,11 +223,15 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
         samesite='strict'
     )
     return User(
-        **user_db.__dict__,
+        username=user_db.username,
+        first_name=user_db.first_name,
+        last_name=user_db.last_name,
+        email=user_db.email,
+        role=UserRole(user_db.role),
         access_token=return_token,
         token_type="bearer",    # noqa: S106
         last_activity_unixtime=None,
-        last_login_unixtime=None
+        last_login_unixtime=None,
     )
 
 
@@ -245,7 +249,17 @@ async def logout(user: Annotated[User, Depends(get_current_user)], response: Res
 
 async def get_user_out(user_db: UserSQL) -> User:
     """Convert UserSQL to User, replace token with empty string."""
-    return User(**user_db.__dict__, access_token="", token_type="")
+    return User(
+            username=user_db.username,
+            first_name=user_db.first_name,
+            last_name=user_db.last_name,
+            email=user_db.email,
+            role=UserRole(user_db.role),
+            access_token="",
+            token_type="",
+            last_activity_unixtime=None,
+            last_login_unixtime=None,
+        )
 
 
 @router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])

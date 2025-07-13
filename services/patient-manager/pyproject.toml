@@ -28,7 +28,6 @@ pytest = "*"
 sphinx = "*"
 sphinx_rtd_theme = "*"
 
-
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.12.3"
 mypy = "^1.16.1"
