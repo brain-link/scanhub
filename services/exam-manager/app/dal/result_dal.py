@@ -5,7 +5,7 @@
 
 from uuid import UUID
 
-from scanhub_libraries.models import BaseResult
+from scanhub_libraries.models import SetResult
 from sqlalchemy.engine import Result as SQLResult
 from sqlalchemy.future import select
 
@@ -63,7 +63,7 @@ async def get_all_results_db(task_id: UUID) -> list[Result]:
         result: SQLResult = await session.execute(select(Result).where(Result.task_id == task_id))
         return list(result.scalars().all())
 
-async def update_result_db(result_id: UUID, payload: BaseResult) -> Result | None:
+async def update_result_db(result_id: UUID, payload: SetResult) -> Result | None:
     """Update existing result in database.
 
     Parameters

@@ -1,8 +1,11 @@
-# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
+Pydantic models of ScanHub.
 
-"""Pydantic models of acquisition control."""
-# TODO: Add docstrings to all models and fields, such that they can be shown in the OpenAPI documentation
+TODO: Add docstrings to all models and fields, such that they can be shown in the OpenAPI documentation
+
+Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
 from datetime import date, datetime
 from enum import Enum
 from uuid import UUID

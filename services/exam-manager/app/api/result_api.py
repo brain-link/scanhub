@@ -11,7 +11,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 
 # from fastapi.responses import FileResponse
-from scanhub_libraries.models import BaseResult, SetResult, ResultOut, User
+from scanhub_libraries.models import ResultOut, SetResult, User
 from scanhub_libraries.security import get_current_user
 
 from app import LOG_CALL_DELIMITER
@@ -56,10 +56,8 @@ async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends
             raise HTTPException(status_code=400, detail="Result parent (task) must not be a template.")
     if not (result := await result_dal.add_blank_result_db(task_id=task_id)):
         raise HTTPException(status_code=404, detail="Could not create result")
-    print(result)
-    result = ResultOut(**result.__dict__)
-    print("Blank result created: ", result)
-    return result
+    result_out = ResultOut(**result.__dict__)
+    return result_out
 
 @result_router.get(
     "/result/{result_id}",

@@ -8,7 +8,7 @@ from uuid import UUID
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseExam, ExamOut, User
+from scanhub_libraries.models import BaseExam, ExamOut, ItemStatus, User
 from scanhub_libraries.security import get_current_user, oauth2_scheme
 
 from app import LOG_CALL_DELIMITER
@@ -121,7 +121,7 @@ async def create_exam_from_template(payload: BaseExam, template_id: UUID,
             detail="Request to create exam from exam instance instead of exam template."
         )
     new_exam = BaseExam(**payload.__dict__)
-    new_exam.status = 'NEW'
+    new_exam.status = ItemStatus.NEW
     if not (exam := await exam_dal.add_exam_data(payload=new_exam, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create exam.")
 
