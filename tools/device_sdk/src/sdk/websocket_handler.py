@@ -8,12 +8,11 @@ Classes:
     WebSocketHandler: Manages WebSocket connections with reconnect logic.
 """
 
-import asyncio
 import logging
 import ssl
 
-from websockets.asyncio.client import connect
-from websockets.exceptions import InvalidURI, InvalidHandshake, InvalidStatus, ConnectionClosed
+from websockets.client import connect
+from websockets.exceptions import ConnectionClosed
 
 
 class WebSocketHandler:
@@ -46,7 +45,7 @@ class WebSocketHandler:
         self.websocket = None
         self.reconnect_delay = reconnect_delay
         self.ca_file = ca_file
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("WebSockerHandler")
 
     async def connect(self):
         """
@@ -57,11 +56,12 @@ class WebSocketHandler:
 
         Logs specific connection-related errors and retries accordingly.
         """
+        print("Device ID:", self.device_id)
         self.websocket = await connect(
             self.uri,
-            additional_headers={
-                "device-id": self.device_id,
-                "device-token": self.device_token
+            extra_headers={
+                "Device-Id": str(self.device_id),
+                "Device-Token": str(self.device_token),
             },
             ssl=ssl.create_default_context(cafile=self.ca_file)
         )
@@ -108,3 +108,4 @@ class WebSocketHandler:
         if self.websocket:
             await self.websocket.close()
             self.logger.info("WebSocket connection closed.")
+            self.websocket = None

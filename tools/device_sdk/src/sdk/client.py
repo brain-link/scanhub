@@ -12,7 +12,12 @@ Classes:
 import asyncio
 import json
 import logging
-from .websocket_handler import WebSocketHandler
+import base64
+import numpy as np
+from sdk.websocket_handler import WebSocketHandler
+from scanhub_libraries.models import AcquisitionPayload
+
+logging.basicConfig(level=logging.INFO)
 
 class Client:
     """
@@ -35,8 +40,19 @@ class Client:
         error_handler (callable): Callback for handling error messages.
         logger (logging.Logger): Logger for the class.
     """
-    def __init__(self, websocket_uri, device_id, device_token, name, manufacturer, modality, 
-                 status, site, ip_address, reconnect_delay=5, ca_file=None):
+    def __init__(
+        self,
+        websocket_uri,
+        device_id,
+        device_token,
+        device_name,
+        serial_number,
+        manufacturer,
+        modality,
+        site,
+        reconnect_delay=5,
+        ca_file=None
+    ):
         """
         Initializes the Client instance.
 
@@ -44,11 +60,11 @@ class Client:
             websocket_uri (str): URI of the WebSocket server (device-manager).
             device_id (UUID): The Device ID. Copy it from Scanhub.
             device_token (str): The device-token used to authenticate the device. Copy it from Scanhub.
-            name (str): Name of the device.
+            device_name (str): Name of the device.
+            serial_number (str): Serial number of the device.
             manufacturer (str): Device manufacturer.
             modality (str): Device modality type.
             site (str): Device location.
-            ip_address (str): Device IP address.
             reconnect_delay (int, optional): Delay in seconds for reconnect attempts. Defaults to 5.
             ca_file (str | None): Filepath to a ca_file to verify the server.
         """
@@ -56,19 +72,18 @@ class Client:
         self.websocket_handler = WebSocketHandler(websocket_uri, device_id, device_token, ca_file=ca_file)
         self.device_id = device_id  # Unique ID for the device
         self.device_token = device_token
-        self.name = name
+        self.serial_number = serial_number
+        self.device_name = device_name
         self.manufacturer = manufacturer
         self.modality = modality
         self.site = site
-        self.ip_address = ip_address
         self.reconnect_delay = reconnect_delay
         self.feedback_handler = None  # Optional callback for feedback
         self.error_handler = None  # Optional callback for error
         self.scan_callback = None  # Callback for the scan process
 
-        # Configure logging
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
+        # Initialize logger
+        self.logger = logging.getLogger("DeviceClient")
 
     async def start(self):
         """
@@ -98,11 +113,11 @@ class Client:
             "command": "register",
             "data": {
                 "status": 'REGISTERED',
-                "name": self.name,
+                "device_name": self.device_name,
+                "serial_number": self.serial_number,
                 "manufacturer": self.manufacturer,
                 "modality": self.modality,
                 "site": self.site,
-                "ip_address": self.ip_address
             }
         }
         await self.websocket_handler.send_message(json.dumps(registration_data))
@@ -124,7 +139,8 @@ class Client:
                 command = data.get("command")
 
                 if command == "start":
-                    await self.handle_start_command(data.get("data"))
+                    payload = AcquisitionPayload(**data.get("data", {}))
+                    await self.handle_start_command(payload)
                 elif command == "feedback": # for feedback only 'message' is needed
                     await self.handle_feedback(data.get("message"))
                 else: # on error whole websocket message is needed
@@ -133,6 +149,8 @@ class Client:
                 self.logger.error("Received invalid JSON message: %s",
                                   message)
             except ConnectionError as e:
+                if self.websocket_handler.websocket is None:
+                    return  # No active connection, exit the loop
                 self.logger.error(e)
                 await self.reconnect()
             except Exception as e:
@@ -140,8 +158,7 @@ class Client:
                                   str(e))
                 await self.reconnect()
 
-
-    async def handle_start_command(self, deviceTask):
+    async def handle_start_command(self, payload: AcquisitionPayload):
         """
         Handles the 'start' command from the server to begin a scanning process.
 
@@ -154,7 +171,7 @@ class Client:
         try:
             if self.scan_callback:
                 # Call the external scan callback function
-                await self.scan_callback(deviceTask)
+                await self.scan_callback(payload)
             else:
                 self.logger.error("Scan callback not defined.")
                 await self.send_error_status("Scan callback not defined.")
@@ -163,7 +180,7 @@ class Client:
             self.logger.error("An error occurred while handling the start command: %s",
                               str(e))
 
-    async def send_status(self, status, data=None, record_id=None, user_access_token=None):
+    async def send_status(self, status, data=None, task_id=None, user_access_token=None):
         """
         Sends a status update to the server.
 
@@ -175,20 +192,38 @@ class Client:
             "command": "update_status",
             "status": status,
             "data": data,
-            "record_id": record_id,
+            "task_id": task_id,
             "user_access_token": user_access_token
         }
         await self.websocket_handler.send_message(json.dumps(status_data))
+    
+    async def upload_result(self, result: np.ndarray, task_id: str, user_access_token: str):
+        """Send scan result as base64-encoded binary."""
+        data_bytes = result.astype(np.float32).tobytes()
+        b64_data = base64.b64encode(data_bytes).decode("utf-8")
+        
+        result_data = {
+            "command": "result",
+            "task_id": task_id,
+            "user_access_token": user_access_token,
+            "shape": result.shape,
+            "dtype": "float32",
+            "data": b64_data,
+        }
 
-    async def send_scanning_status(self, progress, record_id, user_access_token):
+        await self.websocket_handler.send_message(json.dumps(result_data))
+        await self.send_ready_status()
+        self.logger.info("Uploaded result. Device status set to READY.")
+
+    async def send_scanning_status(self, progress, task_id, user_access_token):
         """
         Sends a 'scanning' status with progress percentage.
 
         Args:
             progress (int): The scanning progress percentage.
-            record_id (str): The record_id to report progress for.
+            task_id (str): The task ID to report progress for.
         """
-        await self.send_status("SCANNING", data={'progress': progress}, record_id=record_id, user_access_token=user_access_token)
+        await self.send_status("SCANNING", data={'progress': progress}, task_id=task_id, user_access_token=user_access_token)
 
     async def send_ready_status(self):
         """Sends a 'ready' status to the server."""
@@ -206,6 +241,7 @@ class Client:
     async def stop(self):
         """Closes the WebSocket connection."""
         await self.websocket_handler.close()
+        self.logger.info("WebSocket connection closed.")
 
     async def reconnect(self):
         """

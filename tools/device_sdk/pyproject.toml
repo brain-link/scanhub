@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["sdk"]
+package-dir = {"" = "src"}
+
+[project]
+name = "scanhub-device-sdk"
+version = "0.0.1"
+description = "Software development kit to connect devices to ScanHub."
+authors = [
+    {name="Johannes Behrens", email="johannes.behrens@brain-link.de"},
+    {name="David Schote", email="david.schote@brain-link.de"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+keywords = ["SDK, ScanHub, console, Device-SDK"]
+
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+dependencies = [
+    "numpy",
+    "websockets>=10.4",
+]
+
+[tool.setuptools.package-data]
+"sdk" = ["py.typed"]
