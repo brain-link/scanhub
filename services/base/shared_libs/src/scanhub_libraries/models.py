@@ -53,41 +53,6 @@ class AcquisitionLimits(BaseModel):
     patient_age: int
 
 
-# TODO: To be replaced by new acquisition task
-class SequenceParameters(BaseModel):
-    """Pydantic definition of SequenceParameters."""
-
-    fov: XYZ
-    fov_offset: XYZ
-
-
-# TODO: To be replaced by new acquisition task
-class ParametrizedSequence(BaseModel):
-    """Pydantic model definition of a parametrized sequence."""
-
-    acquisition_limits: AcquisitionLimits
-    sequence_parameters: SequenceParameters
-    sequence: str
-
-# TODO: To be replaced by new acquisition task
-class DeviceTask(BaseModel):
-    """Pydantic model definition of a device workflow."""
-
-    device_id: UUID
-    record_id: UUID
-    command: Commands
-    parametrized_sequence: ParametrizedSequence
-    user_access_token: str
-
-
-# TODO: Needed?
-class ScanStatus(BaseModel):  # pylint: disable=too-few-public-methods
-    """Pydantic definition of a scanstatus."""
-
-    record_id: UUID
-    status_percent: int
-
-
 class DeviceCreationRequest(BaseModel):
     """
     Device registration request pydantic model
@@ -96,21 +61,20 @@ class DeviceCreationRequest(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    title: str
+    name: str
     description: str
 
-
 class DeviceDetails(BaseModel):
-    """Device details pydantic model (to be sent by the device)."""
-
+    """Device creation request pydantic model."""
+    
     model_config = ConfigDict(extra="ignore")
 
-    name: str
-    manufacturer: str
-    modality: str
-    status: str
-    site: str
-    ip_address: str
+    device_name: str | None = None
+    serial_number: str | None = None
+    manufacturer: str | None = None
+    modality: str | None = None
+    status: str | None = None
+    site: str | None = None
 
 
 class DeviceOut(DeviceCreationRequest, DeviceDetails):
@@ -119,13 +83,6 @@ class DeviceOut(DeviceCreationRequest, DeviceDetails):
     id: UUID
     datetime_created: datetime
     datetime_updated: datetime | None = None
-
-
-class TaskEvent(BaseModel):
-    """Task Event."""  # noqa: E501
-
-    task_id: str
-    input: dict[str, str]
 
 
 class TaskType(str, Enum):
@@ -143,7 +100,9 @@ class ResultType(str, Enum):
 
     DICOM = "DICOM"
     MRD = "MRD"
+    NPY = "NUMPY"
     CALIBRATION = "CALIBRATION"
+    NOT_SET = "NOT_SET"
 
 class ItemStatus(str, Enum):
     """Task status enum."""
@@ -154,23 +113,51 @@ class ItemStatus(str, Enum):
     FINISHED = "FINISHED"
     DELETED = "DELETED"
     INPROGRESS = "INPROGRESS"
+    
+
+class BaseMRISequence(BaseModel):
+    """Base model for MRI sequence."""
+
+    model_config = ConfigDict(extra="ignore")
+    
+    name: str
+    description: str
+    sequence_type: str
+    tags: list[str] = []
+
+
+class MRISequenceOut(BaseMRISequence):
+    """Output model for MRI sequence."""
+
+    # Mongo db creates an object _id attribute, which is not a UUID
+    id: str = Field(alias="_id")
+    created_at: datetime
+    updated_at: datetime | None = None
+    file: Any
+    file_extension: str | None = None
 
 
 class BaseResult(BaseModel):
     """Result model."""
 
-    task_id: UUID | None = None
-    type: ResultType
-    status: ItemStatus = ItemStatus.NEW
-    directory: str = ""
-    filename: str = ""
-    progress: float = 0.
+    model_config = ConfigDict(extra="ignore")
+    task_id: UUID
+    
+class SetResult(BaseModel):
+    """Update result model."""
 
-class ResultOut(BaseResult):
+    model_config = ConfigDict(extra="ignore")
+    type: ResultType
+    directory: str
+    filename: str
+
+
+class ResultOut(BaseResult, SetResult):
     """Result output model."""
 
     id: UUID
     datetime_created: datetime
+
 
 class BaseTask(BaseModel):
     """Task base model."""
@@ -211,6 +198,14 @@ class AcquisitionTaskOut(TaskOut, BaseAcquisitionTask):
 
     acquisition_limits: AcquisitionLimits | None = None
 
+
+class AcquisitionPayload(AcquisitionTaskOut):
+    """Acquisition Task payload model."""
+
+    mrd_header: str | None = None
+    sequence: MRISequenceOut
+    access_token: str
+    
 
 class BaseDAGTask(BaseTask):
     """Workflow task model."""
@@ -328,23 +323,4 @@ class PatientOut(BasePatient):
     datetime_updated: datetime | None = None
 
 
-class BaseMRISequence(BaseModel):
-    """Base model for MRI sequence."""
 
-    model_config = ConfigDict(extra="ignore")
-    
-    name: str
-    description: str
-    sequence_type: str
-    tags: list[str] = []
-
-
-class MRISequenceOut(BaseMRISequence):
-    """Output model for MRI sequence."""
-
-    # Mongo db creates an object _id attribute, which is not a UUID
-    id: str = Field(alias="_id")
-    created_at: datetime
-    updated_at: datetime | None = None
-    file: Any
-    file_extension: str | None = None
