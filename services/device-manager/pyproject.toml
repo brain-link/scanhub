@@ -15,15 +15,15 @@ packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-fastapi = "^0.96.0"
 uvicorn = "^0.22.0"
 websockets = "^11.0.3"
-kafka-python = "^2.0.2"
 asyncpg = "^0.27.0"
 psycopg2-binary = "^2.9.6"
 async-sqlalchemy = "^1.0.0"
 python-multipart = "^0.0.6"
 types-requests = "^2.32.0.20250328"
+fastapi = "^0.116.0"
+numpy = "<2.0.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
@@ -38,6 +38,8 @@ sphinx_rtd_theme = "*"
 ruff = "^0.1.11"
 mypy = "^1.8.0"
 
+[tool.setuptools.package-data]
+"app" = ["py.typed"]
 
 [tool.ruff]
 src = ["app"]
