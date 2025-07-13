@@ -470,51 +470,6 @@ export interface BaseMRISequence {
     'tags'?: Array<string>;
 }
 /**
- * Result model.
- * @export
- * @interface BaseResult
- */
-export interface BaseResult {
-    /**
-     * 
-     * @type {TaskId1}
-     * @memberof BaseResult
-     */
-    'task_id'?: TaskId1;
-    /**
-     * 
-     * @type {ResultType}
-     * @memberof BaseResult
-     */
-    'type': ResultType;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof BaseResult
-     */
-    'status'?: ItemStatus;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseResult
-     */
-    'directory'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseResult
-     */
-    'filename'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof BaseResult
-     */
-    'progress'?: number;
-}
-
-
-/**
  * Workflow base model.
  * @export
  * @interface BaseWorkflow
@@ -1661,40 +1616,28 @@ export interface ResultId {
 export interface ResultOut {
     /**
      * 
-     * @type {TaskId1}
-     * @memberof ResultOut
-     */
-    'task_id'?: TaskId1;
-    /**
-     * 
      * @type {ResultType}
      * @memberof ResultOut
      */
     'type': ResultType;
     /**
      * 
-     * @type {ItemStatus}
+     * @type {string}
      * @memberof ResultOut
      */
-    'status'?: ItemStatus;
+    'directory': string;
     /**
      * 
      * @type {string}
      * @memberof ResultOut
      */
-    'directory'?: string;
+    'filename': string;
     /**
      * 
      * @type {string}
      * @memberof ResultOut
      */
-    'filename'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ResultOut
-     */
-    'progress'?: number;
+    'task_id': string;
     /**
      * 
      * @type {string}
@@ -1719,10 +1662,39 @@ export interface ResultOut {
 export const ResultType = {
     Dicom: 'DICOM',
     Mrd: 'MRD',
-    Calibration: 'CALIBRATION'
+    Numpy: 'NUMPY',
+    Calibration: 'CALIBRATION',
+    NotSet: 'NOT_SET'
 } as const;
 
 export type ResultType = typeof ResultType[keyof typeof ResultType];
+
+
+/**
+ * Update result model.
+ * @export
+ * @interface SetResult
+ */
+export interface SetResult {
+    /**
+     * 
+     * @type {ResultType}
+     * @memberof SetResult
+     */
+    'type': ResultType;
+    /**
+     * 
+     * @type {string}
+     * @memberof SetResult
+     */
+    'directory': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SetResult
+     */
+    'filename': string;
+}
 
 
 /**
@@ -3112,14 +3084,14 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Result
-         * @param {BaseResult} baseResult 
+         * @summary Create Blank Result
+         * @param {TaskId1} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createResultApiV1ExamResultPost: async (baseResult: BaseResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'baseResult' is not null or undefined
-            assertParamExists('createResultApiV1ExamResultPost', 'baseResult', baseResult)
+        createBlankResultApiV1ExamResultPost: async (taskId: TaskId1, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('createBlankResultApiV1ExamResultPost', 'taskId', taskId)
             const localVarPath = `/api/v1/exam/result`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3136,14 +3108,17 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
+            if (taskId !== undefined) {
+                for (const [key, value] of Object.entries(taskId)) {
+                    localVarQueryParameter[key] = value;
+                }
+            }
+
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseResult, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3300,17 +3275,17 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Result
+         * @summary Set Result
          * @param {ResultId} resultId 
-         * @param {BaseResult} baseResult 
+         * @param {SetResult} setResult 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateResultApiV1ExamResultResultIdPut: async (resultId: ResultId, baseResult: BaseResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        setResultApiV1ExamResultResultIdPut: async (resultId: ResultId, setResult: SetResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'resultId' is not null or undefined
-            assertParamExists('updateResultApiV1ExamResultResultIdPut', 'resultId', resultId)
-            // verify required parameter 'baseResult' is not null or undefined
-            assertParamExists('updateResultApiV1ExamResultResultIdPut', 'baseResult', baseResult)
+            assertParamExists('setResultApiV1ExamResultResultIdPut', 'resultId', resultId)
+            // verify required parameter 'setResult' is not null or undefined
+            assertParamExists('setResultApiV1ExamResultResultIdPut', 'setResult', setResult)
             const localVarPath = `/api/v1/exam/result/{result_id}`
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3335,7 +3310,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseResult, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(setResult, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3403,15 +3378,15 @@ export const ResultsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Result
-         * @param {BaseResult} baseResult 
+         * @summary Create Blank Result
+         * @param {TaskId1} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createResultApiV1ExamResultPost(baseResult: BaseResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createResultApiV1ExamResultPost(baseResult, options);
+        async createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createBlankResultApiV1ExamResultPost(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createResultApiV1ExamResultPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createBlankResultApiV1ExamResultPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3468,16 +3443,16 @@ export const ResultsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Result
+         * @summary Set Result
          * @param {ResultId} resultId 
-         * @param {BaseResult} baseResult 
+         * @param {SetResult} setResult 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options);
+        async setResultApiV1ExamResultResultIdPut(resultId: ResultId, setResult: SetResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setResultApiV1ExamResultResultIdPut(resultId, setResult, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.updateResultApiV1ExamResultResultIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.setResultApiV1ExamResultResultIdPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3506,13 +3481,13 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Result
-         * @param {BaseResult} baseResult 
+         * @summary Create Blank Result
+         * @param {TaskId1} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createResultApiV1ExamResultPost(baseResult: BaseResult, options?: any): AxiosPromise<ResultOut> {
-            return localVarFp.createResultApiV1ExamResultPost(baseResult, options).then((request) => request(axios, basePath));
+        createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.createBlankResultApiV1ExamResultPost(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
@@ -3556,14 +3531,14 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Result
+         * @summary Set Result
          * @param {ResultId} resultId 
-         * @param {BaseResult} baseResult 
+         * @param {SetResult} setResult 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: any): AxiosPromise<ResultOut> {
-            return localVarFp.updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options).then((request) => request(axios, basePath));
+        setResultApiV1ExamResultResultIdPut(resultId: ResultId, setResult: SetResult, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.setResultApiV1ExamResultResultIdPut(resultId, setResult, options).then((request) => request(axios, basePath));
         },
         /**
          * Upload a DICOM file to a result.  Parameters ---------- result_id     UUID of the result file     Dicom file user     User for authentification  Raises ------ HTTPException     Throws error if ID of the result is unknown
@@ -3588,14 +3563,14 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
 export class ResultsApi extends BaseAPI {
     /**
      * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Result
-     * @param {BaseResult} baseResult 
+     * @summary Create Blank Result
+     * @param {TaskId1} taskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public createResultApiV1ExamResultPost(baseResult: BaseResult, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).createResultApiV1ExamResultPost(baseResult, options).then((request) => request(this.axios, this.basePath));
+    public createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).createBlankResultApiV1ExamResultPost(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3648,15 +3623,15 @@ export class ResultsApi extends BaseAPI {
 
     /**
      * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
-     * @summary Update Result
+     * @summary Set Result
      * @param {ResultId} resultId 
-     * @param {BaseResult} baseResult 
+     * @param {SetResult} setResult 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public updateResultApiV1ExamResultResultIdPut(resultId: ResultId, baseResult: BaseResult, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).updateResultApiV1ExamResultResultIdPut(resultId, baseResult, options).then((request) => request(this.axios, this.basePath));
+    public setResultApiV1ExamResultResultIdPut(resultId: ResultId, setResult: SetResult, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).setResultApiV1ExamResultResultIdPut(resultId, setResult, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

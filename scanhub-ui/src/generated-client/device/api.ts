@@ -57,20 +57,181 @@ export interface AcquisitionLimits {
 
 
 /**
- * Pydantic definition of a commands.
+ * Pydantic definition of acquisition parameters.
  * @export
- * @enum {string}
+ * @interface AcquisitionParameter
  */
+export interface AcquisitionParameter {
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof AcquisitionParameter
+     */
+    'fov_scaling': XYZ;
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof AcquisitionParameter
+     */
+    'fov_offset': XYZ;
+    /**
+     * 
+     * @type {XYZ}
+     * @memberof AcquisitionParameter
+     */
+    'fov_rotation': XYZ;
+}
+/**
+ * Acquisition Task output model.
+ * @export
+ * @interface AcquisitionTaskOut
+ */
+export interface AcquisitionTaskOut {
+    /**
+     * 
+     * @type {WorkflowId}
+     * @memberof AcquisitionTaskOut
+     */
+    'workflow_id'?: WorkflowId;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'description': string;
+    /**
+     * 
+     * @type {TaskType}
+     * @memberof AcquisitionTaskOut
+     */
+    'task_type': TaskType;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'destination': string;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof AcquisitionTaskOut
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {number}
+     * @memberof AcquisitionTaskOut
+     */
+    'progress': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AcquisitionTaskOut
+     */
+    'is_template': boolean;
+    /**
+     * 
+     * @type {DeviceId}
+     * @memberof AcquisitionTaskOut
+     */
+    'device_id'?: DeviceId;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'sequence_id': string;
+    /**
+     * 
+     * @type {AcquisitionParameter}
+     * @memberof AcquisitionTaskOut
+     */
+    'acquisition_parameter': AcquisitionParameter;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'creator': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AcquisitionTaskOut
+     */
+    'datetime_created': string;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof AcquisitionTaskOut
+     */
+    'datetime_updated'?: DatetimeUpdated;
+    /**
+     * 
+     * @type {Array<ResultOut>}
+     * @memberof AcquisitionTaskOut
+     */
+    'results': Array<ResultOut>;
+    /**
+     * 
+     * @type {AcquisitionTaskOutAcquisitionLimits}
+     * @memberof AcquisitionTaskOut
+     */
+    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
+}
 
-export const Commands = {
-    Start: 'START',
-    Stop: 'STOP',
-    Pause: 'PAUSE'
-} as const;
 
-export type Commands = typeof Commands[keyof typeof Commands];
+/**
+ * 
+ * @export
+ * @interface AcquisitionTaskOutAcquisitionLimits
+ */
+export interface AcquisitionTaskOutAcquisitionLimits {
+    /**
+     * 
+     * @type {any}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_height': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_weight': any;
+    /**
+     * 
+     * @type {Gender}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_gender'?: Gender;
+    /**
+     * 
+     * @type {any}
+     * @memberof AcquisitionTaskOutAcquisitionLimits
+     */
+    'patient_age': any;
+}
 
 
+/**
+ * 
+ * @export
+ * @interface DatetimeUpdated
+ */
+export interface DatetimeUpdated {
+}
 /**
  * Device registration request pydantic model (to be sent by user first adding the device to the platform).
  * @export
@@ -82,19 +243,27 @@ export interface DeviceCreationRequest {
      * @type {string}
      * @memberof DeviceCreationRequest
      */
-    'title': string;
+    'name': string;
     /**
      * 
      * @type {string}
      * @memberof DeviceCreationRequest
      */
     'description': string;
-    /**
-     * 
-     * @type {object}
-     * @memberof DeviceCreationRequest
-     */
-    'model_config'?: object;
+}
+/**
+ * 
+ * @export
+ * @interface DeviceId
+ */
+export interface DeviceId {
+}
+/**
+ * 
+ * @export
+ * @interface DeviceName
+ */
+export interface DeviceName {
 }
 /**
  * Device pydantic output model.
@@ -104,52 +273,46 @@ export interface DeviceCreationRequest {
 export interface DeviceOut {
     /**
      * 
+     * @type {DeviceName}
+     * @memberof DeviceOut
+     */
+    'device_name'?: DeviceName;
+    /**
+     * 
+     * @type {SerialNumber}
+     * @memberof DeviceOut
+     */
+    'serial_number'?: SerialNumber;
+    /**
+     * 
+     * @type {Manufacturer}
+     * @memberof DeviceOut
+     */
+    'manufacturer'?: Manufacturer;
+    /**
+     * 
+     * @type {Modality}
+     * @memberof DeviceOut
+     */
+    'modality'?: Modality;
+    /**
+     * 
+     * @type {Status}
+     * @memberof DeviceOut
+     */
+    'status'?: Status;
+    /**
+     * 
+     * @type {Site}
+     * @memberof DeviceOut
+     */
+    'site'?: Site;
+    /**
+     * 
      * @type {string}
      * @memberof DeviceOut
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'manufacturer': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'modality': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'status': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'site': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'ip_address': string;
-    /**
-     * 
-     * @type {object}
-     * @memberof DeviceOut
-     */
-    'model_config'?: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceOut
-     */
-    'title': string;
     /**
      * 
      * @type {string}
@@ -170,50 +333,11 @@ export interface DeviceOut {
     'datetime_created': string;
     /**
      * 
-     * @type {string}
+     * @type {DatetimeUpdated}
      * @memberof DeviceOut
      */
-    'datetime_updated'?: string;
+    'datetime_updated'?: DatetimeUpdated;
 }
-/**
- * Pydantic model definition of a device workflow.
- * @export
- * @interface DeviceTask
- */
-export interface DeviceTask {
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceTask
-     */
-    'device_id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceTask
-     */
-    'record_id': string;
-    /**
-     * 
-     * @type {Commands}
-     * @memberof DeviceTask
-     */
-    'command': Commands;
-    /**
-     * 
-     * @type {ParametrizedSequence}
-     * @memberof DeviceTask
-     */
-    'parametrized_sequence': ParametrizedSequence;
-    /**
-     * 
-     * @type {string}
-     * @memberof DeviceTask
-     */
-    'user_access_token': string;
-}
-
-
 /**
  * Pydantic definition of genders.
  * @export
@@ -244,56 +368,136 @@ export interface HTTPValidationError {
     'detail'?: Array<ValidationError>;
 }
 /**
+ * Task status enum.
+ * @export
+ * @enum {string}
+ */
+
+export const ItemStatus = {
+    New: 'NEW',
+    Updated: 'UPDATED',
+    Started: 'STARTED',
+    Finished: 'FINISHED',
+    Deleted: 'DELETED',
+    Inprogress: 'INPROGRESS'
+} as const;
+
+export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
+
+
+/**
  * 
  * @export
- * @interface LocationInner
+ * @interface Manufacturer
  */
-export interface LocationInner {
+export interface Manufacturer {
 }
 /**
- * Pydantic model definition of a parametrized sequence.
+ * 
  * @export
- * @interface ParametrizedSequence
+ * @interface Modality
  */
-export interface ParametrizedSequence {
+export interface Modality {
+}
+/**
+ * Result output model.
+ * @export
+ * @interface ResultOut
+ */
+export interface ResultOut {
     /**
      * 
-     * @type {AcquisitionLimits}
-     * @memberof ParametrizedSequence
+     * @type {ResultType}
+     * @memberof ResultOut
      */
-    'acquisition_limits': AcquisitionLimits;
-    /**
-     * 
-     * @type {SequenceParameters}
-     * @memberof ParametrizedSequence
-     */
-    'sequence_parameters': SequenceParameters;
+    'type': ResultType;
     /**
      * 
      * @type {string}
-     * @memberof ParametrizedSequence
+     * @memberof ResultOut
      */
-    'sequence': string;
+    'directory': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'filename': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'task_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResultOut
+     */
+    'datetime_created': string;
+}
+
+
+/**
+ * Result type enum.
+ * @export
+ * @enum {string}
+ */
+
+export const ResultType = {
+    Dicom: 'DICOM',
+    Mrd: 'MRD',
+    Numpy: 'NUMPY',
+    Calibration: 'CALIBRATION',
+    NotSet: 'NOT_SET'
+} as const;
+
+export type ResultType = typeof ResultType[keyof typeof ResultType];
+
+
+/**
+ * 
+ * @export
+ * @interface SerialNumber
+ */
+export interface SerialNumber {
 }
 /**
- * Pydantic definition of SequenceParameters.
+ * 
  * @export
- * @interface SequenceParameters
+ * @interface Site
  */
-export interface SequenceParameters {
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof SequenceParameters
-     */
-    'fov': XYZ;
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof SequenceParameters
-     */
-    'fov_offset': XYZ;
+export interface Site {
 }
+/**
+ * 
+ * @export
+ * @interface Status
+ */
+export interface Status {
+}
+/**
+ * Task type enum.
+ * @export
+ * @enum {string}
+ */
+
+export const TaskType = {
+    Acquisition: 'ACQUISITION',
+    Dag: 'DAG',
+    Reconstruction: 'RECONSTRUCTION',
+    Processing: 'PROCESSING'
+} as const;
+
+export type TaskType = typeof TaskType[keyof typeof TaskType];
+
+
 /**
  * 
  * @export
@@ -302,10 +506,10 @@ export interface SequenceParameters {
 export interface ValidationError {
     /**
      * 
-     * @type {Array<LocationInner>}
+     * @type {Array<ValidationErrorLocInner>}
      * @memberof ValidationError
      */
-    'loc': Array<LocationInner>;
+    'loc': Array<ValidationErrorLocInner>;
     /**
      * 
      * @type {string}
@@ -318,6 +522,20 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationErrorLocInner
+ */
+export interface ValidationErrorLocInner {
+}
+/**
+ * 
+ * @export
+ * @interface WorkflowId
+ */
+export interface WorkflowId {
 }
 /**
  * Pydantic definition of coordinates.
@@ -504,13 +722,13 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
          * @summary Start Scan Via Websocket
-         * @param {DeviceTask} deviceTask 
+         * @param {AcquisitionTaskOut} acquisitionTaskOut 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost: async (deviceTask: DeviceTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'deviceTask' is not null or undefined
-            assertParamExists('startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost', 'deviceTask', deviceTask)
+        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost: async (acquisitionTaskOut: AcquisitionTaskOut, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'acquisitionTaskOut' is not null or undefined
+            assertParamExists('startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost', 'acquisitionTaskOut', acquisitionTaskOut)
             const localVarPath = `/api/v1/device/start_scan_via_websocket`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -534,7 +752,7 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(deviceTask, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(acquisitionTaskOut, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -605,12 +823,12 @@ export const DevicesApiFp = function(configuration?: Configuration) {
         /**
          * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
          * @summary Start Scan Via Websocket
-         * @param {DeviceTask} deviceTask 
+         * @param {AcquisitionTaskOut} acquisitionTaskOut 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask: DeviceTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask, options);
+        async startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut: AcquisitionTaskOut, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DevicesApi.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -667,12 +885,12 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
         /**
          * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
          * @summary Start Scan Via Websocket
-         * @param {DeviceTask} deviceTask 
+         * @param {AcquisitionTaskOut} acquisitionTaskOut 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask: DeviceTask, options?: any): AxiosPromise<any> {
-            return localVarFp.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask, options).then((request) => request(axios, basePath));
+        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut: AcquisitionTaskOut, options?: any): AxiosPromise<any> {
+            return localVarFp.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -734,13 +952,13 @@ export class DevicesApi extends BaseAPI {
     /**
      * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
      * @summary Start Scan Via Websocket
-     * @param {DeviceTask} deviceTask 
+     * @param {AcquisitionTaskOut} acquisitionTaskOut 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask: DeviceTask, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(deviceTask, options).then((request) => request(this.axios, this.basePath));
+    public startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut: AcquisitionTaskOut, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
