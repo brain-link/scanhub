@@ -12,7 +12,7 @@ from sqlalchemy.future import select
 from app.db.postgres import Result, async_session
 
 
-async def add_result_db(payload: BaseResult) -> Result:
+async def add_blank_result_db(task_id: str | UUID) -> Result:
     """Add new result to database.
 
     Parameters
@@ -24,7 +24,7 @@ async def add_result_db(payload: BaseResult) -> Result:
     -------
         Database orm model of created result
     """
-    new_result = Result(**payload.dict())
+    new_result = Result(task_id=task_id)
     async with async_session() as session:
         session.add(new_result)
         await session.commit()

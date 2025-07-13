@@ -11,7 +11,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 
 # from fastapi.responses import FileResponse
-from scanhub_libraries.models import BaseResult, ItemStatus, ResultOut, User
+from scanhub_libraries.models import BaseResult, SetResult, ResultOut, User
 from scanhub_libraries.security import get_current_user
 
 from app import LOG_CALL_DELIMITER
@@ -28,7 +28,7 @@ result_router = APIRouter(
 )
 
 @result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
-async def create_result(payload: BaseResult, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
+async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
     """Create a task result.
 
     Parameters
@@ -47,19 +47,18 @@ async def create_result(payload: BaseResult, user: Annotated[User, Depends(get_c
     """
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("payload:", payload)
-    if payload.status != ItemStatus.NEW:
-        raise HTTPException(status_code=400, detail="New result needs to have status NEW")
-    if payload.task_id is not None:
-        task_id = UUID(payload.task_id) if not isinstance(payload.task_id, UUID) else payload.task_id
+    print("Creating blank result for task ID:", task_id)
+    if task_id is not None:
+        task_id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
         if not (task := await task_dal.get_task_data(task_id=task_id)):
             raise HTTPException(status_code=400, detail="Parent (task_id) does not exist.")
         if task.is_template:
             raise HTTPException(status_code=400, detail="Result parent (task) must not be a template.")
-    if not (result := await result_dal.add_result_db(payload=payload)):
+    if not (result := await result_dal.add_blank_result_db(task_id=task_id)):
         raise HTTPException(status_code=404, detail="Could not create result")
+    print(result)
     result = ResultOut(**result.__dict__)
-    print("Result created: ", result)
+    print("Blank result created: ", result)
     return result
 
 @result_router.get(
@@ -152,8 +151,11 @@ async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get
         raise HTTPException(status_code=404, detail=message)
 
 @result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
-async def update_result(result_id: UUID | str, payload: BaseResult,
-                      user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
+async def set_result(
+    result_id: UUID | str,
+    payload: SetResult,
+    user: Annotated[User, Depends(get_current_user)]
+) -> ResultOut:
     """Update an existing result.
 
     Parameters
@@ -176,11 +178,6 @@ async def update_result(result_id: UUID | str, payload: BaseResult,
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("result_id:", result_id)
-    if payload.task_id is not None:
-        task_id = UUID(payload.task_id) if not isinstance(payload.task_id, UUID) else payload.task_id
-        if not await task_dal.get_task_data(task_id=task_id):
-            raise HTTPException(status_code=400, detail="task_id must be an existing id.")
-
     _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
     if not (result_updated := await result_dal.update_result_db(result_id=_id, payload=payload)):
         message = "Could not update result, either because it does not exist, or for another reason."

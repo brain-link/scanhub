@@ -182,12 +182,11 @@ class Result(Base):
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now(),  # pylint: disable=not-callable
     )
-    task_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("task.id"), nullable=True)
-    progress: Mapped[float] = mapped_column(nullable=False, default=0.0)
-    status: Mapped[ItemStatus] = mapped_column(nullable=False, default=ItemStatus.NEW)
-    type: Mapped[ResultType] = mapped_column(nullable=False)
-    directory: Mapped[str] = mapped_column(nullable=False, default="")
-    filename: Mapped[str] = mapped_column(nullable=False, default="")
+    task_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("task.id"), nullable=False)
+
+    type: Mapped[ResultType] = mapped_column(nullable=True, default=ResultType.NOT_SET)
+    directory: Mapped[str] = mapped_column(nullable=True, default="")
+    filename: Mapped[str] = mapped_column(nullable=True, default="")
 
 # Create automap base
 MappedBase = automap_base()
