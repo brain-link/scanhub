@@ -13,8 +13,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from api.db import engine, init_db
-from api.devices import router
+from app.api.db import engine, init_db
+from app.api.device_endpoints import router as http_router
+from app.api.device_websocket import router as ws_router
 
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",
@@ -94,4 +95,5 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 
-app.include_router(router, prefix="/api/v1/device")
+app.include_router(http_router, prefix="/api/v1/device")
+app.include_router(ws_router, prefix="/api/v1/device")
