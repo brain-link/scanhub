@@ -106,30 +106,25 @@ export default function DeviceView() {
   }
 
   const columns: GridColDef<DeviceOut>[] = [
-    { field: 'id', headerName: 'ID', width: 200, editable: false },
-    { field: 'title', headerName: 'Title', width: 200, editable: false },
-    { field: 'description', headerName: 'Description', width: 200, editable: false },
-    { field: 'status', headerName: 'Status', width: 200, editable: false },
-
-    { field: 'name', headerName: 'Device Name', width: 200, editable: false },
-    { field: 'manufacturer', headerName: 'Manufacturer', width: 200, editable: false },
-    { field: 'modality', headerName: 'Modality', width: 200, editable: false },
-    { field: 'site', headerName: 'Site', width: 200, editable: false },
-    { field: 'ip_address', headerName: 'IP Address', width: 200, editable: false },
+    { field: 'id', headerName: 'ID', width: 100, editable: false },
+    { field: 'name', headerName: 'Connection name', width: 150, editable: false },
+    { field: 'description', headerName: 'Description', width: 150, editable: false },
+    { field: 'status', headerName: 'Status', width: 100, editable: false },
+    { field: 'device_name', headerName: 'Device name', width: 150, editable: false },
+    { field: 'serial_number', headerName: 'Serial No.', width: 100, editable: false },
+    { field: 'manufacturer', headerName: 'Manufacturer', width: 100, editable: false },
+    { field: 'modality', headerName: 'Modality', width: 100, editable: false },
+    { field: 'site', headerName: 'Site', width: 100, editable: false },
     {
-      field: 'datetime_created', headerName: 'Added (date/time)', width: 200, editable: false,
+      field: 'datetime_created', headerName: 'Added (date/time)', width: 100, editable: false,
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
-      field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 200, editable: false,
+      field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 100, editable: false,
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Delete',
-      width: 150,
-      cellClassName: 'actions',
+      field: 'actions', type: 'actions', width: 100, cellClassName: 'actions',
       getActions: (row) => {
         return [
           <GridActionsCellItem
@@ -153,6 +148,7 @@ export default function DeviceView() {
         setOpen={setDeviceCreateModalOpen}
         onSubmit={() => {
           refetch()
+          setDeviceCreateModalOpen(false)
         }}
       />
 
@@ -191,7 +187,7 @@ export default function DeviceView() {
         setOpen={(status) => {
           if (status == false) setDeviceToDelete(undefined)
         }}
-        item={deviceToDelete ? 'Device \'' + deviceToDelete.title + '\' with ID \'' + deviceToDelete.id + '\'' : ''}
+        item={deviceToDelete ? 'Device \'' + deviceToDelete.name + '\' with ID \'' + deviceToDelete.id + '\'' : ''}
         modalType={'modify'}
       />
     </Box>

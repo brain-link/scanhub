@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
+import Textarea from '@mui/joy/Textarea'
 import Grid from '@mui/joy/Grid'
 import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
@@ -23,70 +24,44 @@ import NotificationContext from '../NotificationContext'
 import { deviceApi } from '../api'
 
 
-interface BaseFormEntry {
-  key: string,
-  label: string
-}
-
-interface TextFormEntry extends BaseFormEntry {
-  type: 'text'
-  required?: boolean
-  placeholder?: string
-};
-
-// Patient form items, order is row wise
-const createPatientFormContent: TextFormEntry[] = [
-  { type: 'text', key: 'title', label: 'Title', required: true },
-  { type: 'text', key: 'description', label: 'Description', placeholder: '', required: true },
-]
-
-
 function DeviceForm(props: ModalProps) {
   const [, showNotification] = React.useContext(NotificationContext)
-
-  const [deviceToken, setDeviceToken] = React.useState<string | undefined>(undefined);
-  const [deviceId, setDeviceId] = React.useState<string | undefined>(undefined);
-
   const [device, setDevice] = React.useState<DeviceCreationRequest>({
-    title: '',
+    name: '',
     description: ''
   })
 
-  // Post a new record and refetch records table
+  // Make device creation request and refetch devices table
   const mutation = useMutation({
     mutationFn: async () => {
-      await deviceApi
-        .createDeviceApiV1DeviceCreatedevicePost(device)
-        .then((response) => {
-          props.onSubmit()
-          setDeviceToken(response.data.device_token)
-          setDeviceId(response.data.device_id)
-          showNotification({message: 'Device created.', type: 'success'})
-        })
+      const response = await deviceApi.createDeviceApiV1DeviceCreatedevicePost(device, {
+        responseType: 'blob'
+      })
+      // Create blob URL
+      const blob = new Blob([response.data], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+
+      // Create a link and click it to trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'device_credentials.json'; // Desired filename
+      a.style.display = 'none';
+
+      // Append, click, and clean up
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      props.onSubmit()
+      showNotification({message: 'Device created.', type: 'success'})
     }
   })
-
-  function renderFormEntry(item: TextFormEntry, index: number) {
-    if (item.type == 'text') {
-      return (
-        <Grid key={index} md={6}>
-          <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
-          <Input
-            name={item.key}
-            onChange={(e) => setDevice({ ...device, [e.target.name]: e.target.value })}
-            placeholder={item.placeholder}
-            required={item.required}
-            disabled={deviceId != undefined}
-          />
-        </Grid>
-      )
-    }
-  }
 
   return (
     <>
       <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        Create New Device
+        Create new device connection
       </Typography>
 
       <form
@@ -96,40 +71,28 @@ function DeviceForm(props: ModalProps) {
         }}
       >
         <Grid container rowSpacing={3} columnSpacing={5}>
-          {createPatientFormContent.map((item, index) => renderFormEntry(item, index))}
+          <Grid md={6}>
+            <FormLabel sx={{marginBottom: 1}}>Device connection name</FormLabel>
+            <Input
+              onChange={(e) => setDevice({ ...device, name: e.target.value })}
+              placeholder='Connection name'
+              required
+            />
+          </Grid>
+          <Grid md={6}>
+            <FormLabel sx={{marginBottom: 1}}>Description</FormLabel>
+            <Textarea 
+              placeholder="Add a description..."
+              minRows={3}
+              onChange={(e) => setDevice({ ...device, description: e.target.value })}
+            />
+          </Grid>
+
           <Grid md={12}>
-            <Button size='sm' type='submit' sx={{ maxWidth: 100 }} disabled={deviceId != undefined}>
+            <Button size='sm' type='submit' sx={{ maxWidth: 120 }}>
               Create
             </Button>
           </Grid>
-          {deviceId ?
-            <>
-              <Grid md={12}>
-                <Typography color='primary' variant='soft'>
-                  Copy the new device ID and token to that device, such that it can connect to Scanhub.
-                </Typography>
-                <Typography color='warning' variant='soft'>
-                  The token will not be accessible later!
-                </Typography>
-              </Grid>
-              <Grid md={12}>
-                <Typography level='title-md'>
-                  Device ID
-                </Typography>
-                <Typography>
-                  {deviceId}
-                </Typography>
-              </Grid>
-              <Grid md={12}>
-                <Typography level='title-md'>
-                  Device Token
-                </Typography>
-                <Typography level='body-sm' sx={{overflowWrap: 'break-word'}}>
-                  {deviceToken}
-                </Typography>
-              </Grid>
-            </>
-            : undefined}
         </Grid>
       </form>
     </>
