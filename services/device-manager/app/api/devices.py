@@ -21,9 +21,19 @@ from typing import Annotated, Dict, List
 from uuid import UUID
 
 import requests
-from fastapi import APIRouter, Depends, Header, HTTPException, WebSocket, WebSocketDisconnect, WebSocketException
+from fastapi import (
+    APIRouter,
+    Depends,
+    Header,
+    HTTPException,
+    WebSocket,
+    WebSocketDisconnect,
+    WebSocketException,
+)
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import exc
+
 from scanhub_libraries.models import (
     AcquisitionTaskOut,
     MRISequenceOut,
@@ -35,8 +45,6 @@ from scanhub_libraries.models import (
     User,
 )
 from scanhub_libraries.security import compute_complex_password_hash, get_current_user
-from sqlalchemy import exc
-
 from api.dal import (
     dal_create_device,
     dal_delete_device,
