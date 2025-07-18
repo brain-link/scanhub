@@ -388,6 +388,14 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
+   .. py:attribute:: progress
+      :type:  sqlalchemy.orm.Mapped[float]
+
+
+   .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ItemStatus]
+
+
    .. py:attribute:: type
       :type:  sqlalchemy.orm.Mapped[scanhub_libraries.models.ResultType]
 

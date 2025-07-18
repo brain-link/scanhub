@@ -1,0 +1,182 @@
+device-manager.app.api.devices
+==============================
+
+.. py:module:: device-manager.app.api.devices
+
+.. autoapi-nested-parse::
+
+   Device API Endpoints.
+
+   This module defines the API routes and WebSocket endpoints for managing devices.
+   It includes functionalities for:
+   - CRUD operations on devices.
+   - Device registration and status updates via WebSocket.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device-manager.app.api.devices.oauth2_scheme
+   device-manager.app.api.devices.EXAM_MANAGER_URI
+   device-manager.app.api.devices.LOG_CALL_DELIMITER
+   device-manager.app.api.devices.router
+   device-manager.app.api.devices.dict_id_websocket
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device-manager.app.api.devices.get_device_out
+   device-manager.app.api.devices.get_devices
+   device-manager.app.api.devices.get_device
+   device-manager.app.api.devices.create_device
+   device-manager.app.api.devices.delete_device
+   device-manager.app.api.devices.start_scan_via_websocket
+   device-manager.app.api.devices.connection_with_valid_id_and_token
+   device-manager.app.api.devices.websocket_endpoint
+
+
+Module Contents
+---------------
+
+.. py:data:: oauth2_scheme
+
+.. py:data:: EXAM_MANAGER_URI
+   :value: 'exam-manager:8000'
+
+
+.. py:data:: LOG_CALL_DELIMITER
+   :value: '-------------------------------------------------------------------------------'
+
+
+.. py:data:: router
+
+.. py:data:: dict_id_websocket
+   :type:  Dict[uuid.UUID, fastapi.WebSocket]
+
+.. py:function:: get_device_out(data: api.db.Device) -> scanhub_libraries.models.DeviceOut
+   :async:
+
+
+   Get pydantic device output model helper function.
+
+   Parameters
+   ----------
+   data
+       Database model
+
+   Returns
+   -------
+       Pydantic output model
+
+
+.. py:function:: get_devices(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.DeviceOut]
+   :async:
+
+
+   Retrieve the list of registered devices.
+
+   Returns
+   -------
+       List[Device]: The list of registered devices.
+
+
+.. py:function:: get_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], device_id: uuid.UUID)
+   :async:
+
+
+   Retrieve a specific device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response containing the information about the device
+
+
+.. py:function:: create_device(current_user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], request: scanhub_libraries.models.DeviceCreationRequest)
+   :async:
+
+
+   Create device database entry.
+
+   Only devices which are created by a user via this endpoint and have the device_id and device_token
+   that result from this call configured correctly can later connect and register.
+
+   Parameters
+   ----------
+   request:
+       DeviceCreationRequest to create device in Scanhub.
+       Further details of the device are later provided by the device itself.
+
+   Return
+   ------
+   device_token:
+       the token of the device which the user should copy manually to the configuration file of the device.
+
+   device_id:
+       the id of the device, should be copied to the devices config file together with the device_token.
+
+
+.. py:function:: delete_device(device_id: uuid.UUID)
+   :async:
+
+
+   Delete a device.
+
+   Args
+   -------
+       device_id (str): The ID of the device.
+
+   Returns
+   -------
+       dict: The response indicating the success or failure of the deletion.
+
+
+.. py:function:: start_scan_via_websocket(task: scanhub_libraries.models.AcquisitionTaskOut, access_token: Annotated[str, Depends(oauth2_scheme)])
+   :async:
+
+
+   Start a scan via a websocket that was already opened by the device.
+
+   Parameters
+   ----------
+   device_task
+       Details of the scan and the device to scan on.
+
+
+
+.. py:function:: connection_with_valid_id_and_token(device_id: Annotated[uuid.UUID, Header()], device_token: Annotated[str, Header()])
+   :async:
+
+
+   Check if the given device_id and device_token belong to an existing device in the database.
+
+   Args
+   ----
+       device_id (UUID): The device_id to check against the database.
+       device_token (str): The device_token to check against the database.
+
+
+.. py:function:: websocket_endpoint(websocket: fastapi.WebSocket, device_id: Annotated[uuid.UUID, Depends(connection_with_valid_id_and_token)])
+   :async:
+
+
+   Websocket endpoint for device communication.
+
+   Args
+   ----
+       websocket (WebSocket): The WebSocket connection object.
+       device_id (UUID): The device_id.
+
+

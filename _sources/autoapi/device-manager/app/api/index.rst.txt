@@ -17,8 +17,6 @@ Submodules
 
    /autoapi/device-manager/app/api/dal/index
    /autoapi/device-manager/app/api/db/index
-   /autoapi/device-manager/app/api/device_endpoints/index
-   /autoapi/device-manager/app/api/device_websocket/index
-   /autoapi/device-manager/app/api/exam_requests/index
+   /autoapi/device-manager/app/api/devices/index
 
 

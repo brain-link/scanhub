@@ -14,7 +14,7 @@ Functions
 
 .. autoapisummary::
 
-   exam-manager.app.dal.result_dal.add_blank_result_db
+   exam-manager.app.dal.result_dal.add_result_db
    exam-manager.app.dal.result_dal.get_result_db
    exam-manager.app.dal.result_dal.get_all_results_db
    exam-manager.app.dal.result_dal.update_result_db
@@ -24,7 +24,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: add_blank_result_db(task_id: str | uuid.UUID) -> app.db.postgres.Result
+.. py:function:: add_result_db(payload: scanhub_libraries.models.BaseResult) -> app.db.postgres.Result
    :async:
 
 
@@ -72,7 +72,7 @@ Module Contents
        List of result data base orm models
 
 
-.. py:function:: update_result_db(result_id: uuid.UUID, payload: scanhub_libraries.models.SetResult) -> app.db.postgres.Result | None
+.. py:function:: update_result_db(result_id: uuid.UUID, payload: scanhub_libraries.models.BaseResult) -> app.db.postgres.Result | None
    :async:
 
 

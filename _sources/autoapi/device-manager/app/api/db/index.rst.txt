@@ -79,7 +79,15 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[uuid.UUID]
 
 
-   .. py:attribute:: name
+   .. py:attribute:: datetime_created
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: datetime_updated
+      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+
+
+   .. py:attribute:: title
       :type:  sqlalchemy.orm.Mapped[str]
 
 
@@ -95,15 +103,11 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: device_name
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
-   .. py:attribute:: serial_number
-      :type:  sqlalchemy.orm.Mapped[str]
-
-
    .. py:attribute:: status
+      :type:  sqlalchemy.orm.Mapped[str]
+
+
+   .. py:attribute:: name
       :type:  sqlalchemy.orm.Mapped[str]
 
 
@@ -119,12 +123,8 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: datetime_created
-      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
-
-
-   .. py:attribute:: datetime_updated
-      :type:  sqlalchemy.orm.Mapped[datetime.datetime]
+   .. py:attribute:: ip_address
+      :type:  sqlalchemy.orm.Mapped[str]
 
 
    .. py:method:: update(data: dict)
