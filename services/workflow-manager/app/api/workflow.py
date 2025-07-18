@@ -195,7 +195,7 @@ async def trigger_task(task_id: str,
             callback_endpoint = "http://localhost:8443/api/v1/workflowmanager/results_ready/" #"http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
 
             # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
-            response = orchestration_engine.trigger_task(
+            dag_response = orchestration_engine.trigger_task(
                 task.dag_id,
                 conf={
                     "directory": "tmp",#directory,
@@ -204,9 +204,9 @@ async def trigger_task(task_id: str,
                     "user_token": access_token
                 }
             )
-            print(f"DAG triggered with response: {response}")
+            print(f"DAG triggered with response: {dag_response}")
 
-            return {"message": "DAG triggered successfully", "data": response}
+            return {"message": "DAG triggered successfully", "data": dag_response}
         except Exception as e:
             logging.error(f"Failed to trigger DAG: {e}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
