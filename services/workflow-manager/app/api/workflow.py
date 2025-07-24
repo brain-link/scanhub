@@ -185,7 +185,7 @@ def calc_age_from_date(birth_date: date) -> int:
 @router.post("/results_ready/{dag_id}/", tags=["WorkflowManager"])
 async def callback_results_ready(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
     """
-    Callback endpoint to notify that results are ready.
+    Notify that results are ready via callback endpoint.
 
     Args:
         dag_id (str): The ID of the DAG.
@@ -196,7 +196,11 @@ async def callback_results_ready(dag_id: str, access_token: Annotated[str, Depen
         dict: A dictionary containing a success message.
     """
     headers = {"Authorization": "Bearer " + access_token}
-    response = requests.post(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{dag_id}/results_ready", headers=headers)
+    response = requests.post(
+        f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{dag_id}/results_ready",
+        headers=headers,
+        timeout=3  # Added timeout to fix S113
+    )
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="Failed to notify results ready.")
     return {"message": "Results ready notification sent successfully."}
