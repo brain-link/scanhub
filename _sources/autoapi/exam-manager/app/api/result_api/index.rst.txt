@@ -22,11 +22,11 @@ Functions
 
 .. autoapisummary::
 
-   exam-manager.app.api.result_api.create_result
+   exam-manager.app.api.result_api.create_blank_result
    exam-manager.app.api.result_api.get_result
    exam-manager.app.api.result_api.get_all_task_results
    exam-manager.app.api.result_api.delete_result
-   exam-manager.app.api.result_api.update_result
+   exam-manager.app.api.result_api.set_result
    exam-manager.app.api.result_api.upload_dicom
 
 
@@ -35,7 +35,7 @@ Module Contents
 
 .. py:data:: result_router
 
-.. py:function:: create_result(payload: scanhub_libraries.models.BaseResult, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
+.. py:function:: create_blank_result(task_id: str | uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
    :async:
 
 
@@ -110,7 +110,7 @@ Module Contents
        404: Not found
 
 
-.. py:function:: update_result(result_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseResult, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
+.. py:function:: set_result(result_id: uuid.UUID | str, payload: scanhub_libraries.models.SetResult, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ResultOut
    :async:
 
 

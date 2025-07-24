@@ -1,0 +1,167 @@
+device-manager.app.api.exam_requests
+====================================
+
+.. py:module:: device-manager.app.api.exam_requests
+
+.. autoapi-nested-parse::
+
+   Handler for exam requests.
+
+   This module defines functions to interact with the exam manager service,
+   including fetching tasks, sequences, and results. It provides a way to
+   create and update acquisition tasks and results, ensuring that the data
+   is properly formatted and authenticated.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device-manager.app.api.exam_requests.TASK_URI
+   device-manager.app.api.exam_requests.RESULT_URI
+   device-manager.app.api.exam_requests.SEQUENCE_URI
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device-manager.app.api.exam_requests.get_task
+   device-manager.app.api.exam_requests.set_task
+   device-manager.app.api.exam_requests.get_sequence
+   device-manager.app.api.exam_requests.create_blank_result
+   device-manager.app.api.exam_requests.delete_blank_result
+   device-manager.app.api.exam_requests.set_result
+
+
+Module Contents
+---------------
+
+.. py:data:: TASK_URI
+   :value: 'http://exam-manager:8000/api/v1/exam/task'
+
+
+.. py:data:: RESULT_URI
+   :value: 'http://exam-manager:8000/api/v1/exam/result'
+
+
+.. py:data:: SEQUENCE_URI
+   :value: 'http://exam-manager:8000/api/v1/exam/sequence'
+
+
+.. py:function:: get_task(task_id: str, user_access_token: str) -> scanhub_libraries.models.AcquisitionTaskOut
+
+   Fetch acquisition task by ID from the exam manager service.
+
+   Args
+   ----
+       task_id (str): The unique identifier of the task to retrieve.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       AcquisitionTaskOut | None: The acquisition task object if found and valid.
+
+   Raises
+   ------
+       HTTPException: If the task is not found (404) or is not an acquisition task (400).
+
+
+.. py:function:: set_task(task_id: str, payload: scanhub_libraries.models.AcquisitionTaskOut, user_access_token: str) -> scanhub_libraries.models.AcquisitionTaskOut
+
+   Update an acquisition task on the task service with the provided payload.
+
+   Parameters
+   ----------
+   task_id : str
+       The unique identifier of the task to update.
+   payload : AcquisitionTaskOut
+       The updated task data to send to the task service.
+   user_access_token : str
+       The access token used for authorization with the task service.
+
+   Returns
+   -------
+   AcquisitionTaskOut
+       The updated task object returned from the task service.
+
+   Raises
+   ------
+   HTTPException
+       If the task update fails (e.g. non-200 response from the task service).
+
+
+.. py:function:: get_sequence(sequence_id: str, user_access_token: str) -> scanhub_libraries.models.MRISequenceOut
+
+   Fetch MRI sequence by ID from the exam manager service.
+
+   Args
+   ----
+       sequence_id (str): The unique identifier of the sequence to retrieve.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       dict: The MRI sequence object if found.
+
+   Raises
+   ------
+       HTTPException: If the sequence is not found (404).
+
+
+.. py:function:: create_blank_result(task_id: str, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Create a blank result in the exam manager service.
+
+   Returns
+   -------
+       ResultOut: The created blank result object.
+
+   Raises
+   ------
+       HTTPException: If the result creation fails (status code not 201).
+
+
+.. py:function:: delete_blank_result(result_id: str, user_access_token: str) -> None
+
+   Delete a blank result in the exam manager service.
+
+   Args
+   ----
+       result_id (str): The unique identifier of the result to delete.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       None
+
+   Raises
+   ------
+       HTTPException: If the result deletion fails (status code not 204).
+
+
+.. py:function:: set_result(result_id: str, payload: scanhub_libraries.models.SetResult, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Update a result in the exam manager service.
+
+   Args
+   ----
+       result_id (str): The unique identifier of the result to update.
+       payload (SetResult): The data to update the result with.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       ResultOut: The updated result object.
+
+   Raises
+   ------
+       HTTPException: If the result update fails (status code not 200).
+
+

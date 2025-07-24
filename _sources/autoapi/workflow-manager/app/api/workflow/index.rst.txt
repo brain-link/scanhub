@@ -25,6 +25,9 @@ Attributes
    workflow-manager.app.api.workflow.EXAM_MANAGER_URI
    workflow-manager.app.api.workflow.PATIENT_MANAGER_URI
    workflow-manager.app.api.workflow.DEVICE_MANAGER_URI
+   workflow-manager.app.api.workflow.router
+   workflow-manager.app.api.workflow.oauth2_scheme
+   workflow-manager.app.api.workflow.orchestration_engine
    workflow-manager.app.api.workflow.data_lake_directory
 
 
@@ -36,6 +39,7 @@ Functions
    workflow-manager.app.api.workflow.trigger_task
    workflow-manager.app.api.workflow.calc_age_from_date
    workflow-manager.app.api.workflow.callback_results_ready
+   workflow-manager.app.api.workflow.list_available_tasks
    workflow-manager.app.api.workflow.upload_and_trigger
 
 
@@ -60,6 +64,12 @@ Module Contents
    :value: 'device-manager:8000'
 
 
+.. py:data:: router
+
+.. py:data:: oauth2_scheme
+
+.. py:data:: orchestration_engine
+
 .. py:data:: data_lake_directory
 
 .. py:function:: trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
@@ -76,7 +86,7 @@ Module Contents
        dict: A dictionary containing the response from the orchestration engine.
 
 
-.. py:function:: calc_age_from_date(birth_date: datetime.date) -> int
+.. py:function:: calc_age_from_date(birth_date: date) -> int
 
    Calculate age in years from a given birth date.
 
@@ -103,6 +113,19 @@ Module Contents
    Returns
    -------
        dict: A dictionary containing a success message.
+
+
+.. py:function:: list_available_tasks()
+   :async:
+
+
+   Endpoint to list the available tasks from the orchestration engine.
+
+   Currently, only Airflow is supported.
+
+   Returns
+   -------
+       dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
 
 
 .. py:function:: upload_and_trigger(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)], file: fastapi.UploadFile = File(...)) -> Dict[str, Any]
