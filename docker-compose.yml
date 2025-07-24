@@ -31,13 +31,20 @@ x-airflow-common:
     # - ${AIRFLOW_PLUGINS}:/opt/airflow/plugins
     - ./services/airflow/secrets:/opt/secrets
     - data_lake:/opt/airflow/data_lake
-  user: "0:0" # run as airflow root to be able to create files #"${AIRFLOW_UID:-50000}:0"
+    - /var/run/docker.sock:/var/run/docker.sock
   depends_on:
     &airflow-common-depends-on
     airflow-database:
       condition: service_healthy
 
 services:
+  init-data-lake:
+    image: busybox
+    command: ["chmod", "-R", "777", "/data"]
+    volumes:
+      - data_lake:/data
+    user: "0:0"
+    restart: no
 
   # SERVICES
   # Workflow manager, device manager and exam manager create data tables in postgres DB
@@ -174,6 +181,22 @@ services:
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
 
+  # Add the Gadgetron service
+  gadgetron:
+    container_name: gadgetron
+    image: ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:latest
+    ports:
+      - 9002:9002
+    volumes:
+      - data_lake:/data
+    environment:
+      - GADGETRON_HOME=/usr/local/gadgetron
+      - GADGETRON_PORT=9002
+    restart: always
+    depends_on:
+      - init-data-lake
+      - scanhub-database
+
   # Airflow services
   airflow-webserver:
     <<: *airflow-common
@@ -271,6 +294,8 @@ services:
     user: "0:0"
     volumes:
       - .:/sources
+    depends_on:
+      - init-data-lake
 
   # DATABASES
   # Airflow Postgres Database:
