@@ -94,7 +94,7 @@ Module Contents
    :async:
 
 
-   Callback endpoint to notify that results are ready.
+   Notify that results are ready via callback endpoint.
 
    Args:
        dag_id (str): The ID of the DAG.
