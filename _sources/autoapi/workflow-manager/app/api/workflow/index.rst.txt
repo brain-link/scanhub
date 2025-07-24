@@ -35,6 +35,7 @@ Functions
 
    workflow-manager.app.api.workflow.trigger_task
    workflow-manager.app.api.workflow.calc_age_from_date
+   workflow-manager.app.api.workflow.callback_results_ready
    workflow-manager.app.api.workflow.upload_and_trigger
 
 
@@ -87,6 +88,21 @@ Module Contents
    Returns
    -------
        Age in years as int
+
+
+.. py:function:: callback_results_ready(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
+   :async:
+
+
+   Callback endpoint to notify that results are ready.
+
+   Args:
+       dag_id (str): The ID of the DAG.
+       access_token (str): The access token for authentication.
+
+   Returns
+   -------
+       dict: A dictionary containing a success message.
 
 
 .. py:function:: upload_and_trigger(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)], file: fastapi.UploadFile = File(...)) -> Dict[str, Any]
