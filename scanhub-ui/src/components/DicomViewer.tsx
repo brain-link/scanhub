@@ -43,23 +43,23 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   // }
 
   // Query the result by id
-  const {
-    data: task,
-    // refetch: refetchResult,
-    isError,
-  } = useQuery<AcquisitionTaskOut | DAGTaskOut, Error>({
-    queryKey: ['task', taskId],
-    queryFn: async () => {
-      if (taskId) {
-        return await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId).then((result) => {
-          return result.data
-        })
-      }
-      else {
-        throw 'no-task-id-given'
-      }
-    },
-  })
+  // const {
+  //   data: task,
+  //   // refetch: refetchResult,
+  //   isError,
+  // } = useQuery<AcquisitionTaskOut | DAGTaskOut, Error>({
+  //   queryKey: ['task', taskId],
+  //   queryFn: async () => {
+  //     if (taskId) {
+  //       return await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId).then((result) => {
+  //         return result.data
+  //       })
+  //     }
+  //     else {
+  //       throw 'no-task-id-given'
+  //     }
+  //   },
+  // })
 
   // if (task === undefined || isError){
   //   <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
@@ -67,9 +67,9 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   //   </Container>
   // }
   
-  if (task?.results && task.results.length > 0){
-    console.log('Task result: ', task.results[task.results.length-1].directory, task.results[task.results.length-1].filename)
-  }
+  // if (task?.results && task.results.length > 0){
+  //   console.log('Task result: ', task.results[task.results.length-1].directory, task.results[task.results.length-1].filename)
+  // }
 
   // Set state variables
   const [numberViewports, setNumberViewports] = React.useState<number>(1)
@@ -78,10 +78,10 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   // Define viewport reference
   const dicomElement = React.useRef<HTMLDivElement>(null);
 
-  // const dicomImageId = 'wadouri:marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
-  const resultId = task?.results?.length ? task?.results?.[task.results.length-1].id : ''
-  const dicomImageId = 'wadouri:' + baseUrls.examService + '/api/v1/exam/dicom/' + resultId
-  console.log('viewportData: ', dicomImageId)
+  const dicomImageId = 'wadouri:https://localhost:8443/dicom-proxy/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
+  // const resultId = task?.results?.length ? task?.results?.[task.results.length-1].id : ''
+  // const dicomImageId = 'wadouri:' + baseUrls.examService + '/api/v1/exam/dicom/' + resultId
+  // console.log('viewportData: ', dicomImageId)
 
   React.useEffect(() => {
     cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
@@ -99,21 +99,21 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
     }
     enableViewport();
 
-  }, [task])
+  }, [])
 
-  if (task === undefined || 
-      isError ||
-      !task.results || 
-      task.results.length == 0 || 
-      task.status != ItemStatus.Finished || 
-      task.task_type != TaskType.Reconstruction
-  ) {
-    return (
-      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
-      </Container>
-    )
-  }
+  // if (task === undefined || 
+  //     isError ||
+  //     !task.results || 
+  //     task.results.length == 0 || 
+  //     task.status != ItemStatus.Finished || 
+  //     task.task_type != TaskType.Reconstruction
+  // ) {
+  //   return (
+  //     <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+  //       <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
+  //     </Container>
+  //   )
+  // }
 
   return (
     <Stack
