@@ -21,7 +21,7 @@ RESULT_URI = "http://exam-manager:8000/api/v1/exam/result"
 SEQUENCE_URI = "http://exam-manager:8000/api/v1/exam/sequence"
 
 
-async def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:
+def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:
     """
     Fetch acquisition task by ID from the exam manager service.
 
@@ -48,7 +48,7 @@ async def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:
     return AcquisitionTaskOut(**task_raw)
 
 
-async def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token: str) -> AcquisitionTaskOut:
+def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token: str) -> AcquisitionTaskOut:
     """
     Update an acquisition task on the task service with the provided payload.
 
@@ -82,7 +82,7 @@ async def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token:
     return AcquisitionTaskOut(**update_task_response.json())
 
 
-async def get_sequence(sequence_id: str, user_access_token: str):
+def get_sequence(sequence_id: str, user_access_token: str) -> MRISequenceOut:
     """
     Fetch MRI sequence by ID from the exam manager service.
 
@@ -106,7 +106,7 @@ async def get_sequence(sequence_id: str, user_access_token: str):
     return MRISequenceOut(**get_sequence_response.json())
 
 
-async def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
+def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
     """
     Create a blank result in the exam manager service.
 
@@ -127,7 +127,31 @@ async def create_blank_result(task_id: str, user_access_token: str) -> ResultOut
     return ResultOut(**blank_result_response.json())
 
 
-async def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
+def delete_blank_result(result_id: str, user_access_token: str) -> None:
+    """
+    Delete a blank result in the exam manager service.
+
+    Args
+    ----
+        result_id (str): The unique identifier of the result to delete.
+        user_access_token (str): The user's access token for authentication.
+
+    Returns
+    -------
+        None
+
+    Raises
+    ------
+        HTTPException: If the result deletion fails (status code not 204).
+    """
+    headers = {"Authorization": "Bearer " + user_access_token}
+    delete_response = requests.delete(
+        RESULT_URI, params={"result_id": result_id}, headers=headers, timeout=3
+    )
+    if delete_response.status_code != 204:
+        raise HTTPException(status_code=404, detail="Could not delete result.")
+
+def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
     """
     Update a result in the exam manager service.
 

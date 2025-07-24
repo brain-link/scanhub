@@ -11,6 +11,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
 import base64
 import json
+import os
 from secrets import compare_digest, token_hex
 from typing import Annotated, Dict
 from uuid import UUID
@@ -68,7 +69,7 @@ async def start_scan_via_websocket(
 
     """
     # Get pulseq sequence
-    sequence = await exam_requests.get_sequence(task.sequence_id, access_token)
+    sequence = exam_requests.get_sequence(task.sequence_id, access_token)
 
     payload = AcquisitionPayload(
         **task.model_dump(),
@@ -179,9 +180,9 @@ async def websocket_endpoint(
                     # Get task
                     task_id = str(message.get('task_id'))
                     user_access_token = str(message.get('user_access_token'))
-                    task = await exam_requests.get_task(task_id, user_access_token)
+                    task = exam_requests.get_task(task_id, user_access_token)
                     task.progress = data['progress']
-                    updated_task = await exam_requests.set_task(task_id, task, user_access_token)
+                    updated_task = exam_requests.set_task(task_id, task, user_access_token)
                     await websocket.send_json({
                         'command': 'feedback',
                         'message': f'Acquisition task progress: {updated_task.progress}%',
@@ -198,36 +199,49 @@ async def websocket_endpoint(
                 shape = tuple(message.get('shape'))
                 dtype = message.get('dtype')
                 array_bytes = base64.b64decode(message.get('data'))
-                result_array = np.frombuffer(array_bytes, dtype=dtype).reshape(shape)
-                print(f"Received result with shape {result_array.shape} and dtype {result_array.dtype}")
+                result_data = np.frombuffer(array_bytes, dtype=dtype).reshape(shape)
+                print(f"Received result with shape {result_data.shape} and dtype {result_data.dtype}")
 
                 # Get corresponding acquisition task
                 task_id = str(message.get('task_id'))
                 user_access_token = str(message.get('user_access_token'))
-                task = await exam_requests.get_task(task_id, user_access_token)
+                task = exam_requests.get_task(task_id, user_access_token)
 
                 # Update task status to FINISHED
                 task.status = ItemStatus.FINISHED
-                _ = await exam_requests.set_task(task_id, task, user_access_token)
+                _ = exam_requests.set_task(task_id, task, user_access_token)
+
+                data_lake_dir = os.getenv('DATA_LAKE_DIRECTORY', '/opt/airflow/data_lake')
+                result_directory = os.path.join(data_lake_dir, str(task.workflow_id))
+                os.makedirs(result_directory, exist_ok=True)
+                print(f"Saving to data lake directory: {result_directory}")
 
                 # Create blank result
-                blank_result = await exam_requests.create_blank_result(task_id, user_access_token)
+                blank_result = exam_requests.create_blank_result(task_id, user_access_token)
                 # Update result info with created ID
                 set_result = SetResult(
                     type=ResultType.NPY,
-                    directory=f"results/{task.workflow_id}/",
-                    filename=f"{blank_result.id}.npy"
+                    directory=result_directory,
+                    filename=f"{blank_result.id}.npy",
                 )
-                result = await exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
-                print("Result in database: ", result.model_dump())
 
-                # Send feedback to the device
-                await websocket.send_json({
-                    'command': 'feedback',
-                    'message': f'Result {result.id} saved successfully',
-                })
-
-                # TODO: Save data in data lake and write datalake path to result
+                # Save result
+                file_path = os.path.join(set_result.directory, set_result.filename)
+                np.save(file_path, result_data)
+                if os.path.exists(file_path):
+                    result = exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
+                    print("Result in database: ", result.model_dump())
+                    # Send feedback to the device
+                    await websocket.send_json({
+                        'command': 'feedback',
+                        'message': f'Result {result.id} saved successfully to datalake: {file_path}',
+                    })
+                else:
+                    exam_requests.delete_blank_result(str(blank_result.id), user_access_token)
+                    await websocket.send_json({
+                        'command': 'feedback',
+                        'message': f'Could not save result {result.id}, removing blank result from database...',
+                    })
 
             else:
                 print("Received unknown command, which will be ignored:", command)
