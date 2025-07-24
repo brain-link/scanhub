@@ -182,6 +182,26 @@ def calc_age_from_date(birth_date: date) -> int:
     return age
 
 
+@router.post("/results_ready/{dag_id}/", tags=["WorkflowManager"])
+async def callback_results_ready(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
+    """
+    Callback endpoint to notify that results are ready.
+
+    Args:
+        dag_id (str): The ID of the DAG.
+        access_token (str): The access token for authentication.
+
+    Returns
+    -------
+        dict: A dictionary containing a success message.
+    """
+    headers = {"Authorization": "Bearer " + access_token}
+    response = requests.post(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{dag_id}/results_ready", headers=headers)
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail="Failed to notify results ready.")
+    return {"message": "Results ready notification sent successfully."}
+
+
 # Test endpoint to upload a file and trigger a DAG
 @router.post("/upload_and_trigger/{dag_id}/", tags=["WorkflowManager"])
 async def upload_and_trigger(dag_id: str,
