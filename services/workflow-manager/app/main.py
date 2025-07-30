@@ -6,7 +6,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.workflow import router
+from app.api.manager_endpoints import router
 
 app = FastAPI(
     openapi_url="/api/v1/workflowmanager/openapi.json",

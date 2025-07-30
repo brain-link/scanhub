@@ -11,9 +11,11 @@ TODO: How to handle tasks, and where to trigger the device task?
 
 """
 import json
+from uuid import UUID
 import logging
 import os
-from typing import Annotated, Any, Dict
+from datetime import date
+from typing import Annotated, Any
 
 import requests
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
@@ -32,7 +34,8 @@ from scanhub_libraries.models import (
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
-from .orchestration_engine import OrchestrationEngine
+from app.api.orchestration_engine import OrchestrationEngine
+from app.api.task_requests import get_task, set_task
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
@@ -46,13 +49,17 @@ PATIENT_MANAGER_URI = "patient-manager:8100"
 DEVICE_MANAGER_URI = "device-manager:8000"
 
 
+DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
+if DATA_LAKE_DIR is None:   # ensure that DATA_LAKE_DIR is set
+    raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
+
+
 router = APIRouter(dependencies=[Depends(get_current_user)])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 orchestration_engine = OrchestrationEngine()
 
 
-# Read the DATA_LAKE_DIRECTORY environment variable
-data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY', '/default/path/if/not/set')
+
 
 
 @router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
@@ -69,18 +76,10 @@ async def trigger_task(task_id: str,
         dict: A dictionary containing the response from the orchestration engine.
     """
     headers = {"Authorization": "Bearer " + access_token}
-    get_task_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task_id}", headers=headers, timeout=3)
-    if get_task_response.status_code != 200:
-        raise HTTPException(status_code=get_task_response.status_code, detail="Failed to fetch task with id=" + str(task_id))
-    task_raw = get_task_response.json()
-    print(f"\n>>>>>\nTriggering task: {task_raw}\n")
-    task: AcquisitionTaskOut | DAGTaskOut
-    if task_raw["task_type"] == "ACQUISITION":
-        task = AcquisitionTaskOut(**task_raw)
-    elif task_raw["task_type"] == "DAG":
-        task = DAGTaskOut(**task_raw)
-    else:
-        raise TypeError("Invalid task type.")
+
+    task = get_task(task_id, access_token)
+    print(f"\n>>>>>\nTriggering task: {task.model_dump_json()}\n")
+
 
     get_workflow_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{task.workflow_id}", headers=headers, timeout=3)
     if get_workflow_response.status_code != 200:
@@ -112,11 +111,7 @@ async def trigger_task(task_id: str,
         print("Acquisition task: ", task)
 
     task.status = ItemStatus.STARTED
-    requests.put(f"http://{EXAM_MANAGER_URI}/api/v1/exam/task/{task.id}",
-                 data=json.dumps(task, default=jsonable_encoder),
-                 headers=headers,
-                 timeout=3)
-    # could check response type here, but may be optional
+    set_task(task.id, task, access_token)
 
     if task.task_type == TaskType.ACQUISITION:
         response = requests.post(
@@ -132,29 +127,30 @@ async def trigger_task(task_id: str,
     elif task.task_type == TaskType.DAG:
         print("Triggering DAG...")
         try:
-            # Check if the file was successfully uploaded
-            # if not os.path.exists(file_location):
-            #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
-            # Define the callback endpoint
-            callback_endpoint = "http://localhost:8443/api/v1/workflowmanager/results_ready/" #"http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
+            # Get input, i.e. latest result of input task
+            if not task.input_id:
+                print("Missing task input ID")
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="DAG task input does not exist.")
+            if not (input_task := get_task(str(task.input_id), access_token)).results:
+                print("Selected input task does not have any results yet.")
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No results found for input task {input_task.id}.")
+            latest_result = sorted(input_task.results, key=lambda r: r.datetime_created, reverse=True)[0]
 
             # Update the task status to IN_PROGRESS
-            # TBD task.status = ItemStatus.IN_PROGRESS
+            task.status = ItemStatus.INPROGRESS
+            set_task(task.id, task, access_token)
 
-            if not task.results:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No results found for the task.")
-
-            sorted_results = sorted(task.results, key=lambda r: r.datetime_created, reverse=True)
-            latest_result = sorted_results[0]
+            callback_endpoint = f"https://localhost:8443/api/v1/workflowmanager/result_ready/{task.id}"
+            print("CALLBACK ENDPOINT: ", callback_endpoint)
 
             # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
             dag_response = orchestration_engine.trigger_task(
                 task.dag_id,
                 conf={
-                    "directory": latest_result.directory or "tmp",
-                    "file_name": latest_result.filename or "test.py",
+                    "directory": latest_result.directory,
+                    "file_name": latest_result.filename,
                     "workflow_manager_endpoint": callback_endpoint,
-                    "user_token": access_token
+                    "user_token": access_token,
                 }
             )
             print(f"DAG triggered with response: {dag_response}")
@@ -168,28 +164,8 @@ async def trigger_task(task_id: str,
         raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
 
-def calc_age_from_date(birth_date: date) -> int:
-    """Calculate age in years from a given birth date.
-
-    Parameters
-    ----------
-    birth_date
-        Date of birth
-
-    Returns
-    -------
-        Age in years as int
-    """
-    today = date.today()
-    age = today.year - birth_date.year
-    # Adjust if birthday hasn't occurred yet this year
-    if (today.month, today.day) < (birth_date.month, birth_date.day):
-        age -= 1
-    return age
-
-
-@router.post("/results_ready/{dag_id}/", tags=["WorkflowManager"])
-async def callback_results_ready(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
+@router.post("/result_ready/{task_id}", tags=["WorkflowManager"])
+async def callback_results_ready(task_id: UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
     """
     Notify that results are ready via callback endpoint.
 
@@ -201,14 +177,15 @@ async def callback_results_ready(dag_id: str, access_token: Annotated[str, Depen
     -------
         dict: A dictionary containing a success message.
     """
-    headers = {"Authorization": "Bearer " + access_token}
-    response = requests.post(
-        f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{dag_id}/results_ready",
-        headers=headers,
-        timeout=3  # Added timeout to fix S113
-    )
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="Failed to notify results ready.")
+    task = get_task(task_id, access_token)
+    if not hasattr(task, "dag_id") and not isinstance(task, DAGTaskOut):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Result ready callback received invalid task_id: {task.id}",
+        )
+    print("CALLBACK: Result ready for DAG ID ", task.dag_id)
+    task.status = ItemStatus.FINISHED
+    set_task(task.id, task, access_token)
     return {"message": "Results ready notification sent successfully."}
 
 
@@ -235,7 +212,7 @@ async def list_available_tasks():
 @router.post("/upload_and_trigger/{dag_id}/", tags=["WorkflowManager"])
 async def upload_and_trigger(dag_id: str,
                              access_token: Annotated[str, Depends(oauth2_scheme)],
-                             file: UploadFile = File(...)) -> Dict[str, Any]:
+                             file: UploadFile = File(...)) -> dict[str, Any]:
     """
     Upload a file and trigger an Airflow DAG.
 
@@ -255,7 +232,7 @@ async def upload_and_trigger(dag_id: str,
     try:
         # Define the file location in the shared data lake
         directory = f"/upload/{dag_id}"
-        file_location = f"{data_lake_directory}{directory}/{file.filename}"
+        file_location = f"{DATA_LAKE_DIR}{directory}/{file.filename}"
         os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
         # Save the uploaded file
