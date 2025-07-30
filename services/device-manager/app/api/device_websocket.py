@@ -45,10 +45,10 @@ from app.api.dal import (
 )
 
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
+DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
 router = APIRouter()
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
@@ -195,6 +195,11 @@ async def websocket_endpoint(
 
             elif command == 'result':
                 print("Handle command 'result'.")
+                # Check data lake
+                if DATA_LAKE_DIR is None:
+                    raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
+                if not os.path.exists(DATA_LAKE_DIR):
+                    raise IsADirectoryError("`DATA_LAKE_DIRECTORY` does not exist.")
                 # Get the result data from the message
                 shape = tuple(message.get('shape'))
                 dtype = message.get('dtype')
@@ -211,8 +216,8 @@ async def websocket_endpoint(
                 task.status = ItemStatus.FINISHED
                 _ = exam_requests.set_task(task_id, task, user_access_token)
 
-                data_lake_dir = os.getenv('DATA_LAKE_DIRECTORY', '/opt/airflow/data_lake')
-                result_directory = os.path.join(data_lake_dir, str(task.workflow_id))
+                # Define result directory
+                result_directory = os.path.join(DATA_LAKE_DIR, str(task.workflow_id))
                 os.makedirs(result_directory, exist_ok=True)
                 print(f"Saving to data lake directory: {result_directory}")
 
@@ -225,9 +230,10 @@ async def websocket_endpoint(
                     filename=f"{blank_result.id}.npy",
                 )
 
-                # Save result
+                # Save result to shared datalake
                 file_path = os.path.join(set_result.directory, set_result.filename)
                 np.save(file_path, result_data)
+
                 if os.path.exists(file_path):
                     result = exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
                     print("Result in database: ", result.model_dump())
