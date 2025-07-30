@@ -184,12 +184,11 @@ async def get_all_patient_exams(patient_id: UUID, user: Annotated[User, Depends(
     """
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("patient_id:", patient_id)
+    print("Getting exams for patient_id:", patient_id)
     if not (exams := await exam_dal.get_all_exam_data(patient_id=patient_id)):
         # Don't raise exception here, list might be empty
         return []
     result = [await get_exam_out_model(data=exam) for exam in exams]
-    print(">> Exam list: ", result)
     return result
 
 

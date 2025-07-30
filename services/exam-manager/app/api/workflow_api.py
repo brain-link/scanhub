@@ -7,7 +7,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseWorkflow, ItemStatus, User, WorkflowOut
+from scanhub_libraries.models import BaseWorkflow, ItemStatus, User, WorkflowOut, TaskType, DAGTaskOut, AcquisitionTaskOut
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import ensure_uuid
 
@@ -119,15 +119,35 @@ async def create_workflow_from_template(exam_id: UUID,
 
     workflow_out = await get_workflow_out_model(data=workflow)
 
+    task_template_instance_mapping = {}
     # Create all the sub-items for the task templates in a workflow template
     for task in template.tasks:
-        workflow_out.tasks.append(await task_api.create_task_from_template(
+        task_instance: DAGTaskOut | AcquisitionTaskOut = await task_api.create_task_from_template(
             workflow_id=workflow.id,
             template_id=task.id,
             new_task_is_template=new_workflow_is_template,
             user=user,
-        ))
+        )
+        # Map template task IDs to instance task IDs
+        task_template_instance_mapping[task.id] = task_instance.id
+        workflow_out.tasks.append(task_instance)
 
+    # Update inputs of workflow task instances
+    for task_instance in workflow_out.tasks:
+        if hasattr(task_instance, "input_id"):
+            if task_instance.input_id is not None and task_instance.input_id in task_template_instance_mapping:
+                # Assign the new instance ID which corresponds to the original template ID
+                task_instance.input_id = task_template_instance_mapping[task_instance.input_id]
+                _ = await task_api.update_task(
+                    task_id=task_instance.id,
+                    payload=task_instance,
+                    user=user,
+                )
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Could not update input reference for task instance {task_instance.id}",
+                )
     return workflow_out
 
 

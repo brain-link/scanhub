@@ -61,4 +61,4 @@ async def get_task_out(data: DAGTask | AcquisitionTask | Task) -> DAGTaskOut | A
     elif task["task_type"] == "DAG":
         return DAGTaskOut(**task)
     else:
-        raise HTTPException(status_code=400, detail="Task type not supported.")
+        raise HTTPException(status_code=400, detail="Invalid task type")
