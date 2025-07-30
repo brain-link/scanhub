@@ -1,34 +1,32 @@
 x-airflow-common:
   &airflow-common
-  # In order to add custom dependencies or upgrade provider packages you can use your extended image.
-  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
-  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5-python3.10}
   build: ./services/airflow
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    # TODO move the passwords contained here in a secret and
-    # load that secret at runtime instead of putting it in the environment variable here
+    # TODO move the passwords contained here in a secret and load that secret at runtime instead of putting it in the environment variable here
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
     # For backward compatibility, with Airflow <2.3
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+    # AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'  # 'true' to see some tutorials and examples
+    # AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
+
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
     AIRFLOW__SECRETS__BACKEND: airflow.secrets.local_filesystem.LocalFilesystemBackend
     AIRFLOW__SECRETS__BACKEND_KWARGS: '{"variables_file_path": "/opt/secrets/variables.yaml", "connections_file_path": "/opt/secrets/connections.yaml"}'
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
-    AIRFLOW__CLI__ENDPOINT_URL: http://localhost:8081
+
+    # AIRFLOW__CLI__ENDPOINT_URL: http://localhost:8081
+    AIRFLOW__CLI__ENDPOINT_URL: http://airflow-webserver:8080 # point to internal docker service name
+    AIRFLOW__WEBSERVER__BASE_URL: https://localhost:8443/airflow
+
     DATA_LAKE_DIRECTORY: /opt/airflow/data_lake
   volumes:
     - ./services/airflow/dags:/opt/airflow/dags
     - ./services/airflow/logs:/opt/airflow/logs
     - ./services/airflow/plugins:/opt/airflow/plugins
-    # - ${AIRFLOW_DAGS}:/opt/airflow/dags
-    # - ${AIRFLOW_LOGS}:/opt/airflow/logs
-    # - ${AIRFLOW_PLUGINS}:/opt/airflow/plugins
     - ./services/airflow/secrets:/opt/secrets
     - data_lake:/opt/airflow/data_lake
     - /var/run/docker.sock:/var/run/docker.sock
@@ -56,7 +54,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/workflow-manager/app/:/app/
-      - data_lake:/app/data_lake/
+      - data_lake:/data_lake
     environment:
       - ORCHESTRATION_ENGINE=AIRFLOW
       - KESTRA_API_URL=http://kestra:8080
@@ -65,7 +63,7 @@ services:
       # load that secret at runtime instead of putting it in the environment variable here
       - AIRFLOW_USERNAME=airflow
       - AIRFLOW_PASSWORD=airflow
-      - DATA_LAKE_DIRECTORY=/app/data_lake
+      - DATA_LAKE_DIRECTORY=/data_lake
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflowmanager/health/readiness"]
@@ -84,7 +82,9 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/device-manager/app/:/app/
-      # - data_lake:/app/data_lake/
+      - data_lake:/data_lake
+    environment:
+      - DATA_LAKE_DIRECTORY=/data_lake
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://device-manager:8000/api/v1/device/health/readiness"]
@@ -107,7 +107,6 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/exam-manager/app/:/app/
-      - data_lake:/app/data_lake/
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -161,7 +160,6 @@ services:
         # - BASE_IMG=scanhub-base
     volumes:
       - ./services/user-login-manager/app/:/app/
-      - data_lake:/app/data_lake/
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://user-login-manager:8000/api/v1/userlogin/health/readiness"]
@@ -196,8 +194,10 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
+    ports:
+      - "8081:8080"
     healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://airflow-webserver:8080/health" ]
+      test: [ "CMD", "curl", "--fail", "http://airflow-webserver:8080/airflow/health" ]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -407,6 +407,8 @@ services:
       patient-manager:
         condition: service_healthy
       user-login-manager:
+        condition: service_healthy
+      airflow-webserver:
         condition: service_healthy
     extra_hosts:                                # somehow needed to find host.docker.internal under linux
       - 'host.docker.internal:host-gateway'     # for the access to host.docker.internal to work the firewall of the host needs to allow incoming connections
