@@ -23,6 +23,7 @@ Attributes
 .. autoapisummary::
 
    device-manager.app.api.device_websocket.LOG_CALL_DELIMITER
+   device-manager.app.api.device_websocket.DATA_LAKE_DIR
    device-manager.app.api.device_websocket.oauth2_scheme
    device-manager.app.api.device_websocket.router
    device-manager.app.api.device_websocket.dict_id_websocket
@@ -44,6 +45,8 @@ Module Contents
 .. py:data:: LOG_CALL_DELIMITER
    :value: '-------------------------------------------------------------------------------'
 
+
+.. py:data:: DATA_LAKE_DIR
 
 .. py:data:: oauth2_scheme
 

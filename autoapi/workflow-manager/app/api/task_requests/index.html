@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>device-manager.app.api.device_websocket &#8212; ScanHub Documentation</title>
+    <title>workflow-manager.app.api.task_requests &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/device-manager/app/api/device_websocket/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/task_requests/index';</script>
     <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -364,8 +364,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="reference internal" href="../index.html">device-manager.app.api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../main/index.html">device-manager.app.main</a></li>
+<li class="toctree-l1 current active"><a class="reference internal" href="../index.html">workflow-manager.app.api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../main/index.html">workflow-manager.app.main</a></li>
 </ul>
 </div>
 </nav></div>
@@ -406,7 +406,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">device-manager.app.api.device_websocket</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.task_requests</span></li>
   </ul>
 </nav>
 </div>
@@ -423,32 +423,20 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-device-manager.app.api.device_websocket">
-<span id="device-manager-app-api-device-websocket"></span><h1>device-manager.app.api.device_websocket<a class="headerlink" href="#module-device-manager.app.api.device_websocket" title="Link to this heading">#</a></h1>
-<p>Device websocket connection.</p>
-<p>This module defines the WebSocket endpoints for managing devices.
-It includes functionalities for:
-- Device registration and status updates via WebSocket.
-- Listening for commands from devices.</p>
+  <section id="module-workflow-manager.app.api.task_requests">
+<span id="workflow-manager-app-api-task-requests"></span><h1>workflow-manager.app.api.task_requests<a class="headerlink" href="#module-workflow-manager.app.api.task_requests" title="Link to this heading">#</a></h1>
+<p>Handler for exam requests.</p>
+<p>This module defines functions to interact with the exam manager service,
+including fetching tasks, sequences, and results. It provides a way to
+create and update acquisition tasks and results, ensuring that the data
+is properly formatted and authenticated.</p>
 <p>Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.LOG_CALL_DELIMITER" title="device-manager.app.api.device_websocket.LOG_CALL_DELIMITER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.DATA_LAKE_DIR" title="device-manager.app.api.device_websocket.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.oauth2_scheme" title="device-manager.app.api.device_websocket.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.router" title="device-manager.app.api.device_websocket.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.dict_id_websocket" title="device-manager.app.api.device_websocket.dict_id_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.task_requests.TASK_URI" title="workflow-manager.app.api.task_requests.TASK_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TASK_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -459,14 +447,11 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.start_scan_via_websocket" title="device-manager.app.api.device_websocket.start_scan_via_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_scan_via_websocket</span></code></a>(task, access_token)</p></td>
-<td><p>Start a scan via a websocket that was already opened by the device.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.task_requests.get_task" title="workflow-manager.app.api.task_requests.get_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_task</span></code></a>(...)</p></td>
+<td><p>Fetch acquisition task by ID from the exam manager service.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.connection_with_valid_id_and_token" title="device-manager.app.api.device_websocket.connection_with_valid_id_and_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token</span></code></a>(→ uuid.UUID)</p></td>
-<td><p>Check if the given device_id and device_token belong to an existing device in the database.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.websocket_endpoint" title="device-manager.app.api.device_websocket.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket)</p></td>
-<td><p>Websocket endpoint for device communication.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.task_requests.set_task" title="workflow-manager.app.api.task_requests.set_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_task</span></code></a>(...)</p></td>
+<td><p>Update an acquisition task on the task service with the provided payload.</p></td>
 </tr>
 </tbody>
 </table>
@@ -475,59 +460,63 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py data">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.LOG_CALL_DELIMITER">
-<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">LOG_CALL_DELIMITER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'-------------------------------------------------------------------------------'</span></em><a class="headerlink" href="#device-manager.app.api.device_websocket.LOG_CALL_DELIMITER" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.DATA_LAKE_DIR">
-<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">DATA_LAKE_DIR</span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.DATA_LAKE_DIR" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.oauth2_scheme">
-<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.oauth2_scheme" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.router">
-<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.router" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.dict_id_websocket">
-<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">dict_id_websocket</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">fastapi.WebSocket</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#device-manager.app.api.device_websocket.dict_id_websocket" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.task_requests.TASK_URI">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.task_requests.</span></span><span class="sig-name descname"><span class="pre">TASK_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://exam-manager:8000/api/v1/exam/task'</span></em><a class="headerlink" href="#workflow-manager.app.api.task_requests.TASK_URI" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.start_scan_via_websocket">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">start_scan_via_websocket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.device_websocket.start_scan_via_websocket" title="Link to this definition">#</a></dt>
-<dd><p>Start a scan via a websocket that was already opened by the device.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>device_task</dt><dd><p>Details of the scan and the device to scan on.</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="workflow-manager.app.api.task_requests.get_task">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.task_requests.</span></span><span class="sig-name descname"><span class="pre">get_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.task_requests.get_task" title="Link to this definition">#</a></dt>
+<dd><p>Fetch acquisition task by ID from the exam manager service.</p>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>task_id (str | UUID): The unique identifier of the task to retrieve.
+user_access_token (str): The user’s access token for authentication.</p>
+</div></blockquote>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>AcquisitionTaskOut | None: The acquisition task object if found and valid.</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>HTTPException: If the task is not found (404) or is not an acquisition task (400).</p>
+</div></blockquote>
 </section>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.connection_with_valid_id_and_token">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">connection_with_valid_id_and_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uuid.UUID</span></span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.connection_with_valid_id_and_token" title="Link to this definition">#</a></dt>
-<dd><p>Check if the given device_id and device_token belong to an existing device in the database.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.websocket_endpoint">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">websocket_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.device_websocket.websocket_endpoint" title="Link to this definition">#</a></dt>
-<dd><p>Websocket endpoint for device communication.</p>
-<section id="args">
-<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>websocket (WebSocket): The WebSocket connection object.
-device_id (UUID): The device_id.</p>
-</div></blockquote>
+<dt class="sig sig-object py" id="workflow-manager.app.api.task_requests.set_task">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.task_requests.</span></span><span class="sig-name descname"><span class="pre">set_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.task_requests.set_task" title="Link to this definition">#</a></dt>
+<dd><p>Update an acquisition task on the task service with the provided payload.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task_id<span class="classifier">str | UUID</span></dt><dd><p>The unique identifier of the task to update.</p>
+</dd>
+<dt>payload<span class="classifier">AcquisitionTaskOut</span></dt><dd><p>The updated task data to send to the task service.</p>
+</dd>
+<dt>user_access_token<span class="classifier">str</span></dt><dd><p>The access token used for authorization with the task service.</p>
+</dd>
+</dl>
+</section>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>AcquisitionTaskOut</dt><dd><p>The updated task object returned from the task service.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Raises<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>If the task update fails (e.g. non-200 response from the task service).</p>
+</dd>
+</dl>
 </section>
 </dd></dl>
 
@@ -566,14 +555,9 @@ device_id (UUID): The device_id.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.LOG_CALL_DELIMITER"><code class="docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.dict_id_websocket"><code class="docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.start_scan_via_websocket"><code class="docutils literal notranslate"><span class="pre">start_scan_via_websocket()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.connection_with_valid_id_and_token"><code class="docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.websocket_endpoint"><code class="docutils literal notranslate"><span class="pre">websocket_endpoint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.task_requests.TASK_URI"><code class="docutils literal notranslate"><span class="pre">TASK_URI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.task_requests.get_task"><code class="docutils literal notranslate"><span class="pre">get_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.task_requests.set_task"><code class="docutils literal notranslate"><span class="pre">set_task()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -583,7 +567,7 @@ device_id (UUID): The device_id.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../../../_sources/autoapi/device-manager/app/api/device_websocket/index.rst.txt"
+      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/task_requests/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

@@ -1,7 +1,7 @@
-workflow-manager.app.api.workflow
-=================================
+workflow-manager.app.api.manager_endpoints
+==========================================
 
-.. py:module:: workflow-manager.app.api.workflow
+.. py:module:: workflow-manager.app.api.manager_endpoints
 
 .. autoapi-nested-parse::
 
@@ -19,16 +19,16 @@ Attributes
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.router
-   workflow-manager.app.api.workflow.oauth2_scheme
-   workflow-manager.app.api.workflow.orchestration_engine
-   workflow-manager.app.api.workflow.EXAM_MANAGER_URI
-   workflow-manager.app.api.workflow.PATIENT_MANAGER_URI
-   workflow-manager.app.api.workflow.DEVICE_MANAGER_URI
-   workflow-manager.app.api.workflow.router
-   workflow-manager.app.api.workflow.oauth2_scheme
-   workflow-manager.app.api.workflow.orchestration_engine
-   workflow-manager.app.api.workflow.data_lake_directory
+   workflow-manager.app.api.manager_endpoints.router
+   workflow-manager.app.api.manager_endpoints.oauth2_scheme
+   workflow-manager.app.api.manager_endpoints.orchestration_engine
+   workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI
+   workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI
+   workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI
+   workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR
+   workflow-manager.app.api.manager_endpoints.router
+   workflow-manager.app.api.manager_endpoints.oauth2_scheme
+   workflow-manager.app.api.manager_endpoints.orchestration_engine
 
 
 Functions
@@ -36,11 +36,10 @@ Functions
 
 .. autoapisummary::
 
-   workflow-manager.app.api.workflow.trigger_task
-   workflow-manager.app.api.workflow.calc_age_from_date
-   workflow-manager.app.api.workflow.callback_results_ready
-   workflow-manager.app.api.workflow.list_available_tasks
-   workflow-manager.app.api.workflow.upload_and_trigger
+   workflow-manager.app.api.manager_endpoints.trigger_task
+   workflow-manager.app.api.manager_endpoints.callback_results_ready
+   workflow-manager.app.api.manager_endpoints.list_available_tasks
+   workflow-manager.app.api.manager_endpoints.upload_and_trigger
 
 
 Module Contents
@@ -64,13 +63,13 @@ Module Contents
    :value: 'device-manager:8000'
 
 
+.. py:data:: DATA_LAKE_DIR
+
 .. py:data:: router
 
 .. py:data:: oauth2_scheme
 
 .. py:data:: orchestration_engine
-
-.. py:data:: data_lake_directory
 
 .. py:function:: trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
    :async:
@@ -86,21 +85,7 @@ Module Contents
        dict: A dictionary containing the response from the orchestration engine.
 
 
-.. py:function:: calc_age_from_date(birth_date: date) -> int
-
-   Calculate age in years from a given birth date.
-
-   Parameters
-   ----------
-   birth_date
-       Date of birth
-
-   Returns
-   -------
-       Age in years as int
-
-
-.. py:function:: callback_results_ready(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
+.. py:function:: callback_results_ready(task_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
    :async:
 
 
@@ -128,7 +113,7 @@ Module Contents
        dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
 
 
-.. py:function:: upload_and_trigger(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)], file: fastapi.UploadFile = File(...)) -> Dict[str, Any]
+.. py:function:: upload_and_trigger(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)], file: fastapi.UploadFile = File(...)) -> dict[str, Any]
    :async:
 
 
