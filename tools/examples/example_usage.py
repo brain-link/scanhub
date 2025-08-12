@@ -22,15 +22,6 @@ async def perform_scan(client, payload: AcquisitionPayload):
             user_access_token=payload.access_token,
         )
 
-    # Create some random data to simulate scan results.
-    # data = np.random.rand(42, 100, 120)
-    # Submit the result, device status is set to READY.
-    # await client.upload_result(
-    #     result=data,
-    #     task_id=str(payload.id),
-    #     user_access_token=payload.access_token,
-    # )
-
     # Get MRD file
     directory = Path(__file__).resolve().parent
     file_path = directory / "data.mrd"
