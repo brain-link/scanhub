@@ -162,6 +162,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 await websocket.send_json({"command": "feedback", "message": f"Unknown command: {command}"})
                 print("Received unknown command, which will be ignored:", command)
 
+            command = None  # Reset command to avoid confusion in the next iteration
+
     except WebSocketDisconnect:
         print("WebSocketDisconnect")
         del dict_id_websocket[device_id]
@@ -195,12 +197,9 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
     """Handle device status updates."""
     print("Handle command 'update_status'.")
     status = str(message.get("status"))
-    data = message.get("data")
+
     if not status:
         await websocket.send_json({"message": "Invalid status."})
-        return
-    if data is None or "progress" not in data:
-        await websocket.send_json({"message": "Invalid data."})
         return
 
     if not await dal_update_device(device_id, {"status": status}):
@@ -208,7 +207,11 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         await websocket.send_json({"message": "Error updating device."})
 
     if status == "SCANNING":
-        # Get task
+        data = message.get("data")
+        if data is None or "progress" not in data:
+            await websocket.send_json({"message": "Invalid data."})
+            return
+
         task_id = str(message.get("task_id"))
         user_access_token = str(message.get("user_access_token"))
         task = exam_requests.get_task(task_id, user_access_token)
