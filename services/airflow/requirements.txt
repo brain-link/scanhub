@@ -1,5 +1,0 @@
-pydicom
-pydantic
-numpy
-requests
-apache-airflow
