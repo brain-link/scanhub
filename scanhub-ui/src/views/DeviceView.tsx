@@ -148,7 +148,6 @@ export default function DeviceView() {
         setOpen={setDeviceCreateModalOpen}
         onSubmit={() => {
           refetch()
-          setDeviceCreateModalOpen(false)
         }}
       />
 

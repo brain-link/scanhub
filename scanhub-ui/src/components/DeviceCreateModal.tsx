@@ -26,37 +26,48 @@ import { deviceApi } from '../api'
 
 function DeviceForm(props: ModalProps) {
   const [, showNotification] = React.useContext(NotificationContext)
-  const [device, setDevice] = React.useState<DeviceCreationRequest>({
-    name: '',
-    description: ''
-  })
+  const [device, setDevice] = React.useState<DeviceCreationRequest>({ name: '', description: '' })
+  const [credentialsUrl, setCredentialsUrl] = React.useState<string | null>(null)
 
   // Make device creation request and refetch devices table
   const mutation = useMutation({
+    // Return the Blob so we can enable the download button after success
     mutationFn: async () => {
       const response = await deviceApi.createDeviceApiV1DeviceCreatedevicePost(device, {
         responseType: 'blob'
       })
-      // Create blob URL
-      const blob = new Blob([response.data], { type: 'application/json' });
-      const url = window.URL.createObjectURL(blob);
+      // Some clients already give you a Blob in response.data when responseType='blob'
+      // Wrap in Blob to be safe if type is unknown/ArrayBuffer
+      const blob = response?.data instanceof Blob
+        ? response.data
+        : new Blob([response.data], { type: 'application/json' })
 
-      // Create a link and click it to trigger download
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'device_credentials.json'; // Desired filename
-      a.style.display = 'none';
-
-      // Append, click, and clean up
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-
-      props.onSubmit()
-      showNotification({message: 'Device created.', type: 'success'})
+      return blob
+    },
+    onSuccess: (blob: Blob) => {
+      // Create object URL and enable the download button
+      const url = URL.createObjectURL(blob)
+      setCredentialsUrl(url)
+      showNotification({ message: 'Device created. Credentials are ready to download.', type: 'success' })
+    },
+    onError: () => {
+      showNotification({ message: 'Failed to create device.', type: 'warning' })
     }
   })
+
+  const handleDownload = () => {
+    if (!credentialsUrl) return
+    const a = document.createElement('a')
+    a.href = credentialsUrl
+    a.download = "device_credentials.json"
+    a.style.display = 'none'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    // Keep URL alive in case the user wants to click again.
+    // If you want to revoke right after download, call URL.revokeObjectURL(credentialsUrl) and setCredentialsUrl(null)
+    props.setOpen(false) // Close modal after download
+  }
 
   return (
     <>
@@ -71,7 +82,7 @@ function DeviceForm(props: ModalProps) {
         }}
       >
         <Grid container rowSpacing={3} columnSpacing={5}>
-          <Grid md={6}>
+          <Grid md={12}>
             <FormLabel sx={{marginBottom: 1}}>Device connection name</FormLabel>
             <Input
               onChange={(e) => setDevice({ ...device, name: e.target.value })}
@@ -79,7 +90,7 @@ function DeviceForm(props: ModalProps) {
               required
             />
           </Grid>
-          <Grid md={6}>
+          <Grid md={12}>
             <FormLabel sx={{marginBottom: 1}}>Description</FormLabel>
             <Textarea 
               placeholder="Add a description..."
@@ -88,9 +99,25 @@ function DeviceForm(props: ModalProps) {
             />
           </Grid>
 
-          <Grid md={12}>
-            <Button size='sm' type='submit' sx={{ maxWidth: 120 }}>
+          <Grid md={12} sx={{ display: 'flex', gap: 1 }}>
+            {/* Buttons */}
+            <Button
+              size='sm'
+              type='submit'
+              loading={mutation.isPending}
+              disabled={mutation.isPending || !device.name || !device.description || credentialsUrl !== null}
+              sx={{ maxWidth: 200 }}
+            >
               Create
+            </Button>
+
+            <Button
+              size='sm'
+              disabled={!credentialsUrl}
+              onClick={handleDownload}
+              sx={{ maxWidth: 200 }}
+            >
+              Download credentials
             </Button>
           </Grid>
         </Grid>
@@ -115,7 +142,7 @@ export default function DeviceCreateModal(props: ModalProps) {
         aria-describedby='basic-modal-dialog-description'
         size='sm'
         sx={{
-          width: '70vw',
+          width: '50vw',
           borderRadius: 'md',
           p: 5,
         }}
