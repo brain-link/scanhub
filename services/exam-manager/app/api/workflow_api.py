@@ -7,8 +7,16 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseWorkflow, User, WorkflowOut
+from scanhub_libraries.models import (
+    AcquisitionTaskOut,
+    BaseWorkflow,
+    DAGTaskOut,
+    ItemStatus,
+    User,
+    WorkflowOut,
+)
 from scanhub_libraries.security import get_current_user
+from scanhub_libraries.utils import ensure_uuid
 
 from app import LOG_CALL_DELIMITER
 from app.api import task_api
@@ -49,8 +57,7 @@ async def create_workflow(payload: BaseWorkflow, user: Annotated[User, Depends(g
     print("payload:", payload)
     if payload.status != "NEW":
         raise HTTPException(status_code=400, detail="New workflow needs to have status NEW.")
-    if payload.exam_id is not None:
-        _id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
+    if (_id := ensure_uuid(payload.exam_id)) is not None:
         if not (exam := await exam_dal.get_exam_data(exam_id=_id)):
             raise HTTPException(status_code=400, detail="exam_id must be an existing id.")
         if exam.is_template != payload.is_template:
@@ -104,7 +111,7 @@ async def create_workflow_from_template(exam_id: UUID,
             detail="Request to create workflow from workflow instance instead of workflow template."
         )
     new_workflow = BaseWorkflow(**template.__dict__)
-    new_workflow.status = "NEW"
+    new_workflow.status = ItemStatus.NEW
     new_workflow.is_template = new_workflow_is_template
     new_workflow.exam_id = exam_id
     if not (exam := await exam_dal.get_exam_data(exam_id=exam_id)):
@@ -119,15 +126,35 @@ async def create_workflow_from_template(exam_id: UUID,
 
     workflow_out = await get_workflow_out_model(data=workflow)
 
+    task_template_instance_mapping = {}
     # Create all the sub-items for the task templates in a workflow template
     for task in template.tasks:
-        workflow_out.tasks.append(await task_api.create_task_from_template(
+        task_instance: DAGTaskOut | AcquisitionTaskOut = await task_api.create_task_from_template(
             workflow_id=workflow.id,
             template_id=task.id,
             new_task_is_template=new_workflow_is_template,
             user=user,
-        ))
+        )
+        # Map template task IDs to instance task IDs
+        task_template_instance_mapping[task.id] = task_instance.id
+        workflow_out.tasks.append(task_instance)
 
+    # Update inputs of workflow task instances
+    for task_instance in workflow_out.tasks:
+        if hasattr(task_instance, "input_id"):
+            if task_instance.input_id is not None and task_instance.input_id in task_template_instance_mapping:
+                # Assign the new instance ID which corresponds to the original template ID
+                task_instance.input_id = task_template_instance_mapping[task_instance.input_id]
+                _ = await task_api.update_task(
+                    task_id=task_instance.id,
+                    payload=task_instance,
+                    user=user,
+                )
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Could not update input reference for task instance {task_instance.id}",
+                )
     return workflow_out
 
 
@@ -262,8 +289,7 @@ async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow,
     print("payload:", payload)
     if payload.status == "NEW":
         raise HTTPException(status_code=403, detail="Workflow cannot be updated to status NEW.")
-    if payload.exam_id is not None:
-        exam_id = UUID(payload.exam_id) if not isinstance(payload.exam_id, UUID) else payload.exam_id
+    if (exam_id := ensure_uuid(payload.exam_id)) is not None:
         if not (exam := await exam_dal.get_exam_data(exam_id=exam_id)):
             raise HTTPException(status_code=400, detail="exam_id must be an existing id.")
         if exam.is_template != payload.is_template:

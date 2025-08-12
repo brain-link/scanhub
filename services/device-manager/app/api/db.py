@@ -19,9 +19,9 @@ Base: DeclarativeMeta = declarative_base()
 postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
 postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
 postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
-if (os.path.exists(postgres_user_filepath) and \
-    os.path.exists(postgres_password_filepath) and \
-    os.path.exists(postgres_db_name_filepath) \
+if (os.path.exists(postgres_user_filepath) and
+    os.path.exists(postgres_password_filepath) and
+    os.path.exists(postgres_db_name_filepath)
 ):
     with open(postgres_user_filepath) as file:
         postgres_user = file.readline().strip()
@@ -50,25 +50,29 @@ class Device(Base):  # type: ignore
 
     __tablename__ = "device"
 
+    # Main identifiers
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+
+    # Secrets
+    token_hash: Mapped[str] = mapped_column(nullable=False, unique=True)
+    salt: Mapped[str] = mapped_column(nullable=False)
+
+    # Details
+    device_name: Mapped[str] = mapped_column(nullable=True)
+    serial_number: Mapped[str] = mapped_column(nullable=True)
+    status: Mapped[str] = mapped_column(nullable=True)
+    manufacturer: Mapped[str] = mapped_column(nullable=True)
+    modality: Mapped[str] = mapped_column(nullable=True)
+    site: Mapped[str] = mapped_column(nullable=True)
+
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
-
-    title: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    token_hash: Mapped[str] = mapped_column(nullable=False, unique=True)
-    salt: Mapped[str] = mapped_column(nullable=False)
-
-    status: Mapped[str] = mapped_column(nullable=False)
-    name: Mapped[str] = mapped_column(nullable=True)
-    manufacturer: Mapped[str] = mapped_column(nullable=True)
-    modality: Mapped[str] = mapped_column(nullable=True)
-    site: Mapped[str] = mapped_column(nullable=True)
-    ip_address: Mapped[str] = mapped_column(nullable=True)
 
     def update(self, data: dict):
         """Update attributes of orm model.

@@ -5,14 +5,14 @@
 
 from uuid import UUID
 
-from scanhub_libraries.models import BaseResult
+from scanhub_libraries.models import SetResult
 from sqlalchemy.engine import Result as SQLResult
 from sqlalchemy.future import select
 
 from app.db.postgres import Result, async_session
 
 
-async def add_result_db(payload: BaseResult) -> Result:
+async def add_blank_result_db(task_id: str | UUID) -> Result:
     """Add new result to database.
 
     Parameters
@@ -24,7 +24,7 @@ async def add_result_db(payload: BaseResult) -> Result:
     -------
         Database orm model of created result
     """
-    new_result = Result(**payload.dict())
+    new_result = Result(task_id=task_id)
     async with async_session() as session:
         session.add(new_result)
         await session.commit()
@@ -47,6 +47,7 @@ async def get_result_db(result_id: UUID) -> Result | None:
     async with async_session() as session:
         return await session.get(Result, result_id)
 
+
 async def get_all_results_db(task_id: UUID) -> list[Result]:
     """Get a list of all results assigned to a certain task.
 
@@ -63,7 +64,8 @@ async def get_all_results_db(task_id: UUID) -> list[Result]:
         result: SQLResult = await session.execute(select(Result).where(Result.task_id == task_id))
         return list(result.scalars().all())
 
-async def update_result_db(result_id: UUID, payload: BaseResult) -> Result | None:
+
+async def update_result_db(result_id: UUID, payload: SetResult) -> Result | None:
     """Update existing result in database.
 
     Parameters
@@ -84,6 +86,7 @@ async def update_result_db(result_id: UUID, payload: BaseResult) -> Result | Non
             await session.refresh(result)
             return result
     return None
+
 
 async def delete_result_db(result_id: UUID) -> bool:
     """Delete result by id.

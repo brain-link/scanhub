@@ -18,6 +18,7 @@ from scanhub_libraries.models import (
     User,
 )
 from scanhub_libraries.security import get_current_user
+from scanhub_libraries.utils import ensure_uuid
 
 from app import LOG_CALL_DELIMITER
 from app.dal import task_dal, workflow_dal
@@ -59,8 +60,7 @@ async def create_task(
     print("payload:", payload)
     if payload.status != ItemStatus.NEW:
         raise HTTPException(status_code=400, detail="New task needs to have status NEW")
-    if payload.workflow_id is not None:
-        workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
+    if (workflow_id := ensure_uuid(payload.workflow_id)) is not None:
         if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
             raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
         if workflow.is_template != payload.is_template:
@@ -117,6 +117,7 @@ async def create_task_from_template(
             status_code=400,
             detail="Request to create task from task instance instead of task template."
         )
+    new_task: BaseAcquisitionTask | BaseDAGTask
     if template.task_type is TaskType.ACQUISITION:
         new_task = BaseAcquisitionTask(**template.__dict__)
     elif template.task_type is TaskType.DAG:
@@ -204,6 +205,7 @@ async def get_all_workflow_tasks(
     print("List of tasks: ", tasks)
     return [await get_task_out(data=task) for task in tasks]
 
+
 @task_router.get(
     "/task/templates/all",
     response_model=list[AcquisitionTaskOut | DAGTaskOut],
@@ -283,8 +285,7 @@ async def update_task(
     print("task_id:", task_id)
     # if TaskStatus.PENDING in payload.status:
     #     raise HTTPException(status_code=400, detail="Task must not update to status PENDING "
-    if payload.workflow_id is not None:
-        workflow_id = UUID(payload.workflow_id) if not isinstance(payload.workflow_id, UUID) else payload.workflow_id
+    if (workflow_id := ensure_uuid(payload.workflow_id)) is not None:
         if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
             raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
         if workflow.is_template != payload.is_template:

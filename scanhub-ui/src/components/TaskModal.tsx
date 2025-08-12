@@ -370,18 +370,18 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
       })
 
   const {
-    data: dags,
+    data: jobs,
     // isLoading: isLoadingDags,
     // isError: isErrorDags,
     // refetch: refetchDags,
-  } = useQuery<Array<{ dag_id: string; dag_display_name: string }>>({
-    queryKey: ['dags'],
+  } = useQuery<Array<{ job_id: string; job_name: string }>>({
+    queryKey: ['jobs'],
     queryFn: async () => {
       const result = await workflowManagerApi.listAvailableTasksApiV1WorkflowmanagerTasksGet();
       // Map to only include dag_id and dag_display_name
-      return result.data.tasks.dags.map((dag: { dag_id: string; dag_display_name: string }) => ({
-        dag_id: dag.dag_id,
-        dag_display_name: dag.dag_display_name,
+      return result.data.map((job: { job_id: string; job_name: string }) => ({
+        job_id: job.job_id,
+        job_name: job.job_name,
       }));
     },
   })
@@ -455,10 +455,10 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
                 }
               }}
             >
-              {dags?.map((dag) => {
+              {jobs?.map((job) => {
                 return (
-                  <Option key={dag.dag_id} value={dag.dag_id}>
-                    {dag.dag_display_name}
+                  <Option key={job.job_id} value={job.job_id}>
+                    {job.job_name}
                   </Option>
                 )
               })}

@@ -46,7 +46,7 @@ async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)])
     # need to explicitly print the function name for the case where it is called without http from within this module
     print("get_current_user")
     user_db: UserSQL | None = await dal.get_user_from_token(access_token)
-    if  (       user_db is not None
+    if (user_db is not None
             and user_db.access_token is not None
             and user_db.last_activity_unixtime is not None
             and time.time() - user_db.last_activity_unixtime < MAX_INACTIVITY_TIME_SECONDS
@@ -190,7 +190,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"})
 
-    if (        user_db.access_token is not None
+    if (user_db.access_token is not None
             and user_db.last_activity_unixtime is not None
             and time.time() - user_db.last_activity_unixtime < MAX_INACTIVITY_TIME_SECONDS
             and user_db.last_login_unixtime is not None
@@ -227,11 +227,11 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
         first_name=user_db.first_name,
         last_name=user_db.last_name,
         email=user_db.email,
-        role=user_db.role,
+        role=UserRole(user_db.role),
         access_token=return_token,
         token_type="bearer",    # noqa: S106
         last_activity_unixtime=None,
-        last_login_unixtime=None
+        last_login_unixtime=None,
     )
 
 
@@ -250,16 +250,16 @@ async def logout(user: Annotated[User, Depends(get_current_user)], response: Res
 async def get_user_out(user_db: UserSQL) -> User:
     """Convert UserSQL to User, replace token with empty string."""
     return User(
-        username=user_db.username,
-        first_name=user_db.first_name,
-        last_name=user_db.last_name,
-        email=user_db.email,
-        role=user_db.role,
-        access_token="",
-        token_type="",
-        last_activity_unixtime=user_db.last_activity_unixtime,
-        last_login_unixtime=user_db.last_login_unixtime
-    )
+            username=user_db.username,
+            first_name=user_db.first_name,
+            last_name=user_db.last_name,
+            email=user_db.email,
+            role=UserRole(user_db.role),
+            access_token="",
+            token_type="",
+            last_activity_unixtime=None,
+            last_login_unixtime=None,
+        )
 
 
 @router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])
@@ -388,7 +388,6 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
     print(LOG_CALL_DELIMITER)
     print("Username:", current_user.username)
     await create_user_internal(new_user)
-
 
 
 @router.post("/createfirstuser", status_code=201, tags=["user"])

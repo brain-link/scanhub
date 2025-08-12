@@ -31,6 +31,7 @@ seq_router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
+
 async def mri_sequence_form(
     name: str = Form(...),
     description: str = Form(""),

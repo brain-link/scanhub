@@ -5,9 +5,7 @@
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
 import * as React from 'react'
-import { useQuery } from '@tanstack/react-query'
 
-import { taskApi } from '../api'
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import Card from '@mui/joy/Card'
@@ -25,8 +23,7 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 
 import DicomViewerToolbar from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../generated-client/exam'
-import baseUrls from '../utils/Urls'
+import LoginContext from '../LoginContext'
 
 
 initCornerstone()  // initialize cornerstone before first render cycle
@@ -34,41 +31,14 @@ initCornerstone()  // initialize cornerstone before first render cycle
 
 function DicomViewer({taskId}: {taskId: string | undefined} ) {
 
-  // if (taskId === undefined) {
-  //   return (
-  //     <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-  //       <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
-  //     </Container>
-  //   )
-  // }
+  const [user] = React.useContext(LoginContext)
 
-  // Query the result by id
-  const {
-    data: task,
-    // refetch: refetchResult,
-    isError,
-  } = useQuery<AcquisitionTaskOut | DAGTaskOut, Error>({
-    queryKey: ['task', taskId],
-    queryFn: async () => {
-      if (taskId) {
-        return await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId).then((result) => {
-          return result.data
-        })
-      }
-      else {
-        throw 'no-task-id-given'
-      }
-    },
-  })
-
-  // if (task === undefined || isError){
-  //   <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-  //     <AlertItem title={'Could not load task with ID: ' + taskId} type={Alerts.Error} />
-  //   </Container>
-  // }
-  
-  if (task?.results && task.results.length > 0){
-    console.log('Task result: ', task.results[task.results.length-1].directory, task.results[task.results.length-1].filename)
+  if (taskId === undefined) {
+    return (
+      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+        <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
+      </Container>
+    )
   }
 
   // Set state variables
@@ -78,42 +48,64 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   // Define viewport reference
   const dicomElement = React.useRef<HTMLDivElement>(null);
 
-  // const dicomImageId = 'wadouri:marketing.webassets.siemens-healthineers.com/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
-  const resultId = task?.results?.length ? task?.results?.[task.results.length-1].id : ''
-  const dicomImageId = 'wadouri:' + baseUrls.examService + '/api/v1/exam/dicom/' + resultId
+  // const dicomImageId = 'wadouri:https://localhost:8443/dicom-proxy/fcc5ee5afaaf9c51/b73cfcb2da62/Vida_Head.MR.Comp_DR-Gain_DR.1005.1.2021.04.27.14.20.13.818.14380335.dcm'
+
+  // Build URL deterministically
+  const dicomImageId = React.useMemo(
+    () => `wadouri:${window.location.origin}/api/v1/exam/dicom/${taskId}`,
+    [taskId]
+  );
+
   console.log('viewportData: ', dicomImageId)
 
+  const tokenRef = React.useRef<string | undefined>(undefined);
+  React.useEffect(() => {
+    tokenRef.current = user?.access_token;
+  }, [user?.access_token]);
+
+
+  // wire the loader once
   React.useEffect(() => {
     cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+    cornerstoneWADOImageLoader.configure({
+      // send auth header (+ cookies if you use them)
+      beforeSend: (xhr: XMLHttpRequest) => {
+        const t = tokenRef.current;
+        if (t) xhr.setRequestHeader('Authorization', `Bearer ${t}`);
+        // xhr.withCredentials = true; // only if you rely on cookies
+      },
+      // useWebWorkers: true, // enable if you’ve set up worker paths properly
+    });
+  }, []);
 
-    // cornerstoneWADOImageLoader.configure({useWebWorkers: true})
+  // enable once
+  React.useEffect(() => {
+    const el = dicomElement.current;
+    if (!el) 
+      return;
+    try { cornerstone.getEnabledElement(el) }
+    catch { cornerstone.enable(el) }
+    return () => { 
+      try { cornerstone.disable(el) }
+      catch (e) { console.error('Failed to disable DICOM element', e) }
+    };
+  }, []);
 
-    const enableViewport = async () => {
-      if (!dicomElement.current) return;
-
-      cornerstone.enable(dicomElement.current);
-
-      const image = await cornerstone.loadAndCacheImage(dicomImageId);
-      cornerstone.displayImage(dicomElement.current, image)
-
-    }
-    enableViewport();
-
-  }, [task])
-
-  if (task === undefined || 
-      isError ||
-      !task.results || 
-      task.results.length == 0 || 
-      task.status != ItemStatus.Finished || 
-      task.task_type != TaskType.Reconstruction
-  ) {
-    return (
-      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-        <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
-      </Container>
-    )
-  }
+  // load whenever imageId changes
+  React.useEffect(() => {
+    const el = dicomElement.current;
+    if (!el) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const image = await cornerstone.loadAndCacheImage(dicomImageId);
+        if (!cancelled) cornerstone.displayImage(el, image);
+      } catch (e) {
+        console.error('Failed to load DICOM', e);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [dicomImageId]);
 
   return (
     <Stack

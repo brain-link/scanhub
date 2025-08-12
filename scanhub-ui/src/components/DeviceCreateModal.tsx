@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
+import Textarea from '@mui/joy/Textarea'
 import Grid from '@mui/joy/Grid'
 import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
@@ -23,70 +24,55 @@ import NotificationContext from '../NotificationContext'
 import { deviceApi } from '../api'
 
 
-interface BaseFormEntry {
-  key: string,
-  label: string
-}
-
-interface TextFormEntry extends BaseFormEntry {
-  type: 'text'
-  required?: boolean
-  placeholder?: string
-};
-
-// Patient form items, order is row wise
-const createPatientFormContent: TextFormEntry[] = [
-  { type: 'text', key: 'title', label: 'Title', required: true },
-  { type: 'text', key: 'description', label: 'Description', placeholder: '', required: true },
-]
-
-
 function DeviceForm(props: ModalProps) {
   const [, showNotification] = React.useContext(NotificationContext)
+  const [device, setDevice] = React.useState<DeviceCreationRequest>({ name: '', description: '' })
+  const [credentialsUrl, setCredentialsUrl] = React.useState<string | null>(null)
 
-  const [deviceToken, setDeviceToken] = React.useState<string | undefined>(undefined);
-  const [deviceId, setDeviceId] = React.useState<string | undefined>(undefined);
-
-  const [device, setDevice] = React.useState<DeviceCreationRequest>({
-    title: '',
-    description: ''
-  })
-
-  // Post a new record and refetch records table
+  // Make device creation request and refetch devices table
   const mutation = useMutation({
+    // Return the Blob so we can enable the download button after success
     mutationFn: async () => {
-      await deviceApi
-        .createDeviceApiV1DeviceCreatedevicePost(device)
-        .then((response) => {
-          props.onSubmit()
-          setDeviceToken(response.data.device_token)
-          setDeviceId(response.data.device_id)
-          showNotification({message: 'Device created.', type: 'success'})
-        })
+      const response = await deviceApi.createDeviceApiV1DeviceCreatedevicePost(device, {
+        responseType: 'blob'
+      })
+      // Some clients already give you a Blob in response.data when responseType='blob'
+      // Wrap in Blob to be safe if type is unknown/ArrayBuffer
+      const blob = response?.data instanceof Blob
+        ? response.data
+        : new Blob([response.data], { type: 'application/json' })
+
+      return blob
+    },
+    onSuccess: (blob: Blob) => {
+      // Create object URL and enable the download button
+      const url = URL.createObjectURL(blob)
+      setCredentialsUrl(url)
+      showNotification({ message: 'Device created. Credentials are ready to download.', type: 'success' })
+    },
+    onError: () => {
+      showNotification({ message: 'Failed to create device.', type: 'warning' })
     }
   })
 
-  function renderFormEntry(item: TextFormEntry, index: number) {
-    if (item.type == 'text') {
-      return (
-        <Grid key={index} md={6}>
-          <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
-          <Input
-            name={item.key}
-            onChange={(e) => setDevice({ ...device, [e.target.name]: e.target.value })}
-            placeholder={item.placeholder}
-            required={item.required}
-            disabled={deviceId != undefined}
-          />
-        </Grid>
-      )
-    }
+  const handleDownload = () => {
+    if (!credentialsUrl) return
+    const a = document.createElement('a')
+    a.href = credentialsUrl
+    a.download = 'device_credentials.json'
+    a.style.display = 'none'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    // Keep URL alive in case the user wants to click again.
+    // If you want to revoke right after download, call URL.revokeObjectURL(credentialsUrl) and setCredentialsUrl(null)
+    props.setOpen(false) // Close modal after download
   }
 
   return (
     <>
       <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        Create New Device
+        Create new device connection
       </Typography>
 
       <form
@@ -96,40 +82,44 @@ function DeviceForm(props: ModalProps) {
         }}
       >
         <Grid container rowSpacing={3} columnSpacing={5}>
-          {createPatientFormContent.map((item, index) => renderFormEntry(item, index))}
           <Grid md={12}>
-            <Button size='sm' type='submit' sx={{ maxWidth: 100 }} disabled={deviceId != undefined}>
+            <FormLabel sx={{marginBottom: 1}}>Device connection name</FormLabel>
+            <Input
+              onChange={(e) => setDevice({ ...device, name: e.target.value })}
+              placeholder='Connection name'
+              required
+            />
+          </Grid>
+          <Grid md={12}>
+            <FormLabel sx={{marginBottom: 1}}>Description</FormLabel>
+            <Textarea 
+              placeholder="Add a description..."
+              minRows={3}
+              onChange={(e) => setDevice({ ...device, description: e.target.value })}
+            />
+          </Grid>
+
+          <Grid md={12} sx={{ display: 'flex', gap: 1 }}>
+            {/* Buttons */}
+            <Button
+              size='sm'
+              type='submit'
+              loading={mutation.isPending}
+              disabled={mutation.isPending || !device.name || !device.description || credentialsUrl !== null}
+              sx={{ maxWidth: 200 }}
+            >
               Create
             </Button>
+
+            <Button
+              size='sm'
+              disabled={!credentialsUrl}
+              onClick={handleDownload}
+              sx={{ maxWidth: 200 }}
+            >
+              Download credentials
+            </Button>
           </Grid>
-          {deviceId ?
-            <>
-              <Grid md={12}>
-                <Typography color='primary' variant='soft'>
-                  Copy the new device ID and token to that device, such that it can connect to Scanhub.
-                </Typography>
-                <Typography color='warning' variant='soft'>
-                  The token will not be accessible later!
-                </Typography>
-              </Grid>
-              <Grid md={12}>
-                <Typography level='title-md'>
-                  Device ID
-                </Typography>
-                <Typography>
-                  {deviceId}
-                </Typography>
-              </Grid>
-              <Grid md={12}>
-                <Typography level='title-md'>
-                  Device Token
-                </Typography>
-                <Typography level='body-sm' sx={{overflowWrap: 'break-word'}}>
-                  {deviceToken}
-                </Typography>
-              </Grid>
-            </>
-            : undefined}
         </Grid>
       </form>
     </>
@@ -152,7 +142,7 @@ export default function DeviceCreateModal(props: ModalProps) {
         aria-describedby='basic-modal-dialog-description'
         size='sm'
         sx={{
-          width: '70vw',
+          width: '50vw',
           borderRadius: 'md',
           p: 5,
         }}

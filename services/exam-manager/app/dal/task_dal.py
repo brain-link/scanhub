@@ -42,7 +42,7 @@ async def add_task_data(payload: BaseAcquisitionTask | BaseDAGTask, creator) -> 
     return new_task
 
 
-async def get_task_data(task_id: UUID) -> (BaseAcquisitionTask | BaseDAGTask | None):
+async def get_task_data(task_id: UUID) -> Task | None:
     """Get task by id.
 
     Parameters
@@ -64,7 +64,7 @@ async def get_task_data(task_id: UUID) -> (BaseAcquisitionTask | BaseDAGTask | N
         return task
 
 
-async def get_all_task_data(workflow_id: UUID) -> list[BaseAcquisitionTask | BaseDAGTask]:
+async def get_all_task_data(workflow_id: UUID) -> list[Task]:
     """Get a list of all tasks assigned to a certain workflow.
 
     Parameters
@@ -85,7 +85,7 @@ async def get_all_task_data(workflow_id: UUID) -> list[BaseAcquisitionTask | Bas
         return list(result.scalars().all())
 
 
-async def get_all_task_template_data() -> list[BaseAcquisitionTask | BaseDAGTask]:
+async def get_all_task_template_data() -> list[Task]:
     """Get a list of all tasks assigned to a certain workflow.
 
     Parameters
@@ -133,7 +133,7 @@ async def delete_task_data(task_id: UUID) -> bool:
 async def update_task_data(
     task_id: UUID,
     payload: BaseAcquisitionTask | BaseDAGTask
-) -> (BaseAcquisitionTask | BaseDAGTask | None):
+) -> (Task | None):
     """Update existing task in database.
 
     Parameters

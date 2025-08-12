@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "exam-manager"
+name = "user-manager"
 version = "0.0.1"
 description = "Provides functionality for user login and user management."
 authors = [
@@ -16,13 +16,12 @@ packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-fastapi = "^0.96.0"
 asyncpg = "^0.27.0"
 uvicorn = "^0.22.0"
-kafka-python = "^2.0.2"
 psycopg2-binary = "^2.9.6"
 python-multipart = "^0.0.6"
 async-sqlalchemy = "^1.0.0"
+typing-extensions = "^4.14.1"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
@@ -33,10 +32,13 @@ pytest = "*"
 sphinx = "*"
 sphinx_rtd_theme = "*"
 
-[tool.poetry.group.lint.dependencies]
-ruff = "^0.1.11"
-mypy = "^1.8.0"
 
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.12.3"
+mypy = "^1.16.1"
+
+[tool.setuptools.package-data]
+"app" = ["py.typed"]
 
 [tool.ruff]
 src = ["app"]
@@ -68,4 +70,3 @@ warn_no_return = true
 warn_unreachable = true
 python_version = "3.10"
 ignore_missing_imports = true
-mypy_path = "app"

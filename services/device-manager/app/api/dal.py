@@ -1,15 +1,20 @@
-# Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
+Device data access layer.
 
-"""Device data access layer."""
+Provides functions to interact with the device database, including creating,
+updating, retrieving, and deleting device records. It uses SQLAlchemy for
+asynchronous database operations and Pydantic models for data validation.
 
+Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+"""
 from uuid import UUID
 
 from scanhub_libraries.models import DeviceCreationRequest
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
-from api.db import Device, async_session
+from app.api.db import Device, async_session
 
 
 async def dal_create_device(request: DeviceCreationRequest, token_hash: str, salt: str) -> Device:
@@ -21,16 +26,9 @@ async def dal_create_device(request: DeviceCreationRequest, token_hash: str, sal
 
     """
     new_device = Device(
-        title=request.title,
-        description=request.description,
+        **request.model_dump(),
         token_hash=token_hash,
         salt=salt,
-        name=None,
-        manufacturer=None,
-        modality=None,
-        status="NEW",
-        site=None,
-        ip_address=None
     )
     async with async_session() as session:
         session.add(new_device)

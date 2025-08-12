@@ -6,9 +6,8 @@
 import datetime
 import os
 import uuid
-from typing import Literal
 
-from scanhub_libraries.models import BasePatient, Gender
+from scanhub_libraries.models import BasePatient, Gender, ItemStatus
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -61,7 +60,7 @@ class Patient(Base):
     height: Mapped[float] = mapped_column(nullable=False)
     weight: Mapped[float] = mapped_column(nullable=False)
     issuer: Mapped[str] = mapped_column(nullable=False)
-    status: Mapped[Literal["NEW", "UPDATED", "DELETED"]] = mapped_column(nullable=False)
+    status: Mapped[ItemStatus] = mapped_column(nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(

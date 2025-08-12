@@ -25,18 +25,23 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
   itemSelection: ItemSelection, openConfirmModal: (onConfirmed: () => void) => void
 }){
   const [, showNotification] = React.useContext(NotificationContext)
+  const hasTriggeredRef = React.useRef(false)
 
   const processTaskMutation = useMutation({
     mutationKey: ['workflowManagerProcessTask'],
     mutationFn: async () => {
-      await workflowManagerApi
-        .triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost((itemSelection.itemId as string))
-        .then(() => {
-          showNotification({message: 'Started task', type: 'success'})
-        })
-        .catch(() => {
-          showNotification({message: 'Error at starting task.', type: 'warning'})
-        })
+      if (hasTriggeredRef.current) return
+      hasTriggeredRef.current = true
+      try {
+        await workflowManagerApi.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(
+          (itemSelection.itemId as string)
+        )
+        showNotification({message: 'Started task', type: 'success'})
+      } catch {
+        showNotification({message: 'Error at starting task.', type: 'warning'})
+      } finally {
+        hasTriggeredRef.current = false
+      }
     },
   })
 
@@ -50,13 +55,16 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
         size='sm' 
         variant='plain' 
         color={'neutral'}
+        disabled={processTaskMutation.isPending}
         onClick={() => {
           openConfirmModal(() => {
             // By now, only tasks can be executed
             if (itemSelection.itemId == undefined) {
               showNotification({message: 'No item selected!', type: 'warning'})
             } else if (itemSelection.type == 'DAG' || itemSelection.type == 'ACQUISITION') {
-              processTaskMutation.mutate()
+              if (!processTaskMutation.isPending){
+                processTaskMutation.mutate()
+              }
             } else {
               // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
               showNotification({message: 'Acquisition trigger not implemented for this item type!', type: 'warning'})

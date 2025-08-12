@@ -8,7 +8,7 @@ from uuid import UUID
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseExam, ExamOut, User
+from scanhub_libraries.models import BaseExam, ExamOut, ItemStatus, User
 from scanhub_libraries.security import get_current_user, oauth2_scheme
 
 from app import LOG_CALL_DELIMITER
@@ -31,6 +31,7 @@ PREFIX_PATIENT_MANAGER = "http://patient-manager:8100/api/v1/patient"
 exam_router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
+
 
 @exam_router.post("/new", response_model=ExamOut, status_code=201, tags=["exams"])
 async def create_exam(payload: BaseExam,
@@ -121,7 +122,7 @@ async def create_exam_from_template(payload: BaseExam, template_id: UUID,
             detail="Request to create exam from exam instance instead of exam template."
         )
     new_exam = BaseExam(**payload.__dict__)
-    new_exam.status = 'NEW'
+    new_exam.status = ItemStatus.NEW
     if not (exam := await exam_dal.add_exam_data(payload=new_exam, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create exam.")
 
@@ -183,12 +184,11 @@ async def get_all_patient_exams(patient_id: UUID, user: Annotated[User, Depends(
     """
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("patient_id:", patient_id)
+    print("Getting exams for patient_id:", patient_id)
     if not (exams := await exam_dal.get_all_exam_data(patient_id=patient_id)):
         # Don't raise exception here, list might be empty
         return []
     result = [await get_exam_out_model(data=exam) for exam in exams]
-    print(">> Exam list: ", result)
     return result
 
 

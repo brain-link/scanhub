@@ -2,11 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Workflow manager main."""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.workflow import router
+from app.api.manager_endpoints import router
 
 app = FastAPI(
     openapi_url="/api/v1/workflowmanager/openapi.json",
@@ -61,6 +60,5 @@ async def readiness() -> dict:
         500: Workflow table does not exist
     """
     return {"status": "ok"}
-
 
 app.include_router(router, prefix="/api/v1/workflowmanager")

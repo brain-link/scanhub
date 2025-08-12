@@ -44,8 +44,6 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
       name: '',
       description: '',
       indication: undefined,
-      patient_height_cm: undefined,     // eslint-disable-line camelcase
-      patient_weight_kg: undefined,     // eslint-disable-line camelcase
       comment: undefined,
       status: 'NEW',
       is_template: true,        // eslint-disable-line camelcase
