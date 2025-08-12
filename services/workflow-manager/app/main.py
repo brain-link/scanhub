@@ -62,4 +62,3 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 app.include_router(router, prefix="/api/v1/workflowmanager")
-

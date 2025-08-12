@@ -3,8 +3,6 @@
 
 """Exam manager main file."""
 
-import os
-from uuid import UUID
 
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import (
@@ -13,7 +11,6 @@ from fastapi.exception_handlers import (
 )
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -22,7 +19,6 @@ from app.api.mri_sequence_api import seq_router
 from app.api.result_api import result_router
 from app.api.task_api import task_router
 from app.api.workflow_api import workflow_router
-from app.dal import result_dal
 from app.db.mongodb import close_mongo_connection, connect_to_mongo, db
 from app.db.postgres import engine, init_db
 
@@ -137,6 +133,7 @@ async def readiness() -> dict:
         raise HTTPException(status_code=503, detail=f"Database not connected: {str(db.collection)}")
 
     return {"status": "ok"}
+
 
 app.include_router(exam_router, prefix="/api/v1/exam")
 app.include_router(workflow_router, prefix="/api/v1/exam")

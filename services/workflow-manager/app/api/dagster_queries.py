@@ -1,3 +1,4 @@
+"""GraphQL queries for interacting with Dagster."""
 import requests
 
 DAGSTER_URL = "http://dagster-dagit:3000/dagit/graphql"
@@ -22,7 +23,7 @@ def list_dagster_jobs() -> list[dict]:
       }
     }
     """
-    response = requests.post(DAGSTER_URL, json={"query": query})
+    response = requests.post(DAGSTER_URL, json={"query": query}, timeout=3)
     response.raise_for_status()
     data = response.json()
     jobs = []

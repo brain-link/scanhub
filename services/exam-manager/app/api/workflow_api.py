@@ -7,7 +7,14 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import BaseWorkflow, ItemStatus, User, WorkflowOut, TaskType, DAGTaskOut, AcquisitionTaskOut
+from scanhub_libraries.models import (
+    AcquisitionTaskOut,
+    BaseWorkflow,
+    DAGTaskOut,
+    ItemStatus,
+    User,
+    WorkflowOut,
+)
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import ensure_uuid
 

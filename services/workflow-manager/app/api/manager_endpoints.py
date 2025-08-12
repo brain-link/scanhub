@@ -20,7 +20,7 @@ from uuid import UUID
 import requests
 from dagster import RunConfig
 from dagster_graphql import DagsterGraphQLClient
-from fastapi import APIRouter, Depends, File, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
@@ -34,7 +34,7 @@ from scanhub_libraries.models import (
     TaskType,
     WorkflowOut,
 )
-from scanhub_libraries.resources import JobConfigResource, SCANHUB_RESOURCE_KEY
+from scanhub_libraries.resources import SCANHUB_RESOURCE_KEY, JobConfigResource
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
@@ -195,7 +195,7 @@ async def callback_results_ready(task_id: UUID | str, access_token: Annotated[st
         dict: A dictionary containing a success message.
     """
     task = get_task(task_id, access_token)
-    if not hasattr(task, "dag_id") and not isinstance(task, DAGTaskOut):
+    if not isinstance(task, DAGTaskOut):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Result ready callback received invalid task_id: {task.id}",

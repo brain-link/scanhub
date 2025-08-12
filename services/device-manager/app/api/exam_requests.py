@@ -151,6 +151,7 @@ def delete_blank_result(result_id: str, user_access_token: str) -> None:
     if delete_response.status_code != 204:
         raise HTTPException(status_code=404, detail="Could not delete result.")
 
+
 def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
     """
     Update a result in the exam manager service.

@@ -2,22 +2,18 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Definition of result API endpoints accessible through swagger UI."""
-import re
 from pathlib import Path
-from fastapi.responses import FileResponse
-import os
-import shutil
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
-
-from scanhub_libraries.models import ResultOut, SetResult, User, DAGTaskOut
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
+from scanhub_libraries.models import DAGTaskOut, ResultOut, SetResult, User
 from scanhub_libraries.security import get_current_user
 
 from app import LOG_CALL_DELIMITER
-from app.dal import result_dal, task_dal
 from app.api.task_api import get_task
+from app.dal import result_dal, task_dal
 
 # Http status codes
 # 200 = Ok: GET, PUT
