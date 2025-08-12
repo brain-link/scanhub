@@ -14,10 +14,16 @@ import json
 import logging
 import base64
 import numpy as np
+from pathlib import Path
+import hashlib
 from sdk.websocket_handler import WebSocketHandler
 from scanhub_libraries.models import AcquisitionPayload
 
+
+CHUNK = 1 << 20  # 1 MiB, chunk size for file transfers
+
 logging.basicConfig(level=logging.INFO)
+
 
 class Client:
     """
@@ -196,24 +202,59 @@ class Client:
             "user_access_token": user_access_token
         }
         await self.websocket_handler.send_message(json.dumps(status_data))
-    
-    async def upload_result(self, result: np.ndarray, task_id: str, user_access_token: str):
-        """Send scan result as base64-encoded binary."""
-        data_bytes = result.astype(np.float32).tobytes()
-        b64_data = base64.b64encode(data_bytes).decode("utf-8")
-        
-        result_data = {
-            "command": "result",
+
+    # async def upload_numpy_result(self, result: np.ndarray, task_id: str, user_access_token: str):
+    #     """Send numpy result as base64-encoded binary."""
+    #     data_bytes = result.astype(np.float32).tobytes()
+    #     b64_data = base64.b64encode(data_bytes).decode("utf-8")
+
+    #     payload = {
+    #         "command": "numpy-result",
+    #         "task_id": task_id,
+    #         "user_access_token": user_access_token,
+    #         "shape": result.shape,
+    #         "dtype": "float32",
+    #         "data": b64_data,
+    #     }
+
+    #     await self.websocket_handler.send_message(json.dumps(payload))
+    #     await self.send_ready_status()
+    #     self.logger.info("Uploaded numpy result, device status set to READY.")
+
+    async def upload_file_result(self, file_path: str | Path, task_id: str, user_access_token: str) -> None:
+        """Send MRD file as base64-encoded binary."""
+        path = Path(file_path) if not isinstance(file_path, Path) else file_path
+        if not path.exists():
+            raise FileNotFoundError(f"File {file_path} does not exist.")
+
+        size = path.stat().st_size
+        ct = "application/x-ismrmrd+hdf5" if path.suffix == ".mrd" else "application/octet-stream"
+
+        # Optional integrity: precompute sha256
+        sha = hashlib.sha256()
+        with path.open("rb") as f:
+            for chunk in iter(lambda: f.read(CHUNK), b""):
+                sha.update(chunk)
+        sha_hex = sha.hexdigest()
+
+        header = {
+            "command": "file-transfer",
             "task_id": task_id,
             "user_access_token": user_access_token,
-            "shape": result.shape,
-            "dtype": "float32",
-            "data": b64_data,
+            "filename": path.name,
+            "size_bytes": size,
+            "content_type": ct,
+            "sha256": sha_hex,
         }
+        await self.websocket_handler.send_message(json.dumps(header))  # metadata
 
-        await self.websocket_handler.send_message(json.dumps(result_data))
+        # stream file in binary frames
+        with path.open("rb") as f:
+            for chunk in iter(lambda: f.read(CHUNK), b""):
+                await self.websocket_handler.send_message(chunk)
+
         await self.send_ready_status()
-        self.logger.info("Uploaded result. Device status set to READY.")
+        self.logger.info("Uploaded result, device status set to READY.")
 
     async def send_scanning_status(self, progress, task_id, user_access_token):
         """

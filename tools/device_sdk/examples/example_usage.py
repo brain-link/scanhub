@@ -7,6 +7,7 @@ from scanhub_libraries.models import AcquisitionPayload
 import os
 import json
 import signal
+from pathlib import Path
 
 
 async def perform_scan(client, payload: AcquisitionPayload):
@@ -22,11 +23,20 @@ async def perform_scan(client, payload: AcquisitionPayload):
         )
 
     # Create some random data to simulate scan results.
-    data = np.random.rand(42, 100, 120)
-    
+    # data = np.random.rand(42, 100, 120)
     # Submit the result, device status is set to READY.
-    await client.upload_result(
-        result=data,
+    # await client.upload_result(
+    #     result=data,
+    #     task_id=str(payload.id),
+    #     user_access_token=payload.access_token,
+    # )
+
+    # Get MRD file
+    directory = Path(__file__).resolve().parent
+    file_path = directory / "data.mrd"
+
+    await client.upload_file_result(
+        file_path=file_path,
         task_id=str(payload.id),
         user_access_token=payload.access_token,
     )
@@ -46,7 +56,7 @@ async def main():
     except FileNotFoundError:
         print(f"Credentials file not found at {credentials_path}. Please create a device first and save credentials file.")
         return
-    
+
     # Replace the parameters for each particular device!
     client = Client(
         websocket_uri="wss://localhost:8443/api/v1/device/ws",

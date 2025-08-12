@@ -151,5 +151,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-services/airflow/logs/
-dcm_data/
+/tools/device_sdk/examples/device_credentials.json
