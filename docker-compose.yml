@@ -1,39 +1,23 @@
-x-airflow-common:
-  &airflow-common
-  build: ./services/airflow
+x-dagster-common: &dagster_common
+  image: scanhub-dagster:latest
+  pull_policy: never  # Don't pull the image, use the local build
+  build:
+    context: ./services/dagster
+    args:
+      BASE_IMG: ${SCANHUB_BASE_IMAGE}
   environment:
-    &airflow-common-env
-    AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    # TODO move the passwords contained here in a secret and load that secret at runtime instead of putting it in the environment variable here
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
-    # For backward compatibility, with Airflow <2.3
-    # AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
-    AIRFLOW__CORE__FERNET_KEY: ''
-    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'  # 'true' to see some tutorials and examples
-    # AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
-
-    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
-    AIRFLOW__SECRETS__BACKEND: airflow.secrets.local_filesystem.LocalFilesystemBackend
-    AIRFLOW__SECRETS__BACKEND_KWARGS: '{"variables_file_path": "/opt/secrets/variables.yaml", "connections_file_path": "/opt/secrets/connections.yaml"}'
-    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
-
-    # AIRFLOW__CLI__ENDPOINT_URL: http://localhost:8081
-    AIRFLOW__CLI__ENDPOINT_URL: http://airflow-webserver:8080 # point to internal docker service name
-    AIRFLOW__WEBSERVER__BASE_URL: https://localhost:8443/airflow
-
-    DATA_LAKE_DIRECTORY: /opt/airflow/data_lake
+    DAGSTER_HOME: /opt/dagster/dagster_home
+    DATA_LAKE_DIRECTORY: /data
   volumes:
-    - ./services/airflow/dags:/opt/airflow/dags
-    - ./services/airflow/logs:/opt/airflow/logs
-    - ./services/airflow/plugins:/opt/airflow/plugins
-    - ./services/airflow/secrets:/opt/secrets
-    - data_lake:/opt/airflow/data_lake
-    - /var/run/docker.sock:/var/run/docker.sock
-  depends_on:
-    &airflow-common-depends-on
-    airflow-database:
-      condition: service_healthy
+    # Persistent storage for Dagster instance data (run logs, schedules, sensors, etc.)
+    - dagster_storage:/opt/dagster/dagster_home
+    # Mount dagster.yaml config file into the container
+    - ./services/dagster/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+    # Mount the Dagster application source code (repository, jobs, ops, etc.)
+    - ./services/dagster:/opt/dagster/app
+    # Shared data lake between services
+    - data_lake:/data
+
 
 services:
   init-data-lake:
@@ -54,16 +38,9 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/workflow-manager/app/:/app/
-      - data_lake:/data_lake
+      - data_lake:/data
     environment:
-      - ORCHESTRATION_ENGINE=AIRFLOW
-      - KESTRA_API_URL=http://kestra:8080
-      - AIRFLOW_API_URL=http://airflow-webserver:8080
-      # TODO move the username and password in a secret and
-      # load that secret at runtime instead of putting it in the environment variable here
-      - AIRFLOW_USERNAME=airflow
-      - AIRFLOW_PASSWORD=airflow
-      - DATA_LAKE_DIRECTORY=/data_lake
+      DATA_LAKE_DIRECTORY: /data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://workflow-manager:8000/api/v1/workflowmanager/health/readiness"]
@@ -72,6 +49,10 @@ services:
       retries: 10
     depends_on:
       scanhub-database:
+        condition: service_healthy
+      dagster-dagit:
+        condition: service_healthy
+      dagster-daemon:
         condition: service_healthy
 
   device-manager:
@@ -82,9 +63,9 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/device-manager/app/:/app/
-      - data_lake:/data_lake
+      - data_lake:/data
     environment:
-      - DATA_LAKE_DIRECTORY=/data_lake
+      DATA_LAKE_DIRECTORY: /data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://device-manager:8000/api/v1/device/health/readiness"]
@@ -107,6 +88,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/exam-manager/app/:/app/
+      - data_lake:/data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -175,141 +157,20 @@ services:
       - scanhub_database_postgres_db_name
 
   # Add the Gadgetron service
-  gadgetron:
-    container_name: gadgetron
-    image: ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:latest
-    ports:
-      - 9002:9002
-    volumes:
-      - data_lake:/data
-    environment:
-      - GADGETRON_HOME=/usr/local/gadgetron
-      - GADGETRON_PORT=9002
-    restart: always
-    depends_on:
-      - init-data-lake
-      - scanhub-database
-
-  # Airflow services
-  airflow-webserver:
-    <<: *airflow-common
-    command: webserver
-    ports:
-      - "8081:8080"
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://airflow-webserver:8080/airflow/health" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
-
-  airflow-scheduler:
-    <<: *airflow-common
-    command: scheduler
-    healthcheck:
-      test: [ "CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"' ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
-
-  airflow-init:
-    <<: *airflow-common
-    entrypoint: /bin/bash
-    # yamllint disable rule:line-length
-    command:
-      - -c
-      - |
-        function ver() {
-          printf "%04d%04d%04d%04d" $${1//./ }
-        }
-        if [[ -z "${AIRFLOW_UID}" ]]; then
-          echo
-          echo -e "\033[1;33mWARNING!!!: AIRFLOW_UID not set!\e[0m"
-          echo "If you are on Linux, you SHOULD follow the instructions below to set "
-          echo "AIRFLOW_UID environment variable, otherwise files will be owned by root."
-          echo "For other operating systems you can get rid of the warning with manually created .env file:"
-          echo "    See: https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html#setting-the-right-airflow-user"
-          echo
-        fi
-        one_meg=1048576
-        mem_available=$$(($$(getconf _PHYS_PAGES) * $$(getconf PAGE_SIZE) / one_meg))
-        cpus_available=$$(grep -cE 'cpu[0-9]+' /proc/stat)
-        disk_available=$$(df / | tail -1 | awk '{print $$4}')
-        warning_resources="false"
-        if (( mem_available < 4000 )) ; then
-          echo
-          echo -e "\033[1;33mWARNING!!!: Not enough memory available for Docker.\e[0m"
-          echo "At least 4GB of memory required. You have $$(numfmt --to iec $$((mem_available * one_meg)))"
-          echo
-          warning_resources="true"
-        fi
-        if (( cpus_available < 2 )); then
-          echo
-          echo -e "\033[1;33mWARNING!!!: Not enough CPUS available for Docker.\e[0m"
-          echo "At least 2 CPUs recommended. You have $${cpus_available}"
-          echo
-          warning_resources="true"
-        fi
-        if (( disk_available < one_meg * 10 )); then
-          echo
-          echo -e "\033[1;33mWARNING!!!: Not enough Disk space available for Docker.\e[0m"
-          echo "At least 10 GBs recommended. You have $$(numfmt --to iec $$((disk_available * 1024 )))"
-          echo
-          warning_resources="true"
-        fi
-        if [[ $${warning_resources} == "true" ]]; then
-          echo
-          echo -e "\033[1;33mWARNING!!!: You have not enough resources to run Airflow (see above)!\e[0m"
-          echo "Please follow the instructions to increase amount of resources available:"
-          echo "   https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html#before-you-begin"
-          echo
-        fi
-        mkdir -p /sources/logs /sources/dags /sources/plugins
-        chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins}
-        exec /entrypoint airflow version
-    # yamllint enable rule:line-length
-    # TODO move the username and password in a secret and
-    # load that secret at runtime instead of putting it in the environment variable here
-    environment:
-      <<: *airflow-common-env
-      _AIRFLOW_DB_UPGRADE: 'true'
-      _AIRFLOW_WWW_USER_CREATE: 'true'
-      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
-      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
-      _PIP_ADDITIONAL_REQUIREMENTS: ''
-    user: "0:0"
-    volumes:
-      - .:/sources
-    depends_on:
-      - init-data-lake
-
-  # DATABASES
-  # Airflow Postgres Database:
-  airflow-database:
-    container_name: airflow-db
-    image: postgres:15.2-bullseye
-    environment:
-      # TODO move the username, password and db_name in a secret and
-      # load that secret at runtime instead of putting it in the environment variable here
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
-    volumes:
-      - airflow-db-volume:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
-      retries: 5
-    restart: always
+  # gadgetron:
+  #   container_name: gadgetron
+  #   image: ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:latest
+  #   ports:
+  #     - 9002:9002
+  #   volumes:
+  #     - data_lake:/data
+  #   environment:
+  #     - GADGETRON_HOME=/usr/local/gadgetron
+  #     - GADGETRON_PORT=9002
+  #   restart: always
+  #   depends_on:
+  #     - init-data-lake
+  #     - scanhub-database
 
   # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
   scanhub-database:
@@ -408,7 +269,7 @@ services:
         condition: service_healthy
       user-login-manager:
         condition: service_healthy
-      airflow-webserver:
+      dagster-dagit:
         condition: service_healthy
     extra_hosts:                                # somehow needed to find host.docker.internal under linux
       - 'host.docker.internal:host-gateway'     # for the access to host.docker.internal to work the firewall of the host needs to allow incoming connections
@@ -431,12 +292,38 @@ services:
       - nginx
 
 
+  # DAGSTER
+  dagster-dagit:
+    <<: *dagster_common
+    container_name: dagster-dagit
+    command: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "--path-prefix", "/dagit"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/dagit/server-status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      dagster-daemon:
+        condition: service_healthy
+
+  dagster-daemon:
+    <<: *dagster_common
+    container_name: dagster-daemon
+    user: "0:0"
+    entrypoint: ["dagster-daemon", "run"]
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "dagster-daemon"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
 volumes:
   data_lake:
   mongodb_data_sequence:
   postgres_data_scanhub:
   postgres_data_patient:
-  airflow-db-volume:
+  dagster_storage:
 
 
 secrets:

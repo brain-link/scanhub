@@ -1,0 +1,7 @@
+# dagster.yaml
+# Dagster instance configuration
+
+# DefaultRunLauncher runs jobs inside the same container/host as the daemon process.
+run_launcher:
+  module: dagster
+  class: DefaultRunLauncher

@@ -11,55 +11,51 @@ TODO: How to handle tasks, and where to trigger the device task?
 
 """
 import json
-from uuid import UUID
 import logging
 import os
-from datetime import date
+from pathlib import Path
 from typing import Annotated, Any
+from uuid import UUID
 
 import requests
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from dagster import RunConfig
+from dagster_graphql import DagsterGraphQLClient
+from fastapi import APIRouter, Depends, File, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
     AcquisitionLimits,
-    AcquisitionTaskOut,
     DAGTaskOut,
     ExamOut,
     ItemStatus,
     PatientOut,
+    ResultType,
+    SetResult,
     TaskType,
     WorkflowOut,
 )
+from scanhub_libraries.resources import JobConfigResource, SCANHUB_RESOURCE_KEY
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
-from app.api.orchestration_engine import OrchestrationEngine
-from app.api.task_requests import get_task, set_task
-
-router = APIRouter(dependencies=[Depends(get_current_user)])
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
-orchestration_engine = OrchestrationEngine()
+from app.api.dagster_queries import list_dagster_jobs, parse_job_id
+from app.api.scanhub_requests import create_blank_result, get_task, set_result, set_task
 
 # Define the URIs for the different managers
 EXAM_MANAGER_URI = "exam-manager:8000"
 PATIENT_MANAGER_URI = "patient-manager:8100"
 DEVICE_MANAGER_URI = "device-manager:8000"
-
-
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
 if DATA_LAKE_DIR is None:   # ensure that DATA_LAKE_DIR is set
     raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
 
 
+# Define dagster graphQL client
+dg_client = DagsterGraphQLClient("dagster-dagit:3000/dagit", use_https=False)
+# Define the API router
 router = APIRouter(dependencies=[Depends(get_current_user)])
+# Define OAuth2 scheme for token-based authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-orchestration_engine = OrchestrationEngine()
-
-
-
 
 
 @router.post("/trigger_task/{task_id}/", tags=["WorkflowManager"])
@@ -134,28 +130,49 @@ async def trigger_task(task_id: str,
             if not (input_task := get_task(str(task.input_id), access_token)).results:
                 print("Selected input task does not have any results yet.")
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No results found for input task {input_task.id}.")
-            latest_result = sorted(input_task.results, key=lambda r: r.datetime_created, reverse=True)[0]
+            latest_result_in = sorted(input_task.results, key=lambda r: r.datetime_created, reverse=True)[0]
 
             # Update the task status to IN_PROGRESS
             task.status = ItemStatus.INPROGRESS
             set_task(task.id, task, access_token)
 
-            callback_endpoint = f"https://localhost:8443/api/v1/workflowmanager/result_ready/{task.id}"
-            print("CALLBACK ENDPOINT: ", callback_endpoint)
+            # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
+            callback_endpoint = f"http://workflow-manager:8000/api/v1/workflowmanager/result_ready/{task.id}"
 
-            # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
-            dag_response = orchestration_engine.trigger_task(
-                task.dag_id,
-                conf={
-                    "directory": latest_result.directory,
-                    "file_name": latest_result.filename,
-                    "workflow_manager_endpoint": callback_endpoint,
-                    "user_token": access_token,
-                }
+            # Create blank result
+            new_result_out = create_blank_result(task_id, access_token)
+            # Update result info with created ID
+            new_result_out = set_result(
+                result_id=str(new_result_out.id),
+                payload=SetResult(
+                    type=ResultType.DICOM,
+                    directory=str(Path(latest_result_in.directory) / str(new_result_out.id)),
+                    filename="*.dcm",
+                ),
+                user_access_token=access_token,
             )
-            print(f"DAG triggered with response: {dag_response}")
 
-            return {"message": "DAG triggered successfully", "data": dag_response}
+            print(f"Created new result: {new_result_out.model_dump_json()}")
+
+            # Trigger dagster job
+            job_name, repository, location = parse_job_id(task.dag_id)
+            print(f"Triggering job: {job_name} in repository: {repository} at location: {location}")
+            new_run_id = dg_client.submit_job_execution(
+                job_name=job_name,
+                repository_location_name=location,
+                repository_name=repository,
+                run_config=RunConfig(resources={
+                    SCANHUB_RESOURCE_KEY: JobConfigResource(
+                        callback_url=callback_endpoint,
+                        user_access_token=access_token,
+                        input_file=str(Path(latest_result_in.directory) / latest_result_in.filename),
+                        output_dir=new_result_out.directory,
+                    ),
+                }),
+            )
+            print(f"DAG triggered, new run ID: {new_run_id}")
+
+            return {"message": "DAG triggered successfully", "data": new_run_id}
         except Exception as e:
             logging.error(f"Failed to trigger DAG: {e}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -194,72 +211,8 @@ async def callback_results_ready(task_id: UUID | str, access_token: Annotated[st
 async def list_available_tasks():
     """Endpoint to list the available tasks from the orchestration engine.
 
-    Currently, only Airflow is supported.
-
     Returns
     -------
-        dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+        dict: A dictionary containing the list of available dagster jobs.
     """
-    try:
-        tasks = orchestration_engine.get_available_tasks()
-        return {"tasks": tasks}
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except HTTPException as e:
-        raise HTTPException(status_code=e.status_code, detail=e.detail)
-
-
-@router.post("/upload_and_trigger/{dag_id}/", tags=["WorkflowManager"])
-async def upload_and_trigger(dag_id: str,
-                             access_token: Annotated[str, Depends(oauth2_scheme)],
-                             file: UploadFile = File(...)) -> dict[str, Any]:
-    """
-    Upload a file and trigger an Airflow DAG.
-
-    Parameters
-    ----------
-    dag_id
-        The ID of the DAG to be triggered.
-    file, optional
-        Data upload, e.g. reconstruction result, by default File(...)
-
-    Returns
-    -------
-        dict: A dictionary containing a message and data.
-    """
-    if file.filename is None:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="File has no file name.")
-    try:
-        # Define the file location in the shared data lake
-        directory = f"/upload/{dag_id}"
-        file_location = f"{DATA_LAKE_DIR}{directory}/{file.filename}"
-        os.makedirs(os.path.dirname(file_location), exist_ok=True)
-
-        # Save the uploaded file
-        with open(file_location, "wb") as f:
-            f.write(await file.read())
-
-        logging.info(f"File saved to {file_location}")
-
-        # Check if the file was successfully uploaded
-        if not os.path.exists(file_location):
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="File upload failed")
-        # Define the callback endpoint
-        callback_endpoint = "http://workflow-manager:8000/api/v1/workflowmanager/results_ready/"
-
-        # Trigger the Airflow DAG with the directory, file name, and callback endpoint as parameters
-        response = orchestration_engine.trigger_task(
-            dag_id,
-            conf={
-                "directory": directory,
-                "file_name": file.filename,
-                "workflow_manager_endpoint": callback_endpoint,
-                "user_token": access_token
-            }
-        )
-        logging.info(f"DAG triggered with response: {response}")
-
-        return {"message": "File uploaded and DAG triggered successfully", "data": response}
-    except Exception as e:
-        logging.error(f"Failed to trigger DAG: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    return list_dagster_jobs()

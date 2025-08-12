@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Workflow manager main."""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -62,5 +61,5 @@ async def readiness() -> dict:
     """
     return {"status": "ok"}
 
-
 app.include_router(router, prefix="/api/v1/workflowmanager")
+

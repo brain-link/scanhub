@@ -11,12 +11,14 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
 import json
 from uuid import UUID
+
 import requests
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
-from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut
+from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut, ResultOut, SetResult
 
 TASK_URI = "http://exam-manager:8000/api/v1/exam/task"
+RESULT_URI = "http://exam-manager:8000/api/v1/exam/result"
 
 
 def get_task(task_id: str | UUID, user_access_token: str) -> AcquisitionTaskOut | DAGTaskOut:
@@ -98,3 +100,54 @@ def set_task(
         return DAGTaskOut(**updated_task)
     else:
         raise HTTPException(status_code=400, detail="Invalid task type")
+
+
+def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
+    """
+    Create a blank result in the exam manager service.
+
+    Returns
+    -------
+        ResultOut: The created blank result object.
+
+    Raises
+    ------
+        HTTPException: If the result creation fails (status code not 201).
+    """
+    headers = {"Authorization": "Bearer " + user_access_token}
+    blank_result_response = requests.post(
+        RESULT_URI, params={"task_id": task_id}, headers=headers, timeout=3
+    )
+    if blank_result_response.status_code != 201:
+        raise HTTPException(status_code=404, detail="Could not create blank result.")
+    return ResultOut(**blank_result_response.json())
+
+
+def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
+    """
+    Update a result in the exam manager service.
+
+    Args
+    ----
+        result_id (str): The unique identifier of the result to update.
+        payload (SetResult): The data to update the result with.
+        user_access_token (str): The user's access token for authentication.
+
+    Returns
+    -------
+        ResultOut: The updated result object.
+
+    Raises
+    ------
+        HTTPException: If the result update fails (status code not 200).
+    """
+    headers = {"Authorization": "Bearer " + user_access_token}
+    update_result_response = requests.put(
+        f"{RESULT_URI}/{result_id}",
+        data=json.dumps(payload, default=jsonable_encoder),
+        headers=headers,
+        timeout=3
+    )
+    if update_result_response.status_code != 200:
+        raise HTTPException(status_code=400, detail="Error updating result")
+    return ResultOut(**update_result_response.json())

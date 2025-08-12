@@ -226,6 +226,16 @@ class DAGTaskOut(TaskOut, BaseDAGTask):
     pass
 
 
+class DagsterJobConfiguration(BaseModel):
+    """Configuration for a Dagster job."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    callback_url: str | None = None
+    input_path: str
+    output_path: str
+
+
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
 
