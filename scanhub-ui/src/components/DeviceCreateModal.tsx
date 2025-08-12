@@ -59,7 +59,7 @@ function DeviceForm(props: ModalProps) {
     if (!credentialsUrl) return
     const a = document.createElement('a')
     a.href = credentialsUrl
-    a.download = "device_credentials.json"
+    a.download = 'device_credentials.json'
     a.style.display = 'none'
     document.body.appendChild(a)
     a.click()

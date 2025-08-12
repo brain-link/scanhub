@@ -5,9 +5,7 @@
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
 import * as React from 'react'
-import { useQuery } from '@tanstack/react-query'
 
-import { taskApi } from '../api'
 import GridViewSharpIcon from '@mui/icons-material/GridViewSharp'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import Card from '@mui/joy/Card'
@@ -25,8 +23,6 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 
 import DicomViewerToolbar from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../generated-client/exam'
-import baseUrls from '../utils/Urls'
 import LoginContext from '../LoginContext'
 
 
@@ -35,7 +31,7 @@ initCornerstone()  // initialize cornerstone before first render cycle
 
 function DicomViewer({taskId}: {taskId: string | undefined} ) {
 
-  const [user, setUser] = React.useContext(LoginContext)
+  const [user] = React.useContext(LoginContext)
 
   if (taskId === undefined) {
     return (
@@ -75,7 +71,7 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
       // send auth header (+ cookies if you use them)
       beforeSend: (xhr: XMLHttpRequest) => {
         const t = tokenRef.current;
-        if (t) xhr.setRequestHeader("Authorization", `Bearer ${t}`);
+        if (t) xhr.setRequestHeader('Authorization', `Bearer ${t}`);
         // xhr.withCredentials = true; // only if you rely on cookies
       },
       // useWebWorkers: true, // enable if you’ve set up worker paths properly
@@ -85,9 +81,14 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
   // enable once
   React.useEffect(() => {
     const el = dicomElement.current;
-    if (!el) return;
-    try { cornerstone.getEnabledElement(el); } catch { cornerstone.enable(el); }
-    return () => { try { cornerstone.disable(el); } catch {} };
+    if (!el) 
+      return;
+    try { cornerstone.getEnabledElement(el) }
+    catch { cornerstone.enable(el) }
+    return () => { 
+      try { cornerstone.disable(el) }
+      catch (e) { console.error('Failed to disable DICOM element', e) }
+    };
   }, []);
 
   // load whenever imageId changes
@@ -100,7 +101,7 @@ function DicomViewer({taskId}: {taskId: string | undefined} ) {
         const image = await cornerstone.loadAndCacheImage(dicomImageId);
         if (!cancelled) cornerstone.displayImage(el, image);
       } catch (e) {
-        console.error("Failed to load DICOM", e);
+        console.error('Failed to load DICOM', e);
       }
     })();
     return () => { cancelled = true; };
