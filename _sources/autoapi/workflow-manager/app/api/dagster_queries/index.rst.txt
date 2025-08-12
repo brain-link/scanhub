@@ -3,6 +3,11 @@ workflow-manager.app.api.dagster_queries
 
 .. py:module:: workflow-manager.app.api.dagster_queries
 
+.. autoapi-nested-parse::
+
+   GraphQL queries for interacting with Dagster.
+
+
 
 Attributes
 ----------

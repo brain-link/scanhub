@@ -411,7 +411,8 @@
                 <article class="bd-article">
                   
   <h1>Source code for workflow-manager.app.api.dagster_queries</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span></span><span class="sd">&quot;&quot;&quot;GraphQL queries for interacting with Dagster.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">DAGSTER_URL</span> <span class="o">=</span> <span class="s2">&quot;http://dagster-dagit:3000/dagit/graphql&quot;</span>
 
@@ -437,7 +438,7 @@
 <span class="s2">      }</span>
 <span class="s2">    }</span>
 <span class="s2">    &quot;&quot;&quot;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">DAGSTER_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">DAGSTER_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="n">jobs</span> <span class="o">=</span> <span class="p">[]</span>

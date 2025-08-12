@@ -95,12 +95,21 @@ Module Contents
    :async:
 
 
+   Handle device registration.
+
+
 .. py:function:: handle_status_update(websocket: fastapi.WebSocket, message: dict, device_id: uuid.UUID) -> None
    :async:
 
 
+   Handle device status updates.
+
+
 .. py:function:: handle_file_transfer(websocket: fastapi.WebSocket, header: dict) -> None
    :async:
+
+
+   Handle file transfer from device to server.
 
 
 .. py:function:: _pick_result_type(filename: str)
