@@ -37,6 +37,10 @@ Functions
    device-manager.app.api.device_websocket.start_scan_via_websocket
    device-manager.app.api.device_websocket.connection_with_valid_id_and_token
    device-manager.app.api.device_websocket.websocket_endpoint
+   device-manager.app.api.device_websocket.handle_register
+   device-manager.app.api.device_websocket.handle_status_update
+   device-manager.app.api.device_websocket.handle_file_transfer
+   device-manager.app.api.device_websocket._pick_result_type
 
 
 Module Contents
@@ -85,5 +89,22 @@ Module Contents
    ----
        websocket (WebSocket): The WebSocket connection object.
        device_id (UUID): The device_id.
+
+
+.. py:function:: handle_register(websocket: fastapi.WebSocket, message: dict, device_id: uuid.UUID) -> None
+   :async:
+
+
+.. py:function:: handle_status_update(websocket: fastapi.WebSocket, message: dict, device_id: uuid.UUID) -> None
+   :async:
+
+
+.. py:function:: handle_file_transfer(websocket: fastapi.WebSocket, header: dict) -> None
+   :async:
+
+
+.. py:function:: _pick_result_type(filename: str)
+
+   Map extensions to enum.
 
 

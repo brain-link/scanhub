@@ -27,7 +27,7 @@ Functions
    exam-manager.app.api.result_api.get_all_task_results
    exam-manager.app.api.result_api.delete_result
    exam-manager.app.api.result_api.set_result
-   exam-manager.app.api.result_api.upload_dicom
+   exam-manager.app.api.result_api.get_dicom
 
 
 Module Contents
@@ -134,24 +134,10 @@ Module Contents
        404: Not found
 
 
-.. py:function:: upload_dicom(result_id: uuid.UUID | str, file: fastapi.UploadFile, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+.. py:function:: get_dicom(task_id: str | uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> fastapi.responses.FileResponse
    :async:
 
 
-   Upload a DICOM file to a result.
-
-   Parameters
-   ----------
-   result_id
-       UUID of the result
-   file
-       Dicom file
-   user
-       User for authentification
-
-   Raises
-   ------
-   HTTPException
-       Throws error if ID of the result is unknown
+   Get DICOM file of a task result.
 
 

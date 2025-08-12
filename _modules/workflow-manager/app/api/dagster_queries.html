@@ -6,9 +6,8 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>workflow-manager.app.api &#8212; ScanHub Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>workflow-manager.app.api.dagster_queries &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,7 +42,7 @@
     <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/workflow-manager/app/api/dagster_queries';</script>
     <link rel="icon" href="../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -153,7 +152,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../index.html">
+  <a class="nav-link nav-internal" href="../../../../autoapi/index.html">
     Code Documentation
   </a>
 </li>
@@ -240,10 +239,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -254,8 +249,10 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -292,7 +289,7 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../index.html">
+  <a class="nav-link nav-internal" href="../../../../autoapi/index.html">
     Code Documentation
   </a>
 </li>
@@ -358,19 +355,6 @@
     
   </div>
   
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">workflow-manager.app.api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../main/index.html">workflow-manager.app.main</a></li>
-</ul>
-</div>
-</nav></div>
-    </div>
-  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
       <div class="sidebar-primary-item">
@@ -406,7 +390,10 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api</span></li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.dagster_queries</span></li>
   </ul>
 </nav>
 </div>
@@ -423,21 +410,64 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-workflow-manager.app.api">
-<span id="workflow-manager-app-api"></span><h1>workflow-manager.app.api<a class="headerlink" href="#module-workflow-manager.app.api" title="Link to this heading">#</a></h1>
-<p>Init file.</p>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="dagster_queries/index.html">workflow-manager.app.api.dagster_queries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manager_endpoints/index.html">workflow-manager.app.api.manager_endpoints</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scanhub_requests/index.html">workflow-manager.app.api.scanhub_requests</a></li>
-</ul>
-</div>
-</section>
-</section>
+  <h1>Source code for workflow-manager.app.api.dagster_queries</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
+<span class="n">DAGSTER_URL</span> <span class="o">=</span> <span class="s2">&quot;http://dagster-dagit:3000/dagit/graphql&quot;</span>
+
+
+<div class="viewcode-block" id="list_dagster_jobs">
+<a class="viewcode-back" href="../../../../autoapi/workflow-manager/app/api/dagster_queries/index.html#workflow-manager.app.api.dagster_queries.list_dagster_jobs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_dagster_jobs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List all available Dagster jobs.&quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    query {</span>
+<span class="s2">      repositoriesOrError {</span>
+<span class="s2">        ... on RepositoryConnection {</span>
+<span class="s2">          nodes {</span>
+<span class="s2">            name</span>
+<span class="s2">            location {</span>
+<span class="s2">              name</span>
+<span class="s2">            }</span>
+<span class="s2">            pipelines {</span>
+<span class="s2">              name</span>
+<span class="s2">            }</span>
+<span class="s2">          }</span>
+<span class="s2">        }</span>
+<span class="s2">      }</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">DAGSTER_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">})</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">repo</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;repositoriesOrError&quot;</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
+        <span class="n">repo_name</span> <span class="o">=</span> <span class="n">repo</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">location_name</span> <span class="o">=</span> <span class="n">repo</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pipeline</span> <span class="ow">in</span> <span class="n">repo</span><span class="p">[</span><span class="s2">&quot;pipelines&quot;</span><span class="p">]:</span>
+            <span class="n">job_name</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="n">job_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">job_name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">jobs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="n">job_id</span><span class="p">,</span>
+                <span class="s2">&quot;job_name&quot;</span><span class="p">:</span> <span class="n">job_name</span><span class="p">,</span>
+                <span class="s2">&quot;repository&quot;</span><span class="p">:</span> <span class="n">repo_name</span><span class="p">,</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">location_name</span><span class="p">,</span>
+            <span class="p">})</span>
+    <span class="k">return</span> <span class="n">jobs</span></div>
+
+
+
+<div class="viewcode-block" id="parse_job_id">
+<a class="viewcode-back" href="../../../../autoapi/workflow-manager/app/api/dagster_queries/index.html#workflow-manager.app.api.dagster_queries.parse_job_id">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_job_id</span><span class="p">(</span><span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the job ID into its components.&quot;&quot;&quot;</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">job_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;::&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid job ID format&quot;</span><span class="p">)</span>
+    <span class="n">location</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="n">job_name</span> <span class="o">=</span> <span class="n">parts</span>
+    <span class="k">return</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="n">location</span></div>
+
+</pre></div>
 
                 </article>
               
@@ -454,33 +484,6 @@
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../../../_sources/autoapi/workflow-manager/app/api/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
-
-</div></div>
               
             
           </div>

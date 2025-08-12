@@ -19,16 +19,13 @@ Attributes
 
 .. autoapisummary::
 
-   workflow-manager.app.api.manager_endpoints.router
-   workflow-manager.app.api.manager_endpoints.oauth2_scheme
-   workflow-manager.app.api.manager_endpoints.orchestration_engine
    workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR
+   workflow-manager.app.api.manager_endpoints.dg_client
    workflow-manager.app.api.manager_endpoints.router
    workflow-manager.app.api.manager_endpoints.oauth2_scheme
-   workflow-manager.app.api.manager_endpoints.orchestration_engine
 
 
 Functions
@@ -39,17 +36,10 @@ Functions
    workflow-manager.app.api.manager_endpoints.trigger_task
    workflow-manager.app.api.manager_endpoints.callback_results_ready
    workflow-manager.app.api.manager_endpoints.list_available_tasks
-   workflow-manager.app.api.manager_endpoints.upload_and_trigger
 
 
 Module Contents
 ---------------
-
-.. py:data:: router
-
-.. py:data:: oauth2_scheme
-
-.. py:data:: orchestration_engine
 
 .. py:data:: EXAM_MANAGER_URI
    :value: 'exam-manager:8000'
@@ -65,11 +55,11 @@ Module Contents
 
 .. py:data:: DATA_LAKE_DIR
 
+.. py:data:: dg_client
+
 .. py:data:: router
 
 .. py:data:: oauth2_scheme
-
-.. py:data:: orchestration_engine
 
 .. py:function:: trigger_task(task_id: str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
    :async:
@@ -106,28 +96,8 @@ Module Contents
 
    Endpoint to list the available tasks from the orchestration engine.
 
-   Currently, only Airflow is supported.
-
    Returns
    -------
-       dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
-
-
-.. py:function:: upload_and_trigger(dag_id: str, access_token: Annotated[str, Depends(oauth2_scheme)], file: fastapi.UploadFile = File(...)) -> dict[str, Any]
-   :async:
-
-
-   Upload a file and trigger an Airflow DAG.
-
-   Parameters
-   ----------
-   dag_id
-       The ID of the DAG to be triggered.
-   file, optional
-       Data upload, e.g. reconstruction result, by default File(...)
-
-   Returns
-   -------
-       dict: A dictionary containing a message and data.
+       dict: A dictionary containing the list of available dagster jobs.
 
 

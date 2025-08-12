@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>workflow-manager.app.api.orchestration_engine &#8212; ScanHub Documentation</title>
+    <title>workflow-manager.app.api.scanhub_requests &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/orchestration_engine/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/scanhub_requests/index';</script>
     <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -406,7 +406,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.orchestration_engine</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.scanhub_requests</span></li>
   </ul>
 </nav>
 </div>
@@ -423,15 +423,44 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-workflow-manager.app.api.orchestration_engine">
-<span id="workflow-manager-app-api-orchestration-engine"></span><h1>workflow-manager.app.api.orchestration_engine<a class="headerlink" href="#module-workflow-manager.app.api.orchestration_engine" title="Link to this heading">#</a></h1>
-<p>Orchestration engine file for the workflow manager service.</p>
-<section id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+  <section id="module-workflow-manager.app.api.scanhub_requests">
+<span id="workflow-manager-app-api-scanhub-requests"></span><h1>workflow-manager.app.api.scanhub_requests<a class="headerlink" href="#module-workflow-manager.app.api.scanhub_requests" title="Link to this heading">#</a></h1>
+<p>Handler for exam requests.</p>
+<p>This module defines functions to interact with the exam manager service,
+including fetching tasks, sequences, and results. It provides a way to
+create and update acquisition tasks and results, ensuring that the data
+is properly formatted and authenticated.</p>
+<p>Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine" title="workflow-manager.app.api.orchestration_engine.OrchestrationEngine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OrchestrationEngine</span></code></a></p></td>
-<td><p>OrchestrationEngine is responsible for interacting with different orchestration engines.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.scanhub_requests.TASK_URI" title="workflow-manager.app.api.scanhub_requests.TASK_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TASK_URI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.scanhub_requests.RESULT_URI" title="workflow-manager.app.api.scanhub_requests.RESULT_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RESULT_URI</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.scanhub_requests.get_task" title="workflow-manager.app.api.scanhub_requests.get_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_task</span></code></a>(...)</p></td>
+<td><p>Fetch acquisition task by ID from the exam manager service.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.scanhub_requests.set_task" title="workflow-manager.app.api.scanhub_requests.set_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_task</span></code></a>(...)</p></td>
+<td><p>Update an acquisition task on the task service with the provided payload.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.scanhub_requests.create_blank_result" title="workflow-manager.app.api.scanhub_requests.create_blank_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_blank_result</span></code></a>(→ scanhub_libraries.models.ResultOut)</p></td>
+<td><p>Create a blank result in the exam manager service.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.scanhub_requests.set_result" title="workflow-manager.app.api.scanhub_requests.set_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_result</span></code></a>(→ scanhub_libraries.models.ResultOut)</p></td>
+<td><p>Update a result in the exam manager service.</p></td>
 </tr>
 </tbody>
 </table>
@@ -439,164 +468,114 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.orchestration_engine.</span></span><span class="sig-name descname"><span class="pre">OrchestrationEngine</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine" title="Link to this definition">#</a></dt>
-<dd><p>OrchestrationEngine is responsible for interacting with different orchestration engines.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine">
-<span class="sig-name descname"><span class="pre">engine</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine" title="Link to this definition">#</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="workflow-manager.app.api.scanhub_requests.TASK_URI">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.scanhub_requests.</span></span><span class="sig-name descname"><span class="pre">TASK_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://exam-manager:8000/api/v1/exam/task'</span></em><a class="headerlink" href="#workflow-manager.app.api.scanhub_requests.TASK_URI" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url">
-<span class="sig-name descname"><span class="pre">kestra_api_url</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url" title="Link to this definition">#</a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="workflow-manager.app.api.scanhub_requests.RESULT_URI">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.scanhub_requests.</span></span><span class="sig-name descname"><span class="pre">RESULT_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://exam-manager:8000/api/v1/exam/result'</span></em><a class="headerlink" href="#workflow-manager.app.api.scanhub_requests.RESULT_URI" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url">
-<span class="sig-name descname"><span class="pre">airflow_api_url</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_username">
-<span class="sig-name descname"><span class="pre">airflow_username</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_username" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_password">
-<span class="sig-name descname"><span class="pre">airflow_password</span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_password" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_available_tasks">
-<span class="sig-name descname"><span class="pre">get_available_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_available_tasks" title="Link to this definition">#</a></dt>
-<dd><p>Retrieve the available tasks from the orchestration engine.</p>
-<p>Currently, only Airflow is supported.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.scanhub_requests.get_task">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.scanhub_requests.</span></span><span class="sig-name descname"><span class="pre">get_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.scanhub_requests.get_task" title="Link to this definition">#</a></dt>
+<dd><p>Fetch acquisition task by ID from the exam manager service.</p>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>task_id (str | UUID): The unique identifier of the task to retrieve.
+user_access_token (str): The user’s access token for authentication.</p>
+</div></blockquote>
+</section>
 <section id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>list: A list of available tasks (DAGs) for Airflow.</p>
+<div><p>AcquisitionTaskOut | None: The acquisition task object if found and valid.</p>
 </div></blockquote>
 </section>
 <section id="raises">
 <h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>ValueError: If the orchestration engine is not Airflow.</p>
+<div><p>HTTPException: If the task is not found (404) or is not an acquisition task (400).</p>
 </div></blockquote>
 </section>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags">
-<span class="sig-name descname"><span class="pre">_get_airflow_dags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags" title="Link to this definition">#</a></dt>
-<dd><p>Get the list of Airflow DAGs.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.scanhub_requests.set_task">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.scanhub_requests.</span></span><span class="sig-name descname"><span class="pre">set_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.scanhub_requests.set_task" title="Link to this definition">#</a></dt>
+<dd><p>Update an acquisition task on the task service with the provided payload.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task_id<span class="classifier">str | UUID</span></dt><dd><p>The unique identifier of the task to update.</p>
+</dd>
+<dt>payload<span class="classifier">AcquisitionTaskOut</span></dt><dd><p>The updated task data to send to the task service.</p>
+</dd>
+<dt>user_access_token<span class="classifier">str</span></dt><dd><p>The access token used for authorization with the task service.</p>
+</dd>
+</dl>
+</section>
 <section id="id1">
 <h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>dict: A dictionary containing the list of Airflow DAGs.</p>
-</div></blockquote>
+<dl class="simple">
+<dt>AcquisitionTaskOut</dt><dd><p>The updated task object returned from the task service.</p>
+</dd>
+</dl>
 </section>
 <section id="id2">
 <h3>Raises<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>HTTPException: If the request to Airflow API fails.</p>
-</div></blockquote>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>If the task update fails (e.g. non-200 response from the task service).</p>
+</dd>
+</dl>
 </section>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task">
-<span class="sig-name descname"><span class="pre">trigger_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task" title="Link to this definition">#</a></dt>
-<dd><p>Triggers a task in the orchestration engine.</p>
-<p>Currently, only Airflow is supported.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.
-conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</p>
-</dd>
-</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.scanhub_requests.create_blank_result">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.scanhub_requests.</span></span><span class="sig-name descname"><span class="pre">create_blank_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.ResultOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.scanhub_requests.create_blank_result" title="Link to this definition">#</a></dt>
+<dd><p>Create a blank result in the exam manager service.</p>
 <section id="id3">
 <h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing a success message.</p>
+<div><p>ResultOut: The created blank result object.</p>
 </div></blockquote>
 </section>
 <section id="id4">
 <h3>Raises<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>HTTPException: If the request to Airflow API fails.</p>
+<div><p>HTTPException: If the result creation fails (status code not 201).</p>
 </div></blockquote>
 </section>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_task">
-<span class="sig-name descname"><span class="pre">_trigger_airflow_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_task" title="Link to this definition">#</a></dt>
-<dd><p>Trigger an Airflow task.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>task_id (str): The ID of the task to be triggered.
-conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</p>
-</dd>
-</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.scanhub_requests.set_result">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.scanhub_requests.</span></span><span class="sig-name descname"><span class="pre">set_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.SetResult</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.ResultOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.scanhub_requests.set_result" title="Link to this definition">#</a></dt>
+<dd><p>Update a result in the exam manager service.</p>
 <section id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<h3>Args<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing a success message.</p>
+<div><p>result_id (str): The unique identifier of the result to update.
+payload (SetResult): The data to update the result with.
+user_access_token (str): The user’s access token for authentication.</p>
 </div></blockquote>
 </section>
 <section id="id6">
-<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>HTTPException: If the request to Airflow API fails.</p>
+<div><p>ResultOut: The updated result object.</p>
 </div></blockquote>
 </section>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_task_status">
-<span class="sig-name descname"><span class="pre">get_task_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_task_status" title="Link to this definition">#</a></dt>
-<dd><p>Retrieve the status of a task in the orchestration engine.</p>
-<p>Currently, only Airflow is supported.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>
-</dd>
-</dl>
 <section id="id7">
-<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<h3>Raises<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing the task status.</p>
+<div><p>HTTPException: If the result update fails (status code not 200).</p>
 </div></blockquote>
 </section>
-<section id="id8">
-<h3>Raises<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>ValueError: If the orchestration engine is not Airflow.</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_task_status">
-<span class="sig-name descname"><span class="pre">_get_airflow_task_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_task_status" title="Link to this definition">#</a></dt>
-<dd><p>Get the status of an Airflow task.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>task_id (str): The ID of the task whose status is to be retrieved.</p>
-</dd>
-</dl>
-<section id="id9">
-<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>dict: A dictionary containing the task status.</p>
-</div></blockquote>
-</section>
-<section id="id10">
-<h3>Raises<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>HTTPException: If the request to Airflow API fails.</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -631,22 +610,15 @@ conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.engine"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.engine</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.kestra_api_url"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.kestra_api_url</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_api_url"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.airflow_api_url</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_username"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.airflow_username</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.airflow_password"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.airflow_password</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_available_tasks"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.get_available_tasks()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_dags"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._get_airflow_dags()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.trigger_task"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.trigger_task()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._trigger_airflow_task"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._trigger_airflow_task()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine.get_task_status"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine.get_task_status()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.orchestration_engine.OrchestrationEngine._get_airflow_task_status"><code class="docutils literal notranslate"><span class="pre">OrchestrationEngine._get_airflow_task_status()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.scanhub_requests.TASK_URI"><code class="docutils literal notranslate"><span class="pre">TASK_URI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.scanhub_requests.RESULT_URI"><code class="docutils literal notranslate"><span class="pre">RESULT_URI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.scanhub_requests.get_task"><code class="docutils literal notranslate"><span class="pre">get_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.scanhub_requests.set_task"><code class="docutils literal notranslate"><span class="pre">set_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.scanhub_requests.create_blank_result"><code class="docutils literal notranslate"><span class="pre">create_blank_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.scanhub_requests.set_result"><code class="docutils literal notranslate"><span class="pre">set_result()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -656,7 +628,7 @@ conf (Dict[str, str]): Additional configuration parameters to pass to the DAG.</
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/orchestration_engine/index.rst.txt"
+      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/scanhub_requests/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

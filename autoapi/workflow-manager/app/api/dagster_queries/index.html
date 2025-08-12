@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>workflow-manager.app.api.task_requests &#8212; ScanHub Documentation</title>
+    <title>workflow-manager.app.api.dagster_queries &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/task_requests/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/workflow-manager/app/api/dagster_queries/index';</script>
     <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -406,7 +406,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.task_requests</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">workflow-manager.app.api.dagster_queries</span></li>
   </ul>
 </nav>
 </div>
@@ -423,20 +423,13 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-workflow-manager.app.api.task_requests">
-<span id="workflow-manager-app-api-task-requests"></span><h1>workflow-manager.app.api.task_requests<a class="headerlink" href="#module-workflow-manager.app.api.task_requests" title="Link to this heading">#</a></h1>
-<p>Handler for exam requests.</p>
-<p>This module defines functions to interact with the exam manager service,
-including fetching tasks, sequences, and results. It provides a way to
-create and update acquisition tasks and results, ensuring that the data
-is properly formatted and authenticated.</p>
-<p>Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
-SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
+  <section id="module-workflow-manager.app.api.dagster_queries">
+<span id="workflow-manager-app-api-dagster-queries"></span><h1>workflow-manager.app.api.dagster_queries<a class="headerlink" href="#module-workflow-manager.app.api.dagster_queries" title="Link to this heading">#</a></h1>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.task_requests.TASK_URI" title="workflow-manager.app.api.task_requests.TASK_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TASK_URI</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.dagster_queries.DAGSTER_URL" title="workflow-manager.app.api.dagster_queries.DAGSTER_URL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DAGSTER_URL</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -447,11 +440,11 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.task_requests.get_task" title="workflow-manager.app.api.task_requests.get_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_task</span></code></a>(...)</p></td>
-<td><p>Fetch acquisition task by ID from the exam manager service.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.dagster_queries.list_dagster_jobs" title="workflow-manager.app.api.dagster_queries.list_dagster_jobs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_dagster_jobs</span></code></a>(→ list[dict])</p></td>
+<td><p>List all available Dagster jobs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.task_requests.set_task" title="workflow-manager.app.api.task_requests.set_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_task</span></code></a>(...)</p></td>
-<td><p>Update an acquisition task on the task service with the provided payload.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.dagster_queries.parse_job_id" title="workflow-manager.app.api.dagster_queries.parse_job_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_job_id</span></code></a>(→ tuple[str, str, str])</p></td>
+<td><p>Parse the job ID into its components.</p></td>
 </tr>
 </tbody>
 </table>
@@ -460,64 +453,20 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py data">
-<dt class="sig sig-object py" id="workflow-manager.app.api.task_requests.TASK_URI">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.task_requests.</span></span><span class="sig-name descname"><span class="pre">TASK_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://exam-manager:8000/api/v1/exam/task'</span></em><a class="headerlink" href="#workflow-manager.app.api.task_requests.TASK_URI" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.dagster_queries.DAGSTER_URL">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.dagster_queries.</span></span><span class="sig-name descname"><span class="pre">DAGSTER_URL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://dagster-dagit:3000/dagit/graphql'</span></em><a class="headerlink" href="#workflow-manager.app.api.dagster_queries.DAGSTER_URL" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.task_requests.get_task">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.task_requests.</span></span><span class="sig-name descname"><span class="pre">get_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.task_requests.get_task" title="Link to this definition">#</a></dt>
-<dd><p>Fetch acquisition task by ID from the exam manager service.</p>
-<section id="args">
-<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>task_id (str | UUID): The unique identifier of the task to retrieve.
-user_access_token (str): The user’s access token for authentication.</p>
-</div></blockquote>
-</section>
-<section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>AcquisitionTaskOut | None: The acquisition task object if found and valid.</p>
-</div></blockquote>
-</section>
-<section id="raises">
-<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>HTTPException: If the task is not found (404) or is not an acquisition task (400).</p>
-</div></blockquote>
-</section>
+<dt class="sig sig-object py" id="workflow-manager.app.api.dagster_queries.list_dagster_jobs">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.dagster_queries.</span></span><span class="sig-name descname"><span class="pre">list_dagster_jobs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../../_modules/workflow-manager/app/api/dagster_queries.html#list_dagster_jobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#workflow-manager.app.api.dagster_queries.list_dagster_jobs" title="Link to this definition">#</a></dt>
+<dd><p>List all available Dagster jobs.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.task_requests.set_task">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.task_requests.</span></span><span class="sig-name descname"><span class="pre">set_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></span><a class="headerlink" href="#workflow-manager.app.api.task_requests.set_task" title="Link to this definition">#</a></dt>
-<dd><p>Update an acquisition task on the task service with the provided payload.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>task_id<span class="classifier">str | UUID</span></dt><dd><p>The unique identifier of the task to update.</p>
-</dd>
-<dt>payload<span class="classifier">AcquisitionTaskOut</span></dt><dd><p>The updated task data to send to the task service.</p>
-</dd>
-<dt>user_access_token<span class="classifier">str</span></dt><dd><p>The access token used for authorization with the task service.</p>
-</dd>
-</dl>
-</section>
-<section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>AcquisitionTaskOut</dt><dd><p>The updated task object returned from the task service.</p>
-</dd>
-</dl>
-</section>
-<section id="id2">
-<h3>Raises<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>If the task update fails (e.g. non-200 response from the task service).</p>
-</dd>
-</dl>
-</section>
+<dt class="sig sig-object py" id="workflow-manager.app.api.dagster_queries.parse_job_id">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.dagster_queries.</span></span><span class="sig-name descname"><span class="pre">parse_job_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../../_modules/workflow-manager/app/api/dagster_queries.html#parse_job_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#workflow-manager.app.api.dagster_queries.parse_job_id" title="Link to this definition">#</a></dt>
+<dd><p>Parse the job ID into its components.</p>
 </dd></dl>
 
 </section>
@@ -555,9 +504,9 @@ user_access_token (str): The user’s access token for authentication.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.task_requests.TASK_URI"><code class="docutils literal notranslate"><span class="pre">TASK_URI</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.task_requests.get_task"><code class="docutils literal notranslate"><span class="pre">get_task()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.task_requests.set_task"><code class="docutils literal notranslate"><span class="pre">set_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.dagster_queries.DAGSTER_URL"><code class="docutils literal notranslate"><span class="pre">DAGSTER_URL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.dagster_queries.list_dagster_jobs"><code class="docutils literal notranslate"><span class="pre">list_dagster_jobs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.dagster_queries.parse_job_id"><code class="docutils literal notranslate"><span class="pre">parse_job_id()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -567,7 +516,7 @@ user_access_token (str): The user’s access token for authentication.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/task_requests/index.rst.txt"
+      <li><a href="../../../../../_sources/autoapi/workflow-manager/app/api/dagster_queries/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

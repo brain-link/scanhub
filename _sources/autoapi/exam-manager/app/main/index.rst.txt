@@ -28,7 +28,6 @@ Functions
    exam-manager.app.main.startup
    exam-manager.app.main.shutdown
    exam-manager.app.main.readiness
-   exam-manager.app.main.get_dicom
 
 
 Module Contents
@@ -93,32 +92,5 @@ Module Contents
    ------
    HTTPException
        500: Any of the exam-tree tables does not exist
-
-
-.. py:function:: get_dicom(result_id: uuid.UUID | str) -> fastapi.responses.FileResponse
-   :async:
-
-
-   Get DICOM file of a result.
-
-   This endpoint in implemented in main without the result_router to omit the user authentification.
-   The frontend uses cornerstone to load the image, which would need to know, how to authenticate with the backend.
-   This is not to be done. TODO fix it!
-
-   Parameters
-   ----------
-   result_id
-       UUID of the result with the dicom.
-
-   Returns
-   -------
-       DICOM file response
-
-   Raises
-   ------
-   HTTPException
-       Throws exception if result ID is unknown
-   HTTPException
-       Throws exception if DICOM file does not exist
 
 

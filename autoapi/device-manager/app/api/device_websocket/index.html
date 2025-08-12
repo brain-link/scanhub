@@ -468,6 +468,18 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.websocket_endpoint" title="device-manager.app.api.device_websocket.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket)</p></td>
 <td><p>Websocket endpoint for device communication.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.handle_register" title="device-manager.app.api.device_websocket.handle_register"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_register</span></code></a>(→ None)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.handle_status_update" title="device-manager.app.api.device_websocket.handle_status_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_status_update</span></code></a>(→ None)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket.handle_file_transfer" title="device-manager.app.api.device_websocket.handle_file_transfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_file_transfer</span></code></a>(→ None)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#device-manager.app.api.device_websocket._pick_result_type" title="device-manager.app.api.device_websocket._pick_result_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_pick_result_type</span></code></a>(filename)</p></td>
+<td><p>Map extensions to enum.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -531,6 +543,27 @@ device_id (UUID): The device_id.</p>
 </section>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.handle_register">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">handle_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.handle_register" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.handle_status_update">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">handle_status_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.handle_status_update" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.device_websocket.handle_file_transfer">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">handle_file_transfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#device-manager.app.api.device_websocket.handle_file_transfer" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="device-manager.app.api.device_websocket._pick_result_type">
+<span class="sig-prename descclassname"><span class="pre">device-manager.app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_pick_result_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#device-manager.app.api.device_websocket._pick_result_type" title="Link to this definition">#</a></dt>
+<dd><p>Map extensions to enum.</p>
+</dd></dl>
+
 </section>
 </section>
 
@@ -574,6 +607,10 @@ device_id (UUID): The device_id.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.start_scan_via_websocket"><code class="docutils literal notranslate"><span class="pre">start_scan_via_websocket()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.connection_with_valid_id_and_token"><code class="docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.websocket_endpoint"><code class="docutils literal notranslate"><span class="pre">websocket_endpoint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.handle_register"><code class="docutils literal notranslate"><span class="pre">handle_register()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.handle_status_update"><code class="docutils literal notranslate"><span class="pre">handle_status_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket.handle_file_transfer"><code class="docutils literal notranslate"><span class="pre">handle_file_transfer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-manager.app.api.device_websocket._pick_result_type"><code class="docutils literal notranslate"><span class="pre">_pick_result_type()</span></code></a></li>
 </ul>
 </li>
 </ul>

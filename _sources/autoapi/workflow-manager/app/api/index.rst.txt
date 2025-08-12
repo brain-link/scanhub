@@ -15,8 +15,8 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/workflow-manager/app/api/dagster_queries/index
    /autoapi/workflow-manager/app/api/manager_endpoints/index
-   /autoapi/workflow-manager/app/api/orchestration_engine/index
-   /autoapi/workflow-manager/app/api/task_requests/index
+   /autoapi/workflow-manager/app/api/scanhub_requests/index
 
 

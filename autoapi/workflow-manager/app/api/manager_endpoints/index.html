@@ -434,34 +434,25 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#id0" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#id1" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PATIENT_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#id2" title="workflow-manager.app.api.manager_endpoints.orchestration_engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orchestration_engine</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PATIENT_MANAGER_URI</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.dg_client" title="workflow-manager.app.api.manager_endpoints.dg_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dg_client</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.router" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#id0" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#id1" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#id2" title="workflow-manager.app.api.manager_endpoints.orchestration_engine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orchestration_engine</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -481,30 +472,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.list_available_tasks" title="workflow-manager.app.api.manager_endpoints.list_available_tasks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_available_tasks</span></code></a>()</p></td>
 <td><p>Endpoint to list the available tasks from the orchestration engine.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.upload_and_trigger" title="workflow-manager.app.api.manager_endpoints.upload_and_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_and_trigger</span></code></a>(], file, Any])</p></td>
-<td><p>Upload a file and trigger an Airflow DAG.</p></td>
-</tr>
 </tbody>
 </table>
 </div>
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
-<dl class="py data">
-<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.router">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.router" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.oauth2_scheme">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.orchestration_engine">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">orchestration_engine</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.orchestration_engine" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
 <dl class="py data">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI">
 <span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">EXAM_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'exam-manager:8000'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI" title="Link to this definition">#</a></dt>
@@ -526,18 +499,18 @@
 <dd></dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.dg_client">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">dg_client</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.dg_client" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.router">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.router" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">orchestration_engine</span></span><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.oauth2_scheme">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -565,8 +538,8 @@
 access_token (str): The access token for authentication.</p>
 </dd>
 </dl>
-<section id="id3">
-<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: A dictionary containing a success message.</p>
 </div></blockquote>
@@ -577,32 +550,10 @@ access_token (str): The access token for authentication.</p>
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.list_available_tasks">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">list_available_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.list_available_tasks" title="Link to this definition">#</a></dt>
 <dd><p>Endpoint to list the available tasks from the orchestration engine.</p>
-<p>Currently, only Airflow is supported.</p>
-<section id="id4">
-<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing the list of available tasks (DAGs) for Airflow.</p>
-</div></blockquote>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.upload_and_trigger">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">upload_and_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.upload_and_trigger" title="Link to this definition">#</a></dt>
-<dd><p>Upload a file and trigger an Airflow DAG.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>dag_id</dt><dd><p>The ID of the DAG to be triggered.</p>
-</dd>
-<dt>file, optional</dt><dd><p>Data upload, e.g. reconstruction result, by default File(…)</p>
-</dd>
-</dl>
-</section>
-<section id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>dict: A dictionary containing a message and data.</p>
+<div><p>dict: A dictionary containing the list of available dagster jobs.</p>
 </div></blockquote>
 </section>
 </dd></dl>
@@ -642,20 +593,16 @@ access_token (str): The access token for authentication.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.orchestration_engine"><code class="docutils literal notranslate"><span class="pre">orchestration_engine</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">PATIENT_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">orchestration_engine</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.dg_client"><code class="docutils literal notranslate"><span class="pre">dg_client</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.trigger_task"><code class="docutils literal notranslate"><span class="pre">trigger_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.callback_results_ready"><code class="docutils literal notranslate"><span class="pre">callback_results_ready()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.list_available_tasks"><code class="docutils literal notranslate"><span class="pre">list_available_tasks()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.upload_and_trigger"><code class="docutils literal notranslate"><span class="pre">upload_and_trigger()</span></code></a></li>
 </ul>
 </li>
 </ul>

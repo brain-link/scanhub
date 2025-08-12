@@ -1,0 +1,40 @@
+workflow-manager.app.api.dagster_queries
+========================================
+
+.. py:module:: workflow-manager.app.api.dagster_queries
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   workflow-manager.app.api.dagster_queries.DAGSTER_URL
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   workflow-manager.app.api.dagster_queries.list_dagster_jobs
+   workflow-manager.app.api.dagster_queries.parse_job_id
+
+
+Module Contents
+---------------
+
+.. py:data:: DAGSTER_URL
+   :value: 'http://dagster-dagit:3000/dagit/graphql'
+
+
+.. py:function:: list_dagster_jobs() -> list[dict]
+
+   List all available Dagster jobs.
+
+
+.. py:function:: parse_job_id(job_id: str) -> tuple[str, str, str]
+
+   Parse the job ID into its components.
+
+
