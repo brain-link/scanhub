@@ -26,6 +26,41 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AccessToken
+ */
+export interface AccessToken {
+}
+/**
+ * 
+ * @export
+ * @interface ClientId
+ */
+export interface ClientId {
+}
+/**
+ * 
+ * @export
+ * @interface ClientSecret
+ */
+export interface ClientSecret {
+}
+/**
+ * 
+ * @export
+ * @interface Email
+ */
+export interface Email {
+}
+/**
+ * 
+ * @export
+ * @interface GrantType
+ */
+export interface GrantType {
+}
+/**
+ * 
+ * @export
  * @interface HTTPValidationError
  */
 export interface HTTPValidationError {
@@ -39,9 +74,16 @@ export interface HTTPValidationError {
 /**
  * 
  * @export
- * @interface LocationInner
+ * @interface LastActivityUnixtime
  */
-export interface LocationInner {
+export interface LastActivityUnixtime {
+}
+/**
+ * 
+ * @export
+ * @interface LastLoginUnixtime
+ */
+export interface LastLoginUnixtime {
 }
 /**
  * 
@@ -94,10 +136,10 @@ export interface User {
     'last_name': string;
     /**
      * 
-     * @type {string}
+     * @type {Email}
      * @memberof User
      */
-    'email'?: string;
+    'email'?: Email;
     /**
      * 
      * @type {UserRole}
@@ -118,21 +160,21 @@ export interface User {
     'token_type': string;
     /**
      * 
-     * @type {number}
+     * @type {LastActivityUnixtime}
      * @memberof User
      */
-    'last_activity_unixtime'?: number;
+    'last_activity_unixtime'?: LastActivityUnixtime;
     /**
      * 
-     * @type {number}
+     * @type {LastLoginUnixtime}
      * @memberof User
      */
-    'last_login_unixtime'?: number;
+    'last_login_unixtime'?: LastLoginUnixtime;
 }
 
 
 /**
- * An enumeration.
+ * 
  * @export
  * @enum {string}
  */
@@ -155,10 +197,10 @@ export type UserRole = typeof UserRole[keyof typeof UserRole];
 export interface ValidationError {
     /**
      * 
-     * @type {Array<LocationInner>}
+     * @type {Array<ValidationErrorLocInner>}
      * @memberof ValidationError
      */
-    'loc': Array<LocationInner>;
+    'loc': Array<ValidationErrorLocInner>;
     /**
      * 
      * @type {string}
@@ -171,6 +213,13 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationErrorLocInner
+ */
+export interface ValidationErrorLocInner {
 }
 
 /**
@@ -285,14 +334,14 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
          * @summary Login
          * @param {string} username 
          * @param {string} password 
-         * @param {string} [grantType] 
+         * @param {GrantType} [grantType] 
          * @param {string} [scope] 
-         * @param {string} [clientId] 
-         * @param {string} [clientSecret] 
+         * @param {ClientId} [clientId] 
+         * @param {ClientSecret} [clientSecret] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginApiV1UserloginLoginPost: async (username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        loginApiV1UserloginLoginPost: async (username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
             assertParamExists('loginApiV1UserloginLoginPost', 'username', username)
             // verify required parameter 'password' is not null or undefined
@@ -351,11 +400,11 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
          * @summary Loginfromcookie
-         * @param {string} [accessToken] 
+         * @param {AccessToken} [accessToken] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginfromcookieApiV1UserloginLoginfromcookiePost: async (accessToken?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        loginfromcookieApiV1UserloginLoginfromcookiePost: async (accessToken?: AccessToken, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/loginfromcookie`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -428,14 +477,14 @@ export const LoginApiFp = function(configuration?: Configuration) {
          * @summary Login
          * @param {string} username 
          * @param {string} password 
-         * @param {string} [grantType] 
+         * @param {GrantType} [grantType] 
          * @param {string} [scope] 
-         * @param {string} [clientId] 
-         * @param {string} [clientSecret] 
+         * @param {ClientId} [clientId] 
+         * @param {ClientSecret} [clientSecret] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async loginApiV1UserloginLoginPost(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LoginApi.loginApiV1UserloginLoginPost']?.[localVarOperationServerIndex]?.url;
@@ -444,11 +493,11 @@ export const LoginApiFp = function(configuration?: Configuration) {
         /**
          * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
          * @summary Loginfromcookie
-         * @param {string} [accessToken] 
+         * @param {AccessToken} [accessToken] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: AccessToken, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LoginApi.loginfromcookieApiV1UserloginLoginfromcookiePost']?.[localVarOperationServerIndex]?.url;
@@ -481,24 +530,24 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          * @summary Login
          * @param {string} username 
          * @param {string} password 
-         * @param {string} [grantType] 
+         * @param {GrantType} [grantType] 
          * @param {string} [scope] 
-         * @param {string} [clientId] 
-         * @param {string} [clientSecret] 
+         * @param {ClientId} [clientId] 
+         * @param {ClientSecret} [clientSecret] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<User> {
+        loginApiV1UserloginLoginPost(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: any): AxiosPromise<User> {
             return localVarFp.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
         },
         /**
          * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
          * @summary Loginfromcookie
-         * @param {string} [accessToken] 
+         * @param {AccessToken} [accessToken] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: string, options?: any): AxiosPromise<User> {
+        loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: AccessToken, options?: any): AxiosPromise<User> {
             return localVarFp.loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options).then((request) => request(axios, basePath));
         },
         /**
@@ -525,27 +574,27 @@ export class LoginApi extends BaseAPI {
      * @summary Login
      * @param {string} username 
      * @param {string} password 
-     * @param {string} [grantType] 
+     * @param {GrantType} [grantType] 
      * @param {string} [scope] 
-     * @param {string} [clientId] 
-     * @param {string} [clientSecret] 
+     * @param {ClientId} [clientId] 
+     * @param {ClientSecret} [clientSecret] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public loginApiV1UserloginLoginPost(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: RawAxiosRequestConfig) {
+    public loginApiV1UserloginLoginPost(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: RawAxiosRequestConfig) {
         return LoginApiFp(this.configuration).loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
      * @summary Loginfromcookie
-     * @param {string} [accessToken] 
+     * @param {AccessToken} [accessToken] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: string, options?: RawAxiosRequestConfig) {
+    public loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: AccessToken, options?: RawAxiosRequestConfig) {
         return LoginApiFp(this.configuration).loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 

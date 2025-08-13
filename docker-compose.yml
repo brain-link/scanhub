@@ -279,17 +279,17 @@ services:
   
 
   # FRONTEND/SCANHUB-UI
-  scanhub-ui:
-    container_name: scanhub-ui
-    build:
-      context: ./scanhub-ui
-      dockerfile: ./Dockerfile
-      args:
-        NODE_ENV: "development" # use "development" or "production"
-    volumes:
-      - ./scanhub-ui/src:/app/src
-    depends_on:
-      - nginx
+  # scanhub-ui:
+  #   container_name: scanhub-ui
+  #   build:
+  #     context: ./scanhub-ui
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       NODE_ENV: "development" # use "development" or "production"
+  #   volumes:
+  #     - ./scanhub-ui/src:/app/src
+  #   depends_on:
+  #     - nginx
 
 
   # DAGSTER

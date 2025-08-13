@@ -109,11 +109,11 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Dag && 'input_id' in task &&
+          task.task_type === TaskType.Dag && 'input_task_ids' in task &&
           <>
             <Typography fontSize='sm'>Input</Typography>
             <Typography level='body-sm' textColor='text.primary'>
-              {task.input_id ? String(task.input_id) : '-'}
+              {task.input_task_ids ? task.input_task_ids : '-'}
             </Typography>
           </>
         }

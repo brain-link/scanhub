@@ -39,6 +39,20 @@ export interface HTTPValidationError {
 /**
  * 
  * @export
+ * @interface ResultId
+ */
+export interface ResultId {
+}
+/**
+ * 
+ * @export
+ * @interface TaskId
+ */
+export interface TaskId {
+}
+/**
+ * 
+ * @export
  * @interface ValidationError
  */
 export interface ValidationError {
@@ -67,13 +81,6 @@ export interface ValidationError {
  * @interface ValidationErrorLocInner
  */
 export interface ValidationErrorLocInner {
-}
-/**
- * 
- * @export
- * @interface WorkflowId
- */
-export interface WorkflowId {
 }
 
 /**
@@ -184,13 +191,21 @@ export class HealthApi extends BaseAPI {
 export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Hello world endpoint.
-         * @summary Hello World
+         * Notify that results are ready via callback endpoint.  Args:     dag_id (str): The ID of the DAG.     access_token (str): The access token for authentication.  Returns -------     dict: A dictionary containing a success message.
+         * @summary Callback Results Ready
+         * @param {TaskId} taskId 
+         * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        helloWorldApiV1WorkflowmanagerHelloGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/workflowmanager/hello/`;
+        callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost: async (taskId: TaskId, resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost', 'resultId', resultId)
+            const localVarPath = `/api/v1/workflowmanager/result_ready/{task_id}/{result_id}`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -198,7 +213,7 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -218,7 +233,7 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             };
         },
         /**
-         * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+         * Endpoint to list the available tasks from the orchestration engine.  Returns -------     dict: A dictionary containing the list of available dagster jobs.
          * @summary List Available Tasks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -233,44 +248,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
             }
 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Process a workflow.  Parameters ---------- workflow_id     UUID of the workflow to process  Returns -------     Workflow process response
-         * @summary Process
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        processApiV1WorkflowmanagerProcessWorkflowIdPost: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('processApiV1WorkflowmanagerProcessWorkflowIdPost', 'workflowId', workflowId)
-            const localVarPath = `/api/v1/workflowmanager/process/{workflow_id}/`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -327,55 +304,6 @@ export const WorkflowManagerApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
-         * @summary Upload And Trigger
-         * @param {string} dagId 
-         * @param {File} file 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost: async (dagId: string, file: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'dagId' is not null or undefined
-            assertParamExists('uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost', 'dagId', dagId)
-            // verify required parameter 'file' is not null or undefined
-            assertParamExists('uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost', 'file', file)
-            const localVarPath = `/api/v1/workflowmanager/upload_and_trigger/{dag_id}/`
-                .replace(`{${"dag_id"}}`, encodeURIComponent(String(dagId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-            if (file !== undefined) { 
-                localVarFormParams.append('file', file as any);
-            }
-    
-    
-            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = localVarFormParams;
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -387,19 +315,21 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WorkflowManagerApiAxiosParamCreator(configuration)
     return {
         /**
-         * Hello world endpoint.
-         * @summary Hello World
+         * Notify that results are ready via callback endpoint.  Args:     dag_id (str): The ID of the DAG.     access_token (str): The access token for authentication.  Returns -------     dict: A dictionary containing a success message.
+         * @summary Callback Results Ready
+         * @param {TaskId} taskId 
+         * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async helloWorldApiV1WorkflowmanagerHelloGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: string; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.helloWorldApiV1WorkflowmanagerHelloGet(options);
+        async callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost(taskId: TaskId, resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost(taskId, resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.helloWorldApiV1WorkflowmanagerHelloGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+         * Endpoint to list the available tasks from the orchestration engine.  Returns -------     dict: A dictionary containing the list of available dagster jobs.
          * @summary List Available Tasks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -408,19 +338,6 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listAvailableTasksApiV1WorkflowmanagerTasksGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.listAvailableTasksApiV1WorkflowmanagerTasksGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Process a workflow.  Parameters ---------- workflow_id     UUID of the workflow to process  Returns -------     Workflow process response
-         * @summary Process
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: string; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.processApiV1WorkflowmanagerProcessWorkflowIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -436,20 +353,6 @@ export const WorkflowManagerApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
-         * @summary Upload And Trigger
-         * @param {string} dagId 
-         * @param {File} file 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowManagerApi.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -461,32 +364,24 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
     const localVarFp = WorkflowManagerApiFp(configuration)
     return {
         /**
-         * Hello world endpoint.
-         * @summary Hello World
+         * Notify that results are ready via callback endpoint.  Args:     dag_id (str): The ID of the DAG.     access_token (str): The access token for authentication.  Returns -------     dict: A dictionary containing a success message.
+         * @summary Callback Results Ready
+         * @param {TaskId} taskId 
+         * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        helloWorldApiV1WorkflowmanagerHelloGet(options?: any): AxiosPromise<{ [key: string]: string; }> {
-            return localVarFp.helloWorldApiV1WorkflowmanagerHelloGet(options).then((request) => request(axios, basePath));
+        callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost(taskId: TaskId, resultId: ResultId, options?: any): AxiosPromise<{ [key: string]: any; }> {
+            return localVarFp.callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost(taskId, resultId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+         * Endpoint to list the available tasks from the orchestration engine.  Returns -------     dict: A dictionary containing the list of available dagster jobs.
          * @summary List Available Tasks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         listAvailableTasksApiV1WorkflowmanagerTasksGet(options?: any): AxiosPromise<any> {
             return localVarFp.listAvailableTasksApiV1WorkflowmanagerTasksGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Process a workflow.  Parameters ---------- workflow_id     UUID of the workflow to process  Returns -------     Workflow process response
-         * @summary Process
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId: WorkflowId, options?: any): AxiosPromise<{ [key: string]: string; }> {
-            return localVarFp.processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId, options).then((request) => request(axios, basePath));
         },
         /**
          * Endpoint to trigger a task in the orchestration engine.  Args:     task_id (str): The ID of the DAG to be triggered.  Returns -------     dict: A dictionary containing the response from the orchestration engine.
@@ -497,17 +392,6 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
          */
         triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: any): AxiosPromise<{ [key: string]: any; }> {
             return localVarFp.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
-         * @summary Upload And Trigger
-         * @param {string} dagId 
-         * @param {File} file 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: any): AxiosPromise<{ [key: string]: any; }> {
-            return localVarFp.uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -520,18 +404,20 @@ export const WorkflowManagerApiFactory = function (configuration?: Configuration
  */
 export class WorkflowManagerApi extends BaseAPI {
     /**
-     * Hello world endpoint.
-     * @summary Hello World
+     * Notify that results are ready via callback endpoint.  Args:     dag_id (str): The ID of the DAG.     access_token (str): The access token for authentication.  Returns -------     dict: A dictionary containing a success message.
+     * @summary Callback Results Ready
+     * @param {TaskId} taskId 
+     * @param {ResultId} resultId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkflowManagerApi
      */
-    public helloWorldApiV1WorkflowmanagerHelloGet(options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).helloWorldApiV1WorkflowmanagerHelloGet(options).then((request) => request(this.axios, this.basePath));
+    public callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost(taskId: TaskId, resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return WorkflowManagerApiFp(this.configuration).callbackResultsReadyApiV1WorkflowmanagerResultReadyTaskIdResultIdPost(taskId, resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Endpoint to list the available tasks from the orchestration engine.  Currently, only Airflow is supported.  Returns -------     dict: A dictionary containing the list of available tasks (DAGs) for Airflow.
+     * Endpoint to list the available tasks from the orchestration engine.  Returns -------     dict: A dictionary containing the list of available dagster jobs.
      * @summary List Available Tasks
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -539,18 +425,6 @@ export class WorkflowManagerApi extends BaseAPI {
      */
     public listAvailableTasksApiV1WorkflowmanagerTasksGet(options?: RawAxiosRequestConfig) {
         return WorkflowManagerApiFp(this.configuration).listAvailableTasksApiV1WorkflowmanagerTasksGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Process a workflow.  Parameters ---------- workflow_id     UUID of the workflow to process  Returns -------     Workflow process response
-     * @summary Process
-     * @param {WorkflowId} workflowId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowManagerApi
-     */
-    public processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).processApiV1WorkflowmanagerProcessWorkflowIdPost(workflowId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -563,19 +437,6 @@ export class WorkflowManagerApi extends BaseAPI {
      */
     public triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId: string, options?: RawAxiosRequestConfig) {
         return WorkflowManagerApiFp(this.configuration).triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(taskId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Upload a file and trigger an Airflow DAG.  Parameters ---------- dag_id     The ID of the DAG to be triggered. file, optional     Data upload, e.g. reconstruction result, by default File(...)  Returns -------     dict: A dictionary containing a message and data.
-     * @summary Upload And Trigger
-     * @param {string} dagId 
-     * @param {File} file 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowManagerApi
-     */
-    public uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId: string, file: File, options?: RawAxiosRequestConfig) {
-        return WorkflowManagerApiFp(this.configuration).uploadAndTriggerApiV1WorkflowmanagerUploadAndTriggerDagIdPost(dagId, file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

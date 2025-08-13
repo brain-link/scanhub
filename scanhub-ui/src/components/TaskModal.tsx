@@ -485,12 +485,12 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
           <Grid md={4}>
             <FormLabel>Input</FormLabel>
             <Select
-              value={task.input_id ? task.input_id : null}
+              value={task.input_task_ids ? task.input_task_ids[0] : null}
               placeholder={'Select an input...'}
               size='sm'
               onChange={(event, value) => {
                 if (value) {
-                  setTask({ ...task, 'input_id': value })
+                  setTask({ ...task, 'input_task_ids': [value] })
                 }
               }}
             >
