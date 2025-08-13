@@ -12,6 +12,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 import hashlib
 import json
 import os
+from pathlib import Path
 from secrets import compare_digest, token_hex
 from typing import Annotated, Dict, Optional
 from uuid import UUID
@@ -38,10 +39,7 @@ from scanhub_libraries.security import compute_complex_password_hash
 from sqlalchemy import exc
 
 import app.api.exam_requests as exam_requests
-from app.api.dal import (
-    dal_get_device,
-    dal_update_device,
-)
+from app.api.dal import dal_get_device, dal_update_device
 
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
@@ -195,7 +193,7 @@ async def handle_register(websocket: WebSocket, message: dict, device_id: UUID) 
 
 async def handle_status_update(websocket: WebSocket, message: dict, device_id: UUID) -> None:
     """Handle device status updates."""
-    print("Handle command 'update_status'.")
+    print("Handle command 'update_status'...")
     status = str(message.get("status"))
 
     if not status:
@@ -230,6 +228,7 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
 
 async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
     """Handle file transfer from device to server."""
+    print("Handle file transfer...")
     # Preflight check for DATA_LAKE_DIR
     if DATA_LAKE_DIR is None:
         raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
@@ -238,7 +237,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
 
     task_id: str = str(header["task_id"])
     user_access_token: str = str(header["user_access_token"])
-    filename_in: str = os.path.basename(str(header.get("filename", "upload.bin")))
+    filename: Path = Path(header.get("filename", "upload.bin"))
     size_bytes: int = int(header["size_bytes"])
     # content_type: str = header.get("content_type")
     header_sha256: Optional[str] = header.get("sha256")
@@ -246,17 +245,14 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
     # Locate task & result directory
     task = exam_requests.get_task(task_id, user_access_token)
 
-    result_directory = os.path.join(DATA_LAKE_DIR, str(task.workflow_id))
-    os.makedirs(result_directory, exist_ok=True)
-
     # Create blank result entry
     blank_result = exam_requests.create_blank_result(task_id, user_access_token)
 
-    # Preserve extension if present
-    root, ext = os.path.splitext(filename_in)
-    final_filename = f"{blank_result.id}{ext or ''}"
-    file_path = os.path.join(result_directory, final_filename)
-    tmp_path = file_path + ".part"
+    # Create the result directory
+    result_directory = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(blank_result.id)
+    result_directory.mkdir(exist_ok=True)
+    file_path = result_directory / filename
+    tmp_path = file_path.with_suffix(file_path.suffix + ".part")
 
     # Receive bytes -> stream to disk
     hasher = hashlib.sha256()
@@ -305,10 +301,11 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
 
     # Set result
     set_result = SetResult(
-        type=_pick_result_type(filename_in),
-        directory=result_directory,
-        filename=final_filename,
+        type=_pick_result_type(file_path.name),
+        directory=str(result_directory),
+        files=[file_path.name],
     )
+    print("Result to set: ", set_result.model_dump_json())
     result = exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
 
     # Update task status to FINISHED

@@ -13,7 +13,7 @@ from dagster_workflows.numpy_image_reconstruction import notify_op
 def load_kdata(context: OpExecutionContext) -> mrpro.data.KData:
     """Load k-space data from MRD file."""
     job_config: JobConfigResource = context.resources.job_config
-    path = Path(job_config.input_file)
+    path = Path(job_config.input_files[0])  # expect a single input file
     context.log.info("Loading data from %s", path)
 
     if not path.exists():

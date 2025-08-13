@@ -9,7 +9,8 @@ import uuid
 
 from pydantic import BaseModel
 from scanhub_libraries.models import AcquisitionLimits, AcquisitionParameter, ItemStatus, ResultType, TaskType
-from sqlalchemy import JSON, ForeignKey, create_engine, func
+from sqlalchemy import JSON, ForeignKey, create_engine, func, String
+from sqlalchemy.dialects.postgresql import ARRAY, UUID
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -170,7 +171,7 @@ class DAGTask(Task):
     )
     dag_type: Mapped[TaskType] = mapped_column(nullable=False)
     dag_id: Mapped[str] = mapped_column(nullable=False)
-    input_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
+    input_task_ids: Mapped[list[uuid.UUID]] = mapped_column(ARRAY(UUID(as_uuid=True)), nullable=False, default=list)
     parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
 
@@ -188,7 +189,8 @@ class Result(Base):
 
     type: Mapped[ResultType] = mapped_column(nullable=True, default=ResultType.NOT_SET)
     directory: Mapped[str] = mapped_column(nullable=True, default="")
-    filename: Mapped[str] = mapped_column(nullable=True, default="")
+    files: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False, default=list)
+    meta: Mapped[dict] = mapped_column(nullable=True, type_=JSON)
 
 
 # Create automap base

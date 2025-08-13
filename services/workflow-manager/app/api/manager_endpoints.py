@@ -26,6 +26,7 @@ from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
     AcquisitionLimits,
     DAGTaskOut,
+    ResultOut,
     ExamOut,
     ItemStatus,
     PatientOut,
@@ -39,12 +40,13 @@ from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
 from app.api.dagster_queries import list_dagster_jobs, parse_job_id
-from app.api.scanhub_requests import create_blank_result, get_task, set_result, set_task
+from app.api.scanhub_requests import create_blank_result, get_task, set_result, set_task, get_exam_id, get_result
 
 # Define the URIs for the different managers
 EXAM_MANAGER_URI = "exam-manager:8000"
 PATIENT_MANAGER_URI = "patient-manager:8100"
 DEVICE_MANAGER_URI = "device-manager:8000"
+DICOM_BASE_URI = "https://localhost:8443/api/v1/exam/dcm/"
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
 if DATA_LAKE_DIR is None:   # ensure that DATA_LAKE_DIR is set
     raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
@@ -124,20 +126,25 @@ async def trigger_task(task_id: str,
         print("Triggering DAG...")
         try:
             # Get input, i.e. latest result of input task
-            if not task.input_id:
-                print("Missing task input ID")
+            if not task.input_task_ids:
+                print("Missing task input")
                 raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="DAG task input does not exist.")
-            if not (input_task := get_task(str(task.input_id), access_token)).results:
-                print("Selected input task does not have any results yet.")
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No results found for input task {input_task.id}.")
-            latest_result_in = sorted(input_task.results, key=lambda r: r.datetime_created, reverse=True)[0]
+
+            # Collect task input files
+            job_inputs = []
+            for _id in task.input_task_ids:
+                if not (input_task := get_task(str(_id), access_token)).results:
+                    print("Input task does not have any result.")
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No results found for input task {input_task.id}.")
+                latest_result = sorted(input_task.results, key=lambda r: r.datetime_created, reverse=True)[0]
+                for _file in latest_result.files:
+                    file_path = Path(latest_result.directory) / _file
+                    if file_path.exists():
+                        job_inputs.append(str(file_path))
 
             # Update the task status to IN_PROGRESS
             task.status = ItemStatus.INPROGRESS
             set_task(task.id, task, access_token)
-
-            # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
-            callback_endpoint = f"http://workflow-manager:8000/api/v1/workflowmanager/result_ready/{task.id}"
 
             # Create blank result
             new_result_out = create_blank_result(task_id, access_token)
@@ -146,13 +153,14 @@ async def trigger_task(task_id: str,
                 result_id=str(new_result_out.id),
                 payload=SetResult(
                     type=ResultType.DICOM,
-                    directory=str(Path(latest_result_in.directory) / str(new_result_out.id)),
-                    filename="*.dcm",
+                    directory=f"/data/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/",
                 ),
                 user_access_token=access_token,
             )
-
             print(f"Created new result: {new_result_out.model_dump_json()}")
+
+            # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
+            callback_endpoint = f"http://workflow-manager:8000/api/v1/workflowmanager/result_ready/{task.id}/{new_result_out.id}"
 
             # Trigger dagster job
             job_name, repository, location = parse_job_id(task.dag_id)
@@ -165,8 +173,10 @@ async def trigger_task(task_id: str,
                     SCANHUB_RESOURCE_KEY: JobConfigResource(
                         callback_url=callback_endpoint,
                         user_access_token=access_token,
-                        input_file=str(Path(latest_result_in.directory) / latest_result_in.filename),
+                        input_files=job_inputs,
                         output_dir=new_result_out.directory,
+                        task_id=str(task.id),
+                        exam_id=str(exam.id),
                     ),
                 }),
             )
@@ -181,8 +191,12 @@ async def trigger_task(task_id: str,
         raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
 
-@router.post("/result_ready/{task_id}", tags=["WorkflowManager"])
-async def callback_results_ready(task_id: UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]:
+@router.post("/result_ready/{task_id}/{result_id}", tags=["WorkflowManager"])
+async def callback_results_ready(
+    task_id: UUID | str,
+    result_id: UUID | str,
+    access_token: Annotated[str, Depends(oauth2_scheme)]
+) -> dict[str, Any]:
     """
     Notify that results are ready via callback endpoint.
 
@@ -194,15 +208,44 @@ async def callback_results_ready(task_id: UUID | str, access_token: Annotated[st
     -------
         dict: A dictionary containing a success message.
     """
-    task = get_task(task_id, access_token)
-    if not isinstance(task, DAGTaskOut):
+    if not isinstance(task := get_task(task_id, access_token), DAGTaskOut):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Result ready callback received invalid task_id: {task.id}",
         )
-    print("CALLBACK: Result ready for DAG ID ", task.dag_id)
+    if not isinstance(result := get_result(result_id, access_token), ResultOut):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Result ready callback received invalid task_id: {task.id}",
+        )
+
+    print("\n>>>>>\nCallback received: ", result.model_dump_json())
+
+    # Update task status
     task.status = ItemStatus.FINISHED
     set_task(task.id, task, access_token)
+
+    # Get a list of dicom files from the result directory
+    result_dir = Path(result.directory)
+    dicom_files = sorted(result_dir.rglob("*.dcm"))
+
+    # Get dicom location in shared data lake
+    workflow_folder = result_dir.parts[-3]
+    task_folder = result_dir.parts[-2]
+    result_folder = result_dir.parts[-1]
+
+    # Add file names to the result
+    result.files = [str(_file.name) for _file in dicom_files]
+    # Add meta information
+    result.meta = {
+        "instance_count": len(dicom_files),
+        "instances": [
+            f"{DICOM_BASE_URI}{workflow_folder}/{task_folder}/{result_folder}/{_file.name}" for _file in dicom_files
+        ],
+    }
+    print(f"Updated result: {result.model_dump_json()}")
+    _ = set_result(result_id=result.id, payload=result, user_access_token=access_token)
+
     return {"message": "Results ready notification sent successfully."}
 
 

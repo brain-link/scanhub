@@ -10,5 +10,7 @@ class JobConfigResource(ConfigurableResource):
 
     callback_url: str | None = None
     user_access_token: str | None = None
-    input_file: str
+    input_files: list[str]
     output_dir: str
+    task_id: str    # serves as series id
+    exam_id: str    # serves as study id

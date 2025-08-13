@@ -11,7 +11,7 @@ from enum import Enum
 from uuid import UUID
 from typing import Literal, Any
 
-from pydantic import BaseModel, ConfigDict, Field, Extra  # noqa
+from pydantic import BaseModel, ConfigDict, Field  # noqa
 
 
 class Gender(str, Enum):
@@ -62,7 +62,7 @@ class DeviceCreationRequest(BaseModel):
     (to be sent by user first adding the device to the platform).
     """
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     name: str
     description: str
@@ -70,7 +70,7 @@ class DeviceCreationRequest(BaseModel):
 class DeviceDetails(BaseModel):
     """Device creation request pydantic model."""
     
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     device_name: str | None = None
     serial_number: str | None = None
@@ -121,7 +121,7 @@ class ItemStatus(str, Enum):
 class BaseMRISequence(BaseModel):
     """Base model for MRI sequence."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
     
     name: str
     description: str
@@ -143,16 +143,17 @@ class MRISequenceOut(BaseMRISequence):
 class BaseResult(BaseModel):
     """Result model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
     task_id: UUID
-    
+
 class SetResult(BaseModel):
     """Update result model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
     type: ResultType
     directory: str
-    filename: str
+    files: list[str] = []
+    meta: dict | None = None
 
 
 class ResultOut(BaseResult, SetResult):
@@ -165,7 +166,7 @@ class ResultOut(BaseResult, SetResult):
 class BaseTask(BaseModel):
     """Task base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     workflow_id: UUID | None = None
     name: str
@@ -216,7 +217,7 @@ class BaseDAGTask(BaseTask):
     task_type: Literal[TaskType.DAG]
     dag_type: Literal[TaskType.RECONSTRUCTION, TaskType.PROCESSING]
     dag_id: str
-    input_id: UUID | None = None
+    input_task_ids: list[UUID] = []
     parameter: dict | None = None
 
 
@@ -239,7 +240,7 @@ class DagsterJobConfiguration(BaseModel):
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     exam_id: UUID | None = None
     name: str
@@ -262,7 +263,7 @@ class WorkflowOut(BaseWorkflow):
 class BaseExam(BaseModel):
     """Exam base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     patient_id: UUID | None = None
     name: str
@@ -315,7 +316,7 @@ class PasswordUpdateRequest(BaseModel):
 class BasePatient(BaseModel):
     """Patient pydantic base model."""
 
-    model_config = ConfigDict(extra=Extra.ignore)
+    model_config = ConfigDict(extra="ignore")
 
     first_name: str
     last_name: str
