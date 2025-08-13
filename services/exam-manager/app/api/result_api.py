@@ -13,7 +13,7 @@ from scanhub_libraries.security import get_current_user
 
 from app import LOG_CALL_DELIMITER
 from app.dal import result_dal, task_dal
-from app.tools.dicom import is_part10_file, resolve_dicom_path, to_part10_bytes
+from app.tools.dicom import resolve_dicom_path, to_part10_bytes
 from starlette.responses import Response
 
 # Http status codes
@@ -216,36 +216,26 @@ async def get_dicom(
     print("RETURNING DICOM FILE...")
 
     dicom_path = resolve_dicom_path(workflow_id, task_id, result_id, filename)
-
-    if is_part10_file(dicom_path):
-        print("Dicom is valid P10 file...")
-        # Native Part-10: stream from disk, Range supported
-        resp = FileResponse(
-            path=str(dicom_path),
-            media_type="application/dicom",
-            filename=dicom_path.name,  # Content-Disposition: inline; filename="..."
-        )
-        resp.headers["Accept-Ranges"] = "bytes"
-        resp.headers["X-Content-Type-Options"] = "nosniff"
-
-        # Prevent caching of dicoms for development
-        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        resp.headers["Pragma"] = "no-cache"
-        resp.headers["Expires"] = "0"
-
-        resp.headers["Cache-Control"] += ", no-transform"  # keep this to prevent gzip by proxies
-        return resp
-
-    print("Converting dicom to P10 and returning content as streaming response...")
     try:
         data = to_part10_bytes(dicom_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to convert DICOM to Part-10: {e}")
 
-    stream = io.BytesIO(data)  # small and straightforward for Cornerstone
-    headers = {
-        "Content-Disposition": f'inline; filename="{dicom_path.name}"',
-        "X-Content-Type-Options": "nosniff",
-        "Cache-Control": "no-transform",
-    }
-    return StreamingResponse(stream, media_type="application/dicom", headers=headers)
+    if len(data) < 132 or data[128:132] != b"DICM":
+        raise HTTPException(
+            status_code=500,
+            detail="Internal error: produced bytes are not valid DICOM Part-10 format"
+        )
+
+
+    return StreamingResponse(
+        io.BytesIO(data),
+        media_type="application/dicom",
+        headers={
+            "Content-Disposition": f'inline; filename="{dicom_path.name}"',
+            "X-Content-Type-Options": "nosniff",
+            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0, no-transform",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )

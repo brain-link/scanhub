@@ -33,13 +33,6 @@ def resolve_dicom_path(workflow_id: str, task_id: str, result_id: str, filename:
     return requested
 
 
-def is_part10_file(path: Path) -> bool:
-    """Return true if file has the DICOM Part-10 preamble (128 zero bytes) and 'DICM' marker at offset 128."""
-    with path.open("rb") as f:
-        head = f.read(132)
-    return len(head) >= 132 and head[128:132] == b"DICM"
-
-
 def to_part10_bytes(path: str | Path) -> bytes:
     """
     Ensure the dataset at `path` is a valid DICOM Part-10 file.
@@ -54,37 +47,31 @@ def to_part10_bytes(path: str | Path) -> bytes:
     """
     p = Path(path)
 
-    # Fast path: already Part-10 → return original bytes
-    if is_part10_file(p):
+    # If already Part-10, return raw bytes
+    with p.open("rb") as f:
+        head = f.read(132)
+    if len(head) >= 132 and head[128:132] == b"DICM":
         return p.read_bytes()
 
     # Read whatever is there; force=True accepts raw datasets
     ds = dcmread(str(p), force=True)
 
-    # Ensure File Meta container exists
     if not getattr(ds, "file_meta", None):
         ds.file_meta = FileMetaDataset()
-
-    # Populate mandatory file meta fields when possible
     if not getattr(ds.file_meta, "MediaStorageSOPClassUID", None) and hasattr(ds, "SOPClassUID"):
         ds.file_meta.MediaStorageSOPClassUID = ds.SOPClassUID
     if not getattr(ds.file_meta, "MediaStorageSOPInstanceUID", None) and hasattr(ds, "SOPInstanceUID"):
         ds.file_meta.MediaStorageSOPInstanceUID = ds.SOPInstanceUID
 
-    # Pick/keep a Transfer Syntax
-    ts = getattr(ds.file_meta, "TransferSyntaxUID", None)
-    if not ts:
-        # If dataset's byte order/VR flags are known, mirror them; else default to Explicit VR LE.
+    if not getattr(ds.file_meta, "TransferSyntaxUID", None):
         if hasattr(ds, "is_little_endian") and hasattr(ds, "is_implicit_VR"):
-            if ds.is_little_endian and ds.is_implicit_VR:
-                ts = ImplicitVRLittleEndian
-            elif ds.is_little_endian and not ds.is_implicit_VR:
-                ts = ExplicitVRLittleEndian
-            else:
-                ts = ExplicitVRBigEndian
+            ds.file_meta.TransferSyntaxUID = (
+                ImplicitVRLittleEndian if ds.is_little_endian and ds.is_implicit_VR
+                else ExplicitVRLittleEndian if ds.is_little_endian
+                else ExplicitVRBigEndian
+            )
         else:
-            ts = ExplicitVRLittleEndian
-        ds.file_meta.TransferSyntaxUID = ts
+            ds.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian
 
     # Add the 128-byte preamble to make it Part-10
     ds.preamble = b"\x00" * 128
