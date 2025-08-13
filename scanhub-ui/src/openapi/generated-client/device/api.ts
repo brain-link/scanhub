@@ -395,6 +395,13 @@ export interface Manufacturer {
 /**
  * 
  * @export
+ * @interface Meta
+ */
+export interface Meta {
+}
+/**
+ * 
+ * @export
  * @interface Modality
  */
 export interface Modality {
@@ -419,10 +426,16 @@ export interface ResultOut {
     'directory': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ResultOut
      */
-    'filename': string;
+    'files'?: Array<string>;
+    /**
+     * 
+     * @type {Meta}
+     * @memberof ResultOut
+     */
+    'meta'?: Meta;
     /**
      * 
      * @type {string}

@@ -17,7 +17,7 @@ import MenuItem from '@mui/joy/MenuItem'
 import Tooltip from '@mui/joy/Tooltip'
 
 // Sub-components, interfaces, client
-import { ExamOut } from '../generated-client/exam'
+import { ExamOut } from '../openapi/generated-client/exam'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { examApi } from '../api'

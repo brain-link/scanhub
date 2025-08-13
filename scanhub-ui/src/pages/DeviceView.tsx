@@ -21,7 +21,7 @@ import NotificationContext from '../NotificationContext'
 import { deviceApi } from '../api'
 import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
-import { DeviceOut } from '../generated-client/device/api'
+import { DeviceOut } from '../openapi/generated-client/device/api'
 import DeviceCreateModal from '../components/DeviceCreateModal'
 import ConfirmDeleteModal from '../components/ConfirmDelteModal'
 

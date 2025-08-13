@@ -15,7 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/joy/Stack'
 
 import { taskApi } from '../api'
-import { AcquisitionTaskOut, DAGTaskOut } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut } from '../openapi/generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import TaskTemplateItem from './TaskItem'
 

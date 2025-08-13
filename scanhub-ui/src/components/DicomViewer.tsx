@@ -26,7 +26,7 @@ import DicomViewerToolbar from '../components/DicomViewerTools'
 import initCornerstone from '../utils/InitCornerstone'
 import LoginContext from '../LoginContext'
 
-import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../openapi/generated-client/exam'
 import { taskApi } from '../api'
 
 

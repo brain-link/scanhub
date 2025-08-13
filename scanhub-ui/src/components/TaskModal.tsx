@@ -35,9 +35,9 @@ import {
   AcquisitionParameter,
   DAGTaskOut,
   BaseDAGTask
-} from '../generated-client/exam'
+} from '../openapi/generated-client/exam'
 
-import { DeviceOut } from '../generated-client/device/api'
+import { DeviceOut } from '../openapi/generated-client/device/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 

@@ -21,10 +21,11 @@ import { useParams } from 'react-router-dom'
 import { examApi, patientApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import ConfirmAcquisitionLimitsModal from '../components/AcquisitionLimitsModal'
-import DicomViewer from '../components/DicomViewer'
+// import DicomViewer from '../components/DicomViewer'
+import DicomViewer3D from '../viewer/dicom/DicomViewer'
 import PatientInfo from '../components/PatientInfo'
-import { PatientOut } from '../generated-client/patient'
-import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../generated-client/exam'
+import { PatientOut } from '../openapi/generated-client/patient'
+import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../openapi/generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
@@ -262,7 +263,7 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      <DicomViewer taskId={ itemSelection.type == 'DAG' ? itemSelection.itemId : undefined} />
+      <DicomViewer3D taskId={ itemSelection.type == 'DAG' ? itemSelection.itemId : undefined} />
     </Box>
   )
 }

@@ -23,7 +23,7 @@ import { DataGrid, GridColDef, GridCellParams, GridActionsCellItem } from '@mui/
 
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
-import { MRISequenceOut, BaseMRISequence } from '../generated-client/exam'
+import { MRISequenceOut, BaseMRISequence } from '../openapi/generated-client/exam'
 import { Alerts } from '../interfaces/components.interface'
 import AlertItem from '../components/AlertItem'
 import SequenceUpload from '../components/SequenceUpload'

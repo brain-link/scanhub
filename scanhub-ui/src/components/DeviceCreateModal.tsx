@@ -18,7 +18,7 @@ import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Typography from '@mui/joy/Typography'
 
-import { DeviceCreationRequest } from '../generated-client/device'
+import { DeviceCreationRequest } from '../openapi/generated-client/device'
 import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 import { deviceApi } from '../api'

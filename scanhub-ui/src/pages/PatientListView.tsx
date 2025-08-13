@@ -22,7 +22,7 @@ import { DataGrid, GridColDef, GridCellParams, GridActionsCellItem } from '@mui/
 import { patientApi } from '../api'
 import AlertItem from '../components/AlertItem'
 import PatientCreateModal from '../components/PatientCreateModal'
-import { PatientOut, Gender } from '../generated-client/patient'
+import { PatientOut, Gender } from '../openapi/generated-client/patient'
 import { Alerts } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 import ConfirmDeleteModal from '../components/ConfirmDelteModal'

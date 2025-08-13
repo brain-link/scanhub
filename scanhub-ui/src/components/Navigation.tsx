@@ -35,7 +35,7 @@ import { useColorScheme } from '@mui/joy/styles'
 import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
 
 import LoginContext from '../LoginContext'
-import { UserRole } from '../generated-client/userlogin'
+import { UserRole } from '../openapi/generated-client/userlogin'
 import ScanhubLogo from '../media/ScanhubLogo.png'
 import { loginApi } from '../api'
 import ConnectionStatus from './ConnectionStatus'

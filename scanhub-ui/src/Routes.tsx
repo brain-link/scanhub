@@ -20,14 +20,14 @@ const materialTheme = materialExtendTheme()
 
 import LoginContext from './LoginContext'
 
-import App from './views/App'
-import Login from './views/LoginView'
-import PatientListView from './views/PatientListView'
-import AcquisitionView from './views/AcquisitionView'
-import TemplatesView from './views/TemplatesView'
-import UserManagementView from './views/UserManagementView'
-import SequenceView from './views/SequenceView'
-import DeviceView from './views/DeviceView'
+import App from './pages/App'
+import Login from './pages/LoginView'
+import PatientListView from './pages/PatientListView'
+import AcquisitionView from './pages/AcquisitionView'
+import TemplatesView from './pages/TemplatesView'
+import UserManagementView from './pages/UserManagementView'
+import SequenceView from './pages/SequenceView'
+import DeviceView from './pages/DeviceView'
 import ConnectionStatus from './components/ConnectionStatus'
 
 

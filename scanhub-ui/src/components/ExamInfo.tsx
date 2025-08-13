@@ -8,7 +8,7 @@ import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 import * as React from 'react'
 
-import { ExamOut } from '../generated-client/exam'
+import { ExamOut } from '../openapi/generated-client/exam'
 
 
 function ExamInfo({ exam }: { exam: ExamOut }) {

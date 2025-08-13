@@ -16,7 +16,7 @@ import * as React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { workflowManagerApi } from '../api'
-import { ItemStatus } from '../generated-client/exam'
+import { ItemStatus } from '../openapi/generated-client/exam'
 import { ItemSelection } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 

@@ -14,7 +14,7 @@ import React, { useState } from 'react'
 
 import { loginApi, userApi } from '../api'
 import UserCreateModal from '../components/UserCreateModal'
-import { User } from '../generated-client/userlogin'
+import { User } from '../openapi/generated-client/userlogin'
 
 
 const enum LoginErrorState {

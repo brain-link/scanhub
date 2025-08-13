@@ -13,7 +13,7 @@ import * as React from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 
 import { workflowsApi } from '../api'
-import { WorkflowOut } from '../generated-client/exam'
+import { WorkflowOut } from '../openapi/generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import WorkflowItem from './WorkflowItem'
 import Stack from '@mui/joy/Stack'

@@ -3214,17 +3214,29 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get DICOM file of a task result.
+         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
          * @summary Get Dicom
-         * @param {TaskId1} taskId 
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicomApiV1ExamDicomTaskIdGet: async (taskId: TaskId1, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'workflowId', workflowId)
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('getDicomApiV1ExamDicomTaskIdGet', 'taskId', taskId)
-            const localVarPath = `/api/v1/exam/dicom/{task_id}`
-                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
+            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'resultId', resultId)
+            // verify required parameter 'filename' is not null or undefined
+            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'filename', filename)
+            const localVarPath = `/api/v1/exam/dcm/{workflow_id}/{task_id}/{result_id}/{filename}`
+                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
+                .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3383,16 +3395,19 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get DICOM file of a task result.
+         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
          * @summary Get Dicom
-         * @param {TaskId1} taskId 
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDicomApiV1ExamDicomTaskIdGet(taskId: TaskId1, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicomApiV1ExamDicomTaskIdGet(taskId, options);
+        async getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId, taskId, resultId, filename, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicomApiV1ExamDicomTaskIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3463,14 +3478,17 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get DICOM file of a task result.
+         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
          * @summary Get Dicom
-         * @param {TaskId1} taskId 
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicomApiV1ExamDicomTaskIdGet(taskId: TaskId1, options?: any): AxiosPromise<void> {
-            return localVarFp.getDicomApiV1ExamDicomTaskIdGet(taskId, options).then((request) => request(axios, basePath));
+        getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
         /**
          * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
@@ -3540,15 +3558,18 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * Get DICOM file of a task result.
+     * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
      * @summary Get Dicom
-     * @param {TaskId1} taskId 
+     * @param {string} workflowId 
+     * @param {string} taskId 
+     * @param {string} resultId 
+     * @param {string} filename 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getDicomApiV1ExamDicomTaskIdGet(taskId: TaskId1, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getDicomApiV1ExamDicomTaskIdGet(taskId, options).then((request) => request(this.axios, this.basePath));
+    public getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

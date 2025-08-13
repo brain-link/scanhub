@@ -20,7 +20,7 @@ import Typography from '@mui/joy/Typography'
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
 import { ModalProps } from '../interfaces/components.interface'
-import { BaseMRISequence } from '../generated-client/exam/api'
+import { BaseMRISequence } from '../openapi/generated-client/exam/api'
 
 
 

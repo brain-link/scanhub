@@ -18,7 +18,7 @@ import * as React from 'react'
 import { useMutation, UseMutationResult } from '@tanstack/react-query'
 
 import { examApi } from '../api'
-import { BaseExam, ExamOut } from '../generated-client/exam'
+import { BaseExam, ExamOut } from '../openapi/generated-client/exam'
 import { ModalPropsCreate, ModalPropsCreateModifyFromTemplate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 

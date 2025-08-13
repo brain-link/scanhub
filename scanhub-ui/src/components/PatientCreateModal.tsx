@@ -26,7 +26,7 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
 import LoginContext from '../LoginContext'
-import { BasePatient, Gender } from '../generated-client/patient'
+import { BasePatient, Gender } from '../openapi/generated-client/patient'
 import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 import { patientApi } from '../api'

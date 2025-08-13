@@ -3,7 +3,7 @@
 // Component interfaces: Pass data and functions between components
 import {  ReactNode } from 'react'
 
-import {  ItemStatus } from '../generated-client/exam'
+import {  ItemStatus } from '../openapi/generated-client/exam'
 
 
 // export interface SequenceViewerProps {

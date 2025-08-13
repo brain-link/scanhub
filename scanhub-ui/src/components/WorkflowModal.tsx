@@ -17,7 +17,7 @@ import * as React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { workflowsApi } from '../api'
-import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
+import { BaseWorkflow, WorkflowOut } from '../openapi/generated-client/exam'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 

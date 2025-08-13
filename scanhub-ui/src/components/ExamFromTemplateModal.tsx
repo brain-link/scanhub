@@ -14,7 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/joy/Stack'
 
 import { examApi } from '../api'
-import { ExamOut } from '../generated-client/exam'
+import { ExamOut } from '../openapi/generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
 import ExamModal from './ExamModal'

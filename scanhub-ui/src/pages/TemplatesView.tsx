@@ -12,7 +12,7 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { examApi } from '../api'
-import { ExamOut, WorkflowOut} from '../generated-client/exam'
+import { ExamOut, WorkflowOut} from '../openapi/generated-client/exam'
 import ExamModal from '../components/ExamModal'
 import ExamItem, {ExamMenu} from '../components/ExamItem'
 import WorkflowItem, {WorkflowMenu} from '../components/WorkflowItem'

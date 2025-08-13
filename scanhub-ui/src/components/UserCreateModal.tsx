@@ -21,7 +21,7 @@ import Select from '@mui/joy/Select'
 import Option from '@mui/joy/Option';
 
 import { userApi } from '../api'
-import { UserRole, User } from '../generated-client/userlogin'
+import { UserRole, User } from '../openapi/generated-client/userlogin'
 import { ModalProps, ModalPropsCreateFirstUser } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 

@@ -11,7 +11,7 @@ import * as React from 'react'
 
 // import client from '../client/queries';
 // import { Patient } from '../interfaces/data.interface'
-import { PatientOut } from '../generated-client/patient'
+import { PatientOut } from '../openapi/generated-client/patient'
 import { getAgeFromDate } from '../utils/Calc'
 
 function PatientInfo({ patient, isLoading, isError }: { patient: PatientOut | undefined; isLoading: boolean; isError: boolean }) {

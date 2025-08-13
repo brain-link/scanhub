@@ -10,7 +10,7 @@ import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../openapi/generated-client/exam'
 
 
 function capitalize(str: string){
