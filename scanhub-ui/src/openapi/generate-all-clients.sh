@@ -64,3 +64,7 @@ echo "Cleaning up temporary OpenAPI JSON files..."
 rm -rf src/openapi/openapi-jsons
 
 echo "Client generation complete."
+
+
+# echo "Patching client barrels for default forwarding..."
+# ./src/openapi/patch-client-barrels.sh
