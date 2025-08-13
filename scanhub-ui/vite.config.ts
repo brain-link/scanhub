@@ -9,38 +9,10 @@ export default defineConfig({
 
   plugins: [react()],
 
-  // Needed for multi-threaded WASM, web workers, and volume rendering in dev    
-  server: {
-    port: 3000,              // serve at :3000 instead of default 5173
-    host: '0.0.0.0',         // optional: allow access from Docker/other hosts
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-    },
-  },
-  preview: {
-    port: 3000,              // also match in preview mode
-    host: '0.0.0.0',
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-    },
-  },
-
-  build: {
-    target: 'es2020',
-    // Use modern chunks; workers will be emitted as separate files
-    rollupOptions: {
-      output: {
-        // Long-term cache if you like
-        // manualChunks: { vtk: ['@kitware/vtk.js'] },
-      },
-    },
-  },
-
-    resolve: {
+  resolve: {
+    dedupe: ['react', 'react-dom'], // avoid duplicate Reacts in graph
     alias: {
-      // === Cornerstone codec aliases (mirror your Parcel alias block) ===
+      // --- Cornerstone codec aliases (WASM) ---
       '@cornerstonejs/codec-libjpeg-turbo-8bit/decodewasmjs':
         r('node_modules/@cornerstonejs/codec-libjpeg-turbo-8bit/dist/libjpegturbowasm_decode.js'),
       '@cornerstonejs/codec-libjpeg-turbo-8bit/decodewasm':
@@ -63,18 +35,49 @@ export default defineConfig({
     },
   },
 
-  // Let Vite treat wasm files as assets when referenced via new URL()
   assetsInclude: ['**/*.wasm'],
 
-  // Cornerstone + vtk.js can be heavy to prebundle; excluding avoids esbuild worker/wasm quirks
+  // Needed for multi-threaded WASM, web workers, and volume rendering in dev    
+  server: {
+    port: 3000,              // serve at :3000 instead of default 5173
+    host: '0.0.0.0',         // optional: allow access from Docker/other hosts
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
+  preview: {
+    port: 3000,              // also match in preview mode
+    host: '0.0.0.0',
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
+
+  // *** IMPORTANT: exclude heavy/weird deps from esbuild pre-bundling ***
   optimizeDeps: {
+    force: true, // rebuild optimizer cache after changes
     exclude: [
       '@cornerstonejs/core',
       '@cornerstonejs/tools',
       '@cornerstonejs/dicom-image-loader',
       '@cornerstonejs/streaming-image-volume-loader',
-      '@kitware/vtk.js'
+      '@cornerstonejs/codec-charls',
+      '@cornerstonejs/codec-openjpeg',
+      '@cornerstonejs/codec-openjph',
+      '@cornerstonejs/codec-libjpeg-turbo-8bit',
+      '@kitware/vtk.js',
+      'gl-matrix',
+      'dicom-parser',
     ],
+  },
+
+  build: {
+    target: 'es2020',
+    rollupOptions: {
+      // you can add manualChunks here if you want
+    },
   },
 
 });
