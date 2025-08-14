@@ -76,8 +76,8 @@ export function getLinkedToolGroup() {
   });
 
   // Overlay/sync tools enabled
-  toolGroup.setToolEnabled(ReferenceLinesTool.toolName);
-  toolGroup.setToolEnabled(CrosshairsTool.toolName);
+  // toolGroup.setToolEnabled(ReferenceLinesTool.toolName);
+  // toolGroup.setToolEnabled(CrosshairsTool.toolName);
 
   return toolGroup;
 }

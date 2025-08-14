@@ -1,167 +1,152 @@
+// src/viewer/dicom/DicomViewerMinimal.tsx
 import React from 'react';
 import {
   RenderingEngine,
   getRenderingEngine,
   Enums,
-  volumeLoader
+  volumeLoader,
+  type Types,
 } from '@cornerstonejs/core';
-import { initCornerstone3D } from './cornerstone/init';
+import { initCornerstone } from './cornerstone/init';
 import { useImageIds } from './hooks/useImageIds';
-import { useViewportGrid, Layout } from './hooks/useViewportGrid';
 import { usePreferVolume } from './hooks/useVolumeIntent';
-import { getLinkedToolGroup, destroyLinkedToolGroup, attachViewportsToLinkedGroup } from './cornerstone/toolgroups';
 import LoginContext from '../../LoginContext';
+import { getLinkedToolGroup, destroyLinkedToolGroup, attachViewportsToLinkedGroup } from './cornerstone/toolgroups';
+
+import Card from '@mui/joy/Card'
+import Stack from '@mui/joy/Stack'
+
+const RENDERING_ENGINE_ID = 're-min';
+const VIEWPORT_ID = 'vp-min';
 
 
 
-const renderingEngineId = 're-1';
-
+/**
+ * Minimal single-viewport DICOM viewer:
+ * - Initializes Cornerstone3D once (uses your existing initCornerstone3D)
+ * - Creates 1 viewport (STACK or ORTHOGRAPHIC for volume)
+ * - Loads imageIds for the given task and displays them
+ */
 export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
   const [user] = React.useContext(LoginContext);
   const [ready, setReady] = React.useState(false);
-  const [layout, setLayout] = React.useState<Layout>('1x1');
-  const [viewportIds, setViewportIds] = React.useState<string[]>([]);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [viewportReady, setViewportReady] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const engineRef = React.useRef<RenderingEngine | null>(null);
   const { imageIds } = useImageIds(taskId);
-  const grid = useViewportGrid(layout);
   const preferVolume = usePreferVolume(imageIds);
 
-  React.useEffect(() => { 
-    initCornerstone3D(() => user?.access_token).then(() => setReady(true));
-  }, []);
 
-  // create viewports on layout/mode change
+  // Init Cornerstone once
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      await initCornerstone(() => user?.access_token);
+      if (!cancelled) setReady(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.access_token]);
+
+
+  // Create engine + viewport (STACK for small/1 frame; ORTHOGRAPHIC for many)
   React.useEffect(() => {
     if (!ready || !containerRef.current) return;
 
-    const previous = getRenderingEngine(renderingEngineId);
-    if (previous) previous.destroy();
+    // clean previous
+    getRenderingEngine(RENDERING_ENGINE_ID)?.destroy();
 
-    const re = new RenderingEngine(renderingEngineId);
-    const cells = Array.from(containerRef.current.querySelectorAll('[data-cell]')) as HTMLDivElement[];
-    const ids: string[] = [];
-
-    cells.forEach((el, i) => {
-      const viewportId = `vp-${i + 1}`;
-      ids.push(viewportId);
-      re.enableElement({
-        viewportId,
-        element: el,
-        type: preferVolume ? Enums.ViewportType.ORTHOGRAPHIC : Enums.ViewportType.STACK,
-      });
-    });
-
-    setViewportIds(ids);
-    return () => { re.destroy(); };
-  }, [ready, layout, preferVolume]);
-
-
-  // create/bind tool group when viewports exist
-  React.useEffect(() => {
-    if (!ready || viewportIds.length === 0) return;
-
-    // ensure group exists and attach current viewports
-    getLinkedToolGroup();
-    attachViewportsToLinkedGroup(renderingEngineId, viewportIds);
-
-    // clean up on unmount (or when we fully tear down viewports)
-    return () => {
-      destroyLinkedToolGroup();
-    };
-  }, [ready, viewportIds]);
-
-
-  // optional: orient orthographic cameras (A/S/C) if we have ≥3 ortho viewports
-  function setOrthoOrientation(vp: any, kind: 'axial'|'sagittal'|'coronal') {
-    const preset = {
-      axial:    { viewPlaneNormal: [0, 0, 1], viewUp: [0, -1, 0] },
-      sagittal: { viewPlaneNormal: [1, 0, 0], viewUp: [0, 0, 1] },
-      coronal:  { viewPlaneNormal: [0, 1, 0], viewUp: [0, 0, 1] },
-    }[kind];
-    vp.setCamera(preset);
-  }
-
-  // load & render (try volume; fallback to stack)
-  React.useEffect(() => {
-    if (!ready || viewportIds.length === 0 || imageIds.length === 0) return;
+    const engine = new RenderingEngine(RENDERING_ENGINE_ID);
+    engineRef.current = engine;
+  
+    const viewportType = preferVolume ? Enums.ViewportType.ORTHOGRAPHIC : Enums.ViewportType.STACK;
 
     (async () => {
-      const re = getRenderingEngine(renderingEngineId);
-      if (!re) return;
+      await engine.enableElement({
+        viewportId: VIEWPORT_ID,
+        element: containerRef.current!,
+        type: viewportType,
+        defaultOptions: { background: [0, 0, 0] },
+      });
+      setViewportReady(true);
+    })();
 
-      const tryVolume = async () => {
-        const volumeId = `cornerstoneStreamingImageVolume:${Date.now()}`;
-        await volumeLoader.createAndCacheVolume(volumeId, { imageIds });
+    return () => {
+      setViewportReady(false);
+      try { engine.destroy(); } catch {}
+      engineRef.current = null;
+    };
+  }, [ready, imageIds.length]);
 
-        viewportIds.forEach((vpId) => {
-          const vp: any = re.getViewport(vpId);
-          if (vp.type === Enums.ViewportType.ORTHOGRAPHIC) vp.setVolumes([{ volumeId }]);
-          else vp.setStack(imageIds);
-        });
 
-        const orthoIds = viewportIds.filter(vpId => (re.getViewport(vpId) as any).type === Enums.ViewportType.ORTHOGRAPHIC);
-        if (orthoIds.length >= 3) {
-          setOrthoOrientation(re.getViewport(orthoIds[0]) as any, 'axial');
-          setOrthoOrientation(re.getViewport(orthoIds[1]) as any, 'sagittal');
-          setOrthoOrientation(re.getViewport(orthoIds[2]) as any, 'coronal');
-        }
+  // Attach tools only after the viewport exists
+  React.useEffect(() => {
+    if (!viewportReady) return;
+    getLinkedToolGroup();
+    attachViewportsToLinkedGroup(RENDERING_ENGINE_ID, [VIEWPORT_ID]);
+    return () => destroyLinkedToolGroup();
+  }, [viewportReady]);
 
-        re.render();
-      };
 
-      const tryStack = async () => {
-        viewportIds.forEach((vpId) => {
-          const vp: any = re.getViewport(vpId);
-          vp.setStack(imageIds);
-        });
-        re.render();
-      };
+  // Load data and render
+  React.useEffect(() => {
+    console.log("Trying to load the following imageIDs: ", imageIds)
+    if (!viewportReady || !imageIds?.length) return;
 
+    (async () => {
+      const engine = engineRef.current;
+      if (!engine) return;
+
+      const vp = engine.getViewport(VIEWPORT_ID) as Types.IStackViewport | Types.IVolumeViewport;
       try {
-        if (preferVolume) await tryVolume();
-        else await tryStack();
+        if ('setVolumes' in vp && preferVolume) {
+          console.log("Using volume loader...")
+          const volumeId = `cornerstoneStreamingImageVolume:${Date.now()}`;
+          await volumeLoader.createAndCacheVolume(volumeId, { imageIds });
+          await (vp as Types.IVolumeViewport).setVolumes([{ volumeId }]);
+        } else {
+          console.log("Using stack viewport... preferVolume: ", preferVolume)
+          await (vp as Types.IStackViewport).setStack(imageIds);
+        }
+        await vp.render();
       } catch (e) {
-        console.warn('Volume load failed; falling back to stack.', e);
-        await tryStack();
+        console.error('Viewport load failed; forcing stack path', e);
+        try {
+          await (vp as Types.IStackViewport).setStack(imageIds);
+          await vp.render();
+        } catch (e2) {
+          console.error('Stack fallback failed', e2);
+        }
       }
     })();
-  }, [ready, viewportIds, imageIds, preferVolume]);
+  }, [viewportReady, imageIds]);
 
-  if (!imageIds || imageIds.length === 0) {
+  if (!imageIds?.length) {
     return <div style={{ padding: 12 }}>No DICOM instances provided.</div>;
   }
 
-  // Build CSS grid template without String.replaceAll (TS lib friendly)
-  const gridTemplateAreas = grid.areas.map((row) => `"${row}"`).join(' ');
-
   return (
-    <div className="dv-root">
-      <div className="dv-toolbar">
-        <select value={layout} onChange={(e) => setLayout(e.target.value as Layout)}>
-          <option value="1x1">1 view</option>
-          <option value="1x3">3 in a row</option>
-          <option value="2x2">2 × 2</option>
-          <option value="2x1">2 stacked</option>
-          <option value="L-2v">2 left + 1 right</option>
-          <option value="R-2v">1 left + 2 right</option>
-        </select>
-      </div>
-
-      <div
-        className="dv-grid"
-        style={{
-          gridTemplateRows: `repeat(${grid.rows}, 1fr)`,
-          gridTemplateColumns: `repeat(${grid.cols}, 1fr)`,
-          gridTemplateAreas: gridTemplateAreas,
-        }}
-        ref={containerRef}
-      >
-        {Array.from(new Set(grid.areas.join(' ').split(' '))).map((name) => (
-          <div key={name} className="dv-cell" style={{ gridArea: name }}>
-            <div data-cell style={{ width: '100%', height: '100%', background: 'black' }} />
-          </div>
-        ))}
-      </div>
-    </div>
+    <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: 'calc(100vh - var(--Navigation-height))', p: 1 }}>
+      <Card variant="plain" color="neutral" sx={{ p: 0.5, bgcolor: '#000', height: '100%', border: '5px solid' }}>
+        <div 
+          ref={containerRef}
+          id="dicomViewport"
+          onContextMenu={(e) => {
+            e.preventDefault();
+            e.stopPropagation(); // optional, keeps it from bubbling into the page
+          }}
+          style={{ 
+            width: '100%',
+            height: '100%',
+            background: 'black',
+            borderRadius: 8,
+            overscrollBehavior: 'contain',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            WebkitTouchCallout: 'none',
+          }} />
+      </Card>
+    </Stack>
   );
 }

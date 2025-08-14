@@ -9,32 +9,23 @@ import { init as toolsInit } from '@cornerstonejs/tools';
 import { initLoaders } from './loaders';
 import { registerDefaultTools } from './toolgroups';
 
-// import { init as initTurboJPEG8 } from '@cornerstonejs/codec-libjpeg-turbo-8bit';
-// import { init as initCharLS } from '@cornerstonejs/codec-charls';
-// import { init as initOpenJPEG } from '@cornerstonejs/codec-openjpeg';
-// import { init as initOpenJPH } from '@cornerstonejs/codec-openjph';
 
-let initialized = false;
+let initialized: Promise<void> | null = null;
 
-export async function initCornerstone3D(getAccessToken?: () => string | undefined) {
-
-  if (initialized) return;
-
-  // core
-  await csInit();
-  // tools
-  toolsInit();
-
-  // codecs
-  // initTurboJPEG8();
-  // initCharLS();
-  // initOpenJPEG();
-  // initOpenJPH();
-
-  // loaders
-  initLoaders({ getAccessToken });
-  // tool registration
-  registerDefaultTools();
-
-  initialized = true;
+export function initCornerstone(getAccessToken?: () => string | undefined) {
+  if (!initialized) {
+    initialized = (
+      async () => {
+        // core
+        await csInit();
+        // tools
+        toolsInit();
+        // loaders
+        await initLoaders({ getAccessToken });
+        // tool registration
+        registerDefaultTools();
+      }
+    )();
+  }
+  return initialized;
 }

@@ -8,16 +8,16 @@ import { volumeLoader, Types, cache } from '@cornerstonejs/core';
 import { init as dicomImageLoaderInit } from '@cornerstonejs/dicom-image-loader';
 import { cornerstoneStreamingImageVolumeLoader } from '@cornerstonejs/streaming-image-volume-loader';
 
-const { registerVolumeLoader } = volumeLoader;
+// const { registerVolumeLoader } = volumeLoader;
 
-export function initLoaders(opts: { getAccessToken?: () => string | undefined } = {}) {
+export async function initLoaders(opts: { getAccessToken?: () => string | undefined } = {}) {
   // Register streaming volume loader
   volumeLoader.registerVolumeLoader(
     'cornerstoneStreamingImageVolume',
     cornerstoneStreamingImageVolumeLoader as unknown as Types.VolumeLoaderFn
   );
 
-  dicomImageLoaderInit({
+  await dicomImageLoaderInit({
     strict: false,
     maxWebWorkers: navigator.hardwareConcurrency || 1,
     beforeSend: (_xhr, _imageId, defaultHeaders) => {
