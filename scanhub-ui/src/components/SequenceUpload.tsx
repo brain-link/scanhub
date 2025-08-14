@@ -4,7 +4,7 @@
  *
  * SequenceUpload.tsx is responsible for rendering an interface to upload a new sequence.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 

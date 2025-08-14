@@ -1,5 +1,10 @@
 import React from 'react';
-import * as cs3d from '@cornerstonejs/core';
+import {
+  RenderingEngine,
+  getRenderingEngine,
+  Enums,
+  volumeLoader
+} from '@cornerstonejs/core';
 import { initCornerstone3D } from './cornerstone/init';
 import { useImageIds } from './hooks/useImageIds';
 import { useViewportGrid, Layout } from './hooks/useViewportGrid';
@@ -8,7 +13,6 @@ import { getLinkedToolGroup, destroyLinkedToolGroup, attachViewportsToLinkedGrou
 import LoginContext from '../../LoginContext';
 
 
-type Props = { instances: string[] }; // absolute URLs from your backend
 
 const renderingEngineId = 're-1';
 
@@ -28,13 +32,12 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
 
   // create viewports on layout/mode change
   React.useEffect(() => {
-    const [user] = React.useContext(LoginContext);
     if (!ready || !containerRef.current) return;
 
-    const previous = cs3d.getRenderingEngine(renderingEngineId);
+    const previous = getRenderingEngine(renderingEngineId);
     if (previous) previous.destroy();
 
-    const re = new cs3d.RenderingEngine(renderingEngineId);
+    const re = new RenderingEngine(renderingEngineId);
     const cells = Array.from(containerRef.current.querySelectorAll('[data-cell]')) as HTMLDivElement[];
     const ids: string[] = [];
 
@@ -44,7 +47,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
       re.enableElement({
         viewportId,
         element: el,
-        type: preferVolume ? cs3d.Enums.ViewportType.ORTHOGRAPHIC : cs3d.Enums.ViewportType.STACK,
+        type: preferVolume ? Enums.ViewportType.ORTHOGRAPHIC : Enums.ViewportType.STACK,
       });
     });
 
@@ -83,20 +86,20 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
     if (!ready || viewportIds.length === 0 || imageIds.length === 0) return;
 
     (async () => {
-      const re = cs3d.getRenderingEngine(renderingEngineId);
+      const re = getRenderingEngine(renderingEngineId);
       if (!re) return;
 
       const tryVolume = async () => {
         const volumeId = `cornerstoneStreamingImageVolume:${Date.now()}`;
-        await cs3d.volumeLoader.createAndCacheVolume(volumeId, { imageIds });
+        await volumeLoader.createAndCacheVolume(volumeId, { imageIds });
 
         viewportIds.forEach((vpId) => {
           const vp: any = re.getViewport(vpId);
-          if (vp.type === cs3d.Enums.ViewportType.ORTHOGRAPHIC) vp.setVolumes([{ volumeId }]);
+          if (vp.type === Enums.ViewportType.ORTHOGRAPHIC) vp.setVolumes([{ volumeId }]);
           else vp.setStack(imageIds);
         });
 
-        const orthoIds = viewportIds.filter(vpId => (re.getViewport(vpId) as any).type === cs3d.Enums.ViewportType.ORTHOGRAPHIC);
+        const orthoIds = viewportIds.filter(vpId => (re.getViewport(vpId) as any).type === Enums.ViewportType.ORTHOGRAPHIC);
         if (orthoIds.length >= 3) {
           setOrthoOrientation(re.getViewport(orthoIds[0]) as any, 'axial');
           setOrthoOrientation(re.getViewport(orthoIds[1]) as any, 'sagittal');

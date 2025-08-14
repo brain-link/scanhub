@@ -4,15 +4,17 @@
  *
  * DicomViewer.tsx is responsible for rendering the DICOM viewport.
  */
-import * as cs3d from '@cornerstonejs/core';
+import { volumeLoader, Types, cache } from '@cornerstonejs/core';
 import { init as dicomImageLoaderInit } from '@cornerstonejs/dicom-image-loader';
 import { cornerstoneStreamingImageVolumeLoader } from '@cornerstonejs/streaming-image-volume-loader';
 
+const { registerVolumeLoader } = volumeLoader;
+
 export function initLoaders(opts: { getAccessToken?: () => string | undefined } = {}) {
   // Register streaming volume loader
-  cs3d.volumeLoader.registerVolumeLoader(
+  volumeLoader.registerVolumeLoader(
     'cornerstoneStreamingImageVolume',
-    cornerstoneStreamingImageVolumeLoader as unknown as cs3d.Types.VolumeLoaderFn
+    cornerstoneStreamingImageVolumeLoader as unknown as Types.VolumeLoaderFn
   );
 
   dicomImageLoaderInit({
@@ -25,5 +27,5 @@ export function initLoaders(opts: { getAccessToken?: () => string | undefined } 
   });
 
   // Optional: enlarge cache for big series
-  cs3d.cache.setMaxCacheSize(1024 * 1024 * 1024);
+  // cache.setMaxCacheSize(1024 * 1024 * 1024);
 }

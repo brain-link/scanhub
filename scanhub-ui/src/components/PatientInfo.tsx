@@ -7,7 +7,7 @@
 import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 // import { useParams } from 'react-router-dom';
-import * as React from 'react'
+import React from 'react'
 
 // import client from '../client/queries';
 // import { Patient } from '../interfaces/data.interface'

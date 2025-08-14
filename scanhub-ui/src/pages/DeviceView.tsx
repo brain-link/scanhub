@@ -4,7 +4,7 @@
  *
  * DeviceView.tsx is responsible for rendering the devices table and for managing the device registration.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import Box from '@mui/joy/Box'

@@ -14,7 +14,7 @@ import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
 import {
   THEME_ID as MATERIAL_THEME_ID,
   Experimental_CssVarsProvider as MaterialCssVarsProvider,
-  experimental_extendTheme as materialExtendTheme,
+  extendTheme as materialExtendTheme,
 } from '@mui/material/styles'
 const materialTheme = materialExtendTheme()
 

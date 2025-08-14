@@ -5,7 +5,7 @@
  * UserCreateModal.tsx is responsible for rendering a modal with an interface
  * to create a new user.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import Button from '@mui/joy/Button'

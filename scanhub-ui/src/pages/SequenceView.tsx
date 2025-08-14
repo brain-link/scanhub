@@ -4,7 +4,7 @@
  *
  * SequenceView.tsx is responsible for rendering the sequence table and for adding, modifying and removing sequences.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import IconButton from '@mui/joy/IconButton'

@@ -4,7 +4,7 @@
  *
  * UserManagementView.tsx is responsible for rendering the user table and for adding, modifying and removing users.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import Container from '@mui/system/Container'

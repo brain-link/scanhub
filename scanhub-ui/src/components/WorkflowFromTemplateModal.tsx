@@ -9,7 +9,7 @@ import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import DialogTitle from '@mui/joy/DialogTitle'
-import * as React from 'react'
+import React from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 
 import { workflowsApi } from '../api'

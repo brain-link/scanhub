@@ -8,7 +8,7 @@
 import Add from '@mui/icons-material/Add'
 import Button from '@mui/joy/Button'
 import Stack from '@mui/joy/Stack'
-import * as React from 'react'
+import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { examApi } from '../api'

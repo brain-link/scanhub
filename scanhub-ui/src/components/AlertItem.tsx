@@ -10,7 +10,7 @@ import ReportIcon from '@mui/icons-material/Report'
 import WarningIcon from '@mui/icons-material/Warning'
 import Alert from '@mui/joy/Alert'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 
 import { AlertProps, Alerts } from '../interfaces/components.interface'
 

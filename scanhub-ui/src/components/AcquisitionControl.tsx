@@ -12,7 +12,7 @@ import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { workflowManagerApi } from '../api'

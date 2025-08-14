@@ -4,7 +4,7 @@
  *
  * TaskItem.tsx is responsible for rendering a single task item.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'

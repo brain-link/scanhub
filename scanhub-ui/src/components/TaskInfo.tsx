@@ -4,7 +4,7 @@
  *
  * TaskInfo.tsx is responsible for rendering additional information of a task item.
  */
-import * as React from 'react'
+import React from 'react'
 
 import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'

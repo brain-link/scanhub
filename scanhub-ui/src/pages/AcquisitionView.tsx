@@ -14,7 +14,7 @@ import Divider from '@mui/joy/Divider'
 import IconButton from '@mui/joy/IconButton'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 

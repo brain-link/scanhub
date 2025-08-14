@@ -5,7 +5,7 @@
  * ExamItem.tsx is responsible for rendering a single exam item.
  */
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import FolderIcon from '@mui/icons-material/Folder';

@@ -4,15 +4,15 @@
  *
  * Initialize cornerstone 3D.
  */
-import * as cs3d from '@cornerstonejs/core';
-import * as csTools from '@cornerstonejs/tools';
+import {init as csInit} from '@cornerstonejs/core';
+import { init as toolsInit } from '@cornerstonejs/tools';
 import { initLoaders } from './loaders';
 import { registerDefaultTools } from './toolgroups';
 
-import { init as initTurboJPEG8 } from '@cornerstonejs/codec-libjpeg-turbo-8bit';
-import { init as initCharLS } from '@cornerstonejs/codec-charls';
-import { init as initOpenJPEG } from '@cornerstonejs/codec-openjpeg';
-import { init as initOpenJPH } from '@cornerstonejs/codec-openjph';
+// import { init as initTurboJPEG8 } from '@cornerstonejs/codec-libjpeg-turbo-8bit';
+// import { init as initCharLS } from '@cornerstonejs/codec-charls';
+// import { init as initOpenJPEG } from '@cornerstonejs/codec-openjpeg';
+// import { init as initOpenJPH } from '@cornerstonejs/codec-openjph';
 
 let initialized = false;
 
@@ -21,15 +21,15 @@ export async function initCornerstone3D(getAccessToken?: () => string | undefine
   if (initialized) return;
 
   // core
-  await cs3d.init();
+  await csInit();
   // tools
-  csTools.init();
+  toolsInit();
 
   // codecs
-  initTurboJPEG8();
-  initCharLS();
-  initOpenJPEG();
-  initOpenJPH();
+  // initTurboJPEG8();
+  // initCharLS();
+  // initOpenJPEG();
+  // initOpenJPH();
 
   // loaders
   initLoaders({ getAccessToken });

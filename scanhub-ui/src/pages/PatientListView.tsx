@@ -4,7 +4,7 @@
  *
  * PatientListView.tsx is responsible for rendering the patient table view.
  */
-import * as React from 'react'
+import React from 'react'
 import { useContext } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'

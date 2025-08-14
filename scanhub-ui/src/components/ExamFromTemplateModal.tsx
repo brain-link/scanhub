@@ -5,7 +5,7 @@
  * ExamFromTemplateModal.tsx is responsible for rendering a
  * exam template selection interface to generate a new exam.
  */
-import * as React from 'react'
+import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'

@@ -5,7 +5,7 @@
  * WorkflowItem.tsx is responsible for rendering additional information
  * of a workflow item.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'

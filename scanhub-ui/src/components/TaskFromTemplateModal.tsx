@@ -5,7 +5,7 @@
  * TaskFromTemplateModal.tsx is responsible for rendering a
  * task template selection interface to generate a new task.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 import Modal from '@mui/joy/Modal'

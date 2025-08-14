@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import * as cs3d from '@cornerstonejs/core';
+import { metaData } from '@cornerstonejs/core';
 
 /**
  * Decide if we should prefer volume (MPR) rendering.
@@ -16,7 +16,7 @@ export function usePreferVolume(imageIds: string[]): boolean {
 
     // Single file: check if it's multi-frame
     const imageId = imageIds[0];
-    const mf = cs3d.metaData.get('multiFrameModule', imageId) as
+    const mf = metaData.get('multiFrameModule', imageId) as
       | { numberOfFrames?: number }
       | undefined;
 

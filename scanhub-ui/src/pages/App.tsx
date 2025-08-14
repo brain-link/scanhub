@@ -4,7 +4,7 @@
  *
  * App.tsx is the main view of the react app. It is responsible for rendering the navigation bar and the main content.
  */
-import * as React from 'react'
+import React from 'react'
 import axios, { AxiosError } from 'axios'
 import { Outlet } from 'react-router-dom'
 import Box from '@mui/joy/Box'
