@@ -6,8 +6,6 @@ on:
       - main
       - docu
   pull_request:
-    branches:
-      - main
 
 jobs:
   Documentation:
