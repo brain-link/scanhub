@@ -1,41 +1,42 @@
 // vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), viteCommonjs()],
 
-  // Let Vite pre-bundle Cornerstone libs (fixes Safari star-export/default issues)
+  // serve workers & WASM correctly
+  worker: { format: 'es' },
+  assetsInclude: ['**/*.wasm'],
+
+  // Let Vite pre-bundle Cornerstone libs
   optimizeDeps: {
-    // don't exclude cornerstone/* or codecs
     include: [
+      'dicom-parser',   // force CJS → ESM transform
       '@cornerstonejs/core',
       '@cornerstonejs/tools',
-      '@cornerstonejs/dicom-image-loader',
-      '@cornerstonejs/streaming-image-volume-loader',
-      '@cornerstonejs/codec-openjpeg',
-      '@cornerstonejs/codec-openjph',
-      '@cornerstonejs/codec-charls',
-      '@cornerstonejs/codec-libjpeg-turbo-8bit',
       '@kitware/vtk.js',
-      'dicom-parser',
       'gl-matrix',
     ],
+    exclude: ['@cornerstonejs/dicom-image-loader'], // keep its workers raw
   },
 
-  // WASM + workers
-  assetsInclude: ['**/*.wasm'],
-  worker: { format: 'es' },
+  resolve: { dedupe: ['react', 'react-dom'] },
 
   server: {
     host: '0.0.0.0',
     port: 3000,
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-    },
+    origin: 'https://localhost:8443',
+    // headers: {
+    //   'Cross-Origin-Opener-Policy': 'same-origin',
+    //   'Cross-Origin-Embedder-Policy': 'require-corp',
+    //   // 'Cross-Origin-Resource-Policy': 'same-origin',
+    // },
     // If you proxy through HTTPS:8443 (nginx), HMR may need these:
-    // hmr: { protocol: 'wss', host: 'localhost', port: 8443 }, // optional
+    hmr: {
+      protocol: 'wss', host: 'localhost', clientPort: 8443, // browser connects to 8443 (nginx), NOT Vite
+    },
   },
 
   preview: {
