@@ -2,19 +2,18 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Definition of result API endpoints accessible through swagger UI."""
-import io
+
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import FileResponse, StreamingResponse
 from scanhub_libraries.models import ResultOut, SetResult, User
 from scanhub_libraries.security import get_current_user
+from starlette.responses import Response
 
 from app import LOG_CALL_DELIMITER
 from app.dal import result_dal, task_dal
-from app.tools.dicom import resolve_dicom_path, to_part10_bytes
-from starlette.responses import Response
+from app.tools.dicom import provide_p10_dicom, resolve_dicom_path
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -217,25 +216,6 @@ async def get_dicom(
 
     dicom_path = resolve_dicom_path(workflow_id, task_id, result_id, filename)
     try:
-        data = to_part10_bytes(dicom_path)
+        return provide_p10_dicom(dicom_path)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to convert DICOM to Part-10: {e}")
-
-    if len(data) < 132 or data[128:132] != b"DICM":
-        raise HTTPException(
-            status_code=500,
-            detail="Internal error: produced bytes are not valid DICOM Part-10 format"
-        )
-
-
-    return StreamingResponse(
-        io.BytesIO(data),
-        media_type="application/dicom",
-        headers={
-            "Content-Disposition": f'inline; filename="{dicom_path.name}"',
-            "X-Content-Type-Options": "nosniff",
-            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0, no-transform",
-            "Pragma": "no-cache",
-            "Expires": "0",
-        },
-    )
+        raise HTTPException(status_code=500, detail=f"Failed to provide P10 DICOM: {e}")

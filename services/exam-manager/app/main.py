@@ -33,6 +33,7 @@ ORIGINS = [
     # "https://localhost",      # frontend via nginx-proxy with default port
     "http://localhost:8080",    # frontend via nginx-proxy with custom port
     "https://localhost:8443",   # frontend via nginx-proxy with custom port
+    "https://localhost:3000",
 ]
 
 
@@ -47,8 +48,8 @@ app.add_middleware(
     allow_origins=ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+    allow_headers=["*", "Range"],
+    expose_headers=["Content-Range", "Accept-Ranges", "Content-Length"],
 )
 
 
