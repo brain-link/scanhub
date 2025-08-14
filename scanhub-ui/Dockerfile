@@ -1,47 +1,37 @@
-# FROM node:bullseye-slim AS BUILD_IMAGE
-FROM node:20.5.0-slim AS BUILD_IMAGE
-
-
-RUN apt-get update || : && apt-get install -y python3 build-essential \
-    && apt-get clean
-
+FROM node:20-alpine
 WORKDIR /app
-COPY package.json yarn.lock ./
 
+# Use Yarn 4 pinned by "packageManager" in package.json
+RUN corepack enable
 
-# Install dependencies, network timeout flag for slow network connection
-# Without frozen lockfile
-# RUN yarn install --network-timeout 100000
-# With frozen lockfile
-RUN yarn install --frozen-lockfile --network-timeout 100000
+# --- Install deps first for better layer caching -----------------------------
+# If you use Yarn Berry, keep .yarn/ and .yarnrc.yml
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn/ .yarn/
+RUN yarn install --immutable
 
-# Use argument to specify development or production state
-# ARG NODE_ENV=development
-# ENV NODE_ENV=$NODE_ENV
-# RUN set -ex; \
-#     if [ "$NODE_ENV" = "production" ]; then \
-#         yarn install --frozen-lockfile --production --network-timeout 100000; \
-#         # yarn install --no-cache --frozen-lockfile --production --network-timeout 100000; \
-#     elif [ "$NODE_ENV" = "development" ]; then \
-#         yarn install --frozen-lockfile --network-timeout 100000; \
-#     fi;
+# Install curl for health check
+RUN apk add --no-cache curl
 
-# Update browsers list
-RUN npx browserslist@latest --update-db
+# Then copy the app (index.html, vite.config, src, etc.)
 COPY . .
 
-# Clear yarn cache to save memory
-# RUN yarn cache clean
+# Vite will listen on 0.0.0.0:3000 so nginx can reach it
+EXPOSE 3000
 
+# Reliable file watching when src is bind-mounted from host (optional)
+ENV CHOKIDAR_USEPOLLING=true
 
-# Final stage
-# FROM node:bullseye-slim
-FROM node:20.5.0-slim
+# Choose dev or prod at build/run time via ARG/ENV (compose passes args.NOVE_ENV)
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /app
-
-# copy from build image
-COPY --from=BUILD_IMAGE /app /app
-
-# Start the app
-CMD [ "yarn", "start-no-hmr" ]
+# If NODE_ENV=production -> build once and serve with vite preview on :3000
+# Else -> run vite dev server on :3000 (HMR over WS works via nginx proxy)
+CMD ["/bin/sh", "-lc", "\
+  if [ \"$NODE_ENV\" = \"production\" ]; then \
+    yarn build && yarn preview --host 0.0.0.0 --port 3000; \
+  else \
+    yarn dev --host 0.0.0.0 --port 3000; \
+  fi \
+"]
