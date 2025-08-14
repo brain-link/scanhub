@@ -43,15 +43,12 @@ export function useImageIds(taskId?: string) {
 
       // Ensure correct order by sorting urls, i.e. numeric suffixes in filenames
       urls.sort();
-
-      console.log('INSTANCES: ', urls);
-
       return urls;
     },
   });
 
   const imageIds = useMemo(
-    () => dicomUrls.map((u) => (u.startsWith('wado-uri:') ? u : `wado-uri:${u}`)),
+    () => dicomUrls.map((u) => (u.startsWith('wadouri:') ? u : `wadouri:${u}`)),
     [dicomUrls]
   );
 
