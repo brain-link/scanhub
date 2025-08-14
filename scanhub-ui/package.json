@@ -10,7 +10,6 @@
     "@cornerstonejs/codec-openjph": "^2.4.7",
     "@cornerstonejs/core": "^3.32.10",
     "@cornerstonejs/dicom-image-loader": "^3.32.10",
-    "@cornerstonejs/streaming-image-volume-loader": "^1.86.1",
     "@cornerstonejs/tools": "^3.32.10",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",

@@ -10,16 +10,10 @@ export default defineConfig({
   worker: { format: 'es' },
   assetsInclude: ['**/*.wasm'],
 
-  // Let Vite pre-bundle Cornerstone libs
+  // Required for dev
   optimizeDeps: {
-    include: [
-      'dicom-parser',   // force CJS → ESM transform
-      '@cornerstonejs/core',
-      '@cornerstonejs/tools',
-      '@kitware/vtk.js',
-      'gl-matrix',
-    ],
-    exclude: ['@cornerstonejs/dicom-image-loader'], // keep its workers raw
+    include: ['dicom-parser'],
+    exclude: ['@cornerstonejs/dicom-image-loader'],
   },
 
   resolve: { dedupe: ['react', 'react-dom'] },
