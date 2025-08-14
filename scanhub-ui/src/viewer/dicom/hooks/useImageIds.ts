@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api';
 import { TaskType } from '../../../openapi/generated-client/exam';
+import { metaData, Enums } from '@cornerstonejs/core';
 
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
@@ -48,7 +49,10 @@ export function useImageIds(taskId?: string) {
   });
 
   const imageIds = useMemo(
-    () => dicomUrls.map((u) => (u.startsWith('wadouri:') ? u : `wadouri:${u}`)),
+    () =>
+      dicomUrls
+        .filter((u): u is string => typeof u === 'string' && u.length > 0)
+        .map((u) => (u.startsWith('wadouri:') ? u : `wadouri:${u}`)),
     [dicomUrls]
   );
 

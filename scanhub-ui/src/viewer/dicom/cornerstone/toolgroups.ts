@@ -5,28 +5,97 @@
  * toolgroups.ts registers all the tools and create a linked tool group.
  */
 import {
+  annotation,
   addTool,
   Enums,
   ToolGroupManager,
   PanTool,
+  PlanarRotateTool,
   ZoomTool,
   WindowLevelTool,
   StackScrollTool,
   CrosshairsTool,
   ReferenceLinesTool,
+  HeightTool,
+  LengthTool,
+  RectangleROITool,
+  EllipticalROITool,
+  CircleROIStartEndThresholdTool,
+  ProbeTool,
+  BidirectionalTool,
+  EraserTool,
+  LivewireContourTool,
 } from '@cornerstonejs/tools';
+import type { ComponentType } from 'react'
+import OpenInFullSharpIcon from '@mui/icons-material/OpenInFullSharp';
+import ContrastSharpIcon from '@mui/icons-material/ContrastSharp'
+import ZoomInSharpIcon from '@mui/icons-material/ZoomInSharp'
+import ControlCameraSharpIcon from '@mui/icons-material/ControlCameraSharp';
+import HeightSharpIcon from '@mui/icons-material/HeightSharp';
+import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
+import CropSquareSharpIcon from '@mui/icons-material/CropSquareSharp';
+import JoinInnerSharpIcon from '@mui/icons-material/JoinInnerSharp';
+import ScreenRotationSharpIcon from '@mui/icons-material/ScreenRotationSharp';
+import RadioButtonUncheckedSharpIcon from '@mui/icons-material/RadioButtonUncheckedSharp';
+import ModeStandbySharpIcon from '@mui/icons-material/ModeStandbySharp';
+import PolylineSharpIcon from '@mui/icons-material/PolylineSharp';
+import SwapHorizSharpIcon from '@mui/icons-material/SwapHorizSharp';
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
+import type { SvgIconProps } from '@mui/material/SvgIcon'
+// import { deepMerge } from '@cornerstonejs/core/utilities';
+
 
 const TOOL_GROUP_ID = 'linked';
 
 
+// // Update default tool style
+// const customStyle = {
+//   global: {
+//     color: '#6c757d',
+//     colorActive: '#0d6efd',
+//     lineWidth: '2',
+//   }
+// };
+// annotation.config.style.setDefaultToolStyles(deepMerge(customStyle, annotation.config.style.getDefaultToolStyles()));
+
+
+// Declare cornerstone tool class
+type CornerstoneToolClass = { toolName: string; new (...args: any[]): any }
+
+type ToolDefinition = {
+  Tool: CornerstoneToolClass;
+  Icon: ComponentType<SvgIconProps> 
+  label?: string;
+};
+
+export const tools: ToolDefinition[] = [
+  { Tool: PanTool, Icon: ControlCameraSharpIcon, label: 'Pan' },
+  { Tool: PlanarRotateTool, Icon: ScreenRotationSharpIcon, label: 'Rotate' },
+  { Tool: ZoomTool, Icon: ZoomInSharpIcon, label: 'Zoom' },
+  { Tool: WindowLevelTool, Icon: ContrastSharpIcon, label: 'W/L' },
+  { Tool: StackScrollTool, Icon: ReorderSharpIcon, label: 'Slices' },
+  { Tool: HeightTool, Icon: HeightSharpIcon, label: 'Measure height' },
+  { Tool: LengthTool, Icon: OpenInFullSharpIcon, label: 'Measure length' },
+  { Tool: RectangleROITool, Icon: CropSquareSharpIcon, label: 'Rectangle ROI' },
+  { Tool: EllipticalROITool, Icon: RadioButtonUncheckedSharpIcon, label: 'Ellipticle ROI' },
+  { Tool: CircleROIStartEndThresholdTool, Icon: JoinInnerSharpIcon, label: 'Circle ROI start-end threshold' },
+  { Tool: LivewireContourTool, Icon: PolylineSharpIcon, label: 'Livewire' },
+  { Tool: ProbeTool, Icon: ModeStandbySharpIcon, label: 'Probe' },
+  { Tool: BidirectionalTool, Icon: SwapHorizSharpIcon, label: 'Bidirectional' },
+  { Tool: EraserTool, Icon: ClearSharpIcon, label: 'Erase' },
+
+  
+];
+
 export function registerDefaultTools() {
-  // Register tool classes with the global registry (once)
- addTool(PanTool);
- addTool(ZoomTool);
- addTool(WindowLevelTool);
- addTool(StackScrollTool);
- addTool(CrosshairsTool);
- addTool(ReferenceLinesTool);
+
+  //   cornerstoneTools.toolStyle.setToolWidth(2)
+  //   cornerstoneTools.toolColors.setToolColor('#2196f3')
+  //   cornerstoneTools.toolColors.setActiveColor('#4dabf5')
+
+  addTool(CrosshairsTool);
+  addTool(ReferenceLinesTool);
+  tools.forEach(({Tool}) => ( addTool(Tool) ))
 }
 
 /**
@@ -42,12 +111,9 @@ export function getLinkedToolGroup() {
   if (!toolGroup) throw new Error('Failed to create ToolGroup');
 
   // Add tools to this group by their static toolName
-  toolGroup.addTool(PanTool.toolName);
-  toolGroup.addTool(ZoomTool.toolName);
-  toolGroup.addTool(WindowLevelTool.toolName);
-  toolGroup.addTool(StackScrollTool.toolName);
   toolGroup.addTool(CrosshairsTool.toolName);
   toolGroup.addTool(ReferenceLinesTool.toolName);
+  tools.forEach(({Tool}) => ( toolGroup.addTool(Tool.toolName) ))
 
   // Activate with sensible bindings:
   // Left mouse: Window/Level
@@ -78,6 +144,17 @@ export function getLinkedToolGroup() {
   // Overlay/sync tools enabled
   // toolGroup.setToolEnabled(ReferenceLinesTool.toolName);
   // toolGroup.setToolEnabled(CrosshairsTool.toolName);
+
+
+  // const styles = {
+  //   global: {
+  //     color: '#6c757d',
+  //     colorActive: '#0d6efd',
+  //     lineWidth: '2',
+  //   }
+  // };
+  // annotation.config.style.setToolGroupToolStyles(TOOL_GROUP_ID, styles);
+
 
   return toolGroup;
 }

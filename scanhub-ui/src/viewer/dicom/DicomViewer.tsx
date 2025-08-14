@@ -1,6 +1,7 @@
 // src/viewer/dicom/DicomViewerMinimal.tsx
 import React from 'react';
 import {
+  cache,
   RenderingEngine,
   getRenderingEngine,
   Enums,
@@ -9,17 +10,20 @@ import {
 } from '@cornerstonejs/core';
 import { initCornerstone } from './cornerstone/init';
 import { useImageIds } from './hooks/useImageIds';
-import { usePreferVolume } from './hooks/useVolumeIntent';
+import { useNumberOfFrames } from './hooks/useNumberOfFrames';
 import LoginContext from '../../LoginContext';
 import { getLinkedToolGroup, destroyLinkedToolGroup, attachViewportsToLinkedGroup } from './cornerstone/toolgroups';
+import DiconViewerToolbar from './DicomViewerToolbar';
 
-import Card from '@mui/joy/Card'
-import Stack from '@mui/joy/Stack'
+import Card from '@mui/joy/Card';
+import Stack from '@mui/joy/Stack';
+import Container from '@mui/joy/Container';
+import AlertItem from '../../components/AlertItem';
+import { Alerts } from '../../interfaces/components.interface'
+
 
 const RENDERING_ENGINE_ID = 're-min';
 const VIEWPORT_ID = 'vp-min';
-
-
 
 /**
  * Minimal single-viewport DICOM viewer:
@@ -34,7 +38,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const engineRef = React.useRef<RenderingEngine | null>(null);
   const { imageIds } = useImageIds(taskId);
-  const preferVolume = usePreferVolume(imageIds);
+  const numberOfFrames = useNumberOfFrames(imageIds, ready);
 
 
   // Init Cornerstone once
@@ -60,7 +64,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
     const engine = new RenderingEngine(RENDERING_ENGINE_ID);
     engineRef.current = engine;
   
-    const viewportType = preferVolume ? Enums.ViewportType.ORTHOGRAPHIC : Enums.ViewportType.STACK;
+    const viewportType = numberOfFrames > 1 ? Enums.ViewportType.ORTHOGRAPHIC : Enums.ViewportType.STACK;
 
     (async () => {
       await engine.enableElement({
@@ -77,7 +81,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
       try { engine.destroy(); } catch {}
       engineRef.current = null;
     };
-  }, [ready, imageIds.length]);
+  }, [ready, numberOfFrames]);
 
 
   // Attach tools only after the viewport exists
@@ -92,21 +96,32 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
   // Load data and render
   React.useEffect(() => {
     console.log("Trying to load the following imageIDs: ", imageIds)
-    if (!viewportReady || !imageIds?.length) return;
+    if (!viewportReady || !numberOfFrames) return;
 
     (async () => {
       const engine = engineRef.current;
-      if (!engine) return;
+      if (!engine) return;  
 
+      // Get viewport
       const vp = engine.getViewport(VIEWPORT_ID) as Types.IStackViewport | Types.IVolumeViewport;
+
       try {
-        if ('setVolumes' in vp && preferVolume) {
+        if ('setVolumes' in vp && numberOfFrames > 1) {
           console.log("Using volume loader...")
+
+          // Create volume image ids -> add ?frame=1...N
           const volumeId = `cornerstoneStreamingImageVolume:${Date.now()}`;
-          await volumeLoader.createAndCacheVolume(volumeId, { imageIds });
+          const volumeImageIds = Array.from({ length: numberOfFrames }, (_, i) => `${imageIds[0]}?frame=${i + 1}`);
+          // Create and cache volume image ids for volume id
+          const volume = await volumeLoader.createAndCacheVolume(volumeId, { imageIds: volumeImageIds });
+          // Load volume
+          await volume.load();
+          // Set volume in viewport
           await (vp as Types.IVolumeViewport).setVolumes([{ volumeId }]);
+
         } else {
-          console.log("Using stack viewport... preferVolume: ", preferVolume)
+          console.log("Using stack viewport...")
+          // If 2D 
           await (vp as Types.IStackViewport).setStack(imageIds);
         }
         await vp.render();
@@ -122,12 +137,18 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
     })();
   }, [viewportReady, imageIds]);
 
-  if (!imageIds?.length) {
-    return <div style={{ padding: 12 }}>No DICOM instances provided.</div>;
+
+  if (taskId === undefined || !numberOfFrames) {
+    return (
+      <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+        <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />
+      </Container>
+    )
   }
 
   return (
-    <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: 'calc(100vh - var(--Navigation-height))', p: 1 }}>
+    <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: 'calc(100vh - var(--Navigation-height))', p: 1, gap: 1}}>
+      < DiconViewerToolbar />
       <Card variant="plain" color="neutral" sx={{ p: 0.5, bgcolor: '#000', height: '100%', border: '5px solid' }}>
         <div 
           ref={containerRef}
