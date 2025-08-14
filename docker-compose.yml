@@ -16,17 +16,17 @@ x-dagster-common: &dagster_common
     # Mount the Dagster application source code (repository, jobs, ops, etc.)
     - ./services/dagster:/opt/dagster/app
     # Shared data lake between services
-    - data_lake:/data
-
+    # - data_lake:/data
+    - ./data_lake:/data
 
 services:
-  init-data-lake:
-    image: busybox
-    command: ["chmod", "-R", "777", "/data"]
-    volumes:
-      - data_lake:/data
-    user: "0:0"
-    restart: no
+  # init-data-lake:
+  #   image: busybox
+  #   command: ["chmod", "-R", "777", "/data"]
+  #   volumes:
+  #     - data_lake:/data
+  #   user: "0:0"
+  #   restart: no
 
   # SERVICES
   # Workflow manager, device manager and exam manager create data tables in postgres DB
@@ -38,7 +38,8 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/workflow-manager/app/:/app/
-      - data_lake:/data
+      # - data_lake:/data
+      - ./data_lake:/data
     environment:
       DATA_LAKE_DIRECTORY: /data
     healthcheck:
@@ -63,7 +64,8 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/device-manager/app/:/app/
-      - data_lake:/data
+      # - data_lake:/data
+      - ./data_lake:/data
     environment:
       DATA_LAKE_DIRECTORY: /data
     healthcheck:
@@ -88,7 +90,8 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/exam-manager/app/:/app/
-      - data_lake:/data
+      # - data_lake:/data
+      - ./data_lake:/data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -319,7 +322,7 @@ services:
 
 
 volumes:
-  data_lake:
+  # data_lake:  # Use bind-mount to inspect files, make sure data_lake/ exists at project root
   mongodb_data_sequence:
   postgres_data_scanhub:
   postgres_data_patient:
