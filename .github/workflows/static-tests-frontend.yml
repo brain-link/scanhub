@@ -2,7 +2,7 @@ name: static-tests-frontend
 
 on:
   pull_request:
-    branches: [ main ]
+  
 
 jobs:
   linting-frontend:
