@@ -1,7 +1,6 @@
 // src/viewer/dicom/DicomViewerMinimal.tsx
 import React from 'react';
 import {
-  cache,
   RenderingEngine,
   getRenderingEngine,
   Enums,
@@ -78,8 +77,14 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
 
     return () => {
       setViewportReady(false);
-      try { engine.destroy(); } catch {}
-      engineRef.current = null;
+      try {
+        engine.destroy();
+      } catch (err) {
+        // Intentionally ignore: engine may already be destroyed
+        // console.debug('engine.destroy failed', err);
+      } finally {
+        engineRef.current = null;
+      }
     };
   }, [ready, numberOfFrames]);
 
@@ -95,7 +100,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
 
   // Load data and render
   React.useEffect(() => {
-    console.log("Trying to load the following imageIDs: ", imageIds)
+    console.log('Trying to load the following imageIDs: ', imageIds)
     if (!viewportReady || !numberOfFrames) return;
 
     (async () => {
@@ -107,7 +112,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
 
       try {
         if ('setVolumes' in vp && numberOfFrames > 1) {
-          console.log("Using volume loader...")
+          console.log('Using volume loader...')
 
           // Create volume image ids -> add ?frame=1...N
           const volumeId = `cornerstoneStreamingImageVolume:${Date.now()}`;
@@ -120,7 +125,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
           await (vp as Types.IVolumeViewport).setVolumes([{ volumeId }]);
 
         } else {
-          console.log("Using stack viewport...")
+          console.log('Using stack viewport...')
           // If 2D 
           await (vp as Types.IStackViewport).setStack(imageIds);
         }
