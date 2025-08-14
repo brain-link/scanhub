@@ -57,9 +57,7 @@ async def get_task_data(task_id: UUID) -> Task | None:
     task_poly = with_polymorphic(Task, [AcquisitionTask, DAGTask])  # Add all subclasses you have
 
     async with async_session() as session:
-        result = await session.execute(
-            select(task_poly).where(task_poly.id == task_id)
-        )
+        result = await session.execute(select(task_poly).where(task_poly.id == task_id))
         task = result.scalar_one_or_none()
         return task
 
@@ -79,9 +77,7 @@ async def get_all_task_data(workflow_id: UUID) -> list[Task]:
     task_poly = with_polymorphic(Task, [AcquisitionTask, DAGTask])  # Add all subclasses here
 
     async with async_session() as session:
-        result = await session.execute(
-            select(task_poly).where(task_poly.workflow_id == workflow_id)
-        )
+        result = await session.execute(select(task_poly).where(task_poly.workflow_id == workflow_id))
         return list(result.scalars().all())
 
 
@@ -100,9 +96,7 @@ async def get_all_task_template_data() -> list[Task]:
     task_poly = with_polymorphic(Task, [AcquisitionTask, DAGTask])  # Add all subclasses here
 
     async with async_session() as session:
-        result: SQLResult = await session.execute(
-            select(task_poly).where(task_poly.is_template)
-        )
+        result: SQLResult = await session.execute(select(task_poly).where(task_poly.is_template))
         return list(result.scalars().all())
 
 
@@ -120,9 +114,7 @@ async def delete_task_data(task_id: UUID) -> bool:
     """
     task_polymorphic = with_polymorphic(Task, [AcquisitionTask, DAGTask])
     async with async_session() as session:
-        result = await session.execute(
-            select(task_polymorphic).where(task_polymorphic.id == task_id)
-        )
+        result = await session.execute(select(task_polymorphic).where(task_polymorphic.id == task_id))
         if task := result.scalar_one_or_none():
             await session.delete(task)
             await session.commit()
@@ -130,10 +122,7 @@ async def delete_task_data(task_id: UUID) -> bool:
         return False
 
 
-async def update_task_data(
-    task_id: UUID,
-    payload: BaseAcquisitionTask | BaseDAGTask
-) -> (Task | None):
+async def update_task_data(task_id: UUID, payload: BaseAcquisitionTask | BaseDAGTask) -> Task | None:
     """Update existing task in database.
 
     Parameters
@@ -149,9 +138,7 @@ async def update_task_data(
     """
     task_polymorphic = with_polymorphic(Task, [AcquisitionTask, DAGTask])
     async with async_session() as session:
-        result = await session.execute(
-            select(task_polymorphic).where(task_polymorphic.id == task_id)
-        )
+        result = await session.execute(select(task_polymorphic).where(task_polymorphic.id == task_id))
         if task := result.scalar_one_or_none():
             task.update(payload)
             await session.commit()

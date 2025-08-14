@@ -33,9 +33,7 @@ async def connect_to_mongo():
     """Connect to MongoDB using the configuration settings."""
     mongodb_username_filepath = "/run/secrets/sequence_database_root_username"
     mongodb_password_filepath = "/run/secrets/sequence_database_root_password"  # noqa: S105
-    if (os.path.exists(mongodb_username_filepath) and
-        os.path.exists(mongodb_password_filepath)
-    ):
+    if os.path.exists(mongodb_username_filepath) and os.path.exists(mongodb_password_filepath):
         with open(mongodb_username_filepath) as file:
             mongodb_username = file.readline().strip()
         with open(mongodb_password_filepath) as file:

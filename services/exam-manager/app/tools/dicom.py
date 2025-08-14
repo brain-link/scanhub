@@ -1,4 +1,5 @@
 """Helper functions for dicom."""
+
 import io
 import os
 from pathlib import Path
@@ -15,7 +16,7 @@ from pydicom.uid import (
 )
 from starlette.responses import Response
 
-DATA_LAKE_DIR =  Path(os.getenv("DATA_LAKE_DIRECTORY", "/data")).resolve()
+DATA_LAKE_DIR = Path(os.getenv("DATA_LAKE_DIRECTORY", "/data")).resolve()
 
 
 def resolve_dicom_path(workflow_id: str, task_id: str, result_id: str, filename: str) -> Path:
@@ -79,8 +80,10 @@ def provide_p10_dicom(dicom_path: str | Path) -> Response:
     if not getattr(ds.file_meta, "TransferSyntaxUID", None):
         if hasattr(ds, "is_little_endian") and hasattr(ds, "is_implicit_VR"):
             ds.file_meta.TransferSyntaxUID = (
-                ImplicitVRLittleEndian if ds.is_little_endian and ds.is_implicit_VR
-                else ExplicitVRLittleEndian if ds.is_little_endian
+                ImplicitVRLittleEndian
+                if ds.is_little_endian and ds.is_implicit_VR
+                else ExplicitVRLittleEndian
+                if ds.is_little_endian
                 else ExplicitVRBigEndian
             )
         else:
@@ -95,10 +98,7 @@ def provide_p10_dicom(dicom_path: str | Path) -> Response:
     data = bio.getvalue()
 
     if len(data) < 132 or data[128:132] != b"DICM":
-        raise HTTPException(
-            status_code=500,
-            detail="Internal error: produced bytes are not valid DICOM Part-10 format"
-        )
+        raise HTTPException(status_code=500, detail="Internal error: produced bytes are not valid DICOM Part-10 format")
 
     return StreamingResponse(
         io.BytesIO(data),
@@ -111,4 +111,3 @@ def provide_p10_dicom(dicom_path: str | Path) -> Response:
             "Expires": "0",
         },
     )
-

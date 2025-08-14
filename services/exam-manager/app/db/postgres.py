@@ -9,7 +9,7 @@ import uuid
 
 from pydantic import BaseModel
 from scanhub_libraries.models import AcquisitionLimits, AcquisitionParameter, ItemStatus, ResultType, TaskType
-from sqlalchemy import JSON, ForeignKey, create_engine, func, String
+from sqlalchemy import JSON, ForeignKey, String, create_engine, func
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -35,9 +35,10 @@ class Base(DeclarativeBase):
 postgres_user_filepath = "/run/secrets/scanhub_database_postgres_user"
 postgres_password_filepath = "/run/secrets/scanhub_database_postgres_password"  # noqa: S105
 postgres_db_name_filepath = "/run/secrets/scanhub_database_postgres_db_name"
-if (os.path.exists(postgres_user_filepath) and
-    os.path.exists(postgres_password_filepath) and
-    os.path.exists(postgres_db_name_filepath)
+if (
+    os.path.exists(postgres_user_filepath)
+    and os.path.exists(postgres_password_filepath)
+    and os.path.exists(postgres_db_name_filepath)
 ):
     with open(postgres_user_filepath) as file:
         postgres_user = file.readline().strip()
@@ -72,7 +73,8 @@ class Exam(Base):
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+        onupdate=func.now(),
+        nullable=True,  # pylint: disable=not-callable
     )
     workflows: Mapped[list["Workflow"]] = relationship(lazy="selectin")
 
@@ -99,11 +101,10 @@ class Workflow(Base):  # TBD: rename to "Workflow"
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+        onupdate=func.now(),
+        nullable=True,  # pylint: disable=not-callable
     )
-    tasks: Mapped[list["Task"]] = relationship(
-        "Task", lazy="selectin", cascade="all, delete-orphan"
-    )
+    tasks: Mapped[list["Task"]] = relationship("Task", lazy="selectin", cascade="all, delete-orphan")
     exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
@@ -124,7 +125,8 @@ class Task(Base):
         server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+        onupdate=func.now(),
+        nullable=True,  # pylint: disable=not-callable
     )
     workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
@@ -166,9 +168,7 @@ class DAGTask(Task):
     __mapper_args__ = {
         "polymorphic_identity": "DAG",
     }
-    id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("task.id", ondelete="CASCADE"), primary_key=True
-    )
+    id: Mapped[uuid.UUID] = mapped_column(ForeignKey("task.id", ondelete="CASCADE"), primary_key=True)
     dag_type: Mapped[TaskType] = mapped_column(nullable=False)
     dag_id: Mapped[str] = mapped_column(nullable=False)
     input_task_ids: Mapped[list[uuid.UUID]] = mapped_column(ARRAY(UUID(as_uuid=True)), nullable=False, default=list)

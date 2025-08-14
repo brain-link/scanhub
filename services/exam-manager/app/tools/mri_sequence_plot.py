@@ -41,9 +41,7 @@ def get_sequence_plot(
     tx_data: list[list[float]] = [[0.0], [0.0], [0.0]]
 
     # Empty gradient channel dictionary: {channel: [Time, Magnitude]}
-    gradients: dict[str, list[list]] = {
-        channel: [[0.0], [0.0]] for channel in ["gx", "gy", "gz"]
-    }
+    gradients: dict[str, list[list]] = {channel: [[0.0], [0.0]] for channel in ["gx", "gy", "gz"]}
 
     t_0 = 0.0
 
@@ -54,17 +52,13 @@ def get_sequence_plot(
             # ADC event
             if adc := block.adc:
                 adc_duration = adc.dwell * (adc.num_samples + 0.5)
-                rx_data[0] += list(
-                    np.cumsum([t_0, adc.delay, 0, adc_duration, 0]) * time_factor
-                )
+                rx_data[0] += list(np.cumsum([t_0, adc.delay, 0, adc_duration, 0]) * time_factor)
                 rx_data[1] += [0.0, 0.0, 1.0, 1.0, 0.0]
 
             # RF event
             if rf_data := block.rf:
                 time_points = rf_data.t + rf_data.delay
-                tx_data[0] += list(
-                    np.round(time_factor * (t_0 + time_points), 2).astype(float)
-                )
+                tx_data[0] += list(np.round(time_factor * (t_0 + time_points), 2).astype(float))
                 tx_data[1] += list(np.round(np.abs(rf_data.signal), 2).astype(float))
                 tx_data[2] += list(
                     np.round(
@@ -105,13 +99,9 @@ def get_sequence_plot(
                                 gradient_block.fall_time,
                             ]
                         )
-                        waveform = (
-                            1e-3 * gradient_block.amplitude * np.array([0, 0, 1, 1, 0])
-                        )
+                        waveform = 1e-3 * gradient_block.amplitude * np.array([0, 0, 1, 1, 0])
 
-                    gradients[channel][0] += list(
-                        np.round(time_factor * (t_0 + time_points), 2).astype(float)
-                    )
+                    gradients[channel][0] += list(np.round(time_factor * (t_0 + time_points), 2).astype(float))
                     gradients[channel][1] += list(np.round(waveform, 2).astype(float))
 
         # Update current time offset
@@ -177,13 +167,7 @@ def generate_plotly_figure(traces: list[TraceData]):
         yaxis3={"domain": [0.4, 0.55]},
         yaxis4={"domain": [0.6, 0.75]},
         yaxis5={"domain": [0.8, 0.95]},
-        legend={
-            "orientation": "h",
-            "yanchor": "top",
-            "y": 1.02,
-            "xanchor": "left",
-            "x": 0.0
-        },
+        legend={"orientation": "h", "yanchor": "top", "y": 1.02, "xanchor": "left", "x": 0.0},
     )
 
     return fig

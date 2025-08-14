@@ -1,6 +1,5 @@
 """Helper methods for workflows and exam, require recursive model translation."""
 
-
 from fastapi import HTTPException
 from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut, ExamOut, ResultOut, WorkflowOut
 

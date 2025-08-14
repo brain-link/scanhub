@@ -21,9 +21,7 @@ from app.tools.dicom import provide_p10_dicom, resolve_dicom_path
 # 204 = No Content: Delete
 # 404 = Not found
 
-result_router = APIRouter(
-    dependencies=[Depends(get_current_user)]
-)
+result_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
@@ -65,9 +63,7 @@ async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends
     status_code=200,
     tags=["results"],
 )
-async def get_result(
-    result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
-) -> ResultOut:
+async def get_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
     """Get an existing result.
 
     Parameters
@@ -103,8 +99,8 @@ async def get_result(
     tags=["results"],
 )
 async def get_all_task_results(
-    task_id: UUID | str,
-    user: Annotated[User, Depends(get_current_user)]) -> list[ResultOut]:
+    task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
+) -> list[ResultOut]:
     """Get all existing results of a certain task.
 
     Parameters
@@ -153,9 +149,7 @@ async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get
 
 @result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
 async def set_result(
-    result_id: UUID | str,
-    payload: SetResult,
-    user: Annotated[User, Depends(get_current_user)]
+    result_id: UUID | str, payload: SetResult, user: Annotated[User, Depends(get_current_user)]
 ) -> ResultOut:
     """Update an existing result.
 
@@ -193,11 +187,7 @@ async def set_result(
     tags=["results"],
 )
 async def get_dicom(
-    workflow_id: str,
-    task_id: str,
-    result_id: str,
-    filename: str,
-    user: Annotated[User, Depends(get_current_user)]
+    workflow_id: str, task_id: str, result_id: str, filename: str, user: Annotated[User, Depends(get_current_user)]
 ) -> Response:
     """
     Serve a DICOM instance.
