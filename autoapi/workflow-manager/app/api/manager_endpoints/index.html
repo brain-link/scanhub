@@ -443,16 +443,19 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI" title="workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DICOM_BASE_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.dg_client" title="workflow-manager.app.api.manager_endpoints.dg_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dg_client</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.router" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.dg_client" title="workflow-manager.app.api.manager_endpoints.dg_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dg_client</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.router" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -494,6 +497,11 @@
 <dd></dd></dl>
 
 <dl class="py data">
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">DICOM_BASE_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://localhost:8443/api/v1/exam/dcm/'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR">
 <span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">DATA_LAKE_DIR</span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -531,7 +539,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.callback_results_ready">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">callback_results_ready</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.callback_results_ready" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">callback_results_ready</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.callback_results_ready" title="Link to this definition">#</a></dt>
 <dd><p>Notify that results are ready via callback endpoint.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dag_id (str): The ID of the DAG.
@@ -596,6 +604,7 @@ access_token (str): The access token for authentication.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">PATIENT_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI"><code class="docutils literal notranslate"><span class="pre">DICOM_BASE_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.dg_client"><code class="docutils literal notranslate"><span class="pre">dg_client</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>

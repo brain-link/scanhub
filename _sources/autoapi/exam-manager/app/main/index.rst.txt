@@ -34,7 +34,7 @@ Module Contents
 ---------------
 
 .. py:data:: ORIGINS
-   :value: ['http://localhost:8080', 'https://localhost:8443']
+   :value: ['http://localhost:8080', 'https://localhost:8443', 'https://localhost:3000']
 
 
 .. py:data:: app

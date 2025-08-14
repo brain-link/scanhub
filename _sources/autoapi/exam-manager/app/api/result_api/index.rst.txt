@@ -134,10 +134,18 @@ Module Contents
        404: Not found
 
 
-.. py:function:: get_dicom(task_id: str | uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> fastapi.responses.FileResponse
+.. py:function:: get_dicom(workflow_id: str, task_id: str, result_id: str, filename: str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> starlette.responses.Response
    :async:
 
 
-   Get DICOM file of a task result.
+   Serve a DICOM instance.
+
+     - If it's already a DICOM Part-10 file → return FileResponse (supports HTTP Range).
+     - Else → convert to Part-10 in memory and return StreamingResponse.
+
+   Headers:
+     - 'application/dicom' content type
+     - inline disposition (avoid forced download)
+     - 'Cache-Control: no-transform' to prevent proxies from gzipping (which breaks Range offsets)
 
 

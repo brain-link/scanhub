@@ -24,6 +24,7 @@ Attributes
 
    workflow-manager.app.api.scanhub_requests.TASK_URI
    workflow-manager.app.api.scanhub_requests.RESULT_URI
+   workflow-manager.app.api.scanhub_requests.WORKFLOW_URI
 
 
 Functions
@@ -35,6 +36,8 @@ Functions
    workflow-manager.app.api.scanhub_requests.set_task
    workflow-manager.app.api.scanhub_requests.create_blank_result
    workflow-manager.app.api.scanhub_requests.set_result
+   workflow-manager.app.api.scanhub_requests.get_result
+   workflow-manager.app.api.scanhub_requests.get_exam_id
 
 
 Module Contents
@@ -46,6 +49,10 @@ Module Contents
 
 .. py:data:: RESULT_URI
    :value: 'http://exam-manager:8000/api/v1/exam/result'
+
+
+.. py:data:: WORKFLOW_URI
+   :value: 'http://exam-manager:8000/api/v1/exam'
 
 
 .. py:function:: get_task(task_id: str | uuid.UUID, user_access_token: str) -> scanhub_libraries.models.AcquisitionTaskOut | scanhub_libraries.models.DAGTaskOut
@@ -103,7 +110,7 @@ Module Contents
        HTTPException: If the result creation fails (status code not 201).
 
 
-.. py:function:: set_result(result_id: str, payload: scanhub_libraries.models.SetResult, user_access_token: str) -> scanhub_libraries.models.ResultOut
+.. py:function:: set_result(result_id: str | uuid.UUID, payload: scanhub_libraries.models.SetResult | scanhub_libraries.models.ResultOut, user_access_token: str) -> scanhub_libraries.models.ResultOut
 
    Update a result in the exam manager service.
 
@@ -120,5 +127,41 @@ Module Contents
    Raises
    ------
        HTTPException: If the result update fails (status code not 200).
+
+
+.. py:function:: get_result(result_id: str | uuid.UUID, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Fetch a result by ID from the exam manager service.
+
+   Args
+   ----
+       result_id (str): The unique identifier of the result to retrieve.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       ResultOut: The result object if found.
+
+   Raises
+   ------
+       HTTPException: If the result is not found (404).
+
+
+.. py:function:: get_exam_id(workflow_id: str, user_access_token: str) -> str
+
+   Fetch acquisition task by ID from the exam manager service.
+
+   Args
+   ----
+       task_id (str): The unique identifier of the task to retrieve.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       AcquisitionTaskOut | None: The acquisition task object if found and valid.
+
+   Raises
+   ------
+       HTTPException: If the task is not found (404) or is not an acquisition task (400).
 
 

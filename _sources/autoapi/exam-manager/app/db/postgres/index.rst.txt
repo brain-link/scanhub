@@ -352,8 +352,8 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: input_id
-      :type:  sqlalchemy.orm.Mapped[uuid.UUID]
+   .. py:attribute:: input_task_ids
+      :type:  sqlalchemy.orm.Mapped[list[uuid.UUID]]
 
 
    .. py:attribute:: parameter
@@ -396,8 +396,12 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: filename
-      :type:  sqlalchemy.orm.Mapped[str]
+   .. py:attribute:: files
+      :type:  sqlalchemy.orm.Mapped[list[str]]
+
+
+   .. py:attribute:: meta
+      :type:  sqlalchemy.orm.Mapped[dict]
 
 
 .. py:data:: MappedBase

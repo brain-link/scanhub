@@ -459,8 +459,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.set_result" title="exam-manager.app.api.result_api.set_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_result</span></code></a>(]) → scanhub_libraries.models.ResultOut)</p></td>
 <td><p>Update an existing result.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.get_dicom" title="exam-manager.app.api.result_api.get_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dicom</span></code></a>(]) → fastapi.responses.FileResponse)</p></td>
-<td><p>Get DICOM file of a task result.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.get_dicom" title="exam-manager.app.api.result_api.get_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dicom</span></code></a>(]) → starlette.responses.Response)</p></td>
+<td><p>Serve a DICOM instance.</p></td>
 </tr>
 </tbody>
 </table>
@@ -595,8 +595,22 @@ If this is the pydantic ResultBase model, only fields in the base model can be u
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.api.result_api.get_dicom">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.result_api.</span></span><span class="sig-name descname"><span class="pre">get_dicom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">fastapi.responses.FileResponse</span></span></span><a class="headerlink" href="#exam-manager.app.api.result_api.get_dicom" title="Link to this definition">#</a></dt>
-<dd><p>Get DICOM file of a task result.</p>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.result_api.</span></span><span class="sig-name descname"><span class="pre">get_dicom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">scanhub_libraries.models.User</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">get_current_user</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">starlette.responses.Response</span></span></span><a class="headerlink" href="#exam-manager.app.api.result_api.get_dicom" title="Link to this definition">#</a></dt>
+<dd><p>Serve a DICOM instance.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If it’s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).</p></li>
+<li><p>Else → convert to Part-10 in memory and return StreamingResponse.</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Headers:</dt><dd><ul class="simple">
+<li><p>‘application/dicom’ content type</p></li>
+<li><p>inline disposition (avoid forced download)</p></li>
+<li><p>‘Cache-Control: no-transform’ to prevent proxies from gzipping (which breaks Range offsets)</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

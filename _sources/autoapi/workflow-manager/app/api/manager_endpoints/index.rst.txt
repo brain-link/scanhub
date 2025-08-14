@@ -22,6 +22,7 @@ Attributes
    workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI
+   workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI
    workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR
    workflow-manager.app.api.manager_endpoints.dg_client
    workflow-manager.app.api.manager_endpoints.router
@@ -53,6 +54,10 @@ Module Contents
    :value: 'device-manager:8000'
 
 
+.. py:data:: DICOM_BASE_URI
+   :value: 'https://localhost:8443/api/v1/exam/dcm/'
+
+
 .. py:data:: DATA_LAKE_DIR
 
 .. py:data:: dg_client
@@ -75,7 +80,7 @@ Module Contents
        dict: A dictionary containing the response from the orchestration engine.
 
 
-.. py:function:: callback_results_ready(task_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
+.. py:function:: callback_results_ready(task_id: uuid.UUID | str, result_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]
    :async:
 
 

@@ -1,0 +1,51 @@
+exam-manager.app.tools.dicom
+============================
+
+.. py:module:: exam-manager.app.tools.dicom
+
+.. autoapi-nested-parse::
+
+   Helper functions for dicom.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   exam-manager.app.tools.dicom.DATA_LAKE_DIR
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   exam-manager.app.tools.dicom.resolve_dicom_path
+   exam-manager.app.tools.dicom.provide_p10_dicom
+
+
+Module Contents
+---------------
+
+.. py:data:: DATA_LAKE_DIR
+
+.. py:function:: resolve_dicom_path(workflow_id: str, task_id: str, result_id: str, filename: str) -> pathlib.Path
+
+   Build and validate the requested file path, prevent traversal, return (path, safe_name).
+
+
+.. py:function:: provide_p10_dicom(dicom_path: str | pathlib.Path) -> starlette.responses.Response
+
+   Ensure the dataset at `path` is a valid DICOM Part-10 file.
+
+   - If already Part-10, return FileResponse
+   - If not Part-10, create minimal File Meta + 128-byte preamble and return StreamingResponse
+   - We *do not* transcode pixel data here; we only wrap the dataset into Part-10.
+   - TransferSyntaxUID:
+       * If present, we keep it.
+       * If missing, we choose based on ds.is_little_endian/is_implicit_VR if known,
+         otherwise default to ExplicitVRLittleEndian (widely supported).
+
+
