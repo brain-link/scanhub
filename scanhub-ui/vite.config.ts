@@ -1,83 +1,51 @@
+// vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-
-// Helper to resolve from project root
-const r = (p: string) => path.resolve(__dirname, p);
 
 export default defineConfig({
-
   plugins: [react()],
 
-  resolve: {
-    dedupe: ['react', 'react-dom'], // avoid duplicate Reacts in graph
-    alias: {
-      // --- Cornerstone codec aliases (WASM) ---
-      '@cornerstonejs/codec-libjpeg-turbo-8bit/decodewasmjs':
-        r('node_modules/@cornerstonejs/codec-libjpeg-turbo-8bit/dist/libjpegturbowasm_decode.js'),
-      '@cornerstonejs/codec-libjpeg-turbo-8bit/decodewasm':
-        r('node_modules/@cornerstonejs/codec-libjpeg-turbo-8bit/dist/libjpegturbowasm_decode.wasm'),
-
-      '@cornerstonejs/codec-charls/decodewasmjs':
-        r('node_modules/@cornerstonejs/codec-charls/dist/charlswasm_decode.js'),
-      '@cornerstonejs/codec-charls/decodewasm':
-        r('node_modules/@cornerstonejs/codec-charls/dist/charlswasm_decode.wasm'),
-
-      '@cornerstonejs/codec-openjpeg/decodewasmjs':
-        r('node_modules/@cornerstonejs/codec-openjpeg/dist/openjpegwasm_decode.js'),
-      '@cornerstonejs/codec-openjpeg/decodewasm':
-        r('node_modules/@cornerstonejs/codec-openjpeg/dist/openjpegwasm_decode.wasm'),
-
-      '@cornerstonejs/codec-openjph/wasmjs':
-        r('node_modules/@cornerstonejs/codec-openjph/dist/openjphjs.js'),
-      '@cornerstonejs/codec-openjph/wasm':
-        r('node_modules/@cornerstonejs/codec-openjph/dist/openjphjs.wasm'),
-    },
-  },
-
-  assetsInclude: ['**/*.wasm'],
-
-  // Needed for multi-threaded WASM, web workers, and volume rendering in dev    
-  server: {
-    port: 3000,              // serve at :3000 instead of default 5173
-    host: '0.0.0.0',         // optional: allow access from Docker/other hosts
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-    },
-  },
-  preview: {
-    port: 3000,              // also match in preview mode
-    host: '0.0.0.0',
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-    },
-  },
-
-  // *** IMPORTANT: exclude heavy/weird deps from esbuild pre-bundling ***
+  // Let Vite pre-bundle Cornerstone libs (fixes Safari star-export/default issues)
   optimizeDeps: {
-    force: true, // rebuild optimizer cache after changes
-    exclude: [
+    // don't exclude cornerstone/* or codecs
+    include: [
       '@cornerstonejs/core',
       '@cornerstonejs/tools',
       '@cornerstonejs/dicom-image-loader',
       '@cornerstonejs/streaming-image-volume-loader',
-      '@cornerstonejs/codec-charls',
       '@cornerstonejs/codec-openjpeg',
       '@cornerstonejs/codec-openjph',
+      '@cornerstonejs/codec-charls',
       '@cornerstonejs/codec-libjpeg-turbo-8bit',
       '@kitware/vtk.js',
-      'gl-matrix',
       'dicom-parser',
+      'gl-matrix',
     ],
   },
 
-  build: {
-    target: 'es2020',
-    rollupOptions: {
-      // you can add manualChunks here if you want
+  // WASM + workers
+  assetsInclude: ['**/*.wasm'],
+  worker: { format: 'es' },
+
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+    // If you proxy through HTTPS:8443 (nginx), HMR may need these:
+    // hmr: { protocol: 'wss', host: 'localhost', port: 8443 }, // optional
+  },
+
+  preview: {
+    host: '0.0.0.0',
+    port: 3000,
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
     },
   },
 
+  build: { target: 'es2020' },
 });
