@@ -29,9 +29,7 @@ from app.tools.helper import get_workflow_out_model
 # 204 = No Content: Delete
 # 404 = Not found
 
-workflow_router = APIRouter(
-    dependencies=[Depends(get_current_user)]
-)
+workflow_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @workflow_router.post("/workflow/new", response_model=WorkflowOut, status_code=201, tags=["workflows"])
@@ -63,7 +61,7 @@ async def create_workflow(payload: BaseWorkflow, user: Annotated[User, Depends(g
         if exam.is_template != payload.is_template:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid link to exam. Instance needs to refer to instance, template to template."
+                detail="Invalid link to exam. Instance needs to refer to instance, template to template.",
             )
     if payload.is_template is False and payload.exam_id is None:
         raise HTTPException(status_code=400, detail="Workflow instance needs exam_id.")
@@ -74,10 +72,9 @@ async def create_workflow(payload: BaseWorkflow, user: Annotated[User, Depends(g
 
 
 @workflow_router.post("/workflow", response_model=WorkflowOut, status_code=201, tags=["workflows"])
-async def create_workflow_from_template(exam_id: UUID,
-                                        template_id: UUID,
-                                        new_workflow_is_template: bool,
-                                        user: Annotated[User, Depends(get_current_user)]) -> WorkflowOut:
+async def create_workflow_from_template(
+    exam_id: UUID, template_id: UUID, new_workflow_is_template: bool, user: Annotated[User, Depends(get_current_user)]
+) -> WorkflowOut:
     """Create new workflow from template.
 
     Parameters
@@ -107,8 +104,7 @@ async def create_workflow_from_template(exam_id: UUID,
         raise HTTPException(status_code=404, detail="Workflow not found")
     if template.is_template is not True:
         raise HTTPException(
-            status_code=400,
-            detail="Request to create workflow from workflow instance instead of workflow template."
+            status_code=400, detail="Request to create workflow from workflow instance instead of workflow template."
         )
     new_workflow = BaseWorkflow(**template.__dict__)
     new_workflow.status = ItemStatus.NEW
@@ -118,8 +114,7 @@ async def create_workflow_from_template(exam_id: UUID,
         raise HTTPException(status_code=400, detail="exam_id must be an existing id.")
     if exam.is_template != new_workflow_is_template:
         raise HTTPException(
-            status_code=400,
-            detail="Invalid link to exam. Instance needs to refer to instance, template to template."
+            status_code=400, detail="Invalid link to exam. Instance needs to refer to instance, template to template."
         )
     if not (workflow := await workflow_dal.add_workflow_data(payload=new_workflow, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create workflow.")
@@ -195,8 +190,8 @@ async def get_workflow(workflow_id: UUID | str, user: Annotated[User, Depends(ge
     tags=["workflows"],
 )
 async def get_all_exam_workflows(
-    exam_id: UUID | str,
-    user: Annotated[User, Depends(get_current_user)]) -> list[WorkflowOut]:
+    exam_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
+) -> list[WorkflowOut]:
     """Get all existing workflows of a certain exam.
 
     Parameters
@@ -263,8 +258,9 @@ async def delete_workflow(workflow_id: UUID | str, user: Annotated[User, Depends
 
 
 @workflow_router.put("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
-async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow,
-                          user: Annotated[User, Depends(get_current_user)]) -> WorkflowOut:
+async def update_workflow(
+    workflow_id: UUID | str, payload: BaseWorkflow, user: Annotated[User, Depends(get_current_user)]
+) -> WorkflowOut:
     """Update an existing workflow.
 
     Parameters
@@ -295,7 +291,7 @@ async def update_workflow(workflow_id: UUID | str, payload: BaseWorkflow,
         if exam.is_template != payload.is_template:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid link to exam. Instance needs to refer to instance, template to template."
+                detail="Invalid link to exam. Instance needs to refer to instance, template to template.",
             )
     if payload.is_template is False and payload.exam_id is None:
         raise HTTPException(status_code=400, detail="Workflow instance needs exam_id.")

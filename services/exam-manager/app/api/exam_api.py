@@ -28,15 +28,15 @@ from app.tools.helper import get_exam_out_model
 PREFIX_PATIENT_MANAGER = "http://patient-manager:8100/api/v1/patient"
 # PREFIX_PATIENT_MANAGER = "http://host.docker.internal:8090/api/v1/patient"
 
-exam_router = APIRouter(
-    dependencies=[Depends(get_current_user)]
-)
+exam_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @exam_router.post("/new", response_model=ExamOut, status_code=201, tags=["exams"])
-async def create_exam(payload: BaseExam,
-                      user: Annotated[User, Depends(get_current_user)],
-                      access_token: Annotated[str, Depends(oauth2_scheme)]) -> ExamOut:
+async def create_exam(
+    payload: BaseExam,
+    user: Annotated[User, Depends(get_current_user)],
+    access_token: Annotated[str, Depends(oauth2_scheme)],
+) -> ExamOut:
     """Create a new exam.
 
     Parameters
@@ -64,7 +64,8 @@ async def create_exam(payload: BaseExam,
         getpatient_response = requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
-            timeout=3)
+            timeout=3,
+        )
 
         if getpatient_response.status_code != 200:
             raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
@@ -76,9 +77,12 @@ async def create_exam(payload: BaseExam,
 
 
 @exam_router.post("/", response_model=ExamOut, status_code=201, tags=["exams"])
-async def create_exam_from_template(payload: BaseExam, template_id: UUID,
-                                    user: Annotated[User, Depends(get_current_user)],
-                                    access_token: Annotated[str, Depends(oauth2_scheme)]) -> ExamOut:
+async def create_exam_from_template(
+    payload: BaseExam,
+    template_id: UUID,
+    user: Annotated[User, Depends(get_current_user)],
+    access_token: Annotated[str, Depends(oauth2_scheme)],
+) -> ExamOut:
     """Create a new exam from template.
 
     Parameters
@@ -107,7 +111,8 @@ async def create_exam_from_template(payload: BaseExam, template_id: UUID,
         getpatient_response = requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
-            timeout=3)
+            timeout=3,
+        )
         print("getpatient_response: ", getpatient_response)
         print("url: ", PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id))
         if getpatient_response.status_code != 200:
@@ -118,8 +123,7 @@ async def create_exam_from_template(payload: BaseExam, template_id: UUID,
         raise HTTPException(status_code=400, detail="Template not found.")
     if template.is_template is not True:
         raise HTTPException(
-            status_code=400,
-            detail="Request to create exam from exam instance instead of exam template."
+            status_code=400, detail="Request to create exam from exam instance instead of exam template."
         )
     new_exam = BaseExam(**payload.__dict__)
     new_exam.status = ItemStatus.NEW
@@ -130,12 +134,11 @@ async def create_exam_from_template(payload: BaseExam, template_id: UUID,
 
     # Create all the sub-items for the workflow templates in the exam template
     for workflow in template.workflows:
-        exam_out.workflows.append(await workflow_api.create_workflow_from_template(
-            exam_id=exam.id,
-            template_id=workflow.id,
-            new_workflow_is_template=exam.is_template,
-            user=user
-        ))
+        exam_out.workflows.append(
+            await workflow_api.create_workflow_from_template(
+                exam_id=exam.id, template_id=workflow.id, new_workflow_is_template=exam.is_template, user=user
+            )
+        )
     return exam_out
 
 
@@ -234,9 +237,12 @@ async def exam_delete(exam_id: UUID | str, user: Annotated[User, Depends(get_cur
 
 
 @exam_router.put("/{exam_id}", response_model=ExamOut, status_code=200, tags=["exams"])
-async def update_exam(exam_id: UUID | str, payload: BaseExam,
-                      user: Annotated[User, Depends(get_current_user)],
-                      access_token: Annotated[str, Depends(oauth2_scheme)]) -> ExamOut:
+async def update_exam(
+    exam_id: UUID | str,
+    payload: BaseExam,
+    user: Annotated[User, Depends(get_current_user)],
+    access_token: Annotated[str, Depends(oauth2_scheme)],
+) -> ExamOut:
     """Update an existing exam.
 
     Parameters
@@ -264,7 +270,8 @@ async def update_exam(exam_id: UUID | str, payload: BaseExam,
         getpatient_response = requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
-            timeout=3)
+            timeout=3,
+        )
         if getpatient_response.status_code != 200:
             raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
         # for now, allow changing the patient_id, but could require administrator rights in the future

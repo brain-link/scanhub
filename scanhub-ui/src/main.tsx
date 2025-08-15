@@ -9,8 +9,8 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import { StyledEngineProvider } from '@mui/joy/styles'
-import * as React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react'
+import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -20,7 +20,10 @@ import { RouteConfiguration } from './Routes'
 
 const queryClient = new QueryClient()
 
-ReactDOM.createRoot(document.querySelector('#root')!).render(
+const container = document.getElementById('root')!;
+const root = createRoot(container);
+
+root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

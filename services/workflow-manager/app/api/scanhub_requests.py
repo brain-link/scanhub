@@ -15,10 +15,11 @@ from uuid import UUID
 import requests
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
-from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut, ResultOut, SetResult
+from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut, ResultOut, SetResult, WorkflowOut
 
 TASK_URI = "http://exam-manager:8000/api/v1/exam/task"
 RESULT_URI = "http://exam-manager:8000/api/v1/exam/result"
+WORKFLOW_URI = "http://exam-manager:8000/api/v1/exam"
 
 
 def get_task(task_id: str | UUID, user_access_token: str) -> AcquisitionTaskOut | DAGTaskOut:
@@ -123,7 +124,7 @@ def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
     return ResultOut(**blank_result_response.json())
 
 
-def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
+def set_result(result_id: str | UUID, payload: SetResult | ResultOut, user_access_token: str) -> ResultOut:
     """
     Update a result in the exam manager service.
 
@@ -142,12 +143,63 @@ def set_result(result_id: str, payload: SetResult, user_access_token: str) -> Re
         HTTPException: If the result update fails (status code not 200).
     """
     headers = {"Authorization": "Bearer " + user_access_token}
+    _id = str(result_id) if isinstance(result_id, UUID) else result_id
     update_result_response = requests.put(
-        f"{RESULT_URI}/{result_id}",
+        f"{RESULT_URI}/{_id}",
         data=json.dumps(payload, default=jsonable_encoder),
         headers=headers,
-        timeout=3
+        timeout=3,
     )
     if update_result_response.status_code != 200:
         raise HTTPException(status_code=400, detail="Error updating result")
     return ResultOut(**update_result_response.json())
+
+
+def get_result(result_id: str | UUID, user_access_token: str) -> ResultOut:
+    """
+    Fetch a result by ID from the exam manager service.
+
+    Args
+    ----
+        result_id (str): The unique identifier of the result to retrieve.
+        user_access_token (str): The user's access token for authentication.
+
+    Returns
+    -------
+        ResultOut: The result object if found.
+
+    Raises
+    ------
+        HTTPException: If the result is not found (404).
+    """
+    headers = {"Authorization": "Bearer " + user_access_token}
+    _id = str(result_id) if isinstance(result_id, UUID) else result_id
+    response = requests.get(f"{RESULT_URI}/{_id}", headers=headers, timeout=3)
+    if response.status_code != 200:
+        raise HTTPException(status_code=404, detail="Result not found")
+    return ResultOut(**response.json())
+
+
+def get_exam_id(workflow_id: str, user_access_token: str) -> str:
+    """
+    Fetch acquisition task by ID from the exam manager service.
+
+    Args
+    ----
+        task_id (str): The unique identifier of the task to retrieve.
+        user_access_token (str): The user's access token for authentication.
+
+    Returns
+    -------
+        AcquisitionTaskOut | None: The acquisition task object if found and valid.
+
+    Raises
+    ------
+        HTTPException: If the task is not found (404) or is not an acquisition task (400).
+    """
+    headers = {"Authorization": "Bearer " + user_access_token}
+    response = requests.get(f"{WORKFLOW_URI}/{workflow_id}", headers=headers, timeout=3)
+    if response.status_code != 200:
+        raise HTTPException(status_code=404, detail="Task not found")
+    workflow = WorkflowOut(**response.json())
+    return str(workflow.exam_id)

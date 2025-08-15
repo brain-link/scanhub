@@ -8,7 +8,7 @@ import { PropsWithChildren, useState } from 'react'
 import React from 'react'
 
 import LoginContext from './LoginContext'
-import { User } from './generated-client/userlogin'
+import { User } from './openapi/generated-client/userlogin'
 
 export default function LoginContextProvider(props: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null) // null when the user is not logged in

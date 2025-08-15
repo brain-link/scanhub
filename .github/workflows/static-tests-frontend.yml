@@ -1,28 +1,49 @@
-name: 'static-tests-frontend'
+name: static-tests-frontend
 
 on:
   pull_request:
-    branches:
-      - main
 
 jobs:
-
-  linting-python:
-    name: 'Linting frontend'
+  linting-frontend:
+    name: Linting frontend
     runs-on: ubuntu-latest
 
-    env:
-      working-directory: ./scanhub-ui
+    defaults:
+      run:
+        working-directory: ./scanhub-ui
 
-    continue-on-error: True
+    # Safety: ignore any yarnPath in .yarnrc.yml if it exists
+    env:
+      YARN_IGNORE_PATH: 1
 
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Install modules
-        working-directory: ${{env.working-directory}}
-        run: yarn install
-        
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Activate Yarn 4.9.2 from packageManager BEFORE any 'yarn' command
+      - name: Enable Corepack & Yarn 4
+        run: |
+          corepack enable
+          corepack prepare yarn@4.9.2 --activate
+
+      # Cache Yarn Berry cache folder (e.g. .yarn/cache)
+      - name: Get Yarn cache directory
+        id: yarn-cache
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('scanhub-ui/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
       - name: Run linter
-        working-directory: ${{env.working-directory}}
         run: yarn lint

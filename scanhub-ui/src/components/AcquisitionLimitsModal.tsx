@@ -14,11 +14,11 @@ import Grid from '@mui/joy/Grid'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { patientApi } from '../api'
-import { BasePatient, PatientOut } from '../generated-client/patient'
+import { BasePatient, PatientOut } from '../openapi/generated-client/patient'
 
 import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'

@@ -5,7 +5,7 @@
  * PatientCreateModal.tsx is responsible for rendering a modal with an interface
  * to create a new patient.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 
@@ -26,7 +26,7 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
 import LoginContext from '../LoginContext'
-import { BasePatient, Gender } from '../generated-client/patient'
+import { BasePatient, Gender } from '../openapi/generated-client/patient'
 import { ModalProps } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 import { patientApi } from '../api'

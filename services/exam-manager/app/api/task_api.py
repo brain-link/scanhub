@@ -66,7 +66,7 @@ async def create_task(
         if workflow.is_template != payload.is_template:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid link to workflow. Instance needs to refer to instance, template to template."
+                detail="Invalid link to workflow. Instance needs to refer to instance, template to template.",
             )
     if payload.is_template is False and payload.workflow_id is None:
         raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
@@ -114,8 +114,7 @@ async def create_task_from_template(
         raise HTTPException(status_code=404, detail="Task template not found")
     if template.is_template is not True:
         raise HTTPException(
-            status_code=400,
-            detail="Request to create task from task instance instead of task template."
+            status_code=400, detail="Request to create task from task instance instead of task template."
         )
     new_task: BaseAcquisitionTask | BaseDAGTask
     if template.task_type is TaskType.ACQUISITION:
@@ -132,7 +131,7 @@ async def create_task_from_template(
     if workflow.is_template != new_task_is_template:
         raise HTTPException(
             status_code=400,
-            detail="Invalid link to workflow. Instance needs to refer to instance, template to template."
+            detail="Invalid link to workflow. Instance needs to refer to instance, template to template.",
         )
     if not (task := await task_dal.add_task_data(payload=new_task, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create task.")
@@ -143,9 +142,8 @@ async def create_task_from_template(
 
 @task_router.get("/task/{task_id}", response_model=AcquisitionTaskOut | DAGTaskOut, status_code=200, tags=["tasks"])
 async def get_task(
-    task_id: UUID | str,
-    user: Annotated[User, Depends(get_current_user)]
-    ) -> AcquisitionTaskOut | DAGTaskOut:
+    task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
+) -> AcquisitionTaskOut | DAGTaskOut:
     """Get an existing task.
 
     Parameters
@@ -231,10 +229,7 @@ async def get_all_task_templates(
 
 
 @task_router.delete("/task/{task_id}", response_model=None, status_code=204, tags=["tasks"])
-async def delete_task(
-    task_id: UUID | str,
-    user: Annotated[User, Depends(get_current_user)]
-) -> None:
+async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
     """Delete a task.
 
     Parameters
@@ -291,7 +286,7 @@ async def update_task(
         if workflow.is_template != payload.is_template:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid link to workflow. Instance needs to refer to instance, template to template."
+                detail="Invalid link to workflow. Instance needs to refer to instance, template to template.",
             )
     if payload.is_template is False and payload.workflow_id is None:
         raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")

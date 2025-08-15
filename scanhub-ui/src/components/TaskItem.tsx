@@ -4,7 +4,7 @@
  *
  * TaskItem.tsx is responsible for rendering a single task item.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'
@@ -21,7 +21,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../openapi/generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'

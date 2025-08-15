@@ -27,9 +27,7 @@ from scanhub_libraries.security import get_current_user
 # from app.dal import mri_sequence_dal
 from app.db.mongodb import get_mongo_database
 
-seq_router = APIRouter(
-    dependencies=[Depends(get_current_user)]
-)
+seq_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 async def mri_sequence_form(
@@ -81,9 +79,7 @@ async def get_mri_sequence_by_id(
     if sequence := await database.collection.find_one({"_id": ObjectId(sequence_id)}):
         sequence["_id"] = str(sequence["_id"])  # Convert ObjectId to str
         return MRISequenceOut(**sequence)
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail=f"MRI sequence with ID {sequence_id} not found."
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"MRI sequence with ID {sequence_id} not found.")
 
 
 @seq_router.post(
@@ -95,7 +91,7 @@ async def get_mri_sequence_by_id(
 async def create_mri_sequence(
     sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
     file: UploadFile = File(...),
-    database=Depends(get_mongo_database)
+    database=Depends(get_mongo_database),
 ):
     """Upload an MRI sequence file and store it with the provided metadata.
 
@@ -134,7 +130,11 @@ async def create_mri_sequence(
     return await get_mri_sequence_by_id(result.inserted_id, database)
 
 
-@seq_router.get("/sequences/all", response_model=list[MRISequenceOut], tags=["mri sequences"],)
+@seq_router.get(
+    "/sequences/all",
+    response_model=list[MRISequenceOut],
+    tags=["mri sequences"],
+)
 async def get_all_mri_sequences(database=Depends(get_mongo_database)):
     """Retrieve a list of all MRI sequences from the database.
 
@@ -194,9 +194,7 @@ async def get_mri_sequence_file_by_id(
             temp_file.name,
             media_type="application/octet-stream",
             filename=f"{name}{file_extension}",  # Use the retrieved file extension
-            headers={
-                "Content-Disposition": f"attachment; filename={name}{file_extension}"
-            },
+            headers={"Content-Disposition": f"attachment; filename={name}{file_extension}"},
         )
 
         # Function to delete the temporary file
@@ -211,7 +209,11 @@ async def get_mri_sequence_file_by_id(
     raise HTTPException(status_code=404, detail="Binary data not found")
 
 
-@seq_router.put("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"],)
+@seq_router.put(
+    "/sequence/{sequence_id}",
+    response_model=MRISequenceOut,
+    tags=["mri sequences"],
+)
 async def update_mri_sequence_endpoint(
     sequence_id: str,
     sequence_meta: BaseMRISequence,
@@ -235,10 +237,7 @@ async def update_mri_sequence_endpoint(
     """
     update_fields = {k: v for k, v in sequence_meta.dict(by_alias=True).items() if v and v is not None}
     update_fields["updated_at"] = datetime.datetime.now(datetime.timezone.utc)
-    result = await database.collection.update_one(
-        {"_id": ObjectId(sequence_id)},
-        {"$set": update_fields}
-    )
+    result = await database.collection.update_one({"_id": ObjectId(sequence_id)}, {"$set": update_fields})
     if result.matched_count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found.")
     if result.modified_count == 0:
@@ -246,7 +245,11 @@ async def update_mri_sequence_endpoint(
     return await get_mri_sequence_by_id(sequence_id, database)
 
 
-@seq_router.delete("/sequence/{sequence_id}", status_code=status.HTTP_202_ACCEPTED, tags=["mri sequences"],)
+@seq_router.delete(
+    "/sequence/{sequence_id}",
+    status_code=status.HTTP_202_ACCEPTED,
+    tags=["mri sequences"],
+)
 async def delete_mri_sequence_endpoint(
     sequence_id: str,
     database=Depends(get_mongo_database),
@@ -267,9 +270,7 @@ async def delete_mri_sequence_endpoint(
     # deleted_count = await mri_sequence_dal.delete_mri_sequence(database, sequence_id)
     result = await database.collection.delete_one({"_id": ObjectId(sequence_id)})
     if result.deleted_count == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="MRI sequence not found")
 
 
 # @seq_router.get("/mri-sequence-plot/{seq_id}", tags=["mri sequences"],)

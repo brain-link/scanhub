@@ -4,7 +4,7 @@
  *
  * SequenceUpload.tsx is responsible for rendering an interface to upload a new sequence.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 
@@ -20,7 +20,7 @@ import Typography from '@mui/joy/Typography'
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
 import { ModalProps } from '../interfaces/components.interface'
-import { BaseMRISequence } from '../generated-client/exam/api'
+import { BaseMRISequence } from '../openapi/generated-client/exam/api'
 
 
 

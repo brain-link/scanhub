@@ -43,7 +43,7 @@ async def add_exam_data(payload: BaseExam, creator: str) -> Exam:
     return new_exam
 
 
-async def get_exam_data(exam_id: UUID) -> (Exam | None):
+async def get_exam_data(exam_id: UUID) -> Exam | None:
     """Get exam by id.
 
     Parameters
@@ -120,7 +120,7 @@ async def delete_exam_data(exam_id: UUID) -> bool:
         return False
 
 
-async def update_exam_data(exam_id: UUID, payload: BaseExam) -> (Exam | None):
+async def update_exam_data(exam_id: UUID, payload: BaseExam) -> Exam | None:
     """Update existing exam entry.
 
     Parameters

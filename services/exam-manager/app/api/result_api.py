@@ -2,18 +2,18 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Definition of result API endpoints accessible through swagger UI."""
-from pathlib import Path
+
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import FileResponse
-from scanhub_libraries.models import DAGTaskOut, ResultOut, SetResult, User
+from scanhub_libraries.models import ResultOut, SetResult, User
 from scanhub_libraries.security import get_current_user
+from starlette.responses import Response
 
 from app import LOG_CALL_DELIMITER
-from app.api.task_api import get_task
 from app.dal import result_dal, task_dal
+from app.tools.dicom import provide_p10_dicom, resolve_dicom_path
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -21,9 +21,7 @@ from app.dal import result_dal, task_dal
 # 204 = No Content: Delete
 # 404 = Not found
 
-result_router = APIRouter(
-    dependencies=[Depends(get_current_user)]
-)
+result_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
@@ -65,9 +63,7 @@ async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends
     status_code=200,
     tags=["results"],
 )
-async def get_result(
-    result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
-) -> ResultOut:
+async def get_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
     """Get an existing result.
 
     Parameters
@@ -103,8 +99,8 @@ async def get_result(
     tags=["results"],
 )
 async def get_all_task_results(
-    task_id: UUID | str,
-    user: Annotated[User, Depends(get_current_user)]) -> list[ResultOut]:
+    task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
+) -> list[ResultOut]:
     """Get all existing results of a certain task.
 
     Parameters
@@ -153,9 +149,7 @@ async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get
 
 @result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
 async def set_result(
-    result_id: UUID | str,
-    payload: SetResult,
-    user: Annotated[User, Depends(get_current_user)]
+    result_id: UUID | str, payload: SetResult, user: Annotated[User, Depends(get_current_user)]
 ) -> ResultOut:
     """Update an existing result.
 
@@ -187,49 +181,31 @@ async def set_result(
     return ResultOut(**result_updated.__dict__)
 
 
-@result_router.get("/dicom/{task_id}", response_class=FileResponse, status_code=200, tags=["results"])
-async def get_dicom(task_id: str | UUID, user: Annotated[User, Depends(get_current_user)]) -> FileResponse:
-    """Get DICOM file of a task result."""
+@result_router.get(
+    "/dcm/{workflow_id}/{task_id}/{result_id}/{filename}",
+    responses={200: {"content": {"application/dicom": {}}}},
+    tags=["results"],
+)
+async def get_dicom(
+    workflow_id: str, task_id: str, result_id: str, filename: str, user: Annotated[User, Depends(get_current_user)]
+) -> Response:
+    """
+    Serve a DICOM instance.
+
+      - If it's already a DICOM Part-10 file → return FileResponse (supports HTTP Range).
+      - Else → convert to Part-10 in memory and return StreamingResponse.
+
+    Headers:
+      - 'application/dicom' content type
+      - inline disposition (avoid forced download)
+      - 'Cache-Control: no-transform' to prevent proxies from gzipping (which breaks Range offsets)
+    """
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("task_id:", task_id)
+    print("RETURNING DICOM FILE...")
 
-    # Get task and perform checks
-    task_id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
-    if not (task := await get_task(task_id=task_id, user=user)):
-        raise HTTPException(status_code=400, detail="Task ID does not exist.")
-    if task.is_template:
-        raise HTTPException(status_code=400, detail="Task is not an instance.")
-    if not isinstance(task, DAGTaskOut):
-        raise HTTPException(status_code=400, detail="Task is not a DAG task, dicom does not exist.")
-    if not task.results:
-        raise HTTPException(status_code=404, detail="Task has no results, dicom does not exist.")
-
-    # Retrieve the latest result
-    result = sorted(task.results, key=lambda r: r.datetime_created, reverse=True)[0]
-    # Define the path to the DICOM file
-    data_path = (Path("/data") / str(task.workflow_id) / f"{str(result.id)}").resolve()
-    if not data_path.exists():
-        raise HTTPException(status_code=404, detail=f"Could not find result folder for result ID: {result.id}.")
-
-    dicom_file = sorted(data_path.rglob("*.dcm"))[0]    # Get the first DICOM file found
-    # TODO: Should return all dicom files from result folder
-    if not dicom_file.is_file():
-        raise HTTPException(status_code=404, detail=f"Dicom is not a file: {dicom_file}.")
-
-    print(f"Path to dicom file: {dicom_file}")
-
-    # FileResponse in Starlette supports range requests by default
-    resp = FileResponse(
-        path=str(dicom_file),
-        media_type="application/dicom",
-    )
-
-    # Make sure browsers/viewers treat it as inline binary (not forced download)
-    resp.headers["Content-Disposition"] = f'inline; filename="{str(dicom_file)}"'
-    # Explicitly advertise range support (useful for some viewers)
-    resp.headers["Accept-Ranges"] = "bytes"
-    # Optional: avoid caching if your data is dynamic or protected
-    # resp.headers["Cache-Control"] = "no-store"
-
-    return resp
+    dicom_path = resolve_dicom_path(workflow_id, task_id, result_id, filename)
+    try:
+        return provide_p10_dicom(dicom_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to provide P10 DICOM: {e}")

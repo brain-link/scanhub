@@ -16,18 +16,9 @@ x-dagster-common: &dagster_common
     # Mount the Dagster application source code (repository, jobs, ops, etc.)
     - ./services/dagster:/opt/dagster/app
     # Shared data lake between services
-    - data_lake:/data
-
+    - ./data_lake:/data
 
 services:
-  init-data-lake:
-    image: busybox
-    command: ["chmod", "-R", "777", "/data"]
-    volumes:
-      - data_lake:/data
-    user: "0:0"
-    restart: no
-
   # SERVICES
   # Workflow manager, device manager and exam manager create data tables in postgres DB
   workflow-manager:
@@ -38,7 +29,8 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/workflow-manager/app/:/app/
-      - data_lake:/data
+      # - data_lake:/data
+      - ./data_lake:/data
     environment:
       DATA_LAKE_DIRECTORY: /data
     healthcheck:
@@ -63,7 +55,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/device-manager/app/:/app/
-      - data_lake:/data
+      - ./data_lake:/data
     environment:
       DATA_LAKE_DIRECTORY: /data
     healthcheck:
@@ -88,7 +80,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/exam-manager/app/:/app/
-      - data_lake:/data
+      - ./data_lake:/data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -139,7 +131,6 @@ services:
       context: ./services/user-login-manager
       args: 
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
-        # - BASE_IMG=scanhub-base
     volumes:
       - ./services/user-login-manager/app/:/app/
     healthcheck:
@@ -271,6 +262,8 @@ services:
         condition: service_healthy
       dagster-dagit:
         condition: service_healthy
+      scanhub-ui:
+        condition: service_healthy
     extra_hosts:                                # somehow needed to find host.docker.internal under linux
       - 'host.docker.internal:host-gateway'     # for the access to host.docker.internal to work the firewall of the host needs to allow incoming connections
     secrets:
@@ -285,12 +278,15 @@ services:
       context: ./scanhub-ui
       dockerfile: ./Dockerfile
       args:
-        NODE_ENV: "development" # use "development" or "production"
+        NODE_ENV: "production" # or "development"
     volumes:
       - ./scanhub-ui/src:/app/src
-    depends_on:
-      - nginx
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   # DAGSTER
   dagster-dagit:
@@ -319,7 +315,7 @@ services:
 
 
 volumes:
-  data_lake:
+  # data_lake:  # Use bind-mount to inspect files, make sure data_lake/ exists at project root
   mongodb_data_sequence:
   postgres_data_scanhub:
   postgres_data_patient:

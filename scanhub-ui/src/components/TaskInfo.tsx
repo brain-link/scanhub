@@ -4,13 +4,13 @@
  *
  * TaskInfo.tsx is responsible for rendering additional information of a task item.
  */
-import * as React from 'react'
+import React from 'react'
 
 import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, TaskType } from '../openapi/generated-client/exam'
 
 
 function capitalize(str: string){
@@ -109,11 +109,11 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Dag && 'input_id' in task &&
+          task.task_type === TaskType.Dag && 'input_task_ids' in task &&
           <>
             <Typography fontSize='sm'>Input</Typography>
             <Typography level='body-sm' textColor='text.primary'>
-              {task.input_id ? String(task.input_id) : '-'}
+              {task.input_task_ids ? task.input_task_ids : '-'}
             </Typography>
           </>
         }

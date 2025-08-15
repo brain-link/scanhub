@@ -3,7 +3,6 @@
 
 """Exam manager main file."""
 
-
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import (
     http_exception_handler,
@@ -31,15 +30,13 @@ from . import LOG_CALL_DELIMITER
 ORIGINS = [
     # "http://localhost",       # frontend via nginx-proxy with default port
     # "https://localhost",      # frontend via nginx-proxy with default port
-    "http://localhost:8080",    # frontend via nginx-proxy with custom port
-    "https://localhost:8443",   # frontend via nginx-proxy with custom port
+    "http://localhost:8080",  # frontend via nginx-proxy with custom port
+    "https://localhost:8443",  # frontend via nginx-proxy with custom port
+    "https://localhost:3000",
 ]
 
 
-app = FastAPI(
-    openapi_url="/api/v1/exam/openapi.json",
-    docs_url="/api/v1/exam/docs"
-)
+app = FastAPI(openapi_url="/api/v1/exam/openapi.json", docs_url="/api/v1/exam/docs")
 
 
 app.add_middleware(
@@ -47,8 +44,8 @@ app.add_middleware(
     allow_origins=ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+    allow_headers=["*", "Range"],
+    expose_headers=["Content-Range", "Accept-Ranges", "Content-Length"],
 )
 
 

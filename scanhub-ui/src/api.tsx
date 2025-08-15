@@ -4,11 +4,11 @@
  *
  * api.tsx contains instances of the different apis.
  */
-import { PatientsApi, HealthApi as PatientManagerHealthApi } from './generated-client/patient'
-import { ExamsApi, WorkflowsApi, TasksApi, ResultsApi, MriSequencesApi, HealthApi as ExamManagerHealthApi } from './generated-client/exam'
-import { WorkflowManagerApi, HealthApi as WorkflowManagerHealthApi } from './generated-client/workflowmanager'
-import { UserApi, LoginApi, HealthApi as UserLoginManagerHealthApi } from './generated-client/userlogin'
-import { DevicesApi, HealthApi as DeviceManagerHealthApi } from './generated-client/device'
+import { PatientsApi, HealthApi as PatientManagerHealthApi } from './openapi/generated-client/patient'
+import { ExamsApi, WorkflowsApi, TasksApi, ResultsApi, MriSequencesApi, HealthApi as ExamManagerHealthApi } from './openapi/generated-client/exam'
+import { WorkflowManagerApi, HealthApi as WorkflowManagerHealthApi } from './openapi/generated-client/workflowmanager'
+import { UserApi, LoginApi, HealthApi as UserLoginManagerHealthApi } from './openapi/generated-client/userlogin'
+import { DevicesApi, HealthApi as DeviceManagerHealthApi } from './openapi/generated-client/device'
 import baseUrls from './utils/Urls'
 
 

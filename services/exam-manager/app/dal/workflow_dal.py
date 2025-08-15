@@ -39,7 +39,7 @@ async def add_workflow_data(payload: BaseWorkflow, creator: str) -> Workflow:
     return new_workflow
 
 
-async def get_workflow_data(workflow_id: UUID) -> (Workflow | None):
+async def get_workflow_data(workflow_id: UUID) -> Workflow | None:
     """Get workflow by id.
 
     Parameters
@@ -118,7 +118,7 @@ async def delete_workflow_data(workflow_id: UUID) -> bool:
         return False
 
 
-async def update_workflow_data(workflow_id: UUID, payload: BaseWorkflow) -> (Workflow | None):
+async def update_workflow_data(workflow_id: UUID, payload: BaseWorkflow) -> Workflow | None:
     """Update existing workflow in database.
 
     Parameters

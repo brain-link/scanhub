@@ -13,11 +13,11 @@ import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { workflowsApi } from '../api'
-import { BaseWorkflow, WorkflowOut } from '../generated-client/exam'
+import { BaseWorkflow, WorkflowOut } from '../openapi/generated-client/exam'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 

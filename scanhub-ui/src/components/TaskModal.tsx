@@ -21,7 +21,7 @@ import Stack from '@mui/joy/Stack'
 import Grid from '@mui/joy/Grid'
 import Textarea from '@mui/joy/Textarea'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import TaskInfo from './TaskInfo';
@@ -35,9 +35,9 @@ import {
   AcquisitionParameter,
   DAGTaskOut,
   BaseDAGTask
-} from '../generated-client/exam'
+} from '../openapi/generated-client/exam'
 
-import { DeviceOut } from '../generated-client/device/api'
+import { DeviceOut } from '../openapi/generated-client/device/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
@@ -485,12 +485,12 @@ function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>)
           <Grid md={4}>
             <FormLabel>Input</FormLabel>
             <Select
-              value={task.input_id ? task.input_id : null}
+              value={task.input_task_ids ? task.input_task_ids[0] : null}
               placeholder={'Select an input...'}
               size='sm'
               onChange={(event, value) => {
                 if (value) {
-                  setTask({ ...task, 'input_id': value })
+                  setTask({ ...task, 'input_task_ids': [value] })
                 }
               }}
             >

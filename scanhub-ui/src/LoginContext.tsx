@@ -7,7 +7,7 @@
 import React from 'react'
 import { createContext } from 'react'
 
-import { User } from './generated-client/userlogin'
+import { User } from './openapi/generated-client/userlogin'
 
 const LoginContext = createContext<[User | null, React.Dispatch<React.SetStateAction<User | null>>]>([null, () => {}])
 

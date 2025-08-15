@@ -5,7 +5,7 @@
  * WorkflowItem.tsx is responsible for rendering additional information
  * of a workflow item.
  */
-import * as React from 'react'
+import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'
@@ -21,7 +21,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import Button from '@mui/joy/Button'
 
-import { WorkflowOut } from '../generated-client/exam'
+import { WorkflowOut } from '../openapi/generated-client/exam'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'

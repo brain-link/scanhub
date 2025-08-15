@@ -6,9 +6,9 @@
  */
 import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
-import * as React from 'react'
+import React from 'react'
 
-import { WorkflowOut } from '../generated-client/exam'
+import { WorkflowOut } from '../openapi/generated-client/exam'
 
 
 function WorkflowInfo({ workflow }: { workflow: WorkflowOut }) {
