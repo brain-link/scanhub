@@ -9,7 +9,7 @@ from uuid import UUID
 from scanhub_libraries.models import BasePatient
 from sqlalchemy.future import select
 
-from .db import Patient, async_session
+from app.api.db import Patient, async_session
 
 
 async def add_patient(payload: BasePatient) -> Patient:

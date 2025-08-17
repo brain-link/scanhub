@@ -13,8 +13,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from api.db import engine, init_db
-from api.routes import router
+from app.api.db import engine, init_db
+from app.api.routes import router
 
 app = FastAPI(
     openapi_url="/api/v1/patient/openapi.json",
