@@ -280,10 +280,10 @@ def get_mrd_binary(
         ids_list = list(acq_ids)
         yield struct.pack("<IHH", magic, ver, len(ids_list))
         for aid, arr in zip(ids_list, arrays):
-            ncoils, nsamp, two = arr.shape
+            nsamp, _ = arr.shape
             payload = arr.tobytes(order="C")
             # [u32 acqId][u16 nCoils][u16 dtype=1(fc32)][u32 nSamples][u32 byteLen]
-            yield struct.pack("<IHHII", int(aid), int(ncoils), 1, int(nsamp), len(payload))
+            yield struct.pack("<IHHII", int(aid), 1, 1, int(nsamp), len(payload))
             view = memoryview(payload)
             step = 1 << 20
             for i in range(0, len(payload), step):
