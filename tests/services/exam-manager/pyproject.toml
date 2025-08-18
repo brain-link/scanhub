@@ -6,7 +6,7 @@ authors = ["Ben Wilhelm <ben.wilhelm@uniklinik-freiburg.de>"]
 license = "GPLv3 or Scanhub proprietary license."
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.13"
 pytest = "^8.3.2"
 
 
