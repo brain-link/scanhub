@@ -120,7 +120,6 @@ async def readiness() -> dict:
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
     required_tables = ["exam", "workflow", "task"]
-    # required_tables = ["exam", "workflow", "task", "device"]
 
     if not all(t in existing_tables for t in required_tables):
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")

@@ -1,6 +1,9 @@
 {
   "name": "scanhub-ui",
   "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@4.9.2",
   "license": "SEE LICENSE IN LICENSE",
   "source": "index.html",
   "dependencies": {
@@ -91,6 +94,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@4.9.2"
+  }
 }

@@ -21,9 +21,18 @@ import {
   LegendComponent,
   TooltipComponent,
   DataZoomComponent,
+  ToolboxComponent,
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-echartsUse([LineChart, GridComponent, LegendComponent, TooltipComponent, DataZoomComponent, CanvasRenderer]);
+echartsUse([
+  LineChart,
+  GridComponent,
+  LegendComponent,
+  TooltipComponent,
+  DataZoomComponent,
+  ToolboxComponent,
+  CanvasRenderer,
+]);
 const echarts = { init, use: echartsUse };
 
 export default function RawDataViewer({ taskId }: { taskId: string | undefined }) {
@@ -32,10 +41,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
   const [wantTime, setWantTime] = useState(true);
   const [wantFreq, setWantFreq] = useState(false);
   const [mode, setMode] = useState<ComplexMode>('abs');
-  const [zeroPadPow2, setZeroPadPow2] = useState(true);
   const [colormap, setColormap] = useState<ColormapName>('viridis');
-  const [serverStride, setServerStride] = useState(1);
-  const [clientDownsample, setClientDownsample] = useState(4000);
   const [coil, setCoil] = useState(0);
   const [acqRange, setAcqRange] = useState<[number, number]>([0, 0]);
   const [currentAcq, setCurrentAcq] = useState(0);
@@ -64,7 +70,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     const meta = metaQuery.data;
     if (!meta) return;
     const n = meta.acquisitions?.length ? meta.acquisitions.length : 1;
-    setAcqRange([0, Math.max(0, n - 1)]);
+    setAcqRange([0, Math.min(10, n - 1)]);
     setCurrentAcq(0);
     setCoil(0);
   }, [metaQuery.data]);
@@ -89,7 +95,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     resultId,
     idsExpr,
     0,
-    serverStride
+    1
   );
 
   // ---------------- Worker lifecycle (always mounted) ----------------
@@ -105,8 +111,6 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
   useEffect(() => {
     const meta = metaQuery.data;
     const batch = acqQuery.data;
-    console.log("META", meta)
-    console.log("BATCH", batch)
     const worker = workerRef.current;
     if (!meta || !batch || !worker) return;
 
@@ -123,7 +127,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         nSamples: acq.nSamples,
         data: acq.data,
         coil,
-        label: `Acq ${acq.acqId} • Coil ${coil}`,
+        label: `Acq k=${acq.acqId} (Coil ${coil})`,
         sampleRateHz: fs,
       };
     });
@@ -163,13 +167,27 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         heightPct: number,
         gridIdx: number
       ) => {
-        grid.push({ top: `${topPct}%`, height: `${heightPct}%`, left: 60, right: 20 });
+
+        grid.push({
+          top: `${topPct}%`,
+          height: `${heightPct}%`,
+          left: 60,
+          right: 20
+        });
+
         xAxis.push({
           type: 'value',
           gridIndex: gridIdx,
           name: title === 'Time' ? 'Time (s)' : 'Frequency (Hz)',
+          nameLocation: 'middle',
         });
-        yAxis.push({ type: 'value', gridIndex: gridIdx, name: yLabel(title === 'Time' ? 'time' : 'freq') });
+
+        yAxis.push({
+          type: 'value',
+          gridIndex: gridIdx,
+          name: yLabel(title === 'Time' ? 'time' : 'freq'),
+          nameLocation: 'middle',
+        });
 
         traces.forEach((t, idx) => {
           const len = t.x.length;
@@ -189,31 +207,63 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         });
 
         dataZoom.push(
-          { type: 'inside', xAxisIndex: gridIdx },
-          { type: 'slider', xAxisIndex: gridIdx, height: 18, bottom: 0 }
+          {
+            type: 'inside',
+            xAxisIndex: gridIdx,
+            filterMode: 'none',   // independent zoom
+          },
         );
       };
 
       if (wantTime && wantFreq) {
         addPanel(time, 'Time', 6, 40, 0);
-        addPanel(freq, 'Freq', 56, 40, 1);
+        addPanel(freq, 'Freq', 54, 40, 1);
       } else if (wantTime) {
         addPanel(time, 'Time', 6, 86, 0);
       } else if (wantFreq) {
         addPanel(freq, 'Freq', 6, 86, 0);
       }
 
-      const legendShow = (wantTime && time.length > 1) || (wantFreq && freq.length > 1);
-
       setOption({
-        animation: false,
-        tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
-        legend: { show: legendShow },
+        animation: true,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'cross', snap: true },
+          formatter: (params: any) => {
+            if (!params || params.length === 0) return '';
+            // cut off at 10 series
+            const shown = params.slice(0, 10);
+            // First line: x value
+            let res = params[0].axisValueLabel + '<br/>';
+            // Each line is marker + series name + value (like default)
+            res += shown
+              .map((p: any) => `${p.marker}${p.seriesName}: ${p.data[1].toFixed(5)}`)
+              .join('<br/>');
+            // Optional: indicate more values
+            if (params.length > 10) { res += `<br/>… +${params.length - 10} more`; }
+            return res;
+          },
+        },
+        // legend: { show: legendShow },
         grid,
         xAxis,
         yAxis,
         dataZoom,
         series,
+        toolbox: {
+          show: true,
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none',   // zoom only in x by default
+              title: {
+                zoom: 'Zoom',
+                back: 'Reset Zoom'
+              }
+            },
+            restore: { title: 'Restore' },
+            saveAsImage: { title: 'Download' },
+          },
+        },
       });
 
       worker!.removeEventListener('message', onMsg);
@@ -225,8 +275,6 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
       wantTime,
       wantFreq,
       mode,
-      zeroPadPow2,
-      downsampleTarget: clientDownsample,
     });
   }, [
     metaQuery.data,
@@ -235,8 +283,6 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     wantTime,
     wantFreq,
     mode,
-    zeroPadPow2,
-    clientDownsample,
     colormap,
   ]);
 
@@ -247,7 +293,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
 
   return (
 
-    <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: 'calc(100vh - var(--Navigation-height))', p: 1, gap: 1}}>
+    <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: 'calc(100vh - var(--Navigation-height)) - 4', p: 2, gap: 1}}>
       <Controls
         metaCount={metaQuery.data?.acquisitions?.length ?? 0}
         overlay={overlay}
@@ -258,14 +304,8 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         setWantFreq={setWantFreq}
         mode={mode}
         setMode={setMode}
-        zeroPadPow2={zeroPadPow2}
-        setZeroPadPow2={setZeroPadPow2}
         colormap={colormap}
         setColormap={setColormap}
-        serverStride={serverStride}
-        setServerStride={setServerStride}
-        clientDownsample={clientDownsample}
-        setClientDownsample={setClientDownsample}
         coil={coil}
         setCoil={setCoil}
         acqRange={acqRange}
@@ -273,8 +313,8 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         currentAcq={currentAcq}
         setCurrentAcq={setCurrentAcq}
       />
-      <Card variant="plain" color="neutral" sx={{ p: 0.5, height: '100%', border: '5px solid' }}>
-        <div style={{ position: 'relative' }}>
+      <Card variant="outlined" color="neutral" sx={{ p: 0.5, height: '100%' }}>
+
           {
             showEmpty ? (
               <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
@@ -303,7 +343,6 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
               </div>
             )
           }
-        </div>
       </Card>
     </Stack>
   );
