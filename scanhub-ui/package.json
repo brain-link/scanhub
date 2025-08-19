@@ -1,7 +1,6 @@
 {
   "name": "scanhub-ui",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "packageManager": "yarn@4.9.2",
   "license": "SEE LICENSE IN LICENSE",
