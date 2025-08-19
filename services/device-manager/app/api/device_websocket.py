@@ -9,6 +9,7 @@ It includes functionalities for:
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
+
 import hashlib
 import json
 import os
@@ -17,8 +18,6 @@ from secrets import compare_digest, token_hex
 from typing import Annotated, Dict, Optional
 from uuid import UUID
 
-import app.api.exam_requests as exam_requests
-from app.api.dal import dal_get_device, dal_update_device
 from fastapi import (
     APIRouter,
     Depends,
@@ -29,6 +28,7 @@ from fastapi import (
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
+
 from scanhub_libraries.models import (
     AcquisitionPayload,
     AcquisitionTaskOut,
@@ -39,6 +39,9 @@ from scanhub_libraries.models import (
 )
 from scanhub_libraries.security import compute_complex_password_hash
 from sqlalchemy import exc
+
+import app.api.exam_requests as exam_requests
+from app.api.dal import dal_get_device, dal_update_device
 
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")

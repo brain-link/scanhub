@@ -8,12 +8,15 @@ asynchronous database operations and Pydantic models for data validation.
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
+
 from uuid import UUID
 
-from app.api.db import Device, async_session
-from scanhub_libraries.models import DeviceCreationRequest
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
+
+from scanhub_libraries.models import DeviceCreationRequest
+
+from app.api.db import Device, async_session
 
 
 async def dal_create_device(request: DeviceCreationRequest, token_hash: str, salt: str) -> Device:

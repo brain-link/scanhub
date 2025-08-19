@@ -3,9 +3,6 @@
 
 """Main file for the device manager service."""
 
-from app.api.db import engine, init_db
-from app.api.device_endpoints import router as http_router
-from app.api.device_websocket import router as ws_router
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import (
     http_exception_handler,
@@ -15,6 +12,10 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from app.api.db import engine, init_db
+from app.api.device_endpoints import router as http_router
+from app.api.device_websocket import router as ws_router
 
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",

@@ -18,8 +18,6 @@ from typing import Annotated, Any
 from uuid import UUID
 
 import requests
-from app.api.dagster_queries import list_dagster_jobs, parse_job_id
-from app.api.scanhub_requests import create_blank_result, get_result, get_task, set_result, set_task
 from dagster import RunConfig
 from dagster_graphql import DagsterGraphQLClient
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -37,9 +35,18 @@ from scanhub_libraries.models import (
     TaskType,
     WorkflowOut,
 )
-from scanhub_libraries.resources import SCANHUB_RESOURCE_KEY, JobConfigResource
+from scanhub_libraries.resources import JobConfigResource, SCANHUB_RESOURCE_KEY
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
+
+from app.api.dagster_queries import list_dagster_jobs, parse_job_id
+from app.api.scanhub_requests import (
+    create_blank_result,
+    get_result,
+    get_task,
+    set_result,
+    set_task,
+)
 
 # Define the URIs for the different managers
 EXAM_MANAGER_URI = "exam-manager:8000"

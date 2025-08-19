@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Workflow manager main."""
-from app.api.manager_endpoints import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.manager_endpoints import router
 
 app = FastAPI(
     openapi_url="/api/v1/workflowmanager/openapi.json",
