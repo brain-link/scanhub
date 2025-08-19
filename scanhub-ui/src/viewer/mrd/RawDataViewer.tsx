@@ -5,13 +5,17 @@ import { useData } from './hooks/useData';
 import { useMeta } from './hooks/useMeta';
 import { useFileIds } from './hooks/useFileIds';
 import { ColormapName, ComplexMode } from './types';
+import type { CallbackDataParams } from 'echarts/types/dist/shared';
 import Controls from './Controls';
 import { colorCycle } from './utils/colormaps';
+import { WorkerMessage } from './utils/interfaces';
 import Container from '@mui/joy/Container';
 import AlertItem from '../../components/AlertItem';
 import { Alerts } from '../../interfaces/components.interface';
 import Card from '@mui/joy/Card';
 import Stack from '@mui/joy/Stack';
+
+import type { EChartsOption } from 'echarts';
 
 // ---- ECharts (no barrel import) ----
 import { init, use as echartsUse } from 'echarts/core';
@@ -23,7 +27,16 @@ import {
   DataZoomComponent,
   ToolboxComponent,
 } from 'echarts/components';
+import type {
+  SeriesOption,
+  XAXisComponentOption,
+  YAXisComponentOption,
+  GridComponentOption,
+  DataZoomComponentOption,
+} from 'echarts';
 import { CanvasRenderer } from 'echarts/renderers';
+import { MRDAcquisitionInfo } from '../../openapi/generated-client/exam';
+import { ParsedAcq } from './utils/packet';
 echartsUse([
   LineChart,
   GridComponent,
@@ -53,7 +66,6 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     fileIds,
     isLoading: idsLoading,
     isError: idsError,
-    error: idsErrorObj,
   } = useFileIds(taskId);
 
   // Derive IDs (safe defaults) and readiness
@@ -106,7 +118,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
   }, []);
 
   // ---------------- Chart option state ----------------
-  const [option, setOption] = useState<any>({});
+  const [option, setOption] = useState<EChartsOption>({});
 
   useEffect(() => {
     const meta = metaQuery.data;
@@ -116,9 +128,9 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
 
     // dwell_time (sec) -> sampleRateHz per acquisition
     const dwellById = new Map<number, number>();
-    meta.acquisitions?.forEach((a: any) => dwellById.set(a.acquisition_id, a.dwell_time));
+    meta.acquisitions?.forEach((a: MRDAcquisitionInfo) => dwellById.set(a.acquisition_id, a.dwell_time));
 
-    const items = batch.map((acq: any) => {
+    const items = batch.map((acq: ParsedAcq) => {
       const dwell = dwellById.get(acq.acqId)!;
       const fs = 1 / dwell;
       return {
@@ -132,18 +144,18 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
       };
     });
 
-    const onMsg = (ev: MessageEvent<any>) => {
+    const onMsg = (ev: MessageEvent<WorkerMessage>) => {
       const { time, freq } = ev.data as {
         time: { label: string; x: Float32Array; y: Float32Array }[];
         freq: { label: string; x: Float32Array; y: Float32Array }[];
       };
 
       const colors = colorCycle(colormap, Math.max(time.length, freq.length));
-      const series: any[] = [];
-      const xAxis: any[] = [];
-      const yAxis: any[] = [];
-      const grid: any[] = [];
-      const dataZoom: any[] = [];
+      const series: SeriesOption[] = [];
+      const xAxis: XAXisComponentOption[] = [];
+      const yAxis: YAXisComponentOption[] = [];
+      const grid: GridComponentOption[] = [];
+      const dataZoom: DataZoomComponentOption[] = [];
 
       const yLabel = (domain: 'time' | 'freq') =>
         mode === 'abs'
@@ -229,18 +241,19 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         tooltip: {
           trigger: 'axis',
           axisPointer: { type: 'cross', snap: true },
-          formatter: (params: any) => {
-            if (!params || params.length === 0) return '';
-            // cut off at 10 series
-            const shown = params.slice(0, 10);
+          formatter: (params: CallbackDataParams | CallbackDataParams[]) => {
+            const list = Array.isArray(params) ? params : [params];
+            if (list.length === 0) return '';
             // First line: x value
-            let res = params[0].axisValueLabel + '<br/>';
-            // Each line is marker + series name + value (like default)
-            res += shown
-              .map((p: any) => `${p.marker}${p.seriesName}: ${p.data[1].toFixed(5)}`)
-              .join('<br/>');
+            let res = '';
+            // Cut off at 10 series, each line is marker + series name + value (like default)
+            res += list.slice(0, 10).map((p) => {
+              // p.data can be unknown, so cast to [number, number] if that’s your shape
+              const point = p.data as [number, number];
+              return `${p.marker}${p.seriesName}: ${point[1].toFixed(5)}`;
+            }).join('<br/>');
             // Optional: indicate more values
-            if (params.length > 10) { res += `<br/>… +${params.length - 10} more`; }
+            if (list.length > 10) { res += '<br/>...'; }
             return res;
           },
         },

@@ -36,17 +36,19 @@ export default function Controls(p: ControlsProps) {
 
   return (
     
-    <Stack direction={"row"} sx={{alignItems: 'center'}} gap={2}>
+    <Stack direction={'row'} sx={{alignItems: 'center', justifyContent: 'flex-end'}} gap={2}>
      
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+        <FormLabel>Domain</FormLabel>
         <Checkbox label="Time" size="sm" checked={p.wantTime} onChange={e=>p.setWantTime(e.target.checked)} />
         <Checkbox label="Frequency" size="sm" checked={p.wantFreq} onChange={e=>p.setWantFreq(e.target.checked)} />
       </Box>
 
       <FormLabel>Complex</FormLabel>
       <Select
+        size="sm"
         value={p.mode}
-        defaultValue={"abs"}
+        defaultValue={'abs'}
         onChange={(_, value) => p.setMode(value as ComplexMode)}
         required
       >
@@ -59,8 +61,9 @@ export default function Controls(p: ControlsProps) {
 
       <FormLabel>Colormap</FormLabel>
       <Select
+        size="sm"
         value={p.colormap}
-        defaultValue={"abs"}
+        defaultValue={'abs'}
         onChange={(_, value) => p.setColormap(value as ColormapName)}
         required
       >
@@ -70,6 +73,7 @@ export default function Controls(p: ControlsProps) {
 
       <FormLabel>Coil</FormLabel>
       <Input
+        size="sm"
         type="number"
         value={p.coil}
         slotProps={{ input: {min: 0, max: 999, step: 1} }}
@@ -90,24 +94,27 @@ export default function Controls(p: ControlsProps) {
       /> */}
       {
         p.overlay ?
-          <Stack direction={"row"} gap={2}>
+          <Stack direction={'row'} gap={2}>
             <FormLabel>Acquisitions</FormLabel>
             <Input
+              size="sm"
               type="number"
               value={p.acqRange[0]}
               slotProps={{ input: {min: 0, max: maxIdx, step: 1} }}
               onChange={(e) => p.setAcqRange([Math.max(0, Number(e.target.value)), p.acqRange[1]])}
             />
             <Input
+              size="sm"
               type="number"
               value={p.acqRange[1]}
               slotProps={{ input: {min: 0, max: maxIdx, step: 1} }}
               onChange={(e) => p.setAcqRange([p.acqRange[0], Math.min(maxIdx, Number(e.target.value))])}
             />
           </Stack> :
-          <Stack direction={"row"} gap={2}>
+          <Stack direction={'row'} gap={2}>
             <FormLabel>Current</FormLabel>
             <Input
+              size="sm"
               type="number"
               value={p.currentAcq}
               slotProps={{ input: {min: 0, max: maxIdx, step: 1} }}
