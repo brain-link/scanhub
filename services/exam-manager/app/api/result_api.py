@@ -3,20 +3,21 @@
 
 """Definition of result API endpoints accessible through swagger UI."""
 
+import struct
 from typing import Annotated
 from uuid import UUID
-import struct
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from scanhub_libraries.models import ResultOut, SetResult, User, MRDMetaResponse, MRDAcquisitionInfo
-from scanhub_libraries.security import get_current_user
 from fastapi.responses import StreamingResponse
+from scanhub_libraries.models import MRDMetaResponse, ResultOut, SetResult, User
+from scanhub_libraries.security import get_current_user
 from starlette.responses import Response
 
+import app.tools.mrd_provider as mrd
 from app import LOG_CALL_DELIMITER
 from app.dal import result_dal, task_dal
 from app.tools.dicom_provider import provide_p10_dicom, resolve_dicom_path
-import app.tools.mrd_provider as mrd
+
 # Http status codes
 # 200 = Ok: GET, PUT
 # 201 = Created: POST
@@ -223,7 +224,8 @@ async def get_dicom(
     tags=["results", "data"],
     summary="Get ISMRMRD metadata (indexed acquisitions)",
 )
-def get_meta(workflow_id: str, task_id: str, result_id: str):
+def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
+    """Get MRD meta info."""
     try:
         path = mrd.locate_mrd(workflow_id, task_id, result_id)
     except FileNotFoundError:
@@ -262,6 +264,7 @@ def get_mrd_binary(
     coil_idx: int = Query(0, ge=0, description="Coil index"),
     stride: int = Query(1, ge=1, description="Decimate samples by stride"),
 ):
+    """Get MRD as binary stream."""
     try:
         path = mrd.locate_mrd(workflow_id, task_id, result_id)
     except FileNotFoundError:
