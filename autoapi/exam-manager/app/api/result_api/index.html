@@ -462,6 +462,12 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.get_dicom" title="exam-manager.app.api.result_api.get_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dicom</span></code></a>(]) → starlette.responses.Response)</p></td>
 <td><p>Serve a DICOM instance.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.get_meta" title="exam-manager.app.api.result_api.get_meta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_meta</span></code></a>(workflow_id, task_id, result_id)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.result_api.get_mrd_binary" title="exam-manager.app.api.result_api.get_mrd_binary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mrd_binary</span></code></a>(workflow_id, task_id, result_id[, ids, ...])</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -613,6 +619,16 @@ If this is the pydantic ResultBase model, only fields in the base model can be u
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.result_api.get_meta">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.result_api.</span></span><span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.result_api.get_meta" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.result_api.get_mrd_binary">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.result_api.</span></span><span class="sig-name descname"><span class="pre">get_mrd_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Query(...,</span> <span class="pre">description=&quot;IDs:</span> <span class="pre">'0,1,10-20,40-50:2'&quot;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coil_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Query(0,</span> <span class="pre">ge=0,</span> <span class="pre">description='Coil</span> <span class="pre">index')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Query(1,</span> <span class="pre">ge=1,</span> <span class="pre">description='Decimate</span> <span class="pre">samples</span> <span class="pre">by</span> <span class="pre">stride')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.result_api.get_mrd_binary" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 
@@ -655,6 +671,8 @@ If this is the pydantic ResultBase model, only fields in the base model can be u
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.delete_result"><code class="docutils literal notranslate"><span class="pre">delete_result()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.set_result"><code class="docutils literal notranslate"><span class="pre">set_result()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.get_dicom"><code class="docutils literal notranslate"><span class="pre">get_dicom()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.get_meta"><code class="docutils literal notranslate"><span class="pre">get_meta()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.result_api.get_mrd_binary"><code class="docutils literal notranslate"><span class="pre">get_mrd_binary()</span></code></a></li>
 </ul>
 </li>
 </ul>

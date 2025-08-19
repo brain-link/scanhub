@@ -1,7 +1,7 @@
-exam-manager.app.tools.dicom
-============================
+exam-manager.app.tools.dicom_provider
+=====================================
 
-.. py:module:: exam-manager.app.tools.dicom
+.. py:module:: exam-manager.app.tools.dicom_provider
 
 .. autoapi-nested-parse::
 
@@ -14,7 +14,7 @@ Attributes
 
 .. autoapisummary::
 
-   exam-manager.app.tools.dicom.DATA_LAKE_DIR
+   exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR
 
 
 Functions
@@ -22,8 +22,8 @@ Functions
 
 .. autoapisummary::
 
-   exam-manager.app.tools.dicom.resolve_dicom_path
-   exam-manager.app.tools.dicom.provide_p10_dicom
+   exam-manager.app.tools.dicom_provider.resolve_dicom_path
+   exam-manager.app.tools.dicom_provider.provide_p10_dicom
 
 
 Module Contents
