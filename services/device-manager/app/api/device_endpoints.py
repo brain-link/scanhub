@@ -9,22 +9,25 @@ It includes functionalities for:
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
-
 import io
 import json
 from secrets import token_hex
 from typing import Annotated, List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+)
 from fastapi.responses import StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
-
-from scanhub_libraries.models import DeviceCreationRequest, DeviceOut, User
-from scanhub_libraries.security import (
-    compute_complex_password_hash,
-    get_current_user,
+from scanhub_libraries.models import (
+    DeviceCreationRequest,
+    DeviceOut,
+    User,
 )
+from scanhub_libraries.security import compute_complex_password_hash, get_current_user
 
 from app.api.dal import (
     dal_create_device,

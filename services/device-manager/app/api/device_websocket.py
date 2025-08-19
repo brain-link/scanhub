@@ -9,7 +9,6 @@ It includes functionalities for:
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
-
 import hashlib
 import json
 import os
@@ -28,7 +27,6 @@ from fastapi import (
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
-
 from scanhub_libraries.models import (
     AcquisitionPayload,
     AcquisitionTaskOut,
