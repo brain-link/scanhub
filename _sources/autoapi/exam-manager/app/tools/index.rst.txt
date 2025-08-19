@@ -15,8 +15,9 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
-   /autoapi/exam-manager/app/tools/dicom/index
+   /autoapi/exam-manager/app/tools/dicom_provider/index
    /autoapi/exam-manager/app/tools/helper/index
+   /autoapi/exam-manager/app/tools/mrd_provider/index
    /autoapi/exam-manager/app/tools/mri_sequence_plot/index
 
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>exam-manager.app.tools.dicom &#8212; ScanHub Documentation</title>
+    <title>exam-manager.app.tools.dicom_provider &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../../../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/exam-manager/app/tools/dicom/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/exam-manager/app/tools/dicom_provider/index';</script>
     <link rel="icon" href="../../../../../_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -409,7 +409,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">exam-manager.app.tools.dicom</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">exam-manager.app.tools.dicom_provider</span></li>
   </ul>
 </nav>
 </div>
@@ -426,14 +426,14 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-exam-manager.app.tools.dicom">
-<span id="exam-manager-app-tools-dicom"></span><h1>exam-manager.app.tools.dicom<a class="headerlink" href="#module-exam-manager.app.tools.dicom" title="Link to this heading">#</a></h1>
+  <section id="module-exam-manager.app.tools.dicom_provider">
+<span id="exam-manager-app-tools-dicom-provider"></span><h1>exam-manager.app.tools.dicom_provider<a class="headerlink" href="#module-exam-manager.app.tools.dicom_provider" title="Link to this heading">#</a></h1>
 <p>Helper functions for dicom.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.tools.dicom.DATA_LAKE_DIR" title="exam-manager.app.tools.dicom.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR" title="exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -444,10 +444,10 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.tools.dicom.resolve_dicom_path" title="exam-manager.app.tools.dicom.resolve_dicom_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_dicom_path</span></code></a>(→ pathlib.Path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.tools.dicom_provider.resolve_dicom_path" title="exam-manager.app.tools.dicom_provider.resolve_dicom_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_dicom_path</span></code></a>(→ pathlib.Path)</p></td>
 <td><p>Build and validate the requested file path, prevent traversal, return (path, safe_name).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.tools.dicom.provide_p10_dicom" title="exam-manager.app.tools.dicom.provide_p10_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">provide_p10_dicom</span></code></a>(→ starlette.responses.Response)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.tools.dicom_provider.provide_p10_dicom" title="exam-manager.app.tools.dicom_provider.provide_p10_dicom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">provide_p10_dicom</span></code></a>(→ starlette.responses.Response)</p></td>
 <td><p>Ensure the dataset at <cite>path</cite> is a valid DICOM Part-10 file.</p></td>
 </tr>
 </tbody>
@@ -457,19 +457,19 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py data">
-<dt class="sig sig-object py" id="exam-manager.app.tools.dicom.DATA_LAKE_DIR">
-<span class="sig-prename descclassname"><span class="pre">exam-manager.app.tools.dicom.</span></span><span class="sig-name descname"><span class="pre">DATA_LAKE_DIR</span></span><a class="headerlink" href="#exam-manager.app.tools.dicom.DATA_LAKE_DIR" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.tools.dicom_provider.</span></span><span class="sig-name descname"><span class="pre">DATA_LAKE_DIR</span></span><a class="headerlink" href="#exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.tools.dicom.resolve_dicom_path">
-<span class="sig-prename descclassname"><span class="pre">exam-manager.app.tools.dicom.</span></span><span class="sig-name descname"><span class="pre">resolve_dicom_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span></span></span><a class="headerlink" href="#exam-manager.app.tools.dicom.resolve_dicom_path" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="exam-manager.app.tools.dicom_provider.resolve_dicom_path">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.tools.dicom_provider.</span></span><span class="sig-name descname"><span class="pre">resolve_dicom_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workflow_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span></span></span><a class="headerlink" href="#exam-manager.app.tools.dicom_provider.resolve_dicom_path" title="Link to this definition">#</a></dt>
 <dd><p>Build and validate the requested file path, prevent traversal, return (path, safe_name).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="exam-manager.app.tools.dicom.provide_p10_dicom">
-<span class="sig-prename descclassname"><span class="pre">exam-manager.app.tools.dicom.</span></span><span class="sig-name descname"><span class="pre">provide_p10_dicom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dicom_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">starlette.responses.Response</span></span></span><a class="headerlink" href="#exam-manager.app.tools.dicom.provide_p10_dicom" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="exam-manager.app.tools.dicom_provider.provide_p10_dicom">
+<span class="sig-prename descclassname"><span class="pre">exam-manager.app.tools.dicom_provider.</span></span><span class="sig-name descname"><span class="pre">provide_p10_dicom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dicom_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">starlette.responses.Response</span></span></span><a class="headerlink" href="#exam-manager.app.tools.dicom_provider.provide_p10_dicom" title="Link to this definition">#</a></dt>
 <dd><p>Ensure the dataset at <cite>path</cite> is a valid DICOM Part-10 file.</p>
 <ul class="simple">
 <li><p>If already Part-10, return FileResponse</p></li>
@@ -522,9 +522,9 @@ otherwise default to ExplicitVRLittleEndian (widely supported).</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.tools.dicom.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.tools.dicom.resolve_dicom_path"><code class="docutils literal notranslate"><span class="pre">resolve_dicom_path()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.tools.dicom.provide_p10_dicom"><code class="docutils literal notranslate"><span class="pre">provide_p10_dicom()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.tools.dicom_provider.resolve_dicom_path"><code class="docutils literal notranslate"><span class="pre">resolve_dicom_path()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.tools.dicom_provider.provide_p10_dicom"><code class="docutils literal notranslate"><span class="pre">provide_p10_dicom()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -534,7 +534,7 @@ otherwise default to ExplicitVRLittleEndian (widely supported).</p></li>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../../../_sources/autoapi/exam-manager/app/tools/dicom/index.rst.txt"
+      <li><a href="../../../../../_sources/autoapi/exam-manager/app/tools/dicom_provider/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
