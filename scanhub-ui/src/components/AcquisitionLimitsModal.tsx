@@ -66,7 +66,7 @@ function ConfirmAcquisitionLimitsForm(props: ModalProps & { item: PatientOut })
           <Input
             type="number"
             defaultValue={patient.height}
-            slotProps={{ input: {min: 0, max: 999, step: 5} }}
+            slotProps={{ input: {min: 0, max: 999, step: 1} }}
             onChange={(e) => setPatient({ ...patient, height: parseFloat(e.target.value) })}
           />
         </Grid>
@@ -76,7 +76,7 @@ function ConfirmAcquisitionLimitsForm(props: ModalProps & { item: PatientOut })
           <Input
             type="number"
             defaultValue={patient.weight}
-            slotProps={{ input: {min: 0, max: 999, step: 5} }}
+            slotProps={{ input: {min: 0, max: 999, step: 1} }}
             onChange={(e) => setPatient({ ...patient, weight: parseFloat(e.target.value) })}
           />
         </Grid>
