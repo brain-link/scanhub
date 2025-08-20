@@ -27,7 +27,7 @@ import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
 import { DeviceOut } from '../openapi/generated-client/device/api'
 import DeviceCreateModal from '../components/DeviceCreateModal'
-import ConfirmDeleteModal from '../components/ConfirmDelteModal'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 
 
 export default function DeviceView() {

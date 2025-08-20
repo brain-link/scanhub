@@ -25,7 +25,7 @@ import { User, UserRole } from '../openapi/generated-client/userlogin'
 import { Alerts } from '../interfaces/components.interface'
 import UserCreateModal from '../components/UserCreateModal'
 import PasswordModal from '../components/PasswordModal'
-import ConfirmDeleteModal from '../components/ConfirmDelteModal'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 
 
 export default function UserManagementView() {
