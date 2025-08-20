@@ -119,10 +119,6 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[str]
 
 
-   .. py:attribute:: parameter
-      :type:  sqlalchemy.orm.Mapped[dict]
-
-
    .. py:attribute:: datetime_created
       :type:  sqlalchemy.orm.Mapped[datetime.datetime]
 
@@ -131,7 +127,7 @@ Module Contents
       :type:  sqlalchemy.orm.Mapped[datetime.datetime]
 
 
-   .. py:method:: update(data: dict) -> None
+   .. py:method:: update(data: dict)
 
       Update attributes of orm model.
 

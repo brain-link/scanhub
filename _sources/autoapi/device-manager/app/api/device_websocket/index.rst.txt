@@ -27,7 +27,6 @@ Attributes
    device-manager.app.api.device_websocket.oauth2_scheme
    device-manager.app.api.device_websocket.router
    device-manager.app.api.device_websocket.dict_id_websocket
-   device-manager.app.api.device_websocket.dict_id_parameters
 
 
 Functions
@@ -59,9 +58,6 @@ Module Contents
 
 .. py:data:: dict_id_websocket
    :type:  Dict[uuid.UUID, fastapi.WebSocket]
-
-.. py:data:: dict_id_parameters
-   :type:  dict[uuid.UUID, dict]
 
 .. py:function:: start_scan_via_websocket(task: scanhub_libraries.models.AcquisitionTaskOut, access_token: Annotated[str, Depends(oauth2_scheme)])
    :async:
@@ -109,7 +105,7 @@ Module Contents
    Handle device status updates.
 
 
-.. py:function:: handle_file_transfer(websocket: fastapi.WebSocket, header: dict, device_id: uuid.UUID) -> None
+.. py:function:: handle_file_transfer(websocket: fastapi.WebSocket, header: dict) -> None
    :async:
 
 
