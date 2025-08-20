@@ -15,7 +15,7 @@ authors = [
     {name="David Schote", email="david.schote@brain-link.de"}
 ]
 readme = "README.md"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.13,<3.14"
 keywords = ["SDK, ScanHub, console, Device-SDK"]
 
 classifiers = [
@@ -24,8 +24,8 @@ classifiers = [
 ]
 
 dependencies = [
-    "numpy",
-    "websockets>=10.4",
+    "numpy>=2.3.2",
+    "websockets>=15.0.1",
 ]
 
 [tool.setuptools.package-data]
