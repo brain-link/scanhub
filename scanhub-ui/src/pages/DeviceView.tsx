@@ -16,6 +16,10 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Container from '@mui/system/Container'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
+import Modal from '@mui/joy/Modal'
+import Sheet from '@mui/joy/Sheet'
+import FileOpenOutlinedIcon from '@mui/icons-material/FileOpen'
+import ModalClose from '@mui/joy/ModalClose'
 
 import NotificationContext from '../NotificationContext'
 import { deviceApi } from '../api'
@@ -31,6 +35,8 @@ export default function DeviceView() {
   const [deviceCreateModalOpen, setDeviceCreateModalOpen] = React.useState<boolean>(false)
   // const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
   const [deviceToDelete, setDeviceToDelete] = React.useState<DeviceOut | undefined>(undefined)
+  const [deviceOpen, setDeviceOpen] = React.useState<DeviceOut | undefined>(undefined)
+  
 
   const {
     data: devices,
@@ -106,21 +112,35 @@ export default function DeviceView() {
   }
 
   const columns: GridColDef<DeviceOut>[] = [
-    { field: 'id', headerName: 'ID', width: 100, editable: false },
+    {
+      field: 'open', type: 'actions', headerName: '', width: 50, cellClassName: 'open', filterable: false,
+      getActions: (row) => [
+        <GridActionsCellItem
+          key='2'
+          icon={<FileOpenOutlinedIcon />}
+          label='Open'
+          color='inherit'
+          onClick={() => {
+            setDeviceOpen(row.row as DeviceOut)
+          }}
+        />,
+      ]
+    },
+    { field: 'id', headerName: 'ID', width: 150, editable: false },
     { field: 'name', headerName: 'Connection name', width: 150, editable: false },
     { field: 'description', headerName: 'Description', width: 150, editable: false },
-    { field: 'status', headerName: 'Status', width: 100, editable: false },
+    { field: 'status', headerName: 'Status', width: 150, editable: false },
     { field: 'device_name', headerName: 'Device name', width: 150, editable: false },
     { field: 'serial_number', headerName: 'Serial No.', width: 100, editable: false },
-    { field: 'manufacturer', headerName: 'Manufacturer', width: 100, editable: false },
+    { field: 'manufacturer', headerName: 'Manufacturer', width: 150, editable: false },
     { field: 'modality', headerName: 'Modality', width: 100, editable: false },
-    { field: 'site', headerName: 'Site', width: 100, editable: false },
+    { field: 'site', headerName: 'Site', width: 150, editable: false },
     {
-      field: 'datetime_created', headerName: 'Added (date/time)', width: 100, editable: false,
+      field: 'datetime_created', headerName: 'Added (date/time)', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
-      field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 100, editable: false,
+      field: 'datetime_updated', headerName: 'Last updated (date/time)', width: 200, editable: false,
       valueFormatter: (value) => (value ? new Date(value).toLocaleString() : ''),
     },
     {
@@ -180,6 +200,7 @@ export default function DeviceView() {
           }}
         />
       </div>
+
       <ConfirmDeleteModal 
         onSubmit={() => {if (deviceToDelete) delteMutation.mutate(deviceToDelete.id)}}
         isOpen={deviceToDelete != undefined}
@@ -189,6 +210,47 @@ export default function DeviceView() {
         item={deviceToDelete ? 'Device \'' + deviceToDelete.name + '\' with ID \'' + deviceToDelete.id + '\'' : ''}
         modalType={'modify'}
       />
+
+      <Modal
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+        open={deviceOpen !== undefined && deviceOpen.parameter !== undefined}
+        onClose={() => setDeviceOpen(undefined)}
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Sheet
+          variant="outlined"
+          sx={{
+            width: '50vw',
+            borderRadius: 'md',
+            p: 3,
+            boxShadow: 'lg',
+            maxHeight: '70vh',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <ModalClose variant="plain" sx={{ m: 1 }} />
+          <Typography component="h2" id="modal-title" level="h4" sx={{ fontWeight: 'lg', mb: 1 }}>Device Parameter</Typography>
+          <Box
+            sx={{
+              bgcolor: 'background.level1',
+              borderRadius: 'sm',
+              p: 2,
+              width: '100%',
+              flex: 1,
+              minHeight: 0,
+              overflow: 'auto',
+              mt: 2,
+            }}
+          >
+            <Typography id="modal-desc" textColor="text.tertiary" component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap' }}>
+              { JSON.stringify(deviceOpen?.parameter, null, 4) }
+            </Typography>
+          </Box>
+        </Sheet>
+      </Modal>
+
     </Box>
   )
 }
