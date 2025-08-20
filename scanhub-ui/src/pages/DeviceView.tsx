@@ -10,7 +10,6 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import AddSharpIcon from '@mui/icons-material/AddSharp'
-import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import LinearProgress from '@mui/joy/LinearProgress'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
@@ -18,7 +17,8 @@ import Container from '@mui/system/Container'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 import Modal from '@mui/joy/Modal'
 import Sheet from '@mui/joy/Sheet'
-import FileOpenOutlinedIcon from '@mui/icons-material/FileOpen'
+import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
+import DeleteSharpIcon from '@mui/icons-material/DeleteSharp'
 import ModalClose from '@mui/joy/ModalClose'
 
 import NotificationContext from '../NotificationContext'
@@ -117,7 +117,7 @@ export default function DeviceView() {
       getActions: (row) => [
         <GridActionsCellItem
           key='2'
-          icon={<FileOpenOutlinedIcon />}
+          icon={<LaunchOutlinedIcon />}
           label='Open'
           color='inherit'
           onClick={() => {
@@ -149,7 +149,7 @@ export default function DeviceView() {
         return [
           <GridActionsCellItem
             key='1'
-            icon={<DeleteIcon />}
+            icon={<DeleteSharpIcon />}
             label='Delete'
             color='inherit'
             onClick={() => {
