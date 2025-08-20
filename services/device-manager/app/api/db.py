@@ -7,7 +7,7 @@ import datetime
 import os
 import uuid
 
-from sqlalchemy import create_engine, func, JSON
+from sqlalchemy import JSON, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 from sqlalchemy.orm.decl_api import DeclarativeMeta

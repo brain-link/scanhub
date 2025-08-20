@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Main file for the device manager service."""
+from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.exception_handlers import (
     http_exception_handler,
     request_validation_exception_handler,
@@ -16,6 +17,22 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.api.db import engine, init_db
 from app.api.device_endpoints import router as http_router
 from app.api.device_websocket import router as ws_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Define fastapi app lifespan."""
+    # Startup: Initialize database
+    init_db()
+    try:
+        # Hand over control to FastAPI
+        yield
+    finally:
+        # Shutdown...
+        # (No shutdown work needed here right now)
+        pass
+
+
 
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",
@@ -44,7 +61,7 @@ app.add_middleware(
 
 
 @app.exception_handler(StarletteHTTPException)
-async def custom_http_exception_handler(request, exc):
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException) -> Response:
     """
     Add logging for http exceptions.
 
@@ -55,9 +72,9 @@ async def custom_http_exception_handler(request, exc):
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request, exc):
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> Response:
     """
-    Add logging for fastAPI's automatic input validation exceptions.
+    Add logging for FastAPI's automatic input validation exceptions.
 
     https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
     """
@@ -65,35 +82,18 @@ async def validation_exception_handler(request, exc):
     return await request_validation_exception_handler(request, exc)
 
 
-@app.on_event("startup")
-async def startup():
-    """Inititalize database on startup."""
-    init_db()
-
-
 @app.get("/api/v1/device/health/readiness", response_model={}, status_code=200, tags=["health"])
 async def readiness() -> dict:
     """Readiness health endpoint.
 
-    Inspects sqlalchemy engine and check if workflow table exists.
-
-    Returns
-    -------
-        Status docstring
-
-    Raises
-    ------
-    HTTPException
-        500: Workflow table not found
+    Inspects SQLAlchemy engine and checks if the device table exists.
     """
     ins = inspect(engine)
-    # print(f"Found tables: {ins.get_table_names()}")
     if "device" not in ins.get_table_names():
         raise HTTPException(
             status_code=500, detail="Could not find device table, table not created."
         )
     return {"status": "ok"}
-
 
 app.include_router(http_router, prefix="/api/v1/device")
 app.include_router(ws_router, prefix="/api/v1/device")
