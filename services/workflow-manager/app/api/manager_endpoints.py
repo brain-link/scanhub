@@ -43,9 +43,10 @@ from app.api.dagster_queries import list_dagster_jobs, parse_job_id
 from app.api.scanhub_requests import create_blank_result, get_result, get_task, set_result, set_task
 
 # Define the URIs for the different managers
-EXAM_MANAGER_URI = "exam-manager:8000"
-PATIENT_MANAGER_URI = "patient-manager:8100"
-DEVICE_MANAGER_URI = "device-manager:8000"
+EXAM_MANAGER_URI = "http://exam-manager:8000/api/v1/exam"
+PATIENT_MANAGER_URI = "http://patient-manager:8100/api/v1/patient"
+DEVICE_MANAGER_URI = "http://device-manager:8000/api/v1/device"
+WORKFLOW_MANAGER_URI = "http://workflow-manager:8000/api/v1/workflowmanager"
 DICOM_BASE_URI = "https://localhost:8443/api/v1/exam/dcm/"
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
 if DATA_LAKE_DIR is None:   # ensure that DATA_LAKE_DIR is set
@@ -79,19 +80,19 @@ async def trigger_task(task_id: str,
     print(f"\n>>>>>\nTriggering task: {task.model_dump_json()}\n")
 
 
-    get_workflow_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/workflow/{task.workflow_id}", headers=headers, timeout=3)
+    get_workflow_response = requests.get(f"{EXAM_MANAGER_URI}/workflow/{task.workflow_id}", headers=headers, timeout=3)
     if get_workflow_response.status_code != 200:
         raise HTTPException(status_code=get_workflow_response.status_code, detail="Failed to fetch workflow with id=" + str(task.workflow_id))
     workflow_raw = get_workflow_response.json()
     workflow = WorkflowOut(**workflow_raw)
 
-    get_exam_response = requests.get(f"http://{EXAM_MANAGER_URI}/api/v1/exam/{workflow.exam_id}", headers=headers, timeout=3)
+    get_exam_response = requests.get(f"{EXAM_MANAGER_URI}/{workflow.exam_id}", headers=headers, timeout=3)
     if get_exam_response.status_code != 200:
         raise HTTPException(status_code=get_exam_response.status_code, detail="Failed to fetch exam with id=" + str(workflow.exam_id))
     exam_raw = get_exam_response.json()
     exam = ExamOut(**exam_raw)
 
-    get_patient_response = requests.get(f"http://{PATIENT_MANAGER_URI}/api/v1/patient/{exam.patient_id}", headers=headers, timeout=3)
+    get_patient_response = requests.get(f"{PATIENT_MANAGER_URI}/{exam.patient_id}", headers=headers, timeout=3)
     if get_patient_response.status_code != 200:
         raise HTTPException(status_code=get_patient_response.status_code, detail="Failed to fetch patient with id=" + str(exam.patient_id))
     patient_raw = get_patient_response.json()
@@ -113,7 +114,7 @@ async def trigger_task(task_id: str,
 
     if task.task_type == TaskType.ACQUISITION:
         response = requests.post(
-            f"http://{DEVICE_MANAGER_URI}/api/v1/device/start_scan_via_websocket",
+            f"{DEVICE_MANAGER_URI}/start_scan_via_websocket",
             data=json.dumps(task, default=jsonable_encoder),
             headers=headers,
             timeout=3
@@ -160,7 +161,8 @@ async def trigger_task(task_id: str,
             print(f"Created new result: {new_result_out.model_dump_json()}")
 
             # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
-            callback_endpoint = f"http://workflow-manager:8000/api/v1/workflowmanager/result_ready/{task.id}/{new_result_out.id}"
+            callback_endpoint = f"{WORKFLOW_MANAGER_URI}/result_ready/{task.id}/{new_result_out.id}"
+            device_parameter_update_endpoint = f"{DEVICE_MANAGER_URI}/parameter/"
 
             # Trigger dagster job
             job_name, repository, location = parse_job_id(task.dag_id)
@@ -177,6 +179,7 @@ async def trigger_task(task_id: str,
                         output_dir=new_result_out.directory,
                         task_id=str(task.id),
                         exam_id=str(exam.id),
+                        update_device_parameter_base_url=device_parameter_update_endpoint,
                     ),
                 }),
             )

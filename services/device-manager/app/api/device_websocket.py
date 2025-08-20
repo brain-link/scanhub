@@ -312,8 +312,12 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     # Write device parameters if exist
     parameter_path = result_directory / "device_parameter.json"
     if parameter := dict_id_parameters.get(device_id):
+        data = {
+            "device_id": str(device_id),
+            "parameter": parameter,
+        }
         with parameter_path.open("w") as fh:
-            json.dump(parameter, fh)
+            json.dump(data, fh, indent=4)
 
     # Set result
     set_result = SetResult(
