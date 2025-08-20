@@ -32,7 +32,7 @@ async def add_exam_data(payload: BaseExam, creator: str) -> Exam:
     -------
         Database orm model of created exam
     """
-    new_exam = Exam(**payload.dict(), creator=creator)
+    new_exam = Exam(**payload.model_dump(), creator=creator)
     async with async_session() as session:
         session.add(new_exam)
         await session.commit()

@@ -950,6 +950,74 @@ export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
 
 
 /**
+ * ISMRM raw data / (ISMR)MRD acquisition info.
+ * @export
+ * @interface MRDAcquisitionInfo
+ */
+export interface MRDAcquisitionInfo {
+    /**
+     * 
+     * @type {number}
+     * @memberof MRDAcquisitionInfo
+     */
+    'acquisition_id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MRDAcquisitionInfo
+     */
+    'num_samples': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MRDAcquisitionInfo
+     */
+    'num_coils': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MRDAcquisitionInfo
+     */
+    'dwell_time': number;
+}
+/**
+ * ISMRM raw data / (ISMR)MRD meta data response.
+ * @export
+ * @interface MRDMetaResponse
+ */
+export interface MRDMetaResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MRDMetaResponse
+     */
+    'workflow_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MRDMetaResponse
+     */
+    'task_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MRDMetaResponse
+     */
+    'result_id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MRDMetaResponse
+     */
+    'dtype'?: string;
+    /**
+     * 
+     * @type {Array<MRDAcquisitionInfo>}
+     * @memberof MRDMetaResponse
+     */
+    'acquisitions'?: Array<MRDAcquisitionInfo>;
+}
+/**
  * Output model for MRI sequence.
  * @export
  * @interface MRISequenceOut
@@ -1892,6 +1960,339 @@ export interface XYZ {
      */
     'z': number;
 }
+
+/**
+ * DataApi - axios parameter creator
+ * @export
+ */
+export const DataApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * @summary Get DICOM result
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} filename 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDicom: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('getDicom', 'workflowId', workflowId)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getDicom', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getDicom', 'resultId', resultId)
+            // verify required parameter 'filename' is not null or undefined
+            assertParamExists('getDicom', 'filename', filename)
+            const localVarPath = `/api/v1/exam/dcm/{workflow_id}/{task_id}/{result_id}/{filename}`
+                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
+                .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get MRD (binary, interleaved float32 complex)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+         * @param {number} [coilIdx] Coil index
+         * @param {number} [stride] Decimate samples by stride
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMRD: async (workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('getMRD', 'workflowId', workflowId)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getMRD', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getMRD', 'resultId', resultId)
+            // verify required parameter 'ids' is not null or undefined
+            assertParamExists('getMRD', 'ids', ids)
+            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/data`
+                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (ids !== undefined) {
+                localVarQueryParameter['ids'] = ids;
+            }
+
+            if (coilIdx !== undefined) {
+                localVarQueryParameter['coil_idx'] = coilIdx;
+            }
+
+            if (stride !== undefined) {
+                localVarQueryParameter['stride'] = stride;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get ISMRMRD metadata (indexed acquisitions)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMrdMeta: async (workflowId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('getMrdMeta', 'workflowId', workflowId)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getMrdMeta', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getMrdMeta', 'resultId', resultId)
+            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/meta`
+                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DataApi - functional programming interface
+ * @export
+ */
+export const DataApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DataApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * @summary Get DICOM result
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} filename 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicom(workflowId, taskId, resultId, filename, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DataApi.getDicom']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get MRD (binary, interleaved float32 complex)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+         * @param {number} [coilIdx] Coil index
+         * @param {number} [stride] Decimate samples by stride
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DataApi.getMRD']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get ISMRMRD metadata (indexed acquisitions)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRDMetaResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMrdMeta(workflowId, taskId, resultId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DataApi.getMrdMeta']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DataApi - factory interface
+ * @export
+ */
+export const DataApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DataApiFp(configuration)
+    return {
+        /**
+         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * @summary Get DICOM result
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} filename 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get MRD (binary, interleaved float32 complex)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+         * @param {number} [coilIdx] Coil index
+         * @param {number} [stride] Decimate samples by stride
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get ISMRMRD metadata (indexed acquisitions)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: any): AxiosPromise<MRDMetaResponse> {
+            return localVarFp.getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DataApi - object-oriented interface
+ * @export
+ * @class DataApi
+ * @extends {BaseAPI}
+ */
+export class DataApi extends BaseAPI {
+    /**
+     * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+     * @summary Get DICOM result
+     * @param {string} workflowId 
+     * @param {string} taskId 
+     * @param {string} resultId 
+     * @param {string} filename 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DataApi
+     */
+    public getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get MRD (binary, interleaved float32 complex)
+     * @param {string} workflowId 
+     * @param {string} taskId 
+     * @param {string} resultId 
+     * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+     * @param {number} [coilIdx] Coil index
+     * @param {number} [stride] Decimate samples by stride
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DataApi
+     */
+    public getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get ISMRMRD metadata (indexed acquisitions)
+     * @param {string} workflowId 
+     * @param {string} taskId 
+     * @param {string} resultId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DataApi
+     */
+    public getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * ExamsApi - axios parameter creator
@@ -3215,7 +3616,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
-         * @summary Get Dicom
+         * @summary Get DICOM result
          * @param {string} workflowId 
          * @param {string} taskId 
          * @param {string} resultId 
@@ -3223,20 +3624,129 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getDicom: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'workflowId', workflowId)
+            assertParamExists('getDicom', 'workflowId', workflowId)
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'taskId', taskId)
+            assertParamExists('getDicom', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
-            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'resultId', resultId)
+            assertParamExists('getDicom', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
-            assertParamExists('getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet', 'filename', filename)
+            assertParamExists('getDicom', 'filename', filename)
             const localVarPath = `/api/v1/exam/dcm/{workflow_id}/{task_id}/{result_id}/{filename}`
                 .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
                 .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get MRD (binary, interleaved float32 complex)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+         * @param {number} [coilIdx] Coil index
+         * @param {number} [stride] Decimate samples by stride
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMRD: async (workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('getMRD', 'workflowId', workflowId)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getMRD', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getMRD', 'resultId', resultId)
+            // verify required parameter 'ids' is not null or undefined
+            assertParamExists('getMRD', 'ids', ids)
+            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/data`
+                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (ids !== undefined) {
+                localVarQueryParameter['ids'] = ids;
+            }
+
+            if (coilIdx !== undefined) {
+                localVarQueryParameter['coil_idx'] = coilIdx;
+            }
+
+            if (stride !== undefined) {
+                localVarQueryParameter['stride'] = stride;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get ISMRMRD metadata (indexed acquisitions)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMrdMeta: async (workflowId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workflowId' is not null or undefined
+            assertParamExists('getMrdMeta', 'workflowId', workflowId)
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('getMrdMeta', 'taskId', taskId)
+            // verify required parameter 'resultId' is not null or undefined
+            assertParamExists('getMrdMeta', 'resultId', resultId)
+            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/meta`
+                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
+                .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3396,7 +3906,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
-         * @summary Get Dicom
+         * @summary Get DICOM result
          * @param {string} workflowId 
          * @param {string} taskId 
          * @param {string} resultId 
@@ -3404,10 +3914,43 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId, taskId, resultId, filename, options);
+        async getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicom(workflowId, taskId, resultId, filename, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicom']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get MRD (binary, interleaved float32 complex)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+         * @param {number} [coilIdx] Coil index
+         * @param {number} [stride] Decimate samples by stride
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getMRD']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get ISMRMRD metadata (indexed acquisitions)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRDMetaResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMrdMeta(workflowId, taskId, resultId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getMrdMeta']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3479,7 +4022,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
-         * @summary Get Dicom
+         * @summary Get DICOM result
          * @param {string} workflowId 
          * @param {string} taskId 
          * @param {string} resultId 
@@ -3487,8 +4030,35 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get MRD (binary, interleaved float32 complex)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+         * @param {number} [coilIdx] Coil index
+         * @param {number} [stride] Decimate samples by stride
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get ISMRMRD metadata (indexed acquisitions)
+         * @param {string} workflowId 
+         * @param {string} taskId 
+         * @param {string} resultId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: any): AxiosPromise<MRDMetaResponse> {
+            return localVarFp.getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
@@ -3559,7 +4129,7 @@ export class ResultsApi extends BaseAPI {
 
     /**
      * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
-     * @summary Get Dicom
+     * @summary Get DICOM result
      * @param {string} workflowId 
      * @param {string} taskId 
      * @param {string} resultId 
@@ -3568,8 +4138,39 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getDicomApiV1ExamDcmWorkflowIdTaskIdResultIdFilenameGet(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
+    public getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get MRD (binary, interleaved float32 complex)
+     * @param {string} workflowId 
+     * @param {string} taskId 
+     * @param {string} resultId 
+     * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
+     * @param {number} [coilIdx] Coil index
+     * @param {number} [stride] Decimate samples by stride
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get ISMRMRD metadata (indexed acquisitions)
+     * @param {string} workflowId 
+     * @param {string} taskId 
+     * @param {string} resultId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

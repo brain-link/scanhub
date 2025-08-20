@@ -337,4 +337,25 @@ class PatientOut(BasePatient):
     datetime_updated: datetime | None = None
 
 
+# ----------------------------------------
+# Data models
+# ----------------------------------------
 
+
+class MRDAcquisitionInfo(BaseModel):
+    """ISMRM raw data / (ISMR)MRD acquisition info."""
+
+    acquisition_id: int = Field(..., ge=0)
+    num_samples: int = Field(..., ge=1)
+    num_coils: int = Field(..., ge=1)
+    dwell_time: float
+
+
+class MRDMetaResponse(BaseModel):
+    """ISMRM raw data / (ISMR)MRD meta data response."""
+
+    workflow_id: str
+    task_id: str
+    result_id: str
+    dtype: str = "fc32" # float32 complex, interleaved (Re,Im)
+    acquisitions: list[MRDAcquisitionInfo] = []

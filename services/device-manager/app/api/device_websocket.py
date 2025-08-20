@@ -249,7 +249,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
     blank_result = exam_requests.create_blank_result(task_id, user_access_token)
 
     # Create the result directory
-    result_directory = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(blank_result.id)
+    result_directory = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id) / str(blank_result.id)
     result_directory.mkdir(exist_ok=True, parents=True)
     file_path = result_directory / filename
     tmp_path = file_path.with_suffix(file_path.suffix + ".part")

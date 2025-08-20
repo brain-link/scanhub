@@ -129,7 +129,7 @@ function PatientForm(props: ModalProps) {
               <Input
                 type="number"
                 placeholder='Patient height / cm'
-                slotProps={{ input: {min: 0, max: 999, step: 5} }}
+                slotProps={{ input: {min: 0, max: 999, step: 1} }}
                 onChange={(e) => setPatient({ ...patient, height: parseFloat(e.target.value) })}
               />
             </Grid>
@@ -139,7 +139,7 @@ function PatientForm(props: ModalProps) {
               <Input
                 type="number"
                 placeholder='Patient weight / kg'
-                slotProps={{ input: {min: 0, max: 999, step: 5} }}
+                slotProps={{ input: {min: 0, max: 999, step: 1} }}
                 onChange={(e) => setPatient({ ...patient, weight: parseFloat(e.target.value) })}
               />
             </Grid>

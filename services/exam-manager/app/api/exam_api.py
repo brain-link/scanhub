@@ -61,14 +61,13 @@ async def create_exam(
     if payload.is_template is False:
         if payload.patient_id is None:
             raise HTTPException(status_code=400, detail="patient_id must be given to create exam.")
-        getpatient_response = requests.get(
+        with requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3,
-        )
-
-        if getpatient_response.status_code != 200:
-            raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
+        ) as getpatient_response:
+            if getpatient_response.status_code != 200:
+                raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
     if payload.is_template is True and payload.patient_id is not None:
         raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
     if not (exam := await exam_dal.add_exam_data(payload=payload, creator=user.username)):
@@ -108,15 +107,15 @@ async def create_exam_from_template(
     if payload.is_template is False:
         if payload.patient_id is None:
             raise HTTPException(status_code=400, detail="patient_id must be given to create exam instance.")
-        getpatient_response = requests.get(
+        with requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3,
-        )
-        print("getpatient_response: ", getpatient_response)
-        print("url: ", PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id))
-        if getpatient_response.status_code != 200:
-            raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
+        ) as getpatient_response:
+            print("getpatient_response: ", getpatient_response)
+            print("url: ", PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id))
+            if getpatient_response.status_code != 200:
+                raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
     if payload.is_template is True and payload.patient_id is not None:
         raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
     if not (template := await exam_dal.get_exam_data(exam_id=template_id)):
@@ -267,13 +266,13 @@ async def update_exam(
     if payload.is_template is False:
         if payload.patient_id is None:
             raise HTTPException(status_code=400, detail="patient_id must be given for exam instance.")
-        getpatient_response = requests.get(
+        with requests.get(
             PREFIX_PATIENT_MANAGER + "/" + str(payload.patient_id),
             headers={"Authorization": "Bearer " + access_token},
             timeout=3,
-        )
-        if getpatient_response.status_code != 200:
-            raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
+        ) as getpatient_response:
+            if getpatient_response.status_code != 200:
+                raise HTTPException(status_code=400, detail="patient_id must refer to an existing patient.")
         # for now, allow changing the patient_id, but could require administrator rights in the future
     if payload.is_template is True and payload.patient_id is not None:
         raise HTTPException(status_code=400, detail="Exam template must not have patient_id.")
