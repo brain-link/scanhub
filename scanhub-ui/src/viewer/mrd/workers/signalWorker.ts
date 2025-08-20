@@ -50,7 +50,7 @@ self.onmessage = (ev: MessageEvent<WorkIn>) => {
       const y = toScalar(reim, mode);
       const dt = 1 / it.sampleRateHz;
       const x = new Float32Array(y.length);
-      for (let i = 0; i < y.length; i++) x[i] = i * dt;
+      for (let i = 0; i < y.length; i++) x[i] = i * dt * 1000;
       result.time.push({ label: it.label, x, y });
     }
 

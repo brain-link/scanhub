@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ColormapName, ComplexMode } from './types';
+import type { ColorPalette, ComplexMode } from './types';
 import Checkbox from '@mui/joy/Checkbox';
 import Switch from '@mui/joy/Switch';
 import Select from '@mui/joy/Select';
@@ -9,6 +9,7 @@ import FormLabel from '@mui/joy/FormLabel'
 import Box from '@mui/joy/Box';
 import Input from '@mui/joy/Input';
 import Stack from '@mui/joy/Stack';
+import { plotColorPaletteOptions, plotColorPalettes } from './utils/colormaps';
 
 
 export interface ControlsProps {
@@ -21,8 +22,8 @@ export interface ControlsProps {
   setWantFreq: (v: boolean) => void;
   mode: ComplexMode;
   setMode: (v: ComplexMode) => void;
-  colormap: ColormapName;
-  setColormap: (v: ColormapName) => void;
+  colorPalette: ColorPalette;
+  setColorPalette: (v: ColorPalette) => void;
   coil: number;
   setCoil: (v: number) => void;
   acqRange: [number, number];
@@ -62,13 +63,18 @@ export default function Controls(p: ControlsProps) {
       <FormLabel>Colormap</FormLabel>
       <Select
         size="sm"
-        value={p.colormap}
-        defaultValue={'abs'}
-        onChange={(_, value) => p.setColormap(value as ColormapName)}
+        value={p.colorPalette.id}
+        defaultValue={plotColorPalettes.default.id}
+        onChange={(_, value) => p.setColorPalette(plotColorPalettes[value ? value : plotColorPalettes.default.id])}
         required
       >
-          <Option value="viridis">Viridis</Option>
-          <Option value="plasma">Plasma</Option>
+        {
+          plotColorPaletteOptions.map((p) => (
+            <Option key={p.id} value={p.id}>
+              { p.name }
+            </Option>
+          ))
+        }
       </Select>
 
       <FormLabel>Coil</FormLabel>

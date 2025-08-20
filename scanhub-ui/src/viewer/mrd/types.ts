@@ -1,2 +1,7 @@
 export type ComplexMode = 'abs' | 'phase' | 'real' | 'imag';
-export type ColormapName = 'viridis' | 'plasma';
+
+export type ColorPalette = {
+  id: string;
+  name: string;
+  colors: string[];
+};

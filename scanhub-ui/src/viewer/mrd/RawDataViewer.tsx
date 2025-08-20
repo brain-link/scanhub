@@ -4,10 +4,10 @@ import ReactECharts from 'echarts-for-react';
 import { useData } from './hooks/useData';
 import { useMeta } from './hooks/useMeta';
 import { useFileIds } from './hooks/useFileIds';
-import { ColormapName, ComplexMode } from './types';
+import { ColorPalette, ComplexMode } from './types';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
 import Controls from './Controls';
-import { colorCycle } from './utils/colormaps';
+import { plotColorPalettes } from './utils/colormaps';
 import { WorkerMessage } from './utils/interfaces';
 import Container from '@mui/joy/Container';
 import AlertItem from '../../components/AlertItem';
@@ -15,7 +15,7 @@ import { Alerts } from '../../interfaces/components.interface';
 import Card from '@mui/joy/Card';
 import Stack from '@mui/joy/Stack';
 
-import type { EChartsOption } from 'echarts';
+import { color, type EChartsOption } from 'echarts';
 
 // ---- ECharts (no barrel import) ----
 import { init, use as echartsUse } from 'echarts/core';
@@ -54,7 +54,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
   const [wantTime, setWantTime] = useState(true);
   const [wantFreq, setWantFreq] = useState(false);
   const [mode, setMode] = useState<ComplexMode>('abs');
-  const [colormap, setColormap] = useState<ColormapName>('viridis');
+  const [colorPalette, setColorPalette] = useState<ColorPalette>(plotColorPalettes.default);
   const [coil, setCoil] = useState(0);
   const [acqRange, setAcqRange] = useState<[number, number]>([0, 0]);
   const [currentAcq, setCurrentAcq] = useState(0);
@@ -150,27 +150,26 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         freq: { label: string; x: Float32Array; y: Float32Array }[];
       };
 
-      const colors = colorCycle(colormap, Math.max(time.length, freq.length));
       const series: SeriesOption[] = [];
       const xAxis: XAXisComponentOption[] = [];
       const yAxis: YAXisComponentOption[] = [];
       const grid: GridComponentOption[] = [];
       const dataZoom: DataZoomComponentOption[] = [];
 
-      const yLabel = (domain: 'time' | 'freq') =>
-        mode === 'abs'
-          ? domain === 'time'
-            ? '|s(t)|'
-            : '|S(f)|'
-          : mode === 'phase'
-          ? 'Phase (rad)'
-          : mode === 'real'
-          ? domain === 'time'
-            ? 'Re{s(t)}'
-            : 'Re{S(f)}'
-          : domain === 'time'
-          ? 'Im{s(t)}'
-          : 'Im{S(f)}';
+      const yLabel = (domain: 'time' | 'freq') => {
+        switch (mode) {
+          case 'abs':
+            return domain === 'time' ? '|s(t)|' : '|S(f)|';
+          case 'phase':
+            return 'Phase (rad)';
+          case 'real':
+            return domain === 'time' ? 'Re{s(t)}' : 'Re{S(f)}';
+          case 'imag':
+            return domain === 'time' ? 'Im{s(t)}' : 'Im{S(f)}';
+          default:
+            return '';
+        }
+      };
 
       const addPanel = (
         traces: { label: string; x: Float32Array; y: Float32Array }[],
@@ -190,7 +189,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         xAxis.push({
           type: 'value',
           gridIndex: gridIdx,
-          name: title === 'Time' ? 'Time (s)' : 'Frequency (Hz)',
+          name: title === 'Time' ? 'Time / ms' : 'Frequency / Hz',
           nameLocation: 'middle',
         });
 
@@ -198,7 +197,6 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
           type: 'value',
           gridIndex: gridIdx,
           name: yLabel(title === 'Time' ? 'time' : 'freq'),
-          nameLocation: 'middle',
         });
 
         traces.forEach((t, idx) => {
@@ -211,9 +209,10 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
             xAxisIndex: gridIdx,
             yAxisIndex: gridIdx,
             showSymbol: false,
-            large: true,
             sampling: 'lttb',
-            lineStyle: { width: 1.5, color: colors[idx % colors.length] },
+            lineStyle: {
+              width: 1.5,
+            },
             data: pts,
           });
         });
@@ -238,6 +237,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
 
       setOption({
         animation: true,
+        color: colorPalette.colors,
         tooltip: {
           trigger: 'axis',
           axisPointer: { type: 'cross', snap: true },
@@ -296,7 +296,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     wantTime,
     wantFreq,
     mode,
-    colormap,
+    colorPalette,
   ]);
 
   // ---------------- Render (no early returns) ----------------
@@ -317,8 +317,8 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
         setWantFreq={setWantFreq}
         mode={mode}
         setMode={setMode}
-        colormap={colormap}
-        setColormap={setColormap}
+        colorPalette={colorPalette}
+        setColorPalette={setColorPalette}
         coil={coil}
         setCoil={setCoil}
         acqRange={acqRange}
