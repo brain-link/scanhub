@@ -22,6 +22,7 @@ Attributes
    workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI
+   workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI
    workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI
    workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR
    workflow-manager.app.api.manager_endpoints.dg_client
@@ -43,15 +44,19 @@ Module Contents
 ---------------
 
 .. py:data:: EXAM_MANAGER_URI
-   :value: 'exam-manager:8000'
+   :value: 'http://exam-manager:8000/api/v1/exam'
 
 
 .. py:data:: PATIENT_MANAGER_URI
-   :value: 'patient-manager:8100'
+   :value: 'http://patient-manager:8100/api/v1/patient'
 
 
 .. py:data:: DEVICE_MANAGER_URI
-   :value: 'device-manager:8000'
+   :value: 'http://device-manager:8000/api/v1/device'
+
+
+.. py:data:: WORKFLOW_MANAGER_URI
+   :value: 'http://workflow-manager:8000/api/v1/workflowmanager'
 
 
 .. py:data:: DICOM_BASE_URI
