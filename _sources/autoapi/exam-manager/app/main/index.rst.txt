@@ -23,9 +23,10 @@ Functions
 
 .. autoapisummary::
 
-   exam-manager.app.main.lifespan
    exam-manager.app.main.custom_http_exception_handler
    exam-manager.app.main.validation_exception_handler
+   exam-manager.app.main.startup
+   exam-manager.app.main.shutdown
    exam-manager.app.main.readiness
 
 
@@ -36,33 +37,60 @@ Module Contents
    :value: ['http://localhost:8080', 'https://localhost:8443', 'https://localhost:3000']
 
 
-.. py:function:: lifespan(app: fastapi.FastAPI)
-   :async:
-
-
-   Define application lifespan.
-
-
 .. py:data:: app
 
 .. py:function:: custom_http_exception_handler(request, exc)
    :async:
 
 
-   Get http exception handler.
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
 
 
 .. py:function:: validation_exception_handler(request, exc)
    :async:
 
 
-   Get request validation exception handler.
+   Add logging for fastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: startup()
+   :async:
+
+
+   Statup exam-tree microservice.
+
+   Raises
+   ------
+   HTTPException
+       500: Device table does not exist
+   HTTPException
+       500: Workflow table does not exist
+
+
+.. py:function:: shutdown() -> None
+   :async:
+
+
+   Shutdown function.
 
 
 .. py:function:: readiness() -> dict
    :async:
 
 
-   Get status / health endpoint.
+   Readiness health endpoint.
+
+   Returns
+   -------
+       Status dictionary
+
+   Raises
+   ------
+   HTTPException
+       500: Any of the exam-tree tables does not exist
 
 

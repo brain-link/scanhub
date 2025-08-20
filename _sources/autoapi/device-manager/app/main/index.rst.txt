@@ -23,14 +23,21 @@ Functions
 
 .. autoapisummary::
 
+   device-manager.app.main.lifespan
    device-manager.app.main.custom_http_exception_handler
    device-manager.app.main.validation_exception_handler
-   device-manager.app.main.startup
    device-manager.app.main.readiness
 
 
 Module Contents
 ---------------
+
+.. py:function:: lifespan(app: fastapi.FastAPI)
+   :async:
+
+
+   Define fastapi app lifespan.
+
 
 .. py:data:: app
 
@@ -38,7 +45,7 @@ Module Contents
    :value: ['http://localhost:8080', 'https://localhost:8443']
 
 
-.. py:function:: custom_http_exception_handler(request, exc)
+.. py:function:: custom_http_exception_handler(request: fastapi.Request, exc: starlette.exceptions.HTTPException) -> fastapi.Response
    :async:
 
 
@@ -47,20 +54,13 @@ Module Contents
    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
 
 
-.. py:function:: validation_exception_handler(request, exc)
+.. py:function:: validation_exception_handler(request: fastapi.Request, exc: fastapi.exceptions.RequestValidationError) -> fastapi.Response
    :async:
 
 
-   Add logging for fastAPI's automatic input validation exceptions.
+   Add logging for FastAPI's automatic input validation exceptions.
 
    https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
-
-
-.. py:function:: startup()
-   :async:
-
-
-   Inititalize database on startup.
 
 
 .. py:function:: readiness() -> dict
@@ -69,15 +69,6 @@ Module Contents
 
    Readiness health endpoint.
 
-   Inspects sqlalchemy engine and check if workflow table exists.
-
-   Returns
-   -------
-       Status docstring
-
-   Raises
-   ------
-   HTTPException
-       500: Workflow table not found
+   Inspects SQLAlchemy engine and checks if the device table exists.
 
 
