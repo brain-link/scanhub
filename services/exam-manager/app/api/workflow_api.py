@@ -119,9 +119,9 @@ async def create_workflow_from_template(
     if not (workflow := await workflow_dal.add_workflow_data(payload=new_workflow, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create workflow.")
 
-    workflow_out = await get_workflow_out_model(data=workflow)
+    template_instance_mapping = {}
+    task_instances: list[DAGTaskOut | AcquisitionTaskOut] = []
 
-    task_template_instance_mapping = {}
     # Create all the sub-items for the task templates in a workflow template
     for task in template.tasks:
         task_instance: DAGTaskOut | AcquisitionTaskOut = await task_api.create_task_from_template(
@@ -131,26 +131,31 @@ async def create_workflow_from_template(
             user=user,
         )
         # Map template task IDs to instance task IDs
-        task_template_instance_mapping[task.id] = task_instance.id
-        workflow_out.tasks.append(task_instance)
+        template_instance_mapping[task.id] = task_instance.id
+        task_instances.append(task_instance)
 
     # Update inputs of workflow task instances
-    for task_instance in workflow_out.tasks:
-        if hasattr(task_instance, "input_id"):
-            if task_instance.input_id is not None and task_instance.input_id in task_template_instance_mapping:
+    for task_instance in task_instances:
+        if isinstance(task_instance, DAGTaskOut) and task_instance.input_task_ids:
+            try:
                 # Assign the new instance ID which corresponds to the original template ID
-                task_instance.input_id = task_template_instance_mapping[task_instance.input_id]
+                task_instance.input_task_ids = [
+                    template_instance_mapping[_id] for _id in task_instance.input_task_ids \
+                        if _id in template_instance_mapping
+                ]
                 _ = await task_api.update_task(
                     task_id=task_instance.id,
                     payload=task_instance,
                     user=user,
                 )
-            else:
+            except Exception as exc:
                 raise HTTPException(
                     status_code=400,
-                    detail=f"Could not update input reference for task instance {task_instance.id}",
-                )
-    return workflow_out
+                    detail=f"Could not update input reference for task instance {task_instance.id}: {exc}",
+                ) from exc
+
+    # Get workflow out again with updated input_id on tasks
+    return await get_workflow_out_model(data=workflow)
 
 
 @workflow_router.get("/workflow/{workflow_id}", response_model=WorkflowOut, status_code=200, tags=["workflows"])
