@@ -1,18 +1,29 @@
-"""
-Pydantic models of ScanHub.
-
-TODO: Add docstrings to all models and fields, such that they can be shown in the OpenAPI documentation
+"""Pydantic models of ScanHub.
 
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
 from datetime import date, datetime
 from enum import Enum
+from typing import Any, Literal
 from uuid import UUID
-from typing import Literal, Any
 
-from pydantic import BaseModel, ConfigDict, Field  # noqa
+from pydantic import BaseModel, ConfigDict, Field
 
+# ----------------------------------------
+# General
+# ----------------------------------------
+
+class XYZ(BaseModel):
+    """Pydantic definition of coordinates."""
+
+    x: float
+    y: float
+    z: float
+
+# ----------------------------------------
+# Enums
+# ----------------------------------------
 
 class Gender(str, Enum):
     """Pydantic definition of genders."""
@@ -31,61 +42,15 @@ class Commands(str, Enum):
     PAUSE = "PAUSE"
 
 
-class XYZ(BaseModel):
-    """Pydantic definition of coordinates."""
+class ItemStatus(str, Enum):
+    """Task status enum."""
 
-    x: float
-    y: float
-    z: float
-
-
-class AcquisitionParameter(BaseModel):
-    """Pydantic definition of acquisition parameters."""
-
-    fov_scaling: XYZ
-    fov_offset: XYZ
-    fov_rotation: XYZ
-
-
-class AcquisitionLimits(BaseModel):
-    """Pydantic definition of AcquisitionLimits."""
-
-    patient_height: int
-    patient_weight: int
-    patient_gender: Gender = Field(Gender.NOT_GIVEN)
-    patient_age: int
-
-
-class DeviceCreationRequest(BaseModel):
-    """
-    Device registration request pydantic model
-    (to be sent by user first adding the device to the platform).
-    """
-
-    model_config = ConfigDict(extra="ignore")
-
-    name: str
-    description: str
-
-class DeviceDetails(BaseModel):
-    """Device creation request pydantic model."""
-    
-    model_config = ConfigDict(extra="ignore")
-
-    device_name: str | None = None
-    serial_number: str | None = None
-    manufacturer: str | None = None
-    modality: str | None = None
-    status: str | None = None
-    site: str | None = None
-
-
-class DeviceOut(DeviceCreationRequest, DeviceDetails):
-    """Device pydantic output model."""
-
-    id: UUID
-    datetime_created: datetime
-    datetime_updated: datetime | None = None
+    NEW = "NEW"
+    UPDATED = "UPDATED"
+    STARTED = "STARTED"
+    FINISHED = "FINISHED"
+    DELETED = "DELETED"
+    INPROGRESS = "INPROGRESS"
 
 
 class TaskType(str, Enum):
@@ -107,22 +72,62 @@ class ResultType(str, Enum):
     CALIBRATION = "CALIBRATION"
     NOT_SET = "NOT_SET"
 
-class ItemStatus(str, Enum):
-    """Task status enum."""
 
-    NEW = "NEW"
-    UPDATED = "UPDATED"
-    STARTED = "STARTED"
-    FINISHED = "FINISHED"
-    DELETED = "DELETED"
-    INPROGRESS = "INPROGRESS"
-    
+class UserRole(Enum):
+    """User role enum."""
+
+    admin = "admin"
+    medical = "medical"
+    scientist = "scientist"
+    engineer = "engineer"
+
+# ----------------------------------------
+# Device management
+# ----------------------------------------
+
+class DeviceCreationRequest(BaseModel):
+    """Device registration request pydantic model.
+
+    (to be sent by user first adding the device to the platform).
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    name: str
+    description: str
+
+
+class DeviceDetails(BaseModel):
+    """Device creation request pydantic model."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    device_name: str | None = None
+    serial_number: str | None = None
+    manufacturer: str | None = None
+    modality: str | None = None
+    status: str | None = None
+    site: str | None = None
+    parameter: dict | None = None
+
+
+class DeviceOut(DeviceCreationRequest, DeviceDetails):
+    """Device pydantic output model."""
+
+    id: UUID
+    datetime_created: datetime
+    datetime_updated: datetime | None = None
+
+
+# ----------------------------------------
+# Exam management
+# ----------------------------------------
 
 class BaseMRISequence(BaseModel):
     """Base model for MRI sequence."""
 
     model_config = ConfigDict(extra="ignore")
-    
+
     name: str
     description: str
     sequence_type: str
@@ -145,6 +150,7 @@ class BaseResult(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
     task_id: UUID
+
 
 class SetResult(BaseModel):
     """Update result model."""
@@ -188,6 +194,14 @@ class TaskOut(BaseTask):
     results: list[ResultOut]
 
 
+class AcquisitionParameter(BaseModel):
+    """Pydantic definition of acquisition parameters."""
+
+    fov_scaling: XYZ
+    fov_offset: XYZ
+    fov_rotation: XYZ
+
+
 class BaseAcquisitionTask(BaseTask):
     """Represents a task for data acquisition in the system."""
 
@@ -195,6 +209,15 @@ class BaseAcquisitionTask(BaseTask):
     device_id: UUID | None = None
     sequence_id: str    # sequence ID is a mongo db ObjectId, which is not a UUID
     acquisition_parameter: AcquisitionParameter
+
+
+class AcquisitionLimits(BaseModel):
+    """Pydantic definition of AcquisitionLimits."""
+
+    patient_height: int
+    patient_weight: int
+    patient_gender: Gender = Field(Gender.NOT_GIVEN)
+    patient_age: int
 
 
 class AcquisitionTaskOut(TaskOut, BaseAcquisitionTask):
@@ -209,7 +232,8 @@ class AcquisitionPayload(AcquisitionTaskOut):
     mrd_header: str | None = None
     sequence: MRISequenceOut
     access_token: str
-    
+    device_parameter: dict
+
 
 class BaseDAGTask(BaseTask):
     """Workflow task model."""
@@ -223,8 +247,6 @@ class BaseDAGTask(BaseTask):
 
 class DAGTaskOut(TaskOut, BaseDAGTask):
     """Workflow Task output model."""
-
-    pass
 
 
 class DagsterJobConfiguration(BaseModel):
@@ -284,12 +306,9 @@ class ExamOut(BaseExam):
     workflows: list[WorkflowOut]
 
 
-class UserRole(Enum):
-    admin = "admin"
-    medical = "medical"
-    scientist = "scientist"
-    engineer = "engineer"
-
+# ----------------------------------------
+# User management
+# ----------------------------------------
 
 class User(BaseModel):
     username: str
@@ -312,6 +331,10 @@ class PasswordUpdateRequest(BaseModel):
     username_to_change_password_for: str       # the username of the user whose password is set
     newpassword: str                           # the new password
 
+
+# ----------------------------------------
+# Patient management
+# ----------------------------------------
 
 class BasePatient(BaseModel):
     """Patient pydantic base model."""

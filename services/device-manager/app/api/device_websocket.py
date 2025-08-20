@@ -51,6 +51,8 @@ router = APIRouter()
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
 dict_id_websocket: Dict[UUID, WebSocket] = {}
 
+# Maintain device parameters from acquisition start
+dict_id_parameters: dict[UUID, dict] = {}
 
 @router.post("/start_scan_via_websocket", response_model={}, status_code=200, tags=["devices"])
 async def start_scan_via_websocket(
@@ -65,14 +67,25 @@ async def start_scan_via_websocket(
         Details of the scan and the device to scan on.
 
     """
-    # Get pulseq sequence
+    # Get sequence
     sequence = exam_requests.get_sequence(task.sequence_id, access_token)
+    # Get device
+    if task.device_id is None:
+        raise HTTPException(status_code=404, detail="Missing device ID")
+    # Use parameter state to prevent triggering a device twice
+    if task.device_id in dict_id_parameters:
+        raise HTTPException(status_code=404, detail="Device is busy")
+    if not (device := await dal_get_device(task.device_id)):
+        raise HTTPException(status_code=404, detail="Device not found")
+    device_details = DeviceDetails(**device.__dict__)
+    dict_id_parameters[task.device_id] = device_details.parameter if device_details.parameter is not None else {}
 
     payload = AcquisitionPayload(
         **task.model_dump(),
         sequence=sequence,
         mrd_header="header_xml_placeholder",  # Placeholder, should be filled with actual MRD header
         access_token=access_token,
+        device_parameter=dict_id_parameters[task.device_id],
     )
 
     if task.device_id in dict_id_websocket:
@@ -80,11 +93,10 @@ async def start_scan_via_websocket(
         await websocket.send_text(
             json.dumps(
                 {"command": "start", "data": payload},
-                default=jsonable_encoder
+                default=jsonable_encoder,
             ))
         return
-    else:
-        raise HTTPException(status_code=503, detail="Device offline.")
+    raise HTTPException(status_code=503, detail="Device offline.")
 
 
 async def connection_with_valid_id_and_token(websocket: WebSocket) -> UUID:
@@ -154,7 +166,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             # ---------- Receive file/data from device
             elif command == "file-transfer":
-                await handle_file_transfer(websocket, message)
+                await handle_file_transfer(websocket, message, device_id)
 
             else:
                 await websocket.send_json({"command": "feedback", "message": f"Unknown command: {command}"})
@@ -165,6 +177,7 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         print("WebSocketDisconnect")
         del dict_id_websocket[device_id]
+        del dict_id_parameters[device_id]
         print("Device disconnected:", device_id)
         # Set the status of the disconnected device to "disconnected"
         if not await dal_update_device(device_id, {"status": "DISCONNECTED"}):
@@ -226,7 +239,7 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
     })
 
 
-async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
+async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UUID) -> None:
     """Handle file transfer from device to server."""
     print("Handle file transfer...")
     # Preflight check for DATA_LAKE_DIR
@@ -275,10 +288,8 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
 
     # Check if we received the expected number of bytes
     if bytes_received != size_bytes:
-        try:
-            os.remove(tmp_path)
-        except FileNotFoundError:
-            pass
+        if tmp_path.exists():
+            tmp_path.unlink()
         await websocket.send_json({
             "command": "feedback",
             "message": f"Incomplete file received ({bytes_received}/{size_bytes} bytes).",
@@ -287,23 +298,28 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
 
     # Checksum verification
     if header_sha256 and hasher.hexdigest() != header_sha256:
-        try:
-            os.remove(tmp_path)
-        except FileNotFoundError:
-            pass
+        if tmp_path.exists():
+            tmp_path.unlink()
         await websocket.send_json({
             "command": "feedback",
             "message": "Checksum mismatch for uploaded file.",
         })
         return
 
-    os.replace(tmp_path, file_path)  # atomic finalize
+    # os.replace(tmp_path, file_path)  # atomic finalize
+    tmp_path.replace(file_path)
+
+    # Write device parameters if exist
+    parameter_path = result_directory / "device_parameter.json"
+    if parameter := dict_id_parameters.get(device_id):
+        with parameter_path.open("w") as fh:
+            json.dump(parameter, fh)
 
     # Set result
     set_result = SetResult(
         type=_pick_result_type(file_path.name),
         directory=str(result_directory),
-        files=[file_path.name],
+        files=[file_path.name, parameter_path.name],
     )
     print("Result to set: ", set_result.model_dump_json())
     result = exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
@@ -311,6 +327,8 @@ async def handle_file_transfer(websocket: WebSocket, header: dict) -> None:
     # Update task status to FINISHED
     task.status = ItemStatus.FINISHED
     _ = exam_requests.set_task(task_id, task, user_access_token)
+    if dict_id_parameters.get(device_id):
+        del dict_id_parameters[device_id]
 
     await websocket.send_json({
         "command": "feedback",
