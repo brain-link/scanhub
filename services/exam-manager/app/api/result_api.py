@@ -3,17 +3,20 @@
 
 """Definition of result API endpoints accessible through swagger UI."""
 
+import struct
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
-from scanhub_libraries.models import ResultOut, SetResult, User
+from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import StreamingResponse
+from scanhub_libraries.models import MRDMetaResponse, ResultOut, SetResult, User
 from scanhub_libraries.security import get_current_user
 from starlette.responses import Response
 
+import app.tools.mrd_provider as mrd
 from app import LOG_CALL_DELIMITER
 from app.dal import result_dal, task_dal
-from app.tools.dicom import provide_p10_dicom, resolve_dicom_path
+from app.tools.dicom_provider import provide_p10_dicom, resolve_dicom_path
 
 # Http status codes
 # 200 = Ok: GET, PUT
@@ -183,8 +186,10 @@ async def set_result(
 
 @result_router.get(
     "/dcm/{workflow_id}/{task_id}/{result_id}/{filename}",
+    operation_id="get-dicom",
     responses={200: {"content": {"application/dicom": {}}}},
-    tags=["results"],
+    tags=["results", "data"],
+    summary="Get DICOM result",
 )
 async def get_dicom(
     workflow_id: str, task_id: str, result_id: str, filename: str, user: Annotated[User, Depends(get_current_user)]
@@ -209,3 +214,82 @@ async def get_dicom(
         return provide_p10_dicom(dicom_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to provide P10 DICOM: {e}")
+
+
+
+@result_router.get(
+    "/mrd/{workflow_id}/{task_id}/{result_id}/meta",
+    response_model=MRDMetaResponse,
+    operation_id="get-mrd-meta",
+    tags=["results", "data"],
+    summary="Get ISMRMRD metadata (indexed acquisitions)",
+)
+def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
+    """Get MRD meta info."""
+    try:
+        path = mrd.locate_mrd(workflow_id, task_id, result_id)
+    except FileNotFoundError:
+        raise HTTPException(404, "MRD file not found")
+
+    return MRDMetaResponse(
+        workflow_id=workflow_id,
+        task_id=task_id,
+        result_id=result_id,
+        dtype="fc32",
+        acquisitions=mrd.build_index_meta(path),
+    )
+
+
+@result_router.get(
+    "/mrd/{workflow_id}/{task_id}/{result_id}/data",
+    operation_id="getMRD",
+    tags=["results", "data"],
+    summary="Get MRD (binary, interleaved float32 complex)",
+    responses={
+        200: {
+            "description": "Binary packet stream with a tiny header + payload(s).",
+            "content": {
+                "application/octet-stream": {
+                    "schema": {"type": "string", "format": "binary"},
+                },
+            },
+        },
+    },
+)
+def get_mrd_binary(
+    workflow_id: str,
+    task_id: str,
+    result_id: str,
+    ids: str = Query(..., description="IDs: '0,1,10-20,40-50:2'"),
+    coil_idx: int = Query(0, ge=0, description="Coil index"),
+    stride: int = Query(1, ge=1, description="Decimate samples by stride"),
+):
+    """Get MRD as binary stream."""
+    try:
+        path = mrd.locate_mrd(workflow_id, task_id, result_id)
+    except FileNotFoundError:
+        raise HTTPException(404, "MRD file not found")
+
+    try:
+        acq_ids = mrd.parse_ids(ids)
+    except Exception as e:
+        raise HTTPException(400, f"Bad params: {e}")
+
+    arrays = mrd.load_acquisitions_slices(path, acq_ids, coil_idx=coil_idx, stride=stride)
+
+    def gen():
+        # Packet: [u32 'ISMR'][u16 ver=1][u16 n]
+        magic, ver = 0x49534D52, 1
+        ids_list = list(acq_ids)
+        yield struct.pack("<IHH", magic, ver, len(ids_list))
+        for aid, arr in zip(ids_list, arrays):
+            nsamp, _ = arr.shape
+            payload = arr.tobytes(order="C")
+            # [u32 acqId][u16 nCoils][u16 dtype=1(fc32)][u32 nSamples][u32 byteLen]
+            yield struct.pack("<IHHII", int(aid), 1, 1, int(nsamp), len(payload))
+            view = memoryview(payload)
+            step = 1 << 20
+            for i in range(0, len(payload), step):
+                yield view[i:i+step]
+
+    return StreamingResponse(gen(), media_type="application/octet-stream")

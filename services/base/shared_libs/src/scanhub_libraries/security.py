@@ -2,19 +2,17 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Security functions shared between the microservices."""
-
-import time
-from typing import Annotated
 import http.client
 import json
+import time
 from hashlib import scrypt, sha256
+from typing import Annotated
 
-from passlib.hash import argon2
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends, status, HTTPException
+from passlib.hash import argon2
 
 from scanhub_libraries.models import User
-
 
 USERLOGIN_HOST = "user-login-manager:8000"
 USERLOGIN_URI = "/api/v1/userlogin/getcurrentuser"
@@ -22,34 +20,32 @@ USERLOGIN_URI = "/api/v1/userlogin/getcurrentuser"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+    conn = http.client.HTTPConnection(USERLOGIN_HOST, timeout=5)
+    try:
+        conn.request("GET", USERLOGIN_URI, headers={"Authorization": f"Bearer {access_token}"})
+        response = conn.getresponse()
+        if response.status != 200:
+            print("Received invalid token.")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        body = response.read()
+    finally:
+        conn.close()  # ensures socket is closed
 
-async def get_current_user(
-            access_token: Annotated[str, Depends(oauth2_scheme)]
-        ) -> User:
-    connection = http.client.HTTPConnection(USERLOGIN_HOST)
-    connection.request("GET", 
-                       USERLOGIN_URI, 
-                       headers={"Authorization": "Bearer " + access_token})
-    response = connection.getresponse()
-    if response.status != 200:
-        print("Received invalid token.")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    else:
-        responsebody = response.read()
-        responsebody_json = json.loads(responsebody)
-        return User(username=responsebody_json["username"],
-                    first_name=responsebody_json["first_name"],
-                    last_name=responsebody_json["last_name"],
-                    email=responsebody_json["email"],
-                    role=responsebody_json["role"],
-                    access_token="",
-                    token_type="",
-                    last_activity_unixtime=None,
-                    last_login_unixtime=None)
+    data = json.loads(body)
+    return User(username=data["username"],
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                email=data["email"],
+                role=data["role"],
+                access_token="",
+                token_type="",
+                last_activity_unixtime=None,
+                last_login_unixtime=None)
 
 
 def compute_complex_password_hash(password: str, salt: str) -> str:

@@ -29,9 +29,9 @@ async def add_task_data(payload: BaseAcquisitionTask | BaseDAGTask, creator) -> 
     """
     new_task: AcquisitionTask | DAGTask
     if payload.task_type is TaskType.ACQUISITION:
-        new_task = AcquisitionTask(**payload.dict(), creator=creator)
+        new_task = AcquisitionTask(**payload.model_dump(), creator=creator)
     elif payload.task_type is TaskType.DAG:
-        new_task = DAGTask(**payload.dict(), creator=creator)
+        new_task = DAGTask(**payload.model_dump(), creator=creator)
     else:
         raise ValueError(f"Unsupported task type: {payload.task_type}")
 

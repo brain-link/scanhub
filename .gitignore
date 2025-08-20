@@ -151,4 +151,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/device_credentials.json
+*device_credentials.json
+

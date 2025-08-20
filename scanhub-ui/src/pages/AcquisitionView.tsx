@@ -23,6 +23,7 @@ import AcquisitionControl from '../components/AcquisitionControl'
 import ConfirmAcquisitionLimitsModal from '../components/AcquisitionLimitsModal'
 // import DicomViewer from '../components/DicomViewer'
 import DicomViewer3D from '../viewer/dicom/DicomViewer'
+import RawDataViewer from '../viewer/mrd/RawDataViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../openapi/generated-client/patient'
 import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../openapi/generated-client/exam'
@@ -263,7 +264,11 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      <DicomViewer3D taskId={ itemSelection.type == 'DAG' ? itemSelection.itemId : undefined} />
+      {
+        itemSelection.itemId ? (
+          itemSelection.type == 'DAG' ? <DicomViewer3D taskId={itemSelection.itemId}/> : <RawDataViewer taskId={itemSelection.itemId}/>
+        ) : <DicomViewer3D taskId={itemSelection.itemId}/>
+      }
     </Box>
   )
 }
