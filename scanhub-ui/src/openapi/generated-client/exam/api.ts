@@ -2867,7 +2867,7 @@ export class ExamsApi extends BaseAPI {
 export const HealthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * Get status / health endpoint.
          * @summary Readiness
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2907,7 +2907,7 @@ export const HealthApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = HealthApiAxiosParamCreator(configuration)
     return {
         /**
-         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * Get status / health endpoint.
          * @summary Readiness
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2929,7 +2929,7 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = HealthApiFp(configuration)
     return {
         /**
-         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * Get status / health endpoint.
          * @summary Readiness
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2948,7 +2948,7 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
  */
 export class HealthApi extends BaseAPI {
     /**
-     * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+     * Get status / health endpoint.
      * @summary Readiness
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
