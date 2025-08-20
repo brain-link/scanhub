@@ -3,7 +3,7 @@ import asyncio
 import numpy as np
 
 from sdk.client import Client
-from scanhub_libraries.models import AcquisitionPayload
+from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
 import os
 import json
 import signal
@@ -48,17 +48,24 @@ async def main():
         print(f"Credentials file not found at {credentials_path}. Please create a device first and save credentials file.")
         return
 
-    # Replace the parameters for each particular device!
-    client = Client(
-        websocket_uri="wss://localhost:8443/api/v1/device/ws",
-        device_id=credentials.get("device_id"),
-        device_token=credentials.get("device_token"),
+    device_details = DeviceDetails(
         device_name="RandomDataSimulator",
         serial_number="v1.0",
         manufacturer="BrainLink",
         modality="MRI",
         site="Berlin",
-        ca_file="../../secrets/certificate.pem"
+        parameter={
+            "larmor_frequency": 2.025e6,
+        },
+    )
+
+    # Replace the parameters for each particular device!
+    client = Client(
+        websocket_uri="wss://localhost:8443/api/v1/device/ws",
+        device_id=credentials.get("device_id"),
+        device_token=credentials.get("device_token"),
+        ca_file="../../secrets/certificate.pem",
+        device_details=device_details,
     )
 
     client.set_feedback_handler(feedback_handler)
