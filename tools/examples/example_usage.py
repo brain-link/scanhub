@@ -14,6 +14,7 @@ async def perform_scan(client, payload: AcquisitionPayload):
     """Simulate a scanning process by sending status updates and results."""
     print("Received acquisition request with task ID: ", payload.id)
 
+    # Update device status
     for percentage in [0, 25, 50, 75, 100]:
         await asyncio.sleep(1)
         await client.send_scanning_status(
@@ -22,10 +23,12 @@ async def perform_scan(client, payload: AcquisitionPayload):
             user_access_token=payload.access_token,
         )
 
-    # Get MRD file
+    # Print device parameters obtained
+    print("Retrieved device parameters dict: ", payload.device_parameter)
+
+    # Upload MRD result
     directory = Path(__file__).resolve().parent
     file_path = directory / "data.mrd"
-
     await client.upload_file_result(
         file_path=file_path,
         task_id=str(payload.id),
