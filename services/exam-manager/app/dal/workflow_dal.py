@@ -28,7 +28,7 @@ async def add_workflow_data(payload: BaseWorkflow, creator: str) -> Workflow:
     -------
         Database orm model of created workflow
     """
-    new_workflow = Workflow(**payload.dict(), creator=creator)
+    new_workflow = Workflow(**payload.model_dump(), creator=creator)
     async with async_session() as session:
         session.add(new_workflow)
         await session.commit()
