@@ -101,7 +101,7 @@ export default function Controls(p: ControlsProps) {
       {
         p.overlay ?
           <Stack direction={'row'} gap={2}>
-            <FormLabel>Acquisitions</FormLabel>
+            <FormLabel>Readout range</FormLabel>
             <Input
               size="sm"
               type="number"
@@ -118,7 +118,7 @@ export default function Controls(p: ControlsProps) {
             />
           </Stack> :
           <Stack direction={'row'} gap={2}>
-            <FormLabel>Current</FormLabel>
+            <FormLabel>Readout</FormLabel>
             <Input
               size="sm"
               type="number"

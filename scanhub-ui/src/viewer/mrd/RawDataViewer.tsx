@@ -14,8 +14,7 @@ import AlertItem from '../../components/AlertItem';
 import { Alerts } from '../../interfaces/components.interface';
 import Card from '@mui/joy/Card';
 import Stack from '@mui/joy/Stack';
-
-import { color, type EChartsOption } from 'echarts';
+import { type EChartsOption } from 'echarts';
 
 // ---- ECharts (no barrel import) ----
 import { init, use as echartsUse } from 'echarts/core';
@@ -159,13 +158,13 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
       const yLabel = (domain: 'time' | 'freq') => {
         switch (mode) {
           case 'abs':
-            return domain === 'time' ? '|s(t)|' : '|S(f)|';
+            return domain === 'time' ? 'Magnitude s(t)' : 'Magnitude S(f)';
           case 'phase':
-            return 'Phase (rad)';
+            return 'Phase / rad';
           case 'real':
-            return domain === 'time' ? 'Re{s(t)}' : 'Re{S(f)}';
+            return domain === 'time' ? 'Real s(t)' : 'Real S(f)';
           case 'imag':
-            return domain === 'time' ? 'Im{s(t)}' : 'Im{S(f)}';
+            return domain === 'time' ? 'Imaginary s(t)' : 'Imaginary S(f)';
           default:
             return '';
         }
@@ -197,9 +196,10 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
           type: 'value',
           gridIndex: gridIdx,
           name: yLabel(title === 'Time' ? 'time' : 'freq'),
+          nameLocation: 'middle',
         });
 
-        traces.forEach((t, idx) => {
+        traces.forEach((t) => {
           const len = t.x.length;
           const pts = new Array(len);
           for (let i = 0; i < len; i++) pts[i] = [t.x[i], t.y[i]];
@@ -210,20 +210,16 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
             yAxisIndex: gridIdx,
             showSymbol: false,
             sampling: 'lttb',
-            lineStyle: {
-              width: 1.5,
-            },
+            lineStyle: { width: 1.5 },
             data: pts,
           });
         });
 
-        dataZoom.push(
-          {
-            type: 'inside',
-            xAxisIndex: gridIdx,
-            filterMode: 'none',   // independent zoom
-          },
-        );
+        dataZoom.push({
+          type: 'inside',
+          xAxisIndex: gridIdx,
+          filterMode: 'none',   // independent zoom
+        });
       };
 
       if (wantTime && wantFreq) {
@@ -267,7 +263,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
           show: true,
           feature: {
             dataZoom: {
-              yAxisIndex: 'none',   // zoom only in x by default
+              // yAxisIndex: 'none',   // zoom only in x
               title: {
                 zoom: 'Zoom',
                 back: 'Reset Zoom'
