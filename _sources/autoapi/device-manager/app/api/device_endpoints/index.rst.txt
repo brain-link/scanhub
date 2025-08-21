@@ -36,6 +36,7 @@ Functions
    device-manager.app.api.device_endpoints.get_device
    device-manager.app.api.device_endpoints.create_device
    device-manager.app.api.device_endpoints.delete_device
+   device-manager.app.api.device_endpoints.update_device_parameter
 
 
 Module Contents
@@ -112,5 +113,28 @@ Module Contents
    Returns
    -------
        dict: The response indicating the success or failure of the deletion.
+
+
+.. py:function:: update_device_parameter(device_id: uuid.UUID | str, payload: dict, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.DeviceOut
+   :async:
+
+
+   Update acquisition/device parameter.
+
+   Parameters
+   ----------
+   device_id
+       Id of the device to be updated
+   payload
+       Parameter dictionary
+
+   Returns
+   -------
+       Parameter dictionary
+
+   Raises
+   ------
+   HTTPException
+       404: Not found
 
 

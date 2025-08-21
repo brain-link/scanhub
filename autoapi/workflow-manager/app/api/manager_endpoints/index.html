@@ -443,19 +443,22 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI" title="workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DICOM_BASE_URI</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI" title="workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WORKFLOW_MANAGER_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI" title="workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DICOM_BASE_URI</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.dg_client" title="workflow-manager.app.api.manager_endpoints.dg_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dg_client</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR" title="workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.router" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.dg_client" title="workflow-manager.app.api.manager_endpoints.dg_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dg_client</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.router" title="workflow-manager.app.api.manager_endpoints.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme" title="workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -483,17 +486,22 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">EXAM_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'exam-manager:8000'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">EXAM_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://exam-manager:8000/api/v1/exam'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">PATIENT_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'patient-manager:8100'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">PATIENT_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://patient-manager:8100/api/v1/patient'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI">
-<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">DEVICE_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'device-manager:8000'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">DEVICE_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://device-manager:8000/api/v1/device'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">WORKFLOW_MANAGER_URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://workflow-manager:8000/api/v1/workflowmanager'</span></em><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
@@ -604,6 +612,7 @@ access_token (str): The access token for authentication.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">EXAM_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">PATIENT_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">DEVICE_MANAGER_URI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI"><code class="docutils literal notranslate"><span class="pre">WORKFLOW_MANAGER_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI"><code class="docutils literal notranslate"><span class="pre">DICOM_BASE_URI</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.dg_client"><code class="docutils literal notranslate"><span class="pre">dg_client</span></code></a></li>
