@@ -110,7 +110,7 @@ services:
       args: 
           - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
-    - ./services/patient-manager/app:/app/
+      - ./services/patient-manager/app:/app/
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://patient-manager:8100/api/v1/patient/health/readiness"]
