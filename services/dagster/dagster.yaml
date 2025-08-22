@@ -1,7 +1,13 @@
-# dagster.yaml
-# Dagster instance configuration
+# dagster.yaml -- Dagster instance configuration
 
 # DefaultRunLauncher runs jobs inside the same container/host as the daemon process.
 run_launcher:
   module: dagster
   class: DefaultRunLauncher
+
+# Allows to execute up to 4 runs in parallel.
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: QueuedRunCoordinator
+  config:
+    max_concurrent_runs: 4   # adjust as needed
