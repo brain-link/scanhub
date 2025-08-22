@@ -11,8 +11,8 @@ Classes:
 import logging
 import ssl
 
-from websockets.client import connect
 from websockets.exceptions import ConnectionClosed
+from websockets.legacy.client import WebSocketClientProtocol, connect
 
 
 class WebSocketHandler:
@@ -44,7 +44,7 @@ class WebSocketHandler:
         self.uri = uri
         self.device_id = device_id
         self.device_token = device_token
-        self.websocket = None
+        self.websocket: WebSocketClientProtocol | None = None
         self.reconnect_delay = reconnect_delay
         self.ca_file = ca_file
         self.logger = logging.getLogger("WebSockerHandler")
@@ -68,7 +68,7 @@ class WebSocketHandler:
         )
         self.logger.info("WebSocket connection established.")
 
-    async def send_message(self, message):
+    async def send_message(self, message) -> None:
         """Send a message through the WebSocket connection.
 
         Args:
@@ -79,12 +79,15 @@ class WebSocketHandler:
             ConnectionError: If the WebSocket connection is closed during the send operation.
         """
         try:
-            await self.websocket.send(message)
-        except ConnectionClosed as e:
-            self.logger.error("Failed to send message, connection closed: %s", e)
-            raise ConnectionError("Connection closed while trying to send a message.") from e
+            if self.websocket is not None:
+                await self.websocket.send(message)
+            else:
+                raise ConnectionError("WebSocket closed")
+        except Exception:
+            self.logger.exception("Failed to send message.", exc_info=True)
+            raise
 
-    async def receive_message(self):
+    async def receive_message(self) -> str | bytes | None:
         """Receive a message from the WebSocket connection.
 
         Returns
@@ -95,17 +98,22 @@ class WebSocketHandler:
             Logs an error if the connection is closed.
         """
         try:
-            return await self.websocket.recv()
-        except ConnectionClosed as e:
-            self.logger.error("Connection closed: %s", e)
+            if self.websocket is not None:
+                return await self.websocket.recv()
+            raise ConnectionError("WebSocket closed")
+        except ConnectionClosed:
+            self.logger.info("WebSocket closed.")
             return None
+        except Exception:
+            self.logger.exception("Error on websocket message receive.", exc_info=True)
+            raise
 
-    async def close(self):
+    async def close(self) -> None:
         """Close the WebSocket connection gracefully.
 
         Ensures the WebSocket connection is closed and logs the event.
         """
-        if self.websocket:
+        if self.websocket is not None:
             await self.websocket.close()
             self.logger.info("WebSocket connection closed.")
             self.websocket = None
