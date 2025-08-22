@@ -32,7 +32,14 @@ class WebSocketHandler:
         logger (logging.Logger): Logger instance for logging events.
     """
 
-    def __init__(self, uri, device_id, device_token, reconnect_delay=5, ca_file=None):
+    def __init__(
+        self,
+        uri: str,
+        device_id: str,
+        device_token: str,
+        reconnect_delay: int = 5,
+        ca_file: str | None = None,
+    ) -> None:
         """Initialize the WebSocketHandler instance.
 
         Args:
@@ -41,15 +48,15 @@ class WebSocketHandler:
                                              retrying a failed connection.
                                              Defaults to 5.
         """
-        self.uri = uri
-        self.device_id = device_id
-        self.device_token = device_token
+        self.uri: str = uri
+        self.device_id: str = device_id
+        self.device_token: str = device_token
         self.websocket: WebSocketClientProtocol | None = None
-        self.reconnect_delay = reconnect_delay
-        self.ca_file = ca_file
-        self.logger = logging.getLogger("WebSockerHandler")
+        self.reconnect_delay: int = reconnect_delay
+        self.ca_file: str | None = ca_file
+        self.logger: logging.Logger = logging.getLogger("WebSockerHandler")
 
-    async def connect(self):
+    async def connect(self) -> None:
         """Establish a WebSocket connection.
 
         Continuously attempts to connect to the WebSocket server specified by the URI.
@@ -68,7 +75,7 @@ class WebSocketHandler:
         )
         self.logger.info("WebSocket connection established.")
 
-    async def send_message(self, message) -> None:
+    async def send_message(self, message: str | bytes) -> None:
         """Send a message through the WebSocket connection.
 
         Args:

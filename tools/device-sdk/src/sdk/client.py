@@ -14,8 +14,9 @@ import asyncio
 import hashlib
 import json
 import logging
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Awaitable, Callable, Optional
+from typing import Any, Optional
 
 from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
 
@@ -181,8 +182,8 @@ class Client:
         self,
         status: str,
         user_access_token: str | None = None,
-        data: None | dict = None,
-        task_id: str | None = None
+        data: None | dict[str, Any] = None,
+        task_id: str | None = None,
     ) -> None:
         """Send a status update to the server.
 
@@ -312,7 +313,7 @@ class Client:
         else:
             self.logger.info("Error received from server: %s", message)
 
-    def set_feedback_handler(self, handler) -> None:
+    def set_feedback_handler(self, handler: Callable[[str], Awaitable[None]]) -> None:
         """Set a callback function to handle feedback messages.
 
         Args:
@@ -322,7 +323,7 @@ class Client:
         """
         self.feedback_handler = handler
 
-    def set_error_handler(self, handler) -> None:
+    def set_error_handler(self, handler: Callable[[str], Awaitable[None]]) -> None:
         """Set a callback function to handle error messages.
 
         Args:
@@ -332,7 +333,7 @@ class Client:
         """
         self.error_handler = handler
 
-    def set_scan_callback(self, callback) -> None:
+    def set_scan_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
         """Set a callback function to handle the scanning process.
 
         Args:
