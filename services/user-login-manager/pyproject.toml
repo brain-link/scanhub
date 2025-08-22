@@ -64,9 +64,10 @@ strict = true
 convention = "numpy"
 
 [tool.mypy]
+files = ["src"]
+python_version = "3.13"
 warn_return_any = false
 check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
-python_version = "3.13"
 ignore_missing_imports = true

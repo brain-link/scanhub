@@ -17,7 +17,7 @@ jobs:
           - path: services/workflow-manager
           - path: services/device-manager
           - path: services/user-login-manager
-          - path: serivces/patient-manager
+          - path: services/patient-manager
           - path: tools/device-sdk
 
     steps:
@@ -75,4 +75,4 @@ jobs:
 
       - name: Run mypy type checker
         working-directory: ${{ matrix.target.path }}
-        run: poetry run mypy app/
+        run: poetry run mypy
