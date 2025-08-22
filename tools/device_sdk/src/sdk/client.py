@@ -7,6 +7,7 @@ device-manager via WebSocket.
 Classes:
     Client: Handles device registration, status updates, and server command processing.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -170,13 +171,9 @@ class Client:
                 await self.send_error_status("Scan callback not defined.")
         except Exception as e:
             await self.send_error_status(str(e))
-            self.logger.error(
-                "An error occurred while handling the start command: %s", str(e)
-            )
+            self.logger.error("An error occurred while handling the start command: %s", str(e))
 
-    async def send_status(
-        self, status, data=None, task_id=None, user_access_token: str = None
-    ) -> None:
+    async def send_status(self, status, data=None, task_id=None, user_access_token: str = None) -> None:
         """Send a status update to the server.
 
         Args:
@@ -194,20 +191,14 @@ class Client:
         }
         await self.websocket_handler.send_message(json.dumps(status_data))
 
-    async def upload_file_result(
-        self, file_path: str | Path, task_id: str, user_access_token: str
-    ) -> None:
+    async def upload_file_result(self, file_path: str | Path, task_id: str, user_access_token: str) -> None:
         """Send MRD file as base64-encoded binary."""
         path = Path(file_path) if not isinstance(file_path, Path) else file_path
         if not path.exists():
             raise FileNotFoundError(f"File {file_path} does not exist.")
 
         size = path.stat().st_size
-        ct = (
-            "application/x-ismrmrd+hdf5"
-            if path.suffix == ".mrd"
-            else "application/octet-stream"
-        )
+        ct = "application/x-ismrmrd+hdf5" if path.suffix == ".mrd" else "application/octet-stream"
 
         # Optional integrity: precompute sha256
         sha = hashlib.sha256()
@@ -281,9 +272,7 @@ class Client:
 
         Waits for `reconnect_delay` seconds before attempting to reconnect.
         """
-        self.logger.info(
-            "Attempting to reconnect in %d seconds...", self.reconnect_delay
-        )
+        self.logger.info("Attempting to reconnect in %d seconds...", self.reconnect_delay)
         await asyncio.sleep(self.reconnect_delay)
         await self.connect_and_register()
 
