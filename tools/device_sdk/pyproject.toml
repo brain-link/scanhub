@@ -1,32 +1,61 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
-[tool.setuptools]
-packages = ["sdk"]
-package-dir = {"" = "src"}
-
-[project]
+[tool.poetry]
 name = "scanhub-device-sdk"
 version = "0.0.1"
 description = "Software development kit to connect devices to ScanHub."
 authors = [
-    {name="Johannes Behrens", email="johannes.behrens@brain-link.de"},
-    {name="David Schote", email="david.schote@brain-link.de"}
+    "Johannes Behrens <johannes.behrens@brain-link.de>",
+    "David Schote <david.schote@brain-link.de>"
 ]
 readme = "README.md"
-requires-python = ">=3.13,<3.14"
-keywords = ["SDK, ScanHub, console, Device-SDK"]
+packages = [{ include = "sdk", from = "src" }]
 
-classifiers = [
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3 :: Only",
-]
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+numpy = "^2.3.2"
+websockets = "^15.0.1"
+scanhub-libraries = { path = "../../services/base/shared_libs", develop = true }
 
-dependencies = [
-    "numpy>=2.3.2",
-    "websockets>=15.0.1",
-]
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.12.3"
+mypy = "^1.16.1"
 
 [tool.setuptools.package-data]
 "sdk" = ["py.typed"]
+
+[tool.ruff]
+src = ["src"]
+line-length = 120
+indent-width = 4
+target-version = "py313"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.lint]
+# Enable linters
+# E = pycodestyle (error)
+# W = pycodestyle (warning)
+# F = Pyflakes
+# S = flake8-bandit
+# I = isort
+# N = pep8-naming
+# D = pydocstyle
+select = ["E", "W", "F", "S", "I", "N", "D"]
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.mypy]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+python_version = "3.13"
+ignore_missing_imports = true
