@@ -33,11 +33,12 @@ async def lifespan(app: FastAPI):
         pass
 
 
-
 app = FastAPI(
     openapi_url="/api/v1/device/openapi.json",
     docs_url="/api/v1/device/docs",
+    lifespan=lifespan,
 )
+
 
 # To be done: Specify specific origins:
 #   Wildcard ["*"] excludes eeverything that involves credentials
