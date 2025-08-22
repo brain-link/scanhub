@@ -53,7 +53,7 @@ strict = true
 convention = "numpy"
 
 [tool.mypy]
-files = ["src"]
+files = ["app"]
 python_version = "3.13"
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 warn_return_any = false

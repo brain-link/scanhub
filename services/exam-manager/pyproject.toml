@@ -70,7 +70,7 @@ strict = true
 convention = "numpy"
 
 [tool.mypy]
-files = ["src"]
+files = ["app"]
 python_version = "3.13"
 warn_return_any = false
 check_untyped_defs = true
