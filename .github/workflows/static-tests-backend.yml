@@ -6,27 +6,21 @@ on:
 jobs:
 
   Linting:
-    name: 'Linting service'
-
+    name: 'Backend Linting & Typecheck'
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./services
-
+    continue-on-error: True
     strategy:
       matrix:
         python-version: ["3.13"]
-        service: [
-          "exam-manager",
-          "workflow-manager",
-          "device-manager",
-          "user-login-manager",
-          "patient-manager",
-        ]
-
-    continue-on-error: True
+        target:
+          - path: ./services/exam-manager
+          - path: ./services/workflow-manager
+          - path: ./services/device-manager
+          - path: ./services/user-login-manager
+          - path: ./serivces/patient-manager
+          - path: ./tools/device-sdk
 
     steps:
-
       - uses: actions/checkout@v4
 
       - name: Set up python ${{ matrix.python-version }}
@@ -47,7 +41,7 @@ jobs:
           virtualenvs-in-project: false
 
       - name: Update pip
-        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        working-directory: ${{ matrix.target.path }}
         run: poetry run pip install --upgrade pip
 
       - name: Cache poetry dependencies
@@ -58,12 +52,12 @@ jobs:
           key: pydeps-${{ hashFiles('**/poetry.lock') }}
 
       - name: Check cached dependencies
-        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        working-directory: ${{ matrix.target.path }}
         run: poetry install --no-interaction --with lint --no-root
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
       - name: Poetry install
-        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        working-directory: ${{ matrix.target.path }}
         run: poetry install --no-interaction --with lint
 
       - name: Install build tools
@@ -76,9 +70,9 @@ jobs:
         run: pip install ./services/base/shared_libs/
 
       - name: Run ruff linter
-        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        working-directory: ${{ matrix.target.path }}
         run: poetry run ruff check
 
       - name: Run mypy type checker
-        working-directory: ${{ env.working-directory }}/${{ matrix.service }}
+        working-directory: ${{ matrix.target.path }}
         run: poetry run mypy app/
