@@ -6,19 +6,19 @@ on:
 jobs:
 
   Linting:
-    name: 'Backend Linting & Typecheck'
+    name: 'Backend linting & typecheck'
     runs-on: ubuntu-latest
     continue-on-error: True
     strategy:
       matrix:
         python-version: ["3.13"]
         target:
-          - path: ./services/exam-manager
-          - path: ./services/workflow-manager
-          - path: ./services/device-manager
-          - path: ./services/user-login-manager
-          - path: ./serivces/patient-manager
-          - path: ./tools/device-sdk
+          - path: services/exam-manager
+          - path: services/workflow-manager
+          - path: services/device-manager
+          - path: services/user-login-manager
+          - path: serivces/patient-manager
+          - path: tools/device-sdk
 
     steps:
       - uses: actions/checkout@v4
