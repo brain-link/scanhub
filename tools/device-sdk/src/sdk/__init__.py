@@ -1,4 +1,4 @@
-# device_sdk/__init__.py
+"""device_sdk/__init__.py initialization."""
 
 from .client import Client
 from .websocket_handler import WebSocketHandler

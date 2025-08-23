@@ -1,7 +1,8 @@
+# Define repository definitions
 load_from:
   - python_file:
       relative_path: dagster_workflows/repository.py
-      attribute: reconstruction_repository
-  - python_file:
-      relative_path: dagster_workflows/repository.py
-      attribute: processing_repository
+      attribute: definitions
+#   - python_file:
+#       relative_path: dagster_workflows/repository.py
+#       attribute: processing_repository

@@ -7,13 +7,16 @@ device-manager via WebSocket.
 Classes:
     Client: Handles device registration, status updates, and server command processing.
 """
+
 from __future__ import annotations
 
 import asyncio
 import hashlib
 import json
 import logging
+from collections.abc import Awaitable, Callable
 from pathlib import Path
+from typing import Any, Optional
 
 from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
 
@@ -81,9 +84,12 @@ class Client:
         self.device_token = device_token
         self.details: DeviceDetails = device_details
         self.reconnect_delay = reconnect_delay
-        self.feedback_handler = None  # Optional callback for feedback
-        self.error_handler = None  # Optional callback for error
-        self.scan_callback = None  # Callback for the scan process
+        # (Optional) Server feedback handler callback function
+        self.feedback_handler: Optional[Callable[[str], Awaitable[None]]] = None
+        # (Optional) Server error handler callback function
+        self.error_handler: Optional[Callable[[str], Awaitable[None]]] = None
+        # Acquisition callback function
+        self.scan_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
 
         # Initialize logger
         self.logger = logging.getLogger("DeviceClient")
@@ -170,12 +176,14 @@ class Client:
                 await self.send_error_status("Scan callback not defined.")
         except Exception as e:
             await self.send_error_status(str(e))
-            self.logger.error(
-                "An error occurred while handling the start command: %s", str(e)
-            )
+            self.logger.error("An error occurred while handling the start command: %s", str(e))
 
     async def send_status(
-        self, status, data=None, task_id=None, user_access_token: str = None
+        self,
+        status: str,
+        user_access_token: str | None = None,
+        data: None | dict[str, Any] = None,
+        task_id: str | None = None,
     ) -> None:
         """Send a status update to the server.
 
@@ -194,20 +202,14 @@ class Client:
         }
         await self.websocket_handler.send_message(json.dumps(status_data))
 
-    async def upload_file_result(
-        self, file_path: str | Path, task_id: str, user_access_token: str
-    ) -> None:
+    async def upload_file_result(self, file_path: str | Path, task_id: str, user_access_token: str) -> None:
         """Send MRD file as base64-encoded binary."""
         path = Path(file_path) if not isinstance(file_path, Path) else file_path
         if not path.exists():
             raise FileNotFoundError(f"File {file_path} does not exist.")
 
         size = path.stat().st_size
-        ct = (
-            "application/x-ismrmrd+hdf5"
-            if path.suffix == ".mrd"
-            else "application/octet-stream"
-        )
+        ct = "application/x-ismrmrd+hdf5" if path.suffix == ".mrd" else "application/octet-stream"
 
         # Optional integrity: precompute sha256
         sha = hashlib.sha256()
@@ -281,9 +283,7 @@ class Client:
 
         Waits for `reconnect_delay` seconds before attempting to reconnect.
         """
-        self.logger.info(
-            "Attempting to reconnect in %d seconds...", self.reconnect_delay
-        )
+        self.logger.info("Attempting to reconnect in %d seconds...", self.reconnect_delay)
         await asyncio.sleep(self.reconnect_delay)
         await self.connect_and_register()
 
@@ -295,7 +295,7 @@ class Client:
             message (str): The feedback message.
 
         """
-        if self.feedback_handler:
+        if self.feedback_handler is not None:
             await self.feedback_handler(message)
         else:
             self.logger.info("Feedback received from server: %s", message)
@@ -308,12 +308,12 @@ class Client:
             message (str): The error message.
 
         """
-        if self.error_handler:
+        if self.error_handler is not None:
             await self.error_handler(message)
         else:
             self.logger.info("Error received from server: %s", message)
 
-    def set_feedback_handler(self, handler) -> None:
+    def set_feedback_handler(self, handler: Callable[[str], Awaitable[None]]) -> None:
         """Set a callback function to handle feedback messages.
 
         Args:
@@ -323,7 +323,7 @@ class Client:
         """
         self.feedback_handler = handler
 
-    def set_error_handler(self, handler) -> None:
+    def set_error_handler(self, handler: Callable[[str], Awaitable[None]]) -> None:
         """Set a callback function to handle error messages.
 
         Args:
@@ -333,7 +333,7 @@ class Client:
         """
         self.error_handler = handler
 
-    def set_scan_callback(self, callback) -> None:
+    def set_scan_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
         """Set a callback function to handle the scanning process.
 
         Args:

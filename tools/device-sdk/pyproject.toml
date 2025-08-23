@@ -3,48 +3,37 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "user-manager"
+name = "scanhub-device-sdk"
 version = "0.0.1"
-description = "Provides functionality for user login and user management."
+description = "Software development kit to connect devices to ScanHub."
 authors = [
-    "David Schote <david.schote@brain-link.de>", 
-    "Christoph Dinh <christoph.dinh@brain-link.de>",
-    "Ben Wilhelm <ben.wilhelm@uniklinik-freiburg.de>"
+    "Johannes Behrens <johannes.behrens@brain-link.de>",
+    "David Schote <david.schote@brain-link.de>"
 ]
 readme = "README.md"
-packages = [{include = "app"}]
+packages = [{ include = "sdk", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
-asyncpg = "^0.30.0"
-uvicorn = "^0.22.0"
-psycopg2-binary = "^2.9.6"
-python-multipart = "^0.0.6"
-async-sqlalchemy = "^1.0.0"
-typing-extensions = "^4.14.1"
-
-[tool.poetry.group.test.dependencies]
-coverage = "*"
-codecov = "*"
-pytest = "*"
-
-[tool.poetry.group.docs.dependencies]
-sphinx = "*"
-sphinx_rtd_theme = "*"
-
+numpy = "^2.3.2"
+websockets = "^15.0.1"
+scanhub-libraries = { path = "../../services/base/shared_libs", develop = true }
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.12.3"
 mypy = "^1.16.1"
 
 [tool.setuptools.package-data]
-"app" = ["py.typed"]
+"sdk" = ["py.typed"]
 
 [tool.ruff]
-src = ["app"]
+src = ["src"]
 line-length = 120
 indent-width = 4
-target-version = "py310"
+target-version = "py313"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
 
 [tool.ruff.lint]
 # Enable linters
@@ -64,8 +53,9 @@ strict = true
 convention = "numpy"
 
 [tool.mypy]
-files = ["app"]
+files = ["src"]
 python_version = "3.13"
+strict = true
 warn_return_any = false
 check_untyped_defs = true
 warn_no_return = true

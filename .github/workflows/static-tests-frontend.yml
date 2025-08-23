@@ -5,7 +5,7 @@ on:
 
 jobs:
   linting-frontend:
-    name: Linting frontend
+    name: Frontend linting
     runs-on: ubuntu-latest
 
     defaults:

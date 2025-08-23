@@ -11,16 +11,18 @@ Classes:
 import logging
 import ssl
 
-from websockets.client import connect
 from websockets.exceptions import ConnectionClosed
+from websockets.legacy.client import WebSocketClientProtocol, connect
 
 
 class WebSocketHandler:
     """
-    A handler for managing WebSocket connections, sending and receiving messages,
-    and handling automatic reconnection.
+    Handler for managing WebSocket connections.
 
-    Attributes:
+    Sends and receives messages, and handles automatic reconnection.
+
+    Attributes
+    ----------
         uri (str): The WebSocket server URI (device-manager) to connect to.
         websocket (websockets.WebSocketClientProtocol): The WebSocket connection object.
         device_id (str): The device ID to send when opening the connection.
@@ -30,9 +32,15 @@ class WebSocketHandler:
         logger (logging.Logger): Logger instance for logging events.
     """
 
-    def __init__(self, uri, device_id, device_token, reconnect_delay=5, ca_file=None):
-        """
-        Initializes the WebSocketHandler instance.
+    def __init__(
+        self,
+        uri: str,
+        device_id: str,
+        device_token: str,
+        reconnect_delay: int = 5,
+        ca_file: str | None = None,
+    ) -> None:
+        """Initialize the WebSocketHandler instance.
 
         Args:
             uri (str): The URI of the WebSocket server (device-manager).
@@ -40,17 +48,16 @@ class WebSocketHandler:
                                              retrying a failed connection.
                                              Defaults to 5.
         """
-        self.uri = uri
-        self.device_id = device_id
-        self.device_token = device_token
-        self.websocket = None
-        self.reconnect_delay = reconnect_delay
-        self.ca_file = ca_file
-        self.logger = logging.getLogger("WebSockerHandler")
+        self.uri: str = uri
+        self.device_id: str = device_id
+        self.device_token: str = device_token
+        self.websocket: WebSocketClientProtocol | None = None
+        self.reconnect_delay: int = reconnect_delay
+        self.ca_file: str | None = ca_file
+        self.logger: logging.Logger = logging.getLogger("WebSockerHandler")
 
-    async def connect(self):
-        """
-        Establishes a WebSocket connection.
+    async def connect(self) -> None:
+        """Establish a WebSocket connection.
 
         Continuously attempts to connect to the WebSocket server specified by the URI.
         Retries connection after `reconnect_delay` seconds in case of failure.
@@ -68,47 +75,52 @@ class WebSocketHandler:
         )
         self.logger.info("WebSocket connection established.")
 
-    async def send_message(self, message):
-        """
-        Sends a message through the WebSocket connection.
+    async def send_message(self, message: str | bytes) -> None:
+        """Send a message through the WebSocket connection.
 
         Args:
             message (str): The message to be sent over the WebSocket.
 
-        Raises:
+        Raises
+        ------
             ConnectionError: If the WebSocket connection is closed during the send operation.
         """
         try:
-            await self.websocket.send(message)
-        except ConnectionClosed as e:
-            self.logger.error("Failed to send message, connection closed: %s", e)
-            raise ConnectionError(
-                "Connection closed while trying to send a message."
-            ) from e
+            if self.websocket is not None:
+                await self.websocket.send(message)
+            else:
+                raise ConnectionError("WebSocket closed")
+        except Exception:
+            self.logger.exception("Failed to send message.", exc_info=True)
+            raise
 
-    async def receive_message(self):
-        """
-        Receives a message from the WebSocket connection.
+    async def receive_message(self) -> str | bytes | None:
+        """Receive a message from the WebSocket connection.
 
-        Returns:
+        Returns
+        -------
             str or None: The received message, or `None` if the connection is closed.
 
         Logs:
             Logs an error if the connection is closed.
         """
         try:
-            return await self.websocket.recv()
-        except ConnectionClosed as e:
-            self.logger.error("Connection closed: %s", e)
+            if self.websocket is not None:
+                return await self.websocket.recv()
+            raise ConnectionError("WebSocket closed")
+        except ConnectionClosed:
+            self.logger.info("WebSocket closed.")
             return None
+        except Exception:
+            self.logger.exception("Error on websocket message receive.", exc_info=True)
+            raise
 
-    async def close(self):
-        """
-        Closes the WebSocket connection gracefully.
+    async def close(self) -> None:
+        """Close the WebSocket connection gracefully.
 
         Ensures the WebSocket connection is closed and logs the event.
         """
-        if self.websocket:
+        if self.websocket is not None:
             await self.websocket.close()
             self.logger.info("WebSocket connection closed.")
             self.websocket = None
