@@ -1,18 +1,17 @@
-"""Example usage of the Device SDK for a simulated scanning process."""
+"""Example usage of the Device SDK for a simulated scanning process (cross-platform)."""
 import asyncio
-import numpy as np
-
-from sdk.client import Client
-from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
 import os
 import json
 import signal
 from pathlib import Path
 
+from sdk.client import Client
+from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
 
-async def perform_scan(client, payload: AcquisitionPayload):
+
+async def perform_scan(client: Client, payload: AcquisitionPayload):
     """Simulate a scanning process by sending status updates and results."""
-    print("Received acquisition request with task ID: ", payload.id)
+    print("Received acquisition request with task ID:", payload.id)
 
     # Update device status
     for percentage in [0, 25, 50, 75, 100]:
@@ -24,7 +23,7 @@ async def perform_scan(client, payload: AcquisitionPayload):
         )
 
     # Print device parameters obtained
-    print("Retrieved device parameters dict: ", payload.device_parameter)
+    print("Retrieved device parameters dict:", payload.device_parameter)
 
     # Upload MRD result
     directory = Path(__file__).resolve().parent
@@ -35,20 +34,25 @@ async def perform_scan(client, payload: AcquisitionPayload):
         user_access_token=payload.access_token,
     )
 
+
 async def feedback_handler(message):
     print(f"Server Feedback: {message}")
+
 
 async def error_handler(message):
     print(f"Server Error: {message}")
 
 
-async def main():    
+async def main():
     credentials_path = os.path.join(os.path.dirname(__file__), "device_credentials.json")
     try:
-        with open(credentials_path, "r") as f:
+        with open(credentials_path, "r", encoding="utf-8") as f:
             credentials = json.load(f)
     except FileNotFoundError:
-        print(f"Credentials file not found at {credentials_path}. Please create a device first and save credentials file.")
+        print(
+            f"Credentials file not found at {credentials_path}. "
+            "Please create a device first and save the credentials file."
+        )
         return
 
     device_details = DeviceDetails(
@@ -62,7 +66,6 @@ async def main():
         },
     )
 
-    # Replace the parameters for each particular device!
     client = Client(
         websocket_uri="wss://localhost:8443/api/v1/device/ws",
         device_id=credentials.get("device_id"),
@@ -75,23 +78,38 @@ async def main():
     client.set_error_handler(error_handler)
     client.set_scan_callback(lambda deviceTask: perform_scan(client, deviceTask))
 
-
     await client.start()
     print("Client started and waiting for commands from the server.")
     await client.send_ready_status()
-    
-    stop_event = asyncio.Event()
-    def shutdown():
-        stop_event.set()
-        
-    loop = asyncio.get_running_loop()
-    loop.add_signal_handler(signal.SIGINT, shutdown)
-    loop.add_signal_handler(signal.SIGTERM, shutdown)
 
-    await stop_event.wait()  # wait for signal
-    
+    # --- Cross-platform graceful shutdown ---
+    stop_event = asyncio.Event()
+
+    def shutdown():
+        # idempotent; safe to call multiple times
+        if not stop_event.is_set():
+            stop_event.set()
+
+    try:
+        loop = asyncio.get_running_loop()
+        # Works on Unix; raises NotImplementedError on Windows (Proactor loop)
+        loop.add_signal_handler(signal.SIGINT, shutdown)
+        loop.add_signal_handler(signal.SIGTERM, shutdown)
+        await stop_event.wait()
+    except (NotImplementedError, RuntimeError):
+        # Fallback for Windows/Proactor: rely on KeyboardInterrupt (Ctrl+C)
+        try:
+            while not stop_event.is_set():
+                await asyncio.sleep(3600)
+        except KeyboardInterrupt:
+            shutdown()
+
     print("\nStopping client...")
-    await client.stop()
+    try:
+        await client.stop()
+    except Exception as e:
+        print(f"Error while stopping client: {e}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
