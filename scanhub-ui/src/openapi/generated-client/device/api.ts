@@ -233,7 +233,7 @@ export interface AcquisitionTaskOutAcquisitionLimits {
 export interface DatetimeUpdated {
 }
 /**
- * Device registration request pydantic model (to be sent by user first adding the device to the platform).
+ * Device registration request pydantic model.  (to be sent by user first adding the device to the platform).
  * @export
  * @interface DeviceCreationRequest
  */
@@ -307,6 +307,12 @@ export interface DeviceOut {
      * @memberof DeviceOut
      */
     'site'?: Site;
+    /**
+     * 
+     * @type {Parameter}
+     * @memberof DeviceOut
+     */
+    'parameter'?: Parameter;
     /**
      * 
      * @type {string}
@@ -405,6 +411,13 @@ export interface Meta {
  * @interface Modality
  */
 export interface Modality {
+}
+/**
+ * 
+ * @export
+ * @interface Parameter
+ */
+export interface Parameter {
 }
 /**
  * Result output model.

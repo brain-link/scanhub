@@ -27,7 +27,7 @@ import { MRISequenceOut, BaseMRISequence } from '../openapi/generated-client/exa
 import { Alerts } from '../interfaces/components.interface'
 import AlertItem from '../components/AlertItem'
 import SequenceUpload from '../components/SequenceUpload'
-import ConfirmDeleteModal from '../components/ConfirmDelteModal'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 
 
 export default function SequenceView() {

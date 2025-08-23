@@ -174,7 +174,7 @@ export interface User {
 
 
 /**
- * 
+ * User role enum.
  * @export
  * @enum {string}
  */

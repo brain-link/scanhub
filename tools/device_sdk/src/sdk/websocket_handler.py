@@ -1,7 +1,7 @@
 """
 WebSocketHandler module for managing WebSocket connections.
 
-This module provides the `WebSocketHandler` class, which simplifies managing a WebSocket connection, 
+This module provides the `WebSocketHandler` class, which simplifies managing a WebSocket connection,
 handling reconnection, and providing methods to send and receive messages.
 
 Classes:
@@ -29,14 +29,15 @@ class WebSocketHandler:
         ca_file (str | None): Filepath to a ca_file to verify the server.
         logger (logging.Logger): Logger instance for logging events.
     """
+
     def __init__(self, uri, device_id, device_token, reconnect_delay=5, ca_file=None):
         """
         Initializes the WebSocketHandler instance.
 
         Args:
             uri (str): The URI of the WebSocket server (device-manager).
-            reconnect_delay (int, optional): Time in seconds to wait before 
-                                             retrying a failed connection. 
+            reconnect_delay (int, optional): Time in seconds to wait before
+                                             retrying a failed connection.
                                              Defaults to 5.
         """
         self.uri = uri
@@ -63,7 +64,7 @@ class WebSocketHandler:
                 "Device-Id": str(self.device_id),
                 "Device-Token": str(self.device_token),
             },
-            ssl=ssl.create_default_context(cafile=self.ca_file)
+            ssl=ssl.create_default_context(cafile=self.ca_file),
         )
         self.logger.info("WebSocket connection established.")
 
@@ -81,7 +82,9 @@ class WebSocketHandler:
             await self.websocket.send(message)
         except ConnectionClosed as e:
             self.logger.error("Failed to send message, connection closed: %s", e)
-            raise ConnectionError("Connection closed while trying to send a message.") from e
+            raise ConnectionError(
+                "Connection closed while trying to send a message."
+            ) from e
 
     async def receive_message(self):
         """

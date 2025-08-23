@@ -14,3 +14,4 @@ class JobConfigResource(ConfigurableResource):
     output_dir: str
     task_id: str    # serves as series id
     exam_id: str    # serves as study id
+    update_device_parameter_base_url: str | None = None

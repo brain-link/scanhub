@@ -25,7 +25,7 @@ import PatientCreateModal from '../components/PatientCreateModal'
 import { PatientOut, Gender } from '../openapi/generated-client/patient'
 import { Alerts } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
-import ConfirmDeleteModal from '../components/ConfirmDelteModal'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 
 
 export default function PatientListView() {

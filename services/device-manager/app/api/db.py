@@ -7,7 +7,7 @@ import datetime
 import os
 import uuid
 
-from sqlalchemy import create_engine, func
+from sqlalchemy import JSON, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 from sqlalchemy.orm.decl_api import DeclarativeMeta
@@ -66,6 +66,7 @@ class Device(Base):  # type: ignore
     manufacturer: Mapped[str] = mapped_column(nullable=True)
     modality: Mapped[str] = mapped_column(nullable=True)
     site: Mapped[str] = mapped_column(nullable=True)
+    parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now()  # pylint: disable=not-callable
@@ -74,7 +75,7 @@ class Device(Base):  # type: ignore
         onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
 
-    def update(self, data: dict):
+    def update(self, data: dict) -> None:
         """Update attributes of orm model.
 
         Parameters

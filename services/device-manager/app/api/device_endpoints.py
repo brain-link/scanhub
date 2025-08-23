@@ -34,6 +34,7 @@ from app.api.dal import (
     dal_delete_device,
     dal_get_all_devices,
     dal_get_device,
+    dal_update_device,
 )
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -160,3 +161,43 @@ async def delete_device(device_id: UUID, current_user: Annotated[User, Depends(g
     print("Username:", current_user.username)
     if not await dal_delete_device(device_id):
         raise HTTPException(status_code=404, detail="Device not found")
+
+@router.put(
+    "/parameter/{device_id}",
+    response_model=DeviceOut,
+    status_code=200,
+    tags=["devices"],
+    summary="Update acquisition/device parameter",
+)
+async def update_device_parameter(
+    device_id: UUID | str,
+    payload: dict,
+    user: Annotated[User, Depends(get_current_user)],
+) -> DeviceOut:
+    """Update acquisition/device parameter.
+
+    Parameters
+    ----------
+    device_id
+        Id of the device to be updated
+    payload
+        Parameter dictionary
+
+    Returns
+    -------
+        Parameter dictionary
+
+    Raises
+    ------
+    HTTPException
+        404: Not found
+    """
+    print(LOG_CALL_DELIMITER)
+    print("Username:", user.username)
+    print("Device ID:", device_id)
+    _id = UUID(device_id) if not isinstance(device_id, UUID) else device_id
+    print(f"Received payload: {payload}")
+    if not (updated_device := await dal_update_device(device_id=_id, payload={"parameter": payload})):
+        message = "Could not update exam, either because it does not exist, or for another reason."
+        raise HTTPException(status_code=404, detail=message)
+    return DeviceOut(**updated_device.__dict__)

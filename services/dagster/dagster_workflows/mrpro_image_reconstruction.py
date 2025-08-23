@@ -6,7 +6,7 @@ import mrpro
 from dagster import Nothing, OpExecutionContext, Out, RunConfig, graph, op
 from scanhub_libraries.resources import SCANHUB_RESOURCE_KEY, JobConfigResource
 
-from dagster_workflows.numpy_image_reconstruction import notify_op
+from dagster_workflows.shared_ops import notify_op
 
 
 @op(required_resource_keys={SCANHUB_RESOURCE_KEY})
@@ -55,7 +55,6 @@ def save_as_dicom(context: OpExecutionContext, img: mrpro.data.IData) -> None:
     context.log.info("Saving dicom files to %s", path)
     img.to_dicom_folder(path)
     context.log.info("Data saved successfully.")
-
     return
 
 
@@ -77,18 +76,24 @@ mrpro_reconstruction_job = mrpro_reconstruct_graph.to_job(
 # %%
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmpdir:
-        input_path = "../../../tools/device_sdk/examples/data.mrd"
+        input_path = "../../../tools/examples/data.mrd"
 
-        mrpro_reconstruction_job.execute_in_process(
+        result = mrpro_reconstruction_job.execute_in_process(
             run_config=RunConfig(resources={
                 SCANHUB_RESOURCE_KEY: JobConfigResource(
                     callback_url=None,
                     user_access_token=None,
-                    input_file=str(input_path),
+                    input_files=[str(input_path)],
                     output_dir=tmpdir + "/output",  # Ensure output directory is specified
+                    task_id="",
+                    exam_id="",
+                    update_device_parameter_base_url=None,
                 )
             })
         )
 
+    # Report logs
+    for event in result.all_events:
+        print(f"{event.event_type_value} > {event.message}")
 
 # %%
