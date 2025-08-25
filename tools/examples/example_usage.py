@@ -78,7 +78,6 @@ async def main():
 
     await client.start()
     print("Client started and waiting for commands from the server.")
-    await client.send_ready_status()
     
     stop_event = asyncio.Event()
     def shutdown():

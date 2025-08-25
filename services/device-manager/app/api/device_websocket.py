@@ -176,8 +176,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
     except WebSocketDisconnect:
         print("WebSocketDisconnect")
-        del dict_id_websocket[device_id]
-        del dict_id_parameters[device_id]
+        dict_id_websocket.pop(device_id, None)
+        dict_id_parameters.pop(device_id, None)
         print("Device disconnected:", device_id)
         # Set the status of the disconnected device to "disconnected"
         if not await dal_update_device(device_id, {"status": "DISCONNECTED"}):
@@ -217,6 +217,14 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         print("Error updating device, device_id:", device_id)
         await websocket.send_json({"message": "Error updating device."})
 
+    if status == "ERROR":
+        task_id = str(message.get("task_id"))
+        user_access_token = str(message.get("user_access_token"))
+        if task_id and user_access_token:
+            task = exam_requests.get_task(task_id, user_access_token)
+            task.status = ItemStatus.ERROR
+            updated_task = exam_requests.set_task(task_id, task, user_access_token)
+
     if status == "SCANNING":
         data = message.get("data")
         if data is None or "progress" not in data:
@@ -226,7 +234,11 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         task_id = str(message.get("task_id"))
         user_access_token = str(message.get("user_access_token"))
         task = exam_requests.get_task(task_id, user_access_token)
-        task.progress = data["progress"]
+        task.progress = int(data["progress"])
+        if task.progress == 100:
+            task.status = ItemStatus.FINISHED
+        else:
+            task.status = ItemStatus.INPROGRESS
         updated_task = exam_requests.set_task(task_id, task, user_access_token)
         await websocket.send_json({
             "command": "feedback",
