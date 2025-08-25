@@ -140,7 +140,7 @@ export const ItemStatus = {
     Updated: 'UPDATED',
     Started: 'STARTED',
     Finished: 'FINISHED',
-    Deleted: 'DELETED',
+    Error: 'ERROR',
     Inprogress: 'INPROGRESS'
 } as const;
 

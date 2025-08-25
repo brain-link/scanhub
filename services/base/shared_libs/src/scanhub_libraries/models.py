@@ -49,7 +49,7 @@ class ItemStatus(str, Enum):
     UPDATED = "UPDATED"
     STARTED = "STARTED"
     FINISHED = "FINISHED"
-    DELETED = "DELETED"
+    ERROR = "ERROR"
     INPROGRESS = "INPROGRESS"
 
 

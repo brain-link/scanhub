@@ -942,7 +942,7 @@ export const ItemStatus = {
     Updated: 'UPDATED',
     Started: 'STARTED',
     Finished: 'FINISHED',
-    Deleted: 'DELETED',
+    Error: 'ERROR',
     Inprogress: 'INPROGRESS'
 } as const;
 
@@ -2018,7 +2018,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * 
+         * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -2081,7 +2081,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * 
+         * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -2153,7 +2153,7 @@ export const DataApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -2171,7 +2171,7 @@ export const DataApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -2209,7 +2209,7 @@ export const DataApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -2224,7 +2224,7 @@ export const DataApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -2261,7 +2261,7 @@ export class DataApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Get MRD as binary stream.
      * @summary Get MRD (binary, interleaved float32 complex)
      * @param {string} workflowId 
      * @param {string} taskId 
@@ -2278,7 +2278,7 @@ export class DataApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Get MRD meta info.
      * @summary Get ISMRMRD metadata (indexed acquisitions)
      * @param {string} workflowId 
      * @param {string} taskId 
@@ -3665,7 +3665,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -3728,7 +3728,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -3921,7 +3921,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -3939,7 +3939,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -4034,7 +4034,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -4049,7 +4049,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
          * @param {string} workflowId 
          * @param {string} taskId 
@@ -4143,7 +4143,7 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Get MRD as binary stream.
      * @summary Get MRD (binary, interleaved float32 complex)
      * @param {string} workflowId 
      * @param {string} taskId 
@@ -4160,7 +4160,7 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Get MRD meta info.
      * @summary Get ISMRMRD metadata (indexed acquisitions)
      * @param {string} workflowId 
      * @param {string} taskId 
