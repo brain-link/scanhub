@@ -25,8 +25,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
     AcquisitionLimits,
-    DAGTaskOut,
     AcquisitionTaskOut,
+    DAGTaskOut,
     ExamOut,
     ItemStatus,
     PatientOut,
@@ -41,7 +41,7 @@ from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
 from app.api.dagster_queries import list_dagster_jobs, parse_job_id
-from app.api.scanhub_requests import create_blank_result, get_result, get_task, set_result, set_task, delete_result
+from app.api.scanhub_requests import create_blank_result, delete_result, get_result, get_task, set_result, set_task
 
 # Define the URIs for the different managers
 EXAM_MANAGER_URI = "http://exam-manager:8000/api/v1/exam"
