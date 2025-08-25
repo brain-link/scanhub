@@ -21,11 +21,13 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType, ResultOut } from '../openapi/generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
+import DagsterUIModal from './DagsterUIModal'
+import { extractRunId, getLatestResult } from '../utils/ExamTree'
 
 
 export default function TaskItem(
@@ -100,6 +102,11 @@ export default function TaskItem(
 function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut>) {
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
+  const [dagsterOpen, setDagsterOpen] = React.useState<boolean>(false);
+
+  const runId = React.useMemo(() => {
+    return extractRunId(getLatestResult(task.results)?.meta as unknown)
+  }, [task.results]);
 
   const deleteTask = useMutation({
     mutationFn: async () => {
@@ -120,14 +127,15 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
           <MenuItem key='edit' onClick={() => setTaskModalOpen(true)}>
             Edit
           </MenuItem>
-          <MenuItem
-            key='delete'
-            onClick={() => {
-              deleteTask.mutate()
-            }}
-          >
+          <MenuItem key='delete' onClick={() => { deleteTask.mutate() }}>
             Delete
           </MenuItem>
+          {
+            task.task_type === TaskType.Dag &&
+            <MenuItem key='open-dagster' onClick={() => { setDagsterOpen(true) }}>
+              Open DagsterUI
+            </MenuItem>
+          }
         </Menu>
       </Dropdown>
 
@@ -137,6 +145,13 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
         onSubmit={refetchParentData}
         item={task}
         modalType={'modify'}
+      />
+
+      <DagsterUIModal 
+        isOpen={dagsterOpen}
+        setOpen={setDagsterOpen}
+        onSubmit={() => {}}
+        item={runId ? `/dagit/runs/${ runId }` : "/dagit/runs"}
       />
     </>
   )

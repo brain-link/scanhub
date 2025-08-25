@@ -50,19 +50,21 @@ export interface ModalProps {
   setOpen: (open: boolean) => void
 }
 
+export interface ModalPropsItem<T> extends ModalProps {
+  item: T
+}
+
 export interface ModalPropsCreate extends ModalProps {
   createTemplate: boolean
   parentId: string | undefined
   modalType: 'create'
 }
 
-export interface ModalPropsModify<T> extends ModalProps {
-  item: T
+export interface ModalPropsModify<T> extends ModalPropsItem<T> {
   modalType: 'modify'
 }
 
-export interface ModalPropsCreateModifyFromTemplate<T> extends ModalProps {
-  item: T
+export interface ModalPropsCreateModifyFromTemplate<T> extends ModalPropsItem<T> {
   modalType: 'createModifyFromTemplate'
 }
 
