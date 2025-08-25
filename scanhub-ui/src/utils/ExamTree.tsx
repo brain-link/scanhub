@@ -6,9 +6,9 @@ import { ResultOut } from '../openapi/generated-client/exam'
  * @returns run_id as string if available, else null
  */
 export function extractRunId(meta: unknown): string | null {
-  if (meta && typeof meta === "object" && "run_id" in (meta as Record<string, unknown>)) {
-    const v = (meta as Record<string, unknown>)["run_id"];
-    return typeof v === "string" ? v : v != null ? String(v) : null;
+  if (meta && typeof meta === 'object' && 'run_id' in (meta as Record<string, unknown>)) {
+    const v = (meta as Record<string, unknown>)['run_id'];
+    return typeof v === 'string' ? v : v != null ? String(v) : null;
   }
   return null;
 }

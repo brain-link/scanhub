@@ -23,7 +23,7 @@ import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType, ResultOut } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../openapi/generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
@@ -143,7 +143,7 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
         isOpen={dagsterOpen}
         setOpen={setDagsterOpen}
         onSubmit={() => {}}
-        item={runId ? `/dagit/runs/${ runId }` : "/dagit/runs"}
+        item={runId ? `/dagit/runs/${ runId }` : '/dagit/runs'}
       />
     </>
   )
