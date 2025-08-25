@@ -40,7 +40,7 @@ from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
 from app.api.dagster_queries import list_dagster_jobs, parse_job_id
-from app.api.scanhub_requests import create_blank_result, get_result, get_task, set_result, set_task
+from app.api.scanhub_requests import create_blank_result, get_result, get_task, set_result, set_task, delete_result
 
 # Define the URIs for the different managers
 EXAM_MANAGER_URI = "http://exam-manager:8000/api/v1/exam"
@@ -149,16 +149,6 @@ async def trigger_task(task_id: str,
 
             # Create blank result
             new_result_out = create_blank_result(task_id, access_token)
-            # Update result info with created ID
-            new_result_out = set_result(
-                result_id=str(new_result_out.id),
-                payload=SetResult(
-                    type=ResultType.DICOM,
-                    directory=f"/data/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/",
-                ),
-                user_access_token=access_token,
-            )
-            print(f"Created new result: {new_result_out.model_dump_json()}")
 
             # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
             callback_endpoint = f"{WORKFLOW_MANAGER_URI}/result_ready/{task.id}/{new_result_out.id}"
@@ -167,7 +157,7 @@ async def trigger_task(task_id: str,
             # Trigger dagster job
             job_name, repository, location = parse_job_id(task.dag_id)
             print(f"Triggering job: {job_name} in repository: {repository} at location: {location}")
-            new_run_id = dg_client.submit_job_execution(
+            run_id = dg_client.submit_job_execution(
                 job_name=job_name,
                 repository_location_name=location,
                 repository_name=repository,
@@ -183,9 +173,22 @@ async def trigger_task(task_id: str,
                     ),
                 }),
             )
-            print(f"DAG triggered, new run ID: {new_run_id}")
-
-            return {"message": "DAG triggered successfully", "data": new_run_id}
+            if run_id:
+                # Update result
+                new_result_out = set_result(
+                    result_id=str(new_result_out.id),
+                    payload=SetResult(
+                        type=ResultType.DICOM,
+                        meta={ "run_id": run_id },
+                        directory=f"/data/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/",
+                    ),
+                    user_access_token=access_token,
+                )
+                print(f"Created new result: {new_result_out.model_dump_json()}")
+                return {"message": "DAG triggered successfully", "data": run_id}
+            # Delete blank result, if run_id does not exist
+            delete_result(str(new_result_out.id), user_access_token=access_token)
+            return {"message": "Failed to start DAG, no run_id..."}
         except Exception as e:
             logging.error(f"Failed to trigger DAG: {e}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -240,12 +243,16 @@ async def callback_results_ready(
     # Add file names to the result
     result.files = [str(_file.name) for _file in dicom_files]
     # Add meta information
-    result.meta = {
+    meta_update = {
         "instance_count": len(dicom_files),
         "instances": [
             f"{DICOM_BASE_URI}{workflow_folder}/{task_folder}/{result_folder}/{_file.name}" for _file in dicom_files
         ],
     }
+    if result.meta is not None:
+        result.meta.update(meta_update)
+    else:
+        result.meta = meta_update
     print(f"Updated result: {result.model_dump_json()}")
     _ = set_result(result_id=result.id, payload=result, user_access_token=access_token)
 

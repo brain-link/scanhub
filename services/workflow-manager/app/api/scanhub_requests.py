@@ -180,6 +180,28 @@ def get_result(result_id: str | UUID, user_access_token: str) -> ResultOut:
     return ResultOut(**response.json())
 
 
+def delete_result(result_id: str | UUID, user_access_token: str) -> None:
+    """
+    Fetch a result by ID from the exam manager service.
+
+    Args
+    ----
+        result_id (str): The unique identifier of the result to retrieve.
+        user_access_token (str): The user's access token for authentication.
+
+    Returns
+    -------
+        ResultOut: The result object if found.
+
+    Raises
+    ------
+        HTTPException: If the result is not found (404).
+    """
+    headers = {"Authorization": "Bearer " + user_access_token}
+    _id = str(result_id) if isinstance(result_id, UUID) else result_id
+    requests.delete(f"{RESULT_URI}/{_id}", headers=headers, timeout=3)
+
+
 def get_exam_id(workflow_id: str, user_access_token: str) -> str:
     """
     Fetch acquisition task by ID from the exam manager service.
