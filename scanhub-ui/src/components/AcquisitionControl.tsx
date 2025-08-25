@@ -84,9 +84,12 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
         </Typography>
         <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
         <LinearProgress 
-          determinate value={itemSelection.progress}
+          determinate={itemSelection.progress !== undefined && itemSelection.progress > 0}
+          value={itemSelection.progress !== undefined && itemSelection.progress > 0 ? itemSelection.progress : (
+              itemSelection.status === ItemStatus.Inprogress ? 25 : 0
+            )
+          }
           sx={{marginTop: 1}}
-          color={itemSelection.status == ItemStatus.Finished ? 'success' : 'primary'}
         />
       </Stack>
     </Box>

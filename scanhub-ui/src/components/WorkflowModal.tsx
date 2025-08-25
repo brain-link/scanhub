@@ -94,7 +94,6 @@ function WorkflowForm(props: ModalPropsCreate | ModalPropsModify<WorkflowOut>) {
               <Input
                 name={'comment'}
                 onChange={(e) => setWorkflow({ ...workflow, [e.target.name]: e.target.value })}
-                defaultValue={workflow.comment}
               />
             </>
           :

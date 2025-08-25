@@ -36,6 +36,8 @@ import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interfa
 import Container from '@mui/joy/Container'
 import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
+import ExamInfo from '../components/ExamInfo'
+import WorkflowInfo from '../components/WorkflowInfo'
 
 
 function AcquisitionView() {
@@ -180,9 +182,8 @@ function AcquisitionView() {
                   selection={itemSelection}
                 />
               }
-              accordionMenu={
-                <ExamMenu item={exam} refetchParentData={refetchExams} />
-              }
+              accordionMenu={ <ExamMenu item={exam} refetchParentData={refetchExams} /> }
+              toolTipContent={ <ExamInfo exam={exam} /> }
             >
               {exam.workflows?.map((workflow: WorkflowOut) => (
                 <AccordionWithMenu 
@@ -195,6 +196,7 @@ function AcquisitionView() {
                     />
                   }
                   accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetchExams} />}
+                  toolTipContent={<WorkflowInfo workflow={workflow} />}
                 >
                   {workflow.tasks?.sort((taskA, taskB) => {
                     let a: number = 4

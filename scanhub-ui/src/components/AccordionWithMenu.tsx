@@ -9,34 +9,47 @@ import React from 'react';
 import Stack from '@mui/joy/Stack';
 import IconButton from '@mui/joy/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import Tooltip from '@mui/joy/Tooltip'
 
 import { AccordionWithMenuInterface } from '../interfaces/components.interface';
 
 
 export default function AccordionWithMenu(props: AccordionWithMenuInterface) {
 
-    const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
-    return (
-        <Stack direction='column' width='100%'>
-            <Stack direction='row' alignItems='center' justifyContent='space-between'>
-                {props.accordionSummary}
-                <Stack direction='row' alignItems='center'>
-                    {props.accordionMenu}
-                    <IconButton
-                        onClick={() => setExpanded(!expanded)}
-                    >
-                        {expanded ? <ExpandMoreIcon /> : <KeyboardArrowLeftIcon />}
-                    </IconButton>
-                </Stack>
-            </Stack>
-            <Stack
-                direction='column'
-                sx={{ paddingLeft: 3 }}
+  return (
+    <Stack direction='column' width='100%'>
+      <Stack direction='row' alignItems='center'>
+        <Tooltip
+          placement='right'
+          variant='outlined'
+          describeChild={false}
+          arrow
+          title={ props.toolTipContent }
+          modifiers={[
+            { name: 'offset', options: { offset: [0, 64] } }, // skidding=8 (down), distance=20 (further right)
+          ]}
+        >
+          <Stack direction='row' alignItems='center' flexGrow={1}>
+            <IconButton
+              onClick={() => setExpanded(!expanded)}
             >
-                {expanded ? props.children : undefined}
-            </Stack>
-        </Stack>
-    )
+              {expanded ? <ExpandMoreIcon /> : <KeyboardArrowRightIcon />}
+            </IconButton>
+            { props.accordionSummary }
+          </Stack>
+        </Tooltip>
+        { props.accordionMenu }
+      </Stack>
+      <Stack
+        direction='column'
+        sx={{ paddingLeft: 2 }}
+      >
+        {expanded ? props.children : undefined}
+      </Stack>
+      
+    </Stack>
+  )
 }

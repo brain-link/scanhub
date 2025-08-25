@@ -30,6 +30,8 @@ export function RouteConfiguration() {
   const [user, setUser] = useContext(LoginContext)
   const location = useLocation()
 
+  
+
   return (
     <JoyCssVarsProvider defaultMode='system' disableTransitionOnChange>
       <CssBaseline />

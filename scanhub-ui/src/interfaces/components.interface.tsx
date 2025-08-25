@@ -76,4 +76,5 @@ export interface AccordionWithMenuInterface {
   accordionSummary?: ReactNode    // the summary that is always shown
   children?: ReactNode            // the details to expand
   accordionMenu?: ReactNode       // the element/menu that is displayed next to the summary
+  toolTipContent?: ReactNode
 }

@@ -14,7 +14,6 @@ import Menu from '@mui/joy/Menu'
 import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
-import Tooltip from '@mui/joy/Tooltip'
 
 // Sub-components, interfaces, client
 import { ExamOut } from '../openapi/generated-client/exam'
@@ -22,7 +21,6 @@ import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces
 import Box from '@mui/joy/Box'
 import { examApi } from '../api'
 import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
-import ExamInfo from './ExamInfo'
 import WorkflowModal from './WorkflowModal'
 import ExamModal from './ExamModal'
 import Button from '@mui/joy/Button'
@@ -31,43 +29,39 @@ import Button from '@mui/joy/Button'
 export default function ExamItem({ item: exam, selection, onClick }: SelectableItemInterface<ExamOut>) {
 
   return (
-    <Tooltip
-      placement='right'
-      variant='outlined'
-      describeChild={false}
-      arrow
-      title={<ExamInfo exam={exam} />}
+    <Button
+      sx={{ 
+        width: '100%', 
+        p: 0.5, 
+        display: 'flex',
+        justifyContent: 'flex-start'
+      }}
+      variant={(selection.type == 'exam' && selection.itemId == exam.id) ? 'outlined' : 'plain'}
+      onClick={onClick}
     >
-      <Button
-        sx={{ 
-          width: '100%', 
+      <FolderIcon fontSize='small' />
+      <Box 
+        sx={{
+          marginLeft: 0.5,
           p: 0.5, 
           display: 'flex',
-          justifyContent: 'flex-start'
+          flexDirection: 'column',
+          alignItems: 'start',
         }}
-        variant={(selection.type == 'exam' && selection.itemId == exam.id) ? 'outlined' : 'plain'}
-        onClick={onClick}
       >
-        <FolderIcon fontSize='small' />
-        <Box 
-          sx={{
-            marginLeft: 0.5,
-            p: 0.5, 
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-          }}
-        >
-          <Typography level='title-sm'>
-            {exam.name}
-          </Typography>
+        <Typography level='body-xs' textColor='text.tertiary'>
+          EXAM
+        </Typography>
 
-          <Typography level='body-xs' textColor='text.tertiary'>
-            {`Created: ${new Date(exam.datetime_created).toDateString()}`}
-          </Typography>
-        </Box>
-      </Button>
-    </Tooltip>
+        <Typography level='title-sm'>
+          {exam.name}
+        </Typography>
+
+        <Typography level='body-xs' textColor='text.tertiary'>
+          {`Created: ${new Date(exam.datetime_created).toDateString()}`}
+        </Typography>
+      </Box>
+    </Button>
   )
 }
 
