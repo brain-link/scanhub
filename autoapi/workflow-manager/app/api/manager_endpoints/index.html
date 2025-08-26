@@ -472,6 +472,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.trigger_task" title="workflow-manager.app.api.manager_endpoints.trigger_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trigger_task</span></code></a>(]) → dict[str, Any])</p></td>
 <td><p>Endpoint to trigger a task in the orchestration engine.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger" title="workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_acquisition_task_trigger</span></code></a>(→ dict[str, str])</p></td>
+<td><p>Handle acquisition task trigger.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger" title="workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_dag_task_trigger</span></code></a>(task, exam_id, access_token)</p></td>
+<td><p>Handle DAG trigger event.</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#workflow-manager.app.api.manager_endpoints.callback_results_ready" title="workflow-manager.app.api.manager_endpoints.callback_results_ready"><code class="xref py py-obj docutils literal notranslate"><span class="pre">callback_results_ready</span></code></a>(]) → dict[str, Any])</p></td>
 <td><p>Notify that results are ready via callback endpoint.</p></td>
 </tr>
@@ -546,6 +552,70 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">handle_acquisition_task_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.AcquisitionTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.PatientOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger" title="Link to this definition">#</a></dt>
+<dd><p>Handle acquisition task trigger.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task</dt><dd><p>Acquisition task model</p>
+</dd>
+<dt>patient</dt><dd><p>Patient model</p>
+</dd>
+<dt>access_token</dt><dd><p>User access token</p>
+</dd>
+</dl>
+</section>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Dictionary with status and data, i.e. success message</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>Internal error if device task could not be triggered.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger">
+<span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">handle_dag_task_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.DAGTaskOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exam_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger" title="Link to this definition">#</a></dt>
+<dd><p>Handle DAG trigger event.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>task</dt><dd><p>DAG Task to be triggered</p>
+</dd>
+<dt>exam_id</dt><dd><p>Corresponding exam ID</p>
+</dd>
+<dt>access_token</dt><dd><p>User access token</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Dictionary with status and data, i.e. success message</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>Raises<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>Missing input</p>
+</dd>
+<dt>HTTPException</dt><dd><p>Input does not have any result</p>
+</dd>
+<dt>HTTPException</dt><dd><p>Could not trigger DAG</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.callback_results_ready">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">callback_results_ready</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><span class="pre">oauth2_scheme</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.callback_results_ready" title="Link to this definition">#</a></dt>
 <dd><p>Notify that results are ready via callback endpoint.</p>
@@ -554,8 +624,8 @@
 access_token (str): The access token for authentication.</p>
 </dd>
 </dl>
-<section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: A dictionary containing a success message.</p>
 </div></blockquote>
@@ -566,8 +636,8 @@ access_token (str): The access token for authentication.</p>
 <dt class="sig sig-object py" id="workflow-manager.app.api.manager_endpoints.list_available_tasks">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">workflow-manager.app.api.manager_endpoints.</span></span><span class="sig-name descname"><span class="pre">list_available_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#workflow-manager.app.api.manager_endpoints.list_available_tasks" title="Link to this definition">#</a></dt>
 <dd><p>Endpoint to list the available tasks from the orchestration engine.</p>
-<section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>dict: A dictionary containing the list of available dagster jobs.</p>
 </div></blockquote>
@@ -619,6 +689,8 @@ access_token (str): The access token for authentication.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.trigger_task"><code class="docutils literal notranslate"><span class="pre">trigger_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger"><code class="docutils literal notranslate"><span class="pre">handle_acquisition_task_trigger()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger"><code class="docutils literal notranslate"><span class="pre">handle_dag_task_trigger()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.callback_results_ready"><code class="docutils literal notranslate"><span class="pre">callback_results_ready()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-manager.app.api.manager_endpoints.list_available_tasks"><code class="docutils literal notranslate"><span class="pre">list_available_tasks()</span></code></a></li>
 </ul>

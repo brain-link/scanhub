@@ -36,6 +36,8 @@ Functions
 .. autoapisummary::
 
    workflow-manager.app.api.manager_endpoints.trigger_task
+   workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger
+   workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger
    workflow-manager.app.api.manager_endpoints.callback_results_ready
    workflow-manager.app.api.manager_endpoints.list_available_tasks
 
@@ -83,6 +85,56 @@ Module Contents
    Returns
    -------
        dict: A dictionary containing the response from the orchestration engine.
+
+
+.. py:function:: handle_acquisition_task_trigger(task: scanhub_libraries.models.AcquisitionTaskOut, patient: scanhub_libraries.models.PatientOut, access_token: str) -> dict[str, str]
+
+   Handle acquisition task trigger.
+
+   Parameters
+   ----------
+   task
+       Acquisition task model
+   patient
+       Patient model
+   access_token
+       User access token
+
+   Returns
+   -------
+       Dictionary with status and data, i.e. success message
+
+   Raises
+   ------
+   HTTPException
+       Internal error if device task could not be triggered.
+
+
+.. py:function:: handle_dag_task_trigger(task: scanhub_libraries.models.DAGTaskOut, exam_id: str, access_token: str)
+
+   Handle DAG trigger event.
+
+   Parameters
+   ----------
+   task
+       DAG Task to be triggered
+   exam_id
+       Corresponding exam ID
+   access_token
+       User access token
+
+   Returns
+   -------
+       Dictionary with status and data, i.e. success message
+
+   Raises
+   ------
+   HTTPException
+       Missing input
+   HTTPException
+       Input does not have any result
+   HTTPException
+       Could not trigger DAG
 
 
 .. py:function:: callback_results_ready(task_id: uuid.UUID | str, result_id: uuid.UUID | str, access_token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, Any]

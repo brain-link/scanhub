@@ -37,6 +37,7 @@ Functions
    workflow-manager.app.api.scanhub_requests.create_blank_result
    workflow-manager.app.api.scanhub_requests.set_result
    workflow-manager.app.api.scanhub_requests.get_result
+   workflow-manager.app.api.scanhub_requests.delete_result
    workflow-manager.app.api.scanhub_requests.get_exam_id
 
 
@@ -130,6 +131,24 @@ Module Contents
 
 
 .. py:function:: get_result(result_id: str | uuid.UUID, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Fetch a result by ID from the exam manager service.
+
+   Args
+   ----
+       result_id (str): The unique identifier of the result to retrieve.
+       user_access_token (str): The user's access token for authentication.
+
+   Returns
+   -------
+       ResultOut: The result object if found.
+
+   Raises
+   ------
+       HTTPException: If the result is not found (404).
+
+
+.. py:function:: delete_result(result_id: str | uuid.UUID, user_access_token: str) -> None
 
    Fetch a result by ID from the exam manager service.
 
