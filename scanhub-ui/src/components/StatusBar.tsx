@@ -36,7 +36,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 // Device all health cheks
 const healthChecks = [
   {
-    name: "Patient Manager",
+    name: 'Patient Manager',
     useHook: () => useManagerHealthCheck(
       'patientManagerHealthCheck',
       () => patientManagerHealthApi.readinessApiV1PatientHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
@@ -44,7 +44,7 @@ const healthChecks = [
     )
   },
   {
-    name: "Exam Manager",
+    name: 'Exam Manager',
     useHook: () => useManagerHealthCheck(
       'examManagerHealthCheck',
       () => examManagerHealthApi.readinessApiV1ExamHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
@@ -52,7 +52,7 @@ const healthChecks = [
     )
   },
     {
-    name: "Workflow Manager",
+    name: 'Workflow Manager',
     useHook: () => useManagerHealthCheck(
       'workflowManagerHealthCheck',
       () => workflowManagerHealthApi.readinessApiV1WorkflowmanagerHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
@@ -60,7 +60,7 @@ const healthChecks = [
     )
   },
     {
-    name: "User Login Manager",
+    name: 'User Login Manager',
     useHook: () => useManagerHealthCheck(
       'userLoginManagerHealthCheck',
       () => userLoginManagerHealthApi.readinessApiV1UserloginHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
@@ -68,7 +68,7 @@ const healthChecks = [
     )
   },
   {
-    name: "Device Manager",
+    name: 'Device Manager',
     useHook: () => useManagerHealthCheck(
       'deviceManagerHealth',
       () => deviceManagerHealthApi.readinessApiV1DeviceHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
@@ -141,7 +141,7 @@ export default function StatusBar() {
   const { data: deviceStatus } = useQuery<DeviceOut>({
     queryKey: ['deviceStatus', selectedDeviceId], // depends on selected device
     queryFn: async () => {
-      if (!selectedDeviceId) throw new Error("No device selected")
+      if (!selectedDeviceId) throw new Error('No device selected')
       // Call your API to get this device’s latest status
       const result = await deviceApi.getDeviceApiV1DeviceDeviceIdGet(selectedDeviceId)
       return result.data

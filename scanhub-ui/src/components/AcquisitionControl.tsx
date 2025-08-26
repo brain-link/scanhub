@@ -6,7 +6,6 @@
  */
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
