@@ -121,14 +121,14 @@ function AcquisitionView() {
         flex: 1,
         display: 'flex',
         flexDirection: 'row',
-        width: '100dvh',
+        width: '100%',
       }}
     >
       <Sheet
         className='Sidebar'
         sx={{
           position: { xs: 'fixed', md: 'sticky' },
-          height: 'calc(100dvh - var(--Navigation-height))',
+          height: '100%',
           width: 'var(--Sidebar-width)',
           top: 0,
           p: 2,

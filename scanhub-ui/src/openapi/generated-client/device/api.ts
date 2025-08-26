@@ -250,6 +250,19 @@ export interface DeviceCreationRequest {
      * @memberof DeviceCreationRequest
      */
     'description': string;
+    /**
+     * 
+     * @type {DeviceCreationRequestStatus}
+     * @memberof DeviceCreationRequest
+     */
+    'status'?: DeviceCreationRequestStatus;
+}
+/**
+ * 
+ * @export
+ * @interface DeviceCreationRequestStatus
+ */
+export interface DeviceCreationRequestStatus {
 }
 /**
  * 
@@ -304,10 +317,10 @@ export interface DeviceOut {
     'modality'?: Modality;
     /**
      * 
-     * @type {Status}
+     * @type {DeviceCreationRequestStatus}
      * @memberof DeviceOut
      */
-    'status'?: Status;
+    'status'?: DeviceCreationRequestStatus;
     /**
      * 
      * @type {Site}
@@ -351,6 +364,22 @@ export interface DeviceOut {
      */
     'datetime_updated'?: DatetimeUpdated;
 }
+/**
+ * Pydantic definition of a commands.
+ * @export
+ * @enum {string}
+ */
+
+export const DeviceStatus = {
+    Online: 'ONLINE',
+    Offline: 'OFFLINE',
+    Busy: 'BUSY',
+    Error: 'ERROR'
+} as const;
+
+export type DeviceStatus = typeof DeviceStatus[keyof typeof DeviceStatus];
+
+
 /**
  * Pydantic definition of genders.
  * @export
@@ -507,13 +536,6 @@ export interface SerialNumber {
  * @interface Site
  */
 export interface Site {
-}
-/**
- * 
- * @export
- * @interface Status
- */
-export interface Status {
 }
 /**
  * Task type enum.

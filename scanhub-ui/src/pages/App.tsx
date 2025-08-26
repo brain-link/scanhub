@@ -14,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import NotificationContext from '../NotificationContext'
 import Navigation from '../components/Navigation'
 import LoginContext from '../LoginContext'
+import StatusBar from '../components/StatusBar'
 
 
 export default function App() {
@@ -54,33 +55,46 @@ export default function App() {
   }, [])
 
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100dvh',
+      }}
+    >
+
       <Navigation />
 
-        <Snackbar 
-          open={messageObj.visible === true || messageObj.visible === undefined} 
-          variant={'soft'} 
-          color={messageObj.type}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          onClose={() => setMessageObject({ ...messageObj, visible: false})}
-        >
-          {messageObj.message.toString()}
-        </Snackbar>
+      <Snackbar 
+        open={messageObj.visible === true || messageObj.visible === undefined} 
+        variant={'soft'} 
+        color={messageObj.type}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setMessageObject({ ...messageObj, visible: false})}
+      >
+        {messageObj.message.toString()}
+      </Snackbar>
 
       {/* Main content */}
       <Box
         sx={{
-          m: 0,
-          p: 0,
-          gap: 2,
-          justifyContent: 'start',
+          // m: 0,
+          // p: 0,
+          // gap: 2,
+          // justifyContent: 'start',
+          // display: 'flex',
+          // flexDirection: 'row',
+          // flexGrow: 1,
+          // height: 'calc(100dvh - var(--Navigation-height)) - var(--Status-height)',
+          flex: 1,
+          overflow: 'auto',
           display: 'flex',
-          flexDirection: 'row',
-          maxHeight: '100vh',
+          flexDirection: 'column',
         }}
       >
         <Outlet />
       </Box>
-    </>
+      <StatusBar />
+    </Box>
   )
 }

@@ -32,18 +32,19 @@ import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Typography from '@mui/joy/Typography'
 import { useColorScheme } from '@mui/joy/styles'
+import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
 
 import LoginContext from '../LoginContext'
 import { UserRole } from '../openapi/generated-client/userlogin'
 import ScanhubLogo from '../media/ScanhubLogo.png'
 import { loginApi } from '../api'
-import ConnectionStatus from './ConnectionStatus'
 import { version } from '../utils/Versions'
 import PasswordModal from './PasswordModal'
 
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme()
+  const { setMode: setMuiMode } = useMaterialColorScheme()
 
   let modeicon = <BrightnessAutoIcon />
   if (mode === 'light') {
@@ -61,10 +62,13 @@ function ColorSchemeToggle() {
       onClick={() => {
         if (mode === 'system') {
           setMode('dark')
+          setMuiMode('dark')
         } else if (mode === 'dark') {
           setMode('light')
+          setMuiMode('light')
         } else {
           setMode('system')
+          setMuiMode('system')
         }
       }}
     >
@@ -147,7 +151,6 @@ export default function Navigation() {
 
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
         <ColorSchemeToggle />
-        <ConnectionStatus buttonOrPage='button'/>
         <Chip
           variant='soft'
           color='warning'
