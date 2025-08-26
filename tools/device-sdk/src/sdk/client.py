@@ -18,7 +18,7 @@ from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any, Optional
 
-from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
+from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, DeviceStatus
 
 from sdk.websocket_handler import WebSocketHandler
 
@@ -110,18 +110,15 @@ class Client:
         await self.websocket_handler.connect()
         self.logger.info("WebSocket connection established.")
         await self.register_device()
-        await self.send_status(status="READY")
 
     async def register_device(self) -> None:
         """Send a registration message to the server to register the device.
 
         The registration data includes device details like ID, name, manufacturer, and location.
         """
-        data = {"status": "REGISTERED"}
-        data.update(self.details.model_dump())
         registration_data = {
             "command": "register",
-            "data": data,
+            "data": self.details.model_dump(),
         }
         await self.websocket_handler.send_message(json.dumps(registration_data))
         self.logger.info("Device registration sent.")
@@ -171,7 +168,7 @@ class Client:
         try:
             if self.scan_callback:
                 # Set device status to busy
-                await self.send_status(status="BUSY")
+                await self.send_status(status=DeviceStatus.BUSY)
                 # Initialize scanning status (set to zero)
                 await self.send_scanning_status(
                     progress=0, task_id=str(payload.id), user_access_token=payload.access_token,
@@ -179,7 +176,7 @@ class Client:
                 # Call the external scan callback function
                 await self.scan_callback(payload)
                 # Set device status to ready
-                await self.send_status(status="READY")
+                await self.send_status(status=DeviceStatus.ONLINE)
             else:
                 self.logger.error("Scan callback not defined.")
                 await self.send_error_status("Scan callback not defined.")
@@ -191,7 +188,7 @@ class Client:
 
     async def send_status(
         self,
-        status: str,
+        status: DeviceStatus,
         user_access_token: str | None = None,
         data: None | dict[str, Any] = None,
         task_id: str | None = None,
@@ -204,9 +201,11 @@ class Client:
             additional_data (dict, optional): Extra information to include with the status.
 
         """
+        if not isinstance(status, DeviceStatus):
+            raise TypeError("Invalid device status.")
         status_data = {
             "command": "update_status",
-            "status": status,
+            "status": status.value,
             "data": data,
             "task_id": task_id,
             "user_access_token": user_access_token,
@@ -269,7 +268,7 @@ class Client:
 
         """
         await self.send_status(
-            "SCANNING",
+            DeviceStatus.BUSY,
             data={"progress": progress},
             task_id=task_id,
             user_access_token=user_access_token,
@@ -290,10 +289,12 @@ class Client:
         """
         if task_id is not None and user_access_token is not None:
             await self.send_status(
-                "ERROR", data={"error_message": error_message}, task_id=task_id, user_access_token=user_access_token,
+                DeviceStatus.ERROR, data={"error_message": error_message}, task_id=task_id, user_access_token=user_access_token,
             )
         else:
-            await self.send_status("ERROR", data={"error_message": error_message})
+            await self.send_status(
+                DeviceStatus.ERROR, data={"error_message": error_message},
+            )
 
     async def stop(self) -> None:
         """Close the WebSocket connection."""

@@ -34,12 +34,13 @@ class Gender(str, Enum):
     NOT_GIVEN = "NOT_GIVEN"
 
 
-class Commands(str, Enum):
+class DeviceStatus(str, Enum):
     """Pydantic definition of a commands."""
 
-    START = "START"
-    STOP = "STOP"
-    PAUSE = "PAUSE"
+    ONLINE = "ONLINE"
+    OFFLINE = "OFFLINE"
+    BUSY = "BUSY"
+    ERROR = "ERROR"
 
 
 class ItemStatus(str, Enum):
@@ -95,6 +96,7 @@ class DeviceCreationRequest(BaseModel):
 
     name: str
     description: str
+    status: DeviceStatus | None = None
 
 
 class DeviceDetails(BaseModel):
@@ -106,7 +108,7 @@ class DeviceDetails(BaseModel):
     serial_number: str | None = None
     manufacturer: str | None = None
     modality: str | None = None
-    status: str | None = None
+    status: DeviceStatus | None = None
     site: str | None = None
     parameter: dict | None = None
 

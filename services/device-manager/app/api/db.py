@@ -7,6 +7,7 @@ import datetime
 import os
 import uuid
 
+from scanhub_libraries.models import DeviceStatus
 from sqlalchemy import JSON, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
@@ -62,7 +63,7 @@ class Device(Base):  # type: ignore
     # Details
     device_name: Mapped[str] = mapped_column(nullable=True)
     serial_number: Mapped[str] = mapped_column(nullable=True)
-    status: Mapped[str] = mapped_column(nullable=True)
+    status: Mapped[DeviceStatus] = mapped_column(nullable=True)
     manufacturer: Mapped[str] = mapped_column(nullable=True)
     modality: Mapped[str] = mapped_column(nullable=True)
     site: Mapped[str] = mapped_column(nullable=True)

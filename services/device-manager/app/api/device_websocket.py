@@ -34,6 +34,7 @@ from scanhub_libraries.models import (
     ItemStatus,
     ResultType,
     SetResult,
+    DeviceStatus,
 )
 from scanhub_libraries.security import compute_complex_password_hash
 from sqlalchemy import exc
@@ -180,7 +181,7 @@ async def websocket_endpoint(websocket: WebSocket):
         dict_id_parameters.pop(device_id, None)
         print("Device disconnected:", device_id)
         # Set the status of the disconnected device to "disconnected"
-        if not await dal_update_device(device_id, {"status": "DISCONNECTED"}):
+        if not await dal_update_device(device_id, {"status": DeviceStatus.OFFLINE}):
             print("Error updating device status to disconnected.")
 
 
@@ -193,6 +194,7 @@ async def handle_register(websocket: WebSocket, message: dict, device_id: UUID) 
             await websocket.send_json({"message": "Invalid device details."})
             return
         device_details_object = DeviceDetails(**device_details)
+        device_details_object.status = DeviceStatus.ONLINE
         await dal_update_device(device_id, device_details_object.model_dump())
         print("Device registered.")
         # Send response to the device
@@ -207,17 +209,19 @@ async def handle_register(websocket: WebSocket, message: dict, device_id: UUID) 
 async def handle_status_update(websocket: WebSocket, message: dict, device_id: UUID) -> None:
     """Handle device status updates."""
     print("Handle command 'update_status'...")
-    status = str(message.get("status"))
+    status_str = str(message.get("status"))
 
-    if not status:
-        await websocket.send_json({"message": "Invalid status."})
+    try:
+        status = DeviceStatus(status_str)
+    except ValueError:
+        await websocket.send_json({"message": f"Invalid status: {status_str}"})
         return
 
     if not await dal_update_device(device_id, {"status": status}):
         print("Error updating device, device_id:", device_id)
         await websocket.send_json({"message": "Error updating device."})
 
-    if status == "ERROR":
+    if status == DeviceStatus.ERROR:
         task_id = str(message.get("task_id"))
         user_access_token = str(message.get("user_access_token"))
         if task_id and user_access_token:
@@ -225,7 +229,7 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
             task.status = ItemStatus.ERROR
             updated_task = exam_requests.set_task(task_id, task, user_access_token)
 
-    if status == "SCANNING":
+    if status == DeviceStatus.BUSY:
         data = message.get("data")
         if data is None or "progress" not in data:
             await websocket.send_json({"message": "Invalid data."})
