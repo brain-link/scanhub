@@ -74,7 +74,7 @@ Module Contents
        The retrieved MRI sequence.
 
 
-.. py:function:: create_mri_sequence(sequence_meta: scanhub_libraries.models.BaseMRISequence = Depends(mri_sequence_form), seq_file: fastapi.UploadFile = File(...), xml_file: fastapi.UploadFile | None = None, database=Depends(get_mongo_database))
+.. py:function:: create_mri_sequence(seq_file: fastapi.UploadFile = File(...), xml_file: fastapi.UploadFile = File(...), sequence_meta: scanhub_libraries.models.BaseMRISequence = Depends(mri_sequence_form), database=Depends(get_mongo_database))
    :async:
 
 
