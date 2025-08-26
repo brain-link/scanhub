@@ -27,6 +27,7 @@ Functions
    exam-manager.app.api.mri_sequence_api.create_mri_sequence
    exam-manager.app.api.mri_sequence_api.get_all_mri_sequences
    exam-manager.app.api.mri_sequence_api.get_mri_sequence_file_by_id
+   exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id
    exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint
    exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint
 
@@ -73,7 +74,7 @@ Module Contents
        The retrieved MRI sequence.
 
 
-.. py:function:: create_mri_sequence(sequence_meta: scanhub_libraries.models.BaseMRISequence = Depends(mri_sequence_form), file: fastapi.UploadFile = File(...), database=Depends(get_mongo_database))
+.. py:function:: create_mri_sequence(sequence_meta: scanhub_libraries.models.BaseMRISequence = Depends(mri_sequence_form), seq_file: fastapi.UploadFile = File(...), xml_file: fastapi.UploadFile | None = None, database=Depends(get_mongo_database))
    :async:
 
 
@@ -83,8 +84,10 @@ Module Contents
    ----------
    mri_sequence : MRISequenceCreate
        The MRI sequence metadata.
-   file : UploadFile
+   seq_file : UploadFile
        The MRI sequence file to store.
+   xml_file : UploadFile
+       The ISMRMRD header xml file to store.
    database : AsyncIOMotorDatabase
        The MongoDB database handle.
 
@@ -116,6 +119,29 @@ Module Contents
 
 
    Retrieve an MRI sequence file by its ID.
+
+   Parameters
+   ----------
+   sequence_id : str
+       The ID of the MRI sequence to retrieve.
+   background_tasks : BackgroundTasks
+       The background tasks to run.
+   name : str
+       The name of the file to download.
+   database : AsyncIOMotorDatabase
+       The MongoDB database handle.
+
+   Returns
+   -------
+   FileResponse
+       The retrieved MRI sequence file.
+
+
+.. py:function:: get_mri_sequence_header_file_by_id(sequence_id: str, background_tasks: fastapi.BackgroundTasks, name: str = 'header', database=Depends(get_mongo_database))
+   :async:
+
+
+   Retrieve an MRI sequence header (ISMRMRD header) file by its ID.
 
    Parameters
    ----------

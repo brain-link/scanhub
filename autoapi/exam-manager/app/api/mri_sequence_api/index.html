@@ -450,7 +450,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.get_mri_sequence_by_id" title="exam-manager.app.api.mri_sequence_api.get_mri_sequence_by_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mri_sequence_by_id</span></code></a>(...)</p></td>
 <td><p>Retrieve an MRI sequence by its ID.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.create_mri_sequence" title="exam-manager.app.api.mri_sequence_api.create_mri_sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mri_sequence</span></code></a>([sequence_meta, file, database])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.create_mri_sequence" title="exam-manager.app.api.mri_sequence_api.create_mri_sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mri_sequence</span></code></a>([sequence_meta, seq_file, ...])</p></td>
 <td><p>Upload an MRI sequence file and store it with the provided metadata.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.get_all_mri_sequences" title="exam-manager.app.api.mri_sequence_api.get_all_mri_sequences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_mri_sequences</span></code></a>([database])</p></td>
@@ -459,10 +459,13 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.get_mri_sequence_file_by_id" title="exam-manager.app.api.mri_sequence_api.get_mri_sequence_file_by_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mri_sequence_file_by_id</span></code></a>(sequence_id, background_tasks)</p></td>
 <td><p>Retrieve an MRI sequence file by its ID.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint" title="exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_mri_sequence_endpoint</span></code></a>(sequence_id, sequence_meta)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id" title="exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mri_sequence_header_file_by_id</span></code></a>(sequence_id, ...[, ...])</p></td>
+<td><p>Retrieve an MRI sequence header (ISMRMRD header) file by its ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint" title="exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_mri_sequence_endpoint</span></code></a>(sequence_id, sequence_meta)</p></td>
 <td><p>Update an MRI sequence with new data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint" title="exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_mri_sequence_endpoint</span></code></a>() → None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint" title="exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_mri_sequence_endpoint</span></code></a>() → None)</p></td>
 <td><p>Delete an MRI sequence by its ID.</p></td>
 </tr>
 </tbody>
@@ -519,14 +522,16 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.api.mri_sequence_api.create_mri_sequence">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.mri_sequence_api.</span></span><span class="sig-name descname"><span class="pre">create_mri_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence_meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseMRISequence</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(mri_sequence_form)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_mongo_database)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.mri_sequence_api.create_mri_sequence" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.mri_sequence_api.</span></span><span class="sig-name descname"><span class="pre">create_mri_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence_meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseMRISequence</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(mri_sequence_form)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(...)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xml_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.UploadFile</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_mongo_database)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.mri_sequence_api.create_mri_sequence" title="Link to this definition">#</a></dt>
 <dd><p>Upload an MRI sequence file and store it with the provided metadata.</p>
 <section id="id2">
 <h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>mri_sequence<span class="classifier">MRISequenceCreate</span></dt><dd><p>The MRI sequence metadata.</p>
 </dd>
-<dt>file<span class="classifier">UploadFile</span></dt><dd><p>The MRI sequence file to store.</p>
+<dt>seq_file<span class="classifier">UploadFile</span></dt><dd><p>The MRI sequence file to store.</p>
+</dd>
+<dt>xml_file<span class="classifier">UploadFile</span></dt><dd><p>The ISMRMRD header xml file to store.</p>
 </dd>
 <dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
 </dd>
@@ -588,11 +593,37 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.mri_sequence_api.</span></span><span class="sig-name descname"><span class="pre">get_mri_sequence_header_file_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.BackgroundTasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'header'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_mongo_database)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve an MRI sequence header (ISMRMRD header) file by its ID.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to retrieve.</p>
+</dd>
+<dt>background_tasks<span class="classifier">BackgroundTasks</span></dt><dd><p>The background tasks to run.</p>
+</dd>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the file to download.</p>
+</dd>
+<dt>database<span class="classifier">AsyncIOMotorDatabase</span></dt><dd><p>The MongoDB database handle.</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>FileResponse</dt><dd><p>The retrieved MRI sequence file.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.mri_sequence_api.</span></span><span class="sig-name descname"><span class="pre">update_mri_sequence_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scanhub_libraries.models.BaseMRISequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_mongo_database)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint" title="Link to this definition">#</a></dt>
 <dd><p>Update an MRI sequence with new data.</p>
-<section id="id8">
-<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to update.</p>
 </dd>
@@ -602,8 +633,8 @@
 </dd>
 </dl>
 </section>
-<section id="id9">
-<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<section id="id11">
+<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>MRISequence</dt><dd><p>The updated MRI sequence.</p>
 </dd>
@@ -615,8 +646,8 @@
 <dt class="sig sig-object py" id="exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam-manager.app.api.mri_sequence_api.</span></span><span class="sig-name descname"><span class="pre">delete_mri_sequence_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_mongo_database)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint" title="Link to this definition">#</a></dt>
 <dd><p>Delete an MRI sequence by its ID.</p>
-<section id="id10">
-<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>sequence_id<span class="classifier">str</span></dt><dd><p>The ID of the MRI sequence to delete.</p>
 </dd>
@@ -624,8 +655,8 @@
 </dd>
 </dl>
 </section>
-<section id="id11">
-<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<section id="id13">
+<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
 <p>None</p>
 </section>
 </dd></dl>
@@ -671,6 +702,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.mri_sequence_api.create_mri_sequence"><code class="docutils literal notranslate"><span class="pre">create_mri_sequence()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.mri_sequence_api.get_all_mri_sequences"><code class="docutils literal notranslate"><span class="pre">get_all_mri_sequences()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.mri_sequence_api.get_mri_sequence_file_by_id"><code class="docutils literal notranslate"><span class="pre">get_mri_sequence_file_by_id()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id"><code class="docutils literal notranslate"><span class="pre">get_mri_sequence_header_file_by_id()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint"><code class="docutils literal notranslate"><span class="pre">update_mri_sequence_endpoint()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint"><code class="docutils literal notranslate"><span class="pre">delete_mri_sequence_endpoint()</span></code></a></li>
 </ul>
