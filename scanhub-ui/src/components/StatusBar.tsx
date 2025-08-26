@@ -33,71 +33,54 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 
 
-// Device all health cheks
+// Device all health checks
 const healthChecks = [
   {
     name: 'Patient Manager',
-    useHook: () => useManagerHealthCheck(
-      'patientManagerHealthCheck',
-      () => patientManagerHealthApi.readinessApiV1PatientHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-      'patient-manager'
-    )
+    key: 'patientManagerHealthCheck',
+    queryFn: () => patientManagerHealthApi.readinessApiV1PatientHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
   },
   {
     name: 'Exam Manager',
-    useHook: () => useManagerHealthCheck(
-      'examManagerHealthCheck',
-      () => examManagerHealthApi.readinessApiV1ExamHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-      'exam-manager'
-    )
+    key: 'examManagerHealthCheck',
+    queryFn: () => examManagerHealthApi.readinessApiV1ExamHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
   },
-    {
+  {
     name: 'Workflow Manager',
-    useHook: () => useManagerHealthCheck(
-      'workflowManagerHealthCheck',
-      () => workflowManagerHealthApi.readinessApiV1WorkflowmanagerHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-      'workflow-manager'
-    )
+    key: 'workflowManagerHealthCheck',
+    queryFn: () => workflowManagerHealthApi.readinessApiV1WorkflowmanagerHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
   },
-    {
+  {
     name: 'User Login Manager',
-    useHook: () => useManagerHealthCheck(
-      'userLoginManagerHealthCheck',
-      () => userLoginManagerHealthApi.readinessApiV1UserloginHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-      'user-login-manager'
-    )
+    key: 'userLoginManagerHealthCheck',
+    queryFn: () => userLoginManagerHealthApi.readinessApiV1UserloginHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
   },
   {
     name: 'Device Manager',
-    useHook: () => useManagerHealthCheck(
-      'deviceManagerHealth',
-      () => deviceManagerHealthApi.readinessApiV1DeviceHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-      'device-manager'
-    )
+    key: 'deviceManagerHealth',
+    queryFn: () => deviceManagerHealthApi.readinessApiV1DeviceHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
   } 
 ]
 
-function ManagerStatus() {
-
+function ManagerStatus({ items }: { items: Array<{ name: string; isHealthy: boolean; isLoading: boolean }>}) {
   return (
     <Box
       sx={{
         display: 'grid',
         gridTemplateColumns: '1fr auto', // left column flexible, right column auto-sized
-        rowGap: 1,                       // vertical spacing between rows
-        columnGap: 2,                    // horizontal spacing
+        rowGap: 2,                       // vertical spacing between rows
+        columnGap: 4,                    // horizontal spacing
         alignItems: 'center',            // vertical centering per row
         p: 2
       }}
     >
       {
-        healthChecks.map(({ name, useHook }, index) => {
-          const { isHealthy, isLoading } = useHook();
+        items.map(({ name, isHealthy, isLoading }, index) => {
           return (
             <React.Fragment key={`manager-healt-check-${index}`}>
               <Typography level='body-xs'>{name}</Typography>
               {
-                isLoading ? <CircularProgress /> :
+                isLoading ? <CircularProgress determinate={false} size='sm' sx={{'--CircularProgress-size': '20px'}}/> :
                   <Chip
                     size="sm"
                     color={isHealthy ? 'success' : 'danger'}
@@ -115,6 +98,7 @@ function ManagerStatus() {
   )
 }
 
+
 export default function StatusBar() {
 
   const queryClient = useQueryClient()
@@ -123,7 +107,8 @@ export default function StatusBar() {
   const [tooltipPinned, setTooltipPinned] = React.useState(false);
   const tooltipOpen = tooltipHovered || tooltipPinned
 
-  const anyUnhealthy = healthChecks.map(({ useHook }) => useHook()).some(r => !r.isLoading && !r.isHealthy)
+  const healthItems = healthChecks.map(cfg => ({ name: cfg.name, ...useManagerHealthCheck(cfg.key, cfg.queryFn, cfg.name) }));
+  const anyUnhealthy = healthItems.some(i => !i.isLoading && !i.isHealthy);
 
   const selectedDeviceId = queryClient.getQueryData<string | null>(['selectedDeviceId'])
   const setSelectedDeviceId = (id: string | null) => queryClient.setQueryData(['selectedDeviceId'], id)
@@ -138,13 +123,14 @@ export default function StatusBar() {
   })
 
   // Poll only the selected device, but more frequently to get updated device status
-  const { data: deviceStatus } = useQuery<DeviceOut>({
-    queryKey: ['deviceStatus', selectedDeviceId], // depends on selected device
+  const { data: deviceStatus, refetch } = useQuery<string | undefined>({
+    queryKey: ['deviceStatus', 'selectedDeviceId'], // depends on selected device
+
     queryFn: async () => {
       if (!selectedDeviceId) throw new Error('No device selected')
       // Call your API to get this device’s latest status
       const result = await deviceApi.getDeviceApiV1DeviceDeviceIdGet(selectedDeviceId)
-      return result.data
+      return result.data.status ? result.data.status as string : undefined
     },
     enabled: !!selectedDeviceId,     // only run when a device is selected
     refetchInterval: 1000,         // poll every second
@@ -164,22 +150,26 @@ export default function StatusBar() {
         paddingRight: 2,
         paddingLeft: 2,
         alignItems: 'center',
+        overflow: 'hidden',
         position: 'sticky', // or "fixed" if you always want it visible
         bottom: 0,  // stick to the bottom instead of top
         zIndex: 'snackbar', // keep above main content, below snackbar
       }}
     >
       {
-        devices && <Select
+        devices && devices?.length > 0 && <Select
           variant='solid'
           color='primary'
           value={selectedDeviceId || null}
-          onChange={(_, newValue) => setSelectedDeviceId(newValue)}
+          onChange={(_, newValue) => {
+            setSelectedDeviceId(newValue);
+            refetch()
+          }}
           placeholder="Select a device..."
           renderValue={(selected) => {
             if (!selected) return '-'
             const device = devices?.find(d => d.id === selected.value)
-            return device ? `${device.name}: ${deviceStatus?.status ?? device.status ?? '-'}` : '-'
+            return device ? `${device.name}: ${deviceStatus ?? device.status ?? '-'}` : '-'
           }}
           sx={{
             minHeight: 0,
@@ -195,7 +185,7 @@ export default function StatusBar() {
               sx: {
                 order: -1, // move indicator to the start
                 marginRight: '0.5rem',
-                marginLeft: '-0.5rem'
+                marginLeft: '-0.5rem',
               },
             },
           }}
@@ -216,7 +206,7 @@ export default function StatusBar() {
           variant='outlined'
           describeChild={false}
           arrow
-          title={<ManagerStatus/>}
+          title={<ManagerStatus items={healthItems}/>}
           open={tooltipOpen}
           modifiers={[
             { name: 'preventOverflow', options: { padding: 10 } }, // skidding=8 (down), distance=20 (further right)
@@ -235,8 +225,8 @@ export default function StatusBar() {
             onMouseLeave={() => setTooltipHovered(false)}
           >
             {
-              anyUnhealthy ? <ErrorOutlineIcon sx={{ fontSize: 'var(--Status-height)' }}/> :
-                <LinkIcon sx={{ fontSize: 'var(--Status-height)' }} />
+              anyUnhealthy ? <ErrorOutlineIcon sx={{ fontSize: 'calc(var(--Status-height) - 1)' }}/> :
+                <LinkIcon sx={{ fontSize: 'calc(var(--Status-height) - 1)' }} />
             }
           </IconButton>
         </Tooltip>
