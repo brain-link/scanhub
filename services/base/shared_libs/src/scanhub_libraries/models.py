@@ -143,8 +143,10 @@ class MRISequenceOut(BaseMRISequence):
     id: str = Field(alias="_id")
     created_at: datetime
     updated_at: datetime | None = None
-    file: Any
-    file_extension: str | None = None
+    seq_file: Any
+    seq_file_extension: str | None = None
+    xml_file: Any | None = None
+    xml_file_extension: str | None = None
 
 
 class BaseResult(BaseModel):
