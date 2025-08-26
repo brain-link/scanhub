@@ -37,7 +37,7 @@ export function useManagerHealthCheck<T>(
       });
     }
 		// Reconnected
-    if (query.isSuccess && (query.data as any)?.status === 'ok' && prevError.current) {
+    if (query.isSuccess && (query.data as {status?: string})?.status === 'ok' && prevError.current) {
       showNotification({
         message: `Reconnected to ${serviceName} after connection loss.`,
         type: 'success',
@@ -49,6 +49,6 @@ export function useManagerHealthCheck<T>(
 
   return {
     ...query,
-    isHealthy: query.isSuccess && (query.data as any)?.status === 'ok',
+    isHealthy: query.isSuccess && (query.data as {status?: string})?.status === 'ok',
   };
 }

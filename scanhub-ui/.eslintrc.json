@@ -24,7 +24,8 @@
         "camelcase": "warn",
         "spaced-comment": "error",
         "quotes": ["error", "single"],
-        "no-duplicate-imports": "off"
+        "no-duplicate-imports": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "settings": {
         "import/resolver": {

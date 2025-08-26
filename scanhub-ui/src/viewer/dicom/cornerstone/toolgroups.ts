@@ -5,7 +5,6 @@
  * toolgroups.ts registers all the tools and create a linked tool group.
  */
 import {
-  annotation,
   addTool,
   Enums,
   ToolGroupManager,

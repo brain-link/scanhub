@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api';
 import { TaskType } from '../../../openapi/generated-client/exam';
-import { metaData, Enums } from '@cornerstonejs/core';
 
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
