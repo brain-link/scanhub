@@ -22,12 +22,7 @@ from fastapi import (
 )
 from fastapi.responses import StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
-from scanhub_libraries.models import (
-    DeviceCreationRequest,
-    DeviceOut,
-    User,
-    DeviceStatus
-)
+from scanhub_libraries.models import DeviceCreationRequest, DeviceOut, DeviceStatus, User
 from scanhub_libraries.security import compute_complex_password_hash, get_current_user
 
 from app.api.dal import (

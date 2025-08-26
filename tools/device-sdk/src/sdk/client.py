@@ -289,7 +289,10 @@ class Client:
         """
         if task_id is not None and user_access_token is not None:
             await self.send_status(
-                DeviceStatus.ERROR, data={"error_message": error_message}, task_id=task_id, user_access_token=user_access_token,
+                DeviceStatus.ERROR,
+                data={"error_message": error_message},
+                task_id=task_id,
+                user_access_token=user_access_token,
             )
         else:
             await self.send_status(

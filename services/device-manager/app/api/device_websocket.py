@@ -31,10 +31,10 @@ from scanhub_libraries.models import (
     AcquisitionPayload,
     AcquisitionTaskOut,
     DeviceDetails,
+    DeviceStatus,
     ItemStatus,
     ResultType,
     SetResult,
-    DeviceStatus,
 )
 from scanhub_libraries.security import compute_complex_password_hash
 from sqlalchemy import exc
