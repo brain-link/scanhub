@@ -89,9 +89,9 @@ async def get_mri_sequence_by_id(
     tags=["mri sequences"],
 )
 async def create_mri_sequence(
-    sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
     seq_file: UploadFile = File(...),
-    xml_file: UploadFile | None = None,
+    xml_file: UploadFile = File(...),
+    sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
     database=Depends(get_mongo_database),
 ):
     """Upload an MRI sequence file and store it with the provided metadata.
@@ -130,18 +130,20 @@ async def create_mri_sequence(
 
     # Check xml file
     if xml_file is not None:
-        if xml_filename := xml_file.filename:
-            xml_file_suffix = Path(xml_filename).suffix
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Invalid header file",
+        data = await xml_file.read()
+        if data:
+            if xml_filename := xml_file.filename:
+                xml_file_suffix = Path(xml_filename).suffix
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Invalid header file",
             )
-        # Read the content of the uploaded header file
-        payload["xml_file"] = Binary(await xml_file.read())
-        payload["xml_file_extension"] = xml_file_suffix
+            # Read the content of the uploaded header file
+            payload["xml_file"] = Binary(data)
+            payload["xml_file_extension"] = xml_file_suffix
 
-    print(f"SEQUENCE OUT PAYLOAD: {payload}")
+    print("PAYLOAD: ", payload)
 
     if not (result := await database.collection.insert_one(payload)):
         raise HTTPException(status_code=500, detail="Failed to insert sequence.")

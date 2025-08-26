@@ -748,13 +748,6 @@ export interface ExamOut {
 
 
 /**
- * 
- * @export
- * @interface FileExtension
- */
-export interface FileExtension {
-}
-/**
  * Pydantic definition of genders.
  * @export
  * @enum {string}
@@ -1070,13 +1063,25 @@ export interface MRISequenceOut {
      * @type {any}
      * @memberof MRISequenceOut
      */
-    'file': any;
+    'seq_file': any;
     /**
      * 
-     * @type {FileExtension}
+     * @type {SeqFileExtension}
      * @memberof MRISequenceOut
      */
-    'file_extension'?: FileExtension;
+    'seq_file_extension'?: SeqFileExtension;
+    /**
+     * 
+     * @type {XmlFile}
+     * @memberof MRISequenceOut
+     */
+    'xml_file'?: XmlFile;
+    /**
+     * 
+     * @type {XmlFileExtension}
+     * @memberof MRISequenceOut
+     */
+    'xml_file_extension'?: XmlFileExtension;
 }
 /**
  * 
@@ -1745,6 +1750,13 @@ export type ResultType = typeof ResultType[keyof typeof ResultType];
 
 
 /**
+ * 
+ * @export
+ * @interface SeqFileExtension
+ */
+export interface SeqFileExtension {
+}
+/**
  * Update result model.
  * @export
  * @interface SetResult
@@ -1959,6 +1971,20 @@ export interface XYZ {
      * @memberof XYZ
      */
     'z': number;
+}
+/**
+ * 
+ * @export
+ * @interface XmlFile
+ */
+export interface XmlFile {
+}
+/**
+ * 
+ * @export
+ * @interface XmlFileExtension
+ */
+export interface XmlFileExtension {
 }
 
 /**
@@ -2968,9 +2994,10 @@ export class HealthApi extends BaseAPI {
 export const MriSequencesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
          * @summary Create Mri Sequence
-         * @param {File} file 
+         * @param {File} seqFile 
+         * @param {File} xmlFile 
          * @param {string} name 
          * @param {string} [description] 
          * @param {string} [sequenceType] 
@@ -2978,9 +3005,11 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost: async (file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'file' is not null or undefined
-            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'file', file)
+        createMriSequenceApiV1ExamSequencePost: async (seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'seqFile' is not null or undefined
+            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'seqFile', seqFile)
+            // verify required parameter 'xmlFile' is not null or undefined
+            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'xmlFile', xmlFile)
             // verify required parameter 'name' is not null or undefined
             assertParamExists('createMriSequenceApiV1ExamSequencePost', 'name', name)
             const localVarPath = `/api/v1/exam/sequence`;
@@ -3001,8 +3030,12 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
             await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
-            if (file !== undefined) { 
-                localVarFormParams.append('file', file as any);
+            if (seqFile !== undefined) { 
+                localVarFormParams.append('seq_file', seqFile as any);
+            }
+    
+            if (xmlFile !== undefined) { 
+                localVarFormParams.append('xml_file', xmlFile as any);
             }
     
             if (name !== undefined) { 
@@ -3188,6 +3221,49 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
+         * Retrieve an MRI sequence header (ISMRMRD header) file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence Header File By Id
+         * @param {string} sequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet: async (sequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sequenceId' is not null or undefined
+            assertParamExists('getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/exam/sequence/{sequence_id}/header`
+                .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
          * @summary Update Mri Sequence Endpoint
          * @param {string} sequenceId 
@@ -3242,9 +3318,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MriSequencesApiAxiosParamCreator(configuration)
     return {
         /**
-         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
          * @summary Create Mri Sequence
-         * @param {File} file 
+         * @param {File} seqFile 
+         * @param {File} xmlFile 
          * @param {string} name 
          * @param {string} [description] 
          * @param {string} [sequenceType] 
@@ -3252,8 +3329,8 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options);
+        async createMriSequenceApiV1ExamSequencePost(seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequenceApiV1ExamSequencePost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3311,6 +3388,20 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieve an MRI sequence header (ISMRMRD header) file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence Header File By Id
+         * @param {string} sequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId, name, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
          * @summary Update Mri Sequence Endpoint
          * @param {string} sequenceId 
@@ -3335,9 +3426,10 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
     const localVarFp = MriSequencesApiFp(configuration)
     return {
         /**
-         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+         * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
          * @summary Create Mri Sequence
-         * @param {File} file 
+         * @param {File} seqFile 
+         * @param {File} xmlFile 
          * @param {string} name 
          * @param {string} [description] 
          * @param {string} [sequenceType] 
@@ -3345,8 +3437,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
-            return localVarFp.createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
+        createMriSequenceApiV1ExamSequencePost(seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
@@ -3389,6 +3481,17 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
             return localVarFp.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieve an MRI sequence header (ISMRMRD header) file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+         * @summary Get Mri Sequence Header File By Id
+         * @param {string} sequenceId 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId: string, name?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId, name, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
          * @summary Update Mri Sequence Endpoint
          * @param {string} sequenceId 
@@ -3410,9 +3513,10 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
  */
 export class MriSequencesApi extends BaseAPI {
     /**
-     * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. file : UploadFile     The MRI sequence file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
+     * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
      * @summary Create Mri Sequence
-     * @param {File} file 
+     * @param {File} seqFile 
+     * @param {File} xmlFile 
      * @param {string} name 
      * @param {string} [description] 
      * @param {string} [sequenceType] 
@@ -3421,8 +3525,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public createMriSequenceApiV1ExamSequencePost(file: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(file, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
+    public createMriSequenceApiV1ExamSequencePost(seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3471,6 +3575,19 @@ export class MriSequencesApi extends BaseAPI {
      */
     public getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
         return MriSequencesApiFp(this.configuration).getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve an MRI sequence header (ISMRMRD header) file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
+     * @summary Get Mri Sequence Header File By Id
+     * @param {string} sequenceId 
+     * @param {string} [name] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MriSequencesApi
+     */
+    public getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
