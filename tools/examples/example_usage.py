@@ -1,6 +1,6 @@
 """Example usage of the Device SDK for a simulated scanning process."""
 import asyncio
-import numpy as np
+import atexit
 
 from sdk.client import Client
 from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
@@ -78,18 +78,17 @@ async def main():
 
     await client.start()
     print("Client started and waiting for commands from the server.")
-    
+
     stop_event = asyncio.Event()
-    def shutdown():
+
+    def shutdown() -> None:
+        """Define shutdown."""
+        print("\nStopping client...")
         stop_event.set()
-        
-    loop = asyncio.get_running_loop()
-    loop.add_signal_handler(signal.SIGINT, shutdown)
-    loop.add_signal_handler(signal.SIGTERM, shutdown)
+
+    atexit.register(shutdown)
 
     await stop_event.wait()  # wait for signal
-    
-    print("\nStopping client...")
     await client.stop()
 
 if __name__ == "__main__":
