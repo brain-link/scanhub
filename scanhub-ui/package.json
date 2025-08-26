@@ -76,7 +76,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ./src/**/*.tsx",
+    "lint": "eslint ./src --ext .ts,.tsx,.js,.jsx",
     "lint+fix": "eslint --fix './src/**/*.tsx'",
     "format": "prettier --write './src/**/*.tsx' --config ./.prettierrc",
     "generate-all-clients": "./src/openapi/generate-all-clients.sh",
