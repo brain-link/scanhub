@@ -45,17 +45,13 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
     },
   })
 
-  let actionIcon = <PlayCircleIcon />
-  if (itemSelection.status == ItemStatus.Started) actionIcon = <StopCircleIcon />
-  if (itemSelection.status == ItemStatus.Finished) actionIcon = <CheckCircleIcon />
-
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
       <IconButton 
         size='sm' 
         variant='plain' 
         color={'neutral'}
-        disabled={processTaskMutation.isPending}
+        disabled={processTaskMutation.isPending || !(itemSelection.type == 'DAG' || itemSelection.type == 'ACQUISITION')}
         onClick={() => {
           openConfirmModal(() => {
             // By now, only tasks can be executed
@@ -72,7 +68,7 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
           })
         }}
       >
-        {actionIcon}
+        { itemSelection.status == ItemStatus.Started ? <StopCircleIcon /> : <PlayCircleIcon /> }
       </IconButton>
 
       <Stack direction='column' sx={{ flex: 1 }}>

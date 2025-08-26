@@ -66,7 +66,9 @@ function DeviceForm(props: ModalProps) {
     document.body.removeChild(a)
     // Keep URL alive in case the user wants to click again.
     // If you want to revoke right after download, call URL.revokeObjectURL(credentialsUrl) and setCredentialsUrl(null)
+    props.onSubmit()
     props.setOpen(false) // Close modal after download
+    
   }
 
   return (

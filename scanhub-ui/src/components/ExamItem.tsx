@@ -85,7 +85,7 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
   return (
     <>
       <Dropdown>
-        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
+        <MenuButton slotProps={{ root: { size: 'sm', variant: 'plain' } }} sx={{ aspectRatio: '1 / 1', minWidth: 0, p: 0.5 }} slots={{ root: IconButton }}>
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
