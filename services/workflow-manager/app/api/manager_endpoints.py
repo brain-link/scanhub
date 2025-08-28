@@ -216,6 +216,7 @@ def handle_dag_task_trigger(
         # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
         callback_endpoint = f"{WORKFLOW_MANAGER_URI}/result_ready/{task.id}/{new_result_out.id}"
         device_parameter_update_endpoint = f"{DEVICE_MANAGER_URI}/parameter/"
+        result_directory = f"/data/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/"
 
         # Trigger dagster job
         job_name, repository, location = parse_job_id(task.dag_id)
@@ -229,7 +230,7 @@ def handle_dag_task_trigger(
                     callback_url=callback_endpoint,
                     user_access_token=access_token,
                     input_files=job_inputs,
-                    output_dir=new_result_out.directory,
+                    output_dir=result_directory,
                     task_id=task_id,
                     exam_id=exam_id,
                     update_device_parameter_base_url=device_parameter_update_endpoint,
@@ -243,7 +244,7 @@ def handle_dag_task_trigger(
                 payload=SetResult(
                     type=ResultType.DICOM,
                     meta={ "run_id": run_id },
-                    directory=f"/data/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/",
+                    directory=result_directory,
                 ),
                 user_access_token=access_token,
             )
