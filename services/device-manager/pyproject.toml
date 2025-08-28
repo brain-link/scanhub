@@ -3,8 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "device_manager"
+name = "scanhub-device-manager"
 version = "0.0.1"
+license = { file = "LICENSE" }
 description = "The device manager service is responsible for managing the devices that are connected to scanhub."
 authors = [
     "David Schote <david.schote@brain-link.de>", 

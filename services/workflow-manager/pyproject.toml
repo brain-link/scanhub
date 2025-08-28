@@ -3,8 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "workflow_manager"
+name = "scanhub-workflow_manager"
 version = "0.0.1"
+license = { file = "LICENSE" }
 description = "The Workflow Manager organizes the processing chains forming ScanHub Workflows."
 authors = [
     "David Schote <david.schote@brain-link.de>", 

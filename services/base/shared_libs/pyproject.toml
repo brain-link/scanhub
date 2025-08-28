@@ -3,8 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "scanhub_libraries"
+name = "scanhub-libraries"
 version = "0.0.2"
+license = { file = "LICENSE" }
 requires-python = ">=3.13,<3.14"
 dependencies = [
   "pydantic (>=2.11.7,<3.0.0)",

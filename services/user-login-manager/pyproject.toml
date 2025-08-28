@@ -3,8 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "user-manager"
+name = "scanhub-user-manager"
 version = "0.0.1"
+license = { file = "LICENSE" }
 description = "Provides functionality for user login and user management."
 authors = [
     "David Schote <david.schote@brain-link.de>", 

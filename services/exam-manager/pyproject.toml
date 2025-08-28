@@ -3,8 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "exam-manager"
+name = "scanhub-exam-manager"
 version = "0.0.1"
+license = { file = "LICENSE" }
 description = "The Exam Manager is responsible for managing the exam tree."
 authors = [
     "David Schote <david.schote@brain-link.de>", 
