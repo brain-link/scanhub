@@ -4,7 +4,7 @@ from dagster import Definitions, in_process_executor
 from orchestrator.jobs.frequency_calibration import frequency_calibration_job
 from orchestrator.jobs.mrpro_image_reconstruction import mrpro_reconstruction_job
 
-definitions = Definitions(
+defs = Definitions(
     jobs=[
         mrpro_reconstruction_job,
         frequency_calibration_job,

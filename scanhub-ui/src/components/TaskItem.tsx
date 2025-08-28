@@ -143,7 +143,7 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
         isOpen={dagsterOpen}
         setOpen={setDagsterOpen}
         onSubmit={() => {}}
-        item={runId ? `/dagit/runs/${ runId }` : '/dagit/runs'}
+        item={runId ? `/dagster/runs/${ runId }` : '/dagster/runs'}
       />
     </>
   )

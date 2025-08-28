@@ -6,7 +6,7 @@ import mrpro
 from dagster import Nothing, OpExecutionContext, Out, RunConfig, graph, op
 from scanhub_libraries.resources import SCANHUB_RESOURCE_KEY, JobConfigResource
 
-from dagster_workflows.shared_ops import notify_op
+from orchestrator.ops.scanhub import notify_op
 
 
 @op(required_resource_keys={SCANHUB_RESOURCE_KEY})

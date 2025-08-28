@@ -55,7 +55,7 @@ if DATA_LAKE_DIR is None:   # ensure that DATA_LAKE_DIR is set
 
 
 # Define dagster graphQL client
-dg_client = DagsterGraphQLClient("dagster-dagit:3000/dagit", use_https=False)
+dg_client = DagsterGraphQLClient("dagster-webserver:3000/dagster", use_https=False)
 # Define the API router
 router = APIRouter(dependencies=[Depends(get_current_user)])
 # Define OAuth2 scheme for token-based authentication

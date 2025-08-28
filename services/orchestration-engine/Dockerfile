@@ -1,22 +1,33 @@
 ARG BASE_IMG=ghcr.io/brain-link/scanhub/scanhub-base:latest
 FROM $BASE_IMG
 
-# Install ps and pgrep
-RUN apt-get update && apt-get install -y procps curl && rm -rf /var/lib/apt/lists/*
+# Environment
+ARG DAGSTER_HOME=/opt/dagster/dagster_home
+ENV DAGSTER_HOME=$DAGSTER_HOME
+ARG DATA_LAKE_DIRECTORY=/data
+ENV DATA_LAKE_DIRECTORY=$DATA_LAKE_DIRECTORY
 
 WORKDIR /opt/dagster/app
 
-# Install git (needed for git+https requirements)
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends git ca-certificates \
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        procps curl git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# RUN pip install --upgrade pip
+# Poetry
+RUN pip install poetry
 
-# Install dependencies using poetry
+# 1. Install dependencies only (cached well)
 COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction
 
+# 2. Copy source
 COPY . .
 
+# 3. Install just this project (fast)
+RUN poetry install --only-root --no-interaction
+
+# Dagster configuration
 RUN mkdir -p $DAGSTER_HOME
+COPY dagster.yaml $DAGSTER_HOME/dagster.yaml
+COPY workspace.yaml $DAGSTER_HOME/workspace.yaml

@@ -6,31 +6,33 @@ authors = [
     {name = "David Schote", email = "david.schote@brain-link.de"},
 ]
 readme = "README.md"
-license = { file = "LICENSE" }
-
-[tool.poetry]
-packages = [{ include = "orchestrator" }]
+#license = { file = "LICENSE" }
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
-
 dagster-webserver = ">=1.11.7,<2.0.0"
 dagster-docker = ">=0.27.7,<0.28.0"
 pydicom = ">=3.0.1,<4.0.0"
 pydantic = ">=2.11.7,<3.0.0"
 numpy = ">=2.3.2,<3.0.0"
 requests = ">=2.32.5,<3.0.0"
+mrpro = ">=0.250812"
 
-# CPU-only PyTorch from the official CPU wheel index
-torch = { version = "2.4.1+cpu", source = "pytorch-cpu" }
-torchvision = { version = "0.19.1+cpu", source = "pytorch-cpu" }
+[tool.poetry]
+license = "GPL-3.0-only with custom exception"
+# Ship all license files
+include = [
+    { path = "../../LICENSE", format = "sdist" },
+    { path = "../../LICENSE.GPL3", format = "sdist" },
+    { path = "../../LICENSE.GPL3-EXCEPT", format = "sdist" },
+    { path = "../../LICENSE", format = "wheel" },
+    { path = "../../LICENSE.GPL3", format = "wheel" },
+    { path = "../../LICENSE.GPL3-EXCEPT", format = "wheel" }
+]
+packages = [{ include = "orchestrator" }]
 
-mrpro = "*"
-
-[[tool.poetry.source]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
+[tool.dagster]
+module = "orchestrator.repository"
 
 
 [build-system]

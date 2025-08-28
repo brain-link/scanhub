@@ -118,6 +118,9 @@ export default function StatusBar() {
     queryKey: ['devices'],
     queryFn: async () => {
       const result = await deviceApi.getDevicesApiV1DeviceGet()
+      if (selectedDeviceId === null && result.data.length > 0) {
+        setSelectedDeviceId(result.data[0].id)
+      }
       return result.data
     },
   })

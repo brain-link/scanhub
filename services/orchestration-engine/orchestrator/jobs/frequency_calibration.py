@@ -4,9 +4,9 @@ import tempfile
 from pathlib import Path
 
 from dagster import RunConfig, graph, op
-from dagster.loggers import colored_console_logger
 from scanhub_libraries.resources import SCANHUB_RESOURCE_KEY, JobConfigResource
-from dagster_workflows.shared_ops import notify_op, send_device_parameter_update
+
+from orchestrator.ops.scanhub import notify_op, send_device_parameter_update
 
 
 @op(required_resource_keys={SCANHUB_RESOURCE_KEY})
@@ -58,7 +58,6 @@ def frequency_calibration_graph() -> None:
 frequency_calibration_job = frequency_calibration_graph.to_job(
     name="frequency_calibration_job",
     resource_defs={SCANHUB_RESOURCE_KEY: JobConfigResource.configure_at_launch()},
-    logger_defs={"console": colored_console_logger},
 )
 
 # %%
