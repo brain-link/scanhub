@@ -1,7 +1,0 @@
-dagster-webserver
-dagster-docker
-pydicom
-pydantic
-numpy
-requests
-mrpro @ git+https://git@github.com/PTB-MR/mrpro.git@main

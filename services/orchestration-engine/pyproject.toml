@@ -1,0 +1,26 @@
+[project]
+name = "scanhub-orchestration-engine"
+version = "0.1.0"
+description = "Task orchestration engine built on Dagster for executing computational jobs as directed acyclic graphs (DAGs). Integrates with the device manager to coordinate exam workflows where acquisition tasks are executed by devices and DAG tasks are executed within this service."
+authors = [
+    {name = "David Schote",email = "david.schote@brain-link.de"}
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "dagster-webserver (>=1.11.7,<2.0.0)",
+    "dagster-docker (>=0.27.7,<0.28.0)",
+    "pydicom (>=3.0.1,<4.0.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "numpy (>=2.3.2,<3.0.0)",
+    "requests (>=2.32.5,<3.0.0)",
+    "mrpro (>=0.250812,<0.250813)"
+]
+
+[tool.poetry]
+packages = [{ include = "orchestrator" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
