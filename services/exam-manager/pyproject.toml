@@ -1,7 +1,6 @@
 [project]
 name = "scanhub-exam-manager"
 version = "0.0.1"
-license = { file = "LICENSE" }
 description = "The Exam Manager is responsible for managing the exam tree."
 authors = [
     {name = "David Schote", email = "david.schote@brain-link.de"},
@@ -11,6 +10,16 @@ readme = "README.md"
 
 [tool.poetry]
 packages = [{include = "app"}]
+license = "GPL-3.0-only with custom exception"
+# Ship all license files
+include = [
+    { path = "../../LICENSE", format = "sdist" },
+    { path = "../../LICENSE.GPL3", format = "sdist" },
+    { path = "../../LICENSE.GPL3-EXCEPT", format = "sdist" },
+    { path = "../../LICENSE", format = "wheel" },
+    { path = "../../LICENSE.GPL3", format = "wheel" },
+    { path = "../../LICENSE.GPL3-EXCEPT", format = "wheel" }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"

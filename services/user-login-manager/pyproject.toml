@@ -1,17 +1,26 @@
 [project]
 name = "scanhub-user-manager"
 version = "0.0.1"
-license = { file = "LICENSE" }
 description = "Provides functionality for user login and user management."
 authors = [
     {name = "David Schote", email = "david.schote@brain-link.de"},
-    {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"}
+    {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"},
     {name = "Ben Wilhelm", email = "ben.wilhelm@uniklinik-freiburg.de"}
 ]
 readme = "README.md"
 
 [tool.poetry]
 packages = [{include = "app"}]
+license = "GPL-3.0-only with custom exception"
+# Ship all license files
+include = [
+    { path = "../../LICENSE", format = "sdist" },
+    { path = "../../LICENSE.GPL3", format = "sdist" },
+    { path = "../../LICENSE.GPL3-EXCEPT", format = "sdist" },
+    { path = "../../LICENSE", format = "wheel" },
+    { path = "../../LICENSE.GPL3", format = "wheel" },
+    { path = "../../LICENSE.GPL3-EXCEPT", format = "wheel" }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
