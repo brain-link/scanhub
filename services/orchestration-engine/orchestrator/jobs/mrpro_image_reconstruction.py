@@ -45,13 +45,7 @@ def save_as_dicom(context: OpExecutionContext, img: mrpro.data.IData) -> None:
     job_config: JobConfigResource = context.resources.job_config
     path = Path(job_config.output_dir)
     if path.exists():
-        context.log.info("Output directory %s already exists, removing it.", path)
-        for item in path.iterdir():
-            if item.is_file():
-                item.unlink()
-            else:
-                item.rmdir()
-
+        context.log.error("Output directory %s already exists.", path)
     context.log.info("Saving dicom files to %s", path)
     img.to_dicom_folder(path)
     context.log.info("Data saved successfully.")
@@ -76,7 +70,7 @@ mrpro_reconstruction_job = mrpro_reconstruct_graph.to_job(
 # %%
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmpdir:
-        input_path = "../../../tools/examples/data.mrd"
+        input_path = "../../../../tools/examples/data.mrd"
 
         result = mrpro_reconstruction_job.execute_in_process(
             run_config=RunConfig(resources={
