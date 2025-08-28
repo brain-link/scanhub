@@ -1,17 +1,15 @@
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
+[project]
 name = "scanhub-exam-manager"
 version = "0.0.1"
 license = { file = "LICENSE" }
 description = "The Exam Manager is responsible for managing the exam tree."
 authors = [
-    "David Schote <david.schote@brain-link.de>", 
-    "Christoph Dinh <christoph.dinh@brain-link.de>"
+    {name = "David Schote", email = "david.schote@brain-link.de"},
+    {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"}
 ]
 readme = "README.md"
+
+[tool.poetry]
 packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
@@ -78,3 +76,7 @@ check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
 ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

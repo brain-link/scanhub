@@ -1,16 +1,14 @@
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
+[project]
 name = "scanhub-patient-manager"
 version = "0.0.1"
 license = { file = "LICENSE" }
 description = "ScanHub patient manager"
 authors = [
-    "David Schote <david.schote@brain-link.de>",
+    {name = "David Schote", email = "david.schote@brain-link.de"},
 ]
 readme = "README.md"
+
+[tool.poetry]
 packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
@@ -62,3 +60,8 @@ check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
 ignore_missing_imports = true
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
