@@ -30,7 +30,7 @@ Module Contents
 ---------------
 
 .. py:data:: DAGSTER_URL
-   :value: 'http://dagster-dagit:3000/dagit/graphql'
+   :value: 'http://dagster-webserver:3000/dagster/graphql'
 
 
 .. py:function:: list_dagster_jobs() -> list[dict]
