@@ -9,7 +9,6 @@ import {
 } from '@cornerstonejs/core';
 import { initCornerstone } from './cornerstone/init';
 import { useNumberOfFrames } from './hooks/useNumberOfFrames';
-import { ItemSelection } from '../../interfaces/components.interface'
 import LoginContext from '../../LoginContext';
 import { getLinkedToolGroup, destroyLinkedToolGroup, attachViewportsToLinkedGroup } from './cornerstone/toolgroups';
 import DiconViewerToolbar from './DicomViewerToolbar';
