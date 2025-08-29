@@ -8,8 +8,8 @@ import {
   type Types,
 } from '@cornerstonejs/core';
 import { initCornerstone } from './cornerstone/init';
-import { useImageIds } from './hooks/useImageIds';
 import { useNumberOfFrames } from './hooks/useNumberOfFrames';
+import { ItemSelection } from '../../interfaces/components.interface'
 import LoginContext from '../../LoginContext';
 import { getLinkedToolGroup, destroyLinkedToolGroup, attachViewportsToLinkedGroup } from './cornerstone/toolgroups';
 import DiconViewerToolbar from './DicomViewerToolbar';
@@ -30,13 +30,13 @@ const VIEWPORT_ID = 'vp-min';
  * - Creates 1 viewport (STACK or ORTHOGRAPHIC for volume)
  * - Loads imageIds for the given task and displays them
  */
-export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
+export default function DicomViewer3D({imageIds}: {imageIds: string[]}) {
   const [user] = React.useContext(LoginContext);
   const [ready, setReady] = React.useState(false);
   const [viewportReady, setViewportReady] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const engineRef = React.useRef<RenderingEngine | null>(null);
-  const { imageIds } = useImageIds(taskId);
+  
   const numberOfFrames = useNumberOfFrames(imageIds, ready);
 
 
@@ -143,7 +143,7 @@ export default function DicomViewer3D({taskId}: {taskId: string | undefined}) {
   }, [viewportReady, imageIds]);
 
 
-  if (taskId === undefined || !numberOfFrames) {
+  if (imageIds.length == 0 || !numberOfFrames) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
         <AlertItem title='Please select a reconstruction or processing task with a result to show a DICOM image.' type={Alerts.Info} />

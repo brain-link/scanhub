@@ -1,8 +1,10 @@
 // src/viewer/dicom/hooks/useImageIds.ts
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { taskApi } from '../../../api';
-import { TaskType } from '../../../openapi/generated-client/exam';
+import { taskApi } from '../api';
+import { TaskType } from '../openapi/generated-client/exam';
+import { ItemSelection } from '../interfaces/components.interface'
+import { ItemStatus } from '../openapi/generated-client/exam'
 
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
@@ -16,17 +18,20 @@ function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
  * - Returns { imageIds, isVolumeCandidate, isLoading, isError }
  * - Uses 'wado-uri:' scheme per Cornerstone v3 docs
  */
-export function useImageIds(taskId?: string) {
+export function useImageIds(item: ItemSelection) {
   
   const { 
     data: dicomUrls = [],
     isLoading,
     isError
   } = useQuery<string[]>({
-    queryKey: ['tasks', taskId],
-    enabled: !!taskId,
+    queryKey: ['tasks', item.itemId, item.status],
+    enabled: !!item.itemId,
     queryFn: async () => {
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId!);
+
+      if (item.type != 'DAG' || item.status != ItemStatus.Finished) return []
+
+      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
 
       // Only DAG tasks with results
       const isDag = data?.task_type === TaskType.Dag;
