@@ -22,12 +22,9 @@ mrpro = ">=0.250812"
 license = "GPL-3.0-only with custom exception"
 # Ship all license files
 include = [
-    { path = "../../LICENSE", format = "sdist" },
-    { path = "../../LICENSE.GPL3", format = "sdist" },
-    { path = "../../LICENSE.GPL3-EXCEPT", format = "sdist" },
-    { path = "../../LICENSE", format = "wheel" },
-    { path = "../../LICENSE.GPL3", format = "wheel" },
-    { path = "../../LICENSE.GPL3-EXCEPT", format = "wheel" }
+    { path = "LICENSE", format = ["sdist", "wheel"] },
+    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
+    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
 ]
 packages = [{ include = "orchestrator" }]
 
