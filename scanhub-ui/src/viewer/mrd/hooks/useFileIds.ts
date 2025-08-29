@@ -2,6 +2,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api'; // your pre-configured OpenAPI client instance
 import { TaskType } from '../../../openapi/generated-client/exam';
+import { ItemSelection } from '../../../interfaces/components.interface'
+import { ItemStatus } from '../../../openapi/generated-client/exam'
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
   return Array.isArray(v) ? v : v != null ? [v] : [];
@@ -19,18 +21,22 @@ export type FileIds = {
  * - If multiple results exist, returns the newest by datetime_created (falls back to created_at / created).
  * - Throws a typed error when IDs are unavailable, so consumers can show a proper fallback.
  */
-export function useFileIds(taskId?: string) {
+export function useFileIds(item: ItemSelection) {
   const {
     data,
     isLoading,
     isError,
     error,
   } = useQuery<FileIds>({
-    queryKey: ['file-ids', taskId],
-    enabled: !!taskId,
+    queryKey: ['file-ids', item.itemId, item.status],
+    enabled: !!item.itemId,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(taskId!);
+
+      if (item.status != ItemStatus.Finished) throw new Error('Task not finished yet')
+      if (item.type != 'ACQUISITION') throw new Error('Task is not an acquisition task')
+
+      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
 
       // Only DAG tasks with results
       const isAcquisition = data?.task_type === TaskType.Acquisition;
