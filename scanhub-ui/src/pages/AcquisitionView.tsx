@@ -38,6 +38,7 @@ import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
 import ExamInfo from '../components/ExamInfo'
 import WorkflowInfo from '../components/WorkflowInfo'
+import { useImageIds } from '../hooks/useImageIds';
 
 
 function AcquisitionView() {
@@ -48,6 +49,7 @@ function AcquisitionView() {
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
   const [onAcquisitionLimitsConfirm, setOnAcquisitionLimitsConfirm] = React.useState<() => void>(() => () => {});
   // const [, showNotification] = React.useContext(NotificationContext)
+  const { imageIds } = useImageIds(itemSelection);
 
   // useQuery for caching the fetched data
   const {
@@ -267,9 +269,8 @@ function AcquisitionView() {
       />
 
       {
-        itemSelection.itemId ? (
-          itemSelection.type == 'DAG' ? <DicomViewer3D taskId={itemSelection.itemId}/> : <RawDataViewer taskId={itemSelection.itemId}/>
-        ) : <DicomViewer3D taskId={itemSelection.itemId}/>
+        itemSelection.itemId && itemSelection.type == 'ACQUISITION' ? <RawDataViewer item={itemSelection}/> :
+          <DicomViewer3D imageIds={imageIds}/>
       }
     </Box>
   )
