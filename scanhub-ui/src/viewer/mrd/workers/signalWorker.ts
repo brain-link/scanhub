@@ -1,4 +1,4 @@
-/// <reference lib="webworker" />
+// / <reference lib="webworker" />
 import type { ComplexMode } from '../types';
 import { fftRadix2, fftshift, nextPow2 } from '../utils/fft';
 
@@ -60,7 +60,7 @@ self.onmessage = (ev: MessageEvent<WorkIn>) => {
       let buf = new Float32Array(reim);
 
       // pad to next pow2
-      let nfft = nextPow2(n0);
+      const nfft = nextPow2(n0);
       if (nfft !== n0) {
         const padded = new Float32Array(nfft * 2);
         padded.set(buf);

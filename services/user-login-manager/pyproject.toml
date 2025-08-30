@@ -1,18 +1,23 @@
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-name = "user-manager"
+[project]
+name = "scanhub-user-manager"
 version = "0.0.1"
 description = "Provides functionality for user login and user management."
 authors = [
-    "David Schote <david.schote@brain-link.de>", 
-    "Christoph Dinh <christoph.dinh@brain-link.de>",
-    "Ben Wilhelm <ben.wilhelm@uniklinik-freiburg.de>"
+    {name = "David Schote", email = "david.schote@brain-link.de"},
+    {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"},
+    {name = "Ben Wilhelm", email = "ben.wilhelm@uniklinik-freiburg.de"}
 ]
 readme = "README.md"
+
+[tool.poetry]
 packages = [{include = "app"}]
+license = "GPL-3.0-only with custom exception"
+# Ship all license files
+include = [
+    { path = "LICENSE", format = ["sdist", "wheel"] },
+    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
+    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
@@ -71,3 +76,8 @@ check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
 ignore_missing_imports = true
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

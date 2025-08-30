@@ -34,20 +34,27 @@ function SequenceUploadForm(props: ModalProps) {
     sequence_type: '',  // eslint-disable-line camelcase
     tags: []
   })
-  const [file, setFile] = React.useState<File | null>(null)
+  const [seqFile, setSeqFile] = React.useState<File | undefined>(undefined)
+  const [xmlFile, setXmlFile] = React.useState<File | undefined>(undefined)
 
   const uploadSequence = useMutation<void, Error, BaseMRISequence>({
     mutationFn: async (sequence: BaseMRISequence) => {
-      if (file == undefined || file == null) {
-        showNotification({message: 'No file selected for upload.', type: 'warning'})
+      if (seqFile === undefined) {
+        showNotification({message: 'No sequence file selected', type: 'warning'})
         return
       }
       await sequenceApi.createMriSequenceApiV1ExamSequencePost(
-        file, sequence.name, sequence.description as string, sequence.sequence_type as string
+        seqFile,
+        xmlFile ?? new File([], 'null'), 
+        sequence.name,
+        sequence.description ?? '',
+        sequence.sequence_type as string,
+        sequence.tags
       )
       .then(() => {
         showNotification({message: 'Sequence uploaded.', type: 'success'})
         props.onSubmit()
+        props.setOpen(false)
       })
       .catch(() => {
         showNotification({message: 'Error on sequence upload.', type: 'warning'})
@@ -61,7 +68,7 @@ function SequenceUploadForm(props: ModalProps) {
         Upload sequence
       </Typography>
 
-      <Stack spacing={1.5} justifyContent='flex-start'>
+      <Stack spacing={1.5} justifyContent='flex-start' sx={{width: '100%'}}>
         <FormLabel> Name </FormLabel>
         <Input
           name='name'
@@ -90,48 +97,57 @@ function SequenceUploadForm(props: ModalProps) {
         />
 
         <FormLabel> File Selection </FormLabel>
-        <Stack direction={'row'} gap={'5px'} >
-          <Typography>
-            {'Selected file: '}
-          </Typography>
-          <Typography sx={{fontStyle: 'italic'}}>
-            {file ? file?.name : '---'}
-          </Typography>
+        <Stack direction={'row'} gap={2} sx={{alignItems: 'center'}}>
+          <Button component='label' color='primary' size='sm' sx={{width: 150}}>
+            <input
+              hidden
+              accept='.seq'
+              type='file'
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                setSeqFile(file ?? undefined)
+              }}
+            />
+            Upload sequence
+          </Button>
+          <Typography noWrap level='title-sm'>{'Selected file: '}</Typography>
+            <Typography
+              textColor="text.tertiary"
+              sx={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}
+            >
+              {seqFile ? seqFile.name : '-'}
+            </Typography>
         </Stack>
-        <Button color='primary' aria-label='upload picture' component='label'>
-          <input
-            hidden
-            accept='.seq'
-            type='file'
-            onChange={(e) => {
-              e.preventDefault()
-              setFile(e.target.files ? e.target.files[0] : null)
-            }}
-          />
-          Upload sequence
-        </Button>
+
+        <Stack direction={'row'} gap={2} sx={{alignItems: 'center'}}>
+          <Button component='label' color='primary' size='sm' sx={{width: 150}}>
+            <input
+              hidden
+              accept='.xml'
+              type='file'
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                setXmlFile(file ?? undefined)
+              }}
+            />
+            Upload header
+          </Button>
+          <Typography level='title-sm'>{'Selected file: '}</Typography>
+          <Typography
+              textColor="text.tertiary"
+              sx={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}
+            >
+              {xmlFile ? xmlFile?.name : '-'}
+            </Typography>
+        </Stack>
+        
 
         <Button
           size='sm'
-          sx={{ maxWidth: 120 }}
+          sx={{ alignSelf: 'flex-end' }}
           onClick={(event) => {
             event.preventDefault()
-            if (file == undefined || file == null) {
-              showNotification({message: 'No file selected for upload.', type: 'warning'})
-            }
-            else if (sequence.name == '') {
-              showNotification({message: 'No sequence name given.', type: 'warning'})
-            }
-            else if (sequence.description == '') {
-              showNotification({message: 'No sequence description given.', type: 'warning'})
-            }
-            // else if (sequence.type == '') {
-            //   showNotification({message: 'No sequence type given.', type: 'warning'})
-            // }
-            else {
-              uploadSequence.mutate(sequence)
-              props.setOpen(false)
-            }
+            uploadSequence.mutate(sequence)
           }}
         >
           Save

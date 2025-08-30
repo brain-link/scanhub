@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
-import DialogTitle from '@mui/material/DialogTitle'
+import DialogTitle from '@mui/joy/DialogTitle';
 import Stack from '@mui/joy/Stack'
 
 import { examApi } from '../api'

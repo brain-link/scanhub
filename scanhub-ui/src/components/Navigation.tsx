@@ -38,7 +38,6 @@ import LoginContext from '../LoginContext'
 import { UserRole } from '../openapi/generated-client/userlogin'
 import ScanhubLogo from '../media/ScanhubLogo.png'
 import { loginApi } from '../api'
-import ConnectionStatus from './ConnectionStatus'
 import { version } from '../utils/Versions'
 import PasswordModal from './PasswordModal'
 
@@ -152,7 +151,6 @@ export default function Navigation() {
 
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', gap: 1}}>
         <ColorSchemeToggle />
-        <ConnectionStatus buttonOrPage='button'/>
         <Chip
           variant='soft'
           color='warning'

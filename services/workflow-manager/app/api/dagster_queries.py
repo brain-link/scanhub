@@ -1,7 +1,7 @@
 """GraphQL queries for interacting with Dagster."""
 import requests
 
-DAGSTER_URL = "http://dagster-dagit:3000/dagit/graphql"
+DAGSTER_URL = "http://dagster-webserver:3000/dagster/graphql"
 
 
 def list_dagster_jobs() -> list[dict]:

@@ -18,6 +18,7 @@ import Sheet from '@mui/joy/Sheet'
 import ModalClose from '@mui/joy/ModalClose'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import Switch from '@mui/joy/Switch'
 import Container from '@mui/system/Container'
 import { DataGrid, GridColDef, GridCellParams, GridActionsCellItem } from '@mui/x-data-grid'
 
@@ -36,6 +37,7 @@ export default function SequenceView() {
   const [sequenceToDelete, setSequenceToDelete] = React.useState<MRISequenceOut | undefined>(undefined)
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
   const [sequenceOpen, setSequenceOpen] = React.useState<MRISequenceOut | undefined>(undefined)
+  const [showHeader, setShowHeader] = React.useState<boolean>(false)
 
   const {
     data: sequences,
@@ -213,7 +215,10 @@ export default function SequenceView() {
         aria-labelledby="modal-title"
         aria-describedby="modal-desc"
         open={sequenceOpen != undefined}
-        onClose={() => setSequenceOpen(undefined)}
+        onClose={() => {
+          setSequenceOpen(undefined);
+          setShowHeader(false);
+        }}
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
         <Sheet
@@ -223,15 +228,22 @@ export default function SequenceView() {
             borderRadius: 'md',
             p: 3,
             boxShadow: 'lg',
-            maxHeight: '70vh',
+            maxHeight: '80vh',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <ModalClose variant="plain" sx={{ m: 1 }} />
+          <ModalClose variant="plain" sx={{ m: 1 }}/>
           <Typography component="h2" id="modal-title" level="h4" sx={{ fontWeight: 'lg', mb: 1 }}>
             {sequenceOpen?.name}
           </Typography>
+
+          <Stack direction='row' gap={2}>
+            <Typography>Sequence</Typography>
+            <Switch variant='outlined' checked={showHeader} onChange={() => setShowHeader(!showHeader)} disabled={!sequenceOpen?.xml_file}/>
+            <Typography>Header</Typography>
+          </Stack>
+
           <Box
             sx={{
               bgcolor: 'background.level1',
@@ -245,9 +257,10 @@ export default function SequenceView() {
             }}
           >
             <Typography id="modal-desc" textColor="text.tertiary" component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap' }}>
-              {sequenceOpen?.file}
+              {showHeader ? sequenceOpen?.xml_file : sequenceOpen?.seq_file}
             </Typography>
           </Box>
+
         </Sheet>
       </Modal>
 

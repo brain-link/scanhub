@@ -22,11 +22,7 @@ from fastapi import (
 )
 from fastapi.responses import StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
-from scanhub_libraries.models import (
-    DeviceCreationRequest,
-    DeviceOut,
-    User,
-)
+from scanhub_libraries.models import DeviceCreationRequest, DeviceOut, DeviceStatus, User
 from scanhub_libraries.security import compute_complex_password_hash, get_current_user
 
 from app.api.dal import (
@@ -77,9 +73,9 @@ async def get_device(current_user: Annotated[User, Depends(get_current_user)], d
     -------
         dict: The response containing the information about the device
     """
-    print(LOG_CALL_DELIMITER)
-    print("Username:", current_user.username)
-    print("Device-ID:", device_id)
+    # print(LOG_CALL_DELIMITER)
+    # print("Username:", current_user.username)
+    # print("Device-ID:", device_id)
     if not (device := await dal_get_device(device_id)):
         raise HTTPException(status_code=404, detail="Device not found")
     return DeviceOut(**device.__dict__)
@@ -122,6 +118,7 @@ async def create_device(
         raise HTTPException(
             status_code=400,
             detail="The description name must not be empty!")
+    request.status = DeviceStatus.OFFLINE
 
     device_token = token_hex(1024)  # create new token
     salt = token_hex(1024)  # create new salt

@@ -9,9 +9,6 @@ import json
 # sys.path.append("../../../services/exam-manager/app/")
 # import dal
 
-# TODO implement tests for status DELETED
-
-
 # HOST = "https://localhost"
 HOST = "https://localhost:8443"  # for local development with custom port
 PREFIX = HOST + "/api/v1/exam"

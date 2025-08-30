@@ -9,7 +9,6 @@ import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import Typography from '@mui/joy/Typography'
-import Tooltip from '@mui/joy/Tooltip'
 import Box from '@mui/joy/Box'
 import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
@@ -17,13 +16,11 @@ import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-// import SchemaIcon from '@mui/icons-material/Schema'
-import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import Button from '@mui/joy/Button'
 
 import { WorkflowOut } from '../openapi/generated-client/exam'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
-import WorkflowInfo from './WorkflowInfo'
 import { workflowsApi } from '../api'
 import TaskFromTemplateModal from './TaskFromTemplateModal'
 import TaskModal from './TaskModal'
@@ -32,41 +29,37 @@ import WorkflowModal from './WorkflowModal'
 
 export default function WorkflowItem({ item: workflow, selection, onClick }: SelectableItemInterface<WorkflowOut>) {
   return (
-    <Tooltip
-      placement='right'
-      variant='outlined'
-      describeChild={false}
-      arrow
-      title={<WorkflowInfo workflow={workflow} />}
+    <Button
+      sx={{ 
+        width: '100%', 
+        p: 0.5, 
+        display: 'flex',
+        justifyContent: 'flex-start'
+      }}
+      variant={(selection.type == 'workflow' && selection.itemId == workflow.id) ? 'outlined' : 'plain'}
+      onClick={onClick}
     >
-      <Button
-        sx={{ 
-          width: '100%', 
+      <FormatListNumberedIcon fontSize='small' />
+      <Box 
+        sx={{
+          marginLeft: 0.5,
           p: 0.5, 
           display: 'flex',
-          justifyContent: 'flex-start'
+          flexDirection: 'column',
+          alignItems: 'start',
         }}
-        variant={(selection.type == 'workflow' && selection.itemId == workflow.id) ? 'outlined' : 'plain'}
-        onClick={onClick}
       >
-        <InsertDriveFileOutlinedIcon fontSize='small' />
-        <Box 
-          sx={{
-            marginLeft: 0.5,
-            p: 0.5, 
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-          }}
-        >
-          <Typography level='title-sm'>{workflow.name}</Typography>
+        <Typography level='body-xs' textColor='text.tertiary'>
+          WORKFLOW
+        </Typography>
 
-          <Typography level='body-xs' textColor='text.tertiary'>
-            {`Created: ${new Date(workflow.datetime_created).toDateString()}`}
-          </Typography>
-        </Box>
-      </Button>
-    </Tooltip>
+        <Typography level='title-sm'>{workflow.name}</Typography>
+
+        <Typography level='body-xs' textColor='text.tertiary'>
+          {`Created: ${new Date(workflow.datetime_created).toDateString()}`}
+        </Typography>
+      </Box>
+    </Button>
   )
 }
 

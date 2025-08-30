@@ -12,11 +12,12 @@ import { WorkerMessage } from './utils/interfaces';
 import Container from '@mui/joy/Container';
 import AlertItem from '../../components/AlertItem';
 import { Alerts } from '../../interfaces/components.interface';
+import { ItemSelection } from '../../interfaces/components.interface'
 import Card from '@mui/joy/Card';
 import Stack from '@mui/joy/Stack';
 import { type EChartsOption } from 'echarts';
 
-// ---- ECharts (no barrel import) ----
+
 import { init, use as echartsUse } from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import {
@@ -47,8 +48,8 @@ echartsUse([
 ]);
 const echarts = { init, use: echartsUse };
 
-export default function RawDataViewer({ taskId }: { taskId: string | undefined }) {
-  // ---------------- UI state (always same order) ----------------
+export default function RawDataViewer({ item }: { item: ItemSelection }) {
+
   const [overlay, setOverlay] = useState(true);
   const [wantTime, setWantTime] = useState(true);
   const [wantFreq, setWantFreq] = useState(false);
@@ -60,12 +61,12 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // ---------------- Data-layer hooks (never early-return) ----------------
+  // Data layer hooks
   const {
     fileIds,
     isLoading: idsLoading,
     isError: idsError,
-  } = useFileIds(taskId);
+  } = useFileIds(item);
 
   // Derive IDs (safe defaults) and readiness
   const workflowId = fileIds?.workflowId ?? '';
@@ -109,14 +110,14 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     1
   );
 
-  // ---------------- Worker lifecycle (always mounted) ----------------
+  // Worker lifecycle (always mounted)
   const workerRef = useRef<Worker | null>(null);
   useEffect(() => {
     workerRef.current = new Worker(new URL('./workers/signalWorker.ts', import.meta.url), { type: 'module' });
     return () => workerRef.current?.terminate();
   }, []);
 
-  // ---------------- Chart option state ----------------
+  // Chart option state 
   const [option, setOption] = useState<EChartsOption>({});
 
   useEffect(() => {
@@ -295,7 +296,7 @@ export default function RawDataViewer({ taskId }: { taskId: string | undefined }
     colorPalette,
   ]);
 
-  // ---------------- Render (no early returns) ----------------
+  // Render (no early returns)
   const showEmpty =
     (idsError || !fileIds) &&
     !(idsLoading); // avoid flashing the empty while still loading

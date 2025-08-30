@@ -67,7 +67,7 @@ export default function TemplatesView() {
         />
         {
           exams?.map((exam, index) => (
-            <Stack direction="row" key={`exam-${exam.id}`}>
+            <Stack direction="row" key={`exam-${exam.id}`} gap={1}>
               <ExamItem 
                 item={exam}
                 onClick={() => {selectedExam === index ? setSelectedExam(undefined) : setSelectedExam(index)}}

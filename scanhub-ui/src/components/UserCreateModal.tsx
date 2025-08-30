@@ -74,7 +74,7 @@ function UserForm(props: ModalProps | ModalPropsCreateFirstUser) {
     first_name: '',   // eslint-disable-line camelcase
     last_name: '',    // eslint-disable-line camelcase
     email: '',
-    role: UserRole.Medical, // eslint-disable-next-line camelcase
+    role: createFirstUser ? UserRole.Admin : UserRole.Medical, // eslint-disable-next-line camelcase
     token_type: 'password',   // eslint-disable-line camelcase
     access_token: '',         // eslint-disable-line camelcase
   })
@@ -154,6 +154,7 @@ function UserForm(props: ModalProps | ModalPropsCreateFirstUser) {
           <FormLabel sx={{marginBottom: 1}}>{item.label}</FormLabel>
           <Select 
             onChange={(event, value) => setUser({ ...user, [item.key]: value })}
+            defaultValue={user.role}
             required
           >
             {item.options.map((option) => 

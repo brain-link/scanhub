@@ -1,8 +1,8 @@
 x-dagster-common: &dagster_common
-  image: scanhub-dagster:latest
+  image: scanhub-orchestration-engine:latest
   pull_policy: never  # Don't pull the image, use the local build
   build:
-    context: ./services/dagster
+    context: ./services/orchestration-engine
     args:
       BASE_IMG: ${SCANHUB_BASE_IMAGE}
   environment:
@@ -11,12 +11,16 @@ x-dagster-common: &dagster_common
   volumes:
     # Persistent storage for Dagster instance data (run logs, schedules, sensors, etc.)
     - dagster_storage:/opt/dagster/dagster_home
-    # Mount dagster.yaml config file into the container
-    - ./services/dagster/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
-    # Mount the Dagster application source code (repository, jobs, ops, etc.)
-    - ./services/dagster:/opt/dagster/app
+
+    # For development
+    # Mount dagster.yaml and workspace.yaml configuration files into the dagster home directory
+    - ./services/orchestration-engine/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+    - ./services/orchestration-engine/workspace.yaml:/opt/dagster/dagster_home/workspace.yaml
+    # Mount the Dagster application source code (repository, jobs, ops, etc.) - only for development!
+    - ./services/orchestration-engine:/opt/dagster/app
+
     # Shared data lake between services
-    - ./data_lake:/data
+    - ${DATA_LAKE_DIR}:/data
 
 services:
   # SERVICES
@@ -29,8 +33,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/workflow-manager/app/:/app/
-      # - data_lake:/data
-      - ./data_lake:/data
+      - ${DATA_LAKE_DIR}:/data
     environment:
       DATA_LAKE_DIRECTORY: /data
     healthcheck:
@@ -42,7 +45,7 @@ services:
     depends_on:
       scanhub-database:
         condition: service_healthy
-      dagster-dagit:
+      dagster-webserver:
         condition: service_healthy
       dagster-daemon:
         condition: service_healthy
@@ -55,7 +58,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/device-manager/app/:/app/
-      - ./data_lake:/data
+      - ${DATA_LAKE_DIR}:/data
     environment:
       DATA_LAKE_DIRECTORY: /data
     healthcheck:
@@ -80,7 +83,7 @@ services:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
       - ./services/exam-manager/app/:/app/
-      - ./data_lake:/data
+      - ${DATA_LAKE_DIR}:/data
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
       test: ["CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness"]
@@ -168,6 +171,8 @@ services:
     container_name: db-scanhub
     image: postgres:15.2-bullseye
     restart: always # unless-stopped
+    ports:
+      - 5432:5432 # For development only
     volumes:
       - postgres_data_scanhub:/var/lib/postgresql/data/
     environment:
@@ -260,10 +265,10 @@ services:
         condition: service_healthy
       user-login-manager:
         condition: service_healthy
-      dagster-dagit:
+      dagster-webserver:
         condition: service_healthy
-      scanhub-ui:
-        condition: service_healthy
+      # scanhub-ui:
+      #   condition: service_healthy
     extra_hosts:                                # somehow needed to find host.docker.internal under linux
       - 'host.docker.internal:host-gateway'     # for the access to host.docker.internal to work the firewall of the host needs to allow incoming connections
     secrets:
@@ -289,12 +294,12 @@ services:
       start_period: 30s
 
   # DAGSTER
-  dagster-dagit:
+  dagster-webserver:
     <<: *dagster_common
-    container_name: dagster-dagit
-    command: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "--path-prefix", "/dagit"]
+    container_name: dagster-webserver
+    command: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "--path-prefix", "/dagster", "-w", "/opt/dagster/app/workspace.yaml"]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/dagit/server-status"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/dagster/server-status"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -306,7 +311,7 @@ services:
     <<: *dagster_common
     container_name: dagster-daemon
     user: "0:0"
-    entrypoint: ["dagster-daemon", "run"]
+    entrypoint: ["dagster-daemon", "run", "-w", "/opt/dagster/app/workspace.yaml"]
     healthcheck:
       test: ["CMD", "pgrep", "-f", "dagster-daemon"]
       interval: 10s

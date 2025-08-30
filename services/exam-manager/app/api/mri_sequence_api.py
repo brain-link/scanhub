@@ -89,8 +89,9 @@ async def get_mri_sequence_by_id(
     tags=["mri sequences"],
 )
 async def create_mri_sequence(
+    seq_file: UploadFile = File(...),
+    xml_file: UploadFile = File(...),
     sequence_meta: BaseMRISequence = Depends(mri_sequence_form),
-    file: UploadFile = File(...),
     database=Depends(get_mongo_database),
 ):
     """Upload an MRI sequence file and store it with the provided metadata.
@@ -99,8 +100,10 @@ async def create_mri_sequence(
     ----------
     mri_sequence : MRISequenceCreate
         The MRI sequence metadata.
-    file : UploadFile
+    seq_file : UploadFile
         The MRI sequence file to store.
+    xml_file : UploadFile
+        The ISMRMRD header xml file to store.
     database : AsyncIOMotorDatabase
         The MongoDB database handle.
 
@@ -109,20 +112,38 @@ async def create_mri_sequence(
     MRISequence
         The stored MRI sequence with the uploaded file.
     """
-    if filename := file.filename:
-        file_extension = Path(filename).suffix
+    # Check sequence file
+    if seq_filename := seq_file.filename:
+        seq_file_suffix = Path(seq_filename).suffix
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Invalid sequence file extension",
+            detail="Invalid sequence file",
         )
-    # Read the content of the uploaded file
-    file_content = await file.read()
 
-    payload = sequence_meta.dict(by_alias=True)
+    payload = sequence_meta.model_dump(by_alias=True)
     payload["created_at"] = datetime.datetime.now(datetime.timezone.utc)
-    payload["file"] = Binary(file_content)
-    payload["file_extension"] = file_extension
+
+    # Read the content of the uploaded sequence file
+    payload["seq_file"] = Binary(await seq_file.read())
+    payload["seq_file_extension"] = seq_file_suffix
+
+    # Check xml file
+    if xml_file is not None:
+        data = await xml_file.read()
+        if data:
+            if xml_filename := xml_file.filename:
+                xml_file_suffix = Path(xml_filename).suffix
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Invalid header file",
+            )
+            # Read the content of the uploaded header file
+            payload["xml_file"] = Binary(data)
+            payload["xml_file_extension"] = xml_file_suffix
+
+    print("PAYLOAD: ", payload)
 
     if not (result := await database.collection.insert_one(payload)):
         raise HTTPException(status_code=500, detail="Failed to insert sequence.")
@@ -182,8 +203,64 @@ async def get_mri_sequence_file_by_id(
         The retrieved MRI sequence file.
     """
     if mri_sequence := await get_mri_sequence_by_id(sequence_id, database):
-        binary_data = mri_sequence.file
-        file_extension = mri_sequence.file_extension
+        binary_data = mri_sequence.seq_file
+        file_extension = mri_sequence.seq_file_extension
+
+        # Create a temporary file
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(binary_data)
+
+        # Create a FileResponse with the temporary file and the retrieved file extension
+        response = FileResponse(
+            temp_file.name,
+            media_type="application/octet-stream",
+            filename=f"{name}{file_extension}",  # Use the retrieved file extension
+            headers={"Content-Disposition": f"attachment; filename={name}{file_extension}"},
+        )
+
+        # Function to delete the temporary file
+        def delete_temp_file(file_path: str):
+            os.unlink(file_path)
+
+        # Add the background task to delete the temporary file
+        background_tasks.add_task(delete_temp_file, temp_file.name)
+
+        return response
+
+    raise HTTPException(status_code=404, detail="Binary data not found")
+
+
+@seq_router.get("/sequence/{sequence_id}/header", tags=["mri sequences"])
+async def get_mri_sequence_header_file_by_id(
+    sequence_id: str,
+    background_tasks: BackgroundTasks,
+    name: str = "header",
+    database=Depends(get_mongo_database),
+):
+    """Retrieve an MRI sequence header (ISMRMRD header) file by its ID.
+
+    Parameters
+    ----------
+    sequence_id : str
+        The ID of the MRI sequence to retrieve.
+    background_tasks : BackgroundTasks
+        The background tasks to run.
+    name : str
+        The name of the file to download.
+    database : AsyncIOMotorDatabase
+        The MongoDB database handle.
+
+    Returns
+    -------
+    FileResponse
+        The retrieved MRI sequence file.
+    """
+    if mri_sequence := await get_mri_sequence_by_id(sequence_id, database):
+        binary_data = mri_sequence.xml_file
+        file_extension = mri_sequence.xml_file_extension
+
+        if binary_data is None or file_extension is None:
+            raise HTTPException(status_code=404, detail="No MRD header available")
 
         # Create a temporary file
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:

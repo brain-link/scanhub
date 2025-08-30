@@ -10,15 +10,17 @@ import { useMutation } from '@tanstack/react-query'
 import Typography from '@mui/joy/Typography'
 import Tooltip from '@mui/joy/Tooltip'
 import Box from '@mui/joy/Box'
+import Stack from '@mui/joy/Stack';
 import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
 import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
-import DatasetRoundedIcon from '@mui/icons-material/DatasetRounded';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CircularProgress from '@mui/joy/CircularProgress';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/joy/Button'
 
 import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../openapi/generated-client/exam'
@@ -26,6 +28,8 @@ import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
+import DagsterUIModal from './DagsterUIModal'
+import { extractRunId, getLatestResult } from '../utils/ExamTree'
 
 
 export default function TaskItem(
@@ -37,42 +41,38 @@ export default function TaskItem(
   }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut> & SelectableItemInterface<AcquisitionTaskOut | DAGTaskOut>
 ) {
   return (
-    <Box
-      sx={{ 
-        width: '100%', 
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-    >
+    <Stack direction='row' width='100%' alignItems='center' sx={{paddingLeft: 2}}>
       <Tooltip
         placement='right'
         variant='outlined'
         arrow
         title={<TaskInfo data={task} />}
+        modifiers={[
+          { name: 'offset', options: { offset: [0, 64] } }, // skidding=8 (down), distance=20 (further right)
+        ]}
       >
         <Button 
           sx={{
-            width: '100%', 
-            display: 'flex',
-            justifyContent: 'flex-start',
             p: 0.5,
+            flexGrow: 1,
+            justifyContent: 'flex-start',
+            gap: 0.5,
           }}
-          color={task.status == ItemStatus.Finished ? 'success' : 'primary'}
           variant={((selection.type == 'DAG' || selection.type == 'ACQUISITION') && selection.itemId == task.id) ? 'outlined' : 'plain'}
           onClick={onClick}
         >
           {
-            task.task_type === TaskType.Acquisition ? <DatasetRoundedIcon fontSize='small' /> : <AccountTreeRoundedIcon fontSize='small' />
+            task.status === ItemStatus.Finished ? <CheckCircleIcon fontSize='small' /> : (
+              task.status === ItemStatus.Inprogress ? <CircularProgress variant='plain' size="sm" /> : (
+                task.status === ItemStatus.Error ? <HighlightOffIcon fontSize='small' /> : <RadioButtonUncheckedIcon fontSize='small' />
+              )
+            )
           }
-          <Box 
-            sx={{
-              marginLeft: 0.5,
-              p: 0.5, 
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start'
-            }}
-          >
+          <Box sx={{ marginLeft: 0.5, p: 0.5,  display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }} >
+            <Typography level='body-xs' textColor='text.tertiary'>
+              {task.task_type}
+            </Typography>
+            
             <Typography level='title-sm' textAlign='left' sx={{overflowWrap: 'anywhere'}}>
               {task.name}
             </Typography>
@@ -83,16 +83,10 @@ export default function TaskItem(
           </Box>
         </Button>
       </Tooltip>
-      <Box
-        display='flex'
-        alignItems='center'
-      >
-        <TaskMenu item={task} refetchParentData={refetchParentData} />
-        <IconButton sx={{visibility: 'hidden'}} >
-          <ExpandMoreIcon />
-        </IconButton>
-      </Box>
-    </Box>
+
+      <TaskMenu item={task} refetchParentData={refetchParentData} />
+
+    </Stack>
   )
 }
 
@@ -100,6 +94,11 @@ export default function TaskItem(
 function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut>) {
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
+  const [dagsterOpen, setDagsterOpen] = React.useState<boolean>(false);
+
+  const runId = React.useMemo(() => {
+    return extractRunId(getLatestResult(task.results)?.meta as unknown)
+  }, [task.results]);
 
   const deleteTask = useMutation({
     mutationFn: async () => {
@@ -120,14 +119,15 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
           <MenuItem key='edit' onClick={() => setTaskModalOpen(true)}>
             Edit
           </MenuItem>
-          <MenuItem
-            key='delete'
-            onClick={() => {
-              deleteTask.mutate()
-            }}
-          >
+          <MenuItem key='delete' onClick={() => { deleteTask.mutate() }}>
             Delete
           </MenuItem>
+          {
+            task.task_type === TaskType.Dag &&
+            <MenuItem key='open-dagster' onClick={() => { setDagsterOpen(true) }} disabled={!runId}>
+              Open DagsterUI
+            </MenuItem>
+          }
         </Menu>
       </Dropdown>
 
@@ -137,6 +137,13 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
         onSubmit={refetchParentData}
         item={task}
         modalType={'modify'}
+      />
+
+      <DagsterUIModal 
+        isOpen={dagsterOpen}
+        setOpen={setDagsterOpen}
+        onSubmit={() => {}}
+        item={runId ? `/dagster/runs/${ runId }` : '/dagster/runs'}
       />
     </>
   )

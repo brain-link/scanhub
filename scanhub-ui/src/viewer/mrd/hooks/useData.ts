@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { resultApi } from '../../../api';
 import { parsePacket, ParsedBatch, debugHeader } from '../utils/packet';
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 
 export function useData(
   enabled: boolean, workflowId: string, taskId: string, resultId: string, idsExpr: string, coilsIdx?: number, stride = 1

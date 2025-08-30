@@ -1,17 +1,22 @@
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-name = "device_manager"
+[project]
+name = "scanhub-device-manager"
 version = "0.0.1"
 description = "The device manager service is responsible for managing the devices that are connected to scanhub."
 authors = [
-    "David Schote <david.schote@brain-link.de>", 
-    "Christoph Dinh <christoph.dinh@brain-link.de>"
+    {name = "David Schote", email = "david.schote@brain-link.de"},
+    {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"}
 ]
 readme = "README.md"
+
+[tool.poetry]
 packages = [{include = "app"}]
+license = "GPL-3.0-only with custom exception"
+# Ship all license files
+include = [
+    { path = "LICENSE", format = ["sdist", "wheel"] },
+    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
+    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
@@ -71,3 +76,7 @@ check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
 ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

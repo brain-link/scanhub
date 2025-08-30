@@ -18,7 +18,7 @@ from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any, Optional
 
-from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
+from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, DeviceStatus
 
 from sdk.websocket_handler import WebSocketHandler
 
@@ -116,11 +116,9 @@ class Client:
 
         The registration data includes device details like ID, name, manufacturer, and location.
         """
-        data = {"status": "REGISTERED"}
-        data.update(self.details.model_dump())
         registration_data = {
             "command": "register",
-            "data": data,
+            "data": self.details.model_dump(),
         }
         await self.websocket_handler.send_message(json.dumps(registration_data))
         self.logger.info("Device registration sent.")
@@ -169,18 +167,28 @@ class Client:
         """
         try:
             if self.scan_callback:
+                # Set device status to busy
+                await self.send_status(status=DeviceStatus.BUSY)
+                # Initialize scanning status (set to zero)
+                await self.send_scanning_status(
+                    progress=0, task_id=str(payload.id), user_access_token=payload.access_token,
+                )
                 # Call the external scan callback function
                 await self.scan_callback(payload)
+                # Set device status to ready
+                await self.send_status(status=DeviceStatus.ONLINE)
             else:
                 self.logger.error("Scan callback not defined.")
                 await self.send_error_status("Scan callback not defined.")
-        except Exception as e:
-            await self.send_error_status(str(e))
-            self.logger.error("An error occurred while handling the start command: %s", str(e))
+        except Exception as exc:
+            await self.send_error_status(
+                error_message=str(exc), task_id=str(payload.id), user_access_token=payload.access_token,
+            )
+            self.logger.error("An error occurred while handling the start command: %s", str(exc))
 
     async def send_status(
         self,
-        status: str,
+        status: DeviceStatus,
         user_access_token: str | None = None,
         data: None | dict[str, Any] = None,
         task_id: str | None = None,
@@ -193,9 +201,11 @@ class Client:
             additional_data (dict, optional): Extra information to include with the status.
 
         """
+        if not isinstance(status, DeviceStatus):
+            raise TypeError("Invalid device status.")
         status_data = {
             "command": "update_status",
-            "status": status,
+            "status": status.value,
             "data": data,
             "task_id": task_id,
             "user_access_token": user_access_token,
@@ -206,36 +216,41 @@ class Client:
         """Send MRD file as base64-encoded binary."""
         path = Path(file_path) if not isinstance(file_path, Path) else file_path
         if not path.exists():
+            await self.send_error_status("Could not upload file", task_id=task_id, user_access_token=user_access_token)
             raise FileNotFoundError(f"File {file_path} does not exist.")
 
-        size = path.stat().st_size
-        ct = "application/x-ismrmrd+hdf5" if path.suffix == ".mrd" else "application/octet-stream"
+        try:
+            size = path.stat().st_size
+            ct = "application/x-ismrmrd+hdf5" if path.suffix == ".mrd" else "application/octet-stream"
 
-        # Optional integrity: precompute sha256
-        sha = hashlib.sha256()
-        with path.open("rb") as f:
-            for chunk in iter(lambda: f.read(CHUNK), b""):
-                sha.update(chunk)
-        sha_hex = sha.hexdigest()
+            # Optional integrity: precompute sha256
+            sha = hashlib.sha256()
+            with path.open("rb") as f:
+                for chunk in iter(lambda: f.read(CHUNK), b""):
+                    sha.update(chunk)
+            sha_hex = sha.hexdigest()
 
-        header = {
-            "command": "file-transfer",
-            "task_id": task_id,
-            "user_access_token": user_access_token,
-            "filename": path.name,
-            "size_bytes": size,
-            "content_type": ct,
-            "sha256": sha_hex,
-        }
-        await self.websocket_handler.send_message(json.dumps(header))  # metadata
+            header = {
+                "command": "file-transfer",
+                "task_id": task_id,
+                "user_access_token": user_access_token,
+                "filename": path.name,
+                "size_bytes": size,
+                "content_type": ct,
+                "sha256": sha_hex,
+            }
+            await self.websocket_handler.send_message(json.dumps(header))  # metadata
 
-        # stream file in binary frames
-        with path.open("rb") as f:
-            for chunk in iter(lambda: f.read(CHUNK), b""):
-                await self.websocket_handler.send_message(chunk)
-
-        await self.send_ready_status()
-        self.logger.info("Uploaded result, device status set to READY.")
+            # stream file in binary frames
+            with path.open("rb") as f:
+                for chunk in iter(lambda: f.read(CHUNK), b""):
+                    await self.websocket_handler.send_message(chunk)
+            self.logger.info(f"Uploaded file {file_path} successfully!")
+        except Exception as exc:
+            await self.send_error_status(
+                f"Could not upload file: {exc}", task_id=task_id, user_access_token=user_access_token,
+            )
+            raise
 
     async def send_scanning_status(
         self,
@@ -253,17 +268,18 @@ class Client:
 
         """
         await self.send_status(
-            "SCANNING",
+            DeviceStatus.BUSY,
             data={"progress": progress},
             task_id=task_id,
             user_access_token=user_access_token,
         )
 
-    async def send_ready_status(self) -> None:
-        """Send a 'ready' status to the server."""
-        await self.send_status("READY")
-
-    async def send_error_status(self, error_message: str) -> None:
+    async def send_error_status(
+        self,
+        error_message: str,
+        task_id: str | None = None,
+        user_access_token: str | None = None,
+    ) -> None:
         """Send an 'error' status with a specific error message.
 
         Args:
@@ -271,7 +287,17 @@ class Client:
             error_message (str): The error message to include.
 
         """
-        await self.send_status("ERROR", data={"error_message": error_message})
+        if task_id is not None and user_access_token is not None:
+            await self.send_status(
+                DeviceStatus.ERROR,
+                data={"error_message": error_message},
+                task_id=task_id,
+                user_access_token=user_access_token,
+            )
+        else:
+            await self.send_status(
+                DeviceStatus.ERROR, data={"error_message": error_message},
+            )
 
     async def stop(self) -> None:
         """Close the WebSocket connection."""

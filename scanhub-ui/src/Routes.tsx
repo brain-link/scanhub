@@ -16,10 +16,8 @@ import {
   Experimental_CssVarsProvider as MaterialCssVarsProvider,
   extendTheme as materialExtendTheme,
 } from '@mui/material/styles'
-const materialTheme = materialExtendTheme()
 
 import LoginContext from './LoginContext'
-
 import App from './pages/App'
 import Login from './pages/LoginView'
 import PatientListView from './pages/PatientListView'
@@ -28,8 +26,8 @@ import TemplatesView from './pages/TemplatesView'
 import UserManagementView from './pages/UserManagementView'
 import SequenceView from './pages/SequenceView'
 import DeviceView from './pages/DeviceView'
-import ConnectionStatus from './components/ConnectionStatus'
 
+const materialTheme = materialExtendTheme()
 
 export function RouteConfiguration() {
   const navigate = useNavigate()
@@ -49,10 +47,7 @@ export function RouteConfiguration() {
               '--Transition-duration': '0.4s', // set to `none` to disable transition
               '--Sidebar-width': '360px',
               '--Navigation-height': '60px',
-              // '--Navigation-height': '64px',  // set height of navigation bar
-              // '--PatientView-toolbarHeight': '54px',
-              // '--PatientView-drawerWidth': '300px',
-              // '--PatientView-recordWidth': '300px',
+              '--Status-height': '22px',
             },
           }}
         />
@@ -65,7 +60,6 @@ export function RouteConfiguration() {
             <Route path='/devices' element={<DeviceView />} />
             <Route path='/sequences' element={<SequenceView />} />
             <Route path='/users' element={<UserManagementView />} />
-            <Route path='/connections' element={<ConnectionStatus buttonOrPage='page' />} />
           </Route>
 
           <Route

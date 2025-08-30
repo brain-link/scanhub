@@ -6,7 +6,6 @@
  */
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Box from '@mui/joy/Box'
 import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
@@ -45,17 +44,13 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
     },
   })
 
-  let actionIcon = <PlayCircleIcon />
-  if (itemSelection.status == ItemStatus.Started) actionIcon = <StopCircleIcon />
-  if (itemSelection.status == ItemStatus.Finished) actionIcon = <CheckCircleIcon />
-
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
       <IconButton 
         size='sm' 
         variant='plain' 
         color={'neutral'}
-        disabled={processTaskMutation.isPending}
+        disabled={processTaskMutation.isPending || !(itemSelection.type == 'DAG' || itemSelection.type == 'ACQUISITION')}
         onClick={() => {
           openConfirmModal(() => {
             // By now, only tasks can be executed
@@ -72,7 +67,7 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
           })
         }}
       >
-        {actionIcon}
+        { itemSelection.status == ItemStatus.Started ? <StopCircleIcon /> : <PlayCircleIcon /> }
       </IconButton>
 
       <Stack direction='column' sx={{ flex: 1 }}>
@@ -84,9 +79,12 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
         </Typography>
         <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
         <LinearProgress 
-          determinate value={itemSelection.progress}
+          determinate={itemSelection.progress !== undefined && itemSelection.progress > 0}
+          value={itemSelection.progress !== undefined && itemSelection.progress > 0 ? itemSelection.progress : (
+              itemSelection.status === ItemStatus.Inprogress ? 25 : 0
+            )
+          }
           sx={{marginTop: 1}}
-          color={itemSelection.status == ItemStatus.Finished ? 'success' : 'primary'}
         />
       </Stack>
     </Box>
