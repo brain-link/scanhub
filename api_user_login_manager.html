@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Workflow Manager &#8212; ScanHub Documentation</title>
+    <title>User Login Manager &#8212; ScanHub Documentation</title>
   
   
   
@@ -369,7 +369,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api_device_manager.html">Device Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_exam_manager.html">Exam Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_patient_manager.html">UI Patient Manager</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Workflow Manager</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">User Login Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_workflow_manager.html">Workflow Manager</a></li>
 </ul>
 </div>
@@ -414,7 +414,7 @@
     
     <li class="breadcrumb-item"><a href="scanhub_api.html" class="nav-link">Web API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Workflow Manager</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">User Login Manager</span></li>
   </ul>
 </nav>
 </div>
@@ -431,12 +431,12 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="workflow-manager">
-<h1>Workflow Manager<a class="headerlink" href="#workflow-manager" title="Link to this heading">#</a></h1>
+  <section id="user-login-manager">
+<h1>User Login Manager<a class="headerlink" href="#user-login-manager" title="Link to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
-<p>The Workflow Manager API provided by ScanHub is specifically designed to manage the workflows within a scanning and imaging environment.
-It plays a crucial role in creating, updating, retrieving, and deleting workflows, as well as handling the uploading of results related to specific records. The key endpoints in this API are:</p>
+<p>The User Login Manager API provided by ScanHub is specifically designed to manage user authentication and authorization within the system.
+It plays a crucial role in creating, updating, retrieving, and deleting user login sessions, as well as handling the uploading of results related to specific records. The key endpoints in this API are:</p>
 </section>
 <section id="web-api">
 <h2>Web API<a class="headerlink" href="#web-api" title="Link to this heading">#</a></h2>
@@ -509,9 +509,9 @@ access_token (str): The access token for authentication.</p>
 <div><p>dict: A dictionary containing a success message.</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">param {‘string’, ‘uuid’} task_id<span class="colon">:</span></dt>
+<dt class="field-odd">param {‘uuid’, ‘string’} task_id<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
-<dt class="field-even">param {‘string’, ‘uuid’} result_id<span class="colon">:</span></dt>
+<dt class="field-even">param {‘uuid’, ‘string’} result_id<span class="colon">:</span></dt>
 <dd class="field-even"><p></p></dd>
 <dt class="field-odd">status 200<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Successful Response</p>
@@ -544,7 +544,7 @@ access_token (str): The access token for authentication.</p>
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
-<p>Workflow Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
+<p>User Login Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
 <section id="open-source-license">
 <h3>Open Source License<a class="headerlink" href="#open-source-license" title="Link to this heading">#</a></h3>
 <p>If you want to use the Software under the terms of the GPLv3, you may do so for free. Under the GPLv3, you are allowed to modify and distribute the Software, but any derivative works that you distribute must also be licensed under the GPLv3. For the precise terms and conditions, please refer to the text of the GPLv3, which is included with the Software and can also be found at: <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a></p>
