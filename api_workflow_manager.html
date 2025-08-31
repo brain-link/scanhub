@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MRI Acquisition Manager &#8212; ScanHub Documentation</title>
+    <title>Workflow Manager &#8212; ScanHub Documentation</title>
   
   
   
@@ -43,12 +43,12 @@
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api_mri_acquisition';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_workflow_manager';</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MRI Sequences Manager" href="api_mri_sequences.html" />
-    <link rel="prev" title="Workflow Manager" href="api_workflow.html" />
+    <link rel="next" title="Technical Documentation" href="scanhub_techdoc.html" />
+    <link rel="prev" title="Workflow Manager" href="api_user_login_manager.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.1" />
@@ -366,12 +366,11 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api_ui_patient_manager.html">UI Patient Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_device.html">Device Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_exam.html">Exam Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_workflow.html">Workflow Manager</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">MRI Acquisition Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_mri_sequences.html">MRI Sequences Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_device_manager.html">Device Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_exam_manager.html">Exam Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_patient_manager.html">UI Patient Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_user_login_manager.html">Workflow Manager</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Workflow Manager</a></li>
 </ul>
 </div>
 </nav></div>
@@ -415,7 +414,7 @@
     
     <li class="breadcrumb-item"><a href="scanhub_api.html" class="nav-link">Web API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">MRI Acquisition Manager</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Workflow Manager</span></li>
   </ul>
 </nav>
 </div>
@@ -432,49 +431,120 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="mri-acquisition-manager">
-<h1>MRI Acquisition Manager<a class="headerlink" href="#mri-acquisition-manager" title="Link to this heading">#</a></h1>
+  <section id="workflow-manager">
+<h1>Workflow Manager<a class="headerlink" href="#workflow-manager" title="Link to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
-<p>The Acquisition Manager API provides a streamlined interface for managing the MRI acquisition process, bridging the gap between the scanning devices and the user-facing components.
-Its straightforward design ensures that the initiation and monitoring of scans are conducted efficiently and transparently, enhancing the overall workflow of medical imaging procedures.</p>
+<p>The Workflow Manager API provided by ScanHub is specifically designed to manage the workflows within a scanning and imaging environment.
+It plays a crucial role in creating, updating, retrieving, and deleting workflows, as well as handling the uploading of results related to specific records. The key endpoints in this API are:</p>
 </section>
 <section id="web-api">
 <h2>Web API<a class="headerlink" href="#web-api" title="Link to this heading">#</a></h2>
-<dl class="http post">
-<dt class="sig sig-object http" id="post--api-v1-mri-acquisitioncontrol-start-scan">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/acquisitioncontrol/start-scan</span></span><a class="headerlink" href="#post--api-v1-mri-acquisitioncontrol-start-scan" title="Link to this definition">#</a></dt>
-<dd><p><strong>Start Scan</strong></p>
-<p>Receives a job. Create a record id, trigger scan with it and returns it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Successful Response</p></li>
-<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – Validation Error</p></li>
-</ul>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-workflowmanager-health-readiness">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/health/readiness</span></span><a class="headerlink" href="#get--api-v1-workflowmanager-health-readiness" title="Link to this definition">#</a></dt>
+<dd><p><strong>Readiness</strong></p>
+<p>Readiness health endpoint.</p>
+<p>Inspects sqlalchemy engine and check if workflow table exists.</p>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Status docstring</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>500: Workflow table does not exist</p>
 </dd>
 </dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 <dl class="http post">
-<dt class="sig sig-object http" id="post--api-v1-mri-acquisitioncontrol-forward-status">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/mri/acquisitioncontrol/forward-status</span></span><a class="headerlink" href="#post--api-v1-mri-acquisitioncontrol-forward-status" title="Link to this definition">#</a></dt>
-<dd><p><strong>Forward Status</strong></p>
-<p>Receives status for a job. Forwards it to the ui and returns ok.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Successful Response</p></li>
-<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – Validation Error</p></li>
-</ul>
+<dt class="sig sig-object http" id="post--api-v1-workflowmanager-trigger_task-task_id-">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/trigger_task/{task_id}/</span></span><a class="headerlink" href="#post--api-v1-workflowmanager-trigger_task-task_id-" title="Link to this definition">#</a></dt>
+<dd><p><strong>Trigger Task</strong></p>
+<p>Endpoint to trigger a task in the orchestration engine.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>task_id (str): The ID of the DAG to be triggered.</p>
 </dd>
 </dl>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the response from the orchestration engine.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param string task_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-workflowmanager-result_ready-task_id-result_id">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/result_ready/{task_id}/{result_id}</span></span><a class="headerlink" href="#post--api-v1-workflowmanager-result_ready-task_id-result_id" title="Link to this definition">#</a></dt>
+<dd><p><strong>Callback Results Ready</strong></p>
+<p>Notify that results are ready via callback endpoint.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dag_id (str): The ID of the DAG.
+access_token (str): The access token for authentication.</p>
+</dd>
+</dl>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing a success message.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">param {‘string’, ‘uuid’} task_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">param {‘string’, ‘uuid’} result_id<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-workflowmanager-tasks-">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/tasks/</span></span><a class="headerlink" href="#get--api-v1-workflowmanager-tasks-" title="Link to this definition">#</a></dt>
+<dd><p><strong>List Available Tasks</strong></p>
+<p>Endpoint to list the available tasks from the orchestration engine.</p>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: A dictionary containing the list of available dagster jobs.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
-<p>MRI Acquisition Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
+<p>Workflow Manager, including all its source code and associated documentation (collectively, the “Software”), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.</p>
 <section id="open-source-license">
 <h3>Open Source License<a class="headerlink" href="#open-source-license" title="Link to this heading">#</a></h3>
 <p>If you want to use the Software under the terms of the GPLv3, you may do so for free. Under the GPLv3, you are allowed to modify and distribute the Software, but any derivative works that you distribute must also be licensed under the GPLv3. For the precise terms and conditions, please refer to the text of the GPLv3, which is included with the Software and can also be found at: <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a></p>
@@ -507,7 +577,7 @@ Its straightforward design ensures that the initiation and monitoring of scans a
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="api_workflow.html"
+       href="api_user_login_manager.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
@@ -516,11 +586,11 @@ Its straightforward design ensures that the initiation and monitoring of scans a
       </div>
     </a>
     <a class="right-next"
-       href="api_mri_sequences.html"
+       href="scanhub_techdoc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">MRI Sequences Manager</p>
+        <p class="prev-next-title">Technical Documentation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -559,7 +629,7 @@ Its straightforward design ensures that the initiation and monitoring of scans a
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/api_mri_acquisition.rst.txt"
+      <li><a href="_sources/api_workflow_manager.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
