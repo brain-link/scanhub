@@ -441,21 +441,28 @@ It plays a crucial role in creating, updating, retrieving, and deleting user log
 <section id="web-api">
 <h2>Web API<a class="headerlink" href="#web-api" title="Link to this heading">#</a></h2>
 <dl class="http get">
-<dt class="sig sig-object http" id="get--api-v1-workflowmanager-health-readiness">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/health/readiness</span></span><a class="headerlink" href="#get--api-v1-workflowmanager-health-readiness" title="Link to this definition">#</a></dt>
-<dd><p><strong>Readiness</strong></p>
-<p>Readiness health endpoint.</p>
-<p>Inspects sqlalchemy engine and check if workflow table exists.</p>
+<dt class="sig sig-object http" id="get--api-v1-userlogin-getcurrentuser">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/getcurrentuser</span></span><a class="headerlink" href="#get--api-v1-userlogin-getcurrentuser" title="Link to this definition">#</a></dt>
+<dd><p><strong>Get Current User</strong></p>
+<p>Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>access_token</dt><dd><p>User token as previously obtained trough a call to /login
+Submit via HTTP header “Authorization: Bearer &lt;access_token&gt;”</p>
+</dd>
+</dl>
+</section>
 <section id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Status docstring</p>
+<div><p>User pydantic model, the user data of the current user.</p>
 </div></blockquote>
 </section>
 <section id="raises">
 <h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>HTTPException</dt><dd><p>500: Workflow table does not exist</p>
+<dt>HTTPException</dt><dd><p>401: Unauthorized if the token is invalid or outdated.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -467,23 +474,198 @@ It plays a crucial role in creating, updating, retrieving, and deleting user log
 </dd></dl>
 
 <dl class="http post">
-<dt class="sig sig-object http" id="post--api-v1-workflowmanager-trigger_task-task_id-">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/trigger_task/{task_id}/</span></span><a class="headerlink" href="#post--api-v1-workflowmanager-trigger_task-task_id-" title="Link to this definition">#</a></dt>
-<dd><p><strong>Trigger Task</strong></p>
-<p>Endpoint to trigger a task in the orchestration engine.</p>
+<dt class="sig sig-object http" id="post--api-v1-userlogin-loginfromcookie">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/loginfromcookie</span></span><a class="headerlink" href="#post--api-v1-userlogin-loginfromcookie" title="Link to this definition">#</a></dt>
+<dd><p><strong>Loginfromcookie</strong></p>
+<p>Login endpoint for login with cookie.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>Args:</dt><dd><p>task_id (str): The ID of the DAG to be triggered.</p>
+<dt>access_token</dt><dd><p>User token as previously obtained trough a call to /login
+Submit via HTTP cookie.</p>
 </dd>
 </dl>
-<section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing the response from the orchestration engine.</p>
+<div><p>User pydantic model, the user data in case of a successful login.</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>Raises<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>401: Unauthorized if the username or password is wrong.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-userlogin-login">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/login</span></span><a class="headerlink" href="#post--api-v1-userlogin-login" title="Link to this definition">#</a></dt>
+<dd><p><strong>Login</strong></p>
+<p>Login endpoint.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>form_data</dt><dd><p>Http form data for OAuth2 compliant login with username and password.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>User pydantic model, the user data in case of a successful login.</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>401: Unauthorized if the username or password is wrong.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-userlogin-logout">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/logout</span></span><a class="headerlink" href="#post--api-v1-userlogin-logout" title="Link to this definition">#</a></dt>
+<dd><p><strong>Logout</strong></p>
+<p>Logout endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Successful Response</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-userlogin-getallusers">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/getallusers</span></span><a class="headerlink" href="#get--api-v1-userlogin-getallusers" title="Link to this definition">#</a></dt>
+<dd><p><strong>Get User List</strong></p>
+<p>Get all users endpoint (only admins).</p>
+<section id="id7">
+<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>List of all users. The access_token and token_type properties are set to “” for all of them.</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">param string task_id<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--api-v1-userlogin-checknousers">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/checknousers</span></span><a class="headerlink" href="#get--api-v1-userlogin-checknousers" title="Link to this definition">#</a></dt>
+<dd><p><strong>Check No Users</strong></p>
+<p>Check if there are no users in the database.</p>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>True, if there are no users in the database.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-userlogin-createuser">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/createuser</span></span><a class="headerlink" href="#post--api-v1-userlogin-createuser" title="Link to this definition">#</a></dt>
+<dd><p><strong>Create User</strong></p>
+<p>Create user database entry (only admins).</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>new_user</dt><dd><p>pydantic base model of new user, token_type should be “password” and
+access_token should contain the password of the new user.
+The password of the new user should at least be 12 characters long.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-userlogin-createfirstuser">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/createfirstuser</span></span><a class="headerlink" href="#post--api-v1-userlogin-createfirstuser" title="Link to this definition">#</a></dt>
+<dd><p><strong>Create First User</strong></p>
+<p>Create first user.</p>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>first_user</dt><dd><p>pydantic base model of the first user, token_type should be “password” and
+access_token should contain the password of the new user.
+The password of the new user should at least be 12 characters long.
+The role should be admin.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--api-v1-userlogin-deleteuser">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/deleteuser</span></span><a class="headerlink" href="#delete--api-v1-userlogin-deleteuser" title="Link to this definition">#</a></dt>
+<dd><p><strong>User Delete</strong></p>
+<p>Delete an existing user (requires admin priviledges).</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>username_to_delete</dt><dd><p>Name of the user to delete.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Raises<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">query string username_to_delete<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(Required)</p>
+</dd>
+<dt class="field-even">status 204<span class="colon">:</span></dt>
 <dd class="field-even"><p>Successful Response</p>
 </dd>
 <dt class="field-odd">status 422<span class="colon">:</span></dt>
@@ -493,26 +675,69 @@ It plays a crucial role in creating, updating, retrieving, and deleting user log
 </section>
 </dd></dl>
 
-<dl class="http post">
-<dt class="sig sig-object http" id="post--api-v1-workflowmanager-result_ready-task_id-result_id">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/result_ready/{task_id}/{result_id}</span></span><a class="headerlink" href="#post--api-v1-workflowmanager-result_ready-task_id-result_id" title="Link to this definition">#</a></dt>
-<dd><p><strong>Callback Results Ready</strong></p>
-<p>Notify that results are ready via callback endpoint.</p>
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-userlogin-updateuser">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/updateuser</span></span><a class="headerlink" href="#put--api-v1-userlogin-updateuser" title="Link to this definition">#</a></dt>
+<dd><p><strong>Update User</strong></p>
+<p>Update the first_name, last_name, email and role of an existing user.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>Args:</dt><dd><p>dag_id (str): The ID of the DAG.
-access_token (str): The access token for authentication.</p>
+<dt>updated_user</dt><dd><p>The attribute username identifies the user to modify.
+The attributes first_name, last_name, email and role are set for this user.</p>
 </dd>
 </dl>
-<section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+</section>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing a success message.</p>
+<div><p>None</p>
 </div></blockquote>
+</section>
+<section id="id15">
+<h3>Raises<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found if user not found.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
-<dt class="field-odd">param {‘uuid’, ‘string’} task_id<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">param {‘uuid’, ‘string’} result_id<span class="colon">:</span></dt>
-<dd class="field-even"><p></p></dd>
+<dt class="field-odd">status 200<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-userlogin-changepassword">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/changepassword</span></span><a class="headerlink" href="#put--api-v1-userlogin-changepassword" title="Link to this definition">#</a></dt>
+<dd><p><strong>Change Password</strong></p>
+<p>Change password of a user. Only administrators may change passwords of other users.</p>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>password_update_request</dt><dd><p>.password_of_requester: the password of the requester
+.username_to_change_password_for: the username for whom to change the password
+.newpassword: the new password</p>
+</dd>
+</dl>
+</section>
+<section id="id17">
+<h3>Returns<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</section>
+<section id="id18">
+<h3>Raises<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>400: New Password must have at least 12 characters. Old Password must be correct.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
 <dt class="field-odd">status 200<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Successful Response</p>
 </dd>
@@ -524,15 +749,22 @@ access_token (str): The access token for authentication.</p>
 </dd></dl>
 
 <dl class="http get">
-<dt class="sig sig-object http" id="get--api-v1-workflowmanager-tasks-">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/workflowmanager/tasks/</span></span><a class="headerlink" href="#get--api-v1-workflowmanager-tasks-" title="Link to this definition">#</a></dt>
-<dd><p><strong>List Available Tasks</strong></p>
-<p>Endpoint to list the available tasks from the orchestration engine.</p>
-<section id="id3">
-<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<dt class="sig sig-object http" id="get--api-v1-userlogin-health-readiness">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/userlogin/health/readiness</span></span><a class="headerlink" href="#get--api-v1-userlogin-health-readiness" title="Link to this definition">#</a></dt>
+<dd><p><strong>Readiness</strong></p>
+<p>Readiness health endpoint.</p>
+<section id="id19">
+<h3>Returns<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>dict: A dictionary containing the list of available dagster jobs.</p>
+<div><p>Status dictionary</p>
 </div></blockquote>
+</section>
+<section id="id20">
+<h3>Raises<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>500: User table does not exist</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">status 200<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Successful Response</p>
