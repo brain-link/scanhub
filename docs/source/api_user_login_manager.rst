@@ -13,7 +13,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting user log
 Web API
 -------
 
-.. openapi:: ./_openapi/api_user_login_manager_openapi.json
+.. openapi:: ./_openapi/user_login_manager_openapi.json
 
 License
 -------
