@@ -201,10 +201,11 @@ def handle_dag_task_trigger(
                 detail = f"No results found for input task {input_task.id}."
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
             latest_result = sorted(input_task.results, key=lambda r: r.datetime_created, reverse=True)[0]
-            for _file in latest_result.files:
-                file_path = Path(latest_result.directory) / _file
-                if file_path.exists():
-                    job_inputs.append(str(file_path))
+            job_inputs.append(latest_result.model_dump())
+            # for _file in latest_result.files:
+            #     file_path = Path(latest_result.directory) / _file
+            #     if file_path.exists():
+            #         job_inputs.append(str(file_path))
 
         # Update the task status to IN_PROGRESS
         task.status = ItemStatus.INPROGRESS
@@ -216,7 +217,7 @@ def handle_dag_task_trigger(
         # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
         callback_endpoint = f"{WORKFLOW_MANAGER_URI}/result_ready/{task.id}/{new_result_out.id}"
         device_parameter_update_endpoint = f"{DEVICE_MANAGER_URI}/parameter/"
-        result_directory = f"/data/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/"
+        result_directory = f"/{DATA_LAKE_DIR}/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/"
 
         # Trigger dagster job
         job_name, repository, location = parse_job_id(task.dag_id)
@@ -225,18 +226,24 @@ def handle_dag_task_trigger(
             job_name=job_name,
             repository_location_name=location,
             repository_name=repository,
-            run_config=RunConfig(resources={
-                SCANHUB_RESOURCE_KEY: JobConfigResource(
-                    callback_url=callback_endpoint,
-                    user_access_token=access_token,
-                    input_files=job_inputs,
-                    output_dir=result_directory,
-                    task_id=task_id,
-                    exam_id=exam_id,
-                    update_device_parameter_base_url=device_parameter_update_endpoint,
-                ),
+            # run_config=RunConfig(resources={
+            #     SCANHUB_RESOURCE_KEY: JobConfigResource(
+            #         callback_url=callback_endpoint,
+            #         user_access_token=access_token,
+            #         input_files=job_inputs,
+            #         output_dir=result_directory,
+            #         task_id=task_id,
+            #         exam_id=exam_id,
+            #         update_device_parameter_base_url=device_parameter_update_endpoint,
+            #     ),
+            # }),
+            run_config=RunConfig(ops={
+                "acquisition_results": {
+                    "config": { "acquisitions": job_inputs },
+                },
             }),
         )
+
         if run_id:
             # Update result
             new_result_out = set_result(
