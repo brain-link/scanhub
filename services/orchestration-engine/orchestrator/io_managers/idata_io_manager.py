@@ -1,41 +1,51 @@
 """Dagster IO Manager for mrpro IData object."""
+from dataclasses import dataclass
 from pathlib import Path
 
-from dagster import IOManager, OutputContext, InputContext, io_manager
+from dagster import ConfigurableIOManager, InputContext, OutputContext
 from mrpro.data import IData
+from scanhub_libraries.resources import DAGConfiguration
 
 
-class IDataIOManager(IOManager):
+@dataclass
+class IDataContext:
+    """Context definition for IData IO manager."""
+
+    data: IData
+    dag_config: DAGConfiguration
+
+
+class IDataIOManager(ConfigurableIOManager):
     """IO manager for mrpro IData object."""
 
-    def __init__(self, base_dir: str) -> None:
-        """Init."""
-        self.base_dir = Path(base_dir)
-
-    def handle_output(self, context: OutputContext, idata: IData) -> None:
+    def handle_output(self, context: OutputContext, obj: IDataContext) -> None:
         """Write idata to dicom folder."""
         # Decide where to write based on asset key
-        asset_key = "_".join(context.asset_key.path)
-        output_dir = self.base_dir / asset_key
-        output_dir.mkdir(parents=True, exist_ok=False)
+        if not obj.dag_config.output_directory:
+            context.log.error("Output directory not defined")
+            raise AttributeError
+        directory_path = Path(obj.dag_config.output_directory)
 
-        idata.to_dicom_folder(output_dir)
+        obj.data.to_dicom_folder(directory_path)
 
+        # Surface paths in the UI and for hooks/sensors
         context.add_output_metadata({
-            "stored_files": [f.name for f in output_dir.iterdir() if f.is_file()],
-            "output_dir": str(output_dir),
+            "output_directory": str(directory_path.resolve()),
+            "stored_files": [p.name for p in directory_path.iterdir() if p.is_file()],
         })
 
     def load_input(self, context: InputContext) -> IData:
         """Read idata from dicom folder."""
-        # Reload previously written files if needed
-        upstream_metadata = context.upstream_output.metadata
-        dcm_folder = Path(upstream_metadata.get("output_dir"))
-        if not dcm_folder.exists():
-            context.log.error("Dicom folder does not exist: %s", dcm_folder)
-        return IData.from_dicom_folder(dcm_folder)
-
-
-@io_manager(config_schema={"base_dir": str})
-def idata_io_manager(init_context) -> IDataIOManager:
-    return IDataIOManager(base_dir=init_context.resource_config["base_dir"])
+        if (meta := context.metadata) is None:
+            context.log.error("No metadata, cannot save result")
+            raise AttributeError
+        dcm_folder = meta.get("output_directory")
+        if not dcm_folder:
+            context.log.error("Missing directory to load dicom files")
+            raise AttributeError
+        dcm_path = Path(dcm_folder)
+        if not dcm_path.exists():
+            msg = f"DICOM folder does not exist: {dcm_path}"
+            context.log.error(msg)
+            raise FileNotFoundError(msg)
+        return IData.from_dicom_folder(str(dcm_path))

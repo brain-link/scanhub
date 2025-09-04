@@ -8,7 +8,7 @@ from dagster import ConfigurableResource
 class DataLakeResource(ConfigurableResource):
     """Dagster data lake ressource."""
 
-    def get_mrd_path(self, directory: str, filenames: list[str]) -> Path:
+    def get_mrd_path(self, files: list[str]) -> Path:
         """Construct and validate the MRD path inside the data lake.
 
         Parameters
@@ -24,15 +24,14 @@ class DataLakeResource(ConfigurableResource):
             Path to acquisition ISMRMRD file.
 
         """
-        filename = next((f for f in filenames if f.lower().endswith(".mrd")), None)
+        filename = next((f for f in files if f.lower().endswith(".mrd")), None)
         if filename is None:
             raise FileNotFoundError(f"Acquisition result does not specify mrd filename.")
-        mrd_path = Path(directory) / filename
-        if not mrd_path.is_file():
+        if not (mrd_path := Path(filename)).is_file():
             raise FileNotFoundError(f"MRD file does not exist: {mrd_path}")
         return mrd_path
 
-    def get_device_parameter(self, directory: str, filenames: list[str]) -> dict:
+    def get_device_parameter(self, files: list[str]) -> dict:
         """Return the path to the device parameter JSON file if it exists.
 
         Parameters
@@ -48,12 +47,11 @@ class DataLakeResource(ConfigurableResource):
             Dictionary containing device parameters
 
         """
-        filename = next((f for f in filenames if f.lower().endswith(".json")), None)
-        if filename is None:
+        json_file = next((f for f in files if f.lower().endswith(".json")), None)
+        if json_file is None:
             raise FileNotFoundError(f"Acquisition result does not specify device parameter file.")
-        json_path = Path(directory) / filename
         # Check if parameter file exists
-        if not json_path.exists():
+        if not (json_path := Path(json_file)).exists():
             raise FileExistsError(f"Device parameter file does not exist: {json_path}")
         # Load parameter file
         with json_path.open("r") as fh:

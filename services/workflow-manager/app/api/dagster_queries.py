@@ -22,12 +22,11 @@ def list_dagster_jobs() -> list[dict]:
     response = requests.post(DAGSTER_URL, json={"query": query}, timeout=3)
     response.raise_for_status()
     data = response.json()
-    print("Received dagster jobs: ", data)
     jobs = []
     for repo in data["data"]["repositoriesOrError"]["nodes"]:
         repo_name = repo["name"]
         location_name = repo["location"]["name"]
-        for pipeline in repo["pipelines"]:
+        for pipeline in repo["jobs"]:
             job_name = pipeline["name"]
             if job_name == "__ASSET_JOB":
               continue

@@ -1,34 +1,44 @@
 """Definition of acquisiton data assets."""
-from typing import Generator
+from dataclasses import dataclass
+from pathlib import Path
 
-from dagster import DynamicOutput, MetadataValue, OpExecutionContext, asset
-from scanhub_libraries.models import ResultOut
+from dagster import AssetExecutionContext, MetadataValue, asset
+from scanhub_libraries.resources import DAGConfiguration
+
+from orchestrator.ressources.datalake import DataLakeResource
+
+
+@dataclass
+class AcquisitionData:
+    """Acquisition data output of read acquisition data asset."""
+
+    mrd_path: Path
+    device_parameter: dict
 
 
 @asset(
-    required_resource_keys={"datalake"},
-    config_schema={"acquisitions": list},
+    group_name="io",
+    description="Provides acquired ISMRMRD result",
 )
-def acquisition_results(context: OpExecutionContext) -> Generator[DynamicOutput]:
+def read_acquisition_data(
+    context: AssetExecutionContext,
+    dag_config: DAGConfiguration,
+    data_lake: DataLakeResource,
+) -> AcquisitionData:
     """Define acquisition result asset."""
-    for acq in context.op_config["acquisitions"]:
-        result = ResultOut(**acq)
-        context.log.info("Processing acquisition result: %s", result)
-        mrd_file = context.resources.datalake.get_mrd_path(result.directory, result.files)
-        context.log.info("MRD file path: %s", str(mrd_file))
-        device_parameter = context.resources.datalake.get_device_parameter(result.directory, result.files)
-        context.log.info("Device parameters: %s", str(device_parameter))
+    mrd_file = data_lake.get_mrd_path(dag_config.input_files)
+    context.log.info("MRD file path: %s", str(mrd_file))
+    device_parameter = data_lake.get_device_parameter(dag_config.input_files)
+    context.log.info("Device parameters: %s", str(device_parameter))
 
-        yield DynamicOutput(
-            value={
-                "mrd_file": mrd_file,
-                "device_parameter": device_parameter,
-                "result": result.model_dump(),
-            },
-            mapping_key=str(result.id),
-            metadata={
-                "mrd_file": MetadataValue.path(str(mrd_file)),
-                "result": MetadataValue.json(result.model_dump()),
-                "device_parameter": MetadataValue.json(device_parameter),
-            },
-        )
+    # Optional: surface helpful metadata in the Dagster UI
+    context.add_output_metadata({
+        "mrd_path": MetadataValue.path(str(mrd_file)),
+        "device_parameter": MetadataValue.json(device_parameter),
+        "num_input_files": len(dag_config.input_files),
+        "output_directory": MetadataValue.path(dag_config.output_directory),
+        "output_result_id": dag_config.output_result_id,
+        "access_token": dag_config.user_access_token,
+    })
+
+    return AcquisitionData(mrd_path=mrd_file, device_parameter=device_parameter)
