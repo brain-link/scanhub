@@ -36,9 +36,9 @@ from scanhub_libraries.models import (
     TaskType,
     WorkflowOut,
 )
-from scanhub_libraries.resources import DAG_CONFIG_KEY, NOTIFIER_KEY
+from scanhub_libraries.resources import DAG_CONFIG_KEY
 from scanhub_libraries.resources.dag_config import DAGConfiguration
-from scanhub_libraries.resources.notifier import BackendNotifier
+# from scanhub_libraries.resources.notifier import BackendNotifier
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
@@ -216,8 +216,6 @@ def handle_dag_task_trigger(
         new_result_out = create_blank_result(task_id, access_token)
 
         # Use internal url and http (not https and port 8443) because callback endpoint is requested from another docker container
-        callback_endpoint = f"{WORKFLOW_MANAGER_URI}/result_ready/{task.id}/{new_result_out.id}"
-        device_parameter_update_endpoint = f"{DEVICE_MANAGER_URI}/parameter/"
         result_directory = f"{DATA_LAKE_DIR}/{str(task.workflow_id)}/{str(task.id)}/{str(new_result_out.id)}/"
 
         # Trigger dagster job
@@ -231,11 +229,11 @@ def handle_dag_task_trigger(
                 user_access_token=access_token,
                 output_result_id=str(new_result_out.id),
             ),
-            NOTIFIER_KEY: BackendNotifier(
-                success_callback_url=f"{WORKFLOW_MANAGER_URI}/result_ready/{new_result_out.id}",
-                devicemanager_url=f"{DEVICE_MANAGER_URI}/parameter/",
-                access_token=access_token,
-            )
+            # NOTIFIER_KEY: BackendNotifier(
+            #     success_callback_url=f"{WORKFLOW_MANAGER_URI}/result_ready/{new_result_out.id}",
+            #     devicemanager_url=f"{DEVICE_MANAGER_URI}/parameter/",
+            #     access_token=access_token,
+            # ),
         }
 
         try:

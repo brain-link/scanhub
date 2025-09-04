@@ -39,6 +39,7 @@ def acquisition_data_asset(
     # Optional: Add meta data for dagster UI
     context.add_output_metadata({
         "mrd_path": MetadataValue.path(str(data.mrd_path)),
+        "device_id": data.device_id,
         "device_parameter": MetadataValue.json(data.device_parameter),
         "num_input_files": len(dag_config.input_files),
         "output_directory": MetadataValue.path(dag_config.output_directory),

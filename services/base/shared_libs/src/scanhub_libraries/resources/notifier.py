@@ -3,34 +3,32 @@ import httpx
 from dagster import ConfigurableResource
 
 
-class BackendNotifier(ConfigurableResource):
-    """Backend notifier."""
+class WorkflowManagerNotifier(ConfigurableResource):
+    """Notifies device manager."""
 
-    success_callback_url: str | None = None
-    devicemanager_url: str | None = None
-    access_token: str | None = None
+    base_url: str
     timeout: float = 5.0
 
-    def send_dag_success(self, success: bool = True) -> None:
+    def send_dag_success(self, result_id: str, access_token: str, success: bool = True) -> None:
         """Notify backend about successful execution of dagster job/dag."""
-        if self.success_callback_url is None:
-            raise AttributeError
-        if self.access_token is None:
-            raise AttributeError
-        headers = {"Authorization": "Bearer " + self.access_token}
+        headers = {"Authorization": "Bearer " + access_token}
         payload = {"success": success}
+        url = self.base_url.rstrip("/") + f"/result_ready/{result_id}"
         with httpx.Client(timeout=self.timeout) as client:
-            response = client.post(self.success_callback_url, json=payload, headers=headers)
+            response = client.post(url, json=payload, headers=headers)
             response.raise_for_status()
 
-    def send_device_parameter_update(self, device_id: str, parameter: dict) -> None:
+
+class DeviceManagerNotifier(ConfigurableResource):
+    """Notifies device manager."""
+
+    base_url: str
+    timeout: float = 5.0
+
+    def send_device_parameter_update(self, device_id: str, access_token: str, parameter: dict) -> None:
         """Notify backend about device parameter update and send parameters."""
-        if self.devicemanager_url is None:
-            raise AttributeError
-        if self.access_token is None:
-            raise AttributeError
-        headers = {"Authorization": "Bearer " + self.access_token}
-        url = self.devicemanager_url.rstrip("/") + f"/{device_id}"
+        headers = {"Authorization": "Bearer " + access_token}
+        url = self.base_url.rstrip("/") + f"/{device_id}"
         with httpx.Client(timeout=self.timeout) as client:
             response = client.put(url, json=parameter, headers=headers)
             response.raise_for_status()
