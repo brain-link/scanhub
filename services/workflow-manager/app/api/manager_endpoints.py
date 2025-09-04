@@ -20,7 +20,7 @@ from uuid import UUID
 import requests
 from dagster import RunConfig
 from dagster_graphql import DagsterGraphQLClient, DagsterGraphQLClientError
-from fastapi import APIRouter, Depends, HTTPException, status, Body
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
 from scanhub_libraries.models import (
@@ -36,7 +36,9 @@ from scanhub_libraries.models import (
     TaskType,
     WorkflowOut,
 )
-from scanhub_libraries.resources import NOTIFIER_KEY, DAG_CONFIG_KEY, DAGConfiguration
+from scanhub_libraries.resources import DAG_CONFIG_KEY, NOTIFIER_KEY
+from scanhub_libraries.resources.dag_config import DAGConfiguration
+from scanhub_libraries.resources.notifier import BackendNotifier
 from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import calc_age_from_date
 
@@ -229,11 +231,11 @@ def handle_dag_task_trigger(
                 user_access_token=access_token,
                 output_result_id=str(new_result_out.id),
             ),
-            NOTIFIER_KEY: { "config": {
-                "success_callback_url": f"{WORKFLOW_MANAGER_URI}/result_ready/{new_result_out.id}",
-                "devicemanager_url": f"{DEVICE_MANAGER_URI}/parameter/",
-                "access_token": access_token,
-            }}
+            NOTIFIER_KEY: BackendNotifier(
+                success_callback_url=f"{WORKFLOW_MANAGER_URI}/result_ready/{new_result_out.id}",
+                devicemanager_url=f"{DEVICE_MANAGER_URI}/parameter/",
+                access_token=access_token,
+            )
         }
 
         try:
@@ -242,17 +244,6 @@ def handle_dag_task_trigger(
                 repository_location_name=location,
                 repository_name=repository,
                 run_config=RunConfig(resources=resource_cfg),
-                # run_config=RunConfig(resources={
-                #     SCANHUB_RESOURCE_KEY: JobConfigResource(
-                #         callback_url=callback_endpoint,
-                #         user_access_token=access_token,
-                #         input_files=job_inputs,
-                #         output_dir=result_directory,
-                #         task_id=task_id,
-                #         exam_id=exam_id,
-                #         update_device_parameter_base_url=device_parameter_update_endpoint,
-                #     ),
-                # }),
             )
         except DagsterGraphQLClientError as exc:
             raise HTTPException(status_code=400, detail=f"Dagster submission failed: {exc}") from exc

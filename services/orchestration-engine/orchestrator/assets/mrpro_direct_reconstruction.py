@@ -1,17 +1,18 @@
 import mrpro
 from dagster import AssetIn, AssetKey, asset
-from scanhub_libraries.resources import DAGConfiguration
+from scanhub_libraries.resources import IDATA_IO_KEY
+from scanhub_libraries.resources.dag_config import DAGConfiguration
 
-from orchestrator.assets.acquisition import AcquisitionData
-from orchestrator.hooks.scanhub import notify_dag_success
-from orchestrator.io_managers.idata_io_manager import IDataContext
+from orchestrator.hooks import notify_dag_success
+from orchestrator.io.acquisition_data import AcquisitionData, acquisition_data_asset
+from orchestrator.io.idata_io_manager import IDataContext
 
 
 @asset(
     group_name="reconstruction",
     description="MRpro direct reconstruction.",
-    ins={"data": AssetIn(key=AssetKey("read_acquisition_data"))},
-    io_manager_key="idata_io_manager",
+    ins={"data": AssetIn(key=acquisition_data_asset.key)},
+    io_manager_key=IDATA_IO_KEY,
     hooks={notify_dag_success},
 )
 def mrpro_direct_reconstruction(context, data: AcquisitionData, dag_config: DAGConfiguration) -> IDataContext:

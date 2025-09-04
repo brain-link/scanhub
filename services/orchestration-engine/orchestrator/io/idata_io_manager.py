@@ -4,7 +4,7 @@ from pathlib import Path
 
 from dagster import ConfigurableIOManager, InputContext, OutputContext
 from mrpro.data import IData
-from scanhub_libraries.resources import DAGConfiguration
+from scanhub_libraries.resources.dag_config import DAGConfiguration
 
 
 @dataclass
@@ -26,6 +26,7 @@ class IDataIOManager(ConfigurableIOManager):
             raise AttributeError
         directory_path = Path(obj.dag_config.output_directory)
 
+        # Save data as dicom to result folder
         obj.data.to_dicom_folder(directory_path)
 
         # Surface paths in the UI and for hooks/sensors
