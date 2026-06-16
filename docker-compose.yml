@@ -24,33 +24,7 @@ x-dagster-common: &dagster_common
 
 services:
   # SERVICES
-  # Workflow manager, device manager and exam manager create data tables in postgres DB
-  workflow-manager:
-    container_name: workflow-manager
-    build:
-      context: ./services/workflow-manager
-      args:
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    volumes:
-      - ./services/workflow-manager/app/:/app/
-      - ${DATA_LAKE_DIR}:/data
-    environment:
-      DATA_LAKE_DIRECTORY: /data
-      SCANHUB_ALLOWED_ORIGINS: ${SCANHUB_ALLOWED_ORIGINS}
-    healthcheck:
-      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: [ "CMD", "curl", "http://workflow-manager:8000/api/v1/workflowmanager/health/readiness" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      scanhub-database:
-        condition: service_healthy
-      dagster-webserver:
-        condition: service_healthy
-      dagster-daemon:
-        condition: service_healthy
-
+  # Device manager and exam manager create data tables in postgres DB
   device-manager:
     container_name: device-manager
     build:
@@ -104,8 +78,6 @@ services:
       scanhub-database:
         condition: service_healthy
       device-manager:
-        condition: service_healthy
-      workflow-manager:
         condition: service_healthy
     secrets:
       # ScanHub postgres database
@@ -180,7 +152,7 @@ services:
   #     - init-data-lake
   #     - scanhub-database
 
-  # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
+  # Scanhub Postgres Database: Contains exams, workflows, tasks, devices
   scanhub-database:
     container_name: db-scanhub
     image: postgres:15.2-bullseye
@@ -194,7 +166,7 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/scanhub_database_postgres_password
       POSTGRES_DB_FILE: /run/secrets/scanhub_database_postgres_db_name
     healthcheck:
-      # Workflow, device and exam microservices depend on healthy postgres database
+      # device and exam microservices depend on healthy postgres database
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s
       timeout: 5s
@@ -268,8 +240,6 @@ services:
       retries: 10
     depends_on:
       device-manager:
-        condition: service_healthy
-      workflow-manager:
         condition: service_healthy
       exam-manager:
         condition: service_healthy
