@@ -1,4 +1,4 @@
-"""Definition of dagster data lake ressource for acquisition data."""
+"""Definition of dagster data lake resource for acquisition data."""
 import json
 from pathlib import Path
 
@@ -6,58 +6,44 @@ from dagster import ConfigurableResource
 
 
 class DataLakeResource(ConfigurableResource):
-    """Dagster data lake ressource."""
+    """Dagster data lake resource."""
 
-    def get_mrd_path(self, files: list[str]) -> Path:
-        """Construct and validate the MRD path inside the data lake.
-
-        Parameters
-        ----------
-        directory : str
-            Absolute path to result data (contains data lake path).
-        filenames: list[str]
-            List of filenames which can be found in directory.
-
-        Returns
-        -------
-        path
-            Path to acquisition ISMRMRD file.
-
-        """
-        filename = next((f for f in files if f.lower().endswith(".mrd")), None)
-        if filename is None:
-            raise FileNotFoundError(f"Acquisition result does not specify mrd filename.")
-        if not (mrd_path := Path(filename)).is_file():
-            raise FileNotFoundError(f"MRD file does not exist: {mrd_path}")
-        return mrd_path
-
-    def get_device_parameter(self, files: list[str]) -> tuple[str, dict]:
-        """Return the path to the device parameter JSON file if it exists.
+    def get_mrd_path(self, task_dir: str) -> Path:
+        """Find the MRD file inside a task directory.
 
         Parameters
         ----------
-        directory : str
-            Absolute path to result data (contains data lake path).
-        filenames: list[str]
-            List of filenames which can be found in directory.
+        task_dir
+            Absolute path to the task data directory.
 
         Returns
         -------
-        dict
-            Dictionary containing device parameters
-
+        Path
+            Path to the acquisition ISMRMRD file.
         """
-        json_file = next((f for f in files if f.lower().endswith(".json")), None)
-        if json_file is None:
-            raise FileNotFoundError(f"Acquisition result does not specify device parameter file.")
-        # Check if parameter file exists
-        if not (json_path := Path(json_file)).exists():
-            raise FileExistsError(f"Device parameter file does not exist: {json_path}")
-        # Load parameter file
-        with json_path.open("r") as fh:
+        matches = list(Path(task_dir).glob("*.mrd"))
+        if not matches:
+            raise FileNotFoundError(f"No MRD file found in: {task_dir}")
+        return matches[0]
+
+    def get_device_parameter(self, task_dir: str) -> tuple[str, dict]:
+        """Read device parameters from device_parameter.json inside a task directory.
+
+        Parameters
+        ----------
+        task_dir
+            Absolute path to the task data directory.
+
+        Returns
+        -------
+        tuple[str, dict]
+            Device ID and parameter dictionary.
+        """
+        param_file = Path(task_dir) / "device_parameter.json"
+        if not param_file.exists():
+            raise FileNotFoundError(f"device_parameter.json not found in: {task_dir}")
+        with param_file.open("r") as fh:
             data = json.load(fh)
-        # Check if parameter file contains device id and parameter
         if "device_id" not in data or "parameter" not in data:
-            raise AttributeError(f"Invalid paraeter file: {json_path}")
-
-        return (str(data["device_id"]), data["parameter"])
+            raise AttributeError(f"Invalid device_parameter.json in: {task_dir}")
+        return str(data["device_id"]), data["parameter"]

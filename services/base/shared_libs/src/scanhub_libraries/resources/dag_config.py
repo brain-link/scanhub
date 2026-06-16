@@ -3,9 +3,9 @@ from dagster import ConfigurableResource
 
 
 class DAGConfiguration(ConfigurableResource):
-    """Run-scoped parameters accessible from assets + IO managers."""
+    """Run-scoped parameters accessible from assets and IO managers."""
 
-    output_directory: str = ""
-    input_files: list[str] = []
+    task_dir: str = ""           # absolute path to {DATA_LAKE_DIR}/{workflow_id}/{task_id}/
+    task_id: str = ""
+    workflow_id: str = ""
     user_access_token: str = ""
-    output_result_id: str = ""

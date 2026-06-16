@@ -3,19 +3,39 @@ import httpx
 from dagster import ConfigurableResource
 
 
-class WorkflowManagerNotifier(ConfigurableResource):
-    """Notifies device manager."""
+class ExamManagerNotifier(ConfigurableResource):
+    """Notifies exam manager about Dagster job outcomes."""
 
     base_url: str
     timeout: float = 5.0
 
-    def send_dag_success(self, result_id: str, access_token: str, success: bool = True) -> None:
-        """Notify backend about successful execution of dagster job/dag."""
+    def create_dicom_result(
+        self,
+        task_id: str,
+        directory: str,
+        files: list[str],
+        run_id: str,
+        access_token: str,
+    ) -> None:
+        """Create a DICOM result entry in the exam manager after successful reconstruction."""
         headers = {"Authorization": "Bearer " + access_token}
-        payload = {"success": success}
-        url = self.base_url.rstrip("/") + f"/result_ready/{result_id}"
+        payload = {
+            "type": "DICOM",
+            "directory": directory,
+            "files": files,
+            "meta": {"run_id": run_id},
+        }
+        url = self.base_url.rstrip("/") + f"/result/dicom/{task_id}"
         with httpx.Client(timeout=self.timeout) as client:
             response = client.post(url, json=payload, headers=headers)
+            response.raise_for_status()
+
+    def update_task_status(self, task_id: str, status: str, access_token: str) -> None:
+        """Update task status in the exam manager."""
+        headers = {"Authorization": "Bearer " + access_token}
+        url = self.base_url.rstrip("/") + f"/task/{task_id}/status"
+        with httpx.Client(timeout=self.timeout) as client:
+            response = client.put(url, json={"status": status}, headers=headers)
             response.raise_for_status()
 
 

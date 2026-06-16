@@ -1,22 +1,16 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""Sensors to notify workflow manager dependent on run status."""
+"""Run-status sensors that report job outcomes directly to the exam manager."""
+from pathlib import Path
+
 from dagster import DagsterRunStatus, DefaultSensorStatus, RunStatusSensorContext, run_status_sensor
 from scanhub_libraries.resources import DAG_CONFIG_KEY
-from scanhub_libraries.resources.notifier import WorkflowManagerNotifier
+from scanhub_libraries.resources.notifier import ExamManagerNotifier
 
 
 def _get_dag_config_from_run(context: RunStatusSensorContext) -> dict:
-    """Extract the DAG configuration dictionary from a given RunStatusSensorContext.
-
-    Args:
-        context (RunStatusSensorContext): The context containing the Dagster run information.
-
-    Returns:
-        dict: The DAG configuration found under the run's resources, or an empty dictionary if not present or invalid.
-
-    """
+    """Extract the DAG configuration dictionary from a RunStatusSensorContext."""
     run_config = getattr(context.dagster_run, "run_config", None)
     if not isinstance(run_config, dict):
         return {}
@@ -29,29 +23,40 @@ def _get_dag_config_from_run(context: RunStatusSensorContext) -> dict:
     monitor_all_code_locations=True,
     minimum_interval_seconds=5,
 )
-def on_run_success(context: RunStatusSensorContext, notifier_workflow_manager: WorkflowManagerNotifier) -> None:
-    """Handle successful DAG run events by notifying the workflow manager if required information is available.
-
-    This function retrieves the DAG configuration from the provided context, extracts the user access token
-    and output result ID, and attempts to notify the workflow manager of the success.
-    If either the access token or result ID is missing, it logs an
-    informational message indicating that the DAG status could not be reported.
-
-    Args:
-        context (RunStatusSensorContext): The context object containing information about the DAG run.
-        notifier_workflow_manager (WorkflowManagerNotifier): The notifier used to report DAG run success.
-
-    """
+def on_run_success(context: RunStatusSensorContext, notifier_exam_manager: ExamManagerNotifier) -> None:
+    """On successful reconstruction: collect DICOM output files and register a result in the exam manager."""
     dag_config = _get_dag_config_from_run(context)
+    task_dir = dag_config.get("task_dir", "")
+    task_id = dag_config.get("task_id", "")
     access_token = dag_config.get("user_access_token", "")
-    result_id = dag_config.get("output_result_id", "")
-    if result_id and access_token:
-        notifier_workflow_manager.send_dag_success(result_id=result_id, access_token=access_token, success=True)
+    run_id = context.dagster_run.run_id
+
+    if not (task_dir and task_id and access_token):
         context.log.info(
-            "%s succeeded (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id,
+            "Run succeeded but missing task_dir/task_id/access_token — skipping exam-manager notification."
         )
-    else:
-        context.log.info("Run succeeded, but can not report DAG status, missing access_token and/or result_id.")
+        return
+
+    dcm_files = sorted(
+        p.name for p in Path(task_dir).iterdir()
+        if p.is_file() and p.name.startswith(run_id) and p.suffix.lower() == ".dcm"
+    )
+
+    try:
+        notifier_exam_manager.create_dicom_result(
+            task_id=task_id,
+            directory=task_dir,
+            files=dcm_files,
+            run_id=run_id,
+            access_token=access_token,
+        )
+        notifier_exam_manager.update_task_status(task_id, "FINISHED", access_token)
+        context.log.info(
+            "%s succeeded (run_id=%s) — registered %d DICOM file(s).",
+            context.dagster_run.job_name, run_id, len(dcm_files),
+        )
+    except Exception as exc:
+        context.log.error("Failed to notify exam manager on success: %s", exc)
 
 
 @run_status_sensor(
@@ -60,34 +65,22 @@ def on_run_success(context: RunStatusSensorContext, notifier_workflow_manager: W
     monitor_all_code_locations=True,
     minimum_interval_seconds=5,
 )
-def on_run_failure(context: RunStatusSensorContext, notifier_workflow_manager: WorkflowManagerNotifier) -> None:
-    """Handle the failure of a DAG run by notifying the workflow manager if possible.
-
-    This function retrieves the DAG configuration from the provided context, extracts the user access token
-    and output result ID, and attempts to notify the workflow manager of the failure.
-    If either the access token or result ID is missing, it logs an
-    informational message indicating that the DAG status could not be reported.
-
-    Args:
-        context (RunStatusSensorContext):
-            The context object containing information about the DAG run and logging utilities.
-        notifier_workflow_manager (WorkflowManagerNotifier):
-            The notifier used to send DAG status updates.
-
-    Returns:
-        None
-
-    """
+def on_run_failure(context: RunStatusSensorContext, notifier_exam_manager: ExamManagerNotifier) -> None:
+    """On failed reconstruction: mark the task as ERROR in the exam manager."""
     dag_config = _get_dag_config_from_run(context)
+    task_id = dag_config.get("task_id", "")
     access_token = dag_config.get("user_access_token", "")
-    result_id = dag_config.get("output_result_id", "")
-    if result_id and access_token:
-        notifier_workflow_manager.send_dag_success(result_id=result_id, access_token=access_token, success=False)
-        context.log.info(
-            "%s failed (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id,
-        )
-    else:
-        context.log.info("Run failed, but can not report DAG status, missing access_token and/or result_id.")
+
+    if not (task_id and access_token):
+        context.log.info("Run failed but missing task_id/access_token — skipping exam-manager notification.")
+        return
+
+    try:
+        notifier_exam_manager.update_task_status(task_id, "ERROR", access_token)
+        context.log.info("%s failed (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id)
+    except Exception as exc:
+        context.log.error("Failed to notify exam manager on failure: %s", exc)
+
 
 @run_status_sensor(
     run_status=DagsterRunStatus.CANCELED,
@@ -95,27 +88,18 @@ def on_run_failure(context: RunStatusSensorContext, notifier_workflow_manager: W
     monitor_all_code_locations=True,
     minimum_interval_seconds=5,
 )
-def on_run_canceled(context: RunStatusSensorContext, notifier_workflow_manager: WorkflowManagerNotifier) -> None:
-    """Handle the cancellation of a DAG run by notifying the workflow manager and logging the event.
-
-    This function retrieves the DAG configuration from the provided context, extracts the user access token
-    and output result ID, and attempts to notify the workflow manager of the cancellation.
-    If either the access token or result ID is missing, it logs an
-    informational message indicating that the DAG status could not be reported.
-
-    Args:
-        context (RunStatusSensorContext): The context object containing information about the current DAG run.
-        notifier_workflow_manager (WorkflowManagerNotifier): The notifier used to send DAG status updates.
-
-    """
+def on_run_canceled(context: RunStatusSensorContext, notifier_exam_manager: ExamManagerNotifier) -> None:
+    """On canceled reconstruction: mark the task as ERROR in the exam manager."""
     dag_config = _get_dag_config_from_run(context)
+    task_id = dag_config.get("task_id", "")
     access_token = dag_config.get("user_access_token", "")
-    result_id = dag_config.get("output_result_id", "")
-    if result_id and access_token:
-        notifier_workflow_manager.send_dag_success(result_id=result_id, access_token=access_token, success=False)
-        context.log.info(
-            "%s canceled (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id,
-        )
-    else:
-        context.log.info("Run canceled, but can not report DAG status, missing access_token and/or result_id.")
 
+    if not (task_id and access_token):
+        context.log.info("Run canceled but missing task_id/access_token — skipping exam-manager notification.")
+        return
+
+    try:
+        notifier_exam_manager.update_task_status(task_id, "ERROR", access_token)
+        context.log.info("%s canceled (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id)
+    except Exception as exc:
+        context.log.error("Failed to notify exam manager on cancellation: %s", exc)
