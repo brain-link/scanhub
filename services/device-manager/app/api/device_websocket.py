@@ -73,57 +73,47 @@ async def send_json(websocket, payload: dict):
         print(f"RuntimeError while sending WS message: {exc}")
 
 
-@router.post("/start_scan_via_websocket", response_model={}, status_code=200, tags=["devices"])
-async def start_scan_via_websocket(
-    task: AcquisitionTaskOut,
-    access_token: Annotated[str, Depends(oauth2_scheme)]
+@router.post("/trigger_acquisition/{task_id}", response_model={}, status_code=200, tags=["devices"])
+async def trigger_acquisition(
+    task_id: UUID,
+    access_token: Annotated[str, Depends(oauth2_scheme)],
 ):
-    """Start a scan via a websocket that was already opened by the device.
+    """Trigger an MRI acquisition for the given task.
 
-    Parameters
-    ----------
-    device_task
-        Details of the scan and the device to scan on.
-
+    Fetches the task from the exam manager, looks up the assigned sequence and device,
+    sends the scan-start command via the device's open WebSocket, and marks the task as STARTED.
     """
-    # Get sequence and device
+    task = exam_requests.get_task(str(task_id), access_token)
+
     if task.sequence_id is None:
-        raise HTTPException(status_code=404, detail="Missing sequence ID")
+        raise HTTPException(status_code=400, detail="Missing sequence ID on task.")
     if task.device_id is None:
-        raise HTTPException(status_code=404, detail="Missing device ID")
+        raise HTTPException(status_code=400, detail="Missing device ID on task.")
+
+    if task.device_id not in dict_id_websocket:
+        raise HTTPException(status_code=503, detail="Device offline.")
 
     sequence = exam_requests.get_sequence(task.sequence_id, access_token)
 
-    # Use parameter state to prevent triggering a device twice
-    # if task.device_id in dict_id_parameters:
-    #     raise HTTPException(status_code=404, detail="Device is busy")
-
-
     if not (device := await dal_get_device(task.device_id)):
-        raise HTTPException(status_code=404, detail="Device not found")
+        raise HTTPException(status_code=404, detail="Device not found.")
     device_details = DeviceDetails(**device.__dict__)
-
-
-    # dict_id_parameters[task.device_id] = device_details.parameter if device_details.parameter is not None else {}
-
 
     payload = AcquisitionPayload(
         **task.model_dump(),
         sequence=sequence,
-        mrd_header="header_xml_placeholder",  # Placeholder, should be filled with actual MRD header
+        mrd_header="header_xml_placeholder",
         access_token=access_token,
-        device_parameter=device_details.parameter if device_details.parameter is not None else {},
+        device_parameter=device_details.parameter or {},
     )
 
-    if task.device_id in dict_id_websocket:
-        websocket = dict_id_websocket[task.device_id]
-        await websocket.send_text(
-            json.dumps(
-                {"command": "start", "data": payload},
-                default=jsonable_encoder,
-            ))
-        return
-    raise HTTPException(status_code=503, detail="Device offline.")
+    websocket = dict_id_websocket[task.device_id]
+    await websocket.send_text(
+        json.dumps({"command": "start", "data": payload}, default=jsonable_encoder)
+    )
+
+    exam_requests.update_task_status(str(task_id), "STARTED", access_token)
+    return {}
 
 
 async def connection_with_valid_id_and_token(websocket: WebSocket) -> UUID:
@@ -341,7 +331,6 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
 async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UUID) -> None:
     """Handle file transfer from device to server."""
     print("Handle file transfer...")
-    # Preflight check for DATA_LAKE_DIR
     if DATA_LAKE_DIR is None:
         raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
     if not os.path.exists(DATA_LAKE_DIR):
@@ -351,20 +340,14 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     user_access_token: str = str(header["user_access_token"])
     filename: Path = Path(header.get("filename", "upload.bin"))
     size_bytes: int = int(header["size_bytes"])
-    # content_type: str = header.get("content_type")
     header_sha256: Optional[str] = header.get("sha256")
     device_parameter: dict | None = header.get("device_parameter")
 
-    # Locate task & result directory
+    # Locate task and build flat task directory: {DATA_LAKE_DIR}/{workflow_id}/{task_id}/
     task = exam_requests.get_task(task_id, user_access_token)
-
-    # Create blank result entry
-    blank_result = exam_requests.create_blank_result(task_id, user_access_token)
-
-    # Create the result directory
-    result_directory = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id) / str(blank_result.id)
-    result_directory.mkdir(exist_ok=True, parents=True)
-    file_path = result_directory / filename
+    task_dir = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id)
+    task_dir.mkdir(exist_ok=True, parents=True)
+    file_path = task_dir / filename
     tmp_path = file_path.with_suffix(file_path.suffix + ".part")
 
     # Receive bytes -> stream to disk
@@ -377,16 +360,13 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
                 raise WebSocketDisconnect(code=1001)
             if event["type"] != "websocket.receive":
                 continue
-
             chunk = event.get("bytes")
-            if chunk is None:  # ignore stray text frames
+            if chunk is None:
                 continue
-
             fout.write(chunk)
             hasher.update(chunk)
             bytes_received += len(chunk)
 
-    # Check if we received the expected number of bytes
     if bytes_received != size_bytes:
         if tmp_path.exists():
             tmp_path.unlink()
@@ -396,7 +376,6 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
         })
         return
 
-    # Checksum verification
     if header_sha256 and hasher.hexdigest() != header_sha256:
         if tmp_path.exists():
             tmp_path.unlink()
@@ -406,35 +385,50 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
         })
         return
 
-    # os.replace(tmp_path, file_path)  # atomic finalize
     tmp_path.replace(file_path)
     result_files = [file_path.name]
 
     print("DEVICE PARAMETER: ", device_parameter)
 
-    # Write device parameters if exist
     if device_parameter:
-        parameter_path = result_directory / "device_parameter.json"
-        data = {
-            "device_id": str(device_id),
-            "parameter": device_parameter,
-        }
+        parameter_path = task_dir / "device_parameter.json"
         with parameter_path.open("w") as fh:
-            json.dump(data, fh, indent=4)
+            json.dump({"device_id": str(device_id), "parameter": device_parameter}, fh, indent=4)
         result_files.append(parameter_path.name)
 
-    # Set result
-    set_result = SetResult(
+    # Register the MRD file as a result in exam-manager
+    blank_result = exam_requests.create_blank_result(task_id, user_access_token)
+    set_result_payload = SetResult(
         type=_pick_result_type(file_path.name),
-        directory=str(result_directory),
-        files=result_files
+        directory=str(task_dir),
+        files=result_files,
     )
-    print("Result to set: ", set_result.model_dump_json())
-    result = exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
+    result = exam_requests.set_result(str(blank_result.id), set_result_payload, user_access_token)
+
+    # Submit the reconstruction job to Dagster
+    try:
+        from dagster_graphql import DagsterGraphQLClient  # noqa: PLC0415
+        dagster_client = DagsterGraphQLClient(hostname="orchestration-engine", port_number=3000)
+        run_config = {
+            "resources": {
+                "dag_config": {
+                    "config": {
+                        "task_dir": str(task_dir),
+                        "task_id": task_id,
+                        "workflow_id": str(task.workflow_id),
+                        "user_access_token": user_access_token,
+                    }
+                }
+            }
+        }
+        dagster_client.submit_job_execution("mrpro_reconstruction_job", run_config=run_config)
+        print(f"Submitted mrpro_reconstruction_job for task {task_id}.")
+    except Exception as exc:
+        print(f"Warning: Failed to submit Dagster reconstruction job: {exc}")
 
     await send_json(websocket, {
         "command": "feedback",
-        "message": f"File {result.id} saved to datalake: {file_path}",
+        "message": f"File saved and reconstruction triggered: {file_path}",
         "result_id": str(result.id),
     })
 

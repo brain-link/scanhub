@@ -20,7 +20,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
-uvicorn = "^0.22.0"
+uvicorn = "^0.49.0"
 websockets = "^11.0.3"
 asyncpg = "^0.30.0"
 psycopg2-binary = "^2.9.6"
@@ -28,6 +28,8 @@ async-sqlalchemy = "^1.0.0"
 python-multipart = "^0.0.6"
 types-requests = "^2.32.0.20250328"
 numpy = "^2.3.2"
+dagster-graphql = "*"
+fastapi = "^0.137.1"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
