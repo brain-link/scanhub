@@ -9,8 +9,6 @@ is properly formatted and authenticated.
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
-import json
-
 import requests
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -74,7 +72,7 @@ def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token: str) 
     """
     update_task_response = requests.put(
         f"{TASK_URI}/{task_id}",
-        data=json.dumps(payload, default=jsonable_encoder),
+        json=jsonable_encoder(payload),
         headers={"Authorization": "Bearer " + user_access_token},
         timeout=3
     )
@@ -174,7 +172,7 @@ def set_result(result_id: str, payload: SetResult, user_access_token: str) -> Re
     headers = {"Authorization": "Bearer " + user_access_token}
     update_result_response = requests.put(
         f"{RESULT_URI}/{result_id}",
-        data=json.dumps(payload, default=jsonable_encoder),
+        json=jsonable_encoder(payload),
         headers=headers,
         timeout=3
     )

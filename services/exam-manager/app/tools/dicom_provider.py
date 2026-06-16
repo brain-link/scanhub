@@ -22,20 +22,30 @@ DATA_LAKE_DIR = Path(os.getenv("DATA_LAKE_DIRECTORY", "/data")).resolve()
 
 
 def resolve_dicom_path(workflow_id: str, task_id: str, result_id: str, filename: str) -> Path:
-    """Build and validate the requested file path, prevent traversal, return (path, safe_name)."""
-    safe_name = Path(filename).name  # strip any path components
+    """Build and validate the requested file path (legacy: includes result_id subdir)."""
+    safe_name = Path(filename).name
     requested = (DATA_LAKE_DIR / workflow_id / task_id / result_id / safe_name).resolve()
-
-    # Ensure request stays under BASE
     try:
         if not requested.is_relative_to(DATA_LAKE_DIR):
             raise ValueError
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid file path")
-
     if not requested.exists():
         raise HTTPException(status_code=404, detail=f"Dicom file does not exist: {requested}")
+    return requested
 
+
+def resolve_dicom_path_from_db(directory: str, filename: str) -> Path:
+    """Resolve DICOM file path from stored Result directory (flat task-directory layout)."""
+    safe_name = Path(filename).name
+    requested = (Path(directory) / safe_name).resolve()
+    try:
+        if not requested.is_relative_to(DATA_LAKE_DIR):
+            raise ValueError
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid file path")
+    if not requested.exists():
+        raise HTTPException(status_code=404, detail=f"DICOM file not found: {requested}")
     return requested
 
 

@@ -34,7 +34,7 @@ class CreateDicomResult(BaseModel):
 from app.tools.dicom_provider import (
     get_p10_dicom_bytes,
     provide_p10_dicom,
-    resolve_dicom_path,
+    resolve_dicom_path_from_db,
 )
 
 PREFIX_PATIENT_MANAGER = "http://patient-manager:8100/api/v1/patient"
@@ -254,7 +254,7 @@ async def get_dicom(
     print("Username:", user.username)
     print("RETURNING DICOM FILE...")
 
-    dicom_path = resolve_dicom_path(workflow_id, task_id, result_id, filename)
+    dicom_path = await _resolve_dicom_path(result_id, filename)
     try:
         return provide_p10_dicom(dicom_path)
     except Exception as e:
@@ -275,7 +275,7 @@ async def upload_to_xnat(
     print(f"UPLOADING {filename} TO XNAT...")
 
     headers = {"Authorization": "Bearer " + access_token}
-    dicom_path = resolve_dicom_path(workflow_id, task_id, result_id, filename)
+    dicom_path = await _resolve_dicom_path(result_id, filename)
 
     xnat_host = os.getenv("XNAT_HOST", "http://host.docker.internal:8081")
     xnat_user = os.getenv("XNAT_USER", "admin")
@@ -346,6 +346,29 @@ async def upload_to_xnat(
 
 
 
+async def _resolve_dicom_path(result_id: str, filename: str):
+    """Look up Result in DB and return validated path to the requested DICOM file."""
+    result = await result_dal.get_result_db(UUID(result_id))
+    if not result:
+        raise HTTPException(404, "Result not found")
+    if not result.directory:
+        raise HTTPException(404, "Result has no stored directory")
+    return resolve_dicom_path_from_db(result.directory, filename)
+
+
+async def _resolve_mrd_path(result_id: str):
+    """Look up Result in DB and return path to the .mrd file."""
+    result = await result_dal.get_result_db(UUID(result_id))
+    if not result:
+        raise HTTPException(404, "Result not found")
+    if not result.directory or not result.files:
+        raise HTTPException(404, "Result has no stored files")
+    try:
+        return mrd.find_mrd_file(result.directory, result.files)
+    except FileNotFoundError:
+        raise HTTPException(404, "MRD file not found on disk")
+
+
 @result_router.get(
     "/mrd/{workflow_id}/{task_id}/{result_id}/meta",
     response_model=MRDMetaResponse,
@@ -353,19 +376,15 @@ async def upload_to_xnat(
     tags=["results", "data"],
     summary="Get ISMRMRD metadata (indexed acquisitions)",
 )
-def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
+async def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
     """Get MRD meta info."""
-    try:
-        path = mrd.locate_mrd(workflow_id, task_id, result_id)
-    except FileNotFoundError:
-        raise HTTPException(404, "MRD file not found")
-
+    path = await _resolve_mrd_path(result_id)
     return MRDMetaResponse(
         workflow_id=workflow_id,
         task_id=task_id,
         result_id=result_id,
         dtype="fc32",
-        acquisitions=mrd.build_index_meta(path),
+        acquisitions=mrd.build_index_meta(str(path)),
     )
 
 
@@ -385,7 +404,7 @@ def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
         },
     },
 )
-def get_mrd_binary(
+async def get_mrd_binary(
     workflow_id: str,
     task_id: str,
     result_id: str,
@@ -394,10 +413,7 @@ def get_mrd_binary(
     stride: int = Query(1, ge=1, description="Decimate samples by stride"),
 ):
     """Get MRD as binary stream."""
-    try:
-        path = mrd.locate_mrd(workflow_id, task_id, result_id)
-    except FileNotFoundError:
-        raise HTTPException(404, "MRD file not found")
+    path = await _resolve_mrd_path(result_id)
 
     try:
         acq_ids = mrd.parse_ids(ids)
@@ -422,6 +438,8 @@ def get_mrd_binary(
                 yield view[i:i+step]
 
     return StreamingResponse(gen(), media_type="application/octet-stream")
+
+
 @result_router.get(
     "/mrd/{workflow_id}/{task_id}/{result_id}/download",
     operation_id="downloadMRD",
@@ -445,11 +463,7 @@ async def download_mrd(
     user: Annotated[User, Depends(get_current_user)],
 ):
     """Download the full MRD file."""
-    try:
-        path = mrd.locate_mrd(workflow_id, task_id, result_id)
-    except FileNotFoundError:
-        raise HTTPException(404, "MRD file not found")
-
+    path = await _resolve_mrd_path(result_id)
     return FileResponse(
         path=path,
         media_type="application/octet-stream",
