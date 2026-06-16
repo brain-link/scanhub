@@ -66,10 +66,6 @@ class TaskType(str, Enum):
     """Task type enum."""
 
     ACQUISITION = "ACQUISITION"
-    DAG = "DAG"
-    # DAG_TASK has one of the following subtypes
-    RECONSTRUCTION = "RECONSTRUCTION"
-    PROCESSING = "PROCESSING"
 
 
 class ResultType(str, Enum):
@@ -249,30 +245,6 @@ class AcquisitionPayload(AcquisitionTaskOut):
     device_parameter: dict
 
 
-class BaseDAGTask(BaseTask):
-    """Workflow task model."""
-
-    task_type: Literal[TaskType.DAG]
-    dag_type: Literal[TaskType.RECONSTRUCTION, TaskType.PROCESSING]
-    dag_id: str
-    input_task_ids: list[UUID] = []
-    parameter: dict | None = None
-
-
-class DAGTaskOut(TaskOut, BaseDAGTask):
-    """Workflow Task output model."""
-
-
-class DagsterJobConfiguration(BaseModel):
-    """Configuration for a Dagster job."""
-
-    model_config = ConfigDict(extra="ignore")
-
-    callback_url: str | None = None
-    input_path: str
-    output_path: str
-
-
 class BaseWorkflow(BaseModel):
     """Workflow base model."""
 
@@ -293,7 +265,7 @@ class WorkflowOut(BaseWorkflow):
     creator: str
     datetime_created: datetime
     datetime_updated: datetime | None = None
-    tasks: list[AcquisitionTaskOut | DAGTaskOut]
+    tasks: list[AcquisitionTaskOut]
 
 
 class BaseExam(BaseModel):

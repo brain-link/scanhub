@@ -1,9 +1,8 @@
 """Helper methods for workflows and exam, require recursive model translation."""
 
-from fastapi import HTTPException
-from scanhub_libraries.models import AcquisitionTaskOut, DAGTaskOut, ExamOut, ResultOut, WorkflowOut
+from scanhub_libraries.models import AcquisitionTaskOut, ExamOut, ResultOut, WorkflowOut
 
-from app.db.postgres import AcquisitionTask, DAGTask, Exam, Task, Workflow
+from app.db.postgres import AcquisitionTask, Exam, Workflow
 
 
 async def get_exam_out_model(data: Exam) -> ExamOut:
@@ -40,7 +39,7 @@ async def get_workflow_out_model(data: Workflow) -> WorkflowOut:
     return WorkflowOut(**workflow)
 
 
-async def get_task_out(data: DAGTask | AcquisitionTask | Task) -> DAGTaskOut | AcquisitionTaskOut:
+async def get_task_out(data: AcquisitionTask) -> AcquisitionTaskOut:
     """Transform db model to pydantic model.
 
     Parameters
@@ -54,10 +53,4 @@ async def get_task_out(data: DAGTask | AcquisitionTask | Task) -> DAGTaskOut | A
     """
     task = data.__dict__
     task["results"] = [ResultOut(**result.__dict__) for result in data.results]
-
-    if task["task_type"] == "ACQUISITION":
-        return AcquisitionTaskOut(**task)
-    elif task["task_type"] == "DAG":
-        return DAGTaskOut(**task)
-    else:
-        raise HTTPException(status_code=400, detail="Invalid task type")
+    return AcquisitionTaskOut(**task)

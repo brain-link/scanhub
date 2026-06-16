@@ -5,7 +5,7 @@
 
 from uuid import UUID
 
-from scanhub_libraries.models import SetResult
+from scanhub_libraries.models import ResultType, SetResult
 from sqlalchemy.engine import Result as SQLResult
 from sqlalchemy.future import select
 
@@ -25,6 +25,16 @@ async def add_blank_result_db(task_id: str | UUID) -> Result:
         Database orm model of created result
     """
     new_result = Result(task_id=task_id)
+    async with async_session() as session:
+        session.add(new_result)
+        await session.commit()
+        await session.refresh(new_result)
+    return new_result
+
+
+async def add_dicom_result_db(task_id: UUID, directory: str, files: list[str], meta: dict | None = None) -> Result:
+    """Add a DICOM result record to the database (called by Dagster on_run_success sensor)."""
+    new_result = Result(task_id=task_id, type=ResultType.DICOM, directory=directory, files=files, meta=meta or {})
     async with async_session() as session:
         session.add(new_result)
         await session.commit()

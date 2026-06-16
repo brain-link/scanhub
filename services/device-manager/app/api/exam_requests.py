@@ -19,6 +19,7 @@ from scanhub_libraries.models import AcquisitionTaskOut, MRISequenceOut, ResultO
 TASK_URI = "http://exam-manager:8000/api/v1/exam/task"
 RESULT_URI = "http://exam-manager:8000/api/v1/exam/result"
 SEQUENCE_URI = "http://exam-manager:8000/api/v1/exam/sequence"
+WORKFLOW_URI = "http://exam-manager:8000/api/v1/exam/workflow"
 
 
 def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:
@@ -180,6 +181,29 @@ def set_result(result_id: str, payload: SetResult, user_access_token: str) -> Re
     if update_result_response.status_code != 200:
         raise HTTPException(status_code=400, detail="Error updating result")
     return ResultOut(**update_result_response.json())
+
+
+def update_task_status(task_id: str, status: str, user_access_token: str) -> AcquisitionTaskOut:
+    """Update only the status field of a task."""
+    headers = {"Authorization": "Bearer " + user_access_token}
+    response = requests.put(
+        f"{TASK_URI}/{task_id}/status",
+        params={"status": status},
+        headers=headers,
+        timeout=3,
+    )
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail=f"Error updating task status: {response.text}")
+    return AcquisitionTaskOut(**response.json())
+
+
+def get_workflow(workflow_id: str, user_access_token: str) -> dict:
+    """Fetch workflow by ID from the exam manager service."""
+    headers = {"Authorization": "Bearer " + user_access_token}
+    response = requests.get(f"{WORKFLOW_URI}/{workflow_id}", headers=headers, timeout=3)
+    if response.status_code != 200:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return response.json()
 
 
 def get_result(result_id: str, user_access_token: str) -> ResultOut:

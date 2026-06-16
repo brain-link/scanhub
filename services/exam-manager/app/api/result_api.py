@@ -15,6 +15,7 @@ import requests
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
+from pydantic import BaseModel
 from scanhub_libraries.models import MRDMetaResponse, PatientOut, ResultOut, SetResult, User
 from scanhub_libraries.security import get_current_user
 from starlette.responses import Response
@@ -22,6 +23,14 @@ from starlette.responses import Response
 import app.tools.mrd_provider as mrd
 from app import LOG_CALL_DELIMITER
 from app.dal import exam_dal, result_dal, task_dal, workflow_dal
+
+
+class CreateDicomResult(BaseModel):
+    """Payload sent by the Dagster on_run_success sensor to register DICOM output."""
+
+    directory: str
+    files: list[str]
+    meta: dict | None = None
 from app.tools.dicom_provider import (
     get_p10_dicom_bytes,
     provide_p10_dicom,
@@ -40,6 +49,28 @@ result_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 # Define OAuth2 scheme for token-based authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+@result_router.post("/result/dicom/{task_id}", response_model=ResultOut, status_code=201, tags=["results"])
+async def create_dicom_result(
+    task_id: UUID | str,
+    payload: CreateDicomResult,
+    user: Annotated[User, Depends(get_current_user)],
+) -> ResultOut:
+    """Create a DICOM result entry after a successful Dagster reconstruction run."""
+    print(LOG_CALL_DELIMITER)
+    print("Username:", user.username)
+    _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
+    if not await task_dal.get_task_data(task_id=_id):
+        raise HTTPException(status_code=400, detail="Parent task does not exist.")
+    if not (result := await result_dal.add_dicom_result_db(
+        task_id=_id,
+        directory=payload.directory,
+        files=payload.files,
+        meta=payload.meta,
+    )):
+        raise HTTPException(status_code=404, detail="Could not create DICOM result.")
+    return ResultOut(**result.__dict__)
+
 
 @result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
 async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:

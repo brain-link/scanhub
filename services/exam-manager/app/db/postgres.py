@@ -16,7 +16,7 @@ from scanhub_libraries.models import (
     TaskType,
 )
 from sqlalchemy import JSON, ForeignKey, String, create_engine, func
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.mutable import MutableList
@@ -174,20 +174,6 @@ class AcquisitionTask(Task):
     device_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     acquisition_parameter: Mapped[AcquisitionParameter] = mapped_column(type_=JSON, nullable=True)
     acquisition_limits: Mapped[AcquisitionLimits] = mapped_column(type_=JSON, nullable=True)
-
-
-class DAGTask(Task):
-    """DAG task ORM model."""
-
-    __tablename__ = "dag_task"
-    __mapper_args__ = {
-        "polymorphic_identity": "DAG",
-    }
-    id: Mapped[uuid.UUID] = mapped_column(ForeignKey("task.id", ondelete="CASCADE"), primary_key=True)
-    dag_type: Mapped[TaskType] = mapped_column(nullable=False)
-    dag_id: Mapped[str] = mapped_column(nullable=False)
-    input_task_ids: Mapped[list[uuid.UUID]] = mapped_column(ARRAY(UUID(as_uuid=True)), nullable=False, default=list)
-    parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
 
 class Result(Base):
