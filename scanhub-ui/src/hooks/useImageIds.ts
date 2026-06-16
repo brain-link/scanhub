@@ -2,7 +2,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../api';
-import { TaskType } from '../openapi/generated-client/exam';
 import { ItemSelection } from '../interfaces/components.interface'
 import { ItemStatus } from '../openapi/generated-client/exam'
 
@@ -29,14 +28,12 @@ export function useImageIds(item: ItemSelection, resultId?: string) {
     enabled: !!item.itemId,
     queryFn: async () => {
 
-      if (item.type != 'DAG' || item.status != ItemStatus.Finished) return []
+      if (item.type != 'ACQUISITION' || item.status != ItemStatus.Finished) return []
 
       const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
 
-      // Only DAG tasks with results
-      const isDag = data?.task_type === TaskType.Dag;
       const results = normalizeToArray<any>(data?.results);
-      if (!isDag || results.length === 0) return [];
+      if (results.length === 0) return [];
 
       let selectedResult;
 
@@ -55,9 +52,26 @@ export function useImageIds(item: ItemSelection, resultId?: string) {
       const instances = (selectedResult?.meta as any)?.instances;
       const urls = normalizeToArray<string>(instances).filter(Boolean);
 
-      // Ensure correct order by sorting urls, i.e. numeric suffixes in filenames
-      urls.sort();
-      return urls;
+      if (urls.length > 0) {
+        urls.sort();
+        return urls;
+      }
+
+      // Fallback: build WADO URIs from stored result files (flat task-directory layout)
+      const files: string[] = normalizeToArray<string>(selectedResult.files).filter(
+        (f: string) => f.toLowerCase().endsWith('.dcm')
+      );
+      if (files.length > 0) {
+        const workflowId = String(data.workflow_id ?? '');
+        const taskIdStr = String(data.id ?? '');
+        const resultIdStr = String(selectedResult.id ?? '');
+        const origin = typeof window !== 'undefined' ? window.location.origin : '';
+        return files
+          .sort()
+          .map((f: string) => `${origin}/api/v1/exam/dcm/${workflowId}/${taskIdStr}/${resultIdStr}/${f}`);
+      }
+
+      return [];
     },
   });
 

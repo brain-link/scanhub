@@ -6,7 +6,6 @@
  */
 import { PatientsApi, HealthApi as PatientManagerHealthApi } from './openapi/generated-client/patient'
 import { ExamsApi, WorkflowsApi, TasksApi, ResultsApi, MriSequencesApi, DataApi, HealthApi as ExamManagerHealthApi } from './openapi/generated-client/exam'
-import { WorkflowManagerApi, HealthApi as WorkflowManagerHealthApi } from './openapi/generated-client/workflowmanager'
 import { UserApi, LoginApi, HealthApi as UserLoginManagerHealthApi } from './openapi/generated-client/userlogin'
 import { DevicesApi, HealthApi as DeviceManagerHealthApi } from './openapi/generated-client/device'
 import baseUrls from './utils/Urls'
@@ -22,9 +21,6 @@ export const resultApi = new ResultsApi(undefined, baseUrls.examService)
 export const sequenceApi = new MriSequencesApi(undefined, baseUrls.examService)
 export const dataApi = new DataApi(undefined, baseUrls.examService)
 export const examManagerHealthApi = new ExamManagerHealthApi(undefined, baseUrls.examService)
-
-export const workflowManagerApi = new WorkflowManagerApi(undefined, baseUrls.workflowManagerService)
-export const workflowManagerHealthApi = new WorkflowManagerHealthApi(undefined, baseUrls.workflowManagerService)
 
 export const loginApi = new LoginApi(undefined, baseUrls.userloginService)
 export const userApi = new UserApi(undefined, baseUrls.userloginService)

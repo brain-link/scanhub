@@ -23,7 +23,7 @@ import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, ItemStatus } from '../openapi/generated-client/exam'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
@@ -34,11 +34,11 @@ import { extractRunId, getLatestResult } from '../utils/ExamTree'
 
 export default function TaskItem(
   {
-    item: task, 
-    refetchParentData, 
-    selection, 
+    item: task,
+    refetchParentData,
+    selection,
     onClick
-  }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut> & SelectableItemInterface<AcquisitionTaskOut | DAGTaskOut>
+  }: RefetchableItemInterface<AcquisitionTaskOut> & SelectableItemInterface<AcquisitionTaskOut>
 ) {
   return (
     <Stack direction='row' width='100%' alignItems='center' sx={{paddingLeft: 2}}>
@@ -51,14 +51,14 @@ export default function TaskItem(
           { name: 'offset', options: { offset: [0, 64] } }, // skidding=8 (down), distance=20 (further right)
         ]}
       >
-        <Button 
+        <Button
           sx={{
             p: 0.5,
             flexGrow: 1,
             justifyContent: 'flex-start',
             gap: 0.5,
           }}
-          variant={((selection.type == 'DAG' || selection.type == 'ACQUISITION') && selection.itemId == task.id) ? 'outlined' : 'plain'}
+          variant={(selection.type == 'ACQUISITION' && selection.itemId == task.id) ? 'outlined' : 'plain'}
           onClick={onClick}
         >
           {
@@ -91,7 +91,7 @@ export default function TaskItem(
 }
 
 
-function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut>) {
+function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut>) {
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
   const [dagsterOpen, setDagsterOpen] = React.useState<boolean>(false);
@@ -123,8 +123,8 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
             Delete
           </MenuItem>
           {
-            task.task_type === TaskType.Dag &&
-            <MenuItem key='open-dagster' onClick={() => { setDagsterOpen(true) }} disabled={!runId}>
+            runId &&
+            <MenuItem key='open-dagster' onClick={() => { setDagsterOpen(true) }}>
               Open DagsterUI
             </MenuItem>
           }

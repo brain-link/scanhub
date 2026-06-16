@@ -18,7 +18,6 @@ import { useManagerHealthCheck } from '../hooks/useManagerHealthCheck'
 import {
   patientManagerHealthApi,
   examManagerHealthApi,
-  workflowManagerHealthApi,
   userLoginManagerHealthApi,
   deviceManagerHealthApi
 } from '../api'
@@ -27,7 +26,6 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 
 
-// Device all health checks
 const healthChecks = [
   {
     name: 'Patient Manager',
@@ -38,11 +36,6 @@ const healthChecks = [
     name: 'Exam Manager',
     key: 'examManagerHealthCheck',
     queryFn: () => examManagerHealthApi.readinessApiV1ExamHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-  },
-  {
-    name: 'Workflow Manager',
-    key: 'workflowManagerHealthCheck',
-    queryFn: () => workflowManagerHealthApi.readinessApiV1WorkflowmanagerHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
   },
   {
     name: 'User Login Manager',

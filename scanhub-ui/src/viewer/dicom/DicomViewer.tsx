@@ -1,158 +1,133 @@
-// src/viewer/dicom/DicomViewerMinimal.tsx
+// src/viewer/dicom/DicomViewer.tsx
 import React from 'react';
 import {
-  RenderingEngine,
   getRenderingEngine,
   Enums,
   volumeLoader,
+  cache as csCache,
   type Types,
 } from '@cornerstonejs/core';
-import { initCornerstone } from './cornerstone/init';
 import { useNumberOfFrames } from './hooks/useNumberOfFrames';
 import LoginContext from '../../LoginContext';
 import { attachToolGroupsForLayout, destroyToolGroups } from './cornerstone/toolgroups';
 import DiconViewerToolbar from './DicomViewerToolbar';
 import { VIEW_LAYOUTS, VIEW_LAYOUT_META, ViewportId, ViewLayout } from './cornerstone/viewLayouts';
 import { useViewportResize } from './hooks/useViewportResize';
+import { getOrCreateEngine, RENDERING_ENGINE_ID } from './cornerstone/engine';
 
 import Card from '@mui/joy/Card';
 import Stack from '@mui/joy/Stack';
 import Container from '@mui/joy/Container';
-import IconButton from '@mui/joy/IconButton';
 import AlertItem from '../../components/AlertItem';
-import Divider from '@mui/joy/Divider';
-import { ItemSelection } from '../../interfaces/components.interface'
-import { Alerts } from '../../interfaces/components.interface'
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
-import Dropdown from '@mui/joy/Dropdown';
-import Menu from '@mui/joy/Menu';
-import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
-import SaveIcon from '@mui/icons-material/Save';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { useTaskResults } from './hooks/useTaskResults';
+import { ItemSelection } from '../../interfaces/components.interface';
+import { Alerts } from '../../interfaces/components.interface';
 import { useImageIds } from '../../hooks/useImageIds';
-import { dataApi, resultApi } from '../../api';
 
 
-// Constants:
-const RENDERING_ENGINE_ID = 're-min';
-
-
-// Helper function to obtain deterministic volume ID
 function makeVolumeId(imageIds: string[]) {
-  // Deterministic volume ID: Truncated binary to ASCII (btoa) output (0-16) 
   return `cornerstoneStreamingImageVolume:${btoa(imageIds[0]).slice(0, 16)}`;
 }
 
+function safeEvictVolume(volumeId: string | null) {
+  if (!volumeId) return;
+  try { csCache.removeVolumeLoadObject(volumeId); } catch { /* not cached or already evicted */ }
+}
 
-/**
- * Minimal single-viewport DICOM viewer:
- * - Initializes Cornerstone3D once (uses your existing initCornerstone3D)
- * - Creates 1 viewport (STACK or ORTHOGRAPHIC for volume)
- * - Loads imageIds for the given task and displays them
- */
-export default function DicomViewer3D({ item }: { item: ItemSelection }) {
 
-  const { results } = useTaskResults(item);
-  const [selectedResultId, setSelectedResultId] = React.useState<string | undefined>(undefined);
+interface DicomViewer3DProps {
+  item: ItemSelection;
+  selectedResultId?: string;
+}
 
-  // Automatically select newest result when available or updated
-  React.useEffect(() => {
-    setSelectedResultId(undefined); // Reset on item change
-  }, [item.itemId]);
 
-  React.useEffect(() => {
-    if (!results || results.length === 0) return;
-    // useTaskResults sorts by date already, so results[0] is newest.
-    // Only update if current selection is invalid or empty
-    if (!selectedResultId || !results.find(r => r.id === selectedResultId)) {
-      setSelectedResultId(results[0].id);
-    }
-  }, [results, selectedResultId]);
+export default function DicomViewer3D({ item, selectedResultId }: DicomViewer3DProps) {
 
   const { imageIds } = useImageIds(item, selectedResultId);
 
-  // References
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const engineRef = React.useRef<RenderingEngine | null>(null);
-  const engineViewportIdsRef = React.useRef<ViewportId[]>([]);  // Save current engine viewport IDs
-  const volumeIdRef = React.useRef<string | null>(null);  // Save current volume ID
+  const engineViewportIdsRef = React.useRef<ViewportId[]>([]);
+  const volumeIdRef = React.useRef<string | null>(null);
 
-  // Hooks
   const [user] = React.useContext(LoginContext);
   const [ready, setReady] = React.useState(false);
   const [viewportReady, setViewportReady] = React.useState(false);
   const [layout, setLayout] = React.useState<ViewLayout>(ViewLayout.Single);
+
+  // engineRef always points to the global singleton — never created or destroyed here.
+  const engineRef = React.useRef(getRenderingEngine(RENDERING_ENGINE_ID) ?? null);
+
   const numberOfFrames = useNumberOfFrames(imageIds, ready);
   useViewportResize(engineRef, layout, containerRef);
 
 
-  // Create engine once (mount -> unmount)
+  // Ensure Cornerstone is initialised and the global engine exists.
+  // We do NOT destroy the engine on unmount — only viewport elements are released.
   React.useEffect(() => {
-    if (!ready) return
+    setReady(false);
+    setViewportReady(false);
 
-    let engine = getRenderingEngine(RENDERING_ENGINE_ID);
-    if (!engine) {
-      engine = new RenderingEngine(RENDERING_ENGINE_ID);
-    }
-    engineRef.current = engine;
-
-    return () => {
-      // Full cleanup on unmount only
-      try {
-        engineRef.current?.destroy();
-        destroyToolGroups()
-      } finally {
-        engineRef.current = null;
-      }
-    };
-  }, [ready]);
-
-
-  // Initialize Cornerstone
-  React.useEffect(() => {
     let cancelled = false;
-    (async () => {
-      await initCornerstone(() => user?.access_token);
-      if (!cancelled) setReady(true);
-    })();
+
+    getOrCreateEngine(() => user?.access_token).then((engine) => {
+      if (cancelled) return;
+      engineRef.current = engine;
+      setReady(true);
+    });
+
     return () => {
       cancelled = true;
+      // Disable viewports so their DOM elements can be safely unmounted.
+      const engine = engineRef.current;
+      if (engine) {
+        for (const vpId of engineViewportIdsRef.current) {
+          try { engine.disableElement(vpId); } catch { /* ignore */ }
+        }
+      }
+      engineViewportIdsRef.current = [];
+      safeEvictVolume(volumeIdRef.current);
+      volumeIdRef.current = null;
+      setReady(false);
+      setViewportReady(false);
+      destroyToolGroups();
     };
-  }, [user?.access_token]);
+  }, [user?.access_token]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-  // Create and configure rendering engine
+  // Enable / reconfigure viewports for the current layout.
   React.useEffect(() => {
     if (!ready || !containerRef.current || !engineRef.current) return;
 
-    setViewportReady(false); // Block loading/rendering while reconfiguring viewports
+    setViewportReady(false);
 
     let cancelled = false;
     const engine = engineRef.current;
     const layoutViewportIds = VIEW_LAYOUTS[layout].map(v => v.id);
 
-    // Disable removed viewports
+    // Disable viewport elements that are no longer in this layout.
     for (const id of engineViewportIdsRef.current) {
       if (!layoutViewportIds.includes(id)) {
-        engine.disableElement(id);
+        try { engine.disableElement(id); } catch { /* already gone */ }
       }
     }
 
-    // Enable viewports
     (async () => {
       for (const view of VIEW_LAYOUTS[layout]) {
-        if (cancelled) return;
+        if (cancelled || !engineRef.current) return;
 
-        const element = containerRef.current!.querySelector(`#viewport-${view.id}`) as HTMLDivElement;
-        const engineVpIds = Object.keys(engine.getViewports?.() ?? {});
-        const type = numberOfFrames <= 1 ? Enums.ViewportType.STACK
-          : (view.is3D ? Enums.ViewportType.VOLUME_3D : Enums.ViewportType.ORTHOGRAPHIC)
+        const element = containerRef.current!.querySelector(
+          `#viewport-${view.id}`
+        ) as HTMLDivElement | null;
+        if (!element) return;
 
-        if (!engineVpIds.includes(view.id)) {
+        const activeVpIds = engine.getViewports().map(vp => vp.id);
+        const type =
+          numberOfFrames <= 1
+            ? Enums.ViewportType.STACK
+            : view.is3D
+              ? Enums.ViewportType.VOLUME_3D
+              : Enums.ViewportType.ORTHOGRAPHIC;
+
+        if (!activeVpIds.includes(view.id)) {
           await engine.enableElement({
             viewportId: view.id,
             element,
@@ -160,7 +135,6 @@ export default function DicomViewer3D({ item }: { item: ItemSelection }) {
             defaultOptions: { background: [0, 0, 0] },
           });
         } else {
-          // Reattach if element changed (e.g., React re-rendered) OR if type changed (Stack <-> Volume)
           const vp = engine.getViewport(view.id);
           if ((vp as any).element !== element || vp.type !== type) {
             engine.disableElement(view.id);
@@ -175,102 +149,76 @@ export default function DicomViewer3D({ item }: { item: ItemSelection }) {
         }
       }
 
-      if (cancelled) return;
+      if (cancelled || !engineRef.current) return;
 
-      // Enginge resize after layout change
       requestAnimationFrame(() => {
-        if (cancelled) return;
-        const engine = engineRef.current;
-        if (!engine) return
-        // Resize with keep camera = true
-        engine.resize(false, true);
-        // Fit all active viewports to their container
-        engine.getViewports().forEach(vp => vp?.resetCamera?.());
-        engine.render();
+        if (cancelled || !engineRef.current) return;
+        engineRef.current.resize(false, true);
+        engineRef.current.getViewports().forEach(vp => vp?.resetCamera?.());
+        engineRef.current.render();
       });
 
       engineViewportIdsRef.current = layoutViewportIds;
       setViewportReady(true);
     })();
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
 
   }, [ready, layout, numberOfFrames]);
 
 
-  // Load and assign volume(s)
+  // Load and display volume / stack.
   React.useEffect(() => {
-    if (!viewportReady || imageIds.length === 0) return;
+    if (!viewportReady || imageIds.length === 0 || !engineRef.current) return;
 
     let cancelled = false;
 
     (async () => {
       const engine = engineRef.current!;
-      const currentLayout = VIEW_LAYOUTS[layout];
 
-      if (cancelled) return;
-
-      // For 2D stack-only data
       if (layout === ViewLayout.Single && numberOfFrames <= 1) {
         const vp = engine.getViewport('single');
-        if (!vp) return;
-
-        if (vp.type === Enums.ViewportType.STACK) {
-          await (vp as Types.IStackViewport).setStack(imageIds);
-          if (!cancelled) await vp.render();
-        } else {
-          console.warn(`[DicomViewer] Mismatch: Expected Stack viewport for single frame, got ${vp.type}`);
-        }
+        if (!vp || vp.type !== Enums.ViewportType.STACK) return;
+        await (vp as Types.IStackViewport).setStack(imageIds);
+        if (!cancelled) await vp.render();
         return;
       }
 
-      // 3D or multi-slice
-      // Create volume image ids -> add ?frame=1...N
-      // const volumeId = `cornerstoneStreamingImageVolume:${Date.now()}`;
       const volumeId = makeVolumeId(imageIds);
-      const volumeImageIds = Array.from({ length: numberOfFrames }, (_, i) => `${imageIds[0]}?frame=${i + 1}`);
+      const volumeImageIds = Array.from(
+        { length: numberOfFrames },
+        (_, i) => `${imageIds[0]}?frame=${i + 1}`
+      );
 
       if (volumeIdRef.current !== volumeId) {
-        // Create + cache once per series
+        safeEvictVolume(volumeIdRef.current);
         const vol = await volumeLoader.createAndCacheVolume(volumeId, { imageIds: volumeImageIds });
         if (cancelled) return;
         await vol.load();
         volumeIdRef.current = volumeId;
       }
 
-      if (cancelled) return;
+      if (cancelled || !engineRef.current) return;
 
-      // Set volume in viewports
-      for (const view of currentLayout) {
+      for (const view of VIEW_LAYOUTS[layout]) {
         if (cancelled) return;
-        // Get viewport by ID and set volume
         const vp = engine.getViewport(view.id) as Types.IVolumeViewport;
-        if (!vp) continue
-
+        if (!vp) continue;
         await vp.setVolumes([{ volumeId }]);
-        // Set orientation
-        if (view.orientation) vp.setOrientation(view.orientation)
-        // Reset camera
-        await vp.resetCamera(); // ensure proper frustum after setVolumes/orientation
-
-        // Render viewport
+        if (view.orientation) vp.setOrientation(view.orientation);
+        await vp.resetCamera();
         if (!cancelled) await vp.render();
       }
 
-      // Add enabled viewports to toolGroup
-      if (!cancelled) await attachToolGroupsForLayout(VIEW_LAYOUTS[layout], RENDERING_ENGINE_ID)
+      if (!cancelled) await attachToolGroupsForLayout(VIEW_LAYOUTS[layout], RENDERING_ENGINE_ID);
 
     })();
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
 
   }, [viewportReady, layout, imageIds, numberOfFrames]);
 
-  // Grid configuration
+
   const { rows, cols } = VIEW_LAYOUT_META[layout];
   const gridTemplate = `repeat(${rows}, 1fr) / repeat(${cols}, 1fr)`;
 
@@ -278,161 +226,36 @@ export default function DicomViewer3D({ item }: { item: ItemSelection }) {
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
         <AlertItem
-          title="Please select a reconstruction or processing task with a result to show a DICOM image."
+          title="Please select a DICOM result to show an image."
           type={Alerts.Info}
         />
       </Container>
-    )
-  }
-
-  // Handle DICOM download
-  async function handleDownload() {
-    const engine = engineRef.current;
-    if (!engine) return;
-
-    const viewportId = VIEW_LAYOUTS[layout][0].id;
-    const viewport = engine.getViewport(viewportId);
-
-    if (!viewport) return;
-
-    try {
-      // Try to get current image ID
-      // Cast to any because getCurrentImageId is not on base IViewport but exists on Stack/Volume viewports
-      const imageId = (viewport as any).getCurrentImageId?.();
-
-      if (imageId) {
-        // imageId is typically "wadouri:http://..."
-        const url = imageId.replace(/^wadouri:/, '').split('?')[0];
-
-        // Extract params from URL structure: .../dcm/{workflowId}/{taskId}/{resultId}/{filename}
-        const parts = url.split('/');
-        const filename = parts.pop();
-        const resultId = parts.pop();
-        const taskId = parts.pop();
-        const workflowId = parts.pop();
-
-        if (workflowId && taskId && resultId && filename) {
-          const response = await dataApi.getDicom(workflowId, taskId, resultId, filename, { responseType: 'blob' });
-
-          // Create link from blob
-          const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.setAttribute('download', filename);
-          document.body.appendChild(link);
-          link.click();
-
-          // Cleanup
-          link.parentNode?.removeChild(link);
-          window.URL.revokeObjectURL(blobUrl);
-        }
-      }
-    } catch (e) {
-      console.error('Failed to download DICOM', e);
-    }
-  }
-
-  // Handle XNAT export
-  async function handleExportToXnat() {
-    const engine = engineRef.current;
-    if (!engine) return;
-
-    const viewportId = VIEW_LAYOUTS[layout][0].id;
-    const viewport = engine.getViewport(viewportId);
-
-    if (!viewport) return;
-
-    try {
-      const imageId = (viewport as any).getCurrentImageId?.();
-
-      if (imageId) {
-        const url = imageId.replace(/^wadouri:/, '').split('?')[0];
-
-        // Extract params from URL structure: .../dcm/{workflowId}/{taskId}/{resultId}/{filename}
-        const parts = url.split('/');
-        const filename = parts.pop();
-        const resultId = parts.pop();
-        const taskId = parts.pop();
-        const workflowId = parts.pop();
-
-        if (workflowId && taskId && resultId && filename) {
-          await resultApi.uploadToXnat(workflowId, taskId, resultId, filename);
-          alert(`Successfully exported ${filename} to XNAT`);
-        }
-      }
-    } catch (e) {
-      console.error('Failed to export to XNAT', e);
-      alert('Failed to export to XNAT');
-    }
+    );
   }
 
   return (
-    <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', height: '100%', p: 1, gap: 1, overflow: 'hidden' }}>
-
-      {/* Result Selector and Toolbar */}
-      <Stack direction="row" gap={3} alignItems="center" sx={{ flexShrink: 0 }}>
-        <Select
-          size="sm"
-          placeholder="Select Result"
-          value={selectedResultId ?? null}
-          onChange={(_, value) => value && setSelectedResultId(value)}
-          sx={{ minWidth: 200 }}
-        >
-          {results.map((r) => (
-            <Option key={r.id} value={r.id}>
-              {new Date(r.datetime_created).toLocaleString()}
-            </Option>
-          ))}
-        </Select>
-
-
-        <DiconViewerToolbar onLayoutChange={setLayout} currentLayout={layout} />
-
-        <Divider orientation="vertical" />
-
-        <Dropdown>
-          <MenuButton
-            slots={{ root: IconButton }}
-            slotProps={{ root: { size: 'sm', title: 'Share / Export' } }}
-            variant="outlined"
-          >
-            <SaveIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-          </MenuButton>
-          <Menu size="sm" placement="bottom-end">
-            <MenuItem onClick={handleDownload}>
-              <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-              Download DICOM
-            </MenuItem>
-            <MenuItem onClick={handleExportToXnat}>
-              <OpenInNewIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-              Export to XNAT
-            </MenuItem>
-          </Menu>
-        </Dropdown>
-
-      </Stack>
-
+    <Stack
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        width: '100%',
+        height: '100%',
+        p: 1,
+        gap: 1,
+        overflow: 'hidden',
+      }}
+    >
+      <DiconViewerToolbar onLayoutChange={setLayout} currentLayout={layout} />
 
       <Card
         variant="plain"
         color="neutral"
-        sx={{
-          p: 0.5,
-          bgcolor: '#000',
-          flex: 1,
-          minHeight: 0,
-          border: '5px solid',
-          overflow: 'hidden'
-        }}
+        sx={{ p: 0.5, bgcolor: '#000', flex: 1, minHeight: 0, border: '5px solid', overflow: 'hidden' }}
       >
         <div
           ref={containerRef}
-          style={{
-            display: 'grid',
-            gridTemplate,
-            width: '100%',
-            height: '100%',
-          }}
+          style={{ display: 'grid', gridTemplate, width: '100%', height: '100%' }}
         >
           {VIEW_LAYOUTS[layout].map((v) => (
             <div

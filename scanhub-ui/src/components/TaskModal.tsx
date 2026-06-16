@@ -4,10 +4,6 @@
  *
  * TaskModal.tsx is responsible for rendering a modal with an interface to create a new task or to modify an existing task.
  */
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
-import TabPanel from '@mui/joy/TabPanel';
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
 import Input from '@mui/joy/Input'
@@ -30,16 +26,13 @@ import React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import TaskInfo from './TaskInfo';
-import { deviceApi, sequenceApi, taskApi, workflowManagerApi } from '../api'
+import { deviceApi, sequenceApi, taskApi } from '../api'
 import {
   MRISequenceOut,
   BaseAcquisitionTask,
   AcquisitionTaskOut,
-  TaskType,
   ItemStatus,
   AcquisitionParameter,
-  DAGTaskOut,
-  BaseDAGTask,
   CalibrationType
 } from '../openapi/generated-client/exam'
 
@@ -478,222 +471,7 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
 }
 
 
-function DagTaskForm(props: ModalPropsCreate | ModalPropsModify<DAGTaskOut>) {
-  // The form is in this separate component to make sure that the state is reset after closing the modal
-  const [, showNotification] = React.useContext(NotificationContext)
-
-  const [task, setTask] = React.useState<BaseDAGTask & { task_type: 'DAG' }>(
-    props.modalType == 'modify'
-      ? { ...(props.item as BaseDAGTask), status: ItemStatus.Updated, task_type: 'DAG' }
-      : {
-        workflow_id: props.parentId,              // eslint-disable-line camelcase
-        name: '',
-        description: '',
-        task_type: 'DAG',
-        destination: '',
-        status: ItemStatus.New,
-        progress: 0,
-        is_template: props.createTemplate,        // eslint-disable-line camelcase
-        dag_type: TaskType.Processing,
-        dag_id: '',
-      }
-  );
-
-  // Post a new/modified task and reset
-  const mutation =
-    props.modalType == 'modify' ?
-      useMutation({
-        mutationFn: async () => {
-          await taskApi.updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
-            .then(() => {
-              props.onSubmit()
-              showNotification({ message: 'Updated DAG task.', type: 'success' })
-            })
-        }
-      })
-      :
-      useMutation({
-        mutationFn: async () => {
-          await taskApi.createTaskApiV1ExamTaskNewPost(task)
-            .then(() => {
-              console.log('Created task', task)
-              props.onSubmit()
-              showNotification({ message: 'Created DAG task.', type: 'success' })
-            })
-        }
-      })
-
-  const {
-    data: jobs,
-    // isLoading: isLoadingDags,
-    // isError: isErrorDags,
-    // refetch: refetchDags,
-  } = useQuery<Array<{ job_id: string; job_name: string }>>({
-    queryKey: ['jobs'],
-    queryFn: async () => {
-      const result = await workflowManagerApi.listAvailableTasksApiV1WorkflowmanagerTasksGet();
-      // Map to only include dag_id and dag_display_name
-      return result.data.map((job: { job_id: string; job_name: string }) => ({
-        job_id: job.job_id,
-        job_name: job.job_name,
-      }));
-    },
-  })
-
-  const {
-    data: inputTasks,
-    // isLoading: isLoadingDevices,
-    // isError: isErrorDevices,
-    // refetch: refetchDevices,
-  } = useQuery<(AcquisitionTaskOut | DAGTaskOut)[]>({
-    queryKey: ['inputTasks'],
-    queryFn: async () => {
-      const workflowId = props.modalType == 'create' ? props.parentId : props.item.workflow_id
-      if (workflowId) {
-        return await taskApi
-          .getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId)
-          .then((result) => {
-            if (props.modalType == 'modify') {
-              // Filter out the current task being modified
-              return (result.data as (AcquisitionTaskOut | DAGTaskOut)[]).filter(
-                (task) => task.id !== props.item.id
-              );
-            }
-            return result.data as (AcquisitionTaskOut | DAGTaskOut)[]
-          })
-      }
-      return []
-    },
-  })
-
-  const title = props.modalType == 'modify' ? 'Update DAG Task' : 'Create New DAG Task'
-
-  return (
-    <>
-      <Typography id='basic-modal-dialog-title' component='h2' level='inherit' fontSize='1.25em' mb='0.25em'>
-        {title}
-      </Typography>
-
-      <Grid container rowSpacing={2} columnSpacing={5}>
-        <Grid md={6}>
-          <FormLabel>Name</FormLabel>
-          <Input
-            name={'name'}
-            onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-            value={task.name}
-          />
-        </Grid>
-
-        <Grid md={6}>
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            minRows={2}
-            name={'description'}
-            onChange={(e) => setTask({ ...task, [e.target.name]: e.target.value })}
-            defaultValue={task.description}
-          />
-        </Grid>
-
-        {/* DAG selection */}
-        <Grid md={6}>
-          <FormLabel>DAG</FormLabel>
-          <Select
-            value={task.dag_id ? task.dag_id : null}
-            placeholder={'Select a DAG...'}
-            size='sm'
-            onChange={(event, value) => {
-              if (value) {
-                setTask({ ...task, 'dag_id': value })
-              }
-            }}
-          >
-            {jobs?.map((job) => {
-              return (
-                <Option key={job.job_id} value={job.job_id}>
-                  {job.job_name}
-                </Option>
-              )
-            })}
-          </Select>
-        </Grid>
-
-        {/* <Grid md={6}>
-          <FormLabel>DAG Type</FormLabel>
-          <Select
-            value={task.dag_type ? task.dag_type : null}
-            defaultValue={TaskType.Reconstruction}
-            size='sm'
-            onChange={(_, value) => {
-              if (value) {
-                setTask({ ...task, 'dag_type': value })
-              }
-            }}
-          >
-            <Option key={'reconstruction'} value={TaskType.Reconstruction}>Reconstruction</Option>
-            <Option key={'processing'} value={TaskType.Processing}>Processing</Option>
-          </Select>
-        </Grid> */}
-
-        <Grid md={6}>
-          <FormLabel>Input</FormLabel>
-          <Select
-            value={task.input_task_ids ? task.input_task_ids[0] : null}
-            placeholder={'Select an input...'}
-            size='sm'
-            onChange={(event, value) => {
-              if (value) {
-                setTask({ ...task, 'input_task_ids': [value] })
-              }
-            }}
-          >
-            {inputTasks?.map((inputTask) => {
-              return (
-                <Tooltip
-                  key={`tooltip-${inputTask.id}`}
-                  placement='right'
-                  variant='outlined'
-                  arrow
-                  title={<TaskInfo data={inputTask} />}
-                >
-                  <Option key={`option-${inputTask.id}`} value={inputTask.id}>
-                    {inputTask.name}
-                  </Option>
-                </Tooltip>
-              )
-            })}
-          </Select>
-        </Grid>
-
-        {/* Save button */}
-        <Grid md={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
-            size='sm'
-            sx={{ maxWidth: 120 }}
-            onClick={(event) => {
-              event.preventDefault()
-              if (task.name == '') {
-                showNotification({ message: 'Task name must not be empty.', type: 'warning' })
-              }
-              else if (task.description == '') {
-                showNotification({ message: 'Task description must not be empty.', type: 'warning' })
-              }
-              else {
-                mutation.mutate()
-                props.setOpen(false)
-              }
-            }}
-          >
-            Save
-          </Button>
-        </Grid>
-
-      </Grid>
-    </>
-  )
-}
-
-
-export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<AcquisitionTaskOut | DAGTaskOut>) {
+export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<AcquisitionTaskOut>) {
 
   return (
     <Modal
@@ -717,33 +495,8 @@ export default function TaskModal(props: ModalPropsCreate | ModalPropsModify<Acq
         />
         {
           props.modalType === 'modify' && 'item' in props ?
-            (props.item.task_type === TaskType.Acquisition ?
-              <AcquisitionTaskForm {...props as ModalPropsModify<AcquisitionTaskOut>} /> :
-              (props.item.task_type === TaskType.Dag && <DagTaskForm {...props as ModalPropsModify<DAGTaskOut>} />)) :
-            <Tabs aria-label="tabs" defaultValue={0} sx={{ bgcolor: 'transparent' }}>
-              <TabList
-                disableUnderline
-                sx={{
-                  p: 0.5,
-                  gap: 0.5,
-                  borderRadius: 'xl',
-                  bgcolor: 'background.level1',
-                  [`& .${tabClasses.root}[aria-selected="true"]`]: {
-                    boxShadow: 'sm',
-                    bgcolor: 'background.surface',
-                  },
-                }}
-              >
-                <Tab disableIndicator>Acquisition task</Tab>
-                <Tab disableIndicator>DAG task</Tab>
-              </TabList>
-              <TabPanel value={0}>
-                <AcquisitionTaskForm {...props as ModalPropsCreate} />
-              </TabPanel>
-              <TabPanel value={1}>
-                <DagTaskForm {...props as ModalPropsCreate} />
-              </TabPanel>
-            </Tabs>
+            <AcquisitionTaskForm {...props as ModalPropsModify<AcquisitionTaskOut>} /> :
+            <AcquisitionTaskForm {...props as ModalPropsCreate} />
         }
       </ModalDialog>
     </Modal>

@@ -350,99 +350,6 @@ export interface BaseAcquisitionTask {
 
 
 /**
- * Workflow task model.
- * @export
- * @interface BaseDAGTask
- */
-export interface BaseDAGTask {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof BaseDAGTask
-     */
-    'workflow_id'?: WorkflowId1;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseDAGTask
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseDAGTask
-     */
-    'description': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseDAGTask
-     */
-    'task_type': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseDAGTask
-     */
-    'destination': string;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof BaseDAGTask
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {number}
-     * @memberof BaseDAGTask
-     */
-    'progress': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseDAGTask
-     */
-    'is_template': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof BaseDAGTask
-     */
-    'position'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseDAGTask
-     */
-    'dag_type': BaseDAGTaskDagTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseDAGTask
-     */
-    'dag_id': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof BaseDAGTask
-     */
-    'input_task_ids'?: Array<string>;
-    /**
-     * 
-     * @type {Parameter}
-     * @memberof BaseDAGTask
-     */
-    'parameter'?: Parameter;
-}
-
-export const BaseDAGTaskDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type BaseDAGTaskDagTypeEnum = typeof BaseDAGTaskDagTypeEnum[keyof typeof BaseDAGTaskDagTypeEnum];
-
-/**
  * Exam base model.
  * @export
  * @interface BaseExam
@@ -592,128 +499,30 @@ export type CalibrationType = typeof CalibrationType[keyof typeof CalibrationTyp
 export interface Comment {
 }
 /**
- * Workflow Task output model.
+ * Payload sent by the Dagster on_run_success sensor to register DICOM output.
  * @export
- * @interface DAGTaskOut
+ * @interface CreateDicomResult
  */
-export interface DAGTaskOut {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof DAGTaskOut
-     */
-    'workflow_id'?: WorkflowId1;
+export interface CreateDicomResult {
     /**
      * 
      * @type {string}
-     * @memberof DAGTaskOut
+     * @memberof CreateDicomResult
      */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'description': string;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof DAGTaskOut
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'destination': string;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof DAGTaskOut
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {number}
-     * @memberof DAGTaskOut
-     */
-    'progress': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof DAGTaskOut
-     */
-    'is_template': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof DAGTaskOut
-     */
-    'position'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'dag_type': DAGTaskOutDagTypeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'dag_id': string;
+    'directory': string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof DAGTaskOut
+     * @memberof CreateDicomResult
      */
-    'input_task_ids'?: Array<string>;
+    'files': Array<string>;
     /**
      * 
-     * @type {Parameter}
-     * @memberof DAGTaskOut
+     * @type {Meta}
+     * @memberof CreateDicomResult
      */
-    'parameter'?: Parameter;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DAGTaskOut
-     */
-    'datetime_created': string;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof DAGTaskOut
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {Array<ResultOut>}
-     * @memberof DAGTaskOut
-     */
-    'results': Array<ResultOut>;
+    'meta'?: Meta;
 }
-
-export const DAGTaskOutDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type DAGTaskOutDagTypeEnum = typeof DAGTaskOutDagTypeEnum[keyof typeof DAGTaskOutDagTypeEnum];
-
 /**
  * 
  * @export
@@ -838,159 +647,6 @@ export const Gender = {
 
 export type Gender = typeof Gender[keyof typeof Gender];
 
-
-/**
- * 
- * @export
- * @interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
- */
-export interface GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'workflow_id'?: WorkflowId1;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'name': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'description': any;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'destination': any;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'progress': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'is_template': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'position'?: any;
-    /**
-     * 
-     * @type {DeviceId}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'device_id'?: DeviceId;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'calibration'?: any;
-    /**
-     * 
-     * @type {SequenceId}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'sequence_id'?: SequenceId;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionParameter}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'acquisition_parameter'?: AcquisitionTaskOutAcquisitionParameter;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'creator': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'datetime_created': any;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'results': any;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionLimits}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'dag_type': GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'dag_id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'input_task_ids'?: any;
-    /**
-     * 
-     * @type {Parameter}
-     * @memberof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner
-     */
-    'parameter'?: Parameter;
-}
-
-export const GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum = typeof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum[keyof typeof GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInnerDagTypeEnum];
 
 /**
  * 
@@ -1181,635 +837,10 @@ export interface Meta {
 /**
  * 
  * @export
- * @interface Parameter
- */
-export interface Parameter {
-}
-/**
- * 
- * @export
  * @interface PatientId
  */
 export interface PatientId {
 }
-/**
- * @type Payload
- * @export
- */
-export type Payload = { task_type: 'ACQUISITION' } & BaseAcquisitionTask | { task_type: 'DAG' } & BaseDAGTask;
-
-/**
- * 
- * @export
- * @interface ResponseCreateTaskApiV1ExamTaskNewPost
- */
-export interface ResponseCreateTaskApiV1ExamTaskNewPost {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'workflow_id'?: WorkflowId1;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'name': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'description': any;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'destination': any;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'progress': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'is_template': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'position'?: any;
-    /**
-     * 
-     * @type {DeviceId}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'device_id'?: DeviceId;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'calibration'?: any;
-    /**
-     * 
-     * @type {SequenceId}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'sequence_id'?: SequenceId;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionParameter}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'acquisition_parameter'?: AcquisitionTaskOutAcquisitionParameter;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'creator': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'datetime_created': any;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'results': any;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionLimits}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'dag_type': ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'dag_id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'input_task_ids'?: any;
-    /**
-     * 
-     * @type {Parameter}
-     * @memberof ResponseCreateTaskApiV1ExamTaskNewPost
-     */
-    'parameter'?: Parameter;
-}
-
-export const ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum = typeof ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum[keyof typeof ResponseCreateTaskApiV1ExamTaskNewPostDagTypeEnum];
-
-/**
- * 
- * @export
- * @interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost
- */
-export interface ResponseCreateTaskFromTemplateApiV1ExamTaskPost {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'workflow_id'?: WorkflowId1;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'name': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'description': any;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'destination': any;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'progress': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'is_template': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'position'?: any;
-    /**
-     * 
-     * @type {DeviceId}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'device_id'?: DeviceId;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'calibration'?: any;
-    /**
-     * 
-     * @type {SequenceId}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'sequence_id'?: SequenceId;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionParameter}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'acquisition_parameter'?: AcquisitionTaskOutAcquisitionParameter;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'creator': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'datetime_created': any;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'results': any;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionLimits}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'dag_type': ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'dag_id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'input_task_ids'?: any;
-    /**
-     * 
-     * @type {Parameter}
-     * @memberof ResponseCreateTaskFromTemplateApiV1ExamTaskPost
-     */
-    'parameter'?: Parameter;
-}
-
-export const ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum = typeof ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum[keyof typeof ResponseCreateTaskFromTemplateApiV1ExamTaskPostDagTypeEnum];
-
-/**
- * 
- * @export
- * @interface ResponseGetTaskApiV1ExamTaskTaskIdGet
- */
-export interface ResponseGetTaskApiV1ExamTaskTaskIdGet {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'workflow_id'?: WorkflowId1;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'name': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'description': any;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'destination': any;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'progress': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'is_template': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'position'?: any;
-    /**
-     * 
-     * @type {DeviceId}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'device_id'?: DeviceId;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'calibration'?: any;
-    /**
-     * 
-     * @type {SequenceId}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'sequence_id'?: SequenceId;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionParameter}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'acquisition_parameter'?: AcquisitionTaskOutAcquisitionParameter;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'creator': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'datetime_created': any;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'results': any;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionLimits}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'dag_type': ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'dag_id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'input_task_ids'?: any;
-    /**
-     * 
-     * @type {Parameter}
-     * @memberof ResponseGetTaskApiV1ExamTaskTaskIdGet
-     */
-    'parameter'?: Parameter;
-}
-
-export const ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum = typeof ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum[keyof typeof ResponseGetTaskApiV1ExamTaskTaskIdGetDagTypeEnum];
-
-/**
- * 
- * @export
- * @interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut
- */
-export interface ResponseUpdateTaskApiV1ExamTaskTaskIdPut {
-    /**
-     * 
-     * @type {WorkflowId1}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'workflow_id'?: WorkflowId1;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'name': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'description': any;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'destination': any;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'progress': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'is_template': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'position'?: any;
-    /**
-     * 
-     * @type {DeviceId}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'device_id'?: DeviceId;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'calibration'?: any;
-    /**
-     * 
-     * @type {SequenceId}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'sequence_id'?: SequenceId;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionParameter}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'acquisition_parameter'?: AcquisitionTaskOutAcquisitionParameter;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'creator': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'datetime_created': any;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'results': any;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionLimits}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'dag_type': ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'dag_id': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'input_task_ids'?: any;
-    /**
-     * 
-     * @type {Parameter}
-     * @memberof ResponseUpdateTaskApiV1ExamTaskTaskIdPut
-     */
-    'parameter'?: Parameter;
-}
-
-export const ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum = {
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum = typeof ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum[keyof typeof ResponseUpdateTaskApiV1ExamTaskTaskIdPutDagTypeEnum];
-
 /**
  * 
  * @export
@@ -1966,10 +997,7 @@ export interface TaskReorder {
  */
 
 export const TaskType = {
-    Acquisition: 'ACQUISITION',
-    Dag: 'DAG',
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
+    Acquisition: 'ACQUISITION'
 } as const;
 
 export type TaskType = typeof TaskType[keyof typeof TaskType];
@@ -2006,6 +1034,18 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+    /**
+     * 
+     * @type {any}
+     * @memberof ValidationError
+     */
+    'input'?: any;
+    /**
+     * 
+     * @type {object}
+     * @memberof ValidationError
+     */
+    'ctx'?: object;
 }
 /**
  * 
@@ -2096,10 +1136,10 @@ export interface WorkflowOut {
     'datetime_updated'?: DatetimeUpdated;
     /**
      * 
-     * @type {Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>}
+     * @type {Array<AcquisitionTaskOut>}
      * @memberof WorkflowOut
      */
-    'tasks': Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>;
+    'tasks': Array<AcquisitionTaskOut>;
 }
 
 
@@ -3333,8 +2373,8 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
         /**
          * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
          * @summary Create Mri Sequence
-         * @param {File} seqFile 
-         * @param {File} xmlFile 
+         * @param {string} seqFile 
+         * @param {string} xmlFile 
          * @param {string} name 
          * @param {string} [description] 
          * @param {string} [sequenceType] 
@@ -3342,7 +2382,7 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost: async (seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMriSequenceApiV1ExamSequencePost: async (seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'seqFile' is not null or undefined
             assertParamExists('createMriSequenceApiV1ExamSequencePost', 'seqFile', seqFile)
             // verify required parameter 'xmlFile' is not null or undefined
@@ -3657,8 +2697,8 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
         /**
          * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
          * @summary Create Mri Sequence
-         * @param {File} seqFile 
-         * @param {File} xmlFile 
+         * @param {string} seqFile 
+         * @param {string} xmlFile 
          * @param {string} name 
          * @param {string} [description] 
          * @param {string} [sequenceType] 
@@ -3666,7 +2706,7 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMriSequenceApiV1ExamSequencePost(seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+        async createMriSequenceApiV1ExamSequencePost(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequenceApiV1ExamSequencePost']?.[localVarOperationServerIndex]?.url;
@@ -3765,8 +2805,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
         /**
          * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
          * @summary Create Mri Sequence
-         * @param {File} seqFile 
-         * @param {File} xmlFile 
+         * @param {string} seqFile 
+         * @param {string} xmlFile 
          * @param {string} name 
          * @param {string} [description] 
          * @param {string} [sequenceType] 
@@ -3774,7 +2814,7 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost(seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
+        createMriSequenceApiV1ExamSequencePost(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
             return localVarFp.createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3852,8 +2892,8 @@ export class MriSequencesApi extends BaseAPI {
     /**
      * Upload an MRI sequence file and store it with the provided metadata.  Parameters ---------- mri_sequence : MRISequenceCreate     The MRI sequence metadata. seq_file : UploadFile     The MRI sequence file to store. xml_file : UploadFile     The ISMRMRD header xml file to store. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The stored MRI sequence with the uploaded file.
      * @summary Create Mri Sequence
-     * @param {File} seqFile 
-     * @param {File} xmlFile 
+     * @param {string} seqFile 
+     * @param {string} xmlFile 
      * @param {string} name 
      * @param {string} [description] 
      * @param {string} [sequenceType] 
@@ -3862,7 +2902,7 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public createMriSequenceApiV1ExamSequencePost(seqFile: File, xmlFile: File, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+    public createMriSequenceApiV1ExamSequencePost(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
         return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -3986,6 +3026,50 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a DICOM result entry after a successful Dagster reconstruction run.
+         * @summary Create Dicom Result
+         * @param {TaskId} taskId 
+         * @param {CreateDicomResult} createDicomResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDicomResultApiV1ExamResultDicomTaskIdPost: async (taskId: TaskId, createDicomResult: CreateDicomResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('createDicomResultApiV1ExamResultDicomTaskIdPost', 'taskId', taskId)
+            // verify required parameter 'createDicomResult' is not null or undefined
+            assertParamExists('createDicomResultApiV1ExamResultDicomTaskIdPost', 'createDicomResult', createDicomResult)
+            const localVarPath = `/api/v1/exam/result/dicom/{task_id}`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDicomResult, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4429,6 +3513,20 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Create a DICOM result entry after a successful Dagster reconstruction run.
+         * @summary Create Dicom Result
+         * @param {TaskId} taskId 
+         * @param {CreateDicomResult} createDicomResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createDicomResultApiV1ExamResultDicomTaskIdPost(taskId: TaskId, createDicomResult: CreateDicomResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createDicomResultApiV1ExamResultDicomTaskIdPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Result
          * @param {ResultId} resultId 
@@ -4582,6 +3680,17 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.createBlankResultApiV1ExamResultPost(taskId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Create a DICOM result entry after a successful Dagster reconstruction run.
+         * @summary Create Dicom Result
+         * @param {TaskId} taskId 
+         * @param {CreateDicomResult} createDicomResult 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDicomResultApiV1ExamResultDicomTaskIdPost(taskId: TaskId, createDicomResult: CreateDicomResult, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
          * @summary Delete Result
          * @param {ResultId} resultId 
@@ -4707,6 +3816,19 @@ export class ResultsApi extends BaseAPI {
      */
     public createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: RawAxiosRequestConfig) {
         return ResultsApiFp(this.configuration).createBlankResultApiV1ExamResultPost(taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a DICOM result entry after a successful Dagster reconstruction run.
+     * @summary Create Dicom Result
+     * @param {TaskId} taskId 
+     * @param {CreateDicomResult} createDicomResult 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResultsApi
+     */
+    public createDicomResultApiV1ExamResultDicomTaskIdPost(taskId: TaskId, createDicomResult: CreateDicomResult, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4843,15 +3965,15 @@ export class ResultsApi extends BaseAPI {
 export const TasksApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new acquisition task.
          * @summary Create Task
-         * @param {Payload} payload 
+         * @param {BaseAcquisitionTask} baseAcquisitionTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskApiV1ExamTaskNewPost: async (payload: Payload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'payload' is not null or undefined
-            assertParamExists('createTaskApiV1ExamTaskNewPost', 'payload', payload)
+        createTaskApiV1ExamTaskNewPost: async (baseAcquisitionTask: BaseAcquisitionTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'baseAcquisitionTask' is not null or undefined
+            assertParamExists('createTaskApiV1ExamTaskNewPost', 'baseAcquisitionTask', baseAcquisitionTask)
             const localVarPath = `/api/v1/exam/task/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4875,7 +3997,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(payload, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(baseAcquisitionTask, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4883,7 +4005,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new acquisition task from a template.
          * @summary Create Task From Template
          * @param {string} workflowId 
          * @param {string} templateId 
@@ -4938,7 +4060,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -4976,7 +4098,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get all existing task templates.  Returns -------     List of task pydantic output model
+         * Get all task templates.
          * @summary Get All Task Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5010,7 +4132,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get all existing tasks of a certain workflow.  Parameters ---------- workflow_id     Id of parental workflow  Returns -------     List of task pydantic output model
+         * Get all tasks of a workflow.
          * @summary Get All Workflow Tasks
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
@@ -5048,7 +4170,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get an existing task.  Parameters ---------- task_id     Id of the task to be returned  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Get an existing task.
          * @summary Get Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -5086,7 +4208,7 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Reorder tasks by updating their position.  Parameters ---------- payload     Task reorder pydantic model containing list of task IDs in the new order
+         * Reorder tasks by updating their position.
          * @summary Reorder Tasks
          * @param {TaskReorder} taskReorder 
          * @param {*} [options] Override http request option.
@@ -5126,18 +4248,18 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing task.
          * @summary Update Task
          * @param {TaskId} taskId 
-         * @param {Payload} payload 
+         * @param {BaseAcquisitionTask} baseAcquisitionTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskApiV1ExamTaskTaskIdPut: async (taskId: TaskId, payload: Payload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateTaskApiV1ExamTaskTaskIdPut: async (taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'taskId', taskId)
-            // verify required parameter 'payload' is not null or undefined
-            assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'payload', payload)
+            // verify required parameter 'baseAcquisitionTask' is not null or undefined
+            assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'baseAcquisitionTask', baseAcquisitionTask)
             const localVarPath = `/api/v1/exam/task/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5162,7 +4284,52 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(payload, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(baseAcquisitionTask, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update only the status of a task (called by Dagster sensors).
+         * @summary Update Task Status
+         * @param {TaskId} taskId 
+         * @param {string} status 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTaskStatusApiV1ExamTaskTaskIdStatusPut: async (taskId: TaskId, status: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('updateTaskStatusApiV1ExamTaskTaskIdStatusPut', 'taskId', taskId)
+            // verify required parameter 'status' is not null or undefined
+            assertParamExists('updateTaskStatusApiV1ExamTaskTaskIdStatusPut', 'status', status)
+            const localVarPath = `/api/v1/exam/task/{task_id}/status`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5180,20 +4347,20 @@ export const TasksApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TasksApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new acquisition task.
          * @summary Create Task
-         * @param {Payload} payload 
+         * @param {BaseAcquisitionTask} baseAcquisitionTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskApiV1ExamTaskNewPost(payload: Payload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseCreateTaskApiV1ExamTaskNewPost>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskApiV1ExamTaskNewPost(payload, options);
+        async createTaskApiV1ExamTaskNewPost(baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskApiV1ExamTaskNewPost(baseAcquisitionTask, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskApiV1ExamTaskNewPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new acquisition task from a template.
          * @summary Create Task From Template
          * @param {string} workflowId 
          * @param {string} templateId 
@@ -5201,14 +4368,14 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseCreateTaskFromTemplateApiV1ExamTaskPost>> {
+        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskFromTemplateApiV1ExamTaskPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -5221,45 +4388,45 @@ export const TasksApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all existing task templates.  Returns -------     List of task pydantic output model
+         * Get all task templates.
          * @summary Get All Task Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>>> {
+        async getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all existing tasks of a certain workflow.  Parameters ---------- workflow_id     Id of parental workflow  Returns -------     List of task pydantic output model
+         * Get all tasks of a workflow.
          * @summary Get All Workflow Tasks
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>>> {
+        async getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get an existing task.  Parameters ---------- task_id     Id of the task to be returned  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Get an existing task.
          * @summary Get Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseGetTaskApiV1ExamTaskTaskIdGet>> {
+        async getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTaskApiV1ExamTaskTaskIdGet(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getTaskApiV1ExamTaskTaskIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Reorder tasks by updating their position.  Parameters ---------- payload     Task reorder pydantic model containing list of task IDs in the new order
+         * Reorder tasks by updating their position.
          * @summary Reorder Tasks
          * @param {TaskReorder} taskReorder 
          * @param {*} [options] Override http request option.
@@ -5272,17 +4439,31 @@ export const TasksApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing task.
          * @summary Update Task
          * @param {TaskId} taskId 
-         * @param {Payload} payload 
+         * @param {BaseAcquisitionTask} baseAcquisitionTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, payload: Payload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseUpdateTaskApiV1ExamTaskTaskIdPut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskApiV1ExamTaskTaskIdPut(taskId, payload, options);
+        async updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskApiV1ExamTaskTaskIdPut(taskId, baseAcquisitionTask, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTaskApiV1ExamTaskTaskIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update only the status of a task (called by Dagster sensors).
+         * @summary Update Task Status
+         * @param {TaskId} taskId 
+         * @param {string} status 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTaskStatusApiV1ExamTaskTaskIdStatusPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -5296,17 +4477,17 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = TasksApiFp(configuration)
     return {
         /**
-         * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new acquisition task.
          * @summary Create Task
-         * @param {Payload} payload 
+         * @param {BaseAcquisitionTask} baseAcquisitionTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskApiV1ExamTaskNewPost(payload: Payload, options?: any): AxiosPromise<ResponseCreateTaskApiV1ExamTaskNewPost> {
-            return localVarFp.createTaskApiV1ExamTaskNewPost(payload, options).then((request) => request(axios, basePath));
+        createTaskApiV1ExamTaskNewPost(baseAcquisitionTask: BaseAcquisitionTask, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.createTaskApiV1ExamTaskNewPost(baseAcquisitionTask, options).then((request) => request(axios, basePath));
         },
         /**
-         * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a new acquisition task from a template.
          * @summary Create Task From Template
          * @param {string} workflowId 
          * @param {string} templateId 
@@ -5314,11 +4495,11 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<ResponseCreateTaskFromTemplateApiV1ExamTaskPost> {
+        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<AcquisitionTaskOut> {
             return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a task.
          * @summary Delete Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -5328,36 +4509,36 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.deleteTaskApiV1ExamTaskTaskIdDelete(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all existing task templates.  Returns -------     List of task pydantic output model
+         * Get all task templates.
          * @summary Get All Task Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>> {
+        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
             return localVarFp.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all existing tasks of a certain workflow.  Parameters ---------- workflow_id     Id of parental workflow  Returns -------     List of task pydantic output model
+         * Get all tasks of a workflow.
          * @summary Get All Workflow Tasks
          * @param {WorkflowId} workflowId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<Array<GetAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet200ResponseInner>> {
+        getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
             return localVarFp.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get an existing task.  Parameters ---------- task_id     Id of the task to be returned  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Get an existing task.
          * @summary Get Task
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<ResponseGetTaskApiV1ExamTaskTaskIdGet> {
+        getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<AcquisitionTaskOut> {
             return localVarFp.getTaskApiV1ExamTaskTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Reorder tasks by updating their position.  Parameters ---------- payload     Task reorder pydantic model containing list of task IDs in the new order
+         * Reorder tasks by updating their position.
          * @summary Reorder Tasks
          * @param {TaskReorder} taskReorder 
          * @param {*} [options] Override http request option.
@@ -5367,15 +4548,26 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.reorderTasksApiV1ExamTaskReorderPut(taskReorder, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing task.
          * @summary Update Task
          * @param {TaskId} taskId 
-         * @param {Payload} payload 
+         * @param {BaseAcquisitionTask} baseAcquisitionTask 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, payload: Payload, options?: any): AxiosPromise<ResponseUpdateTaskApiV1ExamTaskTaskIdPut> {
-            return localVarFp.updateTaskApiV1ExamTaskTaskIdPut(taskId, payload, options).then((request) => request(axios, basePath));
+        updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.updateTaskApiV1ExamTaskTaskIdPut(taskId, baseAcquisitionTask, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update only the status of a task (called by Dagster sensors).
+         * @summary Update Task Status
+         * @param {TaskId} taskId 
+         * @param {string} status 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5388,19 +4580,19 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
  */
 export class TasksApi extends BaseAPI {
     /**
-     * Create a new task.  Parameters ---------- payload     Task pydantic input model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * Create a new acquisition task.
      * @summary Create Task
-     * @param {Payload} payload 
+     * @param {BaseAcquisitionTask} baseAcquisitionTask 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public createTaskApiV1ExamTaskNewPost(payload: Payload, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskApiV1ExamTaskNewPost(payload, options).then((request) => request(this.axios, this.basePath));
+    public createTaskApiV1ExamTaskNewPost(baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTaskApiV1ExamTaskNewPost(baseAcquisitionTask, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Create a new task from template.  Parameters ---------- workflow_id     ID of the workflow, the task is related to template_id     ID of the template, the task is created from new_task_is_template     set the is_template property on the new task  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * Create a new acquisition task from a template.
      * @summary Create Task From Template
      * @param {string} workflowId 
      * @param {string} templateId 
@@ -5414,7 +4606,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+     * Delete a task.
      * @summary Delete Task
      * @param {TaskId} taskId 
      * @param {*} [options] Override http request option.
@@ -5426,7 +4618,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Get all existing task templates.  Returns -------     List of task pydantic output model
+     * Get all task templates.
      * @summary Get All Task Templates
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5437,7 +4629,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Get all existing tasks of a certain workflow.  Parameters ---------- workflow_id     Id of parental workflow  Returns -------     List of task pydantic output model
+     * Get all tasks of a workflow.
      * @summary Get All Workflow Tasks
      * @param {WorkflowId} workflowId 
      * @param {*} [options] Override http request option.
@@ -5449,7 +4641,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Get an existing task.  Parameters ---------- task_id     Id of the task to be returned  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+     * Get an existing task.
      * @summary Get Task
      * @param {TaskId} taskId 
      * @param {*} [options] Override http request option.
@@ -5461,7 +4653,7 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Reorder tasks by updating their position.  Parameters ---------- payload     Task reorder pydantic model containing list of task IDs in the new order
+     * Reorder tasks by updating their position.
      * @summary Reorder Tasks
      * @param {TaskReorder} taskReorder 
      * @param {*} [options] Override http request option.
@@ -5473,16 +4665,29 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
-     * Update an existing task.  Parameters ---------- task_id     Id of the workflow to be updated payload     Task pydantic base model  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+     * Update an existing task.
      * @summary Update Task
      * @param {TaskId} taskId 
-     * @param {Payload} payload 
+     * @param {BaseAcquisitionTask} baseAcquisitionTask 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, payload: Payload, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).updateTaskApiV1ExamTaskTaskIdPut(taskId, payload, options).then((request) => request(this.axios, this.basePath));
+    public updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).updateTaskApiV1ExamTaskTaskIdPut(taskId, baseAcquisitionTask, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update only the status of a task (called by Dagster sensors).
+     * @summary Update Task Status
+     * @param {TaskId} taskId 
+     * @param {string} status 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

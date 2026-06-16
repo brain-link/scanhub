@@ -24,260 +24,6 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
- * Pydantic definition of AcquisitionLimits.
- * @export
- * @interface AcquisitionLimits
- */
-export interface AcquisitionLimits {
-    /**
-     * 
-     * @type {number}
-     * @memberof AcquisitionLimits
-     */
-    'patient_height': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AcquisitionLimits
-     */
-    'patient_weight': number;
-    /**
-     * 
-     * @type {Gender}
-     * @memberof AcquisitionLimits
-     */
-    'patient_gender'?: Gender;
-    /**
-     * 
-     * @type {number}
-     * @memberof AcquisitionLimits
-     */
-    'patient_age': number;
-}
-
-
-/**
- * Pydantic definition of acquisition parameters.
- * @export
- * @interface AcquisitionParameter
- */
-export interface AcquisitionParameter {
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof AcquisitionParameter
-     */
-    'fov_scaling': XYZ;
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof AcquisitionParameter
-     */
-    'fov_offset': XYZ;
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof AcquisitionParameter
-     */
-    'fov_rotation': XYZ;
-}
-/**
- * Acquisition Task output model.
- * @export
- * @interface AcquisitionTaskOut
- */
-export interface AcquisitionTaskOut {
-    /**
-     * 
-     * @type {WorkflowId}
-     * @memberof AcquisitionTaskOut
-     */
-    'workflow_id'?: WorkflowId;
-    /**
-     * 
-     * @type {string}
-     * @memberof AcquisitionTaskOut
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AcquisitionTaskOut
-     */
-    'description': string;
-    /**
-     * 
-     * @type {TaskType}
-     * @memberof AcquisitionTaskOut
-     */
-    'task_type': TaskType;
-    /**
-     * 
-     * @type {string}
-     * @memberof AcquisitionTaskOut
-     */
-    'destination': string;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof AcquisitionTaskOut
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {number}
-     * @memberof AcquisitionTaskOut
-     */
-    'progress': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AcquisitionTaskOut
-     */
-    'is_template': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof AcquisitionTaskOut
-     */
-    'position'?: number;
-    /**
-     * 
-     * @type {DeviceId1}
-     * @memberof AcquisitionTaskOut
-     */
-    'device_id'?: DeviceId1;
-    /**
-     * 
-     * @type {Array<CalibrationType>}
-     * @memberof AcquisitionTaskOut
-     */
-    'calibration'?: Array<CalibrationType>;
-    /**
-     * 
-     * @type {SequenceId}
-     * @memberof AcquisitionTaskOut
-     */
-    'sequence_id'?: SequenceId;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionParameter}
-     * @memberof AcquisitionTaskOut
-     */
-    'acquisition_parameter'?: AcquisitionTaskOutAcquisitionParameter;
-    /**
-     * 
-     * @type {string}
-     * @memberof AcquisitionTaskOut
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AcquisitionTaskOut
-     */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AcquisitionTaskOut
-     */
-    'datetime_created': string;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof AcquisitionTaskOut
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {Array<ResultOut>}
-     * @memberof AcquisitionTaskOut
-     */
-    'results': Array<ResultOut>;
-    /**
-     * 
-     * @type {AcquisitionTaskOutAcquisitionLimits}
-     * @memberof AcquisitionTaskOut
-     */
-    'acquisition_limits'?: AcquisitionTaskOutAcquisitionLimits;
-}
-
-
-/**
- * 
- * @export
- * @interface AcquisitionTaskOutAcquisitionLimits
- */
-export interface AcquisitionTaskOutAcquisitionLimits {
-    /**
-     * 
-     * @type {any}
-     * @memberof AcquisitionTaskOutAcquisitionLimits
-     */
-    'patient_height': any;
-    /**
-     * 
-     * @type {any}
-     * @memberof AcquisitionTaskOutAcquisitionLimits
-     */
-    'patient_weight': any;
-    /**
-     * 
-     * @type {Gender}
-     * @memberof AcquisitionTaskOutAcquisitionLimits
-     */
-    'patient_gender'?: Gender;
-    /**
-     * 
-     * @type {any}
-     * @memberof AcquisitionTaskOutAcquisitionLimits
-     */
-    'patient_age': any;
-}
-
-
-/**
- * 
- * @export
- * @interface AcquisitionTaskOutAcquisitionParameter
- */
-export interface AcquisitionTaskOutAcquisitionParameter {
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof AcquisitionTaskOutAcquisitionParameter
-     */
-    'fov_scaling': XYZ;
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof AcquisitionTaskOutAcquisitionParameter
-     */
-    'fov_offset': XYZ;
-    /**
-     * 
-     * @type {XYZ}
-     * @memberof AcquisitionTaskOutAcquisitionParameter
-     */
-    'fov_rotation': XYZ;
-}
-/**
- * Pydantic definition of calibration methods.
- * @export
- * @enum {string}
- */
-
-export const CalibrationType = {
-    FlipAngle: 'flip-angle',
-    Frequency: 'frequency',
-    Shims: 'shims'
-} as const;
-
-export type CalibrationType = typeof CalibrationType[keyof typeof CalibrationType];
-
-
-/**
  * 
  * @export
  * @interface DatetimeUpdated
@@ -322,13 +68,6 @@ export interface DeviceCreationRequestStatus {
  * @interface DeviceId
  */
 export interface DeviceId {
-}
-/**
- * 
- * @export
- * @interface DeviceId1
- */
-export interface DeviceId1 {
 }
 /**
  * 
@@ -433,22 +172,6 @@ export type DeviceStatus = typeof DeviceStatus[keyof typeof DeviceStatus];
 
 
 /**
- * Pydantic definition of genders.
- * @export
- * @enum {string}
- */
-
-export const Gender = {
-    Male: 'MALE',
-    Female: 'FEMALE',
-    Other: 'OTHER',
-    NotGiven: 'NOT_GIVEN'
-} as const;
-
-export type Gender = typeof Gender[keyof typeof Gender];
-
-
-/**
  * 
  * @export
  * @interface HTTPValidationError
@@ -462,36 +185,11 @@ export interface HTTPValidationError {
     'detail'?: Array<ValidationError>;
 }
 /**
- * Task status enum.
- * @export
- * @enum {string}
- */
-
-export const ItemStatus = {
-    New: 'NEW',
-    Updated: 'UPDATED',
-    Started: 'STARTED',
-    Finished: 'FINISHED',
-    Error: 'ERROR',
-    Inprogress: 'INPROGRESS'
-} as const;
-
-export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];
-
-
-/**
  * 
  * @export
  * @interface Manufacturer
  */
 export interface Manufacturer {
-}
-/**
- * 
- * @export
- * @interface Meta
- */
-export interface Meta {
 }
 /**
  * 
@@ -508,81 +206,6 @@ export interface Modality {
 export interface Parameter {
 }
 /**
- * Result output model.
- * @export
- * @interface ResultOut
- */
-export interface ResultOut {
-    /**
-     * 
-     * @type {ResultType}
-     * @memberof ResultOut
-     */
-    'type': ResultType;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResultOut
-     */
-    'directory': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResultOut
-     */
-    'files'?: Array<string>;
-    /**
-     * 
-     * @type {Meta}
-     * @memberof ResultOut
-     */
-    'meta'?: Meta;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResultOut
-     */
-    'task_id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResultOut
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResultOut
-     */
-    'datetime_created': string;
-}
-
-
-/**
- * Result type enum.
- * @export
- * @enum {string}
- */
-
-export const ResultType = {
-    Dicom: 'DICOM',
-    Mrd: 'MRD',
-    Numpy: 'NUMPY',
-    Calibration: 'CALIBRATION',
-    NotSet: 'NOT_SET'
-} as const;
-
-export type ResultType = typeof ResultType[keyof typeof ResultType];
-
-
-/**
- * 
- * @export
- * @interface SequenceId
- */
-export interface SequenceId {
-}
-/**
  * 
  * @export
  * @interface SerialNumber
@@ -596,22 +219,6 @@ export interface SerialNumber {
  */
 export interface Site {
 }
-/**
- * Task type enum.
- * @export
- * @enum {string}
- */
-
-export const TaskType = {
-    Acquisition: 'ACQUISITION',
-    Dag: 'DAG',
-    Reconstruction: 'RECONSTRUCTION',
-    Processing: 'PROCESSING'
-} as const;
-
-export type TaskType = typeof TaskType[keyof typeof TaskType];
-
-
 /**
  * 
  * @export
@@ -636,6 +243,18 @@ export interface ValidationError {
      * @memberof ValidationError
      */
     'type': string;
+    /**
+     * 
+     * @type {any}
+     * @memberof ValidationError
+     */
+    'input'?: any;
+    /**
+     * 
+     * @type {object}
+     * @memberof ValidationError
+     */
+    'ctx'?: object;
 }
 /**
  * 
@@ -643,38 +262,6 @@ export interface ValidationError {
  * @interface ValidationErrorLocInner
  */
 export interface ValidationErrorLocInner {
-}
-/**
- * 
- * @export
- * @interface WorkflowId
- */
-export interface WorkflowId {
-}
-/**
- * Pydantic definition of coordinates.
- * @export
- * @interface XYZ
- */
-export interface XYZ {
-    /**
-     * 
-     * @type {number}
-     * @memberof XYZ
-     */
-    'x': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof XYZ
-     */
-    'y': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof XYZ
-     */
-    'z': number;
 }
 
 /**
@@ -834,16 +421,17 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
-         * @summary Start Scan Via Websocket
-         * @param {AcquisitionTaskOut} acquisitionTaskOut 
+         * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+         * @summary Trigger Acquisition
+         * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost: async (acquisitionTaskOut: AcquisitionTaskOut, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'acquisitionTaskOut' is not null or undefined
-            assertParamExists('startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost', 'acquisitionTaskOut', acquisitionTaskOut)
-            const localVarPath = `/api/v1/device/start_scan_via_websocket`;
+        triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost: async (taskId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost', 'taskId', taskId)
+            const localVarPath = `/api/v1/device/trigger_acquisition/{task_id}`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -861,12 +449,9 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(acquisitionTaskOut, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -979,16 +564,16 @@ export const DevicesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
-         * @summary Start Scan Via Websocket
-         * @param {AcquisitionTaskOut} acquisitionTaskOut 
+         * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+         * @summary Trigger Acquisition
+         * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut: AcquisitionTaskOut, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut, options);
+        async triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1055,14 +640,14 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getDevicesApiV1DeviceGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
-         * @summary Start Scan Via Websocket
-         * @param {AcquisitionTaskOut} acquisitionTaskOut 
+         * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+         * @summary Trigger Acquisition
+         * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut: AcquisitionTaskOut, options?: any): AxiosPromise<any> {
-            return localVarFp.startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut, options).then((request) => request(axios, basePath));
+        triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId: string, options?: any): AxiosPromise<any> {
+            return localVarFp.triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Update acquisition/device parameter.  Parameters ---------- device_id     Id of the device to be updated payload     Parameter dictionary  Returns -------     Parameter dictionary  Raises ------ HTTPException     404: Not found
@@ -1133,15 +718,15 @@ export class DevicesApi extends BaseAPI {
     }
 
     /**
-     * Start a scan via a websocket that was already opened by the device.  Parameters ---------- device_task     Details of the scan and the device to scan on.
-     * @summary Start Scan Via Websocket
-     * @param {AcquisitionTaskOut} acquisitionTaskOut 
+     * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+     * @summary Trigger Acquisition
+     * @param {string} taskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut: AcquisitionTaskOut, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).startScanViaWebsocketApiV1DeviceStartScanViaWebsocketPost(acquisitionTaskOut, options).then((request) => request(this.axios, this.basePath));
+    public triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId: string, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

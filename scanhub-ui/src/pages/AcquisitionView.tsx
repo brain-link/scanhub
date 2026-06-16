@@ -3,30 +3,35 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
  * AcquisitionView.tsx is responsible for rendering the acquisition view.
- * The acquisition view is the main interaction point and contains instances of
- * exams, workflows and tasks of a certain patients.
- * It allows to execute them and view results, i.e. dicom images.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
+import FileDownloadIcon from '@mui/icons-material/FileDownload'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import SaveIcon from '@mui/icons-material/Save'
 import Badge from '@mui/joy/Badge'
 import Box from '@mui/joy/Box'
 import Divider from '@mui/joy/Divider'
+import Dropdown from '@mui/joy/Dropdown'
 import IconButton from '@mui/joy/IconButton'
+import Menu from '@mui/joy/Menu'
+import MenuButton from '@mui/joy/MenuButton'
+import MenuItem from '@mui/joy/MenuItem'
+import Option from '@mui/joy/Option'
+import Select from '@mui/joy/Select'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import { examApi, patientApi, taskApi } from '../api'
+import { dataApi, examApi, patientApi, resultApi, taskApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import ConfirmAcquisitionLimitsModal from '../components/AcquisitionLimitsModal'
-// import DicomViewer from '../components/DicomViewer'
 import DicomViewer3D from '../viewer/dicom/DicomViewer'
 import RawDataViewer from '../viewer/mrd/RawDataViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../openapi/generated-client/patient'
-import { ExamOut, TaskType, WorkflowOut, AcquisitionTaskOut, DAGTaskOut } from '../openapi/generated-client/exam'
+import { ExamOut, WorkflowOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
@@ -46,8 +51,13 @@ function AcquisitionView() {
   const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
   const [confirmAcquisitionLimitsModalOpen, setConfirmAcquisitionLimitsModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
-  const [onAcquisitionLimitsConfirm, setOnAcquisitionLimitsConfirm] = React.useState<() => void>(() => () => { });
-  // const [, showNotification] = React.useContext(NotificationContext)
+  const [onAcquisitionLimitsConfirm, setOnAcquisitionLimitsConfirm] = React.useState<() => void>(() => () => { })
+  const [selectedResultId, setSelectedResultId] = React.useState<string | undefined>(undefined)
+
+  // Reset result selection when task changes
+  React.useEffect(() => {
+    setSelectedResultId(undefined)
+  }, [itemSelection.itemId])
 
   const [draggingTaskIndex, setDraggingTaskIndex] = React.useState<number | undefined>(undefined)
   const [draggingWorkflowId, setDraggingWorkflowId] = React.useState<string | undefined>(undefined)
@@ -62,26 +72,17 @@ function AcquisitionView() {
   }
 
   const handleDrop = async (index: number, workflow: WorkflowOut) => {
-    if (
-      draggingTaskIndex === undefined ||
-      draggingWorkflowId !== workflow.id ||
-      draggingTaskIndex === index
-    )
-      return
-
+    if (draggingTaskIndex === undefined || draggingWorkflowId !== workflow.id || draggingTaskIndex === index) return
     const tasks = [...workflow.tasks]
     const [draggedTask] = tasks.splice(draggingTaskIndex, 1)
     tasks.splice(index, 0, draggedTask)
-
-    const taskIds = tasks.map((t) => t.id)
-    await taskApi.reorderTasksApiV1ExamTaskReorderPut({ task_ids: taskIds })
+    await taskApi.reorderTasksApiV1ExamTaskReorderPut({ task_ids: tasks.map(t => t.id) })
     refetchExams()
     setDraggingTaskIndex(undefined)
     setDraggingWorkflowId(undefined)
   }
 
-
-  // useQuery for caching the fetched data
+  // Patient query
   const {
     data: patient,
     refetch: refetchPatient,
@@ -89,57 +90,120 @@ function AcquisitionView() {
     isError: patientError,
   } = useQuery<PatientOut>({
     queryKey: ['patient', params.patientId],
-    queryFn: async () => {
-      return await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!)
-        .then((result) => {
-          return result.data
-        })
-    },
-    refetchInterval: 1000
+    queryFn: async () => (await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!)).data,
+    refetchInterval: 1000,
   })
 
-  // Query all exams of the patient
-  const {
-    data: exams,
-    refetch: refetchExams,
-    // isLoading: examsLoading,
-    // isError: examsError,
-  } = useQuery<ExamOut[], Error>({
+  // Exams query
+  const { data: exams, refetch: refetchExams } = useQuery<ExamOut[], Error>({
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
-      return await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
-        .then((result) => {
-          if (itemSelection.itemId != undefined) {
-            result.data.map((exam) => {
-              if (exam.id == itemSelection.itemId) {
-                setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 })
-              }
-              exam.workflows.map((workflow) => {
-                if (workflow.id == itemSelection.itemId) {
-                  setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 })
-                }
-                workflow.tasks.map((task) => {
-                  if (task.id == itemSelection.itemId) {
-                    setItemSelection({
-                      type: task.task_type == TaskType.Acquisition ? 'ACQUISITION' : 'DAG',
-                      name: task.name,
-                      itemId: task.id,
-                      status: task.status,
-                      progress: task.progress
-                    })
-                  }
-                })
-              })
+      const result = await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
+      if (itemSelection.itemId != undefined) {
+        result.data.forEach((exam) => {
+          if (exam.id === itemSelection.itemId)
+            setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 })
+          exam.workflows.forEach((workflow) => {
+            if (workflow.id === itemSelection.itemId)
+              setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 })
+            workflow.tasks.forEach((task) => {
+              if (task.id === itemSelection.itemId)
+                setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
             })
-          }
-          return result.data
+          })
         })
+      }
+      return result.data
     },
-    refetchInterval: 1000
+    refetchInterval: 1000,
   })
 
+  // Results query for the selected task
+  const { data: taskData } = useQuery({
+    queryKey: ['task-data', itemSelection.itemId, itemSelection.status],
+    enabled: !!itemSelection.itemId && itemSelection.type === 'ACQUISITION',
+    queryFn: async () => {
+      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(itemSelection.itemId!)
+      return data
+    },
+    refetchInterval: 2000,
+  })
+
+  const workflowId: string | undefined = taskData ? String(taskData.workflow_id) : undefined
+  const taskId: string | undefined = itemSelection.itemId
+
+  const taskResults: ResultOut[] = React.useMemo(() => {
+    const raw = Array.isArray(taskData?.results) ? taskData!.results as ResultOut[] : []
+    return raw
+      .filter(r => r.type === ResultType.Mrd || r.type === ResultType.Dicom)
+      .sort((a, b) => new Date(b.datetime_created).getTime() - new Date(a.datetime_created).getTime())
+  }, [taskData?.results])
+
+  // Auto-select the newest result when list updates
+  React.useEffect(() => {
+    if (taskResults.length === 0) return
+    if (!selectedResultId || !taskResults.find(r => r.id === selectedResultId)) {
+      setSelectedResultId(taskResults[0].id)
+    }
+  }, [taskResults])
+
+  const selectedResult = taskResults.find(r => r.id === selectedResultId)
+  const viewerType: 'MRD' | 'DICOM' | undefined =
+    selectedResult?.type === ResultType.Mrd ? 'MRD' :
+    selectedResult?.type === ResultType.Dicom ? 'DICOM' :
+    undefined
+
+  // Download / export handlers
+  async function handleDownloadMrd() {
+    if (!workflowId || !taskId || !selectedResultId) return
+    try {
+      const response = await dataApi.downloadMRD(workflowId, taskId, selectedResultId, { responseType: 'blob' })
+      const filename = selectedResult?.files?.[0] ?? 'data.mrd'
+      const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.setAttribute('download', filename)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode?.removeChild(link)
+      window.URL.revokeObjectURL(blobUrl)
+    } catch (e) {
+      console.error('Failed to download MRD', e)
+    }
+  }
+
+  async function handleDownloadDicom() {
+    if (!workflowId || !taskId || !selectedResultId || !selectedResult?.files?.length) return
+    try {
+      for (const filename of selectedResult.files.filter(f => f.toLowerCase().endsWith('.dcm'))) {
+        const response = await dataApi.getDicom(workflowId, taskId, selectedResultId, filename, { responseType: 'blob' })
+        const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.setAttribute('download', filename)
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode?.removeChild(link)
+        window.URL.revokeObjectURL(blobUrl)
+      }
+    } catch (e) {
+      console.error('Failed to download DICOM', e)
+    }
+  }
+
+  async function handleExportToXnat() {
+    if (!workflowId || !taskId || !selectedResultId || !selectedResult?.files?.length) return
+    try {
+      const filename = selectedResult.files.find(f => f.toLowerCase().endsWith('.dcm')) ?? selectedResult.files[0]
+      await resultApi.uploadToXnat(workflowId, taskId, selectedResultId, filename)
+      alert(`Successfully exported ${filename} to XNAT`)
+    } catch (e) {
+      console.error('Failed to export to XNAT', e)
+      alert('Failed to export to XNAT')
+    }
+  }
+
   if (patientError || patient == undefined) {
-    // Catch undefined patient
     return (
       <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
         <AlertItem title='Error getting patient information / patient undefined.' type={Alerts.Error} />
@@ -147,17 +211,10 @@ function AcquisitionView() {
     )
   }
 
+  const isTaskSelected = !!itemSelection.itemId && itemSelection.type === 'ACQUISITION'
+
   return (
-    <Box
-      sx={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100%',
-        minHeight: 0,
-        overflow: 'hidden'
-      }}
-    >
+    <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row', width: '100%', minHeight: 0, overflow: 'hidden' }}>
       <Sheet
         className='Sidebar'
         sx={{
@@ -177,40 +234,27 @@ function AcquisitionView() {
         </Box>
         <Divider />
         <PatientInfo patient={patient} isLoading={patientLoading} isError={patientError} />
-
-        {/* <ListDivider /> */}
         <Divider />
 
-        {/* Exam header */}
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Typography level='title-md'>Exams</Typography>
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
-
           <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamFromTemplateModalOpen(true)}>
             <AddSharpIcon />
           </IconButton>
         </Box>
-
         <Divider />
 
-        <Box
-          sx={{
-            minHeight: 0,
-            overflow: 'hidden auto',
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Box sx={{ minHeight: 0, overflow: 'hidden auto', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           {exams?.map((exam: ExamOut) => (
             <AccordionWithMenu
               key={`exam-${exam.id}`}
               accordionSummary={
                 <ExamItem
                   item={exam}
-                  onClick={() => { setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 }) }}
+                  onClick={() => setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 })}
                   selection={itemSelection}
                 />
               }
@@ -223,14 +267,14 @@ function AcquisitionView() {
                   accordionSummary={
                     <WorkflowItem
                       item={workflow}
-                      onClick={() => { setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 }) }}
+                      onClick={() => setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 })}
                       selection={itemSelection}
                     />
                   }
                   accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetchExams} />}
                   toolTipContent={<WorkflowInfo workflow={workflow} />}
                 >
-                  {workflow.tasks?.map((task: AcquisitionTaskOut | DAGTaskOut, index: number) => (
+                  {workflow.tasks?.map((task: AcquisitionTaskOut, index: number) => (
                     <Box
                       key={`task-${task.id}`}
                       draggable
@@ -246,15 +290,7 @@ function AcquisitionView() {
                       <TaskItem
                         item={task}
                         refetchParentData={refetchExams}
-                        onClick={() => {
-                          setItemSelection({
-                            type: task.task_type == TaskType.Acquisition ? 'ACQUISITION' : 'DAG',
-                            name: task.name,
-                            itemId: task.id,
-                            status: task.status,
-                            progress: task.progress
-                          })
-                        }}
+                        onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
                         selection={itemSelection}
                       />
                     </Box>
@@ -271,26 +307,20 @@ function AcquisitionView() {
           item={patient}
           isOpen={confirmAcquisitionLimitsModalOpen}
           setOpen={setConfirmAcquisitionLimitsModalOpen}
-          onSubmit={() => {
-            refetchPatient()
-            onAcquisitionLimitsConfirm()
-          }}
+          onSubmit={() => { refetchPatient(); onAcquisitionLimitsConfirm() }}
         />
 
         <AcquisitionControl
           itemSelection={itemSelection}
           openConfirmModal={(callback: () => void) => {
-            if (itemSelection.type == 'ACQUISITION') {
-              // Only require confirmation in case of acquisition tasks
-              setOnAcquisitionLimitsConfirm(() => callback);
-              setConfirmAcquisitionLimitsModalOpen(true);
-            }
-            else {
+            if (itemSelection.type === 'ACQUISITION') {
+              setOnAcquisitionLimitsConfirm(() => callback)
+              setConfirmAcquisitionLimitsModalOpen(true)
+            } else {
               callback()
             }
           }}
         />
-
       </Sheet>
 
       <ExamFromTemplateModal
@@ -302,10 +332,80 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      {
-        itemSelection.itemId && itemSelection.type == 'ACQUISITION' ? <RawDataViewer item={itemSelection} /> :
+      {/* Right panel: Row 1 (file selector + actions) + Row 2 (viewer toolbar) + canvas */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+
+        {/* Row 1: file selector + download/export */}
+        {isTaskSelected && (
+          <Box sx={{
+            px: 1.5, py: 0.75,
+            display: 'flex', alignItems: 'center', gap: 1,
+            borderBottom: '1px solid', borderColor: 'divider',
+            flexShrink: 0,
+          }}>
+            <Select
+              size='sm'
+              placeholder='No results yet'
+              value={selectedResultId ?? null}
+              onChange={(_, v) => v && setSelectedResultId(v)}
+              sx={{ minWidth: 240 }}
+            >
+              {taskResults.map(result => {
+                const dt = new Date(result.datetime_created)
+                const label = (result.files?.[0] ? result.files[0] + ' | ' : '') +
+                  dt.toLocaleDateString() + ', ' + dt.toLocaleTimeString()
+                return (
+                  <Option key={result.id} value={result.id}>{label}</Option>
+                )
+              })}
+            </Select>
+
+            {viewerType === 'MRD' && (
+              <IconButton size='sm' variant='outlined' color='neutral' title='Download MRD' onClick={handleDownloadMrd}>
+                <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+              </IconButton>
+            )}
+
+            {viewerType === 'DICOM' && (
+              <Dropdown>
+                <MenuButton
+                  slots={{ root: IconButton }}
+                  slotProps={{ root: { size: 'sm', variant: 'outlined', color: 'neutral', title: 'Share / Export' } }}
+                >
+                  <SaveIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+                </MenuButton>
+                <Menu size='sm' placement='bottom-end'>
+                  <MenuItem onClick={handleDownloadDicom}>
+                    <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+                    Download DICOM
+                  </MenuItem>
+                  <MenuItem onClick={handleExportToXnat}>
+                    <OpenInNewIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+                    Export to XNAT
+                  </MenuItem>
+                </Menu>
+              </Dropdown>
+            )}
+          </Box>
+        )}
+
+        {/* Row 2 + canvas: rendered by each viewer */}
+        {isTaskSelected && viewerType === 'MRD' && workflowId && taskId && selectedResultId ? (
+          <RawDataViewer
+            selectedResultId={selectedResultId}
+            workflowId={workflowId}
+            taskId={taskId}
+          />
+        ) : isTaskSelected && viewerType === 'DICOM' ? (
+          <DicomViewer3D item={itemSelection} selectedResultId={selectedResultId} />
+        ) : isTaskSelected && taskResults.length === 0 ? (
+          <Container maxWidth={false} sx={{ width: '50%', mt: 5 }}>
+            <AlertItem title='No results available for this task yet.' type={Alerts.Info} />
+          </Container>
+        ) : (
           <DicomViewer3D item={itemSelection} />
-      }
+        )}
+      </Box>
     </Box>
   )
 }
