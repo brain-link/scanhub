@@ -46,6 +46,7 @@ from app.api.dal import dal_get_device, dal_update_device
 
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
+DAGSTER_GRAPHQL_URL = "http://dagster-webserver:3000/dagster/graphql"
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -328,29 +329,8 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         })
 
 
-async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UUID) -> None:
-    """Handle file transfer from device to server."""
-    print("Handle file transfer...")
-    if DATA_LAKE_DIR is None:
-        raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
-    if not os.path.exists(DATA_LAKE_DIR):
-        raise IsADirectoryError("`DATA_LAKE_DIRECTORY` does not exist.")
-
-    task_id: str = str(header["task_id"])
-    user_access_token: str = str(header["user_access_token"])
-    filename: Path = Path(header.get("filename", "upload.bin"))
-    size_bytes: int = int(header["size_bytes"])
-    header_sha256: Optional[str] = header.get("sha256")
-    device_parameter: dict | None = header.get("device_parameter")
-
-    # Locate task and build flat task directory: {DATA_LAKE_DIR}/{workflow_id}/{task_id}/
-    task = exam_requests.get_task(task_id, user_access_token)
-    task_dir = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id)
-    task_dir.mkdir(exist_ok=True, parents=True)
-    file_path = task_dir / filename
-    tmp_path = file_path.with_suffix(file_path.suffix + ".part")
-
-    # Receive bytes -> stream to disk
+async def _stream_to_file(websocket: WebSocket, tmp_path: Path, size_bytes: int) -> tuple[int, str]:
+    """Stream bytes from a WebSocket into a temp file; returns (bytes_received, sha256_hex)."""
     hasher = hashlib.sha256()
     bytes_received = 0
     with open(tmp_path, "wb") as fout:
@@ -366,19 +346,69 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
             fout.write(chunk)
             hasher.update(chunk)
             bytes_received += len(chunk)
+    return bytes_received, hasher.hexdigest()
+
+
+def _submit_reconstruction_job(task_id: str, task_dir: str, workflow_id: str, user_access_token: str) -> None:
+    """Submit the mrpro_reconstruction_job to Dagster after a file transfer completes."""
+    try:
+        from dagster_graphql import DagsterGraphQLClient  # noqa: PLC0415
+        from gql.transport.requests import RequestsHTTPTransport  # noqa: PLC0415
+        _transport = RequestsHTTPTransport(
+            url=DAGSTER_GRAPHQL_URL, use_json=True, timeout=30,
+        )
+        client = DagsterGraphQLClient(hostname="dagster-webserver", port_number=3000, transport=_transport)
+        run_config = {
+            "resources": {
+                "dag_config": {
+                    "config": {
+                        "task_dir": task_dir,
+                        "task_id": task_id,
+                        "workflow_id": workflow_id,
+                        "user_access_token": user_access_token,
+                    },
+                },
+            },
+        }
+        client.submit_job_execution("mrpro_reconstruction_job", run_config=run_config)
+    except Exception as exc:  # noqa: BLE001
+        print(f"Warning: Failed to submit Dagster reconstruction job: {exc}")  # noqa: T201
+
+
+async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UUID) -> None:
+    """Handle file transfer from device to server."""
+    if DATA_LAKE_DIR is None:
+        msg = "Missing `DATA_LAKE_DIRECTORY` environment variable."
+        raise OSError(msg)
+    if not Path(DATA_LAKE_DIR).exists():
+        msg = "`DATA_LAKE_DIRECTORY` does not exist."
+        raise IsADirectoryError(msg)
+
+    task_id: str = str(header["task_id"])
+    user_access_token: str = str(header["user_access_token"])
+    filename: Path = Path(header.get("filename", "upload.bin"))
+    size_bytes: int = int(header["size_bytes"])
+    header_sha256: str | None = header.get("sha256")
+    device_parameter: dict | None = header.get("device_parameter")
+
+    task = exam_requests.get_task(task_id, user_access_token)
+    task_dir = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id)
+    task_dir.mkdir(exist_ok=True, parents=True)
+    file_path = task_dir / filename
+    tmp_path = file_path.with_suffix(file_path.suffix + ".part")
+
+    bytes_received, hexdigest = await _stream_to_file(websocket, tmp_path, size_bytes)
 
     if bytes_received != size_bytes:
-        if tmp_path.exists():
-            tmp_path.unlink()
+        tmp_path.unlink(missing_ok=True)
         await send_json(websocket, {
             "command": "feedback",
             "message": f"Incomplete file received ({bytes_received}/{size_bytes} bytes).",
         })
         return
 
-    if header_sha256 and hasher.hexdigest() != header_sha256:
-        if tmp_path.exists():
-            tmp_path.unlink()
+    if header_sha256 and hexdigest != header_sha256:
+        tmp_path.unlink(missing_ok=True)
         await send_json(websocket, {
             "command": "feedback",
             "message": "Checksum mismatch for uploaded file.",
@@ -388,15 +418,12 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     tmp_path.replace(file_path)
     result_files = [file_path.name]
 
-    print("DEVICE PARAMETER: ", device_parameter)
-
     if device_parameter:
         parameter_path = task_dir / "device_parameter.json"
         with parameter_path.open("w") as fh:
             json.dump({"device_id": str(device_id), "parameter": device_parameter}, fh, indent=4)
         result_files.append(parameter_path.name)
 
-    # Register the MRD file as a result in exam-manager
     blank_result = exam_requests.create_blank_result(task_id, user_access_token)
     set_result_payload = SetResult(
         type=_pick_result_type(file_path.name),
@@ -405,26 +432,12 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     )
     result = exam_requests.set_result(str(blank_result.id), set_result_payload, user_access_token)
 
-    # Submit the reconstruction job to Dagster
-    try:
-        from dagster_graphql import DagsterGraphQLClient  # noqa: PLC0415
-        dagster_client = DagsterGraphQLClient(hostname="orchestration-engine", port_number=3000)
-        run_config = {
-            "resources": {
-                "dag_config": {
-                    "config": {
-                        "task_dir": str(task_dir),
-                        "task_id": task_id,
-                        "workflow_id": str(task.workflow_id),
-                        "user_access_token": user_access_token,
-                    }
-                }
-            }
-        }
-        dagster_client.submit_job_execution("mrpro_reconstruction_job", run_config=run_config)
-        print(f"Submitted mrpro_reconstruction_job for task {task_id}.")
-    except Exception as exc:
-        print(f"Warning: Failed to submit Dagster reconstruction job: {exc}")
+    _submit_reconstruction_job(
+        task_id=task_id,
+        task_dir=str(task_dir),
+        workflow_id=str(task.workflow_id),
+        user_access_token=user_access_token,
+    )
 
     await send_json(websocket, {
         "command": "feedback",

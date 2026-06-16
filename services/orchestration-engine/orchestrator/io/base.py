@@ -1,27 +1,38 @@
 """Base IO Manager for ScanHub resources."""
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Any, List
 
-from dagster import InputContext, OutputContext, UPathIOManager
+from dagster import ConfigurableIOManager, InputContext, OutputContext
+from scanhub_libraries.resources.dag_config import DAGConfiguration
 from upath import UPath
 
 
-class ScanHubIOManager(UPathIOManager, ABC):
-    """Base IO Manager for ScanHub using UPathIOManager."""
+class ScanHubIOManager(ConfigurableIOManager):
+    """Base ConfigurableIOManager for ScanHub — resolves the task directory from dag_config."""
 
-    def _get_path(self, context: InputContext | OutputContext) -> UPath:
-        """Resolve the path for an asset to the flat task directory."""
-        if not hasattr(context.resources, "dag_config"):
-            raise RuntimeError("dag_config resource not found in context.")
-        dag_config = context.resources.dag_config
-        if not dag_config.task_dir:
+    dag_config: DAGConfiguration
+
+    def _get_path(self) -> UPath:
+        if not self.dag_config.task_dir:
             raise ValueError("task_dir is not set in dag_config.")
-        return UPath(dag_config.task_dir)
+        return UPath(self.dag_config.task_dir)
+
+    def handle_output(self, context: OutputContext, obj: Any) -> None:
+        if obj is None:
+            return
+        self.dump_to_path(context, obj, self._get_path())
+
+    def load_input(self, context: InputContext) -> Any:
+        return self.load_from_path(context, self._get_path())
+
+    @abstractmethod
+    def dump_to_path(self, context: OutputContext, obj: Any, path: UPath) -> None:
+        """Write obj to path."""
+
+    @abstractmethod
+    def load_from_path(self, context: InputContext, path: UPath) -> Any:
+        """Load object from path."""
 
     @abstractmethod
     def load_from_files(self, files: List[str]) -> Any:
-        """Load object from a specific list of files."""
-
-    def load_input(self, context: InputContext) -> Any:
-        """Load input via standard UPath behaviour."""
-        return super().load_input(context)
+        """Load object from an explicit file list."""

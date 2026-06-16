@@ -21,7 +21,7 @@ class IDataIOManager(ScanHubIOManager):
         """
         run_id = context.run_id
         tmp_dir = path / f".tmp_{run_id}"
-        tmp_dir.mkdir(parents=True, exist_ok=True)
+        path.mkdir(parents=True, exist_ok=True)  # ensure task dir exists; tmp_dir is created by to_dicom_folder
 
         try:
             obj.to_dicom_folder(str(tmp_dir))

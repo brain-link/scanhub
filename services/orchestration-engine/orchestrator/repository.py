@@ -4,7 +4,7 @@
 """Define dagster repository."""
 import os
 
-from dagster import AssetSelection, Definitions, define_asset_job, in_process_executor, io_manager
+from dagster import AssetSelection, Definitions, define_asset_job, in_process_executor
 from scanhub_libraries.resources import (
     DAG_CONFIG_KEY,
     DATA_LAKE_KEY,
@@ -44,11 +44,13 @@ sensors = [
     on_run_canceled,
 ]
 
+_dag_config = DAGConfiguration.configure_at_launch()
+
 ressources = {
-    DAG_CONFIG_KEY: DAGConfiguration.configure_at_launch(),
+    DAG_CONFIG_KEY: _dag_config,
     DATA_LAKE_KEY: DataLakeResource.configure_at_launch(),
-    IDATA_IO_KEY: io_manager(required_resource_keys={DAG_CONFIG_KEY})(lambda _: IDataIOManager()),
-    DICOM_IO_KEY: io_manager(required_resource_keys={DAG_CONFIG_KEY})(lambda _: DicomIOManager()),
+    IDATA_IO_KEY: IDataIOManager(dag_config=_dag_config),
+    DICOM_IO_KEY: DicomIOManager(dag_config=_dag_config),
     NOTIFIER_EM_KEY: ExamManagerNotifier(base_url=EXAM_MANAGER_URI),
     NOTIFIER_DM_KEY: DeviceManagerNotifier(base_url=DEVICE_MANAGER_URI),
 }

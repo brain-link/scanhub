@@ -42,7 +42,7 @@ async def perform_scan(client, payload: AcquisitionPayload):
         )
 
     # Upload MRD result
-    file_path = directory / "data_osi.mrd"
+    file_path = directory / "data_osii.mrd"
     # file_path = directory / "data_caliber.mrd"
     await client.upload_file_result(
         file_path=file_path,
