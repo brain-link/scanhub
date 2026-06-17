@@ -13,15 +13,15 @@ from scanhub_libraries.security import get_current_user, oauth2_scheme
 
 from app import LOG_CALL_DELIMITER
 from app.api import task_api
-from app.dal import exam_dal as protocol_dal
+from app.dal import protocol_dal
 from app.tools.helper import get_protocol_out_model
 
 PREFIX_PATIENT_MANAGER = "http://patient-manager:8100/api/v1/patient"
 
-exam_router = APIRouter(dependencies=[Depends(get_current_user)])
+protocol_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
-@exam_router.post("/new", response_model=ProtocolOut, status_code=201, tags=["protocols"], operation_id="create_protocol")
+@protocol_router.post("/new", response_model=ProtocolOut, status_code=201, tags=["protocols"], operation_id="create_protocol")
 async def create_protocol(
     payload: BaseProtocol,
     user: Annotated[User, Depends(get_current_user)],
@@ -50,7 +50,7 @@ async def create_protocol(
     return await get_protocol_out_model(data=protocol)
 
 
-@exam_router.post("/", response_model=ProtocolOut, status_code=201, tags=["protocols"], operation_id="create_protocol_from_template")
+@protocol_router.post("/", response_model=ProtocolOut, status_code=201, tags=["protocols"], operation_id="create_protocol_from_template")
 async def create_protocol_from_template(
     payload: BaseProtocol,
     template_id: UUID,
@@ -99,7 +99,7 @@ async def create_protocol_from_template(
     return protocol_out
 
 
-@exam_router.get("/{exam_id}", response_model=ProtocolOut, status_code=200, tags=["protocols"], operation_id="get_protocol")
+@protocol_router.get("/{exam_id}", response_model=ProtocolOut, status_code=200, tags=["protocols"], operation_id="get_protocol")
 async def get_protocol(exam_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> ProtocolOut:
     """Get protocol endpoint."""
     print(LOG_CALL_DELIMITER)
@@ -114,7 +114,7 @@ async def get_protocol(exam_id: UUID | str, user: Annotated[User, Depends(get_cu
     return await get_protocol_out_model(data=protocol)
 
 
-@exam_router.get("/all/{patient_id}", response_model=list[ProtocolOut], status_code=200, tags=["protocols"], operation_id="get_all_patient_protocols")
+@protocol_router.get("/all/{patient_id}", response_model=list[ProtocolOut], status_code=200, tags=["protocols"], operation_id="get_all_patient_protocols")
 async def get_all_patient_protocols(
     patient_id: UUID, user: Annotated[User, Depends(get_current_user)]
 ) -> list[ProtocolOut]:
@@ -127,7 +127,7 @@ async def get_all_patient_protocols(
     return [await get_protocol_out_model(data=p) for p in protocols]
 
 
-@exam_router.get("/templates/all", response_model=list[ProtocolOut], status_code=200, tags=["protocols"], operation_id="get_all_protocol_templates")
+@protocol_router.get("/templates/all", response_model=list[ProtocolOut], status_code=200, tags=["protocols"], operation_id="get_all_protocol_templates")
 async def get_all_protocol_templates(user: Annotated[User, Depends(get_current_user)]) -> list[ProtocolOut]:
     """Get all protocol templates."""
     print(LOG_CALL_DELIMITER)
@@ -139,7 +139,7 @@ async def get_all_protocol_templates(user: Annotated[User, Depends(get_current_u
     return result
 
 
-@exam_router.delete("/{exam_id}", response_model={}, status_code=204, tags=["protocols"], operation_id="delete_protocol")
+@protocol_router.delete("/{exam_id}", response_model={}, status_code=204, tags=["protocols"], operation_id="delete_protocol")
 async def protocol_delete(exam_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
     """Delete a protocol by id. Cascade deletes the associated tasks."""
     print(LOG_CALL_DELIMITER)
@@ -150,7 +150,7 @@ async def protocol_delete(exam_id: UUID | str, user: Annotated[User, Depends(get
         raise HTTPException(status_code=404, detail="Could not delete protocol.")
 
 
-@exam_router.put("/{exam_id}", response_model=ProtocolOut, status_code=200, tags=["protocols"], operation_id="update_protocol")
+@protocol_router.put("/{exam_id}", response_model=ProtocolOut, status_code=200, tags=["protocols"], operation_id="update_protocol")
 async def update_protocol(
     exam_id: UUID | str,
     payload: BaseProtocol,

@@ -126,7 +126,7 @@ class DeviceOut(DeviceCreationRequest, DeviceDetails):
 
 
 # ----------------------------------------
-# Exam management
+# Protocol management
 # ----------------------------------------
 
 class BaseMRISequence(BaseModel):

@@ -22,8 +22,7 @@ from starlette.responses import Response
 
 import app.tools.mrd_provider as mrd
 from app import LOG_CALL_DELIMITER
-from app.dal import exam_dal as protocol_dal
-from app.dal import result_dal, task_dal
+from app.dal import result_dal, task_dal, protocol_dal
 from app.tools.dicom_provider import (
     get_p10_dicom_bytes,
     provide_p10_dicom,

@@ -13,7 +13,7 @@ from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import ensure_uuid
 
 from app import LOG_CALL_DELIMITER
-from app.dal import exam_dal as protocol_dal
+from app.dal import protocol_dal
 from app.dal import task_dal
 from app.tools.helper import get_task_out
 

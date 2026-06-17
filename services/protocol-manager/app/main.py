@@ -3,7 +3,7 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""Exam manager main file."""
+"""Protocol manager main file."""
 
 import os
 from contextlib import asynccontextmanager
@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api.exam_api import exam_router
+from app.api.protocol_api import protocol_router
 from app.api.mri_sequence_api import seq_router
 from app.api.result_api import result_router
 from app.api.task_api import task_router
@@ -108,7 +108,7 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 # Routers
-app.include_router(exam_router, prefix="/api/v1/protocol")
+app.include_router(protocol_router, prefix="/api/v1/protocol")
 app.include_router(task_router, prefix="/api/v1/protocol")
 app.include_router(result_router, prefix="/api/v1/protocol")
 app.include_router(seq_router, prefix="/api/v1/protocol")
