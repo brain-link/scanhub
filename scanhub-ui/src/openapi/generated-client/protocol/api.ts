@@ -1078,7 +1078,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('downloadMRD', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('downloadMRD', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/download`
+            const localVarPath = `/api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/download`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
@@ -1127,7 +1127,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('getDicom', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('getDicom', 'filename', filename)
-            const localVarPath = `/api/v1/exam/dcm/{protocol_id}/{task_id}/{result_id}/{filename}`
+            const localVarPath = `/api/v1/protocol/dcm/{protocol_id}/{task_id}/{result_id}/{filename}`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
@@ -1179,7 +1179,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('getMRD', 'resultId', resultId)
             // verify required parameter 'ids' is not null or undefined
             assertParamExists('getMRD', 'ids', ids)
-            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/data`
+            const localVarPath = `/api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/data`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
@@ -1237,7 +1237,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('getMrdMeta', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getMrdMeta', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/meta`
+            const localVarPath = `/api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/meta`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
@@ -1286,7 +1286,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('uploadToXnat', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('uploadToXnat', 'filename', filename)
-            const localVarPath = `/api/v1/exam/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}`
+            const localVarPath = `/api/v1/protocol/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
@@ -1582,8 +1582,8 @@ export const HealthApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1ExamHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/health/readiness`;
+        healthReadiness: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/protocol/health/readiness`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1622,10 +1622,10 @@ export const HealthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async readinessApiV1ExamHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1ExamHealthReadinessGet(options);
+        async healthReadiness(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.healthReadiness(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1ExamHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.healthReadiness']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1644,8 +1644,8 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1ExamHealthReadinessGet(options?: any): AxiosPromise<any> {
-            return localVarFp.readinessApiV1ExamHealthReadinessGet(options).then((request) => request(axios, basePath));
+        healthReadiness(options?: any): AxiosPromise<any> {
+            return localVarFp.healthReadiness(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1664,8 +1664,8 @@ export class HealthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof HealthApi
      */
-    public readinessApiV1ExamHealthReadinessGet(options?: RawAxiosRequestConfig) {
-        return HealthApiFp(this.configuration).readinessApiV1ExamHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    public healthReadiness(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).healthReadiness(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1689,14 +1689,14 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost: async (seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMriSequence: async (seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'seqFile' is not null or undefined
-            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'seqFile', seqFile)
+            assertParamExists('createMriSequence', 'seqFile', seqFile)
             // verify required parameter 'xmlFile' is not null or undefined
-            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'xmlFile', xmlFile)
+            assertParamExists('createMriSequence', 'xmlFile', xmlFile)
             // verify required parameter 'name' is not null or undefined
-            assertParamExists('createMriSequenceApiV1ExamSequencePost', 'name', name)
-            const localVarPath = `/api/v1/exam/sequence`;
+            assertParamExists('createMriSequence', 'name', name)
+            const localVarPath = `/api/v1/protocol/sequence`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1758,10 +1758,10 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete: async (sequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteMriSequence: async (sequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sequenceId' is not null or undefined
-            assertParamExists('deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete', 'sequenceId', sequenceId)
-            const localVarPath = `/api/v1/exam/sequence/{sequence_id}`
+            assertParamExists('deleteMriSequence', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/protocol/sequence/{sequence_id}`
                 .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1795,8 +1795,8 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllMriSequencesApiV1ExamSequencesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/sequences/all`;
+        getAllMriSequences: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/protocol/sequences/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1830,10 +1830,10 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMriSequenceByIdApiV1ExamSequenceSequenceIdGet: async (sequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMriSequence: async (sequenceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sequenceId' is not null or undefined
-            assertParamExists('getMriSequenceByIdApiV1ExamSequenceSequenceIdGet', 'sequenceId', sequenceId)
-            const localVarPath = `/api/v1/exam/sequence/{sequence_id}`
+            assertParamExists('getMriSequence', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/protocol/sequence/{sequence_id}`
                 .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1869,10 +1869,10 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet: async (sequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMriSequenceFile: async (sequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sequenceId' is not null or undefined
-            assertParamExists('getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet', 'sequenceId', sequenceId)
-            const localVarPath = `/api/v1/exam/sequence/{sequence_id}/file`
+            assertParamExists('getMriSequenceFile', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/protocol/sequence/{sequence_id}/file`
                 .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1912,10 +1912,10 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet: async (sequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMriSequenceHeaderFile: async (sequenceId: string, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sequenceId' is not null or undefined
-            assertParamExists('getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet', 'sequenceId', sequenceId)
-            const localVarPath = `/api/v1/exam/sequence/{sequence_id}/header`
+            assertParamExists('getMriSequenceHeaderFile', 'sequenceId', sequenceId)
+            const localVarPath = `/api/v1/protocol/sequence/{sequence_id}/header`
                 .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1955,12 +1955,12 @@ export const MriSequencesApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut: async (sequenceId: string, baseMRISequence: BaseMRISequence, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateMriSequence: async (sequenceId: string, baseMRISequence: BaseMRISequence, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sequenceId' is not null or undefined
-            assertParamExists('updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut', 'sequenceId', sequenceId)
+            assertParamExists('updateMriSequence', 'sequenceId', sequenceId)
             // verify required parameter 'baseMRISequence' is not null or undefined
-            assertParamExists('updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut', 'baseMRISequence', baseMRISequence)
-            const localVarPath = `/api/v1/exam/sequence/{sequence_id}`
+            assertParamExists('updateMriSequence', 'baseMRISequence', baseMRISequence)
+            const localVarPath = `/api/v1/protocol/sequence/{sequence_id}`
                 .replace(`{${"sequence_id"}}`, encodeURIComponent(String(sequenceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2013,10 +2013,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMriSequenceApiV1ExamSequencePost(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options);
+        async createMriSequence(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMriSequence(seqFile, xmlFile, name, description, sequenceType, tags, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequenceApiV1ExamSequencePost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.createMriSequence']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2026,10 +2026,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId, options);
+        async deleteMriSequence(sequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMriSequence(sequenceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.deleteMriSequence']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2038,10 +2038,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllMriSequencesApiV1ExamSequencesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MRISequenceOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllMriSequencesApiV1ExamSequencesAllGet(options);
+        async getAllMriSequences(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MRISequenceOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllMriSequences(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getAllMriSequencesApiV1ExamSequencesAllGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getAllMriSequences']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2051,10 +2051,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId, options);
+        async getMriSequence(sequenceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequence(sequenceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceByIdApiV1ExamSequenceSequenceIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequence']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2065,10 +2065,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options);
+        async getMriSequenceFile(sequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceFile(sequenceId, name, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2079,10 +2079,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId, name, options);
+        async getMriSequenceHeaderFile(sequenceId: string, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMriSequenceHeaderFile(sequenceId, name, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.getMriSequenceHeaderFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2093,10 +2093,10 @@ export const MriSequencesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId: string, baseMRISequence: BaseMRISequence, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId, baseMRISequence, options);
+        async updateMriSequence(sequenceId: string, baseMRISequence: BaseMRISequence, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRISequenceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMriSequence(sequenceId, baseMRISequence, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MriSequencesApi.updateMriSequence']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2121,8 +2121,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMriSequenceApiV1ExamSequencePost(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
-            return localVarFp.createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
+        createMriSequence(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.createMriSequence(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to delete. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- None
@@ -2131,8 +2131,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId: string, options?: any): AxiosPromise<any> {
-            return localVarFp.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId, options).then((request) => request(axios, basePath));
+        deleteMriSequence(sequenceId: string, options?: any): AxiosPromise<any> {
+            return localVarFp.deleteMriSequence(sequenceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve a list of all MRI sequences from the database.  Parameters ---------- database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- List[MRISequence]     The list of MRI sequences.
@@ -2140,8 +2140,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllMriSequencesApiV1ExamSequencesAllGet(options?: any): AxiosPromise<Array<MRISequenceOut>> {
-            return localVarFp.getAllMriSequencesApiV1ExamSequencesAllGet(options).then((request) => request(axios, basePath));
+        getAllMriSequences(options?: any): AxiosPromise<Array<MRISequenceOut>> {
+            return localVarFp.getAllMriSequences(options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve an MRI sequence by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The retrieved MRI sequence.
@@ -2150,8 +2150,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId: string, options?: any): AxiosPromise<MRISequenceOut> {
-            return localVarFp.getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId, options).then((request) => request(axios, basePath));
+        getMriSequence(sequenceId: string, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.getMriSequence(sequenceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve an MRI sequence file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
@@ -2161,8 +2161,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options).then((request) => request(axios, basePath));
+        getMriSequenceFile(sequenceId: string, name?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getMriSequenceFile(sequenceId, name, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve an MRI sequence header (ISMRMRD header) file by its ID.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to retrieve. background_tasks : BackgroundTasks     The background tasks to run. name : str     The name of the file to download. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- FileResponse     The retrieved MRI sequence file.
@@ -2172,8 +2172,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId: string, name?: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId, name, options).then((request) => request(axios, basePath));
+        getMriSequenceHeaderFile(sequenceId: string, name?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getMriSequenceHeaderFile(sequenceId, name, options).then((request) => request(axios, basePath));
         },
         /**
          * Update an MRI sequence with new data.  Parameters ---------- sequence_id : str     The ID of the MRI sequence to update. mri_sequence : MRISequence     The updated MRI sequence data. database : AsyncIOMotorDatabase     The MongoDB database handle.  Returns ------- MRISequence     The updated MRI sequence.
@@ -2183,8 +2183,8 @@ export const MriSequencesApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId: string, baseMRISequence: BaseMRISequence, options?: any): AxiosPromise<MRISequenceOut> {
-            return localVarFp.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId, baseMRISequence, options).then((request) => request(axios, basePath));
+        updateMriSequence(sequenceId: string, baseMRISequence: BaseMRISequence, options?: any): AxiosPromise<MRISequenceOut> {
+            return localVarFp.updateMriSequence(sequenceId, baseMRISequence, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2209,8 +2209,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public createMriSequenceApiV1ExamSequencePost(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).createMriSequenceApiV1ExamSequencePost(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
+    public createMriSequence(seqFile: string, xmlFile: string, name: string, description?: string, sequenceType?: string, tags?: Array<string>, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).createMriSequence(seqFile, xmlFile, name, description, sequenceType, tags, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2221,8 +2221,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequenceId, options).then((request) => request(this.axios, this.basePath));
+    public deleteMriSequence(sequenceId: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).deleteMriSequence(sequenceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2232,8 +2232,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public getAllMriSequencesApiV1ExamSequencesAllGet(options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getAllMriSequencesApiV1ExamSequencesAllGet(options).then((request) => request(this.axios, this.basePath));
+    public getAllMriSequences(options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getAllMriSequences(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2244,8 +2244,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getMriSequenceByIdApiV1ExamSequenceSequenceIdGet(sequenceId, options).then((request) => request(this.axios, this.basePath));
+    public getMriSequence(sequenceId: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequence(sequenceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2257,8 +2257,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getMriSequenceFileByIdApiV1ExamSequenceSequenceIdFileGet(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
+    public getMriSequenceFile(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceFile(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2270,8 +2270,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).getMriSequenceHeaderFileByIdApiV1ExamSequenceSequenceIdHeaderGet(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
+    public getMriSequenceHeaderFile(sequenceId: string, name?: string, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).getMriSequenceHeaderFile(sequenceId, name, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2283,8 +2283,8 @@ export class MriSequencesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MriSequencesApi
      */
-    public updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId: string, baseMRISequence: BaseMRISequence, options?: RawAxiosRequestConfig) {
-        return MriSequencesApiFp(this.configuration).updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequenceId, baseMRISequence, options).then((request) => request(this.axios, this.basePath));
+    public updateMriSequence(sequenceId: string, baseMRISequence: BaseMRISequence, options?: RawAxiosRequestConfig) {
+        return MriSequencesApiFp(this.configuration).updateMriSequence(sequenceId, baseMRISequence, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2303,10 +2303,10 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProtocolApiV1ExamNewPost: async (baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createProtocol: async (baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'baseProtocol' is not null or undefined
-            assertParamExists('createProtocolApiV1ExamNewPost', 'baseProtocol', baseProtocol)
-            const localVarPath = `/api/v1/exam/new`;
+            assertParamExists('createProtocol', 'baseProtocol', baseProtocol)
+            const localVarPath = `/api/v1/protocol/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2344,12 +2344,12 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProtocolFromTemplateApiV1ExamPost: async (templateId: string, baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createProtocolFromTemplate: async (templateId: string, baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createProtocolFromTemplateApiV1ExamPost', 'templateId', templateId)
+            assertParamExists('createProtocolFromTemplate', 'templateId', templateId)
             // verify required parameter 'baseProtocol' is not null or undefined
-            assertParamExists('createProtocolFromTemplateApiV1ExamPost', 'baseProtocol', baseProtocol)
-            const localVarPath = `/api/v1/exam/`;
+            assertParamExists('createProtocolFromTemplate', 'baseProtocol', baseProtocol)
+            const localVarPath = `/api/v1/protocol/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2384,16 +2384,54 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
+         * Delete a protocol by id. Cascade deletes the associated tasks.
+         * @summary Protocol Delete
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteProtocol: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examId' is not null or undefined
+            assertParamExists('deleteProtocol', 'examId', examId)
+            const localVarPath = `/api/v1/protocol/{exam_id}`
+                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get all protocols of a certain patient.
          * @summary Get All Patient Protocols
          * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllPatientProtocolsApiV1ExamAllPatientIdGet: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllPatientProtocols: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('getAllPatientProtocolsApiV1ExamAllPatientIdGet', 'patientId', patientId)
-            const localVarPath = `/api/v1/exam/all/{patient_id}`
+            assertParamExists('getAllPatientProtocols', 'patientId', patientId)
+            const localVarPath = `/api/v1/protocol/all/{patient_id}`
                 .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2427,8 +2465,8 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProtocolTemplatesApiV1ExamTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/templates/all`;
+        getAllProtocolTemplates: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/protocol/templates/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2462,10 +2500,10 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProtocolApiV1ExamExamIdGet: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProtocol: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'examId' is not null or undefined
-            assertParamExists('getProtocolApiV1ExamExamIdGet', 'examId', examId)
-            const localVarPath = `/api/v1/exam/{exam_id}`
+            assertParamExists('getProtocol', 'examId', examId)
+            const localVarPath = `/api/v1/protocol/{exam_id}`
                 .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2494,44 +2532,6 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Delete a protocol by id. Cascade deletes the associated tasks.
-         * @summary Protocol Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        protocolDeleteApiV1ExamExamIdDelete: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('protocolDeleteApiV1ExamExamIdDelete', 'examId', examId)
-            const localVarPath = `/api/v1/exam/{exam_id}`
-                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Update an existing protocol.
          * @summary Update Protocol
          * @param {ExamId} examId 
@@ -2539,12 +2539,12 @@ export const ProtocolsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProtocolApiV1ExamExamIdPut: async (examId: ExamId, baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateProtocol: async (examId: ExamId, baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'examId' is not null or undefined
-            assertParamExists('updateProtocolApiV1ExamExamIdPut', 'examId', examId)
+            assertParamExists('updateProtocol', 'examId', examId)
             // verify required parameter 'baseProtocol' is not null or undefined
-            assertParamExists('updateProtocolApiV1ExamExamIdPut', 'baseProtocol', baseProtocol)
-            const localVarPath = `/api/v1/exam/{exam_id}`
+            assertParamExists('updateProtocol', 'baseProtocol', baseProtocol)
+            const localVarPath = `/api/v1/protocol/{exam_id}`
                 .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2592,10 +2592,10 @@ export const ProtocolsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createProtocolApiV1ExamNewPost(baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createProtocolApiV1ExamNewPost(baseProtocol, options);
+        async createProtocol(baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProtocol(baseProtocol, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.createProtocolApiV1ExamNewPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.createProtocol']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2606,48 +2606,10 @@ export const ProtocolsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createProtocolFromTemplateApiV1ExamPost(templateId: string, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createProtocolFromTemplateApiV1ExamPost(templateId, baseProtocol, options);
+        async createProtocolFromTemplate(templateId: string, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProtocolFromTemplate(templateId, baseProtocol, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.createProtocolFromTemplateApiV1ExamPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all protocols of a certain patient.
-         * @summary Get All Patient Protocols
-         * @param {string} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProtocolOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getAllPatientProtocolsApiV1ExamAllPatientIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all protocol templates.
-         * @summary Get All Protocol Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProtocolOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getAllProtocolTemplatesApiV1ExamTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get protocol endpoint.
-         * @summary Get Protocol
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getProtocolApiV1ExamExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProtocolApiV1ExamExamIdGet(examId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getProtocolApiV1ExamExamIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.createProtocolFromTemplate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2657,10 +2619,48 @@ export const ProtocolsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async protocolDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.protocolDeleteApiV1ExamExamIdDelete(examId, options);
+        async deleteProtocol(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProtocol(examId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.protocolDeleteApiV1ExamExamIdDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.deleteProtocol']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all protocols of a certain patient.
+         * @summary Get All Patient Protocols
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllPatientProtocols(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProtocolOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPatientProtocols(patientId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getAllPatientProtocols']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all protocol templates.
+         * @summary Get All Protocol Templates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllProtocolTemplates(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProtocolOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProtocolTemplates(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getAllProtocolTemplates']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get protocol endpoint.
+         * @summary Get Protocol
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProtocol(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProtocol(examId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getProtocol']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2671,10 +2671,10 @@ export const ProtocolsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateProtocolApiV1ExamExamIdPut(examId: ExamId, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProtocolApiV1ExamExamIdPut(examId, baseProtocol, options);
+        async updateProtocol(examId: ExamId, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProtocol(examId, baseProtocol, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.updateProtocolApiV1ExamExamIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.updateProtocol']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2694,8 +2694,8 @@ export const ProtocolsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProtocolApiV1ExamNewPost(baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
-            return localVarFp.createProtocolApiV1ExamNewPost(baseProtocol, options).then((request) => request(axios, basePath));
+        createProtocol(baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.createProtocol(baseProtocol, options).then((request) => request(axios, basePath));
         },
         /**
          * Create a new protocol from template.
@@ -2705,37 +2705,8 @@ export const ProtocolsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProtocolFromTemplateApiV1ExamPost(templateId: string, baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
-            return localVarFp.createProtocolFromTemplateApiV1ExamPost(templateId, baseProtocol, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all protocols of a certain patient.
-         * @summary Get All Patient Protocols
-         * @param {string} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId: string, options?: any): AxiosPromise<Array<ProtocolOut>> {
-            return localVarFp.getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all protocol templates.
-         * @summary Get All Protocol Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options?: any): AxiosPromise<Array<ProtocolOut>> {
-            return localVarFp.getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get protocol endpoint.
-         * @summary Get Protocol
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProtocolApiV1ExamExamIdGet(examId: ExamId, options?: any): AxiosPromise<ProtocolOut> {
-            return localVarFp.getProtocolApiV1ExamExamIdGet(examId, options).then((request) => request(axios, basePath));
+        createProtocolFromTemplate(templateId: string, baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.createProtocolFromTemplate(templateId, baseProtocol, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete a protocol by id. Cascade deletes the associated tasks.
@@ -2744,8 +2715,37 @@ export const ProtocolsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        protocolDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: any): AxiosPromise<void> {
-            return localVarFp.protocolDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(axios, basePath));
+        deleteProtocol(examId: ExamId, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteProtocol(examId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all protocols of a certain patient.
+         * @summary Get All Patient Protocols
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllPatientProtocols(patientId: string, options?: any): AxiosPromise<Array<ProtocolOut>> {
+            return localVarFp.getAllPatientProtocols(patientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all protocol templates.
+         * @summary Get All Protocol Templates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllProtocolTemplates(options?: any): AxiosPromise<Array<ProtocolOut>> {
+            return localVarFp.getAllProtocolTemplates(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get protocol endpoint.
+         * @summary Get Protocol
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProtocol(examId: ExamId, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.getProtocol(examId, options).then((request) => request(axios, basePath));
         },
         /**
          * Update an existing protocol.
@@ -2755,8 +2755,8 @@ export const ProtocolsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProtocolApiV1ExamExamIdPut(examId: ExamId, baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
-            return localVarFp.updateProtocolApiV1ExamExamIdPut(examId, baseProtocol, options).then((request) => request(axios, basePath));
+        updateProtocol(examId: ExamId, baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.updateProtocol(examId, baseProtocol, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2776,8 +2776,8 @@ export class ProtocolsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProtocolsApi
      */
-    public createProtocolApiV1ExamNewPost(baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).createProtocolApiV1ExamNewPost(baseProtocol, options).then((request) => request(this.axios, this.basePath));
+    public createProtocol(baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).createProtocol(baseProtocol, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2789,43 +2789,8 @@ export class ProtocolsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProtocolsApi
      */
-    public createProtocolFromTemplateApiV1ExamPost(templateId: string, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).createProtocolFromTemplateApiV1ExamPost(templateId, baseProtocol, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all protocols of a certain patient.
-     * @summary Get All Patient Protocols
-     * @param {string} patientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProtocolsApi
-     */
-    public getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all protocol templates.
-     * @summary Get All Protocol Templates
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProtocolsApi
-     */
-    public getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get protocol endpoint.
-     * @summary Get Protocol
-     * @param {ExamId} examId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProtocolsApi
-     */
-    public getProtocolApiV1ExamExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).getProtocolApiV1ExamExamIdGet(examId, options).then((request) => request(this.axios, this.basePath));
+    public createProtocolFromTemplate(templateId: string, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).createProtocolFromTemplate(templateId, baseProtocol, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2836,8 +2801,43 @@ export class ProtocolsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProtocolsApi
      */
-    public protocolDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).protocolDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(this.axios, this.basePath));
+    public deleteProtocol(examId: ExamId, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).deleteProtocol(examId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all protocols of a certain patient.
+     * @summary Get All Patient Protocols
+     * @param {string} patientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public getAllPatientProtocols(patientId: string, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).getAllPatientProtocols(patientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all protocol templates.
+     * @summary Get All Protocol Templates
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public getAllProtocolTemplates(options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).getAllProtocolTemplates(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get protocol endpoint.
+     * @summary Get Protocol
+     * @param {ExamId} examId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public getProtocol(examId: ExamId, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).getProtocol(examId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2849,8 +2849,8 @@ export class ProtocolsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProtocolsApi
      */
-    public updateProtocolApiV1ExamExamIdPut(examId: ExamId, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
-        return ProtocolsApiFp(this.configuration).updateProtocolApiV1ExamExamIdPut(examId, baseProtocol, options).then((request) => request(this.axios, this.basePath));
+    public updateProtocol(examId: ExamId, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).updateProtocol(examId, baseProtocol, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2869,10 +2869,10 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBlankResultApiV1ExamResultPost: async (taskId: TaskId1, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createBlankResult: async (taskId: TaskId1, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('createBlankResultApiV1ExamResultPost', 'taskId', taskId)
-            const localVarPath = `/api/v1/exam/result`;
+            assertParamExists('createBlankResult', 'taskId', taskId)
+            const localVarPath = `/api/v1/protocol/result`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2913,12 +2913,12 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createDicomResultApiV1ExamResultDicomTaskIdPost: async (taskId: TaskId, createDicomResult: CreateDicomResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createDicomResult: async (taskId: TaskId, createDicomResult: CreateDicomResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('createDicomResultApiV1ExamResultDicomTaskIdPost', 'taskId', taskId)
+            assertParamExists('createDicomResult', 'taskId', taskId)
             // verify required parameter 'createDicomResult' is not null or undefined
-            assertParamExists('createDicomResultApiV1ExamResultDicomTaskIdPost', 'createDicomResult', createDicomResult)
-            const localVarPath = `/api/v1/exam/result/dicom/{task_id}`
+            assertParamExists('createDicomResult', 'createDicomResult', createDicomResult)
+            const localVarPath = `/api/v1/protocol/result/dicom/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2956,10 +2956,10 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteResultApiV1ExamResultResultIdDelete: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteResult: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'resultId' is not null or undefined
-            assertParamExists('deleteResultApiV1ExamResultResultIdDelete', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/result/{result_id}`
+            assertParamExists('deleteResult', 'resultId', resultId)
+            const localVarPath = `/api/v1/protocol/result/{result_id}`
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3003,7 +3003,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('downloadMRD', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('downloadMRD', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/download`
+            const localVarPath = `/api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/download`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
@@ -3040,10 +3040,10 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskResultsApiV1ExamResultAllTaskIdGet: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllTaskResults: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('getAllTaskResultsApiV1ExamResultAllTaskIdGet', 'taskId', taskId)
-            const localVarPath = `/api/v1/exam/result/all/{task_id}`
+            assertParamExists('getAllTaskResults', 'taskId', taskId)
+            const localVarPath = `/api/v1/protocol/result/all/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3090,7 +3090,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('getDicom', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('getDicom', 'filename', filename)
-            const localVarPath = `/api/v1/exam/dcm/{protocol_id}/{task_id}/{result_id}/{filename}`
+            const localVarPath = `/api/v1/protocol/dcm/{protocol_id}/{task_id}/{result_id}/{filename}`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
@@ -3142,7 +3142,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('getMRD', 'resultId', resultId)
             // verify required parameter 'ids' is not null or undefined
             assertParamExists('getMRD', 'ids', ids)
-            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/data`
+            const localVarPath = `/api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/data`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
@@ -3200,7 +3200,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('getMrdMeta', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getMrdMeta', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/meta`
+            const localVarPath = `/api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/meta`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
@@ -3237,10 +3237,10 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getResultApiV1ExamResultResultIdGet: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getResult: async (resultId: ResultId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'resultId' is not null or undefined
-            assertParamExists('getResultApiV1ExamResultResultIdGet', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/result/{result_id}`
+            assertParamExists('getResult', 'resultId', resultId)
+            const localVarPath = `/api/v1/protocol/result/{result_id}`
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3276,12 +3276,12 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setResultApiV1ExamResultResultIdPut: async (resultId: ResultId, setResult: SetResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        setResult: async (resultId: ResultId, setResult: SetResult, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'resultId' is not null or undefined
-            assertParamExists('setResultApiV1ExamResultResultIdPut', 'resultId', resultId)
+            assertParamExists('setResult', 'resultId', resultId)
             // verify required parameter 'setResult' is not null or undefined
-            assertParamExists('setResultApiV1ExamResultResultIdPut', 'setResult', setResult)
-            const localVarPath = `/api/v1/exam/result/{result_id}`
+            assertParamExists('setResult', 'setResult', setResult)
+            const localVarPath = `/api/v1/protocol/result/{result_id}`
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3331,7 +3331,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('uploadToXnat', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('uploadToXnat', 'filename', filename)
-            const localVarPath = `/api/v1/exam/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}`
+            const localVarPath = `/api/v1/protocol/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
@@ -3379,10 +3379,10 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createBlankResultApiV1ExamResultPost(taskId, options);
+        async createBlankResult(taskId: TaskId1, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createBlankResult(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createBlankResultApiV1ExamResultPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createBlankResult']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3393,10 +3393,10 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createDicomResultApiV1ExamResultDicomTaskIdPost(taskId: TaskId, createDicomResult: CreateDicomResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options);
+        async createDicomResult(taskId: TaskId, createDicomResult: CreateDicomResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDicomResult(taskId, createDicomResult, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createDicomResultApiV1ExamResultDicomTaskIdPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.createDicomResult']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3406,10 +3406,10 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteResultApiV1ExamResultResultIdDelete(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteResultApiV1ExamResultResultIdDelete(resultId, options);
+        async deleteResult(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteResult(resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.deleteResultApiV1ExamResultResultIdDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.deleteResult']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3434,10 +3434,10 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ResultOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options);
+        async getAllTaskResults(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ResultOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskResults(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getAllTaskResultsApiV1ExamResultAllTaskIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getAllTaskResults']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3496,10 +3496,10 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getResultApiV1ExamResultResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getResultApiV1ExamResultResultIdGet(resultId, options);
+        async getResult(resultId: ResultId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getResult(resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getResultApiV1ExamResultResultIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.getResult']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3510,10 +3510,10 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async setResultApiV1ExamResultResultIdPut(resultId: ResultId, setResult: SetResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.setResultApiV1ExamResultResultIdPut(resultId, setResult, options);
+        async setResult(resultId: ResultId, setResult: SetResult, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResultOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setResult(resultId, setResult, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ResultsApi.setResultApiV1ExamResultResultIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ResultsApi.setResult']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3549,8 +3549,8 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: any): AxiosPromise<ResultOut> {
-            return localVarFp.createBlankResultApiV1ExamResultPost(taskId, options).then((request) => request(axios, basePath));
+        createBlankResult(taskId: TaskId1, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.createBlankResult(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Create a DICOM result entry after a successful Dagster reconstruction run.
@@ -3560,8 +3560,8 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createDicomResultApiV1ExamResultDicomTaskIdPost(taskId: TaskId, createDicomResult: CreateDicomResult, options?: any): AxiosPromise<ResultOut> {
-            return localVarFp.createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options).then((request) => request(axios, basePath));
+        createDicomResult(taskId: TaskId, createDicomResult: CreateDicomResult, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.createDicomResult(taskId, createDicomResult, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete a result.
@@ -3570,8 +3570,8 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteResultApiV1ExamResultResultIdDelete(resultId: ResultId, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteResultApiV1ExamResultResultIdDelete(resultId, options).then((request) => request(axios, basePath));
+        deleteResult(resultId: ResultId, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteResult(resultId, options).then((request) => request(axios, basePath));
         },
         /**
          * Download the full MRD file.
@@ -3592,8 +3592,8 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<Array<ResultOut>> {
-            return localVarFp.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(axios, basePath));
+        getAllTaskResults(taskId: TaskId, options?: any): AxiosPromise<Array<ResultOut>> {
+            return localVarFp.getAllTaskResults(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Serve a DICOM instance.
@@ -3642,8 +3642,8 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getResultApiV1ExamResultResultIdGet(resultId: ResultId, options?: any): AxiosPromise<ResultOut> {
-            return localVarFp.getResultApiV1ExamResultResultIdGet(resultId, options).then((request) => request(axios, basePath));
+        getResult(resultId: ResultId, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.getResult(resultId, options).then((request) => request(axios, basePath));
         },
         /**
          * Update an existing result.
@@ -3653,8 +3653,8 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setResultApiV1ExamResultResultIdPut(resultId: ResultId, setResult: SetResult, options?: any): AxiosPromise<ResultOut> {
-            return localVarFp.setResultApiV1ExamResultResultIdPut(resultId, setResult, options).then((request) => request(axios, basePath));
+        setResult(resultId: ResultId, setResult: SetResult, options?: any): AxiosPromise<ResultOut> {
+            return localVarFp.setResult(resultId, setResult, options).then((request) => request(axios, basePath));
         },
         /**
          * Upload a DICOM file to XNAT test database.
@@ -3687,8 +3687,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public createBlankResultApiV1ExamResultPost(taskId: TaskId1, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).createBlankResultApiV1ExamResultPost(taskId, options).then((request) => request(this.axios, this.basePath));
+    public createBlankResult(taskId: TaskId1, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).createBlankResult(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3700,8 +3700,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public createDicomResultApiV1ExamResultDicomTaskIdPost(taskId: TaskId, createDicomResult: CreateDicomResult, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options).then((request) => request(this.axios, this.basePath));
+    public createDicomResult(taskId: TaskId, createDicomResult: CreateDicomResult, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).createDicomResult(taskId, createDicomResult, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3712,8 +3712,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public deleteResultApiV1ExamResultResultIdDelete(resultId: ResultId, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).deleteResultApiV1ExamResultResultIdDelete(resultId, options).then((request) => request(this.axios, this.basePath));
+    public deleteResult(resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).deleteResult(resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3738,8 +3738,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(this.axios, this.basePath));
+    public getAllTaskResults(taskId: TaskId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getAllTaskResults(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3796,8 +3796,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getResultApiV1ExamResultResultIdGet(resultId: ResultId, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getResultApiV1ExamResultResultIdGet(resultId, options).then((request) => request(this.axios, this.basePath));
+    public getResult(resultId: ResultId, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getResult(resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3809,8 +3809,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public setResultApiV1ExamResultResultIdPut(resultId: ResultId, setResult: SetResult, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).setResultApiV1ExamResultResultIdPut(resultId, setResult, options).then((request) => request(this.axios, this.basePath));
+    public setResult(resultId: ResultId, setResult: SetResult, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).setResult(resultId, setResult, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3844,10 +3844,10 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskApiV1ExamTaskNewPost: async (baseAcquisitionTask: BaseAcquisitionTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createTask: async (baseAcquisitionTask: BaseAcquisitionTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'baseAcquisitionTask' is not null or undefined
-            assertParamExists('createTaskApiV1ExamTaskNewPost', 'baseAcquisitionTask', baseAcquisitionTask)
-            const localVarPath = `/api/v1/exam/task/new`;
+            assertParamExists('createTask', 'baseAcquisitionTask', baseAcquisitionTask)
+            const localVarPath = `/api/v1/protocol/task/new`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3886,14 +3886,14 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskFromTemplateApiV1ExamTaskPost: async (protocolId: string, templateId: string, newTaskIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createTaskFromTemplate: async (protocolId: string, templateId: string, newTaskIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocolId' is not null or undefined
-            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'protocolId', protocolId)
+            assertParamExists('createTaskFromTemplate', 'protocolId', protocolId)
             // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'templateId', templateId)
+            assertParamExists('createTaskFromTemplate', 'templateId', templateId)
             // verify required parameter 'newTaskIsTemplate' is not null or undefined
-            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'newTaskIsTemplate', newTaskIsTemplate)
-            const localVarPath = `/api/v1/exam/task`;
+            assertParamExists('createTaskFromTemplate', 'newTaskIsTemplate', newTaskIsTemplate)
+            const localVarPath = `/api/v1/protocol/task`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3939,10 +3939,10 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteTaskApiV1ExamTaskTaskIdDelete: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteTask: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('deleteTaskApiV1ExamTaskTaskIdDelete', 'taskId', taskId)
-            const localVarPath = `/api/v1/exam/task/{task_id}`
+            assertParamExists('deleteTask', 'taskId', taskId)
+            const localVarPath = `/api/v1/protocol/task/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3977,10 +3977,10 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet: async (protocolId: ProtocolId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllProtocolTasks: async (protocolId: ProtocolId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocolId' is not null or undefined
-            assertParamExists('getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet', 'protocolId', protocolId)
-            const localVarPath = `/api/v1/exam/task/all/{protocol_id}`
+            assertParamExists('getAllProtocolTasks', 'protocolId', protocolId)
+            const localVarPath = `/api/v1/protocol/task/all/{protocol_id}`
                 .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4014,8 +4014,8 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/task/templates/all`;
+        getAllTaskTemplates: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/protocol/task/templates/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4049,10 +4049,10 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTaskApiV1ExamTaskTaskIdGet: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTask: async (taskId: TaskId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('getTaskApiV1ExamTaskTaskIdGet', 'taskId', taskId)
-            const localVarPath = `/api/v1/exam/task/{task_id}`
+            assertParamExists('getTask', 'taskId', taskId)
+            const localVarPath = `/api/v1/protocol/task/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4087,10 +4087,10 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reorderTasksApiV1ExamTaskReorderPut: async (taskReorder: TaskReorder, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        reorderTasks: async (taskReorder: TaskReorder, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskReorder' is not null or undefined
-            assertParamExists('reorderTasksApiV1ExamTaskReorderPut', 'taskReorder', taskReorder)
-            const localVarPath = `/api/v1/exam/task/reorder`;
+            assertParamExists('reorderTasks', 'taskReorder', taskReorder)
+            const localVarPath = `/api/v1/protocol/task/reorder`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4128,12 +4128,12 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskApiV1ExamTaskTaskIdPut: async (taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateTask: async (taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'taskId', taskId)
+            assertParamExists('updateTask', 'taskId', taskId)
             // verify required parameter 'baseAcquisitionTask' is not null or undefined
-            assertParamExists('updateTaskApiV1ExamTaskTaskIdPut', 'baseAcquisitionTask', baseAcquisitionTask)
-            const localVarPath = `/api/v1/exam/task/{task_id}`
+            assertParamExists('updateTask', 'baseAcquisitionTask', baseAcquisitionTask)
+            const localVarPath = `/api/v1/protocol/task/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4172,12 +4172,12 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskStatusApiV1ExamTaskTaskIdStatusPut: async (taskId: TaskId, status: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateTaskStatus: async (taskId: TaskId, status: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('updateTaskStatusApiV1ExamTaskTaskIdStatusPut', 'taskId', taskId)
+            assertParamExists('updateTaskStatus', 'taskId', taskId)
             // verify required parameter 'status' is not null or undefined
-            assertParamExists('updateTaskStatusApiV1ExamTaskTaskIdStatusPut', 'status', status)
-            const localVarPath = `/api/v1/exam/task/{task_id}/status`
+            assertParamExists('updateTaskStatus', 'status', status)
+            const localVarPath = `/api/v1/protocol/task/{task_id}/status`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4226,10 +4226,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskApiV1ExamTaskNewPost(baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskApiV1ExamTaskNewPost(baseAcquisitionTask, options);
+        async createTask(baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTask(baseAcquisitionTask, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskApiV1ExamTaskNewPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.createTask']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4241,10 +4241,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskFromTemplateApiV1ExamTaskPost(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(protocolId, templateId, newTaskIsTemplate, options);
+        async createTaskFromTemplate(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplate(protocolId, templateId, newTaskIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskFromTemplateApiV1ExamTaskPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskFromTemplate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4254,10 +4254,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteTaskApiV1ExamTaskTaskIdDelete(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTaskApiV1ExamTaskTaskIdDelete(taskId, options);
+        async deleteTask(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTask(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.deleteTaskApiV1ExamTaskTaskIdDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.deleteTask']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4267,10 +4267,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId: ProtocolId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId, options);
+        async getAllProtocolTasks(protocolId: ProtocolId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProtocolTasks(protocolId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllProtocolTasks']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4279,10 +4279,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options);
+        async getAllTaskTemplates(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplates(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplates']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4292,10 +4292,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTaskApiV1ExamTaskTaskIdGet(taskId, options);
+        async getTask(taskId: TaskId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTask(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.getTaskApiV1ExamTaskTaskIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.getTask']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4305,10 +4305,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reorderTasksApiV1ExamTaskReorderPut(taskReorder: TaskReorder, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.reorderTasksApiV1ExamTaskReorderPut(taskReorder, options);
+        async reorderTasks(taskReorder: TaskReorder, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reorderTasks(taskReorder, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.reorderTasksApiV1ExamTaskReorderPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.reorderTasks']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4319,10 +4319,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskApiV1ExamTaskTaskIdPut(taskId, baseAcquisitionTask, options);
+        async updateTask(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTask(taskId, baseAcquisitionTask, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTaskApiV1ExamTaskTaskIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTask']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4333,10 +4333,10 @@ export const TasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options);
+        async updateTaskStatus(taskId: TaskId, status: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskStatus(taskId, status, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTaskStatusApiV1ExamTaskTaskIdStatusPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.updateTaskStatus']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -4356,8 +4356,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskApiV1ExamTaskNewPost(baseAcquisitionTask: BaseAcquisitionTask, options?: any): AxiosPromise<AcquisitionTaskOut> {
-            return localVarFp.createTaskApiV1ExamTaskNewPost(baseAcquisitionTask, options).then((request) => request(axios, basePath));
+        createTask(baseAcquisitionTask: BaseAcquisitionTask, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.createTask(baseAcquisitionTask, options).then((request) => request(axios, basePath));
         },
         /**
          * Create a new acquisition task from a template.
@@ -4368,8 +4368,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskFromTemplateApiV1ExamTaskPost(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<AcquisitionTaskOut> {
-            return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(protocolId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
+        createTaskFromTemplate(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.createTaskFromTemplate(protocolId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete a task.
@@ -4378,8 +4378,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteTaskApiV1ExamTaskTaskIdDelete(taskId: TaskId, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteTaskApiV1ExamTaskTaskIdDelete(taskId, options).then((request) => request(axios, basePath));
+        deleteTask(taskId: TaskId, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteTask(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all tasks of a protocol.
@@ -4388,8 +4388,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId: ProtocolId, options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
-            return localVarFp.getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId, options).then((request) => request(axios, basePath));
+        getAllProtocolTasks(protocolId: ProtocolId, options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
+            return localVarFp.getAllProtocolTasks(protocolId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all task templates.
@@ -4397,8 +4397,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
-            return localVarFp.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(axios, basePath));
+        getAllTaskTemplates(options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
+            return localVarFp.getAllTaskTemplates(options).then((request) => request(axios, basePath));
         },
         /**
          * Get an existing task.
@@ -4407,8 +4407,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: any): AxiosPromise<AcquisitionTaskOut> {
-            return localVarFp.getTaskApiV1ExamTaskTaskIdGet(taskId, options).then((request) => request(axios, basePath));
+        getTask(taskId: TaskId, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.getTask(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Reorder tasks by updating their position.
@@ -4417,8 +4417,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reorderTasksApiV1ExamTaskReorderPut(taskReorder: TaskReorder, options?: any): AxiosPromise<void> {
-            return localVarFp.reorderTasksApiV1ExamTaskReorderPut(taskReorder, options).then((request) => request(axios, basePath));
+        reorderTasks(taskReorder: TaskReorder, options?: any): AxiosPromise<void> {
+            return localVarFp.reorderTasks(taskReorder, options).then((request) => request(axios, basePath));
         },
         /**
          * Update an existing task.
@@ -4428,8 +4428,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: any): AxiosPromise<AcquisitionTaskOut> {
-            return localVarFp.updateTaskApiV1ExamTaskTaskIdPut(taskId, baseAcquisitionTask, options).then((request) => request(axios, basePath));
+        updateTask(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.updateTask(taskId, baseAcquisitionTask, options).then((request) => request(axios, basePath));
         },
         /**
          * Update only the status of a task (called by Dagster sensors).
@@ -4439,8 +4439,8 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: any): AxiosPromise<AcquisitionTaskOut> {
-            return localVarFp.updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options).then((request) => request(axios, basePath));
+        updateTaskStatus(taskId: TaskId, status: string, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.updateTaskStatus(taskId, status, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4460,8 +4460,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public createTaskApiV1ExamTaskNewPost(baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskApiV1ExamTaskNewPost(baseAcquisitionTask, options).then((request) => request(this.axios, this.basePath));
+    public createTask(baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTask(baseAcquisitionTask, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4474,8 +4474,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public createTaskFromTemplateApiV1ExamTaskPost(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskFromTemplateApiV1ExamTaskPost(protocolId, templateId, newTaskIsTemplate, options).then((request) => request(this.axios, this.basePath));
+    public createTaskFromTemplate(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTaskFromTemplate(protocolId, templateId, newTaskIsTemplate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4486,8 +4486,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public deleteTaskApiV1ExamTaskTaskIdDelete(taskId: TaskId, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).deleteTaskApiV1ExamTaskTaskIdDelete(taskId, options).then((request) => request(this.axios, this.basePath));
+    public deleteTask(taskId: TaskId, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).deleteTask(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4498,8 +4498,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId: ProtocolId, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId, options).then((request) => request(this.axios, this.basePath));
+    public getAllProtocolTasks(protocolId: ProtocolId, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).getAllProtocolTasks(protocolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4509,8 +4509,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
+    public getAllTaskTemplates(options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).getAllTaskTemplates(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4521,8 +4521,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public getTaskApiV1ExamTaskTaskIdGet(taskId: TaskId, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).getTaskApiV1ExamTaskTaskIdGet(taskId, options).then((request) => request(this.axios, this.basePath));
+    public getTask(taskId: TaskId, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).getTask(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4533,8 +4533,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public reorderTasksApiV1ExamTaskReorderPut(taskReorder: TaskReorder, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).reorderTasksApiV1ExamTaskReorderPut(taskReorder, options).then((request) => request(this.axios, this.basePath));
+    public reorderTasks(taskReorder: TaskReorder, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).reorderTasks(taskReorder, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4546,8 +4546,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public updateTaskApiV1ExamTaskTaskIdPut(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).updateTaskApiV1ExamTaskTaskIdPut(taskId, baseAcquisitionTask, options).then((request) => request(this.axios, this.basePath));
+    public updateTask(taskId: TaskId, baseAcquisitionTask: BaseAcquisitionTask, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).updateTask(taskId, baseAcquisitionTask, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4559,8 +4559,8 @@ export class TasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options).then((request) => request(this.axios, this.basePath));
+    public updateTaskStatus(taskId: TaskId, status: string, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).updateTaskStatus(taskId, status, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

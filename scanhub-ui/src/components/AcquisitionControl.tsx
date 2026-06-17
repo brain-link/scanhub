@@ -15,7 +15,7 @@ import axios from 'axios'
 import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
-import { ItemStatus } from '../openapi/generated-client/exam'
+import { ItemStatus } from '../openapi/generated-client/protocol'
 import { ItemSelection } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 import baseUrls from '../utils/Urls'

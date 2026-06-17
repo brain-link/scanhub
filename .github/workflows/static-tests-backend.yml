@@ -13,8 +13,7 @@ jobs:
       matrix:
         python-version: ["3.13"]
         target:
-          - path: services/exam-manager
-          - path: services/workflow-manager
+          - path: services/protocol-manager
           - path: services/device-manager
           - path: services/user-login-manager
           - path: services/patient-manager

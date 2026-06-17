@@ -24,14 +24,14 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import { dataApi, examApi, patientApi, resultApi, taskApi } from '../api'
+import { dataApi, protocolApi, patientApi, resultApi, taskApi } from '../api'
 import AcquisitionControl from '../components/AcquisitionControl'
 import ConfirmAcquisitionLimitsModal from '../components/AcquisitionLimitsModal'
 import DicomViewer3D from '../viewer/dicom/DicomViewer'
 import RawDataViewer from '../viewer/mrd/RawDataViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../openapi/generated-client/patient'
-import { ProtocolOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/exam'
+import { ProtocolOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/protocol'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
@@ -74,8 +74,8 @@ function AcquisitionView() {
     const tasks = [...protocol.tasks]
     const [draggedTask] = tasks.splice(draggingTaskIndex, 1)
     tasks.splice(index, 0, draggedTask)
-    await taskApi.reorderTasksApiV1ExamTaskReorderPut({ task_ids: tasks.map(t => t.id) })
-    refetchExams()
+    await taskApi.reorderTasks({ task_ids: tasks.map(t => t.id) })
+    refetchProtocols()
     setDraggingTaskIndex(undefined)
     setDraggingProtocolId(undefined)
   }
@@ -88,15 +88,15 @@ function AcquisitionView() {
     isError: patientError,
   } = useQuery<PatientOut>({
     queryKey: ['patient', params.patientId],
-    queryFn: async () => (await patientApi.getPatientApiV1PatientPatientIdGet(params.patientId!)).data,
+    queryFn: async () => (await patientApi.getPatient(params.patientId!)).data,
     refetchInterval: 1000,
   })
 
   // Protocols query
-  const { data: exams, refetch: refetchExams } = useQuery<ProtocolOut[], Error>({
-    queryKey: ['allExams', params.patientId],
+  const { data: protocols, refetch: refetchProtocols } = useQuery<ProtocolOut[], Error>({
+    queryKey: ['allProtocols', params.patientId],
     queryFn: async () => {
-      const result = await examApi.getAllPatientProtocolsApiV1ExamAllPatientIdGet(params.patientId!)
+      const result = await protocolApi.getAllPatientProtocols(params.patientId!)
       if (itemSelection.itemId != undefined) {
         result.data.forEach((protocol) => {
           if (protocol.id === itemSelection.itemId)
@@ -117,7 +117,7 @@ function AcquisitionView() {
     queryKey: ['task-data', itemSelection.itemId, itemSelection.status],
     enabled: !!itemSelection.itemId && itemSelection.type === 'ACQUISITION',
     queryFn: async () => {
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(itemSelection.itemId!)
+      const { data } = await taskApi.getTask(itemSelection.itemId!)
       return data
     },
     refetchInterval: 2000,
@@ -233,7 +233,7 @@ function AcquisitionView() {
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Typography level='title-md'>Protocols</Typography>
-            <Badge badgeContent={exams?.length} color='primary' />
+            <Badge badgeContent={protocols?.length} color='primary' />
           </Box>
           <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamFromTemplateModalOpen(true)}>
             <AddSharpIcon />
@@ -242,7 +242,7 @@ function AcquisitionView() {
         <Divider />
 
         <Box sx={{ minHeight: 0, overflow: 'hidden auto', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          {exams?.map((protocol: ProtocolOut) => (
+          {protocols?.map((protocol: ProtocolOut) => (
             <AccordionWithMenu
               key={`protocol-${protocol.id}`}
               accordionSummary={
@@ -252,8 +252,8 @@ function AcquisitionView() {
                   selection={itemSelection}
                 />
               }
-              accordionMenu={<ExamMenu item={protocol} refetchParentData={refetchExams} />}
-              toolTipContent={<ExamInfo exam={protocol} />}
+              accordionMenu={<ExamMenu item={protocol} refetchParentData={refetchProtocols} />}
+              toolTipContent={<ExamInfo protocol={protocol} />}
             >
               {protocol.tasks?.map((task: AcquisitionTaskOut, index: number) => (
                 <Box
@@ -270,7 +270,7 @@ function AcquisitionView() {
                 >
                   <TaskItem
                     item={task}
-                    refetchParentData={refetchExams}
+                    refetchParentData={refetchProtocols}
                     onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
                     selection={itemSelection}
                   />
@@ -306,7 +306,7 @@ function AcquisitionView() {
         isOpen={examFromTemplateModalOpen}
         setOpen={setExamFromTemplateModalOpen}
         parentId={String(params.patientId)}
-        onSubmit={refetchExams}
+        onSubmit={refetchProtocols}
         createTemplate={false}
         modalType={'create'}
       />

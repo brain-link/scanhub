@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../api';
 import { ItemSelection } from '../interfaces/components.interface'
-import { ItemStatus } from '../openapi/generated-client/exam'
+import { ItemStatus } from '../openapi/generated-client/protocol'
 
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
@@ -30,7 +30,7 @@ export function useImageIds(item: ItemSelection, resultId?: string) {
 
       if (item.type != 'ACQUISITION' || item.status != ItemStatus.Finished) return []
 
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
+      const { data } = await taskApi.getTask(item.itemId!);
 
       const results = normalizeToArray<any>(data?.results);
       if (results.length === 0) return [];
@@ -68,7 +68,7 @@ export function useImageIds(item: ItemSelection, resultId?: string) {
         const origin = typeof window !== 'undefined' ? window.location.origin : '';
         return files
           .sort()
-          .map((f: string) => `${origin}/api/v1/exam/dcm/${protocolId}/${taskIdStr}/${resultIdStr}/${f}`);
+          .map((f: string) => `${origin}/api/v1/protocol/dcm/${protocolId}/${taskIdStr}/${resultIdStr}/${f}`);
       }
 
       return [];

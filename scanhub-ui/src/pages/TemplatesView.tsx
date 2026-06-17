@@ -12,8 +12,8 @@ import Stack from '@mui/joy/Stack'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { examApi, taskApi } from '../api'
-import { ProtocolOut } from '../openapi/generated-client/exam'
+import { protocolApi, taskApi } from '../api'
+import { ProtocolOut } from '../openapi/generated-client/protocol'
 import ExamModal from '../components/ExamModal'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
 import Typography from '@mui/joy/Typography'
@@ -51,7 +51,7 @@ export default function TemplatesView() {
     tasks.splice(index, 0, draggedTask)
 
     const taskIds = tasks.map((t) => t.id)
-    await taskApi.reorderTasksApiV1ExamTaskReorderPut({ task_ids: taskIds })
+    await taskApi.reorderTasks({ task_ids: taskIds })
     refetchExams()
     setDraggingTaskIndex(undefined)
   }
@@ -59,8 +59,8 @@ export default function TemplatesView() {
   const { data: exams, refetch: refetchExams } = useQuery<ProtocolOut[]>({
     queryKey: ['allExamTemplates'],
     queryFn: async () => {
-      return await examApi
-        .getAllProtocolTemplatesApiV1ExamTemplatesAllGet()
+      return await protocolApi
+        .getAllProtocolTemplates()
         .then((result) => {
           return result.data
         })

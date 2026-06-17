@@ -118,11 +118,10 @@ Deployment was not testet yet! The following list gives an indication about some
 - In infrastructure/nginx_config.conf put your domain name in place of localhost as redirect target from http to https (line 8)
 - In scanhub-ui/src/utils/Urls.tsx put your domain name in place of localhost
 - In services/device-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/exam-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
+- In services/protocol-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
 - In services/mri/sequence-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
 - In services/patient-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
 - In services/user-login-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/workflow-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
 - Build the Scanhub Containers as described in section "Installation + Start & Stop"
 - Set up a service to automatically start Scanhub when booting the system
 - Consider setting up monitoring of the servers resources etc.

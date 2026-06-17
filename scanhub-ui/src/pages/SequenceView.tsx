@@ -23,7 +23,7 @@ import { DataGrid, GridColDef, GridCellParams, GridActionsCellItem } from '@mui/
 
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
-import { MRISequenceOut, BaseMRISequence } from '../openapi/generated-client/exam'
+import { MRISequenceOut, BaseMRISequence } from '../openapi/generated-client/protocol'
 import { Alerts } from '../interfaces/components.interface'
 import AlertItem from '../components/AlertItem'
 import SequenceUpload from '../components/SequenceUpload'
@@ -46,17 +46,15 @@ export default function SequenceView() {
   } = useQuery<MRISequenceOut[]>({
     queryKey: ['sequences'],
     queryFn: async () => {
-      return await sequenceApi
-        .getAllMriSequencesApiV1ExamSequencesAllGet()
-        .then((result) => {
-          return result.data
-        })
+      return await sequenceApi.getAllMriSequences().then((result) => {
+        return result.data
+      })
     },
   })
 
   const delteMutation = useMutation<unknown, unknown, MRISequenceOut>({
     mutationFn: async (sequence) => {
-      await sequenceApi.deleteMriSequenceEndpointApiV1ExamSequenceSequenceIdDelete(sequence._id)
+      await sequenceApi.deleteMriSequence(sequence._id)
         .then(() => {
           showNotification({ message: 'Deleted sequence ' + sequence.name, type: 'success' })
           refetch()
@@ -75,7 +73,7 @@ export default function SequenceView() {
 
   const updateMutation = useMutation<unknown, unknown, MRISequenceOut>({
     mutationFn: async (sequence) => {
-      await sequenceApi.updateMriSequenceEndpointApiV1ExamSequenceSequenceIdPut(sequence._id, sequence as BaseMRISequence)
+      await sequenceApi.updateMriSequence(sequence._id, sequence as BaseMRISequence)
         .then(() => {
           showNotification({ message: 'Modified sequence ' + sequence.name, type: 'success' })
           setIsUpdating(false)

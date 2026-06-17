@@ -57,7 +57,7 @@ async def mri_sequence_form(
     )
 
 
-@seq_router.get("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"])
+@seq_router.get("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"], operation_id="get_mri_sequence")
 async def get_mri_sequence_by_id(
     sequence_id: str,
     database=Depends(get_mongo_database),
@@ -87,6 +87,7 @@ async def get_mri_sequence_by_id(
     response_model=MRISequenceOut,
     status_code=status.HTTP_201_CREATED,
     tags=["mri sequences"],
+    operation_id="create_mri_sequence",
 )
 async def create_mri_sequence(
     seq_file: UploadFile = File(...),
@@ -155,6 +156,7 @@ async def create_mri_sequence(
     "/sequences/all",
     response_model=list[MRISequenceOut],
     tags=["mri sequences"],
+    operation_id="get_all_mri_sequences",
 )
 async def get_all_mri_sequences(database=Depends(get_mongo_database)):
     """Retrieve a list of all MRI sequences from the database.
@@ -177,7 +179,7 @@ async def get_all_mri_sequences(database=Depends(get_mongo_database)):
     return sequences
 
 
-@seq_router.get("/sequence/{sequence_id}/file", tags=["mri sequences"])
+@seq_router.get("/sequence/{sequence_id}/file", tags=["mri sequences"], operation_id="get_mri_sequence_file")
 async def get_mri_sequence_file_by_id(
     sequence_id: str,
     background_tasks: BackgroundTasks,
@@ -230,7 +232,7 @@ async def get_mri_sequence_file_by_id(
     raise HTTPException(status_code=404, detail="Binary data not found")
 
 
-@seq_router.get("/sequence/{sequence_id}/header", tags=["mri sequences"])
+@seq_router.get("/sequence/{sequence_id}/header", tags=["mri sequences"], operation_id="get_mri_sequence_header_file")
 async def get_mri_sequence_header_file_by_id(
     sequence_id: str,
     background_tasks: BackgroundTasks,
@@ -290,6 +292,7 @@ async def get_mri_sequence_header_file_by_id(
     "/sequence/{sequence_id}",
     response_model=MRISequenceOut,
     tags=["mri sequences"],
+    operation_id="update_mri_sequence",
 )
 async def update_mri_sequence_endpoint(
     sequence_id: str,
@@ -326,6 +329,7 @@ async def update_mri_sequence_endpoint(
     "/sequence/{sequence_id}",
     status_code=status.HTTP_202_ACCEPTED,
     tags=["mri sequences"],
+    operation_id="delete_mri_sequence",
 )
 async def delete_mri_sequence_endpoint(
     sequence_id: str,

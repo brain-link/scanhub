@@ -268,12 +268,12 @@ export interface ValidationErrorLocInner {
 export const HealthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the protocol-tree tables does not exist
          * @summary Readiness
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1PatientHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        healthReadiness: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/patient/health/readiness`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -308,15 +308,15 @@ export const HealthApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = HealthApiAxiosParamCreator(configuration)
     return {
         /**
-         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the protocol-tree tables does not exist
          * @summary Readiness
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async readinessApiV1PatientHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1PatientHealthReadinessGet(options);
+        async healthReadiness(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.healthReadiness(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1PatientHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.healthReadiness']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -330,13 +330,13 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = HealthApiFp(configuration)
     return {
         /**
-         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+         * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the protocol-tree tables does not exist
          * @summary Readiness
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1PatientHealthReadinessGet(options?: any): AxiosPromise<any> {
-            return localVarFp.readinessApiV1PatientHealthReadinessGet(options).then((request) => request(axios, basePath));
+        healthReadiness(options?: any): AxiosPromise<any> {
+            return localVarFp.healthReadiness(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -349,14 +349,14 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
  */
 export class HealthApi extends BaseAPI {
     /**
-     * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the exam-tree tables does not exist
+     * Readiness health endpoint.  Returns -------     Status dictionary  Raises ------ HTTPException     500: Any of the protocol-tree tables does not exist
      * @summary Readiness
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HealthApi
      */
-    public readinessApiV1PatientHealthReadinessGet(options?: RawAxiosRequestConfig) {
-        return HealthApiFp(this.configuration).readinessApiV1PatientHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    public healthReadiness(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).healthReadiness(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -375,9 +375,9 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPatientApiV1PatientPost: async (basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createPatient: async (basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'basePatient' is not null or undefined
-            assertParamExists('createPatientApiV1PatientPost', 'basePatient', basePatient)
+            assertParamExists('createPatient', 'basePatient', basePatient)
             const localVarPath = `/api/v1/patient/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -415,9 +415,9 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePatientApiV1PatientPatientIdDelete: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deletePatient: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('deletePatientApiV1PatientPatientIdDelete', 'patientId', patientId)
+            assertParamExists('deletePatient', 'patientId', patientId)
             const localVarPath = `/api/v1/patient/{patient_id}`
                 .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -453,9 +453,9 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientApiV1PatientPatientIdGet: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPatient: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('getPatientApiV1PatientPatientIdGet', 'patientId', patientId)
+            assertParamExists('getPatient', 'patientId', patientId)
             const localVarPath = `/api/v1/patient/{patient_id}`
                 .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -490,7 +490,7 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientListApiV1PatientGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPatientList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/patient/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -526,11 +526,11 @@ export const PatientsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePatientApiV1PatientPatientIdPut: async (patientId: string, basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updatePatient: async (patientId: string, basePatient: BasePatient, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('updatePatientApiV1PatientPatientIdPut', 'patientId', patientId)
+            assertParamExists('updatePatient', 'patientId', patientId)
             // verify required parameter 'basePatient' is not null or undefined
-            assertParamExists('updatePatientApiV1PatientPatientIdPut', 'basePatient', basePatient)
+            assertParamExists('updatePatient', 'basePatient', basePatient)
             const localVarPath = `/api/v1/patient/{patient_id}`
                 .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -579,10 +579,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPatientApiV1PatientPost(basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPatientApiV1PatientPost(basePatient, options);
+        async createPatient(basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPatient(basePatient, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.createPatientApiV1PatientPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.createPatient']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -592,10 +592,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePatientApiV1PatientPatientIdDelete(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatientApiV1PatientPatientIdDelete(patientId, options);
+        async deletePatient(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatient(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.deletePatientApiV1PatientPatientIdDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.deletePatient']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -605,10 +605,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPatientApiV1PatientPatientIdGet(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientApiV1PatientPatientIdGet(patientId, options);
+        async getPatient(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatient(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientApiV1PatientPatientIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatient']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -617,10 +617,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPatientListApiV1PatientGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PatientOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientListApiV1PatientGet(options);
+        async getPatientList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PatientOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatientList(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientListApiV1PatientGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.getPatientList']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -631,10 +631,10 @@ export const PatientsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updatePatientApiV1PatientPatientIdPut(patientId: string, basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options);
+        async updatePatient(patientId: string, basePatient: BasePatient, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PatientOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatient(patientId, basePatient, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PatientsApi.updatePatientApiV1PatientPatientIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PatientsApi.updatePatient']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -654,8 +654,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPatientApiV1PatientPost(basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
-            return localVarFp.createPatientApiV1PatientPost(basePatient, options).then((request) => request(axios, basePath));
+        createPatient(basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
+            return localVarFp.createPatient(basePatient, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete patient from database.  Parameters ---------- patient_id     Id of patient to be deleted  Raises ------ HTTPException     _description_
@@ -664,8 +664,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePatientApiV1PatientPatientIdDelete(patientId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deletePatientApiV1PatientPatientIdDelete(patientId, options).then((request) => request(axios, basePath));
+        deletePatient(patientId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePatient(patientId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get a patient from database by id.  Parameters ---------- patient_id     Id of the requested patient  Returns -------     Patient pydantic output model  Raises ------ HTTPException     404: Patient not found
@@ -674,8 +674,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientApiV1PatientPatientIdGet(patientId: string, options?: any): AxiosPromise<PatientOut> {
-            return localVarFp.getPatientApiV1PatientPatientIdGet(patientId, options).then((request) => request(axios, basePath));
+        getPatient(patientId: string, options?: any): AxiosPromise<PatientOut> {
+            return localVarFp.getPatient(patientId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all patients endpoint.  Returns -------     List of patient pydantic output models
@@ -683,8 +683,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPatientListApiV1PatientGet(options?: any): AxiosPromise<Array<PatientOut>> {
-            return localVarFp.getPatientListApiV1PatientGet(options).then((request) => request(axios, basePath));
+        getPatientList(options?: any): AxiosPromise<Array<PatientOut>> {
+            return localVarFp.getPatientList(options).then((request) => request(axios, basePath));
         },
         /**
          * Update existing patient endpoint.  Parameters ---------- patient_id     Id of the patient to be updated payload     Patient data to be updated  Returns -------     Updated patient pydantic output model  Raises ------ HTTPException     404: Patient not found
@@ -694,8 +694,8 @@ export const PatientsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePatientApiV1PatientPatientIdPut(patientId: string, basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
-            return localVarFp.updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options).then((request) => request(axios, basePath));
+        updatePatient(patientId: string, basePatient: BasePatient, options?: any): AxiosPromise<PatientOut> {
+            return localVarFp.updatePatient(patientId, basePatient, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -715,8 +715,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public createPatientApiV1PatientPost(basePatient: BasePatient, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).createPatientApiV1PatientPost(basePatient, options).then((request) => request(this.axios, this.basePath));
+    public createPatient(basePatient: BasePatient, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).createPatient(basePatient, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -727,8 +727,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public deletePatientApiV1PatientPatientIdDelete(patientId: string, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).deletePatientApiV1PatientPatientIdDelete(patientId, options).then((request) => request(this.axios, this.basePath));
+    public deletePatient(patientId: string, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).deletePatient(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -739,8 +739,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public getPatientApiV1PatientPatientIdGet(patientId: string, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).getPatientApiV1PatientPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
+    public getPatient(patientId: string, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).getPatient(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -750,8 +750,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public getPatientListApiV1PatientGet(options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).getPatientListApiV1PatientGet(options).then((request) => request(this.axios, this.basePath));
+    public getPatientList(options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).getPatientList(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -763,8 +763,8 @@ export class PatientsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PatientsApi
      */
-    public updatePatientApiV1PatientPatientIdPut(patientId: string, basePatient: BasePatient, options?: RawAxiosRequestConfig) {
-        return PatientsApiFp(this.configuration).updatePatientApiV1PatientPatientIdPut(patientId, basePatient, options).then((request) => request(this.axios, this.basePath));
+    public updatePatient(patientId: string, basePatient: BasePatient, options?: RawAxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).updatePatient(patientId, basePatient, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

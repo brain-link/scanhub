@@ -43,7 +43,7 @@ LOG_CALL_DELIMITER = "----------------------------------------------------------
 router = APIRouter()
 
 
-@router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"])
+@router.get('/', response_model=List[DeviceOut], status_code=200, tags=["devices"], operation_id="get_devices")
 async def get_devices(current_user: Annotated[User, Depends(get_current_user)]) -> list[DeviceOut]:
     """
     Retrieve the list of registered devices.
@@ -60,7 +60,7 @@ async def get_devices(current_user: Annotated[User, Depends(get_current_user)]) 
     return [DeviceOut(**device.__dict__) for device in devices_all]
 
 
-@router.get('/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"])
+@router.get('/{device_id}', response_model=DeviceOut, status_code=200, tags=["devices"], operation_id="get_device")
 async def get_device(current_user: Annotated[User, Depends(get_current_user)], device_id: UUID):
     """
     Retrieve a specific device.
@@ -81,7 +81,7 @@ async def get_device(current_user: Annotated[User, Depends(get_current_user)], d
     return DeviceOut(**device.__dict__)
 
 
-@router.post("/createdevice", status_code=201, tags=["devices"])
+@router.post("/createdevice", status_code=201, tags=["devices"], operation_id="create_device")
 async def create_device(
     current_user: Annotated[User, Depends(get_current_user)],
     request: DeviceCreationRequest,
@@ -141,7 +141,7 @@ async def create_device(
     )
 
 
-@router.delete('/{device_id}', response_model={}, status_code=204, tags=["devices"])
+@router.delete('/{device_id}', response_model={}, status_code=204, tags=["devices"], operation_id="delete_device")
 async def delete_device(device_id: UUID, current_user: Annotated[User, Depends(get_current_user)]):
     """
     Delete a device.
@@ -165,6 +165,7 @@ async def delete_device(device_id: UUID, current_user: Annotated[User, Depends(g
     status_code=200,
     tags=["devices"],
     summary="Update acquisition/device parameter",
+    operation_id="update_device_parameter",
 )
 async def update_device_parameter(
     device_id: UUID | str,

@@ -26,7 +26,7 @@ class TaskReorder(BaseModel):
     task_ids: list[UUID]
 
 
-@task_router.post("/task/new", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"])
+@task_router.post("/task/new", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"], operation_id="create_task")
 async def create_task(
     payload: BaseAcquisitionTask,
     user: Annotated[User, Depends(get_current_user)],
@@ -51,7 +51,7 @@ async def create_task(
     return await get_task_out(data=task)
 
 
-@task_router.post("/task", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"])
+@task_router.post("/task", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"], operation_id="create_task_from_template")
 async def create_task_from_template(
     protocol_id: UUID,
     template_id: UUID,
@@ -80,7 +80,7 @@ async def create_task_from_template(
     return await get_task_out(data=task)
 
 
-@task_router.get("/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"])
+@task_router.get("/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="get_task")
 async def get_task(
     task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
 ) -> AcquisitionTaskOut:
@@ -96,7 +96,7 @@ async def get_task(
     return await get_task_out(data=task)
 
 
-@task_router.get("/task/all/{protocol_id}", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"])
+@task_router.get("/task/all/{protocol_id}", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"], operation_id="get_all_protocol_tasks")
 async def get_all_protocol_tasks(
     protocol_id: UUID | str,
     user: Annotated[User, Depends(get_current_user)],
@@ -110,7 +110,7 @@ async def get_all_protocol_tasks(
     return [await get_task_out(data=task) for task in tasks]
 
 
-@task_router.get("/task/templates/all", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"])
+@task_router.get("/task/templates/all", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"], operation_id="get_all_task_templates")
 async def get_all_task_templates(
     user: Annotated[User, Depends(get_current_user)],
 ) -> list[AcquisitionTaskOut]:
@@ -122,7 +122,7 @@ async def get_all_task_templates(
     return [await get_task_out(data=task) for task in tasks]
 
 
-@task_router.delete("/task/{task_id}", response_model=None, status_code=204, tags=["tasks"])
+@task_router.delete("/task/{task_id}", response_model=None, status_code=204, tags=["tasks"], operation_id="delete_task")
 async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
     """Delete a task."""
     print(LOG_CALL_DELIMITER)
@@ -132,7 +132,7 @@ async def delete_task(task_id: UUID | str, user: Annotated[User, Depends(get_cur
         raise HTTPException(status_code=404, detail="Could not delete task.")
 
 
-@task_router.put("/task/reorder", response_model=None, status_code=204, tags=["tasks"])
+@task_router.put("/task/reorder", response_model=None, status_code=204, tags=["tasks"], operation_id="reorder_tasks")
 async def reorder_tasks(
     payload: TaskReorder,
     user: Annotated[User, Depends(get_current_user)],
@@ -144,7 +144,7 @@ async def reorder_tasks(
         raise HTTPException(status_code=404, detail="Could not reorder tasks")
 
 
-@task_router.put("/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"])
+@task_router.put("/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="update_task")
 async def update_task(
     task_id: UUID | str,
     payload: BaseAcquisitionTask,
@@ -169,7 +169,7 @@ async def update_task(
     return await get_task_out(data=task_updated)
 
 
-@task_router.put("/task/{task_id}/status", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"])
+@task_router.put("/task/{task_id}/status", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="update_task_status")
 async def update_task_status(
     task_id: UUID | str,
     status: str,

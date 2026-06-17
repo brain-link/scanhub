@@ -83,7 +83,7 @@ export default function DeviceStatus() {
     const { data: devices, isLoading, isError } = useQuery<DeviceOut[]>({
         queryKey: ['devices'],
         queryFn: async () => {
-            const result = await deviceApi.getDevicesApiV1DeviceGet()
+            const result = await deviceApi.getDevices()
             return result.data
         },
         // Poll every 5 seconds to keep status more or less fresh

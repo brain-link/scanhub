@@ -13,8 +13,8 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import DialogTitle from '@mui/joy/DialogTitle';
 import Stack from '@mui/joy/Stack'
 
-import { examApi } from '../api'
-import { ProtocolOut } from '../openapi/generated-client/exam'
+import { protocolApi } from '../api'
+import { ProtocolOut } from '../openapi/generated-client/protocol'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
 import ExamModal from './ExamModal'
@@ -22,20 +22,20 @@ import ExamModal from './ExamModal'
 
 export default function ExamFromTemplateModal(props: ModalPropsCreate) {
 
-  const [selectedExam, setSelectedExam] = React.useState<ProtocolOut | undefined>(undefined);
+  const [selectedProtocol, setSelectedProtocol] = React.useState<ProtocolOut | undefined>(undefined);
 
-  const { data: exams } = useQuery<ProtocolOut[]>({
+  const { data: protocols } = useQuery<ProtocolOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
-      return await examApi
-        .getAllProtocolTemplatesApiV1ExamTemplatesAllGet()
+      return await protocolApi
+        .getAllProtocolTemplates()
         .then((result) => {
           return result.data
         })
     },
   })
 
-  function returnExamFromTemplateModal() {
+  function returnProtocolFromTemplateModal() {
     return <Modal
       open={props.isOpen}
       onClose={() => {
@@ -52,13 +52,13 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
             px: 'var(--ModalDialog-padding)',
           }}
         >
-          {exams &&
-            exams.map((exam, idx) => (
+          {protocols &&
+            protocols.map((exam, idx) => (
               <ExamItem
                 key={idx}
                 item={exam}
                 onClick={() => {
-                  setSelectedExam({ ...exam, 'patient_id': props.parentId, 'is_template': props.createTemplate })
+                  setSelectedProtocol({ ...exam, 'patient_id': props.parentId, 'is_template': props.createTemplate })
                 }}
                 selection={ITEM_UNSELECTED} 
               />
@@ -69,13 +69,13 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
   }
 
   return (
-    selectedExam ? 
+    selectedProtocol ? 
       <ExamModal
-        item={selectedExam}
+        item={selectedProtocol}
         isOpen={true}
         setOpen={(status) => {
           if (status == false) {
-            setSelectedExam(undefined)  // reset state
+            setSelectedProtocol(undefined)  // reset state
           }
           props.setOpen(status)
         }}
@@ -83,6 +83,6 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
         modalType={'createModifyFromTemplate'}
       />
     :
-      returnExamFromTemplateModal()
+      returnProtocolFromTemplateModal()
   )
 }

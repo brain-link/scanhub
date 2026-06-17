@@ -11,7 +11,7 @@ PREFIX = "https://localhost:8443"
 
 
 def test_readiness():
-    response = requests.get(PREFIX + "/api/v1/exam/health/readiness", timeout=3, verify=False)
+    response = requests.get(PREFIX + "/api/v1/protocol/health/readiness", timeout=3, verify=False)
     assert response.status_code == 200
     response_json = response.json()
     assert response_json["status"] == "ok"

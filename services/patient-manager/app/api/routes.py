@@ -44,7 +44,7 @@ async def get_patient_out(data: db.Patient) -> PatientOut:
     )
 
 
-@router.post("/", response_model=PatientOut, status_code=201, tags=["patients"])
+@router.post("/", response_model=PatientOut, status_code=201, tags=["patients"], operation_id="create_patient")
 async def create_patient(payload: BasePatient) -> PatientOut:
     """Create new patient database entry.
 
@@ -68,7 +68,7 @@ async def create_patient(payload: BasePatient) -> PatientOut:
     return await get_patient_out(patient)
 
 
-@router.get("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"])
+@router.get("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"], operation_id="get_patient")
 async def get_patient(patient_id: UUID) -> PatientOut:
     """Get a patient from database by id.
 
@@ -92,7 +92,7 @@ async def get_patient(patient_id: UUID) -> PatientOut:
     return await get_patient_out(patient)
 
 
-@router.get('/', response_model=list[PatientOut], status_code=200, tags=["patients"])
+@router.get('/', response_model=list[PatientOut], status_code=200, tags=["patients"], operation_id="get_patient_list")
 async def get_patient_list() -> list[PatientOut]:
     """Get all patients endpoint.
 
@@ -106,7 +106,7 @@ async def get_patient_list() -> list[PatientOut]:
     return [await get_patient_out(patient) for patient in patients]
 
 
-@router.delete("/{patient_id}", response_model={}, status_code=204, tags=["patients"])
+@router.delete("/{patient_id}", response_model={}, status_code=204, tags=["patients"], operation_id="delete_patient")
 async def delete_patient(patient_id: UUID) -> None:
     """Delete patient from database.
 
@@ -124,7 +124,7 @@ async def delete_patient(patient_id: UUID) -> None:
         raise HTTPException(status_code=404, detail="Patient not found")
 
 
-@router.put("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"])
+@router.put("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"], operation_id="update_patient")
 async def update_patient(patient_id: UUID, payload: BasePatient):
     """Update existing patient endpoint.
 

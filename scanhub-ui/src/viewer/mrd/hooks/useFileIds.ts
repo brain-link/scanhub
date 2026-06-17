@@ -1,9 +1,9 @@
 // useFileIds.ts
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api'; // your pre-configured OpenAPI client instance
-import { TaskType } from '../../../openapi/generated-client/exam';
+import { TaskType } from '../../../openapi/generated-client/protocol';
 import { ItemSelection } from '../../../interfaces/components.interface'
-import { ItemStatus } from '../../../openapi/generated-client/exam'
+import { ItemStatus } from '../../../openapi/generated-client/protocol'
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
   return Array.isArray(v) ? v : v != null ? [v] : [];
@@ -36,7 +36,7 @@ export function useFileIds(item: ItemSelection) {
       if (item.status != ItemStatus.Finished) throw new Error('Task not finished yet')
       if (item.type != 'ACQUISITION') throw new Error('Task is not an acquisition task')
 
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
+      const { data } = await taskApi.getTask(item.itemId!);
 
       // Only DAG tasks with results
       const isAcquisition = data?.task_type === TaskType.Acquisition;

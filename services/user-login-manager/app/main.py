@@ -96,7 +96,7 @@ async def shutdown() -> None:
     return None
 
 
-@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"])
+@router.get("/health/readiness", response_model={}, status_code=200, tags=["health"], operation_id="health_readiness")
 async def readiness() -> dict:
     """Readiness health endpoint.
 

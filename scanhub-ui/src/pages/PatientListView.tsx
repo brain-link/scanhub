@@ -43,7 +43,7 @@ export default function PatientListView() {
   } = useQuery<PatientOut[]>({
     queryKey: ['patients'],
     queryFn: async () => {
-      return await patientApi.getPatientListApiV1PatientGet()
+      return await patientApi.getPatientList()
       .then((result) => {
         return result.data
       })
@@ -52,7 +52,7 @@ export default function PatientListView() {
 
   const deleteMutation = useMutation<unknown, unknown, PatientOut>({
     mutationFn: async (patient: PatientOut) => {
-      await patientApi.deletePatientApiV1PatientPatientIdDelete(patient.id)
+      await patientApi.deletePatient(patient.id)
       .then(() => {
         showNotification({message: 'Deleted patient ' + patient.first_name + ' ' + patient.last_name + ' (' + patient.id + ')', type: 'success'})
         refetch()
@@ -71,7 +71,7 @@ export default function PatientListView() {
 
   const updateMutation = useMutation<unknown, unknown, PatientOut>({
     mutationFn: async (patient: PatientOut) => {
-      await patientApi.updatePatientApiV1PatientPatientIdPut(patient.id, patient)
+      await patientApi.updatePatient(patient.id, patient)
       .then(() => {
         showNotification({message: 'Modified patient ' + patient.first_name + ' ' + 
                                     patient.last_name + ' (' + patient.id + ')', 

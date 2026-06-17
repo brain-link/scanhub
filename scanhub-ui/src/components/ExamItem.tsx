@@ -16,10 +16,10 @@ import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 
 // Sub-components, interfaces, client
-import { ProtocolOut } from '../openapi/generated-client/exam'
+import { ProtocolOut } from '../openapi/generated-client/protocol'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
-import { examApi } from '../api'
+import { protocolApi } from '../api'
 import ExamModal from './ExamModal'
 import Button from '@mui/joy/Button'
 
@@ -70,8 +70,8 @@ export function ExamMenu({ item: protocol, refetchParentData }: RefetchableItemI
 
   const deleteProtocol = useMutation({
     mutationFn: async () => {
-      await examApi
-        .protocolDeleteApiV1ExamExamIdDelete(protocol.id)
+      await protocolApi
+        .deleteProtocol(protocol.id)
         .then(() => {
           refetchParentData()
         })

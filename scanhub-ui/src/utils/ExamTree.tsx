@@ -1,4 +1,4 @@
-import { ResultOut } from '../openapi/generated-client/exam'
+import { ResultOut } from '../openapi/generated-client/protocol'
 
 /**
  * Extract run id from untyped dictionary

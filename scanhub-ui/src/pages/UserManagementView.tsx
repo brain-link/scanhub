@@ -44,7 +44,7 @@ export default function UserManagementView() {
     queryKey: ['users'],
     queryFn: async () => {
       return await userApi
-        .getUserListApiV1UserloginGetallusersGet()
+        .getUserList()
         .then((result) => {
           return result.data
         })
@@ -53,7 +53,7 @@ export default function UserManagementView() {
 
   const delteMutation = useMutation<unknown, unknown, string>({
     mutationFn: async (username) => {
-      await userApi.userDeleteApiV1UserloginDeleteuserDelete(username)
+      await userApi.deleteUser(username)
       .then(() => {
         showNotification({message: 'Deleted user ' + username, type: 'success'})
         refetch()
@@ -72,7 +72,7 @@ export default function UserManagementView() {
 
   const updateMutation = useMutation<unknown, unknown, User>({
     mutationFn: async (user) => {
-      await userApi.updateUserApiV1UserloginUpdateuserPut(user)
+      await userApi.updateUser(user)
       .then(() => {
         showNotification({message: 'Modified user ' + user.username, type: 'success'})
         setIsUpdating(false)

@@ -277,9 +277,9 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createDeviceApiV1DeviceCreatedevicePost: async (deviceCreationRequest: DeviceCreationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createDevice: async (deviceCreationRequest: DeviceCreationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'deviceCreationRequest' is not null or undefined
-            assertParamExists('createDeviceApiV1DeviceCreatedevicePost', 'deviceCreationRequest', deviceCreationRequest)
+            assertParamExists('createDevice', 'deviceCreationRequest', deviceCreationRequest)
             const localVarPath = `/api/v1/device/createdevice`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -317,9 +317,9 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteDeviceApiV1DeviceDeviceIdDelete: async (deviceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteDevice: async (deviceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'deviceId' is not null or undefined
-            assertParamExists('deleteDeviceApiV1DeviceDeviceIdDelete', 'deviceId', deviceId)
+            assertParamExists('deleteDevice', 'deviceId', deviceId)
             const localVarPath = `/api/v1/device/{device_id}`
                 .replace(`{${"device_id"}}`, encodeURIComponent(String(deviceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -355,9 +355,9 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDeviceApiV1DeviceDeviceIdGet: async (deviceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getDevice: async (deviceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'deviceId' is not null or undefined
-            assertParamExists('getDeviceApiV1DeviceDeviceIdGet', 'deviceId', deviceId)
+            assertParamExists('getDevice', 'deviceId', deviceId)
             const localVarPath = `/api/v1/device/{device_id}`
                 .replace(`{${"device_id"}}`, encodeURIComponent(String(deviceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -392,7 +392,7 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDevicesApiV1DeviceGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getDevices: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/device/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -421,15 +421,15 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+         * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
          * @summary Trigger Acquisition
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost: async (taskId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        triggerAcquisition: async (taskId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost', 'taskId', taskId)
+            assertParamExists('triggerAcquisition', 'taskId', taskId)
             const localVarPath = `/api/v1/device/trigger_acquisition/{task_id}`
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -466,11 +466,11 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDeviceParameterApiV1DeviceParameterDeviceIdPut: async (deviceId: DeviceId, requestBody: { [key: string]: any; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateDeviceParameter: async (deviceId: DeviceId, requestBody: { [key: string]: any; }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'deviceId' is not null or undefined
-            assertParamExists('updateDeviceParameterApiV1DeviceParameterDeviceIdPut', 'deviceId', deviceId)
+            assertParamExists('updateDeviceParameter', 'deviceId', deviceId)
             // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('updateDeviceParameterApiV1DeviceParameterDeviceIdPut', 'requestBody', requestBody)
+            assertParamExists('updateDeviceParameter', 'requestBody', requestBody)
             const localVarPath = `/api/v1/device/parameter/{device_id}`
                 .replace(`{${"device_id"}}`, encodeURIComponent(String(deviceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -519,10 +519,10 @@ export const DevicesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest: DeviceCreationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest, options);
+        async createDevice(deviceCreationRequest: DeviceCreationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDevice(deviceCreationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.createDeviceApiV1DeviceCreatedevicePost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.createDevice']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -532,10 +532,10 @@ export const DevicesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteDeviceApiV1DeviceDeviceIdDelete(deviceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDeviceApiV1DeviceDeviceIdDelete(deviceId, options);
+        async deleteDevice(deviceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDevice(deviceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.deleteDeviceApiV1DeviceDeviceIdDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.deleteDevice']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -545,10 +545,10 @@ export const DevicesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDeviceApiV1DeviceDeviceIdGet(deviceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeviceOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDeviceApiV1DeviceDeviceIdGet(deviceId, options);
+        async getDevice(deviceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeviceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDevice(deviceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDeviceApiV1DeviceDeviceIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDevice']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -557,23 +557,23 @@ export const DevicesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDevicesApiV1DeviceGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DeviceOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDevicesApiV1DeviceGet(options);
+        async getDevices(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DeviceOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDevices(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDevicesApiV1DeviceGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.getDevices']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+         * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
          * @summary Trigger Acquisition
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId, options);
+        async triggerAcquisition(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.triggerAcquisition(taskId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.triggerAcquisition']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -584,10 +584,10 @@ export const DevicesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId: DeviceId, requestBody: { [key: string]: any; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeviceOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId, requestBody, options);
+        async updateDeviceParameter(deviceId: DeviceId, requestBody: { [key: string]: any; }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeviceOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDeviceParameter(deviceId, requestBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DevicesApi.updateDeviceParameterApiV1DeviceParameterDeviceIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.updateDeviceParameter']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -607,8 +607,8 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest: DeviceCreationRequest, options?: any): AxiosPromise<any> {
-            return localVarFp.createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest, options).then((request) => request(axios, basePath));
+        createDevice(deviceCreationRequest: DeviceCreationRequest, options?: any): AxiosPromise<any> {
+            return localVarFp.createDevice(deviceCreationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete a device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response indicating the success or failure of the deletion.
@@ -617,8 +617,8 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteDeviceApiV1DeviceDeviceIdDelete(deviceId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteDeviceApiV1DeviceDeviceIdDelete(deviceId, options).then((request) => request(axios, basePath));
+        deleteDevice(deviceId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteDevice(deviceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve a specific device.  Args -------     device_id (str): The ID of the device.  Returns -------     dict: The response containing the information about the device
@@ -627,8 +627,8 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDeviceApiV1DeviceDeviceIdGet(deviceId: string, options?: any): AxiosPromise<DeviceOut> {
-            return localVarFp.getDeviceApiV1DeviceDeviceIdGet(deviceId, options).then((request) => request(axios, basePath));
+        getDevice(deviceId: string, options?: any): AxiosPromise<DeviceOut> {
+            return localVarFp.getDevice(deviceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve the list of registered devices.  Returns -------     List[Device]: The list of registered devices.
@@ -636,18 +636,18 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDevicesApiV1DeviceGet(options?: any): AxiosPromise<Array<DeviceOut>> {
-            return localVarFp.getDevicesApiV1DeviceGet(options).then((request) => request(axios, basePath));
+        getDevices(options?: any): AxiosPromise<Array<DeviceOut>> {
+            return localVarFp.getDevices(options).then((request) => request(axios, basePath));
         },
         /**
-         * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+         * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
          * @summary Trigger Acquisition
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId: string, options?: any): AxiosPromise<any> {
-            return localVarFp.triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId, options).then((request) => request(axios, basePath));
+        triggerAcquisition(taskId: string, options?: any): AxiosPromise<any> {
+            return localVarFp.triggerAcquisition(taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * Update acquisition/device parameter.  Parameters ---------- device_id     Id of the device to be updated payload     Parameter dictionary  Returns -------     Parameter dictionary  Raises ------ HTTPException     404: Not found
@@ -657,8 +657,8 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId: DeviceId, requestBody: { [key: string]: any; }, options?: any): AxiosPromise<DeviceOut> {
-            return localVarFp.updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId, requestBody, options).then((request) => request(axios, basePath));
+        updateDeviceParameter(deviceId: DeviceId, requestBody: { [key: string]: any; }, options?: any): AxiosPromise<DeviceOut> {
+            return localVarFp.updateDeviceParameter(deviceId, requestBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -678,8 +678,8 @@ export class DevicesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest: DeviceCreationRequest, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).createDeviceApiV1DeviceCreatedevicePost(deviceCreationRequest, options).then((request) => request(this.axios, this.basePath));
+    public createDevice(deviceCreationRequest: DeviceCreationRequest, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).createDevice(deviceCreationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -690,8 +690,8 @@ export class DevicesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public deleteDeviceApiV1DeviceDeviceIdDelete(deviceId: string, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).deleteDeviceApiV1DeviceDeviceIdDelete(deviceId, options).then((request) => request(this.axios, this.basePath));
+    public deleteDevice(deviceId: string, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).deleteDevice(deviceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -702,8 +702,8 @@ export class DevicesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public getDeviceApiV1DeviceDeviceIdGet(deviceId: string, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).getDeviceApiV1DeviceDeviceIdGet(deviceId, options).then((request) => request(this.axios, this.basePath));
+    public getDevice(deviceId: string, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).getDevice(deviceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -713,20 +713,20 @@ export class DevicesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public getDevicesApiV1DeviceGet(options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).getDevicesApiV1DeviceGet(options).then((request) => request(this.axios, this.basePath));
+    public getDevices(options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).getDevices(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Trigger an MRI acquisition for the given task.  Fetches the task from the exam manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
+     * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
      * @summary Trigger Acquisition
      * @param {string} taskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId: string, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).triggerAcquisitionApiV1DeviceTriggerAcquisitionTaskIdPost(taskId, options).then((request) => request(this.axios, this.basePath));
+    public triggerAcquisition(taskId: string, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).triggerAcquisition(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -738,8 +738,8 @@ export class DevicesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DevicesApi
      */
-    public updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId: DeviceId, requestBody: { [key: string]: any; }, options?: RawAxiosRequestConfig) {
-        return DevicesApiFp(this.configuration).updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId, requestBody, options).then((request) => request(this.axios, this.basePath));
+    public updateDeviceParameter(deviceId: DeviceId, requestBody: { [key: string]: any; }, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).updateDeviceParameter(deviceId, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -757,7 +757,7 @@ export const HealthApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1DeviceHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        healthReadiness: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/device/health/readiness`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -797,10 +797,10 @@ export const HealthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async readinessApiV1DeviceHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1DeviceHealthReadinessGet(options);
+        async healthReadiness(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.healthReadiness(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1DeviceHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.healthReadiness']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -819,8 +819,8 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1DeviceHealthReadinessGet(options?: any): AxiosPromise<any> {
-            return localVarFp.readinessApiV1DeviceHealthReadinessGet(options).then((request) => request(axios, basePath));
+        healthReadiness(options?: any): AxiosPromise<any> {
+            return localVarFp.healthReadiness(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -839,8 +839,8 @@ export class HealthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof HealthApi
      */
-    public readinessApiV1DeviceHealthReadinessGet(options?: RawAxiosRequestConfig) {
-        return HealthApiFp(this.configuration).readinessApiV1DeviceHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    public healthReadiness(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).healthReadiness(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

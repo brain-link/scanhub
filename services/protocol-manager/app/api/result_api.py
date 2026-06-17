@@ -44,7 +44,7 @@ result_router = APIRouter(dependencies=[Depends(get_current_user)])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-@result_router.post("/result/dicom/{task_id}", response_model=ResultOut, status_code=201, tags=["results"])
+@result_router.post("/result/dicom/{task_id}", response_model=ResultOut, status_code=201, tags=["results"], operation_id="create_dicom_result")
 async def create_dicom_result(
     task_id: UUID | str,
     payload: CreateDicomResult,
@@ -66,7 +66,7 @@ async def create_dicom_result(
     return ResultOut(**result.__dict__)
 
 
-@result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
+@result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"], operation_id="create_blank_result")
 async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
     """Create a blank task result."""
     print(LOG_CALL_DELIMITER)
@@ -83,7 +83,7 @@ async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends
     return ResultOut(**result.__dict__)
 
 
-@result_router.get("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
+@result_router.get("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"], operation_id="get_result")
 async def get_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
     """Get an existing result."""
     print(LOG_CALL_DELIMITER)
@@ -97,7 +97,7 @@ async def get_result(result_id: UUID | str, user: Annotated[User, Depends(get_cu
     return ResultOut(**result.__dict__)
 
 
-@result_router.get("/result/all/{task_id}", response_model=list[ResultOut], status_code=200, tags=["results"])
+@result_router.get("/result/all/{task_id}", response_model=list[ResultOut], status_code=200, tags=["results"], operation_id="get_all_task_results")
 async def get_all_task_results(
     task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
 ) -> list[ResultOut]:
@@ -110,7 +110,7 @@ async def get_all_task_results(
     return [ResultOut(**task.__dict__) for task in tasks]
 
 
-@result_router.delete("/result/{result_id}", response_model={}, status_code=204, tags=["results"])
+@result_router.delete("/result/{result_id}", response_model={}, status_code=204, tags=["results"], operation_id="delete_result")
 async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
     """Delete a result."""
     print(LOG_CALL_DELIMITER)
@@ -120,7 +120,7 @@ async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get
         raise HTTPException(status_code=404, detail="Could not delete result.")
 
 
-@result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
+@result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"], operation_id="set_result")
 async def set_result(
     result_id: UUID | str, payload: SetResult, user: Annotated[User, Depends(get_current_user)]
 ) -> ResultOut:

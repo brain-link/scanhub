@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api';
-import { TaskType, ItemStatus, ResultOut } from '../../../openapi/generated-client/exam';
+import { TaskType, ItemStatus, ResultOut } from '../../../openapi/generated-client/protocol';
 import { ItemSelection } from '../../../interfaces/components.interface';
 
 /**
@@ -45,7 +45,7 @@ export function useResults(item: ItemSelection) {
       }
 
       // Fetch task details from API
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
+      const { data } = await taskApi.getTask(item.itemId!);
 
       // Check that task is an acquisition with results
       const isAcquisition = data?.task_type === TaskType.Acquisition;

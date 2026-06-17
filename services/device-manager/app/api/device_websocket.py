@@ -74,7 +74,13 @@ async def send_json(websocket, payload: dict):
         print(f"RuntimeError while sending WS message: {exc}")
 
 
-@router.post("/trigger_acquisition/{task_id}", response_model={}, status_code=200, tags=["devices"])
+@router.post(
+    "/trigger_acquisition/{task_id}",
+    response_model={},
+    status_code=200,
+    tags=["devices"],
+    operation_id="trigger_acquisition",
+)
 async def trigger_acquisition(
     task_id: UUID,
     access_token: Annotated[str, Depends(oauth2_scheme)],

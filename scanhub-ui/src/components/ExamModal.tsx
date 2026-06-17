@@ -17,8 +17,8 @@ import Typography from '@mui/joy/Typography'
 import React from 'react'
 import { useMutation, UseMutationResult } from '@tanstack/react-query'
 
-import { examApi } from '../api'
-import { BaseProtocol, ProtocolOut } from '../openapi/generated-client/exam'
+import { protocolApi } from '../api'
+import { BaseProtocol, ProtocolOut } from '../openapi/generated-client/protocol'
 import { ModalPropsCreate, ModalPropsCreateModifyFromTemplate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
@@ -55,8 +55,8 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
   if (props.modalType == 'modify') {
     mutation = useMutation({
       mutationFn: async () => {
-        await examApi
-        .updateProtocolApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
+        await protocolApi
+        .updateProtocol(props.item!.id, exam)   // props.item most not be and is not undefined here
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Updated Protocol.', type: 'success'})
@@ -66,8 +66,8 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
   } else if (props.modalType == 'create') {
     mutation = useMutation({
       mutationFn: async () => {
-        await examApi
-        .createProtocolApiV1ExamNewPost(exam)
+        await protocolApi
+        .createProtocol(exam)
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Created Protocol.', type: 'success'})
@@ -77,8 +77,8 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
   } else if (props.modalType == 'createModifyFromTemplate') {
     mutation = useMutation({
       mutationFn: async () => {
-        await examApi
-        .createProtocolFromTemplateApiV1ExamPost(props.item.id, exam)
+        await protocolApi
+        .createProtocolFromTemplate(props.item.id, exam)
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Created Protocol from Template.', type: 'success'})

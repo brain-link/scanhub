@@ -23,11 +23,10 @@ done
 SUBPACKAGES=(
   "services/base/shared_libs"
   "services/device-manager"
-  "services/exam-manager"
+  "services/protocol-manager"
   "services/orchestration-engine"
   "services/patient-manager"
   "services/user-login-manager"
-  "services/workflow-manager"
   "tools/device-sdk"
 )
 

@@ -32,7 +32,7 @@ import type {
   DataZoomComponentOption,
 } from 'echarts';
 import { CanvasRenderer } from 'echarts/renderers';
-import { MRDAcquisitionInfo } from '../../openapi/generated-client/exam';
+import { MRDAcquisitionInfo } from '../../openapi/generated-client/protocol';
 import { ParsedAcq } from './utils/packet';
 echartsUse([
   LineChart,

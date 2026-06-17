@@ -65,8 +65,8 @@ async def lifespan(app: FastAPI):
         # Close shared connections here, if any
 
 app = FastAPI(
-    openapi_url="/api/v1/exam/openapi.json",
-    docs_url="/api/v1/exam/docs",
+    openapi_url="/api/v1/protocol/openapi.json",
+    docs_url="/api/v1/protocol/docs",
     lifespan=lifespan,
 )
 
@@ -91,7 +91,7 @@ async def validation_exception_handler(request, exc):
     print(f"{exc}")
     return await request_validation_exception_handler(request, exc)
 
-@app.get("/api/v1/exam/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get("/api/v1/protocol/health/readiness", response_model={}, status_code=200, tags=["health"], operation_id="health_readiness")
 async def readiness() -> dict:
     """Get status / health endpoint."""
     print(LOG_CALL_DELIMITER)
@@ -108,7 +108,7 @@ async def readiness() -> dict:
     return {"status": "ok"}
 
 # Routers
-app.include_router(exam_router, prefix="/api/v1/exam")
-app.include_router(task_router, prefix="/api/v1/exam")
-app.include_router(result_router, prefix="/api/v1/exam")
-app.include_router(seq_router, prefix="/api/v1/exam")
+app.include_router(exam_router, prefix="/api/v1/protocol")
+app.include_router(task_router, prefix="/api/v1/protocol")
+app.include_router(result_router, prefix="/api/v1/protocol")
+app.include_router(seq_router, prefix="/api/v1/protocol")

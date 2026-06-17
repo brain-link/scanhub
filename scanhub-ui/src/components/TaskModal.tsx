@@ -34,7 +34,7 @@ import {
   ItemStatus,
   AcquisitionParameter,
   CalibrationType
-} from '../openapi/generated-client/exam'
+} from '../openapi/generated-client/protocol'
 
 import { DeviceOut } from '../openapi/generated-client/device/api'
 import { ModalPropsCreate, ModalPropsModify } from '../interfaces/components.interface'
@@ -74,7 +74,7 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
     props.modalType == 'modify' ?
       useMutation({
         mutationFn: async () => {
-          await taskApi.updateTaskApiV1ExamTaskTaskIdPut(props.item.id, task)
+          await taskApi.updateTask(props.item.id, task)
             .then(() => {
               props.onSubmit()
               showNotification({ message: 'Updated acquisition task.', type: 'success' })
@@ -84,7 +84,7 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
       :
       useMutation({
         mutationFn: async () => {
-          await taskApi.createTaskApiV1ExamTaskNewPost(task)
+          await taskApi.createTask(task)
             .then(() => {
               console.log('Created task', task)
               props.onSubmit()
@@ -101,7 +101,7 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
   } = useQuery<MRISequenceOut[]>({
     queryKey: ['sequences'],
     queryFn: async () => {
-      return await sequenceApi.getAllMriSequencesApiV1ExamSequencesAllGet()
+      return await sequenceApi.getAllMriSequences()
         .then((result) => {
           return result.data
         })
@@ -117,7 +117,7 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
     queryKey: ['devices'],
     queryFn: async () => {
       return await deviceApi
-        .getDevicesApiV1DeviceGet()
+        .getDevices()
         .then((result) => {
           return result.data
         })

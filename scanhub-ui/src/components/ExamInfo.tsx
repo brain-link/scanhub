@@ -8,13 +8,13 @@ import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 import React from 'react'
 
-import { ProtocolOut } from '../openapi/generated-client/exam'
+import { ProtocolOut } from '../openapi/generated-client/protocol'
 
 
-function ExamInfo({ exam }: { exam: ProtocolOut }) {
+function ExamInfo({ protocol }: { protocol: ProtocolOut }) {
 
-  const datetime_created = new Date(exam.datetime_created)
-  const datetime_updated = exam.datetime_updated ? new Date(String(exam.datetime_updated)) : undefined
+  const datetime_created = new Date(protocol.datetime_created)
+  const datetime_updated = protocol.datetime_updated ? new Date(String(protocol.datetime_updated)) : undefined
 
   return (
     <Box sx={{display: 'flex', alignItems: 'stretch'}}>
@@ -32,42 +32,42 @@ function ExamInfo({ exam }: { exam: ProtocolOut }) {
       >
         <Typography fontSize='sm'>Name</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.name}
+          {protocol.name}
         </Typography>
 
         <Typography fontSize='sm'>Description</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.description}
+          {protocol.description}
         </Typography>
 
         <Typography fontSize='sm'>Indication</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.indication ? String(exam.indication) : '-'}
+          {protocol.indication ? String(protocol.indication) : '-'}
         </Typography>
 
         <Typography fontSize='sm'>Comment</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.comment ? String(exam.comment) : '-'}
+          {protocol.comment ? String(protocol.comment) : '-'}
         </Typography>
 
         <Typography fontSize='sm'>Status</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.status}
+          {protocol.status}
         </Typography>
 
         <Typography fontSize='sm'>Is Template</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.is_template ? 'True' : 'False'}
+          {protocol.is_template ? 'True' : 'False'}
         </Typography>
 
         <Typography fontSize='sm'>ID</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.id}
+          {protocol.id}
         </Typography>
 
         <Typography fontSize='sm'>Creator</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-          {exam.creator}
+          {protocol.creator}
         </Typography>
 
         <Typography level='body-sm'>Last update</Typography>

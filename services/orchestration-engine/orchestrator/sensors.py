@@ -33,7 +33,7 @@ def on_run_success(context: RunStatusSensorContext, notifier_exam_manager: ExamM
 
     if not (task_dir and task_id and access_token):
         context.log.info(
-            "Run succeeded but missing task_dir/task_id/access_token — skipping exam-manager notification."
+            "Run succeeded but missing task_dir/task_id/access_token — skipping protocol-manager notification."
         )
         return
 
@@ -72,7 +72,7 @@ def on_run_failure(context: RunStatusSensorContext, notifier_exam_manager: ExamM
     access_token = dag_config.get("user_access_token", "")
 
     if not (task_id and access_token):
-        context.log.info("Run failed but missing task_id/access_token — skipping exam-manager notification.")
+        context.log.info("Run failed but missing task_id/access_token — skipping protocol-manager notification.")
         return
 
     try:
@@ -95,7 +95,7 @@ def on_run_canceled(context: RunStatusSensorContext, notifier_exam_manager: Exam
     access_token = dag_config.get("user_access_token", "")
 
     if not (task_id and access_token):
-        context.log.info("Run canceled but missing task_id/access_token — skipping exam-manager notification.")
+        context.log.info("Run canceled but missing task_id/access_token — skipping protocol-manager notification.")
         return
 
     try:

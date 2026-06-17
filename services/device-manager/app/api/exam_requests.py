@@ -14,9 +14,9 @@ from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from scanhub_libraries.models import AcquisitionTaskOut, MRISequenceOut, ResultOut, SetResult
 
-TASK_URI = "http://exam-manager:8000/api/v1/exam/task"
-RESULT_URI = "http://exam-manager:8000/api/v1/exam/result"
-SEQUENCE_URI = "http://exam-manager:8000/api/v1/exam/sequence"
+TASK_URI = "http://protocol-manager:8000/api/v1/protocol/task"
+RESULT_URI = "http://protocol-manager:8000/api/v1/protocol/result"
+SEQUENCE_URI = "http://protocol-manager:8000/api/v1/protocol/sequence"
 
 
 def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:

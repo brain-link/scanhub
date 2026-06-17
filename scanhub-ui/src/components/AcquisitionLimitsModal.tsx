@@ -32,7 +32,7 @@ function ConfirmAcquisitionLimitsForm(props: ModalProps & { item: PatientOut })
 
   const mutation = useMutation({
     mutationFn: async () => {
-      await patientApi.updatePatientApiV1PatientPatientIdPut(props.item.id, patient)
+      await patientApi.updatePatient(props.item.id, patient)
       .then(() => {
         showNotification({message: 'Updated patient acquisition limits.', type: 'success'})
         props.onSubmit()

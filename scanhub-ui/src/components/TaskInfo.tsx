@@ -10,7 +10,7 @@ import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-import { AcquisitionTaskOut, CalibrationType } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, CalibrationType } from '../openapi/generated-client/protocol'
 
 
 function capitalize(str: string){

@@ -27,7 +27,7 @@ from orchestrator.jobs.mri_frequency_calibration import frequency_calibration_jo
 from orchestrator.sensors import on_run_canceled, on_run_failure, on_run_success
 
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY", "data")
-EXAM_MANAGER_URI = "http://exam-manager:8000/api/v1/exam"
+EXAM_MANAGER_URI = "http://protocol-manager:8000/api/v1/protocol"
 DEVICE_MANAGER_URI = "http://device-manager:8000/api/v1/device"
 
 

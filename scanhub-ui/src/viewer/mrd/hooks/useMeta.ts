@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { resultApi } from '../../../api';
-import { MRDMetaResponse } from '../../../openapi/generated-client/exam';
+import { MRDMetaResponse } from '../../../openapi/generated-client/protocol';
 
 export function useMeta(enabled: boolean, protocolId: string, taskId: string, resultId: string) {
   return useQuery<MRDMetaResponse>({

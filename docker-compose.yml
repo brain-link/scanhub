@@ -24,7 +24,7 @@ x-dagster-common: &dagster_common
 
 services:
   # SERVICES
-  # Device manager and exam manager create data tables in postgres DB
+  # Device manager and protocol manager create data tables in postgres DB
   device-manager:
     container_name: device-manager
     build:
@@ -51,14 +51,14 @@ services:
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
 
-  exam-manager:
-    container_name: exam-manager
+  protocol-manager:
+    container_name: protocol-manager
     build:
-      context: ./services/exam-manager
+      context: ./services/protocol-manager
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
-      - ./services/exam-manager/app/:/app/
+      - ./services/protocol-manager/app/:/app/
       - ${DATA_LAKE_DIR}:/data
     environment:
       SCANHUB_ALLOWED_ORIGINS: ${SCANHUB_ALLOWED_ORIGINS}
@@ -70,7 +70,7 @@ services:
       - 'host.docker.internal:host-gateway'
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: [ "CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness" ]
+      test: [ "CMD", "curl", "http://protocol-manager:8000/api/v1/protocol/health/readiness" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -152,7 +152,7 @@ services:
   #     - init-data-lake
   #     - scanhub-database
 
-  # Scanhub Postgres Database: Contains exams, workflows, tasks, devices
+  # Scanhub Postgres Database: Contains protocols, tasks, devices
   scanhub-database:
     container_name: db-scanhub
     image: postgres:15.2-bullseye
@@ -166,7 +166,7 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/scanhub_database_postgres_password
       POSTGRES_DB_FILE: /run/secrets/scanhub_database_postgres_db_name
     healthcheck:
-      # device and exam microservices depend on healthy postgres database
+      # device and protocol microservices depend on healthy postgres database
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s
       timeout: 5s
@@ -241,7 +241,7 @@ services:
     depends_on:
       device-manager:
         condition: service_healthy
-      exam-manager:
+      protocol-manager:
         condition: service_healthy
       patient-manager:
         condition: service_healthy

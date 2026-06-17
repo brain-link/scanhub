@@ -116,7 +116,7 @@
         <mxCell id="L5MEKKil3N5dobx29khn-45" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="-20" y="70" width="570" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="L5MEKKil3N5dobx29khn-50" value="Exam Manager" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+        <mxCell id="L5MEKKil3N5dobx29khn-50" value="Protocol Manager" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="180.5" y="160" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="W92m8VuoNIIunjYURMXv-38" value="" style="endArrow=none;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;startFill=1;endFill=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;jumpStyle=arc;jumpSize=10;fontSize=16;" parent="1" source="L5MEKKil3N5dobx29khn-66" target="L5MEKKil3N5dobx29khn-10" edge="1">
@@ -409,7 +409,7 @@
         <mxCell id="L5MEKKil3N5dobx29khn-66" value="Workflow DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=0;fontSize=16;" parent="W92m8VuoNIIunjYURMXv-50" vertex="1">
           <mxGeometry y="65" width="140" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="L5MEKKil3N5dobx29khn-65" value="Exam DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=0;fontSize=16;" parent="W92m8VuoNIIunjYURMXv-50" vertex="1">
+        <mxCell id="L5MEKKil3N5dobx29khn-65" value="Protocol DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=0;fontSize=16;" parent="W92m8VuoNIIunjYURMXv-50" vertex="1">
           <mxGeometry width="140" height="80" as="geometry" />
         </mxCell>
         <mxCell id="W92m8VuoNIIunjYURMXv-51" value="" style="group;rounded=0;fontSize=16;" parent="W92m8VuoNIIunjYURMXv-52" vertex="1" connectable="0">
@@ -609,7 +609,7 @@
         <mxCell id="j5KQa3_2x4oAnSILvBNY-29" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontSize=16;" vertex="1" parent="1">
           <mxGeometry x="-20" y="70" width="570" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="j5KQa3_2x4oAnSILvBNY-30" value="Exam Manager" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" vertex="1" parent="1">
+        <mxCell id="j5KQa3_2x4oAnSILvBNY-30" value="Protocol Manager" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" vertex="1" parent="1">
           <mxGeometry x="180.5" y="160" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="j5KQa3_2x4oAnSILvBNY-31" value="" style="endArrow=none;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;startFill=1;endFill=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;jumpStyle=arc;jumpSize=10;fontSize=16;" edge="1" parent="1" source="j5KQa3_2x4oAnSILvBNY-78" target="j5KQa3_2x4oAnSILvBNY-43">
@@ -891,7 +891,7 @@
         <mxCell id="j5KQa3_2x4oAnSILvBNY-78" value="Workflow DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=0;fontSize=16;" vertex="1" parent="j5KQa3_2x4oAnSILvBNY-76">
           <mxGeometry y="65" width="140" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="j5KQa3_2x4oAnSILvBNY-79" value="Exam DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=0;fontSize=16;" vertex="1" parent="j5KQa3_2x4oAnSILvBNY-76">
+        <mxCell id="j5KQa3_2x4oAnSILvBNY-79" value="Protocol DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=0;fontSize=16;" vertex="1" parent="j5KQa3_2x4oAnSILvBNY-76">
           <mxGeometry width="140" height="80" as="geometry" />
         </mxCell>
         <mxCell id="j5KQa3_2x4oAnSILvBNY-80" value="" style="group;rounded=0;fontSize=16;" vertex="1" connectable="0" parent="j5KQa3_2x4oAnSILvBNY-74">

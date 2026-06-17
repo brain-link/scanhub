@@ -6,12 +6,12 @@
 import requests
 import json
 # import sys
-# sys.path.append("../../../services/exam-manager/app/")
+# sys.path.append("../../../services/protocol-manager/app/")
 # import dal
 
 # HOST = "https://localhost"
 HOST = "https://localhost:8443"  # for local development with custom port
-PREFIX = HOST + "/api/v1/exam"
+PREFIX = HOST + "/api/v1/protocol"
 PREFIX_PATIENT_MANAGER = HOST + "/api/v1/patient"
 USERNAME = "Max"            #   make sure this user is installed with this password
 PASSWORD = "maxmaxmaxmax"   #   they are not set up by this test routine
@@ -142,7 +142,7 @@ def test_invalid_and_no_token_with_openapijson():
     path_dict = openapijson["paths"]
     def run_requests(headers, comment):
         for path in path_dict:
-            if path == "/api/v1/exam/health/readiness":
+            if path == "/api/v1/protocol/health/readiness":
                 continue
             if path.count("{") == 1 and path.count("}") == 1 and path.endswith("}"):
                 path_for_request = path[0:path.find("{")] + "c7b7c2ba-e6ca-4354-a1e9-697478565148"

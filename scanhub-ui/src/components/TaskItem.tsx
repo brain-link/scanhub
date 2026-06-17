@@ -23,7 +23,7 @@ import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, ItemStatus } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, ItemStatus } from '../openapi/generated-client/protocol'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
@@ -102,7 +102,7 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
 
   const deleteTask = useMutation({
     mutationFn: async () => {
-      await taskApi.deleteTaskApiV1ExamTaskTaskIdDelete(task.id)
+      await taskApi.deleteTask(task.id)
       .then(() => {
         refetchParentData()
       })

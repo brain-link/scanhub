@@ -76,7 +76,7 @@ async def startup() -> None:
     init_db()
 
 
-@app.get("/api/v1/patient/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get("/api/v1/patient/health/readiness", response_model={}, status_code=200, tags=["health"], operation_id="health_readiness")
 async def readiness() -> dict:
     """Readiness health endpoint.
 

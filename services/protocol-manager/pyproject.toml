@@ -1,7 +1,7 @@
 [project]
-name = "scanhub-exam-manager"
+name = "scanhub-protocol-manager"
 version = "0.0.1"
-description = "The Exam Manager is responsible for managing the exam tree."
+description = "The protocol manager is responsible for managing the protocol tree."
 authors = [
     {name = "David Schote", email = "david.schote@brain-link.de"},
     {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"}
