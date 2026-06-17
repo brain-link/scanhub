@@ -9,7 +9,4 @@ Web API documentation for services.
    api_ui_patient_manager
 
    api_device
-   api_protocol
-   api_workflow
-   api_mri_acquisition
-   api_mri_sequences
+   api_exam

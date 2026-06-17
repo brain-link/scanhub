@@ -21,19 +21,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
 sys.path.insert(0, basedir)
 
-# Create __init__.py files in the given directories that they are recognized as packages by sphinx
-def create_init_files(directories):
-    for directory in directories:
-        fp = open(f'{directory}/__init__.py', 'w')
-        fp.write('"""Init file, that enables sphinx to detect this package."""')
-        fp.close()
-
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'ScanHub'
-copyright = '2023, BRAIN-LINK UG (haftungsbeschraenkt)'
-author = 'BRAIN-LINK UG (haftungsbeschraenkt)'
+# copyright = '2023, BRAIN-LINK UG (haftungsbeschraenkt)'
+# author = 'BRAIN-LINK UG (haftungsbeschraenkt)'
+copyright = 'David Schote, Christoph Dinh and Johannes Behrens'
+author = 'David Schote, Christoph Dinh and Johannes Behrens'
 release = '0.0.1'   # import this from scanhub package
 version = '0.0.1'   # import this from scanhub package
 
@@ -72,10 +67,13 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for AutoAPI -----------------------------------------------------
 
-autoapi_dirs = ['../../services/device-manager',
-                '../../services/protocol-manager',
-                '../../services/workflow-manager',
-                ]
+autoapi_dirs = [
+    '../../services/device-manager',
+    '../../services/protocol-manager',
+    '../../services/orchestration-engine',
+    '../../services/user-login-manager',
+    '../../services/patient-manager',
+]
 
 autoapi_template_dir = '_templates/autoapi'
 
@@ -83,8 +81,6 @@ init_dirs = []
 for autoapi_dir in autoapi_dirs:
     init_dirs.append(autoapi_dir)
     init_dirs.append(autoapi_dir + '/app')
-
-create_init_files(init_dirs)
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -96,12 +92,10 @@ html_theme = 'pydata_sphinx_theme'
 html_show_sphinx = False
 html_scaled_image_link = False
 html_show_sourcelink = True
-html_logo = "_static/images/logo_brainlink.svg"
-html_favicon = "_static/brainlink_favicon/favicon-32x32.png"
-# html_logo = "_static/images/logo_scanhub.png"
+html_favicon = "_static/scanhub_favicon/favicon-32x32.png"
 
 html_context = {
-    "github_user": "brain-link",
+    "github_user": "scanhub-os",
     "github_repo": "scanhub",
     "github_version": "dev",
     "doc_path": "docs/",
@@ -116,23 +110,16 @@ html_sidebars = {
 }
 
 html_theme_options = {
-    # "external_links": [{"url": "https://github.com/Project-MONAI/tutorials", "name": "Tutorials"}],
+    "logo": {
+        "image_light": "_static/images/logo.png",
+        "image_dark": "_static/images/logo.png",
+        "text": "ScanHub Documentation",
+    },
     "icon_links": [
-        {
-            "name": "Brain-Link",
-            "url": "https://brain-link.de/",
-            "icon": "https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg",
-            "type": "url"
-        },
         {
             "name": "GitHub",
             "url": "https://github.com/brain-link/scanhub",
             "icon": "fa-brands fa-github",
-        },
-        {
-            "name": "LinkedIn",
-            "url": "https://www.linkedin.com/company/brain-link/",
-            "icon": "fa-brands fa-linkedin",
         },
     ],
     "collapse_navigation": True,
@@ -143,8 +130,8 @@ html_theme_options = {
     "footer_end": [],
     "navbar_align": "content",
     "header_links_before_dropdown": 4,
-    "pygment_light_style": "default",
-    "pygment_dark_style": "github-dark",
+    "pygments_light_style": "default",
+    "pygments_dark_style": "github-dark",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

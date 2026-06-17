@@ -17,6 +17,12 @@ html[data-theme="dark"] {
     --pst-color-warning: #E92076;
     --pst-color-info: #00A1E0;
 }
+/* Logo: space between image and title text, no underline on hover */
+.navbar-brand img {
+    margin-right: 0.75rem;
+}
 
-
+.navbar-brand:hover {
+    text-decoration: none;
+}
 
