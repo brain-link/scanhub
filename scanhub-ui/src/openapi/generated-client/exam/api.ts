@@ -89,10 +89,10 @@ export interface AcquisitionParameter {
 export interface AcquisitionTaskOut {
     /**
      * 
-     * @type {WorkflowId1}
+     * @type {ProtocolId1}
      * @memberof AcquisitionTaskOut
      */
-    'workflow_id'?: WorkflowId1;
+    'protocol_id'?: ProtocolId1;
     /**
      * 
      * @type {string}
@@ -270,10 +270,10 @@ export interface AcquisitionTaskOutAcquisitionParameter {
 export interface BaseAcquisitionTask {
     /**
      * 
-     * @type {WorkflowId1}
+     * @type {ProtocolId1}
      * @memberof BaseAcquisitionTask
      */
-    'workflow_id'?: WorkflowId1;
+    'protocol_id'?: ProtocolId1;
     /**
      * 
      * @type {string}
@@ -350,57 +350,6 @@ export interface BaseAcquisitionTask {
 
 
 /**
- * Exam base model.
- * @export
- * @interface BaseExam
- */
-export interface BaseExam {
-    /**
-     * 
-     * @type {PatientId}
-     * @memberof BaseExam
-     */
-    'patient_id'?: PatientId;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseExam
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BaseExam
-     */
-    'description': string;
-    /**
-     * 
-     * @type {Indication}
-     * @memberof BaseExam
-     */
-    'indication'?: Indication;
-    /**
-     * 
-     * @type {Comment}
-     * @memberof BaseExam
-     */
-    'comment'?: Comment;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof BaseExam
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BaseExam
-     */
-    'is_template': boolean;
-}
-
-
-/**
  * Base model for MRI sequence.
  * @export
  * @interface BaseMRISequence
@@ -432,45 +381,51 @@ export interface BaseMRISequence {
     'tags'?: Array<string>;
 }
 /**
- * Workflow base model.
+ * Protocol base model.
  * @export
- * @interface BaseWorkflow
+ * @interface BaseProtocol
  */
-export interface BaseWorkflow {
+export interface BaseProtocol {
     /**
      * 
-     * @type {ExamId1}
-     * @memberof BaseWorkflow
+     * @type {PatientId}
+     * @memberof BaseProtocol
      */
-    'exam_id'?: ExamId1;
+    'patient_id'?: PatientId;
     /**
      * 
      * @type {string}
-     * @memberof BaseWorkflow
+     * @memberof BaseProtocol
      */
     'name': string;
     /**
      * 
      * @type {string}
-     * @memberof BaseWorkflow
+     * @memberof BaseProtocol
      */
     'description': string;
     /**
      * 
+     * @type {Indication}
+     * @memberof BaseProtocol
+     */
+    'indication'?: Indication;
+    /**
+     * 
      * @type {Comment}
-     * @memberof BaseWorkflow
+     * @memberof BaseProtocol
      */
     'comment'?: Comment;
     /**
      * 
      * @type {ItemStatus}
-     * @memberof BaseWorkflow
+     * @memberof BaseProtocol
      */
     'status': ItemStatus;
     /**
      * 
      * @type {boolean}
-     * @memberof BaseWorkflow
+     * @memberof BaseProtocol
      */
     'is_template': boolean;
 }
@@ -544,94 +499,6 @@ export interface DeviceId {
  */
 export interface ExamId {
 }
-/**
- * 
- * @export
- * @interface ExamId1
- */
-export interface ExamId1 {
-}
-/**
- * Exam output model.
- * @export
- * @interface ExamOut
- */
-export interface ExamOut {
-    /**
-     * 
-     * @type {PatientId}
-     * @memberof ExamOut
-     */
-    'patient_id'?: PatientId;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'description': string;
-    /**
-     * 
-     * @type {Indication}
-     * @memberof ExamOut
-     */
-    'indication'?: Indication;
-    /**
-     * 
-     * @type {Comment}
-     * @memberof ExamOut
-     */
-    'comment'?: Comment;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof ExamOut
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ExamOut
-     */
-    'is_template': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExamOut
-     */
-    'datetime_created': string;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof ExamOut
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {Array<WorkflowOut>}
-     * @memberof ExamOut
-     */
-    'workflows': Array<WorkflowOut>;
-}
-
-
 /**
  * Pydantic definition of genders.
  * @export
@@ -728,7 +595,7 @@ export interface MRDMetaResponse {
      * @type {string}
      * @memberof MRDMetaResponse
      */
-    'workflow_id': string;
+    'protocol_id': string;
     /**
      * 
      * @type {string}
@@ -841,6 +708,101 @@ export interface Meta {
  */
 export interface PatientId {
 }
+/**
+ * 
+ * @export
+ * @interface ProtocolId
+ */
+export interface ProtocolId {
+}
+/**
+ * 
+ * @export
+ * @interface ProtocolId1
+ */
+export interface ProtocolId1 {
+}
+/**
+ * Protocol output model.
+ * @export
+ * @interface ProtocolOut
+ */
+export interface ProtocolOut {
+    /**
+     * 
+     * @type {PatientId}
+     * @memberof ProtocolOut
+     */
+    'patient_id'?: PatientId;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProtocolOut
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProtocolOut
+     */
+    'description': string;
+    /**
+     * 
+     * @type {Indication}
+     * @memberof ProtocolOut
+     */
+    'indication'?: Indication;
+    /**
+     * 
+     * @type {Comment}
+     * @memberof ProtocolOut
+     */
+    'comment'?: Comment;
+    /**
+     * 
+     * @type {ItemStatus}
+     * @memberof ProtocolOut
+     */
+    'status': ItemStatus;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProtocolOut
+     */
+    'is_template': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProtocolOut
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProtocolOut
+     */
+    'creator': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProtocolOut
+     */
+    'datetime_created': string;
+    /**
+     * 
+     * @type {DatetimeUpdated}
+     * @memberof ProtocolOut
+     */
+    'datetime_updated'?: DatetimeUpdated;
+    /**
+     * 
+     * @type {Array<AcquisitionTaskOut>}
+     * @memberof ProtocolOut
+     */
+    'tasks': Array<AcquisitionTaskOut>;
+}
+
+
 /**
  * 
  * @export
@@ -1055,95 +1017,6 @@ export interface ValidationError {
 export interface ValidationErrorLocInner {
 }
 /**
- * 
- * @export
- * @interface WorkflowId
- */
-export interface WorkflowId {
-}
-/**
- * 
- * @export
- * @interface WorkflowId1
- */
-export interface WorkflowId1 {
-}
-/**
- * Workflow output model.
- * @export
- * @interface WorkflowOut
- */
-export interface WorkflowOut {
-    /**
-     * 
-     * @type {ExamId1}
-     * @memberof WorkflowOut
-     */
-    'exam_id'?: ExamId1;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkflowOut
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkflowOut
-     */
-    'description': string;
-    /**
-     * 
-     * @type {Comment}
-     * @memberof WorkflowOut
-     */
-    'comment'?: Comment;
-    /**
-     * 
-     * @type {ItemStatus}
-     * @memberof WorkflowOut
-     */
-    'status': ItemStatus;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorkflowOut
-     */
-    'is_template': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkflowOut
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkflowOut
-     */
-    'creator': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkflowOut
-     */
-    'datetime_created': string;
-    /**
-     * 
-     * @type {DatetimeUpdated}
-     * @memberof WorkflowOut
-     */
-    'datetime_updated'?: DatetimeUpdated;
-    /**
-     * 
-     * @type {Array<AcquisitionTaskOut>}
-     * @memberof WorkflowOut
-     */
-    'tasks': Array<AcquisitionTaskOut>;
-}
-
-
-/**
  * Pydantic definition of coordinates.
  * @export
  * @interface XYZ
@@ -1192,21 +1065,21 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Download the full MRD file.
          * @summary Download MRD file
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadMRD: async (workflowId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('downloadMRD', 'workflowId', workflowId)
+        downloadMRD: async (protocolId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('downloadMRD', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('downloadMRD', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('downloadMRD', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/download`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/download`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1236,26 +1109,26 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * Serve a DICOM instance.
          * @summary Get DICOM result
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicom: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getDicom', 'workflowId', workflowId)
+        getDicom: async (protocolId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getDicom', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getDicom', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getDicom', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('getDicom', 'filename', filename)
-            const localVarPath = `/api/v1/exam/dcm/{workflow_id}/{task_id}/{result_id}/{filename}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/dcm/{protocol_id}/{task_id}/{result_id}/{filename}`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
                 .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
@@ -1288,7 +1161,7 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -1297,17 +1170,17 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMRD: async (workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getMRD', 'workflowId', workflowId)
+        getMRD: async (protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getMRD', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getMRD', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getMRD', 'resultId', resultId)
             // verify required parameter 'ids' is not null or undefined
             assertParamExists('getMRD', 'ids', ids)
-            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/data`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/data`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1351,21 +1224,21 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMrdMeta: async (workflowId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getMrdMeta', 'workflowId', workflowId)
+        getMrdMeta: async (protocolId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getMrdMeta', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getMrdMeta', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getMrdMeta', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/meta`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/meta`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1397,24 +1270,24 @@ export const DataApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Upload a DICOM file to XNAT test database.
          * @summary Upload DICOM result to XNAT
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadToXnat: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('uploadToXnat', 'workflowId', workflowId)
+        uploadToXnat: async (protocolId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('uploadToXnat', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('uploadToXnat', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('uploadToXnat', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('uploadToXnat', 'filename', filename)
-            const localVarPath = `/api/v1/exam/xnat/upload/{workflow_id}/{task_id}/{result_id}/{filename}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
                 .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
@@ -1457,30 +1330,30 @@ export const DataApiFp = function(configuration?: Configuration) {
         /**
          * Download the full MRD file.
          * @summary Download MRD file
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadMRD(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadMRD(workflowId, taskId, resultId, options);
+        async downloadMRD(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadMRD(protocolId, taskId, resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DataApi.downloadMRD']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * Serve a DICOM instance.
          * @summary Get DICOM result
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicom(workflowId, taskId, resultId, filename, options);
+        async getDicom(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicom(protocolId, taskId, resultId, filename, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DataApi.getDicom']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1488,7 +1361,7 @@ export const DataApiFp = function(configuration?: Configuration) {
         /**
          * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -1497,8 +1370,8 @@ export const DataApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options);
+        async getMRD(protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMRD(protocolId, taskId, resultId, ids, coilIdx, stride, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DataApi.getMRD']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1506,14 +1379,14 @@ export const DataApiFp = function(configuration?: Configuration) {
         /**
          * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRDMetaResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMrdMeta(workflowId, taskId, resultId, options);
+        async getMrdMeta(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRDMetaResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMrdMeta(protocolId, taskId, resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DataApi.getMrdMeta']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1521,15 +1394,15 @@ export const DataApiFp = function(configuration?: Configuration) {
         /**
          * Upload a DICOM file to XNAT test database.
          * @summary Upload DICOM result to XNAT
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadToXnat(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadToXnat(workflowId, taskId, resultId, filename, options);
+        async uploadToXnat(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadToXnat(protocolId, taskId, resultId, filename, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DataApi.uploadToXnat']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1547,32 +1420,32 @@ export const DataApiFactory = function (configuration?: Configuration, basePath?
         /**
          * Download the full MRD file.
          * @summary Download MRD file
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadMRD(workflowId: string, taskId: string, resultId: string, options?: any): AxiosPromise<any> {
-            return localVarFp.downloadMRD(workflowId, taskId, resultId, options).then((request) => request(axios, basePath));
+        downloadMRD(protocolId: string, taskId: string, resultId: string, options?: any): AxiosPromise<any> {
+            return localVarFp.downloadMRD(protocolId, taskId, resultId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * Serve a DICOM instance.
          * @summary Get DICOM result
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        getDicom(protocolId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getDicom(protocolId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
         /**
          * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -1581,33 +1454,33 @@ export const DataApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: any): AxiosPromise<any> {
-            return localVarFp.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
+        getMRD(protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.getMRD(protocolId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
         },
         /**
          * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: any): AxiosPromise<MRDMetaResponse> {
-            return localVarFp.getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(axios, basePath));
+        getMrdMeta(protocolId: string, taskId: string, resultId: string, options?: any): AxiosPromise<MRDMetaResponse> {
+            return localVarFp.getMrdMeta(protocolId, taskId, resultId, options).then((request) => request(axios, basePath));
         },
         /**
          * Upload a DICOM file to XNAT test database.
          * @summary Upload DICOM result to XNAT
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadToXnat(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<{ [key: string]: any; }> {
-            return localVarFp.uploadToXnat(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        uploadToXnat(protocolId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<{ [key: string]: any; }> {
+            return localVarFp.uploadToXnat(protocolId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1622,21 +1495,21 @@ export class DataApi extends BaseAPI {
     /**
      * Download the full MRD file.
      * @summary Download MRD file
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DataApi
      */
-    public downloadMRD(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
-        return DataApiFp(this.configuration).downloadMRD(workflowId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
+    public downloadMRD(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).downloadMRD(protocolId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+     * Serve a DICOM instance.
      * @summary Get DICOM result
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {string} filename 
@@ -1644,14 +1517,14 @@ export class DataApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DataApi
      */
-    public getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
-        return DataApiFp(this.configuration).getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
+    public getDicom(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).getDicom(protocolId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get MRD as binary stream.
      * @summary Get MRD (binary, interleaved float32 complex)
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -1661,28 +1534,28 @@ export class DataApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DataApi
      */
-    public getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig) {
-        return DataApiFp(this.configuration).getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(this.axios, this.basePath));
+    public getMRD(protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).getMRD(protocolId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get MRD meta info.
      * @summary Get ISMRMRD metadata (indexed acquisitions)
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DataApi
      */
-    public getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
-        return DataApiFp(this.configuration).getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
+    public getMrdMeta(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).getMrdMeta(protocolId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Upload a DICOM file to XNAT test database.
      * @summary Upload DICOM result to XNAT
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {string} filename 
@@ -1690,574 +1563,8 @@ export class DataApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DataApi
      */
-    public uploadToXnat(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
-        return DataApiFp(this.configuration).uploadToXnat(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * ExamsApi - axios parameter creator
- * @export
- */
-export const ExamsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createExamApiV1ExamNewPost: async (baseExam: BaseExam, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'baseExam' is not null or undefined
-            assertParamExists('createExamApiV1ExamNewPost', 'baseExam', baseExam)
-            const localVarPath = `/api/v1/exam/new`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseExam, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam From Template
-         * @param {string} templateId 
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createExamFromTemplateApiV1ExamPost: async (templateId: string, baseExam: BaseExam, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createExamFromTemplateApiV1ExamPost', 'templateId', templateId)
-            // verify required parameter 'baseExam' is not null or undefined
-            assertParamExists('createExamFromTemplateApiV1ExamPost', 'baseExam', baseExam)
-            const localVarPath = `/api/v1/exam/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (templateId !== undefined) {
-                localVarQueryParameter['template_id'] = templateId;
-            }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseExam, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Exam Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        examDeleteApiV1ExamExamIdDelete: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('examDeleteApiV1ExamExamIdDelete', 'examId', examId)
-            const localVarPath = `/api/v1/exam/{exam_id}`
-                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get all exam templates.  Returns -------     List of exam pydantic output models
-         * @summary Get All Exam Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllExamTemplatesApiV1ExamTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/templates/all`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
-         * @summary Get All Patient Exams
-         * @param {string} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllPatientExamsApiV1ExamAllPatientIdGet: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('getAllPatientExamsApiV1ExamAllPatientIdGet', 'patientId', patientId)
-            const localVarPath = `/api/v1/exam/all/{patient_id}`
-                .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get exam endpoint.  Parameters ---------- exam_id     Id of requested exam entry  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Not found
-         * @summary Get Exam
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getExamApiV1ExamExamIdGet: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('getExamApiV1ExamExamIdGet', 'examId', examId)
-            const localVarPath = `/api/v1/exam/{exam_id}`
-                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Update an existing exam.  Parameters ---------- exam_id     Id of the exam to be updated payload     Exam pydantic input model  Returns -------     Exam pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Exam
-         * @param {ExamId} examId 
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateExamApiV1ExamExamIdPut: async (examId: ExamId, baseExam: BaseExam, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('updateExamApiV1ExamExamIdPut', 'examId', examId)
-            // verify required parameter 'baseExam' is not null or undefined
-            assertParamExists('updateExamApiV1ExamExamIdPut', 'baseExam', baseExam)
-            const localVarPath = `/api/v1/exam/{exam_id}`
-                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseExam, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * ExamsApi - functional programming interface
- * @export
- */
-export const ExamsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = ExamsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createExamApiV1ExamNewPost(baseExam: BaseExam, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamApiV1ExamNewPost(baseExam, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.createExamApiV1ExamNewPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam From Template
-         * @param {string} templateId 
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createExamFromTemplateApiV1ExamPost(templateId: string, baseExam: BaseExam, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamFromTemplateApiV1ExamPost(templateId, baseExam, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.createExamFromTemplateApiV1ExamPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Exam Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async examDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.examDeleteApiV1ExamExamIdDelete(examId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.examDeleteApiV1ExamExamIdDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all exam templates.  Returns -------     List of exam pydantic output models
-         * @summary Get All Exam Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllExamTemplatesApiV1ExamTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExamOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllExamTemplatesApiV1ExamTemplatesAllGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.getAllExamTemplatesApiV1ExamTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
-         * @summary Get All Patient Exams
-         * @param {string} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExamOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPatientExamsApiV1ExamAllPatientIdGet(patientId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.getAllPatientExamsApiV1ExamAllPatientIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get exam endpoint.  Parameters ---------- exam_id     Id of requested exam entry  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Not found
-         * @summary Get Exam
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getExamApiV1ExamExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getExamApiV1ExamExamIdGet(examId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.getExamApiV1ExamExamIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Update an existing exam.  Parameters ---------- exam_id     Id of the exam to be updated payload     Exam pydantic input model  Returns -------     Exam pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Exam
-         * @param {ExamId} examId 
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateExamApiV1ExamExamIdPut(examId: ExamId, baseExam: BaseExam, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateExamApiV1ExamExamIdPut(examId, baseExam, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ExamsApi.updateExamApiV1ExamExamIdPut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * ExamsApi - factory interface
- * @export
- */
-export const ExamsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ExamsApiFp(configuration)
-    return {
-        /**
-         * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createExamApiV1ExamNewPost(baseExam: BaseExam, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.createExamApiV1ExamNewPost(baseExam, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Exam From Template
-         * @param {string} templateId 
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createExamFromTemplateApiV1ExamPost(templateId: string, baseExam: BaseExam, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.createExamFromTemplateApiV1ExamPost(templateId, baseExam, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Exam Delete
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        examDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: any): AxiosPromise<void> {
-            return localVarFp.examDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all exam templates.  Returns -------     List of exam pydantic output models
-         * @summary Get All Exam Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllExamTemplatesApiV1ExamTemplatesAllGet(options?: any): AxiosPromise<Array<ExamOut>> {
-            return localVarFp.getAllExamTemplatesApiV1ExamTemplatesAllGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
-         * @summary Get All Patient Exams
-         * @param {string} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: string, options?: any): AxiosPromise<Array<ExamOut>> {
-            return localVarFp.getAllPatientExamsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get exam endpoint.  Parameters ---------- exam_id     Id of requested exam entry  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Not found
-         * @summary Get Exam
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getExamApiV1ExamExamIdGet(examId: ExamId, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.getExamApiV1ExamExamIdGet(examId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Update an existing exam.  Parameters ---------- exam_id     Id of the exam to be updated payload     Exam pydantic input model  Returns -------     Exam pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Exam
-         * @param {ExamId} examId 
-         * @param {BaseExam} baseExam 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateExamApiV1ExamExamIdPut(examId: ExamId, baseExam: BaseExam, options?: any): AxiosPromise<ExamOut> {
-            return localVarFp.updateExamApiV1ExamExamIdPut(examId, baseExam, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * ExamsApi - object-oriented interface
- * @export
- * @class ExamsApi
- * @extends {BaseAPI}
- */
-export class ExamsApi extends BaseAPI {
-    /**
-     * Create a new exam.  Parameters ---------- payload     Exam pydantic input model.  Returns -------     Exam pydantic output moddel.  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Exam
-     * @param {BaseExam} baseExam 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public createExamApiV1ExamNewPost(baseExam: BaseExam, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).createExamApiV1ExamNewPost(baseExam, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Create a new exam from template.  Parameters ---------- payload     The potentially modified exam to create. template_id     ID of the template, the exam is created from  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Exam From Template
-     * @param {string} templateId 
-     * @param {BaseExam} baseExam 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public createExamFromTemplateApiV1ExamPost(templateId: string, baseExam: BaseExam, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).createExamFromTemplateApiV1ExamPost(templateId, baseExam, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Delete an exam by id. Cascade deletes the associated workflow and tasks.  Parameters ---------- exam_id     Id of the exam to be deleted  Raises ------ HTTPException     404: Not found
-     * @summary Exam Delete
-     * @param {ExamId} examId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public examDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).examDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all exam templates.  Returns -------     List of exam pydantic output models
-     * @summary Get All Exam Templates
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public getAllExamTemplatesApiV1ExamTemplatesAllGet(options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).getAllExamTemplatesApiV1ExamTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all exams of a certain patient.  Parameters ---------- patient_id     Id of parent  Returns -------     List of exam pydantic output models
-     * @summary Get All Patient Exams
-     * @param {string} patientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public getAllPatientExamsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).getAllPatientExamsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get exam endpoint.  Parameters ---------- exam_id     Id of requested exam entry  Returns -------     Exam pydantic output model.  Raises ------ HTTPException     404: Not found
-     * @summary Get Exam
-     * @param {ExamId} examId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public getExamApiV1ExamExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).getExamApiV1ExamExamIdGet(examId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Update an existing exam.  Parameters ---------- exam_id     Id of the exam to be updated payload     Exam pydantic input model  Returns -------     Exam pydantic output model  Raises ------ HTTPException     404: Not found
-     * @summary Update Exam
-     * @param {ExamId} examId 
-     * @param {BaseExam} baseExam 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ExamsApi
-     */
-    public updateExamApiV1ExamExamIdPut(examId: ExamId, baseExam: BaseExam, options?: RawAxiosRequestConfig) {
-        return ExamsApiFp(this.configuration).updateExamApiV1ExamExamIdPut(examId, baseExam, options).then((request) => request(this.axios, this.basePath));
+    public uploadToXnat(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return DataApiFp(this.configuration).uploadToXnat(protocolId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2984,13 +2291,579 @@ export class MriSequencesApi extends BaseAPI {
 
 
 /**
+ * ProtocolsApi - axios parameter creator
+ * @export
+ */
+export const ProtocolsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a new protocol.
+         * @summary Create Protocol
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProtocolApiV1ExamNewPost: async (baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'baseProtocol' is not null or undefined
+            assertParamExists('createProtocolApiV1ExamNewPost', 'baseProtocol', baseProtocol)
+            const localVarPath = `/api/v1/exam/new`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseProtocol, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a new protocol from template.
+         * @summary Create Protocol From Template
+         * @param {string} templateId 
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProtocolFromTemplateApiV1ExamPost: async (templateId: string, baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'templateId' is not null or undefined
+            assertParamExists('createProtocolFromTemplateApiV1ExamPost', 'templateId', templateId)
+            // verify required parameter 'baseProtocol' is not null or undefined
+            assertParamExists('createProtocolFromTemplateApiV1ExamPost', 'baseProtocol', baseProtocol)
+            const localVarPath = `/api/v1/exam/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (templateId !== undefined) {
+                localVarQueryParameter['template_id'] = templateId;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseProtocol, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get all protocols of a certain patient.
+         * @summary Get All Patient Protocols
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllPatientProtocolsApiV1ExamAllPatientIdGet: async (patientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('getAllPatientProtocolsApiV1ExamAllPatientIdGet', 'patientId', patientId)
+            const localVarPath = `/api/v1/exam/all/{patient_id}`
+                .replace(`{${"patient_id"}}`, encodeURIComponent(String(patientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get all protocol templates.
+         * @summary Get All Protocol Templates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllProtocolTemplatesApiV1ExamTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/exam/templates/all`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get protocol endpoint.
+         * @summary Get Protocol
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProtocolApiV1ExamExamIdGet: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examId' is not null or undefined
+            assertParamExists('getProtocolApiV1ExamExamIdGet', 'examId', examId)
+            const localVarPath = `/api/v1/exam/{exam_id}`
+                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a protocol by id. Cascade deletes the associated tasks.
+         * @summary Protocol Delete
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        protocolDeleteApiV1ExamExamIdDelete: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examId' is not null or undefined
+            assertParamExists('protocolDeleteApiV1ExamExamIdDelete', 'examId', examId)
+            const localVarPath = `/api/v1/exam/{exam_id}`
+                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an existing protocol.
+         * @summary Update Protocol
+         * @param {ExamId} examId 
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProtocolApiV1ExamExamIdPut: async (examId: ExamId, baseProtocol: BaseProtocol, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examId' is not null or undefined
+            assertParamExists('updateProtocolApiV1ExamExamIdPut', 'examId', examId)
+            // verify required parameter 'baseProtocol' is not null or undefined
+            assertParamExists('updateProtocolApiV1ExamExamIdPut', 'baseProtocol', baseProtocol)
+            const localVarPath = `/api/v1/exam/{exam_id}`
+                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(baseProtocol, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ProtocolsApi - functional programming interface
+ * @export
+ */
+export const ProtocolsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ProtocolsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a new protocol.
+         * @summary Create Protocol
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createProtocolApiV1ExamNewPost(baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProtocolApiV1ExamNewPost(baseProtocol, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.createProtocolApiV1ExamNewPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a new protocol from template.
+         * @summary Create Protocol From Template
+         * @param {string} templateId 
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createProtocolFromTemplateApiV1ExamPost(templateId: string, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProtocolFromTemplateApiV1ExamPost(templateId, baseProtocol, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.createProtocolFromTemplateApiV1ExamPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all protocols of a certain patient.
+         * @summary Get All Patient Protocols
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProtocolOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getAllPatientProtocolsApiV1ExamAllPatientIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all protocol templates.
+         * @summary Get All Protocol Templates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProtocolOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getAllProtocolTemplatesApiV1ExamTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get protocol endpoint.
+         * @summary Get Protocol
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProtocolApiV1ExamExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProtocolApiV1ExamExamIdGet(examId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.getProtocolApiV1ExamExamIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete a protocol by id. Cascade deletes the associated tasks.
+         * @summary Protocol Delete
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async protocolDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.protocolDeleteApiV1ExamExamIdDelete(examId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.protocolDeleteApiV1ExamExamIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an existing protocol.
+         * @summary Update Protocol
+         * @param {ExamId} examId 
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateProtocolApiV1ExamExamIdPut(examId: ExamId, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProtocolOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProtocolApiV1ExamExamIdPut(examId, baseProtocol, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProtocolsApi.updateProtocolApiV1ExamExamIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ProtocolsApi - factory interface
+ * @export
+ */
+export const ProtocolsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ProtocolsApiFp(configuration)
+    return {
+        /**
+         * Create a new protocol.
+         * @summary Create Protocol
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProtocolApiV1ExamNewPost(baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.createProtocolApiV1ExamNewPost(baseProtocol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a new protocol from template.
+         * @summary Create Protocol From Template
+         * @param {string} templateId 
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createProtocolFromTemplateApiV1ExamPost(templateId: string, baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.createProtocolFromTemplateApiV1ExamPost(templateId, baseProtocol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all protocols of a certain patient.
+         * @summary Get All Patient Protocols
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId: string, options?: any): AxiosPromise<Array<ProtocolOut>> {
+            return localVarFp.getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all protocol templates.
+         * @summary Get All Protocol Templates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options?: any): AxiosPromise<Array<ProtocolOut>> {
+            return localVarFp.getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get protocol endpoint.
+         * @summary Get Protocol
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProtocolApiV1ExamExamIdGet(examId: ExamId, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.getProtocolApiV1ExamExamIdGet(examId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a protocol by id. Cascade deletes the associated tasks.
+         * @summary Protocol Delete
+         * @param {ExamId} examId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        protocolDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: any): AxiosPromise<void> {
+            return localVarFp.protocolDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an existing protocol.
+         * @summary Update Protocol
+         * @param {ExamId} examId 
+         * @param {BaseProtocol} baseProtocol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateProtocolApiV1ExamExamIdPut(examId: ExamId, baseProtocol: BaseProtocol, options?: any): AxiosPromise<ProtocolOut> {
+            return localVarFp.updateProtocolApiV1ExamExamIdPut(examId, baseProtocol, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ProtocolsApi - object-oriented interface
+ * @export
+ * @class ProtocolsApi
+ * @extends {BaseAPI}
+ */
+export class ProtocolsApi extends BaseAPI {
+    /**
+     * Create a new protocol.
+     * @summary Create Protocol
+     * @param {BaseProtocol} baseProtocol 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public createProtocolApiV1ExamNewPost(baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).createProtocolApiV1ExamNewPost(baseProtocol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a new protocol from template.
+     * @summary Create Protocol From Template
+     * @param {string} templateId 
+     * @param {BaseProtocol} baseProtocol 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public createProtocolFromTemplateApiV1ExamPost(templateId: string, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).createProtocolFromTemplateApiV1ExamPost(templateId, baseProtocol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all protocols of a certain patient.
+     * @summary Get All Patient Protocols
+     * @param {string} patientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId: string, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).getAllPatientProtocolsApiV1ExamAllPatientIdGet(patientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all protocol templates.
+     * @summary Get All Protocol Templates
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).getAllProtocolTemplatesApiV1ExamTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get protocol endpoint.
+     * @summary Get Protocol
+     * @param {ExamId} examId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public getProtocolApiV1ExamExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).getProtocolApiV1ExamExamIdGet(examId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete a protocol by id. Cascade deletes the associated tasks.
+     * @summary Protocol Delete
+     * @param {ExamId} examId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public protocolDeleteApiV1ExamExamIdDelete(examId: ExamId, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).protocolDeleteApiV1ExamExamIdDelete(examId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an existing protocol.
+     * @summary Update Protocol
+     * @param {ExamId} examId 
+     * @param {BaseProtocol} baseProtocol 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProtocolsApi
+     */
+    public updateProtocolApiV1ExamExamIdPut(examId: ExamId, baseProtocol: BaseProtocol, options?: RawAxiosRequestConfig) {
+        return ProtocolsApiFp(this.configuration).updateProtocolApiV1ExamExamIdPut(examId, baseProtocol, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * ResultsApi - axios parameter creator
  * @export
  */
 export const ResultsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a blank task result.
          * @summary Create Blank Result
          * @param {TaskId1} taskId 
          * @param {*} [options] Override http request option.
@@ -3077,7 +2950,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a result.
          * @summary Delete Result
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -3117,21 +2990,21 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Download the full MRD file.
          * @summary Download MRD file
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadMRD: async (workflowId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('downloadMRD', 'workflowId', workflowId)
+        downloadMRD: async (protocolId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('downloadMRD', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('downloadMRD', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('downloadMRD', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/download`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/download`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3161,7 +3034,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+         * Get all existing results of a certain task.
          * @summary Get All Task Results
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -3199,26 +3072,26 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * Serve a DICOM instance.
          * @summary Get DICOM result
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicom: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getDicom', 'workflowId', workflowId)
+        getDicom: async (protocolId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getDicom', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getDicom', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getDicom', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('getDicom', 'filename', filename)
-            const localVarPath = `/api/v1/exam/dcm/{workflow_id}/{task_id}/{result_id}/{filename}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/dcm/{protocol_id}/{task_id}/{result_id}/{filename}`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
                 .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
@@ -3251,7 +3124,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -3260,17 +3133,17 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMRD: async (workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getMRD', 'workflowId', workflowId)
+        getMRD: async (protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getMRD', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getMRD', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getMRD', 'resultId', resultId)
             // verify required parameter 'ids' is not null or undefined
             assertParamExists('getMRD', 'ids', ids)
-            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/data`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/data`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3314,21 +3187,21 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMrdMeta: async (workflowId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getMrdMeta', 'workflowId', workflowId)
+        getMrdMeta: async (protocolId: string, taskId: string, resultId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getMrdMeta', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('getMrdMeta', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('getMrdMeta', 'resultId', resultId)
-            const localVarPath = `/api/v1/exam/mrd/{workflow_id}/{task_id}/{result_id}/meta`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/mrd/{protocol_id}/{task_id}/{result_id}/meta`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3358,7 +3231,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+         * Get an existing result.
          * @summary Get Result
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -3396,7 +3269,7 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing result.
          * @summary Set Result
          * @param {ResultId} resultId 
          * @param {SetResult} setResult 
@@ -3442,24 +3315,24 @@ export const ResultsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Upload a DICOM file to XNAT test database.
          * @summary Upload DICOM result to XNAT
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadToXnat: async (workflowId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('uploadToXnat', 'workflowId', workflowId)
+        uploadToXnat: async (protocolId: string, taskId: string, resultId: string, filename: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('uploadToXnat', 'protocolId', protocolId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('uploadToXnat', 'taskId', taskId)
             // verify required parameter 'resultId' is not null or undefined
             assertParamExists('uploadToXnat', 'resultId', resultId)
             // verify required parameter 'filename' is not null or undefined
             assertParamExists('uploadToXnat', 'filename', filename)
-            const localVarPath = `/api/v1/exam/xnat/upload/{workflow_id}/{task_id}/{result_id}/{filename}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)))
+            const localVarPath = `/api/v1/exam/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)))
                 .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)))
                 .replace(`{${"result_id"}}`, encodeURIComponent(String(resultId)))
                 .replace(`{${"filename"}}`, encodeURIComponent(String(filename)));
@@ -3500,7 +3373,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ResultsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a blank task result.
          * @summary Create Blank Result
          * @param {TaskId1} taskId 
          * @param {*} [options] Override http request option.
@@ -3527,7 +3400,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a result.
          * @summary Delete Result
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -3542,20 +3415,20 @@ export const ResultsApiFp = function(configuration?: Configuration) {
         /**
          * Download the full MRD file.
          * @summary Download MRD file
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadMRD(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadMRD(workflowId, taskId, resultId, options);
+        async downloadMRD(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadMRD(protocolId, taskId, resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ResultsApi.downloadMRD']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+         * Get all existing results of a certain task.
          * @summary Get All Task Results
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -3568,17 +3441,17 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * Serve a DICOM instance.
          * @summary Get DICOM result
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicom(workflowId, taskId, resultId, filename, options);
+        async getDicom(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDicom(protocolId, taskId, resultId, filename, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ResultsApi.getDicom']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3586,7 +3459,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
         /**
          * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -3595,8 +3468,8 @@ export const ResultsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options);
+        async getMRD(protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMRD(protocolId, taskId, resultId, ids, coilIdx, stride, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ResultsApi.getMRD']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3604,20 +3477,20 @@ export const ResultsApiFp = function(configuration?: Configuration) {
         /**
          * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRDMetaResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMrdMeta(workflowId, taskId, resultId, options);
+        async getMrdMeta(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MRDMetaResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMrdMeta(protocolId, taskId, resultId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ResultsApi.getMrdMeta']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+         * Get an existing result.
          * @summary Get Result
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -3630,7 +3503,7 @@ export const ResultsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing result.
          * @summary Set Result
          * @param {ResultId} resultId 
          * @param {SetResult} setResult 
@@ -3646,15 +3519,15 @@ export const ResultsApiFp = function(configuration?: Configuration) {
         /**
          * Upload a DICOM file to XNAT test database.
          * @summary Upload DICOM result to XNAT
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadToXnat(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadToXnat(workflowId, taskId, resultId, filename, options);
+        async uploadToXnat(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: any; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadToXnat(protocolId, taskId, resultId, filename, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ResultsApi.uploadToXnat']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3670,7 +3543,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = ResultsApiFp(configuration)
     return {
         /**
-         * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+         * Create a blank task result.
          * @summary Create Blank Result
          * @param {TaskId1} taskId 
          * @param {*} [options] Override http request option.
@@ -3691,7 +3564,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.createDicomResultApiV1ExamResultDicomTaskIdPost(taskId, createDicomResult, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+         * Delete a result.
          * @summary Delete Result
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -3703,17 +3576,17 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
         /**
          * Download the full MRD file.
          * @summary Download MRD file
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadMRD(workflowId: string, taskId: string, resultId: string, options?: any): AxiosPromise<any> {
-            return localVarFp.downloadMRD(workflowId, taskId, resultId, options).then((request) => request(axios, basePath));
+        downloadMRD(protocolId: string, taskId: string, resultId: string, options?: any): AxiosPromise<any> {
+            return localVarFp.downloadMRD(protocolId, taskId, resultId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+         * Get all existing results of a certain task.
          * @summary Get All Task Results
          * @param {TaskId} taskId 
          * @param {*} [options] Override http request option.
@@ -3723,22 +3596,22 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getAllTaskResultsApiV1ExamResultAllTaskIdGet(taskId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+         * Serve a DICOM instance.
          * @summary Get DICOM result
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
-            return localVarFp.getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        getDicom(protocolId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<any> {
+            return localVarFp.getDicom(protocolId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
         /**
          * Get MRD as binary stream.
          * @summary Get MRD (binary, interleaved float32 complex)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -3747,23 +3620,23 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: any): AxiosPromise<any> {
-            return localVarFp.getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
+        getMRD(protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.getMRD(protocolId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(axios, basePath));
         },
         /**
          * Get MRD meta info.
          * @summary Get ISMRMRD metadata (indexed acquisitions)
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: any): AxiosPromise<MRDMetaResponse> {
-            return localVarFp.getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(axios, basePath));
+        getMrdMeta(protocolId: string, taskId: string, resultId: string, options?: any): AxiosPromise<MRDMetaResponse> {
+            return localVarFp.getMrdMeta(protocolId, taskId, resultId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+         * Get an existing result.
          * @summary Get Result
          * @param {ResultId} resultId 
          * @param {*} [options] Override http request option.
@@ -3773,7 +3646,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getResultApiV1ExamResultResultIdGet(resultId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+         * Update an existing result.
          * @summary Set Result
          * @param {ResultId} resultId 
          * @param {SetResult} setResult 
@@ -3786,15 +3659,15 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
         /**
          * Upload a DICOM file to XNAT test database.
          * @summary Upload DICOM result to XNAT
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} taskId 
          * @param {string} resultId 
          * @param {string} filename 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadToXnat(workflowId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<{ [key: string]: any; }> {
-            return localVarFp.uploadToXnat(workflowId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
+        uploadToXnat(protocolId: string, taskId: string, resultId: string, filename: string, options?: any): AxiosPromise<{ [key: string]: any; }> {
+            return localVarFp.uploadToXnat(protocolId, taskId, resultId, filename, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3807,7 +3680,7 @@ export const ResultsApiFactory = function (configuration?: Configuration, basePa
  */
 export class ResultsApi extends BaseAPI {
     /**
-     * Create a task result.  Parameters ---------- payload     Result pydantic input model  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
+     * Create a blank task result.
      * @summary Create Blank Result
      * @param {TaskId1} taskId 
      * @param {*} [options] Override http request option.
@@ -3832,7 +3705,7 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * Delete a task.  Parameters ---------- task_id     Id of the task to be deleted  Raises ------ HTTPException     404: Not found
+     * Delete a result.
      * @summary Delete Result
      * @param {ResultId} resultId 
      * @param {*} [options] Override http request option.
@@ -3846,19 +3719,19 @@ export class ResultsApi extends BaseAPI {
     /**
      * Download the full MRD file.
      * @summary Download MRD file
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public downloadMRD(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).downloadMRD(workflowId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
+    public downloadMRD(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).downloadMRD(protocolId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Get all existing results of a certain task.  Parameters ---------- task_id     Id of parental task  Returns -------     List of task pydantic output model
+     * Get all existing results of a certain task.
      * @summary Get All Task Results
      * @param {TaskId} taskId 
      * @param {*} [options] Override http request option.
@@ -3870,9 +3743,9 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * Serve a DICOM instance.    - If it\'s already a DICOM Part-10 file → return FileResponse (supports HTTP Range).   - Else → convert to Part-10 in memory and return StreamingResponse.  Headers:   - \'application/dicom\' content type   - inline disposition (avoid forced download)   - \'Cache-Control: no-transform\' to prevent proxies from gzipping (which breaks Range offsets)
+     * Serve a DICOM instance.
      * @summary Get DICOM result
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {string} filename 
@@ -3880,14 +3753,14 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getDicom(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getDicom(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
+    public getDicom(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getDicom(protocolId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get MRD as binary stream.
      * @summary Get MRD (binary, interleaved float32 complex)
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {string} ids IDs: \&#39;0,1,10-20,40-50:2\&#39;
@@ -3897,26 +3770,26 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getMRD(workflowId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getMRD(workflowId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(this.axios, this.basePath));
+    public getMRD(protocolId: string, taskId: string, resultId: string, ids: string, coilIdx?: number, stride?: number, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getMRD(protocolId, taskId, resultId, ids, coilIdx, stride, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get MRD meta info.
      * @summary Get ISMRMRD metadata (indexed acquisitions)
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public getMrdMeta(workflowId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).getMrdMeta(workflowId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
+    public getMrdMeta(protocolId: string, taskId: string, resultId: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).getMrdMeta(protocolId, taskId, resultId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Get an existing result.  Parameters ---------- result_id     Id of the result to be returned  Returns -------     Result pydantic output model  Raises ------ HTTPException     404: Not found
+     * Get an existing result.
      * @summary Get Result
      * @param {ResultId} resultId 
      * @param {*} [options] Override http request option.
@@ -3928,7 +3801,7 @@ export class ResultsApi extends BaseAPI {
     }
 
     /**
-     * Update an existing result.  Parameters ---------- result_id     Id of the result to be updated payload     Result pydantic base model/dict     If this is the pydantic ResultBase model, only fields in the base model can be updated.  Returns -------     Task pydantic output model  Raises ------ HTTPException     404: Not found
+     * Update an existing result.
      * @summary Set Result
      * @param {ResultId} resultId 
      * @param {SetResult} setResult 
@@ -3943,7 +3816,7 @@ export class ResultsApi extends BaseAPI {
     /**
      * Upload a DICOM file to XNAT test database.
      * @summary Upload DICOM result to XNAT
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} taskId 
      * @param {string} resultId 
      * @param {string} filename 
@@ -3951,8 +3824,8 @@ export class ResultsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResultsApi
      */
-    public uploadToXnat(workflowId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
-        return ResultsApiFp(this.configuration).uploadToXnat(workflowId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
+    public uploadToXnat(protocolId: string, taskId: string, resultId: string, filename: string, options?: RawAxiosRequestConfig) {
+        return ResultsApiFp(this.configuration).uploadToXnat(protocolId, taskId, resultId, filename, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4007,15 +3880,15 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Create a new acquisition task from a template.
          * @summary Create Task From Template
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} templateId 
          * @param {boolean} newTaskIsTemplate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskFromTemplateApiV1ExamTaskPost: async (workflowId: string, templateId: string, newTaskIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'workflowId', workflowId)
+        createTaskFromTemplateApiV1ExamTaskPost: async (protocolId: string, templateId: string, newTaskIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'protocolId', protocolId)
             // verify required parameter 'templateId' is not null or undefined
             assertParamExists('createTaskFromTemplateApiV1ExamTaskPost', 'templateId', templateId)
             // verify required parameter 'newTaskIsTemplate' is not null or undefined
@@ -4036,8 +3909,8 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
-            if (workflowId !== undefined) {
-                localVarQueryParameter['workflow_id'] = workflowId;
+            if (protocolId !== undefined) {
+                localVarQueryParameter['protocol_id'] = protocolId;
             }
 
             if (templateId !== undefined) {
@@ -4098,13 +3971,17 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get all task templates.
-         * @summary Get All Task Templates
+         * Get all tasks of a protocol.
+         * @summary Get All Protocol Tasks
+         * @param {ProtocolId} protocolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/task/templates/all`;
+        getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet: async (protocolId: ProtocolId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocolId' is not null or undefined
+            assertParamExists('getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet', 'protocolId', protocolId)
+            const localVarPath = `/api/v1/exam/task/all/{protocol_id}`
+                .replace(`{${"protocol_id"}}`, encodeURIComponent(String(protocolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4132,17 +4009,13 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get all tasks of a workflow.
-         * @summary Get All Workflow Tasks
-         * @param {WorkflowId} workflowId 
+         * Get all task templates.
+         * @summary Get All Task Templates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet', 'workflowId', workflowId)
-            const localVarPath = `/api/v1/exam/task/all/{workflow_id}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
+        getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/exam/task/templates/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4362,14 +4235,14 @@ export const TasksApiFp = function(configuration?: Configuration) {
         /**
          * Create a new acquisition task from a template.
          * @summary Create Task From Template
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} templateId 
          * @param {boolean} newTaskIsTemplate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options);
+        async createTaskFromTemplateApiV1ExamTaskPost(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcquisitionTaskOut>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTaskFromTemplateApiV1ExamTaskPost(protocolId, templateId, newTaskIsTemplate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.createTaskFromTemplateApiV1ExamTaskPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4388,6 +4261,19 @@ export const TasksApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Get all tasks of a protocol.
+         * @summary Get All Protocol Tasks
+         * @param {ProtocolId} protocolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId: ProtocolId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Get all task templates.
          * @summary Get All Task Templates
          * @param {*} [options] Override http request option.
@@ -4397,19 +4283,6 @@ export const TasksApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all tasks of a workflow.
-         * @summary Get All Workflow Tasks
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AcquisitionTaskOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TasksApi.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4489,14 +4362,14 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
         /**
          * Create a new acquisition task from a template.
          * @summary Create Task From Template
-         * @param {string} workflowId 
+         * @param {string} protocolId 
          * @param {string} templateId 
          * @param {boolean} newTaskIsTemplate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<AcquisitionTaskOut> {
-            return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
+        createTaskFromTemplateApiV1ExamTaskPost(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: any): AxiosPromise<AcquisitionTaskOut> {
+            return localVarFp.createTaskFromTemplateApiV1ExamTaskPost(protocolId, templateId, newTaskIsTemplate, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete a task.
@@ -4509,6 +4382,16 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.deleteTaskApiV1ExamTaskTaskIdDelete(taskId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get all tasks of a protocol.
+         * @summary Get All Protocol Tasks
+         * @param {ProtocolId} protocolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId: ProtocolId, options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
+            return localVarFp.getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Get all task templates.
          * @summary Get All Task Templates
          * @param {*} [options] Override http request option.
@@ -4516,16 +4399,6 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
          */
         getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
             return localVarFp.getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all tasks of a workflow.
-         * @summary Get All Workflow Tasks
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<Array<AcquisitionTaskOut>> {
-            return localVarFp.getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get an existing task.
@@ -4594,15 +4467,15 @@ export class TasksApi extends BaseAPI {
     /**
      * Create a new acquisition task from a template.
      * @summary Create Task From Template
-     * @param {string} workflowId 
+     * @param {string} protocolId 
      * @param {string} templateId 
      * @param {boolean} newTaskIsTemplate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
      */
-    public createTaskFromTemplateApiV1ExamTaskPost(workflowId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).createTaskFromTemplateApiV1ExamTaskPost(workflowId, templateId, newTaskIsTemplate, options).then((request) => request(this.axios, this.basePath));
+    public createTaskFromTemplateApiV1ExamTaskPost(protocolId: string, templateId: string, newTaskIsTemplate: boolean, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).createTaskFromTemplateApiV1ExamTaskPost(protocolId, templateId, newTaskIsTemplate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4618,6 +4491,18 @@ export class TasksApi extends BaseAPI {
     }
 
     /**
+     * Get all tasks of a protocol.
+     * @summary Get All Protocol Tasks
+     * @param {ProtocolId} protocolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId: ProtocolId, options?: RawAxiosRequestConfig) {
+        return TasksApiFp(this.configuration).getAllProtocolTasksApiV1ExamTaskAllProtocolIdGet(protocolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Get all task templates.
      * @summary Get All Task Templates
      * @param {*} [options] Override http request option.
@@ -4626,18 +4511,6 @@ export class TasksApi extends BaseAPI {
      */
     public getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options?: RawAxiosRequestConfig) {
         return TasksApiFp(this.configuration).getAllTaskTemplatesApiV1ExamTaskTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all tasks of a workflow.
-     * @summary Get All Workflow Tasks
-     * @param {WorkflowId} workflowId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TasksApi
-     */
-    public getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
-        return TasksApiFp(this.configuration).getAllWorkflowTasksApiV1ExamTaskAllWorkflowIdGet(workflowId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4688,583 +4561,6 @@ export class TasksApi extends BaseAPI {
      */
     public updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId: TaskId, status: string, options?: RawAxiosRequestConfig) {
         return TasksApiFp(this.configuration).updateTaskStatusApiV1ExamTaskTaskIdStatusPut(taskId, status, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * WorkflowsApi - axios parameter creator
- * @export
- */
-export const WorkflowsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createWorkflowApiV1ExamWorkflowNewPost: async (baseWorkflow: BaseWorkflow, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'baseWorkflow' is not null or undefined
-            assertParamExists('createWorkflowApiV1ExamWorkflowNewPost', 'baseWorkflow', baseWorkflow)
-            const localVarPath = `/api/v1/exam/workflow/new`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseWorkflow, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow From Template
-         * @param {string} examId 
-         * @param {string} templateId 
-         * @param {boolean} newWorkflowIsTemplate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createWorkflowFromTemplateApiV1ExamWorkflowPost: async (examId: string, templateId: string, newWorkflowIsTemplate: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'examId', examId)
-            // verify required parameter 'templateId' is not null or undefined
-            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'templateId', templateId)
-            // verify required parameter 'newWorkflowIsTemplate' is not null or undefined
-            assertParamExists('createWorkflowFromTemplateApiV1ExamWorkflowPost', 'newWorkflowIsTemplate', newWorkflowIsTemplate)
-            const localVarPath = `/api/v1/exam/workflow`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (examId !== undefined) {
-                localVarQueryParameter['exam_id'] = examId;
-            }
-
-            if (templateId !== undefined) {
-                localVarQueryParameter['template_id'] = templateId;
-            }
-
-            if (newWorkflowIsTemplate !== undefined) {
-                localVarQueryParameter['new_workflow_is_template'] = newWorkflowIsTemplate;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Delete Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete', 'workflowId', workflowId)
-            const localVarPath = `/api/v1/exam/workflow/{workflow_id}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get all existing workflows of a certain exam.  Parameters ---------- exam_id     Id of parent exam  Returns -------     List of workflow pydantic output model
-         * @summary Get All Exam Workflows
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet: async (examId: ExamId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'examId' is not null or undefined
-            assertParamExists('getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet', 'examId', examId)
-            const localVarPath = `/api/v1/exam/workflow/all/{exam_id}`
-                .replace(`{${"exam_id"}}`, encodeURIComponent(String(examId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get all workflow templates.  Returns -------     List of workflow pydantic output model
-         * @summary Get All Workflow Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/exam/workflow/templates/all`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get a workflow.  Parameters ---------- workflow_id     Id of the workflow to be returned  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Get Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getWorkflowApiV1ExamWorkflowWorkflowIdGet: async (workflowId: WorkflowId, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('getWorkflowApiV1ExamWorkflowWorkflowIdGet', 'workflowId', workflowId)
-            const localVarPath = `/api/v1/exam/workflow/{workflow_id}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Update an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be updated payload     Workflow pydantic indput model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateWorkflowApiV1ExamWorkflowWorkflowIdPut: async (workflowId: WorkflowId, baseWorkflow: BaseWorkflow, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'workflowId' is not null or undefined
-            assertParamExists('updateWorkflowApiV1ExamWorkflowWorkflowIdPut', 'workflowId', workflowId)
-            // verify required parameter 'baseWorkflow' is not null or undefined
-            assertParamExists('updateWorkflowApiV1ExamWorkflowWorkflowIdPut', 'baseWorkflow', baseWorkflow)
-            const localVarPath = `/api/v1/exam/workflow/{workflow_id}`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(baseWorkflow, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * WorkflowsApi - functional programming interface
- * @export
- */
-export const WorkflowsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = WorkflowsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.createWorkflowApiV1ExamWorkflowNewPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow From Template
-         * @param {string} examId 
-         * @param {string} templateId 
-         * @param {boolean} newWorkflowIsTemplate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.createWorkflowFromTemplateApiV1ExamWorkflowPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Delete Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all existing workflows of a certain exam.  Parameters ---------- exam_id     Id of parent exam  Returns -------     List of workflow pydantic output model
-         * @summary Get All Exam Workflows
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkflowOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet(examId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all workflow templates.  Returns -------     List of workflow pydantic output model
-         * @summary Get All Workflow Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkflowOut>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get a workflow.  Parameters ---------- workflow_id     Id of the workflow to be returned  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Get Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getWorkflowApiV1ExamWorkflowWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getWorkflowApiV1ExamWorkflowWorkflowIdGet(workflowId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.getWorkflowApiV1ExamWorkflowWorkflowIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Update an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be updated payload     Workflow pydantic indput model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateWorkflowApiV1ExamWorkflowWorkflowIdPut(workflowId: WorkflowId, baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkflowOut>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateWorkflowApiV1ExamWorkflowWorkflowIdPut(workflowId, baseWorkflow, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WorkflowsApi.updateWorkflowApiV1ExamWorkflowWorkflowIdPut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * WorkflowsApi - factory interface
- * @export
- */
-export const WorkflowsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = WorkflowsApiFp(configuration)
-    return {
-        /**
-         * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow: BaseWorkflow, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-         * @summary Create Workflow From Template
-         * @param {string} examId 
-         * @param {string} templateId 
-         * @param {boolean} newWorkflowIsTemplate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-         * @summary Delete Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId: WorkflowId, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all existing workflows of a certain exam.  Parameters ---------- exam_id     Id of parent exam  Returns -------     List of workflow pydantic output model
-         * @summary Get All Exam Workflows
-         * @param {ExamId} examId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet(examId: ExamId, options?: any): AxiosPromise<Array<WorkflowOut>> {
-            return localVarFp.getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet(examId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all workflow templates.  Returns -------     List of workflow pydantic output model
-         * @summary Get All Workflow Templates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options?: any): AxiosPromise<Array<WorkflowOut>> {
-            return localVarFp.getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get a workflow.  Parameters ---------- workflow_id     Id of the workflow to be returned  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Get Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getWorkflowApiV1ExamWorkflowWorkflowIdGet(workflowId: WorkflowId, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.getWorkflowApiV1ExamWorkflowWorkflowIdGet(workflowId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Update an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be updated payload     Workflow pydantic indput model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-         * @summary Update Workflow
-         * @param {WorkflowId} workflowId 
-         * @param {BaseWorkflow} baseWorkflow 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateWorkflowApiV1ExamWorkflowWorkflowIdPut(workflowId: WorkflowId, baseWorkflow: BaseWorkflow, options?: any): AxiosPromise<WorkflowOut> {
-            return localVarFp.updateWorkflowApiV1ExamWorkflowWorkflowIdPut(workflowId, baseWorkflow, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * WorkflowsApi - object-oriented interface
- * @export
- * @class WorkflowsApi
- * @extends {BaseAPI}
- */
-export class WorkflowsApi extends BaseAPI {
-    /**
-     * Create new workflow.  Parameters ---------- payload     Workflow pydantic input model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Workflow
-     * @param {BaseWorkflow} baseWorkflow 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).createWorkflowApiV1ExamWorkflowNewPost(baseWorkflow, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Create new workflow from template.  Parameters ---------- exam_id     Id of the exam, the workflow is related to template_id     ID of the template, the workflow is created from new_workflow_is_template     set the is_template property of the new workflow and its tasks  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Creation unsuccessful
-     * @summary Create Workflow From Template
-     * @param {string} examId 
-     * @param {string} templateId 
-     * @param {boolean} newWorkflowIsTemplate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public createWorkflowFromTemplateApiV1ExamWorkflowPost(examId: string, templateId: string, newWorkflowIsTemplate: boolean, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).createWorkflowFromTemplateApiV1ExamWorkflowPost(examId, templateId, newWorkflowIsTemplate, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Delete a workflow. Cascade delete the associated tasks.  Parameters ---------- workflow_id     Id of the workflow to be deleted  Raises ------ HTTPException     404: Not found
-     * @summary Delete Workflow
-     * @param {WorkflowId} workflowId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).deleteWorkflowApiV1ExamWorkflowWorkflowIdDelete(workflowId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all existing workflows of a certain exam.  Parameters ---------- exam_id     Id of parent exam  Returns -------     List of workflow pydantic output model
-     * @summary Get All Exam Workflows
-     * @param {ExamId} examId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet(examId: ExamId, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).getAllExamWorkflowsApiV1ExamWorkflowAllExamIdGet(examId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all workflow templates.  Returns -------     List of workflow pydantic output model
-     * @summary Get All Workflow Templates
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).getAllWorkflowTemplatesApiV1ExamWorkflowTemplatesAllGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get a workflow.  Parameters ---------- workflow_id     Id of the workflow to be returned  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-     * @summary Get Workflow
-     * @param {WorkflowId} workflowId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public getWorkflowApiV1ExamWorkflowWorkflowIdGet(workflowId: WorkflowId, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).getWorkflowApiV1ExamWorkflowWorkflowIdGet(workflowId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Update an existing workflow.  Parameters ---------- workflow_id     Id of the workflow to be updated payload     Workflow pydantic indput model  Returns -------     Workflow pydantic output model  Raises ------ HTTPException     404: Not found
-     * @summary Update Workflow
-     * @param {WorkflowId} workflowId 
-     * @param {BaseWorkflow} baseWorkflow 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof WorkflowsApi
-     */
-    public updateWorkflowApiV1ExamWorkflowWorkflowIdPut(workflowId: WorkflowId, baseWorkflow: BaseWorkflow, options?: RawAxiosRequestConfig) {
-        return WorkflowsApiFp(this.configuration).updateWorkflowApiV1ExamWorkflowWorkflowIdPut(workflowId, baseWorkflow, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

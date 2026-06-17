@@ -349,7 +349,7 @@ async def _stream_to_file(websocket: WebSocket, tmp_path: Path, size_bytes: int)
     return bytes_received, hasher.hexdigest()
 
 
-def _submit_reconstruction_job(task_id: str, task_dir: str, workflow_id: str, user_access_token: str) -> None:
+def _submit_reconstruction_job(task_id: str, task_dir: str, protocol_id: str, user_access_token: str) -> None:
     """Submit the mrpro_reconstruction_job to Dagster after a file transfer completes."""
     try:
         from dagster_graphql import DagsterGraphQLClient  # noqa: PLC0415
@@ -364,7 +364,7 @@ def _submit_reconstruction_job(task_id: str, task_dir: str, workflow_id: str, us
                     "config": {
                         "task_dir": task_dir,
                         "task_id": task_id,
-                        "workflow_id": workflow_id,
+                        "protocol_id": protocol_id,
                         "user_access_token": user_access_token,
                     },
                 },
@@ -392,7 +392,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     device_parameter: dict | None = header.get("device_parameter")
 
     task = exam_requests.get_task(task_id, user_access_token)
-    task_dir = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id)
+    task_dir = Path(DATA_LAKE_DIR) / str(task.protocol_id) / str(task_id)
     task_dir.mkdir(exist_ok=True, parents=True)
     file_path = task_dir / filename
     tmp_path = file_path.with_suffix(file_path.suffix + ".part")
@@ -435,7 +435,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     _submit_reconstruction_job(
         task_id=task_id,
         task_dir=str(task_dir),
-        workflow_id=str(task.workflow_id),
+        protocol_id=str(task.protocol_id),
         user_access_token=user_access_token,
     )
 

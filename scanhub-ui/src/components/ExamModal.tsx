@@ -18,25 +18,25 @@ import React from 'react'
 import { useMutation, UseMutationResult } from '@tanstack/react-query'
 
 import { examApi } from '../api'
-import { BaseExam, ExamOut } from '../openapi/generated-client/exam'
+import { BaseProtocol, ProtocolOut } from '../openapi/generated-client/exam'
 import { ModalPropsCreate, ModalPropsCreateModifyFromTemplate, ModalPropsModify } from '../interfaces/components.interface'
 import NotificationContext from '../NotificationContext'
 
 
-const formContent: {key: keyof BaseExam, label: string, placeholder: string, editForTemplates: boolean, required: boolean}[] = [
-  { key: 'name', label: 'Exam Name', placeholder: 'Name of the examination', editForTemplates: true, required: true },
+const formContent: {key: keyof BaseProtocol, label: string, placeholder: string, editForTemplates: boolean, required: boolean}[] = [
+  { key: 'name', label: 'Protocol Name', placeholder: 'Name of the protocol', editForTemplates: true, required: true },
   { key: 'description', label: 'Description', placeholder: 'What is included in the examination', editForTemplates: true, required: true },
   { key: 'indication', label: 'Indication', placeholder: 'Why the examination is done', editForTemplates: false, required: false },
   { key: 'comment', label: 'Comment', placeholder: 'Any remarks about this specific execution of the examination', editForTemplates: false, required: false },
 ]
 
 
-function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPropsCreateModifyFromTemplate<ExamOut>) {
+function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | ModalPropsCreateModifyFromTemplate<ProtocolOut>) {
   // The form is in this separate component to make sure that the state is reset after closing the modal
   
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const initialExam: BaseExam = props.modalType == 'modify' || props.modalType == 'createModifyFromTemplate' ? 
+  const initialExam: BaseProtocol = props.modalType == 'modify' || props.modalType == 'createModifyFromTemplate' ? 
     {...props.item, status: 'UPDATED'}
   :
     {
@@ -49,17 +49,17 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
       is_template: true,        // eslint-disable-line camelcase
     }
 
-	const [exam, setExam] = React.useState<BaseExam>(initialExam);
+	const [exam, setExam] = React.useState<BaseProtocol>(initialExam);
 
   let mutation: UseMutationResult<void, unknown, void, unknown>;
   if (props.modalType == 'modify') {
     mutation = useMutation({
       mutationFn: async () => {
         await examApi
-        .updateExamApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
+        .updateProtocolApiV1ExamExamIdPut(props.item!.id, exam)   // props.item most not be and is not undefined here
         .then(() => {
           props.onSubmit()
-          showNotification({message: 'Updated Exam.', type: 'success'})
+          showNotification({message: 'Updated Protocol.', type: 'success'})
         })
       }
     })
@@ -67,10 +67,10 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
     mutation = useMutation({
       mutationFn: async () => {
         await examApi
-        .createExamApiV1ExamNewPost(exam)
+        .createProtocolApiV1ExamNewPost(exam)
         .then(() => {
           props.onSubmit()
-          showNotification({message: 'Created Exam.', type: 'success'})
+          showNotification({message: 'Created Protocol.', type: 'success'})
         })
       }
     })
@@ -78,19 +78,19 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
     mutation = useMutation({
       mutationFn: async () => {
         await examApi
-        .createExamFromTemplateApiV1ExamPost(props.item.id, exam)
+        .createProtocolFromTemplateApiV1ExamPost(props.item.id, exam)
         .then(() => {
           props.onSubmit()
-          showNotification({message: 'Created Exam from Template.', type: 'success'})
+          showNotification({message: 'Created Protocol from Template.', type: 'success'})
         })
       }
     })
   }
 
-	let title = 'Default Exam Modal';
-  if (props.modalType == 'modify') title = 'Update Exam';
-  else if (props.modalType == 'create') title = 'Create New Exam';
-  else if (props.modalType == 'createModifyFromTemplate') title = 'Create From Template'
+	let title = 'Default Protocol Modal';
+  if (props.modalType == 'modify') title = 'Update Protocol';
+  else if (props.modalType == 'create') title = 'Create New Protocol';
+  else if (props.modalType == 'createModifyFromTemplate') title = 'Create Protocol From Template'
 
   return (
     <>
@@ -145,7 +145,7 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPro
 }
 
 
-export default function ExamModal(props: ModalPropsCreate | ModalPropsModify<ExamOut> | ModalPropsCreateModifyFromTemplate<ExamOut>) {
+export default function ExamModal(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | ModalPropsCreateModifyFromTemplate<ProtocolOut>) {
   return (
     <Modal
       open={props.isOpen}   // open=False unmounts children, resetting the state of the form

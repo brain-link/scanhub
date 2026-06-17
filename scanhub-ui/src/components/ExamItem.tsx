@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamItem.tsx is responsible for rendering a single exam item.
+ * ExamItem.tsx is responsible for rendering a single protocol item.
  */
 import Typography from '@mui/joy/Typography'
 import React from 'react'
@@ -16,49 +16,47 @@ import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 
 // Sub-components, interfaces, client
-import { ExamOut } from '../openapi/generated-client/exam'
+import { ProtocolOut } from '../openapi/generated-client/exam'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { examApi } from '../api'
-import WorkflowFromTemplateModal from './WorkflowFromTemplateModal'
-import WorkflowModal from './WorkflowModal'
 import ExamModal from './ExamModal'
 import Button from '@mui/joy/Button'
 
 
-export default function ExamItem({ item: exam, selection, onClick }: SelectableItemInterface<ExamOut>) {
+export default function ExamItem({ item: protocol, selection, onClick }: SelectableItemInterface<ProtocolOut>) {
 
   return (
     <Button
-      sx={{ 
-        width: '100%', 
-        p: 0.5, 
+      sx={{
+        width: '100%',
+        p: 0.5,
         display: 'flex',
         justifyContent: 'flex-start'
       }}
-      variant={(selection.type == 'exam' && selection.itemId == exam.id) ? 'outlined' : 'plain'}
+      variant={(selection.type == 'protocol' && selection.itemId == protocol.id) ? 'outlined' : 'plain'}
       onClick={onClick}
     >
       <FolderIcon fontSize='small' />
-      <Box 
+      <Box
         sx={{
           marginLeft: 0.5,
-          p: 0.5, 
+          p: 0.5,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'start',
         }}
       >
         <Typography level='body-xs' textColor='text.tertiary'>
-          EXAM
+          PROTOCOL
         </Typography>
 
         <Typography level='title-sm'>
-          {exam.name}
+          {protocol.name}
         </Typography>
 
         <Typography level='body-xs' textColor='text.tertiary'>
-          {`Created: ${new Date(exam.datetime_created).toDateString()}`}
+          {`Created: ${new Date(protocol.datetime_created).toDateString()}`}
         </Typography>
       </Box>
     </Button>
@@ -66,16 +64,14 @@ export default function ExamItem({ item: exam, selection, onClick }: SelectableI
 }
 
 
-export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInterface<ExamOut>) {
+export function ExamMenu({ item: protocol, refetchParentData }: RefetchableItemInterface<ProtocolOut>) {
 
-  const [workflowFromTemplateModalOpen, setWorkflowFromTemplateModalOpen] = React.useState(false)
-  const [workflowCreateNewModalOpen, setWorkflowCreateNewModalOpen] = React.useState(false)
   const [examModalOpen, setExamModalOpen] = React.useState(false)
 
-  const deleteExam = useMutation({
+  const deleteProtocol = useMutation({
     mutationFn: async () => {
       await examApi
-        .examDeleteApiV1ExamExamIdDelete(exam.id)
+        .protocolDeleteApiV1ExamExamIdDelete(protocol.id)
         .then(() => {
           refetchParentData()
         })
@@ -95,63 +91,21 @@ export function ExamMenu({ item: exam, refetchParentData }: RefetchableItemInter
           <MenuItem
             key='delete'
             onClick={() => {
-              deleteExam.mutate()
+              deleteProtocol.mutate()
             }}
           >
             Delete
           </MenuItem>
-          <MenuItem
-            key='addFromTemplate'
-            onClick={() => {
-              setWorkflowFromTemplateModalOpen(true)
-            }}
-          >
-            Add Workflow from Template
-          </MenuItem>
-          {
-            exam.is_template ?
-              <MenuItem
-                key='addNew'
-                onClick={() => {
-                  setWorkflowCreateNewModalOpen(true)
-                }}
-              >
-                Add new Workflow
-              </MenuItem>
-            : undefined
-          }
         </Menu>
       </Dropdown>
 
       <ExamModal
-        item={exam}
+        item={protocol}
         isOpen={examModalOpen}
         setOpen={setExamModalOpen}
         onSubmit={refetchParentData}
         modalType='modify'
       />
-
-      <WorkflowFromTemplateModal
-        isOpen={workflowFromTemplateModalOpen}
-        setOpen={setWorkflowFromTemplateModalOpen}
-        parentId={exam.id}
-        onSubmit={refetchParentData}
-        createTemplate={exam.is_template}
-        modalType={'create'}
-      />
-      {
-        exam.is_template ?
-          <WorkflowModal
-            isOpen={workflowCreateNewModalOpen}
-            setOpen={setWorkflowCreateNewModalOpen}
-            parentId={exam.id}
-            onSubmit={refetchParentData}
-            createTemplate={exam.is_template}
-            modalType={'create'}
-          />
-        : undefined
-      }
-
     </>
   )
 }

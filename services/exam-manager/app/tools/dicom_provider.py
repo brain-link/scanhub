@@ -21,10 +21,10 @@ from starlette.responses import Response
 DATA_LAKE_DIR = Path(os.getenv("DATA_LAKE_DIRECTORY", "/data")).resolve()
 
 
-def resolve_dicom_path(workflow_id: str, task_id: str, result_id: str, filename: str) -> Path:
-    """Build and validate the requested file path (legacy: includes result_id subdir)."""
+def resolve_dicom_path(protocol_id: str, task_id: str, result_id: str, filename: str) -> Path:
+    """Build and validate the requested file path: {DATA_LAKE_DIR}/{protocol_id}/{task_id}/{result_id}/{filename}."""
     safe_name = Path(filename).name
-    requested = (DATA_LAKE_DIR / workflow_id / task_id / result_id / safe_name).resolve()
+    requested = (DATA_LAKE_DIR / protocol_id / task_id / result_id / safe_name).resolve()
     try:
         if not requested.is_relative_to(DATA_LAKE_DIR):
             raise ValueError

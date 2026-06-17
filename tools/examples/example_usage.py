@@ -21,15 +21,14 @@ async def perform_scan(client, payload: AcquisitionPayload):
 
     if CalibrationType.FREQUENCY in payload.calibration:
         print("Performing frequency calibration...")
-        # Upload MRD result
-        file_path = directory / "frequency_calibration.mrd"
+        file_path = directory / "data_caliber.mrd"
         await client.upload_file_result(
             file_path=file_path,
             name="frequency_calibration.mrd",
             parameter=payload.device_parameter,
             task_id=str(payload.id),
             user_access_token=payload.access_token,
-    )
+        )
 
     # Simulate some workload
     delay_per_step = 0.5

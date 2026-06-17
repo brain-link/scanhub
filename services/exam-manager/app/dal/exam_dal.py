@@ -1,144 +1,74 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-"""Data acess layer (DAL) between fastapi endpoint and sql database."""
+"""Data access layer (DAL) between fastapi endpoint and sql database."""
 
 from pprint import pprint
 from uuid import UUID
 
-from scanhub_libraries.models import BaseExam
+from scanhub_libraries.models import BaseProtocol
 from sqlalchemy.engine import Result
 from sqlalchemy.future import select
 
 from app.db.postgres import (
-    Exam,
+    Protocol,
     async_session,
 )
 
-# ----- Exam data access layer
 
-
-async def add_exam_data(payload: BaseExam, creator: str) -> Exam:
-    """Create new exam.
-
-    Parameters
-    ----------
-    payload
-        Exam pydantic base model
-    creator
-        The username/id of the user who creats this exam
-
-    Returns
-    -------
-        Database orm model of created exam
-    """
-    new_exam = Exam(**payload.model_dump(), creator=creator)
+async def add_protocol_data(payload: BaseProtocol, creator: str) -> Protocol:
+    """Create new protocol."""
+    new_protocol = Protocol(**payload.model_dump(), creator=creator)
     async with async_session() as session:
-        session.add(new_exam)
+        session.add(new_protocol)
         await session.commit()
-        await session.refresh(new_exam)
-    # debug
-    print("***** NEW EXAM *****")
-    pprint(new_exam.__dict__)
-    return new_exam
+        await session.refresh(new_protocol)
+    print("***** NEW PROTOCOL *****")
+    pprint(new_protocol.__dict__)
+    return new_protocol
 
 
-async def get_exam_data(exam_id: UUID) -> Exam | None:
-    """Get exam by id.
-
-    Parameters
-    ----------
-    exam_id
-        Id of requested exam
-
-    Returns
-    -------
-        Database orm model of exam or none
-    """
+async def get_protocol_data(protocol_id: UUID) -> Protocol | None:
+    """Get protocol by id."""
     async with async_session() as session:
-        exam = await session.get(Exam, exam_id)
-    return exam
+        protocol = await session.get(Protocol, protocol_id)
+    return protocol
 
 
-async def get_all_exam_data(patient_id: UUID) -> list[Exam]:
-    """Get a list of all exams assigned to a certain patient.
-
-    Parameters
-    ----------
-    patient_id
-        Id of the parent patient entry, exams are assigned to
-
-    Returns
-    -------
-        List of exam data base orm models
-    """
+async def get_all_protocol_data(patient_id: UUID) -> list[Protocol]:
+    """Get all protocols assigned to a certain patient."""
     async with async_session() as session:
-        result: Result = await session.execute(select(Exam).where(Exam.patient_id == patient_id))
-        exams = list(result.scalars().all())
-    return exams
+        result: Result = await session.execute(select(Protocol).where(Protocol.patient_id == patient_id))
+        protocols = list(result.scalars().all())
+    return protocols
 
 
-async def get_all_exam_template_data() -> list[Exam]:
-    """Get a list of all exams assigned to a certain patient.
-
-    Parameters
-    ----------
-    patient_id
-        Id of the parent patient entry, exams are assigned to
-
-    Returns
-    -------
-        List of exam data base orm models
-    """
+async def get_all_protocol_template_data() -> list[Protocol]:
+    """Get all protocol templates."""
     async with async_session() as session:
-        result: Result = await session.execute(select(Exam).where(Exam.is_template))
-        exams = list(result.scalars().all())
-    return exams
+        result: Result = await session.execute(select(Protocol).where(Protocol.is_template))
+        protocols = list(result.scalars().all())
+    return protocols
 
 
-async def delete_exam_data(exam_id: UUID) -> bool:
-    """Delete exam by id. Also deletes associated workflows and tasks.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the exam to be deleted
-
-    Returns
-    -------
-        Success of deletion
-    """
+async def delete_protocol_data(protocol_id: UUID) -> bool:
+    """Delete protocol by id. Also deletes associated tasks."""
     async with async_session() as session:
-        if exam := await session.get(Exam, exam_id):
-            for workflow in exam.workflows:
-                for task in workflow.tasks:
-                    await session.delete(task)
-                await session.delete(workflow)
-            await session.delete(exam)
+        if protocol := await session.get(Protocol, protocol_id):
+            for task in protocol.tasks:
+                await session.delete(task)
+            await session.delete(protocol)
             await session.commit()
             return True
         return False
 
 
-async def update_exam_data(exam_id: UUID, payload: BaseExam) -> Exam | None:
-    """Update existing exam entry.
-
-    Parameters
-    ----------
-    exam_id
-        Id of the database entry to be updated
-
-    payload
-        Pydantic base exam model with data to be updated
-
-    Returns
-    -------
-        Database orm model of updated exam
-    """
+async def update_protocol_data(protocol_id: UUID, payload: BaseProtocol) -> Protocol | None:
+    """Update existing protocol entry."""
     async with async_session() as session:
-        if exam := await session.get(Exam, exam_id):
-            exam.update(payload)
+        if protocol := await session.get(Protocol, protocol_id):
+            protocol.update(payload)
             await session.commit()
-            await session.refresh(exam)
-            return exam
+            await session.refresh(protocol)
+            return protocol
         return None

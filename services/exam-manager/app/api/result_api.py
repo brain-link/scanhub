@@ -22,7 +22,13 @@ from starlette.responses import Response
 
 import app.tools.mrd_provider as mrd
 from app import LOG_CALL_DELIMITER
-from app.dal import exam_dal, result_dal, task_dal, workflow_dal
+from app.dal import exam_dal as protocol_dal
+from app.dal import result_dal, task_dal
+from app.tools.dicom_provider import (
+    get_p10_dicom_bytes,
+    provide_p10_dicom,
+    resolve_dicom_path_from_db,
+)
 
 
 class CreateDicomResult(BaseModel):
@@ -31,23 +37,11 @@ class CreateDicomResult(BaseModel):
     directory: str
     files: list[str]
     meta: dict | None = None
-from app.tools.dicom_provider import (
-    get_p10_dicom_bytes,
-    provide_p10_dicom,
-    resolve_dicom_path_from_db,
-)
 
 PREFIX_PATIENT_MANAGER = "http://patient-manager:8100/api/v1/patient"
 
-# Http status codes
-# 200 = Ok: GET, PUT
-# 201 = Created: POST
-# 204 = No Content: Delete
-# 404 = Not found
-
 result_router = APIRouter(dependencies=[Depends(get_current_user)])
 
-# Define OAuth2 scheme for token-based authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 @result_router.post("/result/dicom/{task_id}", response_model=ResultOut, status_code=201, tags=["results"])
@@ -74,22 +68,7 @@ async def create_dicom_result(
 
 @result_router.post("/result", response_model=ResultOut, status_code=201, tags=["results"])
 async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
-    """Create a task result.
-
-    Parameters
-    ----------
-    payload
-        Result pydantic input model
-
-    Returns
-    -------
-        Result pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Creation unsuccessful
-    """
+    """Create a blank task result."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
     print("Creating blank result for task ID:", task_id)
@@ -101,36 +80,14 @@ async def create_blank_result(task_id: str | UUID, user: Annotated[User, Depends
             raise HTTPException(status_code=400, detail="Result parent (task) must not be a template.")
     if not (result := await result_dal.add_blank_result_db(task_id=task_id)):
         raise HTTPException(status_code=404, detail="Could not create result")
-    result_out = ResultOut(**result.__dict__)
-    return result_out
+    return ResultOut(**result.__dict__)
 
 
-@result_router.get(
-    "/result/{result_id}",
-    response_model=ResultOut,
-    status_code=200,
-    tags=["results"],
-)
+@result_router.get("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
 async def get_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> ResultOut:
-    """Get an existing result.
-
-    Parameters
-    ----------
-    result_id
-        Id of the result to be returned
-
-    Returns
-    -------
-        Result pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
+    """Get an existing result."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("task_id:", result_id)
     try:
         _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
     except ValueError:
@@ -140,120 +97,56 @@ async def get_result(result_id: UUID | str, user: Annotated[User, Depends(get_cu
     return ResultOut(**result.__dict__)
 
 
-@result_router.get(
-    "/result/all/{task_id}",
-    response_model=list[ResultOut],
-    status_code=200,
-    tags=["results"],
-)
+@result_router.get("/result/all/{task_id}", response_model=list[ResultOut], status_code=200, tags=["results"])
 async def get_all_task_results(
     task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
 ) -> list[ResultOut]:
-    """Get all existing results of a certain task.
-
-    Parameters
-    ----------
-    task_id
-        Id of parental task
-
-    Returns
-    -------
-        List of task pydantic output model
-    """
+    """Get all existing results of a certain task."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("task_id:", task_id)
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
     if not (tasks := await result_dal.get_all_results_db(task_id=_id)):
-        # Don't raise exception here, list might be empty.
         return []
-    result = [ResultOut(**task.__dict__) for task in tasks]
-    print("List of tasks: ", result)
-    return result
+    return [ResultOut(**task.__dict__) for task in tasks]
 
 
 @result_router.delete("/result/{result_id}", response_model={}, status_code=204, tags=["results"])
 async def delete_result(result_id: UUID | str, user: Annotated[User, Depends(get_current_user)]) -> None:
-    """Delete a task.
-
-    Parameters
-    ----------
-    task_id
-        Id of the task to be deleted
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
+    """Delete a result."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("result_id:", result_id)
     _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
     if not await result_dal.delete_result_db(result_id=_id):
-        message = "Could not delete result, either because it does not exist, or for another reason."
-        raise HTTPException(status_code=404, detail=message)
+        raise HTTPException(status_code=404, detail="Could not delete result.")
 
 
 @result_router.put("/result/{result_id}", response_model=ResultOut, status_code=200, tags=["results"])
 async def set_result(
     result_id: UUID | str, payload: SetResult, user: Annotated[User, Depends(get_current_user)]
 ) -> ResultOut:
-    """Update an existing result.
-
-    Parameters
-    ----------
-    result_id
-        Id of the result to be updated
-    payload
-        Result pydantic base model/dict
-        If this is the pydantic ResultBase model, only fields in the base model can be updated.
-
-    Returns
-    -------
-        Task pydantic output model
-
-    Raises
-    ------
-    HTTPException
-        404: Not found
-    """
+    """Update an existing result."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("result_id:", result_id)
     _id = UUID(result_id) if not isinstance(result_id, UUID) else result_id
     if not (result_updated := await result_dal.update_result_db(result_id=_id, payload=payload)):
-        message = "Could not update result, either because it does not exist, or for another reason."
-        raise HTTPException(status_code=404, detail=message)
-    print("Updated result: ", result_updated.__dict__)
+        raise HTTPException(status_code=404, detail="Could not update result.")
     return ResultOut(**result_updated.__dict__)
 
 
 @result_router.get(
-    "/dcm/{workflow_id}/{task_id}/{result_id}/{filename}",
+    "/dcm/{protocol_id}/{task_id}/{result_id}/{filename}",
     operation_id="get-dicom",
     responses={200: {"content": {"application/dicom": {}}}},
     tags=["results", "data"],
     summary="Get DICOM result",
 )
 async def get_dicom(
-    workflow_id: str, task_id: str, result_id: str, filename: str, user: Annotated[User, Depends(get_current_user)]
+    protocol_id: str, task_id: str, result_id: str, filename: str,
+    user: Annotated[User, Depends(get_current_user)]
 ) -> Response:
-    """
-    Serve a DICOM instance.
-
-      - If it's already a DICOM Part-10 file → return FileResponse (supports HTTP Range).
-      - Else → convert to Part-10 in memory and return StreamingResponse.
-
-    Headers:
-      - 'application/dicom' content type
-      - inline disposition (avoid forced download)
-      - 'Cache-Control: no-transform' to prevent proxies from gzipping (which breaks Range offsets)
-    """
+    """Serve a DICOM instance."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    print("RETURNING DICOM FILE...")
-
     dicom_path = await _resolve_dicom_path(result_id, filename)
     try:
         return provide_p10_dicom(dicom_path)
@@ -262,13 +155,14 @@ async def get_dicom(
 
 
 @result_router.post(
-    "/xnat/upload/{workflow_id}/{task_id}/{result_id}/{filename}",
+    "/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}",
     operation_id="upload-to-xnat",
     tags=["results", "data"],
     summary="Upload DICOM result to XNAT",
 )
 async def upload_to_xnat(
-    workflow_id: str, task_id: str, result_id: str, filename: str, access_token: Annotated[str, Depends(oauth2_scheme)]
+    protocol_id: str, task_id: str, result_id: str, filename: str,
+    access_token: Annotated[str, Depends(oauth2_scheme)]
 ) -> dict:
     """Upload a DICOM file to XNAT test database."""
     print(LOG_CALL_DELIMITER)
@@ -282,28 +176,22 @@ async def upload_to_xnat(
     xnat_pass = os.getenv("XNAT_PASSWORD", "admin")
     project_id = os.getenv("XNAT_PROJECT_ID", "A4IM")
 
-    # Fetch workflow and exam to get actual patient info
-    workflow = await workflow_dal.get_workflow_data(UUID(workflow_id))
-    if not workflow:
-        raise HTTPException(status_code=404, detail=f"Workflow not found: {workflow_id}")
+    protocol = await protocol_dal.get_protocol_data(UUID(protocol_id))
+    if not protocol:
+        raise HTTPException(status_code=404, detail=f"Protocol not found: {protocol_id}")
 
-    exam = await exam_dal.get_exam_data(workflow.exam_id)
-    if not exam:
-        raise HTTPException(status_code=404, detail=f"Exam not found for workflow: {workflow_id}")
-
-    # Fetch patient details from patient-manager
-    get_patient_response = requests.get(f"{PREFIX_PATIENT_MANAGER}/{exam.patient_id}", headers=headers, timeout=3)
+    get_patient_response = requests.get(f"{PREFIX_PATIENT_MANAGER}/{protocol.patient_id}", headers=headers, timeout=3)
     if get_patient_response.status_code != 200:
         raise HTTPException(
             status_code=get_patient_response.status_code,
-            detail="Failed to fetch patient with id=" + str(exam.patient_id),
+            detail="Failed to fetch patient with id=" + str(protocol.patient_id),
         )
     patient_raw = get_patient_response.json()
     patient = PatientOut(**patient_raw)
 
     patient_name = f"{patient.first_name}^{patient.last_name}"
     subject_id = str(patient.patient_id)
-    session_id = str(exam.id)
+    session_id = str(protocol.id)
 
     upload_url = (
         f"{xnat_host}/data/services/import"
@@ -323,16 +211,11 @@ async def upload_to_xnat(
     with tempfile.NamedTemporaryFile(suffix=".zip", delete=True) as tmp_zip:
         with zipfile.ZipFile(tmp_zip, "w") as zf:
             zf.writestr(dicom_path.name, dicom_bytes)
-
         tmp_zip.seek(0)
         async with httpx.AsyncClient(timeout=60.0) as client:
             try:
                 files = {"file": (f"{filename}.zip", tmp_zip, "application/zip")}
-                response = await client.post(
-                    upload_url,
-                    auth=(xnat_user, xnat_pass),
-                    files=files,
-                )
+                response = await client.post(upload_url, auth=(xnat_user, xnat_pass), files=files)
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"XNAT upload request failed: {e}")
 
@@ -341,9 +224,7 @@ async def upload_to_xnat(
             status_code=response.status_code,
             detail=f"XNAT upload failed: {response.status_code} - {response.text}",
         )
-
     return {"status": "success", "xnat_response": response.text}
-
 
 
 async def _resolve_dicom_path(result_id: str, filename: str):
@@ -370,17 +251,17 @@ async def _resolve_mrd_path(result_id: str):
 
 
 @result_router.get(
-    "/mrd/{workflow_id}/{task_id}/{result_id}/meta",
+    "/mrd/{protocol_id}/{task_id}/{result_id}/meta",
     response_model=MRDMetaResponse,
     operation_id="get-mrd-meta",
     tags=["results", "data"],
     summary="Get ISMRMRD metadata (indexed acquisitions)",
 )
-async def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
+async def get_meta(protocol_id: str, task_id: str, result_id: str) -> MRDMetaResponse:
     """Get MRD meta info."""
     path = await _resolve_mrd_path(result_id)
     return MRDMetaResponse(
-        workflow_id=workflow_id,
+        protocol_id=protocol_id,
         task_id=task_id,
         result_id=result_id,
         dtype="fc32",
@@ -389,23 +270,19 @@ async def get_meta(workflow_id: str, task_id: str, result_id: str) -> MRDMetaRes
 
 
 @result_router.get(
-    "/mrd/{workflow_id}/{task_id}/{result_id}/data",
+    "/mrd/{protocol_id}/{task_id}/{result_id}/data",
     operation_id="getMRD",
     tags=["results", "data"],
     summary="Get MRD (binary, interleaved float32 complex)",
     responses={
         200: {
             "description": "Binary packet stream with a tiny header + payload(s).",
-            "content": {
-                "application/octet-stream": {
-                    "schema": {"type": "string", "format": "binary"},
-                },
-            },
+            "content": {"application/octet-stream": {"schema": {"type": "string", "format": "binary"}}},
         },
     },
 )
 async def get_mrd_binary(
-    workflow_id: str,
+    protocol_id: str,
     task_id: str,
     result_id: str,
     ids: str = Query(..., description="IDs: '0,1,10-20,40-50:2'"),
@@ -414,7 +291,6 @@ async def get_mrd_binary(
 ):
     """Get MRD as binary stream."""
     path = await _resolve_mrd_path(result_id)
-
     try:
         acq_ids = mrd.parse_ids(ids)
     except Exception as e:
@@ -423,14 +299,12 @@ async def get_mrd_binary(
     arrays = mrd.load_acquisitions_slices(path, acq_ids, coil_idx=coil_idx, stride=stride)
 
     def gen():
-        # Packet: [u32 'ISMR'][u16 ver=1][u16 n]
         magic, ver = 0x49534D52, 1
         ids_list = list(acq_ids)
         yield struct.pack("<IHH", magic, ver, len(ids_list))
         for aid, arr in zip(ids_list, arrays):
             nsamp, _ = arr.shape
             payload = arr.tobytes(order="C")
-            # [u32 acqId][u16 nCoils][u16 dtype=1(fc32)][u32 nSamples][u32 byteLen]
             yield struct.pack("<IHHII", int(aid), 1, 1, int(nsamp), len(payload))
             view = memoryview(payload)
             step = 1 << 20
@@ -441,31 +315,23 @@ async def get_mrd_binary(
 
 
 @result_router.get(
-    "/mrd/{workflow_id}/{task_id}/{result_id}/download",
+    "/mrd/{protocol_id}/{task_id}/{result_id}/download",
     operation_id="downloadMRD",
     tags=["results", "data"],
     summary="Download MRD file",
     responses={
         200: {
             "description": "The raw MRD file.",
-            "content": {
-                "application/octet-stream": {
-                    "schema": {"type": "string", "format": "binary"},
-                },
-            },
+            "content": {"application/octet-stream": {"schema": {"type": "string", "format": "binary"}}},
         },
     },
 )
 async def download_mrd(
-    workflow_id: str,
+    protocol_id: str,
     task_id: str,
     result_id: str,
     user: Annotated[User, Depends(get_current_user)],
 ):
     """Download the full MRD file."""
     path = await _resolve_mrd_path(result_id)
-    return FileResponse(
-        path=path,
-        media_type="application/octet-stream",
-        filename=path.name,
-    )
+    return FileResponse(path=path, media_type="application/octet-stream", filename=path.name)

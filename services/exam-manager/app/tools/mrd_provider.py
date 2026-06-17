@@ -19,13 +19,9 @@ DATA_LAKE_DIR = Path(os.getenv("DATA_LAKE_DIRECTORY", "/data")).resolve()
 RANGE_RE = re.compile(r"^\s*(\d+)\s*-\s*(\d+)(?::(\d+))?\s*$")
 
 
-def locate_mrd(workflow_id: str, task_id: str, result_id: str) -> Path:
-    """
-    Build a file path.
-
-    Legacy: /data_lake/{workflow_id}/{task_id}/{result_id}/*.mrd
-    """
-    result_dir = DATA_LAKE_DIR / workflow_id / task_id / result_id
+def locate_mrd(protocol_id: str, task_id: str, result_id: str) -> Path:
+    """Build a file path: /data_lake/{protocol_id}/{task_id}/{result_id}/*.mrd"""
+    result_dir = DATA_LAKE_DIR / protocol_id / task_id / result_id
     try:
         return next(result_dir.glob("*.mrd"))
     except StopIteration:

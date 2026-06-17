@@ -13,7 +13,8 @@ from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import ensure_uuid
 
 from app import LOG_CALL_DELIMITER
-from app.dal import task_dal, workflow_dal
+from app.dal import exam_dal as protocol_dal
+from app.dal import task_dal
 from app.tools.helper import get_task_out
 
 task_router = APIRouter(dependencies=[Depends(get_current_user)])
@@ -35,16 +36,16 @@ async def create_task(
     print("Username:", user.username)
     if payload.status != ItemStatus.NEW:
         raise HTTPException(status_code=400, detail="New task needs to have status NEW")
-    if (workflow_id := ensure_uuid(payload.workflow_id)) is not None:
-        if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
-            raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
-        if workflow.is_template != payload.is_template:
+    if (protocol_id := ensure_uuid(payload.protocol_id)) is not None:
+        if not (protocol := await protocol_dal.get_protocol_data(protocol_id=protocol_id)):
+            raise HTTPException(status_code=400, detail="protocol_id must be an existing id.")
+        if protocol.is_template != payload.is_template:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid link to workflow. Instance needs to refer to instance, template to template.",
+                detail="Invalid link to protocol. Instance needs to refer to instance, template to template.",
             )
-    if payload.is_template is False and payload.workflow_id is None:
-        raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
+    if payload.is_template is False and payload.protocol_id is None:
+        raise HTTPException(status_code=400, detail="Task instance needs protocol_id.")
     if not (task := await task_dal.add_task_data(payload=payload, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create task")
     return await get_task_out(data=task)
@@ -52,7 +53,7 @@ async def create_task(
 
 @task_router.post("/task", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"])
 async def create_task_from_template(
-    workflow_id: UUID,
+    protocol_id: UUID,
     template_id: UUID,
     new_task_is_template: bool,
     user: Annotated[User, Depends(get_current_user)],
@@ -66,13 +67,13 @@ async def create_task_from_template(
         raise HTTPException(status_code=400, detail="Provided task is not a template.")
     new_task = BaseAcquisitionTask(**template.__dict__)
     new_task.is_template = new_task_is_template
-    new_task.workflow_id = workflow_id
-    if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
-        raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
-    if workflow.is_template != new_task_is_template:
+    new_task.protocol_id = protocol_id
+    if not (protocol := await protocol_dal.get_protocol_data(protocol_id=protocol_id)):
+        raise HTTPException(status_code=400, detail="protocol_id must be an existing id.")
+    if protocol.is_template != new_task_is_template:
         raise HTTPException(
             status_code=400,
-            detail="Invalid link to workflow. Instance needs to refer to instance, template to template.",
+            detail="Invalid link to protocol. Instance needs to refer to instance, template to template.",
         )
     if not (task := await task_dal.add_task_data(payload=new_task, creator=user.username)):
         raise HTTPException(status_code=404, detail="Could not create task.")
@@ -95,16 +96,16 @@ async def get_task(
     return await get_task_out(data=task)
 
 
-@task_router.get("/task/all/{workflow_id}", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"])
-async def get_all_workflow_tasks(
-    workflow_id: UUID | str,
+@task_router.get("/task/all/{protocol_id}", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"])
+async def get_all_protocol_tasks(
+    protocol_id: UUID | str,
     user: Annotated[User, Depends(get_current_user)],
 ) -> list[AcquisitionTaskOut]:
-    """Get all tasks of a workflow."""
+    """Get all tasks of a protocol."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    _id = UUID(workflow_id) if not isinstance(workflow_id, UUID) else workflow_id
-    if not (tasks := await task_dal.get_all_task_data(workflow_id=_id)):
+    _id = UUID(protocol_id) if not isinstance(protocol_id, UUID) else protocol_id
+    if not (tasks := await task_dal.get_all_task_data(protocol_id=_id)):
         return []
     return [await get_task_out(data=task) for task in tasks]
 
@@ -152,16 +153,16 @@ async def update_task(
     """Update an existing task."""
     print(LOG_CALL_DELIMITER)
     print("Username:", user.username)
-    if (workflow_id := ensure_uuid(payload.workflow_id)) is not None:
-        if not (workflow := await workflow_dal.get_workflow_data(workflow_id=workflow_id)):
-            raise HTTPException(status_code=400, detail="workflow_id must be an existing id.")
-        if workflow.is_template != payload.is_template:
+    if (protocol_id := ensure_uuid(payload.protocol_id)) is not None:
+        if not (protocol := await protocol_dal.get_protocol_data(protocol_id=protocol_id)):
+            raise HTTPException(status_code=400, detail="protocol_id must be an existing id.")
+        if protocol.is_template != payload.is_template:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid link to workflow. Instance needs to refer to instance, template to template.",
+                detail="Invalid link to protocol. Instance needs to refer to instance, template to template.",
             )
-    if payload.is_template is False and payload.workflow_id is None:
-        raise HTTPException(status_code=400, detail="Task instance needs workflow_id.")
+    if payload.is_template is False and payload.protocol_id is None:
+        raise HTTPException(status_code=400, detail="Task instance needs protocol_id.")
     _id = UUID(task_id) if not isinstance(task_id, UUID) else task_id
     if not (task_updated := await task_dal.update_task_data(task_id=_id, payload=payload)):
         raise HTTPException(status_code=404, detail="Could not update task.")

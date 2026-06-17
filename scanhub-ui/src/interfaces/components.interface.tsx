@@ -29,7 +29,7 @@ export interface RefetchableItemInterface<T> {
 }
 
 export interface ItemSelection {
-  type: 'exam' | 'workflow' | 'DAG' | 'ACQUISITION' | undefined, 
+  type: 'protocol' | 'ACQUISITION' | undefined,
   name: string | undefined,
   itemId: string | undefined,
   status: ItemStatus,

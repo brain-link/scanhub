@@ -16,7 +16,7 @@ function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
  * Return type for useResults hook.
  */
 export type ResultsData = {
-  workflowId: string;
+  protocolId: string;
   taskId: string;
   results: ResultOut[];
 };
@@ -25,7 +25,7 @@ export type ResultsData = {
  * Hook: useResults
  * ----------------
  * Fetches all results (files) for a given acquisition task.
- * Returns workflow ID, task ID, and the list of available results,
+ * Returns protocol ID, task ID, and the list of available results,
  * sorted by datetime_created (newest first).
  *
  * @param item - The selected task item from UI (must be Finished and Acquisition type)
@@ -55,10 +55,10 @@ export function useResults(item: ItemSelection) {
       }
 
       // Extract IDs
-      const workflowId = String(data.workflow_id ?? '');
+      const protocolId = String(data.protocol_id ?? '');
       const taskId = String(data.id ?? '');
-      if (!workflowId || !taskId) {
-        throw new Error('Missing workflow or task ID.');
+      if (!protocolId || !taskId) {
+        throw new Error('Missing protocol or task ID.');
       }
 
       // Sort results by datetime_created (descending)
@@ -70,7 +70,7 @@ export function useResults(item: ItemSelection) {
             new Date(a.datetime_created).getTime()
         );
 
-      return { workflowId, taskId, results };
+      return { protocolId, taskId, results };
     },
   });
 
@@ -81,7 +81,7 @@ export function useResults(item: ItemSelection) {
   }, [item.progress]);
 
   return {
-    workflowId: query.data?.workflowId ?? '',
+    protocolId: query.data?.protocolId ?? '',
     taskId: query.data?.taskId ?? '',
     results: query.data?.results ?? [],
     isLoading: query.isLoading,

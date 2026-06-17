@@ -32,7 +32,7 @@ class DeviceStateMachine:
 
     _VALID_TRANSITIONS: ClassVar[dict[DeviceStatus, list[DeviceStatus]]] = {
         DeviceStatus.OFFLINE: [DeviceStatus.ONLINE],
-        DeviceStatus.ONLINE: [DeviceStatus.BUSY, DeviceStatus.OFFLINE],
+        DeviceStatus.ONLINE: [DeviceStatus.BUSY, DeviceStatus.ERROR, DeviceStatus.OFFLINE],
         DeviceStatus.BUSY: [DeviceStatus.ONLINE, DeviceStatus.ERROR, DeviceStatus.OFFLINE],
         DeviceStatus.ERROR: [DeviceStatus.ONLINE, DeviceStatus.OFFLINE],
     }

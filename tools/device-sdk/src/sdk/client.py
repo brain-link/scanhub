@@ -20,7 +20,7 @@ from typing import Any, Optional
 
 from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, DeviceStatus
 
-from sdk.device_state_machine import DeviceStateMachine
+from sdk.device_state_machine import DeviceStateMachine, InvalidStateTransitionError
 from sdk.websocket_handler import WebSocketHandler
 
 MAX_FILE_UPLOAD_ATTEMPTS = 3
@@ -352,23 +352,23 @@ class Client:
                         msg = f"Uploaded file {file_path} successfully."
                         log.info(msg)
                     except Exception as exc:
-                        msg = f"Upload failed (attempt {attempt}): {exc}"
-                        log.warning(msg)
+                        log.warning("Upload failed (attempt %d/%d) for %s: %s", attempt, MAX_FILE_UPLOAD_ATTEMPTS, file_path, exc)
                         await asyncio.sleep(2**attempt)  # exponential backoff
 
                 if not success:
-                    msg = f"Giving up on file {file_path} after {attempt} attempts."
-                    log.error(msg)
-                    await self.state_machine.transition(
-                        DeviceStatus.ERROR,
-                        context={"error_message": f"File upload failed after {attempt} attempts."},
-                    )
+                    log.error("Giving up on file %s after %d attempts.", file_path, attempt)
+                    try:
+                        await self.state_machine.transition(
+                            DeviceStatus.ERROR,
+                            context={"error_message": f"File upload failed after {attempt} attempts: {file_path}"},
+                        )
+                    except InvalidStateTransitionError:
+                        log.warning("Could not signal upload error: device not in a state that allows ERROR transition.")
 
             except asyncio.CancelledError:
                 break
             except Exception as exc:
-                msg = f"Uploader error: {exc}"
-                log.error(msg)
+                log.error("Uploader encountered unexpected error: %s", exc)
 
     async def _upload_file_direct(
         self,

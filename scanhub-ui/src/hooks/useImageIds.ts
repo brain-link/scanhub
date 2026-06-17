@@ -62,13 +62,13 @@ export function useImageIds(item: ItemSelection, resultId?: string) {
         (f: string) => f.toLowerCase().endsWith('.dcm')
       );
       if (files.length > 0) {
-        const workflowId = String(data.workflow_id ?? '');
+        const protocolId = String(data.protocol_id ?? '');
         const taskIdStr = String(data.id ?? '');
         const resultIdStr = String(selectedResult.id ?? '');
         const origin = typeof window !== 'undefined' ? window.location.origin : '';
         return files
           .sort()
-          .map((f: string) => `${origin}/api/v1/exam/dcm/${workflowId}/${taskIdStr}/${resultIdStr}/${f}`);
+          .map((f: string) => `${origin}/api/v1/exam/dcm/${protocolId}/${taskIdStr}/${resultIdStr}/${f}`);
       }
 
       return [];

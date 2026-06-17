@@ -8,10 +8,10 @@ import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 import React from 'react'
 
-import { ExamOut } from '../openapi/generated-client/exam'
+import { ProtocolOut } from '../openapi/generated-client/exam'
 
 
-function ExamInfo({ exam }: { exam: ExamOut }) {
+function ExamInfo({ exam }: { exam: ProtocolOut }) {
 
   const datetime_created = new Date(exam.datetime_created)
   const datetime_updated = exam.datetime_updated ? new Date(String(exam.datetime_updated)) : undefined

@@ -17,9 +17,9 @@ async def add_task_data(payload: BaseAcquisitionTask, creator: str) -> Acquisiti
     new_task = AcquisitionTask(**payload.model_dump(), creator=creator)
 
     async with async_session() as session:
-        if new_task.workflow_id:
+        if new_task.protocol_id:
             result = await session.execute(
-                select(func.max(Task.position)).where(Task.workflow_id == new_task.workflow_id)
+                select(func.max(Task.position)).where(Task.protocol_id == new_task.protocol_id)
             )
             max_position = result.scalar()
             new_task.position = (max_position + 1) if max_position is not None else 0
@@ -37,11 +37,11 @@ async def get_task_data(task_id: UUID) -> AcquisitionTask | None:
         return result.scalar_one_or_none()
 
 
-async def get_all_task_data(workflow_id: UUID) -> list[AcquisitionTask]:
-    """Get all acquisition tasks assigned to a workflow, ordered by position."""
+async def get_all_task_data(protocol_id: UUID) -> list[AcquisitionTask]:
+    """Get all acquisition tasks assigned to a protocol, ordered by position."""
     async with async_session() as session:
         result = await session.execute(
-            select(AcquisitionTask).where(AcquisitionTask.workflow_id == workflow_id).order_by(AcquisitionTask.position)
+            select(AcquisitionTask).where(AcquisitionTask.protocol_id == protocol_id).order_by(AcquisitionTask.position)
         )
         return list(result.scalars().all())
 

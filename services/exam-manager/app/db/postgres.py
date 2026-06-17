@@ -23,18 +23,11 @@ from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
-# Create base for exam and workflow table
 class Base(DeclarativeBase):
     """Declarative base class."""
 
     def update(self, data: BaseModel) -> None:
-        """Update a exam entry.
-
-        Parameters
-        ----------
-        data
-            Data to be written
-        """
+        """Update a protocol entry."""
         for key, value in data.model_dump().items():
             setattr(self, key, value)
 
@@ -56,7 +49,6 @@ if (
     db_uri = f"postgresql://{postgres_user}:{postgres_password}@scanhub-database/{postgres_db_name}"
     db_uri_async = f"postgresql+asyncpg://{postgres_user}:{postgres_password}@scanhub-database/{postgres_db_name}"
     engine = create_engine(db_uri, echo=False)
-    # Create async engine and session, echo=True generates console output
     async_engine = create_async_engine(db_uri_async, future=True, echo=False, isolation_level="AUTOCOMMIT")
     async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 else:
@@ -68,38 +60,10 @@ def init_db() -> None:
     Base.metadata.create_all(engine)
 
 
-class Exam(Base):
-    """Abstract exam ORM model."""
+class Protocol(Base):
+    """Protocol ORM model."""
 
-    __tablename__ = "exam"
-    __table_args__ = {"extend_existing": True}
-
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    creator: Mapped[str] = mapped_column(nullable=False)
-    datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now()  # pylint: disable=not-callable
-    )
-    datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(),
-        nullable=True,  # pylint: disable=not-callable
-    )
-    workflows: Mapped[list["Workflow"]] = relationship(lazy="selectin")
-
-    patient_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    indication: Mapped[str] = mapped_column(nullable=True)
-    patient_height_cm: Mapped[int] = mapped_column(nullable=True)
-    patient_weight_kg: Mapped[int] = mapped_column(nullable=True)
-    comment: Mapped[str] = mapped_column(nullable=True)
-    status: Mapped[ItemStatus] = mapped_column(nullable=False)
-    is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
-
-
-class Workflow(Base):  # TBD: rename to "Workflow"
-    """Workflow ORM model."""
-
-    __tablename__ = "workflow"
+    __tablename__ = "protocol"
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
@@ -114,9 +78,13 @@ class Workflow(Base):  # TBD: rename to "Workflow"
     tasks: Mapped[list["Task"]] = relationship(
         "Task", lazy="selectin", cascade="all, delete-orphan", order_by="Task.position"
     )
-    exam_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("exam.id"), nullable=True)
+
+    patient_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
+    indication: Mapped[str] = mapped_column(nullable=True)
+    patient_height_cm: Mapped[int] = mapped_column(nullable=True)
+    patient_weight_kg: Mapped[int] = mapped_column(nullable=True)
     comment: Mapped[str] = mapped_column(nullable=True)
     status: Mapped[ItemStatus] = mapped_column(nullable=False)
     is_template: Mapped[bool] = mapped_column(nullable=False, default=True)
@@ -137,7 +105,7 @@ class Task(Base):
         onupdate=func.now(),
         nullable=True,  # pylint: disable=not-callable
     )
-    workflow_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("workflow.id"), nullable=True)
+    protocol_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("protocol.id"), nullable=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     task_type: Mapped[TaskType] = mapped_column(nullable=False)
@@ -202,4 +170,4 @@ MappedBase.prepare(autoload_with=engine, reflect=True)
 try:
     Device = MappedBase.classes.device
 except AttributeError as error:
-    raise AttributeError("Could not find device and/or workflow table(s).") from error
+    raise AttributeError("Could not find device table.") from error

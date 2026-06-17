@@ -50,7 +50,7 @@ function AcquisitionTaskForm(props: ModalPropsCreate | ModalPropsModify<Acquisit
     props.modalType == 'modify'
       ? { ...(props.item as BaseAcquisitionTask), status: ItemStatus.Updated, task_type: 'ACQUISITION' }
       : {
-        workflow_id: props.parentId,              // eslint-disable-line camelcase
+        protocol_id: props.parentId,              // eslint-disable-line camelcase
         name: '',
         description: '',
         task_type: 'ACQUISITION',

@@ -48,11 +48,11 @@ const echartsCore = { init, use: echartsUse };
 
 interface RawDataViewerProps {
   selectedResultId: string;
-  workflowId: string;
+  protocolId: string;
   taskId: string;
 }
 
-export default function RawDataViewer({ selectedResultId, workflowId, taskId }: RawDataViewerProps) {
+export default function RawDataViewer({ selectedResultId, protocolId, taskId }: RawDataViewerProps) {
   const [overlay, setOverlay] = useState(true);
   const [wantTime, setWantTime] = useState(true);
   const [wantFreq, setWantFreq] = useState(false);
@@ -64,10 +64,10 @@ export default function RawDataViewer({ selectedResultId, workflowId, taskId }: 
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const idsReady = !!workflowId && !!taskId && !!selectedResultId;
+  const idsReady = !!protocolId && !!taskId && !!selectedResultId;
 
   // Meta query
-  const metaQuery = useMeta(idsReady, workflowId, taskId, selectedResultId);
+  const metaQuery = useMeta(idsReady, protocolId, taskId, selectedResultId);
 
   // Initialize range when meta changes
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function RawDataViewer({ selectedResultId, workflowId, taskId }: 
   // Binary acquisitions query
   const acqQuery = useData(
     idsReady && !!idsExpr,
-    workflowId,
+    protocolId,
     taskId,
     selectedResultId,
     idsExpr,

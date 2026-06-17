@@ -31,18 +31,16 @@ import DicomViewer3D from '../viewer/dicom/DicomViewer'
 import RawDataViewer from '../viewer/mrd/RawDataViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../openapi/generated-client/patient'
-import { ExamOut, WorkflowOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/exam'
+import { ProtocolOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/exam'
 import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
 import ExamItem, { ExamMenu } from '../components/ExamItem'
-import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
 import Container from '@mui/joy/Container'
 import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
 import ExamInfo from '../components/ExamInfo'
-import WorkflowInfo from '../components/WorkflowInfo'
 
 
 function AcquisitionView() {
@@ -60,26 +58,26 @@ function AcquisitionView() {
   }, [itemSelection.itemId])
 
   const [draggingTaskIndex, setDraggingTaskIndex] = React.useState<number | undefined>(undefined)
-  const [draggingWorkflowId, setDraggingWorkflowId] = React.useState<string | undefined>(undefined)
+  const [draggingProtocolId, setDraggingProtocolId] = React.useState<string | undefined>(undefined)
 
-  const handleDragStart = (index: number, workflowId: string) => {
+  const handleDragStart = (index: number, protocolId: string) => {
     setDraggingTaskIndex(index)
-    setDraggingWorkflowId(workflowId)
+    setDraggingProtocolId(protocolId)
   }
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
   }
 
-  const handleDrop = async (index: number, workflow: WorkflowOut) => {
-    if (draggingTaskIndex === undefined || draggingWorkflowId !== workflow.id || draggingTaskIndex === index) return
-    const tasks = [...workflow.tasks]
+  const handleDrop = async (index: number, protocol: ProtocolOut) => {
+    if (draggingTaskIndex === undefined || draggingProtocolId !== protocol.id || draggingTaskIndex === index) return
+    const tasks = [...protocol.tasks]
     const [draggedTask] = tasks.splice(draggingTaskIndex, 1)
     tasks.splice(index, 0, draggedTask)
     await taskApi.reorderTasksApiV1ExamTaskReorderPut({ task_ids: tasks.map(t => t.id) })
     refetchExams()
     setDraggingTaskIndex(undefined)
-    setDraggingWorkflowId(undefined)
+    setDraggingProtocolId(undefined)
   }
 
   // Patient query
@@ -94,22 +92,18 @@ function AcquisitionView() {
     refetchInterval: 1000,
   })
 
-  // Exams query
-  const { data: exams, refetch: refetchExams } = useQuery<ExamOut[], Error>({
+  // Protocols query
+  const { data: exams, refetch: refetchExams } = useQuery<ProtocolOut[], Error>({
     queryKey: ['allExams', params.patientId],
     queryFn: async () => {
-      const result = await examApi.getAllPatientExamsApiV1ExamAllPatientIdGet(params.patientId!)
+      const result = await examApi.getAllPatientProtocolsApiV1ExamAllPatientIdGet(params.patientId!)
       if (itemSelection.itemId != undefined) {
-        result.data.forEach((exam) => {
-          if (exam.id === itemSelection.itemId)
-            setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 })
-          exam.workflows.forEach((workflow) => {
-            if (workflow.id === itemSelection.itemId)
-              setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 })
-            workflow.tasks.forEach((task) => {
-              if (task.id === itemSelection.itemId)
-                setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
-            })
+        result.data.forEach((protocol) => {
+          if (protocol.id === itemSelection.itemId)
+            setItemSelection({ type: 'protocol', name: protocol.name, itemId: protocol.id, status: protocol.status, progress: 0 })
+          protocol.tasks.forEach((task) => {
+            if (task.id === itemSelection.itemId)
+              setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
           })
         })
       }
@@ -118,7 +112,7 @@ function AcquisitionView() {
     refetchInterval: 1000,
   })
 
-  // Results query for the selected task
+  // Task data query for the selected task
   const { data: taskData } = useQuery({
     queryKey: ['task-data', itemSelection.itemId, itemSelection.status],
     enabled: !!itemSelection.itemId && itemSelection.type === 'ACQUISITION',
@@ -129,7 +123,7 @@ function AcquisitionView() {
     refetchInterval: 2000,
   })
 
-  const workflowId: string | undefined = taskData ? String(taskData.workflow_id) : undefined
+  const protocolId: string | undefined = taskData ? String(taskData.protocol_id) : undefined
   const taskId: string | undefined = itemSelection.itemId
 
   const taskResults: ResultOut[] = React.useMemo(() => {
@@ -155,9 +149,9 @@ function AcquisitionView() {
 
   // Download / export handlers
   async function handleDownloadMrd() {
-    if (!workflowId || !taskId || !selectedResultId) return
+    if (!protocolId || !taskId || !selectedResultId) return
     try {
-      const response = await dataApi.downloadMRD(workflowId, taskId, selectedResultId, { responseType: 'blob' })
+      const response = await dataApi.downloadMRD(protocolId, taskId, selectedResultId, { responseType: 'blob' })
       const filename = selectedResult?.files?.[0] ?? 'data.mrd'
       const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
@@ -173,10 +167,10 @@ function AcquisitionView() {
   }
 
   async function handleDownloadDicom() {
-    if (!workflowId || !taskId || !selectedResultId || !selectedResult?.files?.length) return
+    if (!protocolId || !taskId || !selectedResultId || !selectedResult?.files?.length) return
     try {
       for (const filename of selectedResult.files.filter(f => f.toLowerCase().endsWith('.dcm'))) {
-        const response = await dataApi.getDicom(workflowId, taskId, selectedResultId, filename, { responseType: 'blob' })
+        const response = await dataApi.getDicom(protocolId, taskId, selectedResultId, filename, { responseType: 'blob' })
         const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = blobUrl
@@ -192,10 +186,10 @@ function AcquisitionView() {
   }
 
   async function handleExportToXnat() {
-    if (!workflowId || !taskId || !selectedResultId || !selectedResult?.files?.length) return
+    if (!protocolId || !taskId || !selectedResultId || !selectedResult?.files?.length) return
     try {
       const filename = selectedResult.files.find(f => f.toLowerCase().endsWith('.dcm')) ?? selectedResult.files[0]
-      await resultApi.uploadToXnat(workflowId, taskId, selectedResultId, filename)
+      await resultApi.uploadToXnat(protocolId, taskId, selectedResultId, filename)
       alert(`Successfully exported ${filename} to XNAT`)
     } catch (e) {
       console.error('Failed to export to XNAT', e)
@@ -238,7 +232,7 @@ function AcquisitionView() {
 
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-            <Typography level='title-md'>Exams</Typography>
+            <Typography level='title-md'>Protocols</Typography>
             <Badge badgeContent={exams?.length} color='primary' />
           </Box>
           <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamFromTemplateModalOpen(true)}>
@@ -248,54 +242,39 @@ function AcquisitionView() {
         <Divider />
 
         <Box sx={{ minHeight: 0, overflow: 'hidden auto', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          {exams?.map((exam: ExamOut) => (
+          {exams?.map((protocol: ProtocolOut) => (
             <AccordionWithMenu
-              key={`exam-${exam.id}`}
+              key={`protocol-${protocol.id}`}
               accordionSummary={
                 <ExamItem
-                  item={exam}
-                  onClick={() => setItemSelection({ type: 'exam', name: exam.name, itemId: exam.id, status: exam.status, progress: 0 })}
+                  item={protocol}
+                  onClick={() => setItemSelection({ type: 'protocol', name: protocol.name, itemId: protocol.id, status: protocol.status, progress: 0 })}
                   selection={itemSelection}
                 />
               }
-              accordionMenu={<ExamMenu item={exam} refetchParentData={refetchExams} />}
-              toolTipContent={<ExamInfo exam={exam} />}
+              accordionMenu={<ExamMenu item={protocol} refetchParentData={refetchExams} />}
+              toolTipContent={<ExamInfo exam={protocol} />}
             >
-              {exam.workflows?.map((workflow: WorkflowOut) => (
-                <AccordionWithMenu
-                  key={`workflow-${workflow.id}`}
-                  accordionSummary={
-                    <WorkflowItem
-                      item={workflow}
-                      onClick={() => setItemSelection({ type: 'workflow', name: workflow.name, itemId: workflow.id, status: workflow.status, progress: 0 })}
-                      selection={itemSelection}
-                    />
-                  }
-                  accordionMenu={<WorkflowMenu item={workflow} refetchParentData={refetchExams} />}
-                  toolTipContent={<WorkflowInfo workflow={workflow} />}
+              {protocol.tasks?.map((task: AcquisitionTaskOut, index: number) => (
+                <Box
+                  key={`task-${task.id}`}
+                  draggable
+                  onDragStart={() => handleDragStart(index, protocol.id)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(index, protocol)}
+                  sx={{
+                    cursor: 'grab',
+                    '&:active': { cursor: 'grabbing' },
+                    opacity: (draggingTaskIndex === index && draggingProtocolId === protocol.id) ? 0.5 : 1,
+                  }}
                 >
-                  {workflow.tasks?.map((task: AcquisitionTaskOut, index: number) => (
-                    <Box
-                      key={`task-${task.id}`}
-                      draggable
-                      onDragStart={() => handleDragStart(index, workflow.id)}
-                      onDragOver={handleDragOver}
-                      onDrop={() => handleDrop(index, workflow)}
-                      sx={{
-                        cursor: 'grab',
-                        '&:active': { cursor: 'grabbing' },
-                        opacity: (draggingTaskIndex === index && draggingWorkflowId === workflow.id) ? 0.5 : 1,
-                      }}
-                    >
-                      <TaskItem
-                        item={task}
-                        refetchParentData={refetchExams}
-                        onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
-                        selection={itemSelection}
-                      />
-                    </Box>
-                  ))}
-                </AccordionWithMenu>
+                  <TaskItem
+                    item={task}
+                    refetchParentData={refetchExams}
+                    onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
+                    selection={itemSelection}
+                  />
+                </Box>
               ))}
             </AccordionWithMenu>
           ))}
@@ -390,10 +369,10 @@ function AcquisitionView() {
         )}
 
         {/* Row 2 + canvas: rendered by each viewer */}
-        {isTaskSelected && viewerType === 'MRD' && workflowId && taskId && selectedResultId ? (
+        {isTaskSelected && viewerType === 'MRD' && protocolId && taskId && selectedResultId ? (
           <RawDataViewer
             selectedResultId={selectedResultId}
-            workflowId={workflowId}
+            protocolId={protocolId}
             taskId={taskId}
           />
         ) : isTaskSelected && viewerType === 'DICOM' ? (

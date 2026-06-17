@@ -182,7 +182,7 @@ class BaseTask(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    workflow_id: UUID | None = None
+    protocol_id: UUID | None = None
     name: str
     description: str
     task_type: TaskType
@@ -245,31 +245,8 @@ class AcquisitionPayload(AcquisitionTaskOut):
     device_parameter: dict
 
 
-class BaseWorkflow(BaseModel):
-    """Workflow base model."""
-
-    model_config = ConfigDict(extra="ignore")
-
-    exam_id: UUID | None = None
-    name: str
-    description: str
-    comment: str | None = None
-    status: ItemStatus
-    is_template: bool
-
-
-class WorkflowOut(BaseWorkflow):
-    """Workflow output model."""
-
-    id: UUID
-    creator: str
-    datetime_created: datetime
-    datetime_updated: datetime | None = None
-    tasks: list[AcquisitionTaskOut]
-
-
-class BaseExam(BaseModel):
-    """Exam base model."""
+class BaseProtocol(BaseModel):
+    """Protocol base model."""
 
     model_config = ConfigDict(extra="ignore")
 
@@ -282,14 +259,14 @@ class BaseExam(BaseModel):
     is_template: bool
 
 
-class ExamOut(BaseExam):
-    """Exam output model."""
+class ProtocolOut(BaseProtocol):
+    """Protocol output model."""
 
     id: UUID
     creator: str
     datetime_created: datetime
     datetime_updated: datetime | None = None
-    workflows: list[WorkflowOut]
+    tasks: list[AcquisitionTaskOut]
 
 
 # ----------------------------------------
@@ -363,7 +340,7 @@ class MRDAcquisitionInfo(BaseModel):
 class MRDMetaResponse(BaseModel):
     """ISMRM raw data / (ISMR)MRD meta data response."""
 
-    workflow_id: str
+    protocol_id: str
     task_id: str
     result_id: str
     dtype: str = "fc32" # float32 complex, interleaved (Re,Im)

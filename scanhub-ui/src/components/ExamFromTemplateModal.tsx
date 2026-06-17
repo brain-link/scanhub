@@ -14,7 +14,7 @@ import DialogTitle from '@mui/joy/DialogTitle';
 import Stack from '@mui/joy/Stack'
 
 import { examApi } from '../api'
-import { ExamOut } from '../openapi/generated-client/exam'
+import { ProtocolOut } from '../openapi/generated-client/exam'
 import { ITEM_UNSELECTED, ModalPropsCreate } from '../interfaces/components.interface'
 import ExamItem from './ExamItem'
 import ExamModal from './ExamModal'
@@ -22,13 +22,13 @@ import ExamModal from './ExamModal'
 
 export default function ExamFromTemplateModal(props: ModalPropsCreate) {
 
-  const [selectedExam, setSelectedExam] = React.useState<ExamOut | undefined>(undefined);
+  const [selectedExam, setSelectedExam] = React.useState<ProtocolOut | undefined>(undefined);
 
-  const { data: exams } = useQuery<ExamOut[]>({
+  const { data: exams } = useQuery<ProtocolOut[]>({
     queryKey: ['exams'],
     queryFn: async () => {
       return await examApi
-        .getAllExamTemplatesApiV1ExamTemplatesAllGet()
+        .getAllProtocolTemplatesApiV1ExamTemplatesAllGet()
         .then((result) => {
           return result.data
         })
@@ -44,7 +44,7 @@ export default function ExamFromTemplateModal(props: ModalPropsCreate) {
     >
       <ModalDialog sx={{ width: '50vw', p: 5 }}>
         <ModalClose />
-        <DialogTitle>Add Exam from Template</DialogTitle>
+        <DialogTitle>Add Protocol from Template</DialogTitle>
         <Stack
           sx={{
             overflow: 'scroll',

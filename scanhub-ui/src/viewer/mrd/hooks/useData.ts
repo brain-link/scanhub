@@ -4,14 +4,14 @@ import { parsePacket, ParsedBatch, debugHeader } from '../utils/packet';
 import type { AxiosRequestConfig } from 'axios';
 
 export function useData(
-  enabled: boolean, workflowId: string, taskId: string, resultId: string, idsExpr: string, coilsIdx?: number, stride = 1
+  enabled: boolean, protocolId: string, taskId: string, resultId: string, idsExpr: string, coilsIdx?: number, stride = 1
 ) {
   const opts: AxiosRequestConfig = { responseType: 'arraybuffer' };
   return useQuery<ParsedBatch>({
-    queryKey: ['raw-acq', workflowId, taskId, resultId, idsExpr, coilsIdx, stride],
+    queryKey: ['raw-acq', protocolId, taskId, resultId, idsExpr, coilsIdx, stride],
     enabled: enabled,
     queryFn: async () => {
-      const resp = await resultApi.getMRD(workflowId, taskId, resultId, idsExpr, coilsIdx, stride, opts);
+      const resp = await resultApi.getMRD(protocolId, taskId, resultId, idsExpr, coilsIdx, stride, opts);
 
       const buf: ArrayBuffer = (resp as any).data;
       debugHeader(buf);  // ← adds clarity in the console

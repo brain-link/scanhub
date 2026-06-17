@@ -22,7 +22,6 @@ from app.api.exam_api import exam_router
 from app.api.mri_sequence_api import seq_router
 from app.api.result_api import result_router
 from app.api.task_api import task_router
-from app.api.workflow_api import workflow_router
 from app.db.mongodb import close_mongo_connection, connect_to_mongo, db
 from app.db.postgres import engine, init_db
 
@@ -98,7 +97,7 @@ async def readiness() -> dict:
     print(LOG_CALL_DELIMITER)
     ins = inspect(engine)
     existing_tables = ins.get_table_names()
-    required_tables = ["exam", "workflow", "task"]
+    required_tables = ["protocol", "task"]
 
     if not all(t in existing_tables for t in required_tables):
         raise HTTPException(status_code=500, detail="SQL-DB: Could not create all required tables.")
@@ -110,7 +109,6 @@ async def readiness() -> dict:
 
 # Routers
 app.include_router(exam_router, prefix="/api/v1/exam")
-app.include_router(workflow_router, prefix="/api/v1/exam")
 app.include_router(task_router, prefix="/api/v1/exam")
 app.include_router(result_router, prefix="/api/v1/exam")
 app.include_router(seq_router, prefix="/api/v1/exam")
