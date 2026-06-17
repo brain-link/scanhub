@@ -15,7 +15,7 @@ export function extractRunId(meta: unknown): string | null {
 
 /**
  * Get latest result from a list of ResultOut
- * @param results 
+ * @param results
  * @returns latest result
  */
 export function getLatestResult(results: ResultOut[]) {

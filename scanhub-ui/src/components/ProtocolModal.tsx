@@ -2,8 +2,8 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamModal.tsx is responsible for rendering a modal with an interface
- * to create a new exam or modify an existing exam.
+ * ProtocolModal.tsx is responsible for rendering a modal with an interface
+ * to create a new protocol or modify an existing protocol.
  */
 import Button from '@mui/joy/Button'
 import FormLabel from '@mui/joy/FormLabel'
@@ -31,12 +31,12 @@ const formContent: {key: keyof BaseProtocol, label: string, placeholder: string,
 ]
 
 
-function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | ModalPropsCreateModifyFromTemplate<ProtocolOut>) {
+function ProtocolForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | ModalPropsCreateModifyFromTemplate<ProtocolOut>) {
   // The form is in this separate component to make sure that the state is reset after closing the modal
-  
+
   const [, showNotification] = React.useContext(NotificationContext)
 
-  const initialExam: BaseProtocol = props.modalType == 'modify' || props.modalType == 'createModifyFromTemplate' ? 
+  const initialProtocol: BaseProtocol = props.modalType == 'modify' || props.modalType == 'createModifyFromTemplate' ?
     {...props.item, status: 'UPDATED'}
   :
     {
@@ -49,14 +49,14 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
       is_template: true,        // eslint-disable-line camelcase
     }
 
-	const [exam, setExam] = React.useState<BaseProtocol>(initialExam);
+	const [protocol, setProtocol] = React.useState<BaseProtocol>(initialProtocol);
 
   let mutation: UseMutationResult<void, unknown, void, unknown>;
   if (props.modalType == 'modify') {
     mutation = useMutation({
       mutationFn: async () => {
         await protocolApi
-        .updateProtocol(props.item!.id, exam)   // props.item most not be and is not undefined here
+        .updateProtocol(props.item!.id, protocol)   // props.item most not be and is not undefined here
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Updated Protocol.', type: 'success'})
@@ -67,7 +67,7 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
     mutation = useMutation({
       mutationFn: async () => {
         await protocolApi
-        .createProtocol(exam)
+        .createProtocol(protocol)
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Created Protocol.', type: 'success'})
@@ -78,7 +78,7 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
     mutation = useMutation({
       mutationFn: async () => {
         await protocolApi
-        .createProtocolFromTemplate(props.item.id, exam)
+        .createProtocolFromTemplate(props.item.id, protocol)
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Created Protocol from Template.', type: 'success'})
@@ -101,14 +101,14 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
       <Stack spacing={1}>
         <Grid container rowSpacing={1.5} columnSpacing={5}>
           {formContent.map((entry, index) => (
-            !exam.is_template || entry.editForTemplates ? 
+            !protocol.is_template || entry.editForTemplates ?
               <Grid key={index} md={6}>
                 <FormLabel>{entry.label}</FormLabel>
                 <Input
                   name={entry.key}
-                  onChange={(e) => setExam({ ...exam, [e.target.name]: e.target.value })}
+                  onChange={(e) => setProtocol({ ...protocol, [e.target.name]: e.target.value })}
                   placeholder={entry.placeholder}
-                  defaultValue={exam[entry.key]?.toString()}
+                  defaultValue={protocol[entry.key]?.toString()}
                   required={entry.required}
                 />
               </Grid>
@@ -122,16 +122,16 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
               sx={{ width: 120 }}
               onClick={(event) => {
                 event.preventDefault()
-                if (exam.name == '') {
+                if (protocol.name == '') {
                   showNotification({message: 'Name must not be empty.', type: 'warning'})
-                } else if (exam.description == '') {
+                } else if (protocol.description == '') {
                   showNotification({message: 'Description must not be empty.', type: 'warning'})
-                } else if (!exam.is_template && (exam.indication == undefined || exam.indication == '')) {
+                } else if (!protocol.is_template && (protocol.indication == undefined || protocol.indication == '')) {
                   showNotification({message: 'Indication must not be empty.', type: 'warning'})
                 } else {
                   mutation.mutate()
                   props.setOpen(false)
-                } 
+                }
               }}
             >
             Save
@@ -145,7 +145,7 @@ function ExamForm(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | Moda
 }
 
 
-export default function ExamModal(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | ModalPropsCreateModifyFromTemplate<ProtocolOut>) {
+export default function ProtocolModal(props: ModalPropsCreate | ModalPropsModify<ProtocolOut> | ModalPropsCreateModifyFromTemplate<ProtocolOut>) {
   return (
     <Modal
       open={props.isOpen}   // open=False unmounts children, resetting the state of the form
@@ -166,7 +166,7 @@ export default function ExamModal(props: ModalPropsCreate | ModalPropsModify<Pro
             bgcolor: 'background.body',
           }}
         />
-        <ExamForm {...props} />
+        <ProtocolForm {...props} />
       </ModalDialog>
     </Modal>
   )

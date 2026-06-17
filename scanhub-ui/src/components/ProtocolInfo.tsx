@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamInfo.tsx is responsible for rendering additional information of an exam item.
+ * ProtocolInfo.tsx is responsible for rendering additional information of a protocol item.
  */
 import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
@@ -11,7 +11,7 @@ import React from 'react'
 import { ProtocolOut } from '../openapi/generated-client/protocol'
 
 
-function ExamInfo({ protocol }: { protocol: ProtocolOut }) {
+function ProtocolInfo({ protocol }: { protocol: ProtocolOut }) {
 
   const datetime_created = new Date(protocol.datetime_created)
   const datetime_updated = protocol.datetime_updated ? new Date(String(protocol.datetime_updated)) : undefined
@@ -82,4 +82,4 @@ function ExamInfo({ protocol }: { protocol: ProtocolOut }) {
   )
 }
 
-export default ExamInfo
+export default ProtocolInfo

@@ -29,7 +29,7 @@ import { taskApi } from '../api'
 import TaskModal from './TaskModal'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import DagsterUIModal from './DagsterUIModal'
-import { extractRunId, getLatestResult } from '../utils/ExamTree'
+import { extractRunId, getLatestResult } from '../utils/ProtocolTree'
 
 
 export default function TaskItem(

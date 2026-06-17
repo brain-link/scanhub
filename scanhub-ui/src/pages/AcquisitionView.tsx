@@ -32,21 +32,21 @@ import RawDataViewer from '../viewer/mrd/RawDataViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../openapi/generated-client/patient'
 import { ProtocolOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/protocol'
-import ExamFromTemplateModal from '../components/ExamFromTemplateModal'
+import ProtocolFromTemplateModal from '../components/ProtocolFromTemplateModal'
 import AccordionWithMenu from '../components/AccordionWithMenu'
-import ExamItem, { ExamMenu } from '../components/ExamItem'
+import ProtocolItem, { ProtocolMenu } from '../components/ProtocolItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
 import Container from '@mui/joy/Container'
 import AlertItem from '../components/AlertItem'
 import { Alerts } from '../interfaces/components.interface'
-import ExamInfo from '../components/ExamInfo'
+import ProtocolInfo from '../components/ProtocolInfo'
 
 
 function AcquisitionView() {
   const params = useParams()
 
-  const [examFromTemplateModalOpen, setExamFromTemplateModalOpen] = React.useState(false)
+  const [protocolFromTemplateModalOpen, setProtocolFromTemplateModalOpen] = React.useState(false)
   const [confirmAcquisitionLimitsModalOpen, setConfirmAcquisitionLimitsModalOpen] = React.useState(false)
   const [itemSelection, setItemSelection] = React.useState<ItemSelection>(ITEM_UNSELECTED)
   const [onAcquisitionLimitsConfirm, setOnAcquisitionLimitsConfirm] = React.useState<() => void>(() => () => { })
@@ -235,7 +235,7 @@ function AcquisitionView() {
             <Typography level='title-md'>Protocols</Typography>
             <Badge badgeContent={protocols?.length} color='primary' />
           </Box>
-          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setExamFromTemplateModalOpen(true)}>
+          <IconButton size='sm' variant='plain' color='neutral' onClick={() => setProtocolFromTemplateModalOpen(true)}>
             <AddSharpIcon />
           </IconButton>
         </Box>
@@ -246,14 +246,14 @@ function AcquisitionView() {
             <AccordionWithMenu
               key={`protocol-${protocol.id}`}
               accordionSummary={
-                <ExamItem
+                <ProtocolItem
                   item={protocol}
                   onClick={() => setItemSelection({ type: 'protocol', name: protocol.name, itemId: protocol.id, status: protocol.status, progress: 0 })}
                   selection={itemSelection}
                 />
               }
-              accordionMenu={<ExamMenu item={protocol} refetchParentData={refetchProtocols} />}
-              toolTipContent={<ExamInfo protocol={protocol} />}
+              accordionMenu={<ProtocolMenu item={protocol} refetchParentData={refetchProtocols} />}
+              toolTipContent={<ProtocolInfo protocol={protocol} />}
             >
               {protocol.tasks?.map((task: AcquisitionTaskOut, index: number) => (
                 <Box
@@ -302,9 +302,9 @@ function AcquisitionView() {
         />
       </Sheet>
 
-      <ExamFromTemplateModal
-        isOpen={examFromTemplateModalOpen}
-        setOpen={setExamFromTemplateModalOpen}
+      <ProtocolFromTemplateModal
+        isOpen={protocolFromTemplateModalOpen}
+        setOpen={setProtocolFromTemplateModalOpen}
         parentId={String(params.patientId)}
         onSubmit={refetchProtocols}
         createTemplate={false}

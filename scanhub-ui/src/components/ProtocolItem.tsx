@@ -2,7 +2,7 @@
  * Copyright (C) 2024, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
  *
- * ExamItem.tsx is responsible for rendering a single protocol item.
+ * ProtocolItem.tsx is responsible for rendering a single protocol item.
  */
 import Typography from '@mui/joy/Typography'
 import React from 'react'
@@ -20,11 +20,11 @@ import { ProtocolOut } from '../openapi/generated-client/protocol'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { protocolApi } from '../api'
-import ExamModal from './ExamModal'
+import ProtocolModal from './ProtocolModal'
 import Button from '@mui/joy/Button'
 
 
-export default function ExamItem({ item: protocol, selection, onClick }: SelectableItemInterface<ProtocolOut>) {
+export default function ProtocolItem({ item: protocol, selection, onClick }: SelectableItemInterface<ProtocolOut>) {
 
   return (
     <Button
@@ -64,9 +64,9 @@ export default function ExamItem({ item: protocol, selection, onClick }: Selecta
 }
 
 
-export function ExamMenu({ item: protocol, refetchParentData }: RefetchableItemInterface<ProtocolOut>) {
+export function ProtocolMenu({ item: protocol, refetchParentData }: RefetchableItemInterface<ProtocolOut>) {
 
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [protocolModalOpen, setProtocolModalOpen] = React.useState(false)
 
   const deleteProtocol = useMutation({
     mutationFn: async () => {
@@ -85,7 +85,7 @@ export function ExamMenu({ item: protocol, refetchParentData }: RefetchableItemI
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>
-          <MenuItem key='edit' onClick={() => setExamModalOpen(true)}>
+          <MenuItem key='edit' onClick={() => setProtocolModalOpen(true)}>
             Edit
           </MenuItem>
           <MenuItem
@@ -99,10 +99,10 @@ export function ExamMenu({ item: protocol, refetchParentData }: RefetchableItemI
         </Menu>
       </Dropdown>
 
-      <ExamModal
+      <ProtocolModal
         item={protocol}
-        isOpen={examModalOpen}
-        setOpen={setExamModalOpen}
+        isOpen={protocolModalOpen}
+        setOpen={setProtocolModalOpen}
         onSubmit={refetchParentData}
         modalType='modify'
       />

@@ -14,8 +14,8 @@ import { useQuery } from '@tanstack/react-query'
 
 import { protocolApi, taskApi } from '../api'
 import { ProtocolOut } from '../openapi/generated-client/protocol'
-import ExamModal from '../components/ExamModal'
-import ExamItem, { ExamMenu } from '../components/ExamItem'
+import ProtocolModal from '../components/ProtocolModal'
+import ProtocolItem, { ProtocolMenu } from '../components/ProtocolItem'
 import Typography from '@mui/joy/Typography'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED } from '../interfaces/components.interface'
@@ -23,7 +23,7 @@ import TaskModal from '../components/TaskModal'
 
 
 export default function TemplatesView() {
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
+  const [protocolModalOpen, setProtocolModalOpen] = React.useState(false)
   const [taskModalOpen, setTaskModalOpen] = React.useState(false)
 
   const [selectedProtocol, setSelectedProtocol] = React.useState<undefined | number>(undefined)
@@ -42,22 +42,22 @@ export default function TemplatesView() {
       draggingTaskIndex === undefined ||
       draggingTaskIndex === index ||
       selectedProtocol === undefined ||
-      !exams
+      !protocols
     )
       return
 
-    const tasks = [...exams[selectedProtocol].tasks]
+    const tasks = [...protocols[selectedProtocol].tasks]
     const [draggedTask] = tasks.splice(draggingTaskIndex, 1)
     tasks.splice(index, 0, draggedTask)
 
     const taskIds = tasks.map((t) => t.id)
     await taskApi.reorderTasks({ task_ids: taskIds })
-    refetchExams()
+    refetchProtocols()
     setDraggingTaskIndex(undefined)
   }
 
-  const { data: exams, refetch: refetchExams } = useQuery<ProtocolOut[]>({
-    queryKey: ['allExamTemplates'],
+  const { data: protocols, refetch: refetchProtocols } = useQuery<ProtocolOut[]>({
+    queryKey: ['allProtocolTemplates'],
     queryFn: async () => {
       return await protocolApi
         .getAllProtocolTemplates()
@@ -76,33 +76,33 @@ export default function TemplatesView() {
           <Button
             variant='outlined'
             startDecorator={<Add sx={{ fontSize: 'var(--IconFontSize)' }} />}
-            onClick={() => setExamModalOpen(true)}>
+            onClick={() => setProtocolModalOpen(true)}>
             Create Protocol
           </Button>
         </Stack>
 
-        <ExamModal
-          isOpen={examModalOpen}
-          setOpen={setExamModalOpen}
-          onSubmit={() => refetchExams()}
+        <ProtocolModal
+          isOpen={protocolModalOpen}
+          setOpen={setProtocolModalOpen}
+          onSubmit={() => refetchProtocols()}
           modalType='create'
           createTemplate={true}
           parentId={undefined}
         />
         {
-          exams?.map((protocol, index) => (
+          protocols?.map((protocol, index) => (
             <Stack direction="row" key={`protocol-${protocol.id}`} gap={1}>
-              <ExamItem
+              <ProtocolItem
                 item={protocol}
                 onClick={() => { selectedProtocol === index ? setSelectedProtocol(undefined) : setSelectedProtocol(index) }}
                 selection={selectedProtocol === index ? {
                   type: 'protocol',
-                  name: exams[index].name,
-                  itemId: exams[index].id,
-                  status: exams[index].status
+                  name: protocols[index].name,
+                  itemId: protocols[index].id,
+                  status: protocols[index].status
                 } : ITEM_UNSELECTED}
               />
-              <ExamMenu item={protocol} refetchParentData={refetchExams} />
+              <ProtocolMenu item={protocol} refetchParentData={refetchProtocols} />
             </Stack>
           ))
         }
@@ -124,13 +124,13 @@ export default function TemplatesView() {
         <TaskModal
           isOpen={taskModalOpen}
           setOpen={setTaskModalOpen}
-          onSubmit={() => refetchExams()}
+          onSubmit={() => refetchProtocols()}
           modalType='create'
           createTemplate={true}
-          parentId={exams && selectedProtocol !== undefined ? exams[selectedProtocol].id : undefined}
+          parentId={protocols && selectedProtocol !== undefined ? protocols[selectedProtocol].id : undefined}
         />
         {
-          exams && selectedProtocol !== undefined && exams[selectedProtocol]?.tasks?.map((task, index) => (
+          protocols && selectedProtocol !== undefined && protocols[selectedProtocol]?.tasks?.map((task, index) => (
             <Box
               key={`task-${task.id}`}
               draggable
@@ -145,7 +145,7 @@ export default function TemplatesView() {
             >
               <TaskItem
                 item={task}
-                refetchParentData={refetchExams}
+                refetchParentData={refetchProtocols}
                 onClick={() => { }}
                 selection={ITEM_UNSELECTED}
               />
