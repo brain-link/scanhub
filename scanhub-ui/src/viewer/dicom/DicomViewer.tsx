@@ -37,10 +37,12 @@ function safeEvictVolume(volumeId: string | null) {
 interface DicomViewer3DProps {
   item: ItemSelection;
   selectedResultId?: string;
+  onDownloadDicom?: () => void;
+  onExportToXnat?: () => void;
 }
 
 
-export default function DicomViewer3D({ item, selectedResultId }: DicomViewer3DProps) {
+export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom, onExportToXnat }: DicomViewer3DProps) {
 
   const { imageIds } = useImageIds(item, selectedResultId);
 
@@ -246,7 +248,12 @@ export default function DicomViewer3D({ item, selectedResultId }: DicomViewer3DP
         overflow: 'hidden',
       }}
     >
-      <DiconViewerToolbar onLayoutChange={setLayout} currentLayout={layout} />
+      <DiconViewerToolbar
+        onLayoutChange={setLayout}
+        currentLayout={layout}
+        onDownloadDicom={onDownloadDicom}
+        onExportToXnat={onExportToXnat}
+      />
 
       <Card
         variant="plain"

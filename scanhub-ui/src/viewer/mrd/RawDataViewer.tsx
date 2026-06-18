@@ -5,14 +5,25 @@ import { useData } from './hooks/useData';
 import { useMeta } from './hooks/useMeta';
 import { ColorPalette, ComplexMode } from './types';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
-import Controls from './Controls';
-import { plotColorPalettes } from './utils/colormaps';
+import { plotColorPalettes, plotColorPaletteOptions } from './utils/colormaps';
 import { WorkerMessage } from './utils/interfaces';
 import Container from '@mui/joy/Container';
 import AlertItem from '../../components/AlertItem';
 import { Alerts } from '../../interfaces/components.interface';
+import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
+import Checkbox from '@mui/joy/Checkbox';
+import IconButton from '@mui/joy/IconButton';
+import Input from '@mui/joy/Input';
+import Option from '@mui/joy/Option';
+import Select from '@mui/joy/Select';
+import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
+import Switch from '@mui/joy/Switch';
+import Typography from '@mui/joy/Typography';
+import { Popper } from '@mui/base/Popper';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import TuneIcon from '@mui/icons-material/Tune';
 import { type EChartsOption } from 'echarts';
 
 import { init, use as echartsUse } from 'echarts/core';
@@ -50,9 +61,11 @@ interface RawDataViewerProps {
   selectedResultId: string;
   protocolId: string;
   taskId: string;
+  onDownload?: () => void;
+  taskName?: string;
 }
 
-export default function RawDataViewer({ selectedResultId, protocolId, taskId }: RawDataViewerProps) {
+export default function RawDataViewer({ selectedResultId, protocolId, taskId, onDownload, taskName }: RawDataViewerProps) {
   const [overlay, setOverlay] = useState(true);
   const [wantTime, setWantTime] = useState(true);
   const [wantFreq, setWantFreq] = useState(false);
@@ -62,14 +75,32 @@ export default function RawDataViewer({ selectedResultId, protocolId, taskId }: 
   const [acqRange, setAcqRange] = useState<[number, number]>([0, 0]);
   const [currentAcq, setCurrentAcq] = useState(0);
 
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsAnchorRef = useRef<HTMLButtonElement>(null);
+  const settingsPanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!settingsOpen) return;
+    const handleMouseDown = (e: MouseEvent) => {
+      if (
+        !settingsAnchorRef.current?.contains(e.target as Node) &&
+        !settingsPanelRef.current?.contains(e.target as Node)
+      ) {
+        setSettingsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleMouseDown);
+    return () => document.removeEventListener('mousedown', handleMouseDown);
+  }, [settingsOpen]);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const idsReady = !!protocolId && !!taskId && !!selectedResultId;
 
-  // Meta query
   const metaQuery = useMeta(idsReady, protocolId, taskId, selectedResultId);
 
-  // Initialize range when meta changes
+  const maxIdx = Math.max(0, (metaQuery.data?.acquisitions?.length ?? 0) - 1);
+
   useEffect(() => {
     if (!metaQuery.data) return;
     const n = metaQuery.data.acquisitions?.length ?? 1;
@@ -78,7 +109,6 @@ export default function RawDataViewer({ selectedResultId, protocolId, taskId }: 
     setCoil(0);
   }, [metaQuery.data]);
 
-  // ids expression
   const idsExpr = useMemo(() => {
     const meta = metaQuery.data;
     if (!meta) return '';
@@ -90,7 +120,6 @@ export default function RawDataViewer({ selectedResultId, protocolId, taskId }: 
     return String(currentAcq);
   }, [metaQuery.data, overlay, acqRange, currentAcq]);
 
-  // Binary acquisitions query
   const acqQuery = useData(
     idsReady && !!idsExpr,
     protocolId,
@@ -101,7 +130,6 @@ export default function RawDataViewer({ selectedResultId, protocolId, taskId }: 
     1
   );
 
-  // Worker lifecycle
   const workerRef = useRef<Worker | null>(null);
   useEffect(() => {
     workerRef.current = new Worker(new URL('./workers/signalWorker.ts', import.meta.url), { type: 'module' });
@@ -235,25 +263,128 @@ export default function RawDataViewer({ selectedResultId, protocolId, taskId }: 
 
   return (
     <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', p: 1, gap: 1, overflow: 'hidden' }}>
-      <Controls
-        metaCount={metaQuery.data?.acquisitions?.length ?? 0}
-        overlay={overlay}
-        setOverlay={setOverlay}
-        wantTime={wantTime}
-        setWantTime={setWantTime}
-        wantFreq={wantFreq}
-        setWantFreq={setWantFreq}
-        mode={mode}
-        setMode={setMode}
-        colorPalette={colorPalette}
-        setColorPalette={setColorPalette}
-        coil={coil}
-        setCoil={setCoil}
-        acqRange={acqRange}
-        setAcqRange={setAcqRange}
-        currentAcq={currentAcq}
-        setCurrentAcq={setCurrentAcq}
-      />
+
+      {/* Toolbar */}
+      <Stack direction='row' alignItems='center' gap={0.5}>
+        <Typography level='title-sm' sx={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {taskName ? `${taskName} Raw Data` : 'Raw Data'}
+        </Typography>
+
+        {/* Settings */}
+        <IconButton
+          ref={settingsAnchorRef}
+          size='sm'
+          variant='plain'
+          color='neutral'
+          title='Plot settings'
+          onClick={() => setSettingsOpen(v => !v)}
+        >
+          <TuneIcon fontSize='small' />
+        </IconButton>
+
+        <Popper open={settingsOpen} anchorEl={settingsAnchorRef.current} placement='bottom-end' style={{ zIndex: 1300 }}>
+          <Sheet
+            ref={settingsPanelRef}
+            variant='outlined'
+            sx={{ p: 2, mt: 0.5, borderRadius: 'sm', boxShadow: 'md', display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 220 }}
+          >
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Domain</Typography>
+              <Stack direction='row' gap={2}>
+                <Checkbox label='Time' size='sm' checked={wantTime} onChange={e => setWantTime(e.target.checked)} />
+                <Checkbox label='Frequency' size='sm' checked={wantFreq} onChange={e => setWantFreq(e.target.checked)} />
+              </Stack>
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Mode</Typography>
+              <Select size='sm' value={mode} defaultValue='abs' onChange={(_, v) => setMode(v as ComplexMode)} required
+                slotProps={{ listbox: { disablePortal: true } }}
+              >
+                <Option value='abs'>Magnitude</Option>
+                <Option value='phase'>Phase</Option>
+                <Option value='real'>Real</Option>
+                <Option value='imag'>Imag</Option>
+              </Select>
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Color Palette</Typography>
+              <Select
+                size='sm'
+                value={colorPalette.id}
+                defaultValue={plotColorPalettes.default.id}
+                onChange={(_, v) => setColorPalette(plotColorPalettes[v ?? plotColorPalettes.default.id])}
+                required
+                slotProps={{ listbox: { disablePortal: true } }}
+              >
+                {plotColorPaletteOptions.map(p => <Option key={p.id} value={p.id}>{p.name}</Option>)}
+              </Select>
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Coil</Typography>
+              <Input
+                size='sm'
+                type='number'
+                value={coil}
+                slotProps={{ input: { min: 0, max: 999, step: 1 } }}
+                onChange={e => setCoil(Math.max(0, Number(e.target.value)))}
+              />
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Plot Mode</Typography>
+              <Stack direction='row' alignItems='center' gap={1}>
+                <Typography level='body-xs'>Single</Typography>
+                <Switch size='sm' checked={overlay} onChange={e => setOverlay(e.target.checked)} />
+                <Typography level='body-xs'>Overlay</Typography>
+              </Stack>
+            </Box>
+
+            {overlay ? (
+              <Box>
+                <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Range</Typography>
+                <Stack direction='row' gap={1}>
+                  <Input
+                    size='sm'
+                    type='number'
+                    value={acqRange[0]}
+                    slotProps={{ input: { min: 0, max: maxIdx, step: 1 } }}
+                    onChange={e => setAcqRange([Math.max(0, Number(e.target.value)), acqRange[1]])}
+                  />
+                  <Input
+                    size='sm'
+                    type='number'
+                    value={acqRange[1]}
+                    slotProps={{ input: { min: 0, max: maxIdx, step: 1 } }}
+                    onChange={e => setAcqRange([acqRange[0], Math.min(maxIdx, Number(e.target.value))])}
+                  />
+                </Stack>
+              </Box>
+            ) : (
+              <Box>
+                <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Readout</Typography>
+                <Input
+                  size='sm'
+                  type='number'
+                  value={currentAcq}
+                  slotProps={{ input: { min: 0, max: maxIdx, step: 1 } }}
+                  onChange={e => setCurrentAcq(Math.max(0, Math.min(maxIdx, Number(e.target.value))))}
+                />
+              </Box>
+            )}
+          </Sheet>
+        </Popper>
+
+        {/* Download */}
+        {onDownload && (
+          <IconButton size='sm' variant='outlined' color='neutral' title='Download MRD' onClick={onDownload}>
+            <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+          </IconButton>
+        )}
+      </Stack>
+
       <Card variant="outlined" color="neutral" sx={{ p: 0.5, flex: 1, minHeight: 0 }}>
         {showEmpty ? (
           <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>

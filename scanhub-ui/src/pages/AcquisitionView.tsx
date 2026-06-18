@@ -5,26 +5,17 @@
  * AcquisitionView.tsx is responsible for rendering the acquisition view.
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
-import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import FolderIcon from '@mui/icons-material/Folder'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CircularProgress from '@mui/joy/CircularProgress';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
-import SaveIcon from '@mui/icons-material/Save'
 import Badge from '@mui/joy/Badge'
 import Box from '@mui/joy/Box'
 import Container from '@mui/joy/Container'
 import Divider from '@mui/joy/Divider'
-import Dropdown from '@mui/joy/Dropdown'
 import IconButton from '@mui/joy/IconButton'
-import Menu from '@mui/joy/Menu'
-import MenuButton from '@mui/joy/MenuButton'
-import MenuItem from '@mui/joy/MenuItem'
-import Option from '@mui/joy/Option'
-import Select from '@mui/joy/Select'
 import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
@@ -295,6 +286,9 @@ function AcquisitionView() {
                               )
                             )
                           }
+                          results={itemSelection.itemId === task.id ? taskResults : undefined}
+                          selectedResultId={itemSelection.itemId === task.id ? selectedResultId : undefined}
+                          onResultSelect={itemSelection.itemId === task.id ? setSelectedResultId : undefined}
                         />
                       </Box>
                     ))}
@@ -336,72 +330,23 @@ function AcquisitionView() {
         modalType={'create'}
       />
 
-      {/* Right panel: Row 1 (file selector + actions) + Row 2 (viewer toolbar) + canvas */}
+      {/* Right panel: viewer toolbar + canvas */}
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-
-        {/* Row 1: file selector + download/export */}
-        {isTaskSelected && (
-          <Box sx={{
-            px: 1.5, py: 0.75,
-            display: 'flex', alignItems: 'center', gap: 1,
-            borderBottom: '1px solid', borderColor: 'divider',
-            flexShrink: 0,
-          }}>
-            <Select
-              size='sm'
-              placeholder='No results yet'
-              value={selectedResultId ?? null}
-              onChange={(_, v) => v && setSelectedResultId(v)}
-              sx={{ minWidth: 240 }}
-            >
-              {taskResults.map(result => {
-                const dt = new Date(result.datetime_created)
-                const label = (result.files?.[0] ? result.files[0] + ' | ' : '') +
-                  dt.toLocaleDateString() + ', ' + dt.toLocaleTimeString()
-                return (
-                  <Option key={result.id} value={result.id}>{label}</Option>
-                )
-              })}
-            </Select>
-
-            {viewerType === 'MRD' && (
-              <IconButton size='sm' variant='outlined' color='neutral' title='Download MRD' onClick={handleDownloadMrd}>
-                <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-              </IconButton>
-            )}
-
-            {viewerType === 'DICOM' && (
-              <Dropdown>
-                <MenuButton
-                  slots={{ root: IconButton }}
-                  slotProps={{ root: { size: 'sm', variant: 'outlined', color: 'neutral', title: 'Share / Export' } }}
-                >
-                  <SaveIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-                </MenuButton>
-                <Menu size='sm' placement='bottom-end'>
-                  <MenuItem onClick={handleDownloadDicom}>
-                    <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-                    Download DICOM
-                  </MenuItem>
-                  <MenuItem onClick={handleExportToXnat}>
-                    <OpenInNewIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
-                    Export to XNAT
-                  </MenuItem>
-                </Menu>
-              </Dropdown>
-            )}
-          </Box>
-        )}
-
-        {/* Row 2 + canvas: rendered by each viewer */}
         {isTaskSelected && viewerType === 'MRD' && protocolId && taskId && selectedResultId ? (
           <RawDataViewer
             selectedResultId={selectedResultId}
             protocolId={protocolId}
             taskId={taskId}
+            onDownload={handleDownloadMrd}
+            taskName={taskData?.name}
           />
         ) : isTaskSelected && viewerType === 'DICOM' ? (
-          <DicomViewer3D item={itemSelection} selectedResultId={selectedResultId} />
+          <DicomViewer3D
+            item={itemSelection}
+            selectedResultId={selectedResultId}
+            onDownloadDicom={handleDownloadDicom}
+            onExportToXnat={handleExportToXnat}
+          />
         ) : isTaskSelected && taskResults.length === 0 ? (
           <Container maxWidth={false} sx={{ width: '50%', mt: 5 }}>
             <AlertItem title='No results available for this task yet.' type={Alerts.Info} />

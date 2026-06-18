@@ -12,6 +12,13 @@ import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup'
 import Stack from '@mui/joy/Stack';
 import Tooltip from '@mui/joy/Tooltip';
 import Divider from '@mui/joy/Divider';
+import Dropdown from '@mui/joy/Dropdown';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
+import MenuItem from '@mui/joy/MenuItem';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import SaveIcon from '@mui/icons-material/Save';
 import { Enums } from '@cornerstonejs/tools';
 import { getToolGroup, tools } from './cornerstone/toolgroups';
 import { ViewLayout } from './cornerstone/viewLayouts';
@@ -21,11 +28,13 @@ import { GridIcon } from './icons/LayoutIcons';
 interface DicomViewerToolbarProps {
   onLayoutChange: (layout: ViewLayout) => void;
   currentLayout: ViewLayout;
+  onDownloadDicom?: () => void;
+  onExportToXnat?: () => void;
 }
 
 
 
-function DiconViewerToolbar({ onLayoutChange, currentLayout }: DicomViewerToolbarProps) {
+function DiconViewerToolbar({ onLayoutChange, currentLayout, onDownloadDicom, onExportToXnat }: DicomViewerToolbarProps) {
   const [activeTool, setActiveTool] = React.useState<string | null>(null)
 
   const toolGroup = React.useMemo(() => getToolGroup(), [])
@@ -94,6 +103,34 @@ function DiconViewerToolbar({ onLayoutChange, currentLayout }: DicomViewerToolba
           </IconButton>
         ))}
       </ToggleButtonGroup>
+
+      {(onDownloadDicom || onExportToXnat) && (
+        <>
+          <Divider orientation="vertical" />
+          <Dropdown>
+            <MenuButton
+              slots={{ root: IconButton }}
+              slotProps={{ root: { size: 'sm', variant: 'outlined', color: 'neutral', title: 'Share / Export' } }}
+            >
+              <SaveIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+            </MenuButton>
+            <Menu size='sm' placement='bottom-end'>
+              {onDownloadDicom && (
+                <MenuItem onClick={onDownloadDicom}>
+                  <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+                  Download DICOM
+                </MenuItem>
+              )}
+              {onExportToXnat && (
+                <MenuItem onClick={onExportToXnat}>
+                  <OpenInNewIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+                  Export to XNAT
+                </MenuItem>
+              )}
+            </Menu>
+          </Dropdown>
+        </>
+      )}
     </Stack>
 
   )
