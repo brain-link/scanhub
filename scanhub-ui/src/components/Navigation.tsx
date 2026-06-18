@@ -35,7 +35,7 @@ import { useColorScheme as useMaterialColorScheme } from '@mui/material/styles'
 
 import LoginContext from '../LoginContext'
 import { UserRole } from '../openapi/generated-client/userlogin'
-import logo from '../media/logo.png'
+import logo from '/logo.png'
 import { loginApi } from '../api'
 import { version } from '../utils/Versions'
 import ManagerStatus from './ManagerStatus'

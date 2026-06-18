@@ -11,7 +11,7 @@ import Input from '@mui/joy/Input'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import React, { useState } from 'react'
-import logo from '../media/logo.png'
+import logo from '/logo.png'
 
 import { loginApi, userApi } from '../api'
 import UserCreateModal from '../components/UserCreateModal'
