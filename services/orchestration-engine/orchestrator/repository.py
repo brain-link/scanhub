@@ -15,7 +15,7 @@ from scanhub_libraries.resources import (
 )
 from scanhub_libraries.resources.dag_config import DAGConfiguration
 from scanhub_libraries.resources.data_lake import DataLakeResource
-from scanhub_libraries.resources.notifier import DeviceManagerNotifier, ExamManagerNotifier
+from scanhub_libraries.resources.notifier import DeviceManagerNotifier, ProtocolManagerNotifier
 
 from orchestrator.assets.acquisition_data import acquisition_data_asset
 from orchestrator.assets.dicom_input import dicom_input
@@ -51,7 +51,7 @@ ressources = {
     DATA_LAKE_KEY: DataLakeResource.configure_at_launch(),
     IDATA_IO_KEY: IDataIOManager(dag_config=_dag_config),
     DICOM_IO_KEY: DicomIOManager(dag_config=_dag_config),
-    NOTIFIER_EM_KEY: ExamManagerNotifier(base_url=EXAM_MANAGER_URI),
+    NOTIFIER_EM_KEY: ProtocolManagerNotifier(base_url=EXAM_MANAGER_URI),
     NOTIFIER_DM_KEY: DeviceManagerNotifier(base_url=DEVICE_MANAGER_URI),
 }
 

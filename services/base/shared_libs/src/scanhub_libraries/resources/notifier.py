@@ -3,8 +3,8 @@ import httpx
 from dagster import ConfigurableResource
 
 
-class ExamManagerNotifier(ConfigurableResource):
-    """Notifies exam manager about Dagster job outcomes."""
+class ProtocolManagerNotifier(ConfigurableResource):
+    """Notifies protocol manager about Dagster job outcomes."""
 
     base_url: str
     timeout: float = 5.0
@@ -17,7 +17,7 @@ class ExamManagerNotifier(ConfigurableResource):
         run_id: str,
         access_token: str,
     ) -> None:
-        """Create a DICOM result entry in the exam manager after successful reconstruction."""
+        """Create a DICOM result entry in the protocol manager after successful reconstruction."""
         headers = {"Authorization": "Bearer " + access_token}
         payload = {
             "type": "DICOM",
@@ -31,7 +31,7 @@ class ExamManagerNotifier(ConfigurableResource):
             response.raise_for_status()
 
     def update_task_status(self, task_id: str, status: str, access_token: str) -> None:
-        """Update task status in the exam manager."""
+        """Update task status in the protocol manager."""
         headers = {"Authorization": "Bearer " + access_token}
         url = self.base_url.rstrip("/") + f"/task/{task_id}/status"
         with httpx.Client(timeout=self.timeout) as client:

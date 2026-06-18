@@ -1,7 +1,7 @@
 """
-Handler for exam requests.
+Handler for protocol requests.
 
-This module defines functions to interact with the exam manager service,
+This module defines functions to interact with the protocol manager service,
 including fetching tasks, sequences, and results. It provides a way to
 create and update acquisition tasks and results, ensuring that the data
 is properly formatted and authenticated.
@@ -21,7 +21,7 @@ SEQUENCE_URI = "http://protocol-manager:8000/api/v1/protocol/sequence"
 
 def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:
     """
-    Fetch acquisition task by ID from the exam manager service.
+    Fetch acquisition task by ID from the protocol manager service.
 
     Args
     ----
@@ -82,7 +82,7 @@ def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token: str) 
 
 def get_sequence(sequence_id: str, user_access_token: str) -> MRISequenceOut:
     """
-    Fetch MRI sequence by ID from the exam manager service.
+    Fetch MRI sequence by ID from the protocol manager service.
 
     Args
     ----
@@ -106,7 +106,7 @@ def get_sequence(sequence_id: str, user_access_token: str) -> MRISequenceOut:
 
 def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
     """
-    Create a blank result in the exam manager service.
+    Create a blank result in the protocol manager service.
 
     Returns
     -------
@@ -127,7 +127,7 @@ def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
 
 def delete_blank_result(result_id: str, user_access_token: str) -> None:
     """
-    Delete a blank result in the exam manager service.
+    Delete a blank result in the protocol manager service.
 
     Args
     ----
@@ -152,7 +152,7 @@ def delete_blank_result(result_id: str, user_access_token: str) -> None:
 
 def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
     """
-    Update a result in the exam manager service.
+    Update a result in the protocol manager service.
 
     Args
     ----
@@ -196,7 +196,7 @@ def update_task_status(task_id: str, status: str, user_access_token: str) -> Acq
 
 def get_result(result_id: str, user_access_token: str) -> ResultOut:
     """
-    Fetch result by ID from the exam manager service.
+    Fetch result by ID from the protocol manager service.
 
     Args
     ----

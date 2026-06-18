@@ -1,7 +1,7 @@
 [project]
 name = "scanhub-orchestration-engine"
 version = "0.1.0"
-description = "Task orchestration engine built on Dagster for executing computational jobs as directed acyclic graphs (DAGs). Integrates with the device manager to coordinate exam workflows where acquisition tasks are executed by devices and DAG tasks are executed within this service."
+description = "Task orchestration engine built on Dagster for executing computational jobs as directed acyclic graphs (DAGs). Integrates with the device manager to coordinate protocol execution."
 authors = [
     {name = "David Schote", email = "david.schote@brain-link.de"},
 ]

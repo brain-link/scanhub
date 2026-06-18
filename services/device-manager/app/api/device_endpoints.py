@@ -196,6 +196,6 @@ async def update_device_parameter(
     _id = UUID(device_id) if not isinstance(device_id, UUID) else device_id
     print(f"Received payload: {payload}")
     if not (updated_device := await dal_update_device(device_id=_id, payload={"parameter": payload})):
-        message = "Could not update exam, either because it does not exist, or for another reason."
+        message = "Could not update protocol, either because it does not exist, or for another reason."
         raise HTTPException(status_code=404, detail=message)
     return DeviceOut(**updated_device.__dict__)

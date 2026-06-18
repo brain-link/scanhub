@@ -87,7 +87,7 @@ async def readiness() -> dict:
     Raises
     ------
     HTTPException
-        500: Any of the exam-tree tables does not exist
+        500: Any of the protocol-tree tables does not exist
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()

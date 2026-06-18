@@ -71,7 +71,7 @@ async def validation_exception_handler(request, exc):
 
 @app.on_event("startup")
 async def startup():
-    """Statup exam-tree microservice.
+    """Statup protocol-tree microservice.
 
     Raises
     ------
