@@ -9,14 +9,17 @@ import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import FolderIcon from '@mui/icons-material/Folder';
+import Tooltip from '@mui/joy/Tooltip'
 import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
+import Stack from '@mui/joy/Stack';
 import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
 import MenuItem from '@mui/joy/MenuItem'
 
 // Sub-components, interfaces, client
 import { ProtocolOut } from '../openapi/generated-client/protocol'
+import ProtocolInfo from './ProtocolInfo';
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import Box from '@mui/joy/Box'
 import { protocolApi } from '../api'
@@ -24,42 +27,69 @@ import ProtocolModal from './ProtocolModal'
 import Button from '@mui/joy/Button'
 
 
-export default function ProtocolItem({ item: protocol, selection, onClick }: SelectableItemInterface<ProtocolOut>) {
+export default function ProtocolItem(
+  {
+    item: protocol,
+    refetchParentData,
+    selection,
+    onClick,
+    icon = <FolderIcon fontSize='small' />,
+    hoverIcon,
+  }: SelectableItemInterface<ProtocolOut> & RefetchableItemInterface<ProtocolOut>
+) {
+  const [hovered, setHovered] = React.useState(false)
 
   return (
-    <Button
-      sx={{
-        width: '100%',
-        p: 0.5,
-        display: 'flex',
-        justifyContent: 'flex-start'
-      }}
-      variant={(selection.type == 'protocol' && selection.itemId == protocol.id) ? 'outlined' : 'plain'}
-      onClick={onClick}
-    >
-      <FolderIcon fontSize='small' />
-      <Box
-        sx={{
-          marginLeft: 0.5,
-          p: 0.5,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'start',
-        }}
+    <Stack direction='row' width='100%' alignItems='center'>
+      <Tooltip
+        placement='right'
+        variant='outlined'
+        arrow
+        title={<ProtocolInfo protocol={protocol} />}
+        modifiers={[
+          { name: 'offset', options: { offset: [0, 64] } }, // skidding=8 (down), distance=20 (further right)
+        ]}
       >
-        <Typography level='body-xs' textColor='text.tertiary'>
-          PROTOCOL
-        </Typography>
+        <Button
+          sx={{
+            width: '100%',
+            p: 0.5,
+            display: 'flex',
+            justifyContent: 'flex-start'
+          }}
+          variant={(selection.type == 'protocol' && selection.itemId == protocol.id) ? 'outlined' : 'plain'}
+          onClick={onClick}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          {hovered && hoverIcon ? hoverIcon : icon}
+          <Box
+            sx={{
+              marginLeft: 0.5,
+              p: 0.5,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+            }}
+          >
+            <Typography level='body-xs' textColor='text.tertiary'>
+              PROTOCOL
+            </Typography>
 
-        <Typography level='title-sm'>
-          {protocol.name}
-        </Typography>
+            <Typography level='title-sm'>
+              {protocol.name}
+            </Typography>
 
-        <Typography level='body-xs' textColor='text.tertiary'>
-          {`Created: ${new Date(protocol.datetime_created).toDateString()}`}
-        </Typography>
-      </Box>
-    </Button>
+            <Typography level='body-xs' textColor='text.tertiary'>
+              {`Created: ${new Date(protocol.datetime_created).toDateString()}`}
+            </Typography>
+          </Box>
+        </Button>
+      </Tooltip>
+
+      <ProtocolMenu item={protocol} refetchParentData={refetchParentData} />
+
+    </Stack>
   )
 }
 
@@ -81,7 +111,7 @@ export function ProtocolMenu({ item: protocol, refetchParentData }: RefetchableI
   return (
     <>
       <Dropdown>
-        <MenuButton slotProps={{ root: { size: 'sm', variant: 'plain' } }} sx={{ aspectRatio: '1 / 1', minWidth: 0, p: 0.5 }} slots={{ root: IconButton }}>
+        <MenuButton variant='plain' sx={{ size: 'xs' }} slots={{ root: IconButton }}>
           <MoreHorizIcon fontSize='small' />
         </MenuButton>
         <Menu id='context-menu' variant='plain' sx={{ zIndex: 'snackbar' }}>

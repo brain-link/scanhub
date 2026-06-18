@@ -15,15 +15,12 @@ import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
 import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CircularProgress from '@mui/joy/CircularProgress';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, ItemStatus } from '../openapi/generated-client/protocol'
+import { AcquisitionTaskOut } from '../openapi/generated-client/protocol'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
@@ -37,7 +34,8 @@ export default function TaskItem(
     item: task,
     refetchParentData,
     selection,
-    onClick
+    onClick,
+    icon = <></>,
   }: RefetchableItemInterface<AcquisitionTaskOut> & SelectableItemInterface<AcquisitionTaskOut>
 ) {
   return (
@@ -61,13 +59,7 @@ export default function TaskItem(
           variant={(selection.type == 'ACQUISITION' && selection.itemId == task.id) ? 'outlined' : 'plain'}
           onClick={onClick}
         >
-          {
-            task.status === ItemStatus.Finished ? <CheckCircleIcon fontSize='small' /> : (
-              task.status === ItemStatus.Inprogress ? <CircularProgress variant='plain' size="sm" /> : (
-                task.status === ItemStatus.Error ? <HighlightOffIcon fontSize='small' /> : <RadioButtonUncheckedIcon fontSize='small' />
-              )
-            )
-          }
+          { icon }
           <Box sx={{ marginLeft: 0.5, p: 0.5,  display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }} >
             <Typography level='body-xs' textColor='text.tertiary'>
               {task.task_type}

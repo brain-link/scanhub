@@ -6,10 +6,17 @@
  */
 import AddSharpIcon from '@mui/icons-material/AddSharp'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
+import FolderIcon from '@mui/icons-material/Folder'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CircularProgress from '@mui/joy/CircularProgress';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import SaveIcon from '@mui/icons-material/Save'
 import Badge from '@mui/joy/Badge'
 import Box from '@mui/joy/Box'
+import Container from '@mui/joy/Container'
 import Divider from '@mui/joy/Divider'
 import Dropdown from '@mui/joy/Dropdown'
 import IconButton from '@mui/joy/IconButton'
@@ -19,6 +26,7 @@ import MenuItem from '@mui/joy/MenuItem'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
 import Sheet from '@mui/joy/Sheet'
+import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -31,16 +39,12 @@ import DicomViewer3D from '../viewer/dicom/DicomViewer'
 import RawDataViewer from '../viewer/mrd/RawDataViewer'
 import PatientInfo from '../components/PatientInfo'
 import { PatientOut } from '../openapi/generated-client/patient'
-import { ProtocolOut, AcquisitionTaskOut, ResultOut, ResultType } from '../openapi/generated-client/protocol'
+import { ProtocolOut, AcquisitionTaskOut, ResultOut, ResultType, ItemStatus } from '../openapi/generated-client/protocol'
 import ProtocolFromTemplateModal from '../components/ProtocolFromTemplateModal'
-import AccordionWithMenu from '../components/AccordionWithMenu'
-import ProtocolItem, { ProtocolMenu } from '../components/ProtocolItem'
+import ProtocolItem from '../components/ProtocolItem'
 import TaskItem from '../components/TaskItem'
-import { ITEM_UNSELECTED, ItemSelection } from '../interfaces/components.interface'
-import Container from '@mui/joy/Container'
+import { ITEM_UNSELECTED, ItemSelection, Alerts } from '../interfaces/components.interface'
 import AlertItem from '../components/AlertItem'
-import { Alerts } from '../interfaces/components.interface'
-import ProtocolInfo from '../components/ProtocolInfo'
 
 
 function AcquisitionView() {
@@ -56,6 +60,16 @@ function AcquisitionView() {
   React.useEffect(() => {
     setSelectedResultId(undefined)
   }, [itemSelection.itemId])
+
+  const [expandedProtocols, setExpandedProtocols] = React.useState<Set<string>>(new Set())
+
+  const toggleProtocol = (id: string) => {
+    setExpandedProtocols(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
 
   const [draggingTaskIndex, setDraggingTaskIndex] = React.useState<number | undefined>(undefined)
   const [draggingProtocolId, setDraggingProtocolId] = React.useState<string | undefined>(undefined)
@@ -242,42 +256,53 @@ function AcquisitionView() {
         <Divider />
 
         <Box sx={{ minHeight: 0, overflow: 'hidden auto', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          {protocols?.map((protocol: ProtocolOut) => (
-            <AccordionWithMenu
-              key={`protocol-${protocol.id}`}
-              accordionSummary={
+          {protocols?.map((protocol: ProtocolOut) => {
+            const isExpanded = expandedProtocols.has(protocol.id)
+            return (
+              <Stack key={`protocol-${protocol.id}`} direction='column' width='100%'>
                 <ProtocolItem
                   item={protocol}
-                  onClick={() => setItemSelection({ type: 'protocol', name: protocol.name, itemId: protocol.id, status: protocol.status, progress: 0 })}
+                  refetchParentData={refetchProtocols}
+                  onClick={() => toggleProtocol(protocol.id)}
                   selection={itemSelection}
+                  icon={isExpanded ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />}
+                  hoverIcon={<FolderOpenIcon fontSize='small' />}
                 />
-              }
-              accordionMenu={<ProtocolMenu item={protocol} refetchParentData={refetchProtocols} />}
-              toolTipContent={<ProtocolInfo protocol={protocol} />}
-            >
-              {protocol.tasks?.map((task: AcquisitionTaskOut, index: number) => (
-                <Box
-                  key={`task-${task.id}`}
-                  draggable
-                  onDragStart={() => handleDragStart(index, protocol.id)}
-                  onDragOver={handleDragOver}
-                  onDrop={() => handleDrop(index, protocol)}
-                  sx={{
-                    cursor: 'grab',
-                    '&:active': { cursor: 'grabbing' },
-                    opacity: (draggingTaskIndex === index && draggingProtocolId === protocol.id) ? 0.5 : 1,
-                  }}
-                >
-                  <TaskItem
-                    item={task}
-                    refetchParentData={refetchProtocols}
-                    onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
-                    selection={itemSelection}
-                  />
-                </Box>
-              ))}
-            </AccordionWithMenu>
-          ))}
+                {isExpanded && (
+                  <Stack direction='column' sx={{ pl: 2 }}>
+                    {protocol.tasks?.map((task: AcquisitionTaskOut, index: number) => (
+                      <Box
+                        key={`task-${task.id}`}
+                        draggable
+                        onDragStart={() => handleDragStart(index, protocol.id)}
+                        onDragOver={handleDragOver}
+                        onDrop={() => handleDrop(index, protocol)}
+                        sx={{
+                          cursor: 'grab',
+                          '&:active': { cursor: 'grabbing' },
+                          opacity: (draggingTaskIndex === index && draggingProtocolId === protocol.id) ? 0.5 : 1,
+                        }}
+                      >
+                        <TaskItem
+                          item={task}
+                          refetchParentData={refetchProtocols}
+                          onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
+                          selection={itemSelection}
+                          icon={
+                            task.status === ItemStatus.Finished ? <CheckCircleIcon fontSize='small' /> : (
+                              task.status === ItemStatus.Inprogress ? <CircularProgress variant='plain' size="sm" /> : (
+                                task.status === ItemStatus.Error ? <HighlightOffIcon fontSize='small' /> : <RadioButtonUncheckedIcon fontSize='small' />
+                              )
+                            )
+                          }
+                        />
+                      </Box>
+                    ))}
+                  </Stack>
+                )}
+              </Stack>
+            )
+          })}
         </Box>
 
         <Divider />
