@@ -246,7 +246,19 @@ function AcquisitionView() {
         </Box>
         <Divider />
 
-        <Box sx={{ minHeight: 0, overflow: 'hidden auto', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{
+          minHeight: 0,
+          overflow: 'hidden auto',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(255,255,255,0.22) rgba(255,255,255,0.05)',
+          '&::-webkit-scrollbar': { width: '6px' },
+          '&::-webkit-scrollbar-track': { background: 'rgba(255,255,255,0.05)', borderRadius: '3px' },
+          '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.22)', borderRadius: '3px' },
+          '&::-webkit-scrollbar-thumb:hover': { background: 'rgba(255,255,255,0.40)' },
+        }}>
           {protocols?.map((protocol: ProtocolOut) => {
             const isExpanded = expandedProtocols.has(protocol.id)
             return (
