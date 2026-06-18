@@ -12,6 +12,7 @@ import LoginContext from '../../LoginContext';
 import { attachToolGroupsForLayout, destroyToolGroups } from './cornerstone/toolgroups';
 import DiconViewerToolbar from './DicomViewerToolbar';
 import { VIEW_LAYOUTS, VIEW_LAYOUT_META, ViewportId, ViewLayout } from './cornerstone/viewLayouts';
+import { SliceGridViewer } from './SliceGridViewer';
 import { useViewportResize } from './hooks/useViewportResize';
 import { getOrCreateEngine, RENDERING_ENGINE_ID } from './cornerstone/engine';
 
@@ -172,6 +173,7 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
   // Load and display volume / stack.
   React.useEffect(() => {
     if (!viewportReady || imageIds.length === 0 || !engineRef.current) return;
+    if (layout === ViewLayout.AllSlices) return; // handled entirely by SliceGridViewer
 
     let cancelled = false;
 
@@ -260,24 +262,32 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
         color="neutral"
         sx={{ p: 0.5, bgcolor: '#000', flex: 1, minHeight: 0, border: '5px solid', overflow: 'hidden' }}
       >
-        <div
-          ref={containerRef}
-          style={{ display: 'grid', gridTemplate, width: '100%', height: '100%' }}
-        >
-          {VIEW_LAYOUTS[layout].map((v) => (
-            <div
-              key={v.id}
-              id={`viewport-${v.id}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                background: 'black',
-                borderRadius: 5,
-                overflow: 'hidden',
-              }}
-            />
-          ))}
-        </div>
+        {layout === ViewLayout.AllSlices ? (
+          <SliceGridViewer
+            imageIds={imageIds}
+            numberOfFrames={numberOfFrames}
+            engineRef={engineRef}
+          />
+        ) : (
+          <div
+            ref={containerRef}
+            style={{ display: 'grid', gridTemplate, width: '100%', height: '100%' }}
+          >
+            {VIEW_LAYOUTS[layout].map((v) => (
+              <div
+                key={v.id}
+                id={`viewport-${v.id}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  background: 'black',
+                  borderRadius: 5,
+                  overflow: 'hidden',
+                }}
+              />
+            ))}
+          </div>
+        )}
       </Card>
     </Stack>
   );

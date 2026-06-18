@@ -78,6 +78,11 @@ function DiconViewerToolbar({ onLayoutChange, currentLayout, onDownloadDicom, on
             <GridIcon rows={2} cols={2} fontSize='small' padding={4} />
           </IconButton>
         </Tooltip>
+        <Tooltip title="All slices" variant="soft">
+          <IconButton value="all-slices" aria-label="All slices">
+            <GridIcon rows={2} cols={4} fontSize='small' padding={4} gap={2} />
+          </IconButton>
+        </Tooltip>
       </ToggleButtonGroup>
 
       <Divider orientation="vertical" />

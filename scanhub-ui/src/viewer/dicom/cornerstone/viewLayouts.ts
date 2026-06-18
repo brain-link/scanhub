@@ -6,6 +6,7 @@ export enum ViewLayout {
   Single = '1x1',
   OneByThree = '1x3',
   TwoByTwo = '2x2',
+  AllSlices = 'all-slices',
 }
 
 export type ViewDefinition = {
@@ -18,6 +19,7 @@ export const VIEW_LAYOUT_META = {
   [ViewLayout.Single]: { rows: 1, cols: 1 },
   [ViewLayout.OneByThree]: { rows: 1, cols: 3 },
   [ViewLayout.TwoByTwo]: { rows: 2, cols: 2 },
+  [ViewLayout.AllSlices]: { rows: 0, cols: 0 },
 };
 
 export const VIEW_LAYOUTS: Record<ViewLayout, ViewDefinition[]> = {
@@ -35,6 +37,8 @@ export const VIEW_LAYOUTS: Record<ViewLayout, ViewDefinition[]> = {
     { id: 'coronal', orientation: Enums.OrientationAxis.CORONAL, is3D: false },
     { id: 'volume3D', orientation: null, is3D: true },
   ],
+  // AllSlices has no fixed viewport definitions — SliceGridViewer manages them dynamically.
+  [ViewLayout.AllSlices]: [],
 };
 
 export type ViewportId = ViewDefinition['id'];
