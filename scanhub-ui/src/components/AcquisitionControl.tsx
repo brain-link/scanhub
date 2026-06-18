@@ -23,15 +23,23 @@ import baseUrls from '../utils/Urls'
 
 
 const STATUS_LABEL: Record<string, string> = {
+  // device states
   NEW: 'Ready',
   UPDATED: 'Ready',
   STARTED: 'Starting...',
   INPROGRESS: 'Scanning...',
+  ACQUIRED: 'Scan acquired',
   FINISHED: 'Scan complete',
   ERROR: 'Device error',
   TRANSFERRING: 'Transferring data...',
+  // pipeline states
   RECONSTRUCTING: 'Reconstructing...',
+  SUCCEEDED: 'Reconstruction complete',
+  FAILED: 'Reconstruction failed',
+  CANCELLED: 'Cancelled',
 }
+
+const FAILURE_STATUSES = new Set(['ERROR', 'FAILED', 'CANCELLED'])
 
 function AcquisitionControl({ itemSelection, openConfirmModal }: {
   itemSelection: ItemSelection, openConfirmModal: (onConfirmed: () => void) => void
@@ -41,11 +49,13 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
   const hasTriggeredRef = React.useRef(false)
   const [liveProgress, setLiveProgress] = React.useState<number | undefined>(undefined)
   const [liveStatusLabel, setLiveStatusLabel] = React.useState<string | undefined>(undefined)
+  const [rawTaskStatus, setRawTaskStatus] = React.useState<string | undefined>(undefined)
 
   React.useEffect(() => {
     if (!itemSelection.itemId || itemSelection.type !== 'ACQUISITION' || !user?.access_token) {
       setLiveProgress(undefined)
       setLiveStatusLabel(undefined)
+      setRawTaskStatus(undefined)
       return
     }
 
@@ -54,14 +64,13 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
 
     es.onmessage = (event: MessageEvent<string>) => {
       const data: { task_status: string; progress: number } = JSON.parse(event.data)
+      setRawTaskStatus(data.task_status)
       setLiveProgress(data.progress)
       setLiveStatusLabel(STATUS_LABEL[data.task_status] ?? data.task_status)
-      if (data.task_status === 'ERROR') {
+      if (FAILURE_STATUSES.has(data.task_status) || data.task_status === 'SUCCEEDED') {
         es.close()
       }
     }
-
-    es.onerror = () => es.close()
 
     return () => es.close()
   }, [itemSelection.itemId, itemSelection.type, user?.access_token])
@@ -119,15 +128,22 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
           const progressValue = liveProgress ?? itemSelection.progress ?? 0
           const label = liveStatusLabel ?? STATUS_LABEL[itemSelection.status]
           const showPct = progressValue > 0 && progressValue < 100
+          const isFailure = rawTaskStatus
+            ? FAILURE_STATUSES.has(rawTaskStatus)
+            : itemSelection.status === ItemStatus.Error
           return (
             <>
               <LinearProgress
                 determinate={progressValue > 0}
                 value={progressValue}
+                color={isFailure ? 'danger' : 'primary'}
                 sx={{ marginTop: 1 }}
               />
               {label && (
-                <Typography level='body-xs' sx={{ marginTop: 0.5, color: 'neutral.500' }}>
+                <Typography
+                  level='body-xs'
+                  sx={{ marginTop: 0.5, color: isFailure ? 'danger.500' : 'neutral.500' }}
+                >
                   {label}{showPct ? ` — ${progressValue}%` : ''}
                 </Typography>
               )}

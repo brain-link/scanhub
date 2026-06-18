@@ -6,8 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from dagster import AssetExecutionContext, MetadataValue, asset
-from scanhub_libraries.resources.dag_config import DAGConfiguration
-from scanhub_libraries.resources.data_lake import DataLakeResource
+
+from orchestrator.resources import DataLakeResource
+from orchestrator.utils.dag_config import DAGConfiguration
 
 
 @dataclass

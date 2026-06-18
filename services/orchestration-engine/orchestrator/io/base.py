@@ -3,7 +3,7 @@ from abc import abstractmethod
 from typing import Any, List
 
 from dagster import ConfigurableIOManager, InputContext, OutputContext
-from scanhub_libraries.resources.dag_config import DAGConfiguration
+from orchestrator.utils.dag_config import DAGConfiguration
 from upath import UPath
 
 

@@ -7,8 +7,9 @@ from typing import List
 import numpy as np
 import pydicom
 from dagster import AssetIn, asset
-from scanhub_libraries.resources import DICOM_IO_KEY
 from skimage import filters
+
+from orchestrator import DICOM_IO_KEY
 from orchestrator.assets.dicom_input import dicom_input
 
 

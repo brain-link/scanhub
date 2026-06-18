@@ -57,9 +57,12 @@ class ItemStatus(str, Enum):
     NEW = "NEW"
     UPDATED = "UPDATED"
     STARTED = "STARTED"
-    FINISHED = "FINISHED"
-    ERROR = "ERROR"
     INPROGRESS = "INPROGRESS"
+    ACQUIRED = "ACQUIRED"      # scan complete, reconstruction pending
+    FINISHED = "FINISHED"      # scan + reconstruction both complete
+    ERROR = "ERROR"            # device-side error during acquisition
+    FAILED = "FAILED"          # pipeline failure during reconstruction
+    CANCELLED = "CANCELLED"    # Dagster job cancelled
 
 
 class TaskType(str, Enum):

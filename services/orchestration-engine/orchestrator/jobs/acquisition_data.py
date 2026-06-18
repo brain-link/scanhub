@@ -3,8 +3,8 @@
 
 """Definition of acquisition data operation."""
 from dagster import OpExecutionContext, op
-from scanhub_libraries.resources.dag_config import DAGConfiguration
-from scanhub_libraries.resources.data_lake import DataLakeResource
+from orchestrator.utils.dag_config import DAGConfiguration
+from orchestrator.resources import DataLakeResource
 
 from orchestrator.assets.acquisition_data import AcquisitionData
 

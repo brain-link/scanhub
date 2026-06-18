@@ -4,10 +4,11 @@
 """MRpro direct image reconstruction using."""
 import mrpro
 from dagster import AssetIn, asset
-from scanhub_libraries.resources import IDATA_IO_KEY
 from mrpro.data import IData
 
+from orchestrator import IDATA_IO_KEY
 from orchestrator.assets.acquisition_data import AcquisitionData, acquisition_data_asset
+
 
 @asset(
     group_name="reconstruction",
@@ -40,5 +41,4 @@ def mrpro_direct_reconstruction(context, data: AcquisitionData) -> IData:
     context.log.info("Loaded data: %s", kdata.shape)
     reconstruction = mrpro.algorithms.reconstruction.DirectReconstruction(kdata)
     context.log.info("Performing direct reconstruction using mrpro...")
-    idata = reconstruction(kdata)
-    return idata
+    return reconstruction(kdata)

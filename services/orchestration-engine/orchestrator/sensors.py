@@ -5,8 +5,9 @@
 from pathlib import Path
 
 from dagster import DagsterRunStatus, DefaultSensorStatus, RunStatusSensorContext, run_status_sensor
-from scanhub_libraries.resources import DAG_CONFIG_KEY
-from scanhub_libraries.resources.notifier import ProtocolManagerNotifier
+
+from orchestrator import DAG_CONFIG_KEY
+from orchestrator.notifier import DeviceManagerNotifier, ProtocolManagerNotifier
 
 
 def _get_dag_config_from_run(context: RunStatusSensorContext) -> dict:
@@ -23,40 +24,54 @@ def _get_dag_config_from_run(context: RunStatusSensorContext) -> dict:
     monitor_all_code_locations=True,
     minimum_interval_seconds=5,
 )
-def on_run_success(context: RunStatusSensorContext, notifier_protocol: ProtocolManagerNotifier) -> None:
-    """On successful reconstruction: collect DICOM output files and register a result in the protocol manager."""
+def on_run_success(
+    context: RunStatusSensorContext,
+    notifier_exam_manager: ProtocolManagerNotifier,
+    notifier_device_manager: DeviceManagerNotifier,
+) -> None:
+    """On successful reconstruction: register DICOM result and push SSE completion event."""
     dag_config = _get_dag_config_from_run(context)
     task_dir = dag_config.get("task_dir", "")
     task_id = dag_config.get("task_id", "")
     access_token = dag_config.get("user_access_token", "")
     run_id = context.dagster_run.run_id
 
-    if not (task_dir and task_id and access_token):
-        context.log.info(
-            "Run succeeded but missing task_dir/task_id/access_token — skipping protocol-manager notification."
-        )
+    if not task_id:
+        context.log.info("Run succeeded but task_id missing — skipping notifications.")
         return
 
     dcm_files = sorted(
         p.name for p in Path(task_dir).iterdir()
         if p.is_file() and p.name.startswith(run_id) and p.suffix.lower() == ".dcm"
-    )
+    ) if task_dir else []
 
-    try:
-        notifier_protocol.create_dicom_result(
-            task_id=task_id,
-            directory=task_dir,
-            files=dcm_files,
-            run_id=run_id,
-            access_token=access_token,
-        )
-        notifier_protocol.update_task_status(task_id, "FINISHED", access_token)
-        context.log.info(
-            "%s succeeded (run_id=%s) — registered %d DICOM file(s).",
-            context.dagster_run.job_name, run_id, len(dcm_files),
-        )
-    except Exception as exc:
-        context.log.error("Failed to notify protocol manager on success: %s", exc)
+    if task_dir and access_token:
+        try:
+            result_id = notifier_exam_manager.create_blank_result(task_id, access_token)
+            notifier_exam_manager.set_result(
+                result_id=result_id,
+                result_type="DICOM",
+                directory=task_dir,
+                files=dcm_files,
+                access_token=access_token,
+            )
+            notifier_exam_manager.update_task_status(task_id, "FINISHED", access_token)
+            context.log.info(
+                "%s succeeded (run_id=%s) — registered %d DICOM file(s).",
+                context.dagster_run.job_name, run_id, len(dcm_files),
+            )
+        except Exception:
+            context.log.exception("Failed to notify protocol manager on success.")
+    else:
+        context.log.warning("Missing task_dir or access_token — skipping protocol-manager update.")
+
+    notifier_device_manager.push_task_event(
+        task_id=task_id,
+        source="pipeline",
+        task_status="SUCCEEDED",
+        progress=100,
+        message=f"Reconstruction complete — {len(dcm_files)} DICOM file(s) registered.",
+    )
 
 
 @run_status_sensor(
@@ -65,8 +80,12 @@ def on_run_success(context: RunStatusSensorContext, notifier_protocol: ProtocolM
     monitor_all_code_locations=True,
     minimum_interval_seconds=5,
 )
-def on_run_failure(context: RunStatusSensorContext, notifier_exam_manager: ProtocolManagerNotifier) -> None:
-    """On failed reconstruction: mark the task as ERROR in the protocol manager."""
+def on_run_failure(
+    context: RunStatusSensorContext,
+    notifier_exam_manager: ProtocolManagerNotifier,
+    notifier_device_manager: DeviceManagerNotifier,
+) -> None:
+    """On failed reconstruction: mark the task as FAILED and push SSE error event."""
     dag_config = _get_dag_config_from_run(context)
     task_id = dag_config.get("task_id", "")
     access_token = dag_config.get("user_access_token", "")
@@ -76,10 +95,18 @@ def on_run_failure(context: RunStatusSensorContext, notifier_exam_manager: Proto
         return
 
     try:
-        notifier_exam_manager.update_task_status(task_id, "ERROR", access_token)
+        notifier_exam_manager.update_task_status(task_id, "FAILED", access_token)
         context.log.info("%s failed (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id)
-    except Exception as exc:
-        context.log.error("Failed to notify protocol manager on failure: %s", exc)
+    except Exception:
+        context.log.exception("Failed to notify protocol manager on failure.")
+
+    notifier_device_manager.push_task_event(
+        task_id=task_id,
+        source="pipeline",
+        task_status="FAILED",
+        progress=0,
+        message=f"Reconstruction failed — run_id={context.dagster_run.run_id}.",
+    )
 
 
 @run_status_sensor(
@@ -88,8 +115,12 @@ def on_run_failure(context: RunStatusSensorContext, notifier_exam_manager: Proto
     monitor_all_code_locations=True,
     minimum_interval_seconds=5,
 )
-def on_run_canceled(context: RunStatusSensorContext, notifier_exam_manager: ProtocolManagerNotifier) -> None:
-    """On canceled reconstruction: mark the task as ERROR in the protocol manager."""
+def on_run_canceled(
+    context: RunStatusSensorContext,
+    notifier_exam_manager: ProtocolManagerNotifier,
+    notifier_device_manager: DeviceManagerNotifier,
+) -> None:
+    """On canceled reconstruction: mark the task as CANCELLED and push SSE event."""
     dag_config = _get_dag_config_from_run(context)
     task_id = dag_config.get("task_id", "")
     access_token = dag_config.get("user_access_token", "")
@@ -99,7 +130,15 @@ def on_run_canceled(context: RunStatusSensorContext, notifier_exam_manager: Prot
         return
 
     try:
-        notifier_exam_manager.update_task_status(task_id, "ERROR", access_token)
+        notifier_exam_manager.update_task_status(task_id, "CANCELLED", access_token)
         context.log.info("%s canceled (run_id=%s).", context.dagster_run.job_name, context.dagster_run.run_id)
     except Exception as exc:
         context.log.error("Failed to notify protocol manager on cancellation: %s", exc)
+
+    notifier_device_manager.push_task_event(
+        task_id=task_id,
+        source="pipeline",
+        task_status="CANCELLED",
+        progress=0,
+        message=f"Reconstruction cancelled — run_id={context.dagster_run.run_id}.",
+    )

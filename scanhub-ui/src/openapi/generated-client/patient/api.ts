@@ -139,9 +139,12 @@ export const ItemStatus = {
     New: 'NEW',
     Updated: 'UPDATED',
     Started: 'STARTED',
+    Inprogress: 'INPROGRESS',
+    Acquired: 'ACQUIRED',
     Finished: 'FINISHED',
     Error: 'ERROR',
-    Inprogress: 'INPROGRESS'
+    Failed: 'FAILED',
+    Cancelled: 'CANCELLED'
 } as const;
 
 export type ItemStatus = typeof ItemStatus[keyof typeof ItemStatus];

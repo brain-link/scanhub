@@ -220,6 +220,37 @@ export interface SerialNumber {
 export interface Site {
 }
 /**
+ * Payload for the push-event endpoint — callable by any internal service.
+ * @export
+ * @interface TaskEvent
+ */
+export interface TaskEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskEvent
+     */
+    'source': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskEvent
+     */
+    'task_status': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskEvent
+     */
+    'progress'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskEvent
+     */
+    'message'?: string;
+}
+/**
  * 
  * @export
  * @interface ValidationError
@@ -421,6 +452,87 @@ export const DevicesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Internal endpoint: any service pushes a status event to all SSE subscribers of a task.  Called by Dagster sensors on job success, failure, or cancellation. No authentication required — only reachable on the internal Docker network.
+         * @summary Push Task Event
+         * @param {string} taskId 
+         * @param {TaskEvent} taskEvent 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pushTaskEvent: async (taskId: string, taskEvent: TaskEvent, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('pushTaskEvent', 'taskId', taskId)
+            // verify required parameter 'taskEvent' is not null or undefined
+            assertParamExists('pushTaskEvent', 'taskEvent', taskEvent)
+            const localVarPath = `/api/v1/device/task/{task_id}/push-event`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(taskEvent, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * SSE endpoint — streams real-time task status updates to the browser.  The browser connects with EventSource and receives JSON events of the form:     {\"task_status\": \"INPROGRESS\", \"progress\": 45}  The stream closes automatically when the task reaches FINISHED or ERROR. A keepalive comment is sent every 25 s to prevent proxy timeouts.
+         * @summary Task Stream
+         * @param {string} taskId 
+         * @param {string} token 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskStream: async (taskId: string, token: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'taskId' is not null or undefined
+            assertParamExists('taskStream', 'taskId', taskId)
+            // verify required parameter 'token' is not null or undefined
+            assertParamExists('taskStream', 'token', token)
+            const localVarPath = `/api/v1/device/task-stream/{task_id}`
+                .replace(`{${"task_id"}}`, encodeURIComponent(String(taskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
          * @summary Trigger Acquisition
          * @param {string} taskId 
@@ -564,6 +676,34 @@ export const DevicesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Internal endpoint: any service pushes a status event to all SSE subscribers of a task.  Called by Dagster sensors on job success, failure, or cancellation. No authentication required — only reachable on the internal Docker network.
+         * @summary Push Task Event
+         * @param {string} taskId 
+         * @param {TaskEvent} taskEvent 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pushTaskEvent(taskId: string, taskEvent: TaskEvent, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pushTaskEvent(taskId, taskEvent, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.pushTaskEvent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * SSE endpoint — streams real-time task status updates to the browser.  The browser connects with EventSource and receives JSON events of the form:     {\"task_status\": \"INPROGRESS\", \"progress\": 45}  The stream closes automatically when the task reaches FINISHED or ERROR. A keepalive comment is sent every 25 s to prevent proxy timeouts.
+         * @summary Task Stream
+         * @param {string} taskId 
+         * @param {string} token 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async taskStream(taskId: string, token: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskStream(taskId, token, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DevicesApi.taskStream']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
          * @summary Trigger Acquisition
          * @param {string} taskId 
@@ -638,6 +778,28 @@ export const DevicesApiFactory = function (configuration?: Configuration, basePa
          */
         getDevices(options?: any): AxiosPromise<Array<DeviceOut>> {
             return localVarFp.getDevices(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Internal endpoint: any service pushes a status event to all SSE subscribers of a task.  Called by Dagster sensors on job success, failure, or cancellation. No authentication required — only reachable on the internal Docker network.
+         * @summary Push Task Event
+         * @param {string} taskId 
+         * @param {TaskEvent} taskEvent 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pushTaskEvent(taskId: string, taskEvent: TaskEvent, options?: any): AxiosPromise<any> {
+            return localVarFp.pushTaskEvent(taskId, taskEvent, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * SSE endpoint — streams real-time task status updates to the browser.  The browser connects with EventSource and receives JSON events of the form:     {\"task_status\": \"INPROGRESS\", \"progress\": 45}  The stream closes automatically when the task reaches FINISHED or ERROR. A keepalive comment is sent every 25 s to prevent proxy timeouts.
+         * @summary Task Stream
+         * @param {string} taskId 
+         * @param {string} token 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        taskStream(taskId: string, token: string, options?: any): AxiosPromise<any> {
+            return localVarFp.taskStream(taskId, token, options).then((request) => request(axios, basePath));
         },
         /**
          * Trigger an MRI acquisition for the given task.  Fetches the task from the protocol manager, looks up the assigned sequence and device, sends the scan-start command via the device\'s open WebSocket, and marks the task as STARTED.
@@ -715,6 +877,32 @@ export class DevicesApi extends BaseAPI {
      */
     public getDevices(options?: RawAxiosRequestConfig) {
         return DevicesApiFp(this.configuration).getDevices(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Internal endpoint: any service pushes a status event to all SSE subscribers of a task.  Called by Dagster sensors on job success, failure, or cancellation. No authentication required — only reachable on the internal Docker network.
+     * @summary Push Task Event
+     * @param {string} taskId 
+     * @param {TaskEvent} taskEvent 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevicesApi
+     */
+    public pushTaskEvent(taskId: string, taskEvent: TaskEvent, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).pushTaskEvent(taskId, taskEvent, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * SSE endpoint — streams real-time task status updates to the browser.  The browser connects with EventSource and receives JSON events of the form:     {\"task_status\": \"INPROGRESS\", \"progress\": 45}  The stream closes automatically when the task reaches FINISHED or ERROR. A keepalive comment is sent every 25 s to prevent proxy timeouts.
+     * @summary Task Stream
+     * @param {string} taskId 
+     * @param {string} token 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevicesApi
+     */
+    public taskStream(taskId: string, token: string, options?: RawAxiosRequestConfig) {
+        return DevicesApiFp(this.configuration).taskStream(taskId, token, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

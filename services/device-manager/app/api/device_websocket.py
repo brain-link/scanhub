@@ -22,6 +22,7 @@ from secrets import compare_digest, token_hex
 from typing import Annotated
 from uuid import UUID
 
+from dagster_graphql import DagsterGraphQLClient
 from fastapi import (
     APIRouter,
     Depends,
@@ -33,10 +34,10 @@ from fastapi import (
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
-from starlette.responses import StreamingResponse
+from gql.transport.requests import RequestsHTTPTransport
+from pydantic import BaseModel
 from scanhub_libraries.models import (
     AcquisitionPayload,
-    AcquisitionTaskOut,
     DeviceDetails,
     DeviceStatus,
     ItemStatus,
@@ -45,6 +46,7 @@ from scanhub_libraries.models import (
 )
 from scanhub_libraries.security import compute_complex_password_hash
 from sqlalchemy import exc
+from starlette.responses import StreamingResponse
 
 import app.api.exam_requests as exam_requests
 from app.api.dal import dal_get_device, dal_update_device
@@ -88,6 +90,31 @@ async def _broadcast_task_status(task_id: str, event: dict) -> None:
         await queue.put(event)
 
 
+# Terminal task_status values that cause the SSE stream to close automatically.
+_SSE_TERMINAL_STATUSES = frozenset({"ERROR", "FAILED", "CANCELLED", "SUCCEEDED"})
+
+
+class TaskEvent(BaseModel):
+    """Payload for the push-event endpoint — callable by any internal service."""
+
+    source: str          # "device" | "pipeline" | "system"
+    task_status: str     # e.g. INPROGRESS, FINISHED, FAILED, TRANSFERRING …
+    progress: int = 0
+    message: str = ""
+
+
+@router.post("/task/{task_id}/push-event", response_model={}, status_code=200,
+             tags=["devices"], operation_id="push_task_event")
+async def push_task_event(task_id: str, event: TaskEvent) -> dict:
+    """Internal endpoint: any service pushes a status event to all SSE subscribers of a task.
+
+    Called by Dagster sensors on job success, failure, or cancellation.
+    No authentication required — only reachable on the internal Docker network.
+    """
+    await _broadcast_task_status(task_id, event.model_dump())
+    return {}
+
+
 @router.get("/task-stream/{task_id}", tags=["devices"], operation_id="task_stream")
 async def task_stream(task_id: str, token: Annotated[str, Query()]) -> StreamingResponse:
     """SSE endpoint — streams real-time task status updates to the browser.
@@ -113,7 +140,7 @@ async def task_stream(task_id: str, token: Annotated[str, Query()]) -> Streaming
                     yield ": keepalive\n\n"
                     continue
                 yield f"data: {json.dumps(event)}\n\n"
-                if event.get("task_status") == "ERROR":
+                if event.get("task_status") in _SSE_TERMINAL_STATUSES:
                     break
         finally:
             with suppress(ValueError):
@@ -369,7 +396,7 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         progress = int(data.get("progress", task.progress or 0))
         task.progress = max(0, min(progress, 100))
         if task.progress >= 100:
-            task.status = ItemStatus.FINISHED
+            task.status = ItemStatus.ACQUIRED
         else:
             task.status = ItemStatus.INPROGRESS
 
@@ -414,8 +441,6 @@ async def _stream_to_file(websocket: WebSocket, tmp_path: Path, size_bytes: int)
 def _submit_reconstruction_job(task_id: str, task_dir: str, protocol_id: str, user_access_token: str) -> None:
     """Submit the mrpro_reconstruction_job to Dagster after a file transfer completes."""
     try:
-        from dagster_graphql import DagsterGraphQLClient  # noqa: PLC0415
-        from gql.transport.requests import RequestsHTTPTransport  # noqa: PLC0415
         _transport = RequestsHTTPTransport(
             url=DAGSTER_GRAPHQL_URL, use_json=True, timeout=30,
         )
@@ -502,7 +527,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
         user_access_token=user_access_token,
     )
 
-    await _broadcast_task_status(task_id, {"task_status": "RECONSTRUCTING", "progress": 100})
+    await _broadcast_task_status(task_id, {"task_status": "RECONSTRUCTING", "progress": 0})
     await send_json(websocket, {
         "command": "feedback",
         "message": f"File saved and reconstruction triggered: {file_path}",
