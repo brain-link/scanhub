@@ -14,21 +14,26 @@ import hashlib
 import json
 import os
 import time
+from collections import defaultdict
+from collections.abc import AsyncGenerator
+from contextlib import suppress
 from pathlib import Path
 from secrets import compare_digest, token_hex
-from typing import Annotated, Dict, Optional
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
+    Query,
     WebSocket,
     WebSocketDisconnect,
     WebSocketException,
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
+from starlette.responses import StreamingResponse
 from scanhub_libraries.models import (
     AcquisitionPayload,
     AcquisitionTaskOut,
@@ -53,13 +58,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 router = APIRouter()
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
-dict_id_websocket: Dict[UUID, WebSocket] = {}
+dict_id_websocket: dict[UUID, WebSocket] = {}
 
 # Maintain device parameters from acquisition start
 # dict_id_parameters: dict[UUID, dict] = {}
 
 # Maintain latest device activity (pong)
-device_last_seen: Dict[UUID, float] = {}
+device_last_seen: dict[UUID, float] = {}
+
+# SSE subscriber queues per task_id
+task_sse_queues: dict[str, list[asyncio.Queue]] = defaultdict(list)
 
 
 async def send_json(websocket, payload: dict):
@@ -72,6 +80,50 @@ async def send_json(websocket, payload: dict):
     except RuntimeError as exc:
         # Starlette sometimes raises RuntimeError when send called after close
         print(f"RuntimeError while sending WS message: {exc}")
+
+
+async def _broadcast_task_status(task_id: str, event: dict) -> None:
+    """Push a status event to all SSE subscribers watching a task."""
+    for queue in list(task_sse_queues.get(task_id, [])):
+        await queue.put(event)
+
+
+@router.get("/task-stream/{task_id}", tags=["devices"], operation_id="task_stream")
+async def task_stream(task_id: str, token: Annotated[str, Query()]) -> StreamingResponse:
+    """SSE endpoint — streams real-time task status updates to the browser.
+
+    The browser connects with EventSource and receives JSON events of the form:
+        {"task_status": "INPROGRESS", "progress": 45}
+
+    The stream closes automatically when the task reaches FINISHED or ERROR.
+    A keepalive comment is sent every 25 s to prevent proxy timeouts.
+    """
+    if not token:
+        raise HTTPException(status_code=401, detail="Missing token.")
+
+    queue: asyncio.Queue = asyncio.Queue()
+    task_sse_queues[task_id].append(queue)
+
+    async def generator() -> AsyncGenerator[str, None]:
+        try:
+            while True:
+                try:
+                    event = await asyncio.wait_for(queue.get(), timeout=25)
+                except asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+                    continue
+                yield f"data: {json.dumps(event)}\n\n"
+                if event.get("task_status") == "ERROR":
+                    break
+        finally:
+            with suppress(ValueError):
+                task_sse_queues[task_id].remove(queue)
+
+    return StreamingResponse(
+        generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.post(
@@ -87,7 +139,7 @@ async def trigger_acquisition(
 ):
     """Trigger an MRI acquisition for the given task.
 
-    Fetches the task from the exam manager, looks up the assigned sequence and device,
+    Fetches the task from the protocol manager, looks up the assigned sequence and device,
     sends the scan-start command via the device's open WebSocket, and marks the task as STARTED.
     """
     task = exam_requests.get_task(str(task_id), access_token)
@@ -321,9 +373,13 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         else:
             task.status = ItemStatus.INPROGRESS
 
-    # Persist and send feedback
+    # Persist and broadcast to SSE subscribers
     try:
         updated_task = exam_requests.set_task(str(task_id), task, str(user_access_token))
+        await _broadcast_task_status(str(task_id), {
+            "task_status": updated_task.status,
+            "progress": updated_task.progress or 0,
+        })
         await send_json(websocket, {
             "command": "feedback",
             "message": f"Device {status.value} update processed (progress={updated_task.progress}%)."
@@ -403,6 +459,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
     file_path = task_dir / filename
     tmp_path = file_path.with_suffix(file_path.suffix + ".part")
 
+    await _broadcast_task_status(task_id, {"task_status": "TRANSFERRING", "progress": 0})
     bytes_received, hexdigest = await _stream_to_file(websocket, tmp_path, size_bytes)
 
     if bytes_received != size_bytes:
@@ -445,6 +502,7 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
         user_access_token=user_access_token,
     )
 
+    await _broadcast_task_status(task_id, {"task_status": "RECONSTRUCTING", "progress": 100})
     await send_json(websocket, {
         "command": "feedback",
         "message": f"File saved and reconstruction triggered: {file_path}",

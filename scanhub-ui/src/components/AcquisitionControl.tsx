@@ -17,15 +17,54 @@ import { useMutation } from '@tanstack/react-query'
 
 import { ItemStatus } from '../openapi/generated-client/protocol'
 import { ItemSelection } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext'
 import NotificationContext from '../NotificationContext'
 import baseUrls from '../utils/Urls'
 
+
+const STATUS_LABEL: Record<string, string> = {
+  NEW: 'Ready',
+  UPDATED: 'Ready',
+  STARTED: 'Starting...',
+  INPROGRESS: 'Scanning...',
+  FINISHED: 'Scan complete',
+  ERROR: 'Device error',
+  TRANSFERRING: 'Transferring data...',
+  RECONSTRUCTING: 'Reconstructing...',
+}
 
 function AcquisitionControl({ itemSelection, openConfirmModal }: {
   itemSelection: ItemSelection, openConfirmModal: (onConfirmed: () => void) => void
 }){
   const [, showNotification] = React.useContext(NotificationContext)
+  const [user] = React.useContext(LoginContext)
   const hasTriggeredRef = React.useRef(false)
+  const [liveProgress, setLiveProgress] = React.useState<number | undefined>(undefined)
+  const [liveStatusLabel, setLiveStatusLabel] = React.useState<string | undefined>(undefined)
+
+  React.useEffect(() => {
+    if (!itemSelection.itemId || itemSelection.type !== 'ACQUISITION' || !user?.access_token) {
+      setLiveProgress(undefined)
+      setLiveStatusLabel(undefined)
+      return
+    }
+
+    const url = `${baseUrls.deviceService}/api/v1/device/task-stream/${itemSelection.itemId}?token=${user.access_token}`
+    const es = new EventSource(url)
+
+    es.onmessage = (event: MessageEvent<string>) => {
+      const data: { task_status: string; progress: number } = JSON.parse(event.data)
+      setLiveProgress(data.progress)
+      setLiveStatusLabel(STATUS_LABEL[data.task_status] ?? data.task_status)
+      if (data.task_status === 'ERROR') {
+        es.close()
+      }
+    }
+
+    es.onerror = () => es.close()
+
+    return () => es.close()
+  }, [itemSelection.itemId, itemSelection.type, user?.access_token])
 
   const processTaskMutation = useMutation({
     mutationKey: ['triggerAcquisition'],
@@ -76,15 +115,25 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
           :
             'Select item to start...'}
         </Typography>
-        <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
-        <LinearProgress
-          determinate={itemSelection.progress !== undefined && itemSelection.progress > 0}
-          value={itemSelection.progress !== undefined && itemSelection.progress > 0 ? itemSelection.progress : (
-              itemSelection.status === ItemStatus.Inprogress ? 25 : 0
-            )
-          }
-          sx={{marginTop: 1}}
-        />
+        {(() => {
+          const progressValue = liveProgress ?? itemSelection.progress ?? 0
+          const label = liveStatusLabel ?? STATUS_LABEL[itemSelection.status]
+          const showPct = progressValue > 0 && progressValue < 100
+          return (
+            <>
+              <LinearProgress
+                determinate={progressValue > 0}
+                value={progressValue}
+                sx={{ marginTop: 1 }}
+              />
+              {label && (
+                <Typography level='body-xs' sx={{ marginTop: 0.5, color: 'neutral.500' }}>
+                  {label}{showPct ? ` — ${progressValue}%` : ''}
+                </Typography>
+              )}
+            </>
+          )
+        })()}
       </Stack>
     </Box>
   )
