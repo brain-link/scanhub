@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="scanhub-ui/src/media/logo.png" width="100" alt="ScanHub">
+    <img src="scanhub-ui/public/logo.png" width="100" alt="ScanHub">
     <h1 align="center">ScanHub</h3>
 </p>
 
