@@ -18,7 +18,7 @@ from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any, Optional
 
-from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, DeviceStatus
+from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, DeviceStatus, CalibrationType
 
 from sdk.device_state_machine import DeviceStateMachine, InvalidStateTransitionError
 from sdk.websocket_handler import WebSocketHandler
@@ -88,9 +88,12 @@ class Client:
         self.reconnect_delay = reconnect_delay
 
         # External handlers
-        self.feedback_handler: Optional[Callable[[str], Awaitable[None]]] = None
-        self.error_handler: Optional[Callable[[str], Awaitable[None]]] = None
-        self.scan_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
+        self._feedback_handler: Optional[Callable[[str], Awaitable[None]]] = None
+        self._error_handler: Optional[Callable[[str], Awaitable[None]]] = None
+        self._scan_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
+        self._frequency_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
+        self._flip_angle_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
+        self._shim_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
 
         # Task management
         self.active_tasks: dict[str, asyncio.Task[Any]] = {}
@@ -204,7 +207,7 @@ class Client:
             deviceTask (dict): Command data containing scanning parameters.
 
         """
-        if not self.scan_callback:
+        if not self._scan_callback:
             log.error("Scan callback not defined.")
             await self.state_machine.transition(
                 DeviceStatus.ERROR,
@@ -225,7 +228,7 @@ class Client:
         """Execute the scan asynchronously and manage its lifecycle."""
         task_id = str(payload.id)
         try:
-            if not callable(self.scan_callback):
+            if not callable(self._scan_callback):
                 log.error("Scan callback not defined.")
                 await self.state_machine.transition(
                     DeviceStatus.ERROR,
@@ -241,7 +244,18 @@ class Client:
                 "task_id": str(payload.id),
                 "user_access_token": payload.access_token,
             })
-            await self.scan_callback(payload)
+
+            for calibration in payload.calibration:
+                if (calibration is CalibrationType.FREQUENCY and
+                    callable(self._frequency_calibration_callback)):
+                    await self._frequency_calibration_callback(payload)
+                if (calibration is CalibrationType.FLIPANGLE and
+                    callable(self._flip_angle_calibration_callback)):
+                    await self._flip_angle_calibration_callback(payload)
+                if (calibration is CalibrationType.SHIMS and
+                    callable(self._shim_calibration_callback)):
+                    await self._shim_calibration_callback(payload)
+            await self._scan_callback(payload)
             log.info(f"Scan task {task_id} completed successfully.")
 
         except asyncio.CancelledError:
@@ -294,15 +308,15 @@ class Client:
 
     async def handle_feedback(self, message: str) -> None:
         """Handle feedback messages from the server."""
-        if self.feedback_handler is not None:
-            await self.feedback_handler(message)
+        if self._feedback_handler is not None:
+            await self._feedback_handler(message)
         else:
             log.info("Feedback received from server: %s", message)
 
     async def handle_error(self, message: str) -> None:
         """Handle error messages from the server."""
-        if self.error_handler is not None:
-            await self.error_handler(message)
+        if self._error_handler is not None:
+            await self._error_handler(message)
         else:
             log.info("Error received from server: %s", message)
 
@@ -411,12 +425,25 @@ class Client:
 
     def set_feedback_handler(self, handler: Callable[[str], Awaitable[None]]) -> None:
         """Set feedback handler."""
-        self.feedback_handler = handler
+        self._feedback_handler = handler
 
     def set_error_handler(self, handler: Callable[[str], Awaitable[None]]) -> None:
         """Set error handler."""
-        self.error_handler = handler
+        self._error_handler = handler
 
     def set_scan_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
         """Set scan callback."""
-        self.scan_callback = callback
+        self._scan_callback = callback
+
+    def set_frequency_calibration_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
+        """Set frequency calibration callback."""
+        self._frequency_calibration_callback = callback
+
+    def set_flip_angle_calibration_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
+        """Set frequency calibration callback."""
+        self._flip_angle_calibration_callback = callback
+
+    def set_shim_calibration_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
+        """Set frequency calibration callback."""
+        self._shim_calibration_callback = callback
+
