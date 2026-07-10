@@ -88,7 +88,6 @@ function ConfirmAcquisitionLimitsForm(props: ModalProps & { item: PatientOut })
             onClick={(event) => {
               event.preventDefault()
               mutation.mutate()
-              props.onSubmit()
               props.setOpen(false)
             }}
           >

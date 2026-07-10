@@ -28,13 +28,15 @@ import { GridIcon } from './icons/LayoutIcons';
 interface DicomViewerToolbarProps {
   onLayoutChange: (layout: ViewLayout) => void;
   currentLayout: ViewLayout;
+  /** Whether the loaded result is volumetric (multiple slices) — gates the MPR-only layouts. */
+  allow3DLayouts: boolean;
   onDownloadDicom?: () => void;
   onExportToXnat?: () => void;
 }
 
 
 
-function DiconViewerToolbar({ onLayoutChange, currentLayout, onDownloadDicom, onExportToXnat }: DicomViewerToolbarProps) {
+function DiconViewerToolbar({ onLayoutChange, currentLayout, allow3DLayouts, onDownloadDicom, onExportToXnat }: DicomViewerToolbarProps) {
   const [activeTool, setActiveTool] = React.useState<string | null>(null)
 
   const toolGroup = React.useMemo(() => getToolGroup(), [])
@@ -68,16 +70,20 @@ function DiconViewerToolbar({ onLayoutChange, currentLayout, onDownloadDicom, on
             <GridIcon rows={1} cols={1} fontSize='small' padding={4} />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Three orthogonal views" variant="soft">
-          <IconButton value="1x3" aria-label="1x3 Layout">
-            <GridIcon rows={1} cols={3} fontSize='small' padding={4} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="MPR + 3D" variant="soft">
-          <IconButton value="2x2" aria-label="2x2 Layout">
-            <GridIcon rows={2} cols={2} fontSize='small' padding={4} />
-          </IconButton>
-        </Tooltip>
+        {allow3DLayouts && (
+          <>
+            <Tooltip title="Three orthogonal views" variant="soft">
+              <IconButton value="1x3" aria-label="1x3 Layout">
+                <GridIcon rows={1} cols={3} fontSize='small' padding={4} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="MPR + 3D" variant="soft">
+              <IconButton value="2x2" aria-label="2x2 Layout">
+                <GridIcon rows={2} cols={2} fontSize='small' padding={4} />
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
         <Tooltip title="All slices" variant="soft">
           <IconButton value="all-slices" aria-label="All slices">
             <GridIcon rows={2} cols={4} fontSize='small' padding={4} gap={2} />

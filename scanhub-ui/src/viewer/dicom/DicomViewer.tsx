@@ -60,7 +60,16 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
   const engineRef = React.useRef(getRenderingEngine(RENDERING_ENGINE_ID) ?? null);
 
   const numberOfFrames = useNumberOfFrames(imageIds, ready);
-  useViewportResize(engineRef, layout, containerRef);
+  const has3D = numberOfFrames > 1;
+  useViewportResize(engineRef, layout, containerRef, viewportReady);
+
+  // MPR (1x3 / 2x2) layouts only make sense for volumetric data — fall back
+  // to Single whenever the selected result turns out to be a plain 2D image.
+  React.useEffect(() => {
+    if (!has3D && (layout === ViewLayout.OneByThree || layout === ViewLayout.TwoByTwo)) {
+      setLayout(ViewLayout.Single);
+    }
+  }, [has3D, layout]);
 
 
   // Ensure Cornerstone is initialised and the global engine exists.
@@ -184,14 +193,17 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
         const vp = engine.getViewport('single');
         if (!vp || vp.type !== Enums.ViewportType.STACK) return;
         await (vp as Types.IStackViewport).setStack(imageIds);
-        if (!cancelled) await vp.render();
+        if (cancelled) return;
+        vp.resetCamera();
+        await vp.render();
+        if (!cancelled) await attachToolGroupsForLayout(VIEW_LAYOUTS[layout], RENDERING_ENGINE_ID);
         return;
       }
 
       const volumeId = makeVolumeId(imageIds);
       const volumeImageIds = Array.from(
         { length: numberOfFrames },
-        (_, i) => `${imageIds[0]}?frame=${i + 1}`
+        (_, i) => `${imageIds[0]}?frame=${i}`
       );
 
       if (volumeIdRef.current !== volumeId) {
@@ -253,6 +265,7 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
       <DiconViewerToolbar
         onLayoutChange={setLayout}
         currentLayout={layout}
+        allow3DLayouts={has3D}
         onDownloadDicom={onDownloadDicom}
         onExportToXnat={onExportToXnat}
       />

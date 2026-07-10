@@ -102,6 +102,8 @@ export default function DeviceStatus() {
     }, [devices]);
 
     const anyError = sortedDevices.some(d => (d.status as unknown as string) === DeviceStatusEnum.Error);
+    const anyConnected = sortedDevices.some(d => (d.status as unknown as string) !== DeviceStatusEnum.Offline);
+    const statusColor = isLoading ? 'neutral' : anyConnected ? 'success' : 'danger';
 
     if (isLoading || isError || sortedDevices.length === 0) {
         // If loading or error, or no devices, we might want to hide it or show a neutral state.
@@ -126,7 +128,7 @@ export default function DeviceStatus() {
             >
                 <IconButton
                     variant='plain'
-                    color='primary'
+                    color={statusColor}
                     size='sm'
                     onClick={() => setTooltipPinned(prev => !prev)}
                     onMouseEnter={() => setTooltipHovered(true)}

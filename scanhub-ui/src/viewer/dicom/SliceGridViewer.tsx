@@ -1,6 +1,8 @@
 import React from 'react';
 import { Enums, imageLoader, type Types } from '@cornerstonejs/core';
 import type { RenderingEngine } from '@cornerstonejs/core';
+import { attachToolGroupToViewports } from './cornerstone/toolgroups';
+import { RENDERING_ENGINE_ID } from './cornerstone/engine';
 
 const COLS = 4;
 
@@ -18,7 +20,7 @@ export function SliceGridViewer({ imageIds, numberOfFrames, engineRef }: SliceGr
     if (!imageIds.length || !numberOfFrames) return [];
     if (imageIds.length > 1) return imageIds;
     if (numberOfFrames === 1) return [imageIds[0]];
-    return Array.from({ length: numberOfFrames }, (_, i) => `${imageIds[0]}?frame=${i + 1}`);
+    return Array.from({ length: numberOfFrames }, (_, i) => `${imageIds[0]}?frame=${i}`);
   }, [imageIds, numberOfFrames]);
 
   // Capture wheel events before Cornerstone's bubble-phase handlers can
@@ -63,6 +65,8 @@ export function SliceGridViewer({ imageIds, numberOfFrames, engineRef }: SliceGr
           ? { lower: globalMin, upper: globalMax }
           : undefined;
 
+      const enabledViewportIds: string[] = [];
+
       for (let i = 0; i < frameUrls.length; i++) {
         if (cancelled) return;
 
@@ -88,7 +92,12 @@ export function SliceGridViewer({ imageIds, numberOfFrames, engineRef }: SliceGr
           if (voiRange) vp.setProperties({ voiRange });
           vp.resetCamera();
           if (!cancelled) await vp.render();
+          enabledViewportIds.push(`slice-${i}`);
         } catch { /* ignore transient render errors */ }
+      }
+
+      if (!cancelled && enabledViewportIds.length) {
+        attachToolGroupToViewports(enabledViewportIds, RENDERING_ENGINE_ID);
       }
     })();
 

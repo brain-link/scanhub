@@ -37,7 +37,7 @@ export function useNumberOfFrames(imageIds: string[] | undefined, ready: boolean
       // 2) Prime metadata by loading the first frame (no-op if cached),
       //    then try again
       try {
-        const first = id.includes('?') ? id : `${id}?frame=1`;
+        const first = id.includes('?') ? id : `${id}?frame=0`;
         await imageLoader.loadAndCacheImage(first);
       } catch {
         /* ignore — we'll still fall back to 1 */

@@ -6,7 +6,8 @@ import type { ViewLayout } from '../cornerstone/viewLayouts';
 export function useViewportResize(
   engineRef: React.RefObject<RenderingEngine | null>,
   layout: ViewLayout,
-  containerRef: React.RefObject<HTMLDivElement | null>
+  containerRef: React.RefObject<HTMLDivElement | null>,
+  viewportReady: boolean
 ) {
   React.useEffect(() => {
     const container = containerRef.current;
@@ -37,5 +38,12 @@ export function useViewportResize(
 
     tiles.forEach(t => observer.observe(t));
     return () => observer.disconnect();
-  }, [engineRef, layout, containerRef]);
+    // viewportReady is the key dependency here: on first mount, imageIds is
+    // still empty and the parent renders its "select a result" placeholder
+    // instead of `containerRef`'s markup, so this effect finds no container
+    // and sets up no observer. `engineRef`/`containerRef` are refs with stable
+    // identity, so they never trigger a re-run on their own — without
+    // `viewportReady` flipping true (which only happens once the container
+    // and its tiles genuinely exist), the observer would never get created.
+  }, [engineRef, layout, containerRef, viewportReady]);
 }

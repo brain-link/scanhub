@@ -234,6 +234,32 @@ export async function attachToolGroupsForLayout(
 }
 
 
+/**
+ * Attaches the 2D tool group to a flat set of viewport ids (e.g. slice-grid
+ * tiles). Crosshairs / reference lines stay disabled — the tiles are
+ * independent single-frame stacks, not orthogonal views of a shared volume.
+ */
+export function attachToolGroupToViewports(viewportIds: string[], renderingEngineId: string) {
+  const toolGroup = getToolGroup();
+  const toolGroup3D = get3DToolGroup();
+  if (!toolGroup || !toolGroup3D) return;
+
+  toolGroup.removeViewports(renderingEngineId);
+  toolGroup3D.removeViewports(renderingEngineId);
+
+  const wlSync = getWindowLevelSync();
+  wlSync.getSourceViewports().forEach((vp) => wlSync.removeSource(vp));
+  wlSync.getTargetViewports().forEach((vp) => wlSync.removeTarget(vp));
+
+  for (const id of viewportIds) {
+    toolGroup.addViewport(id, renderingEngineId);
+  }
+
+  toolGroup.setToolDisabled(CrosshairsTool.toolName);
+  toolGroup.setToolDisabled(ReferenceLinesTool.toolName);
+}
+
+
 /** Detach & destroy the shared groups. */
 export function destroyToolGroups() {
   const existing = ToolGroupManager.getToolGroup(TOOL_GROUP_ID);
