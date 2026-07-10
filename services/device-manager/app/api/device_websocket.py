@@ -240,15 +240,35 @@ async def connection_with_valid_id_and_token(websocket: WebSocket) -> UUID:
 # TODO improve overall logic and resilience
 
 
+# Client pings every 5s (see Client._heartbeat). Timeout allows for a couple of
+# missed pings (network jitter) before declaring a device dead; the check
+# interval bounds the worst-case detection delay to roughly TIMEOUT + CHECK.
+_HEARTBEAT_TIMEOUT_S = 15
+_HEARTBEAT_CHECK_INTERVAL_S = 5
+
+
 # Coroutine to monitor device status depending on ping-pong
 async def monitor_devices():
-    """Monitor device online/offline status."""
+    """Monitor device online/offline status via the ping heartbeat.
+
+    Catches every disconnection a clean WebSocketDisconnect can't: crashed
+    processes, killed processes (SIGKILL), dropped network links, etc. — any
+    device that stops pinging is marked OFFLINE within roughly
+    `_HEARTBEAT_TIMEOUT_S + _HEARTBEAT_CHECK_INTERVAL_S` seconds, independent of
+    whether the client ever got a chance to shut down cleanly.
+    """
     while True:
         now = time.time()
-        for dev, last_seen in device_last_seen.items():
-            if now - last_seen > 60:  # 1 minute timeout
-                await dal_update_device(dev, {"status": DeviceStatus.OFFLINE})
-        await asyncio.sleep(30)
+        # Snapshot before mutating device_last_seen below.
+        stale = [
+            dev for dev, last_seen in device_last_seen.items()
+            if now - last_seen > _HEARTBEAT_TIMEOUT_S
+        ]
+        for dev in stale:
+            await dal_update_device(dev, {"status": DeviceStatus.OFFLINE})
+            # Drop it — nothing left to monitor until the device pings again.
+            device_last_seen.pop(dev, None)
+        await asyncio.sleep(_HEARTBEAT_CHECK_INTERVAL_S)
 
 
 @router.websocket("/ws")
@@ -296,6 +316,7 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         print("WebSocketDisconnect")
         dict_id_websocket.pop(device_id, None)
+        device_last_seen.pop(device_id, None)
         # dict_id_parameters.pop(device_id, None)
         print("Device disconnected:", device_id)
         # Set the status of the disconnected device to "disconnected"
@@ -511,6 +532,8 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
         with parameter_path.open("w") as fh:
             json.dump({"device_id": str(device_id), "parameter": device_parameter}, fh, indent=4)
         result_files.append(parameter_path.name)
+        if not await dal_update_device(device_id, {"parameter": device_parameter}):
+            print("Error updating device parameter, device_id:", device_id)
 
     blank_result = exam_requests.create_blank_result(task_id, user_access_token)
     set_result_payload = SetResult(

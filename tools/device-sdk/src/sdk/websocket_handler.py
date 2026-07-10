@@ -12,8 +12,8 @@ import asyncio
 import logging
 import ssl
 
+from websockets.asyncio.client import ClientConnection, connect
 from websockets.exceptions import ConnectionClosed
-from websockets.legacy.client import WebSocketClientProtocol, connect
 
 
 class WebSocketHandler:
@@ -52,7 +52,7 @@ class WebSocketHandler:
         self.uri: str = uri
         self.device_id: str = device_id
         self.device_token: str = device_token
-        self.websocket: WebSocketClientProtocol | None = None
+        self.websocket: ClientConnection | None = None
         self.reconnect_delay: int = reconnect_delay
         self.ca_file: str | None = ca_file
         self.logger: logging.Logger = logging.getLogger("WebSockerHandler")
@@ -68,12 +68,13 @@ class WebSocketHandler:
         print("Device ID:", self.device_id)
         self.websocket = await connect(
             self.uri,
-            extra_headers={
+            additional_headers={
                 "Device-Id": str(self.device_id),
                 "Device-Token": str(self.device_token),
             },
             ssl=ssl.create_default_context(cafile=self.ca_file),
             max_size=None,
+            proxy=None,
         )
         self.logger.info("WebSocket connection established.")
 

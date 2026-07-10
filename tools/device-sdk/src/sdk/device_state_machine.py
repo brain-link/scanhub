@@ -86,6 +86,25 @@ class DeviceStateMachine:
             msg = f"[STATE] Context update in {self._state.value}: {context}"
             log.debug(msg)
 
+    async def notify_task_error(self, task_id: str, user_access_token: str, error_message: str) -> None:
+        """
+        Report a single task as errored without touching the device's own tracked state.
+
+        Unlike transition(), this does not mutate self._state and is not subject to
+        FSM validation. Use it when rejecting a task (e.g. device busy with another
+        task) so the report is scoped to that task_id alone — going through
+        transition(ERROR) here would clobber the shared device state while a
+        different task is genuinely still in progress, corrupting its subsequent
+        status updates.
+        """
+        context = {
+            "task_id": task_id,
+            "user_access_token": user_access_token,
+            "error_message": error_message,
+        }
+        await self._send_status(DeviceStatus.ERROR, context)
+        log.info("[TASK] Reported error for task %s: %s", task_id, error_message)
+
     # ------------------------------------------------------------------
     # Internal helpers
 

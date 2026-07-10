@@ -91,9 +91,9 @@ class Client:
         self._feedback_handler: Optional[Callable[[str], Awaitable[None]]] = None
         self._error_handler: Optional[Callable[[str], Awaitable[None]]] = None
         self._scan_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
-        self._frequency_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
-        self._flip_angle_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
-        self._shim_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
+        self._frequency_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]] = None
+        self._flip_angle_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]] = None
+        self._shim_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]] = None
 
         # Task management
         self.active_tasks: dict[str, asyncio.Task[Any]] = {}
@@ -113,7 +113,7 @@ class Client:
         await self.connect_and_register()
         # Start background tasks
         asyncio.create_task(self.listen_for_commands())
-        asyncio.create_task(self._heartbeat(interval=15))
+        asyncio.create_task(self._heartbeat(interval=5))
         asyncio.create_task(self._file_uploader())
 
     async def connect_and_register(self) -> None:
@@ -176,7 +176,7 @@ class Client:
                 log.error("Error while receiving commands: %s", str(e))
                 await self.reconnect()
 
-    async def _heartbeat(self, interval: int = 15) -> None:
+    async def _heartbeat(self, interval: int = 5) -> None:
         """Periodically send ping messages to keep connection alive.
 
         This application level ping-pong allows to track if devices are still alive
@@ -216,8 +216,20 @@ class Client:
             return
 
         async with self._task_lock:
-            if str(payload.id) in self.active_tasks:
-                log.warning("Scan already running for task %s", payload.id)
+            if self.active_tasks:
+                # The device/client can only run one acquisition at a time. Reject any
+                # additional start command outright rather than queueing or silently
+                # dropping it, so the requester gets clear feedback instead of a task
+                # that hangs forever in "STARTED".
+                busy_with = next(iter(self.active_tasks))
+                log.warning(
+                    "Rejecting task %s: device is busy with task %s", payload.id, busy_with
+                )
+                await self.state_machine.notify_task_error(
+                    task_id=str(payload.id),
+                    user_access_token=payload.access_token,
+                    error_message=f"Device is busy with task {busy_with}.",
+                )
                 return
 
             # Create background task (non-blocking)
@@ -248,13 +260,13 @@ class Client:
             for calibration in payload.calibration:
                 if (calibration is CalibrationType.FREQUENCY and
                     callable(self._frequency_calibration_callback)):
-                    await self._frequency_calibration_callback(payload)
+                    payload = await self._frequency_calibration_callback(payload)
                 if (calibration is CalibrationType.FLIPANGLE and
                     callable(self._flip_angle_calibration_callback)):
-                    await self._flip_angle_calibration_callback(payload)
+                    payload = await self._flip_angle_calibration_callback(payload)
                 if (calibration is CalibrationType.SHIMS and
                     callable(self._shim_calibration_callback)):
-                    await self._shim_calibration_callback(payload)
+                    payload = await self._shim_calibration_callback(payload)
             await self._scan_callback(payload)
             log.info(f"Scan task {task_id} completed successfully.")
 
@@ -435,15 +447,21 @@ class Client:
         """Set scan callback."""
         self._scan_callback = callback
 
-    def set_frequency_calibration_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
+    def set_frequency_calibration_callback(
+        self, callback: Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]
+    ) -> None:
         """Set frequency calibration callback."""
         self._frequency_calibration_callback = callback
 
-    def set_flip_angle_calibration_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
+    def set_flip_angle_calibration_callback(
+        self, callback: Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]
+    ) -> None:
         """Set frequency calibration callback."""
         self._flip_angle_calibration_callback = callback
 
-    def set_shim_calibration_callback(self, callback: Callable[[AcquisitionPayload], Awaitable[None]]) -> None:
+    def set_shim_calibration_callback(
+        self, callback: Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]
+    ) -> None:
         """Set frequency calibration callback."""
         self._shim_calibration_callback = callback
 

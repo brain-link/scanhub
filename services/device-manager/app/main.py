@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
 """Main file for the device manager service."""
+import asyncio
 import os
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.exception_handlers import (
@@ -17,6 +18,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.db import engine, init_db
 from app.api.device_endpoints import router as http_router
+from app.api.device_websocket import monitor_devices
 from app.api.device_websocket import router as ws_router
 
 
@@ -25,13 +27,19 @@ async def lifespan(app: FastAPI):
     """Define fastapi app lifespan."""
     # Startup: Initialize database
     init_db()
+    # Background task: mark devices OFFLINE once their ping heartbeat goes stale.
+    # This is what actually catches an ungraceful client exit (crash, SIGKILL,
+    # dropped network) — a device's own shutdown routine can only ever cover a
+    # clean exit, never these cases.
+    monitor_task = asyncio.create_task(monitor_devices())
     try:
         # Hand over control to FastAPI
         yield
     finally:
         # Shutdown...
-        # (No shutdown work needed here right now)
-        pass
+        monitor_task.cancel()
+        with suppress(asyncio.CancelledError):
+            await monitor_task
 
 
 app = FastAPI(
