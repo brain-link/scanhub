@@ -136,22 +136,6 @@ services:
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
 
-  # Add the Gadgetron service
-  # gadgetron:
-  #   container_name: gadgetron
-  #   image: ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:latest
-  #   ports:
-  #     - 9002:9002
-  #   volumes:
-  #     - data_lake:/data
-  #   environment:
-  #     - GADGETRON_HOME=/usr/local/gadgetron
-  #     - GADGETRON_PORT=9002
-  #   restart: always
-  #   depends_on:
-  #     - init-data-lake
-  #     - scanhub-database
-
   # Scanhub Postgres Database: Contains protocols, tasks, devices
   scanhub-database:
     container_name: db-scanhub
@@ -259,21 +243,21 @@ services:
       - privatekey
 
   # FRONTEND/SCANHUB-UI
-  # scanhub-ui:
-  #   container_name: scanhub-ui
-  #   build:
-  #     context: ./scanhub-ui
-  #     dockerfile: ./Dockerfile
-  #     args:
-  #       NODE_ENV: "production" # or "development"
-  #   volumes:
-  #     - ./scanhub-ui/src:/app/src
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:3000/"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 10
-  #     start_period: 30s
+  scanhub-ui:
+    container_name: scanhub-ui
+    build:
+      context: ./scanhub-ui
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: "production" # or "development"
+    volumes:
+      - ./scanhub-ui/src:/app/src
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   # DAGSTER
   dagster-webserver:
