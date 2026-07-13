@@ -40,6 +40,7 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 const FAILURE_STATUSES = new Set(['ERROR', 'FAILED', 'CANCELLED'])
+const ALWAYS_INDETERMINATE_STATUSES = new Set(['STARTED', 'TRANSFERRING', 'RECONSTRUCTING'])
 
 function AcquisitionControl({ itemSelection, openConfirmModal }: {
   itemSelection: ItemSelection, openConfirmModal: (onConfirmed: () => void) => void
@@ -131,11 +132,15 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
           const isFailure = rawTaskStatus
             ? FAILURE_STATUSES.has(rawTaskStatus)
             : itemSelection.status === ItemStatus.Error
+          const currentStatus = rawTaskStatus ?? itemSelection.status
+          const isIndeterminate =
+            ALWAYS_INDETERMINATE_STATUSES.has(currentStatus)
+            || (currentStatus === ItemStatus.Inprogress && progressValue === 0)
           return (
             <>
               <LinearProgress
-                determinate={progressValue > 0}
-                value={progressValue}
+                determinate={!isIndeterminate}
+                value={isIndeterminate ? undefined : progressValue}
                 color={isFailure ? 'danger' : 'primary'}
                 sx={{ marginTop: 1 }}
               />
