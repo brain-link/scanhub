@@ -201,10 +201,16 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
       }
 
       const volumeId = makeVolumeId(imageIds);
-      const volumeImageIds = Array.from(
-        { length: numberOfFrames },
-        (_, i) => `${imageIds[0]}?frame=${i}`
-      );
+      // Multi-instance stacks are already one imageId per slice. Single
+      // multiframe files need per-frame imageIds — Cornerstone's wadouri
+      // loader uses 1-based frame numbers (frame 0 is invalid).
+      const volumeImageIds =
+        imageIds.length > 1
+          ? imageIds
+          : Array.from(
+              { length: numberOfFrames },
+              (_, i) => `${imageIds[0]}?frame=${i + 1}`
+            );
 
       if (volumeIdRef.current !== volumeId) {
         safeEvictVolume(volumeIdRef.current);

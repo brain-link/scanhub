@@ -20,7 +20,7 @@ export function SliceGridViewer({ imageIds, numberOfFrames, engineRef }: SliceGr
     if (!imageIds.length || !numberOfFrames) return [];
     if (imageIds.length > 1) return imageIds;
     if (numberOfFrames === 1) return [imageIds[0]];
-    return Array.from({ length: numberOfFrames }, (_, i) => `${imageIds[0]}?frame=${i}`);
+    return Array.from({ length: numberOfFrames }, (_, i) => `${imageIds[0]}?frame=${i + 1}`);
   }, [imageIds, numberOfFrames]);
 
   // Capture wheel events before Cornerstone's bubble-phase handlers can

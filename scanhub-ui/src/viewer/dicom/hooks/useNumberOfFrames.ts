@@ -34,11 +34,14 @@ export function useNumberOfFrames(imageIds: string[] | undefined, ready: boolean
         return;
       }
 
-      // 2) Prime metadata by loading the first frame (no-op if cached),
-      //    then try again
+      // 2) Prime metadata by loading the image as-is (no-op if cached), then
+      //    try again. Deliberately no `?frame=` suffix here: we don't yet
+      //    know whether this is multiframe, and a plain imageId always
+      //    resolves to the first frame for both single- and multi-frame
+      //    files, whereas guessing a frame number can be out of range for
+      //    single-frame files (pixel data has exactly one frame, at index 0).
       try {
-        const first = id.includes('?') ? id : `${id}?frame=0`;
-        await imageLoader.loadAndCacheImage(first);
+        await imageLoader.loadAndCacheImage(id);
       } catch {
         /* ignore — we'll still fall back to 1 */
       }
