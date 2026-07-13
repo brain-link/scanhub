@@ -8,7 +8,7 @@ import os
 import uuid
 
 from scanhub_libraries.models import DeviceStatus
-from sqlalchemy import JSON, create_engine, func
+from sqlalchemy import JSON, DateTime, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 from sqlalchemy.orm.decl_api import DeclarativeMeta
@@ -70,10 +70,10 @@ class Device(Base):  # type: ignore
     parameter: Mapped[dict] = mapped_column(type_=JSON, nullable=True)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now()  # pylint: disable=not-callable
+        DateTime(timezone=True), server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True  # pylint: disable=not-callable
+        DateTime(timezone=True), onupdate=func.now(), nullable=True  # pylint: disable=not-callable
     )
 
     def update(self, data: dict) -> None:

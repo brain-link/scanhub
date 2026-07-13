@@ -8,7 +8,7 @@ import os
 import uuid
 
 from scanhub_libraries.models import BasePatient, Gender, ItemStatus
-from sqlalchemy import create_engine, func
+from sqlalchemy import DateTime, create_engine, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
@@ -64,9 +64,9 @@ class Patient(Base):
     comment: Mapped[str] = mapped_column(nullable=True)
 
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now())  # pylint: disable=not-callable
+        DateTime(timezone=True), server_default=func.now())  # pylint: disable=not-callable
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
-        onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
+        DateTime(timezone=True), onupdate=func.now(), nullable=True)  # pylint: disable=not-callable
 
     def update(self, data: BasePatient) -> None:
         """Update a patient entry.

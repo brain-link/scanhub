@@ -15,7 +15,7 @@ from scanhub_libraries.models import (
     ResultType,
     TaskType,
 )
-from sqlalchemy import JSON, ForeignKey, String, create_engine, func
+from sqlalchemy import JSON, DateTime, ForeignKey, String, create_engine, func
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
@@ -69,9 +69,10 @@ class Protocol(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     creator: Mapped[str] = mapped_column(nullable=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now()  # pylint: disable=not-callable
+        DateTime(timezone=True), server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True),
         onupdate=func.now(),
         nullable=True,  # pylint: disable=not-callable
     )
@@ -99,9 +100,10 @@ class Task(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     creator: Mapped[str] = mapped_column(nullable=False)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now()  # pylint: disable=not-callable
+        DateTime(timezone=True), server_default=func.now()  # pylint: disable=not-callable
     )
     datetime_updated: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True),
         onupdate=func.now(),
         nullable=True,  # pylint: disable=not-callable
     )
@@ -152,7 +154,7 @@ class Result(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     datetime_created: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now(),  # pylint: disable=not-callable
+        DateTime(timezone=True), server_default=func.now(),  # pylint: disable=not-callable
     )
     task_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("task.id"), nullable=False)
 
