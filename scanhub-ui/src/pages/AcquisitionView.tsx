@@ -108,7 +108,7 @@ function AcquisitionView() {
             setItemSelection({ type: 'protocol', name: protocol.name, itemId: protocol.id, status: protocol.status, progress: 0 })
           protocol.tasks.forEach((task) => {
             if (task.id === itemSelection.itemId)
-              setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })
+              setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress, deviceId: task.device_id ? String(task.device_id) : undefined })
           })
         })
       }
@@ -289,7 +289,7 @@ function AcquisitionView() {
                         <TaskItem
                           item={task}
                           refetchParentData={refetchProtocols}
-                          onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress })}
+                          onClick={() => setItemSelection({ type: 'ACQUISITION', name: task.name, itemId: task.id, status: task.status, progress: task.progress, deviceId: task.device_id ? String(task.device_id) : undefined })}
                           selection={itemSelection}
                           icon={
                             task.status === ItemStatus.Finished ? <CheckCircleIcon fontSize='small' /> : (

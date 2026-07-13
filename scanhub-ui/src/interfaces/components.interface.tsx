@@ -32,7 +32,8 @@ export interface ItemSelection {
   name: string | undefined,
   itemId: string | undefined,
   status: ItemStatus,
-  progress?: number
+  progress?: number,
+  deviceId?: string
 }
 
 export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined, status: ItemStatus.New, progress: 0 }

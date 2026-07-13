@@ -13,8 +13,10 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import axios from 'axios'
 import React from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
+import { deviceApi } from '../api'
+import { DeviceStatus } from '../openapi/generated-client/device/api'
 import { ItemStatus } from '../openapi/generated-client/protocol'
 import { ItemSelection } from '../interfaces/components.interface'
 import LoginContext from '../LoginContext'
@@ -76,6 +78,14 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
     return () => es.close()
   }, [itemSelection.itemId, itemSelection.type, user?.access_token])
 
+  const { data: device } = useQuery({
+    queryKey: ['device', itemSelection.deviceId],
+    queryFn: async () => (await deviceApi.getDevice(itemSelection.deviceId!)).data,
+    enabled: !!itemSelection.deviceId,
+    refetchInterval: 5000,
+  })
+  const isDeviceOffline = device?.status === DeviceStatus.Offline
+
   const processTaskMutation = useMutation({
     mutationKey: ['triggerAcquisition'],
     mutationFn: async () => {
@@ -100,11 +110,13 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
         size='sm'
         variant='plain'
         color={'neutral'}
-        disabled={processTaskMutation.isPending || itemSelection.type !== 'ACQUISITION'}
+        disabled={processTaskMutation.isPending || itemSelection.type !== 'ACQUISITION' || isDeviceOffline}
         onClick={() => {
           openConfirmModal(() => {
             if (itemSelection.itemId == undefined) {
               showNotification({message: 'No item selected!', type: 'warning'})
+            } else if (isDeviceOffline) {
+              showNotification({message: 'Assigned device is offline.', type: 'warning'})
             } else if (itemSelection.type == 'ACQUISITION') {
               if (!processTaskMutation.isPending){
                 processTaskMutation.mutate()
