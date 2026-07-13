@@ -107,19 +107,31 @@ export default function DicomViewer3D({ item, selectedResultId, onDownloadDicom,
 
   // Enable / reconfigure viewports for the current layout.
   React.useEffect(() => {
-    if (!ready || !containerRef.current || !engineRef.current) return;
+    if (!ready || !engineRef.current) return;
 
     setViewportReady(false);
 
     let cancelled = false;
     const engine = engineRef.current;
-    const layoutViewportIds = VIEW_LAYOUTS[layout].map(v => v.id);
+    // AllSlices has no fixed viewports of its own — SliceGridViewer manages
+    // its own tile viewports directly. Still fall through to disable any
+    // stale viewports left over from a previous non-AllSlices layout,
+    // otherwise they linger (DOM-detached) in the rendering engine and the
+    // shared tool group, and the next setToolActive/setToolPassive call
+    // throws trying to re-render them — silently breaking tool switching.
+    const layoutViewportIds =
+      layout === ViewLayout.AllSlices ? [] : VIEW_LAYOUTS[layout].map(v => v.id);
 
     // Disable viewport elements that are no longer in this layout.
     for (const id of engineViewportIdsRef.current) {
       if (!layoutViewportIds.includes(id)) {
         try { engine.disableElement(id); } catch { /* already gone */ }
       }
+    }
+    engineViewportIdsRef.current = layoutViewportIds;
+
+    if (layout === ViewLayout.AllSlices || !containerRef.current) {
+      return () => { cancelled = true; };
     }
 
     (async () => {
