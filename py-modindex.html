@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8d6ca438" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'py-modindex';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -50,22 +51,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
 
 
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -91,7 +98,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -117,9 +124,11 @@
       
     
     
-    <img src="_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
-    <img src="_static/logo_brainlink.svg" class="logo__image only-dark pst-js-only" alt="ScanHub Documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
+  
+    <p class="title logo__title">ScanHub Documentation</p>
   
 </a></div>
     
@@ -181,11 +190,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -198,31 +214,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -309,11 +301,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -326,31 +325,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -390,213 +365,243 @@
    <h1>Python Module Index</h1>
 
    <div class="modindex-jumpbox">
-   <a href="#cap-d"><strong>d</strong></a> | 
-   <a href="#cap-e"><strong>e</strong></a> | 
-   <a href="#cap-w"><strong>w</strong></a>
+   <a href="#cap-a"><strong>a</strong></a> | 
+   <a href="#cap-o"><strong>o</strong></a>
    </div>
 
    <table class="indextable modindextable">
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-d"><td></td><td>
-       <strong>d</strong></td><td></td></tr>
+     <tr class="cap" id="cap-a"><td></td><td>
+       <strong>a</strong></td><td></td></tr>
      <tr>
        <td><img src="_static/minus.png" class="toggler"
               id="toggle-1" style="display: none" alt="-" /></td>
        <td>
-       <a href="autoapi/device-manager/index.html#module-device-manager"><code class="xref">device-manager</code></a></td><td>
+       <a href="autoapi/app/index.html#module-app"><code class="xref">app</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/index.html#module-device-manager.app"><code class="xref">device-manager.app</code></a></td><td>
+       <a href="autoapi/app/api/index.html#module-app.api"><code class="xref">app.api</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/api/index.html#module-device-manager.app.api"><code class="xref">device-manager.app.api</code></a></td><td>
+       <a href="autoapi/app/api/dal/index.html#module-app.api.dal"><code class="xref">app.api.dal</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/api/dal/index.html#module-device-manager.app.api.dal"><code class="xref">device-manager.app.api.dal</code></a></td><td>
+       <a href="autoapi/app/api/db/index.html#module-app.api.db"><code class="xref">app.api.db</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/api/db/index.html#module-device-manager.app.api.db"><code class="xref">device-manager.app.api.db</code></a></td><td>
+       <a href="autoapi/app/api/device_endpoints/index.html#module-app.api.device_endpoints"><code class="xref">app.api.device_endpoints</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/api/device_endpoints/index.html#module-device-manager.app.api.device_endpoints"><code class="xref">device-manager.app.api.device_endpoints</code></a></td><td>
+       <a href="autoapi/app/api/device_websocket/index.html#module-app.api.device_websocket"><code class="xref">app.api.device_websocket</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/api/device_websocket/index.html#module-device-manager.app.api.device_websocket"><code class="xref">device-manager.app.api.device_websocket</code></a></td><td>
+       <a href="autoapi/app/api/exam_requests/index.html#module-app.api.exam_requests"><code class="xref">app.api.exam_requests</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/api/exam_requests/index.html#module-device-manager.app.api.exam_requests"><code class="xref">device-manager.app.api.exam_requests</code></a></td><td>
+       <a href="autoapi/app/api/mri_sequence_api/index.html#module-app.api.mri_sequence_api"><code class="xref">app.api.mri_sequence_api</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/device-manager/app/main/index.html#module-device-manager.app.main"><code class="xref">device-manager.app.main</code></a></td><td>
+       <a href="autoapi/app/api/protocol_api/index.html#module-app.api.protocol_api"><code class="xref">app.api.protocol_api</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/api/result_api/index.html#module-app.api.result_api"><code class="xref">app.api.result_api</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/api/routes/index.html#module-app.api.routes"><code class="xref">app.api.routes</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/api/task_api/index.html#module-app.api.task_api"><code class="xref">app.api.task_api</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/dal/index.html#module-app.dal"><code class="xref">app.dal</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/dal/protocol_dal/index.html#module-app.dal.protocol_dal"><code class="xref">app.dal.protocol_dal</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/dal/result_dal/index.html#module-app.dal.result_dal"><code class="xref">app.dal.result_dal</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/dal/task_dal/index.html#module-app.dal.task_dal"><code class="xref">app.dal.task_dal</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/db/index.html#module-app.db"><code class="xref">app.db</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/db/mongodb/index.html#module-app.db.mongodb"><code class="xref">app.db.mongodb</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/db/postgres/index.html#module-app.db.postgres"><code class="xref">app.db.postgres</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/main/index.html#module-app.main"><code class="xref">app.main</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/tools/index.html#module-app.tools"><code class="xref">app.tools</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/tools/dicom_provider/index.html#module-app.tools.dicom_provider"><code class="xref">app.tools.dicom_provider</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/tools/helper/index.html#module-app.tools.helper"><code class="xref">app.tools.helper</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/tools/mrd_provider/index.html#module-app.tools.mrd_provider"><code class="xref">app.tools.mrd_provider</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/tools/mri_sequence_plot/index.html#module-app.tools.mri_sequence_plot"><code class="xref">app.tools.mri_sequence_plot</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="autoapi/app/userlogin/index.html#module-app.userlogin"><code class="xref">app.userlogin</code></a></td><td>
        <em></em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-e"><td></td><td>
-       <strong>e</strong></td><td></td></tr>
+     <tr class="cap" id="cap-o"><td></td><td>
+       <strong>o</strong></td><td></td></tr>
      <tr>
        <td><img src="_static/minus.png" class="toggler"
               id="toggle-2" style="display: none" alt="-" /></td>
        <td>
-       <a href="autoapi/exam-manager/index.html#module-exam-manager"><code class="xref">exam-manager</code></a></td><td>
+       <a href="autoapi/orchestrator/index.html#module-orchestrator"><code class="xref">orchestrator</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/index.html#module-exam-manager.app"><code class="xref">exam-manager.app</code></a></td><td>
+       <a href="autoapi/orchestrator/assets/index.html#module-orchestrator.assets"><code class="xref">orchestrator.assets</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/api/index.html#module-exam-manager.app.api"><code class="xref">exam-manager.app.api</code></a></td><td>
+       <a href="autoapi/orchestrator/assets/acquisition_data/index.html#module-orchestrator.assets.acquisition_data"><code class="xref">orchestrator.assets.acquisition_data</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/api/exam_api/index.html#module-exam-manager.app.api.exam_api"><code class="xref">exam-manager.app.api.exam_api</code></a></td><td>
+       <a href="autoapi/orchestrator/assets/dicom_input/index.html#module-orchestrator.assets.dicom_input"><code class="xref">orchestrator.assets.dicom_input</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#module-exam-manager.app.api.mri_sequence_api"><code class="xref">exam-manager.app.api.mri_sequence_api</code></a></td><td>
+       <a href="autoapi/orchestrator/assets/image_processing/index.html#module-orchestrator.assets.image_processing"><code class="xref">orchestrator.assets.image_processing</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/api/result_api/index.html#module-exam-manager.app.api.result_api"><code class="xref">exam-manager.app.api.result_api</code></a></td><td>
+       <a href="autoapi/orchestrator/assets/mrpro_direct_reconstruction/index.html#module-orchestrator.assets.mrpro_direct_reconstruction"><code class="xref">orchestrator.assets.mrpro_direct_reconstruction</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/api/task_api/index.html#module-exam-manager.app.api.task_api"><code class="xref">exam-manager.app.api.task_api</code></a></td><td>
+       <a href="autoapi/orchestrator/io/index.html#module-orchestrator.io"><code class="xref">orchestrator.io</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/api/workflow_api/index.html#module-exam-manager.app.api.workflow_api"><code class="xref">exam-manager.app.api.workflow_api</code></a></td><td>
+       <a href="autoapi/orchestrator/io/base/index.html#module-orchestrator.io.base"><code class="xref">orchestrator.io.base</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/dal/index.html#module-exam-manager.app.dal"><code class="xref">exam-manager.app.dal</code></a></td><td>
+       <a href="autoapi/orchestrator/io/dicom_io_manager/index.html#module-orchestrator.io.dicom_io_manager"><code class="xref">orchestrator.io.dicom_io_manager</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/dal/exam_dal/index.html#module-exam-manager.app.dal.exam_dal"><code class="xref">exam-manager.app.dal.exam_dal</code></a></td><td>
+       <a href="autoapi/orchestrator/io/idata_io_manager/index.html#module-orchestrator.io.idata_io_manager"><code class="xref">orchestrator.io.idata_io_manager</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/dal/result_dal/index.html#module-exam-manager.app.dal.result_dal"><code class="xref">exam-manager.app.dal.result_dal</code></a></td><td>
+       <a href="autoapi/orchestrator/jobs/index.html#module-orchestrator.jobs"><code class="xref">orchestrator.jobs</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/dal/task_dal/index.html#module-exam-manager.app.dal.task_dal"><code class="xref">exam-manager.app.dal.task_dal</code></a></td><td>
+       <a href="autoapi/orchestrator/jobs/acquisition_data/index.html#module-orchestrator.jobs.acquisition_data"><code class="xref">orchestrator.jobs.acquisition_data</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#module-exam-manager.app.dal.workflow_dal"><code class="xref">exam-manager.app.dal.workflow_dal</code></a></td><td>
+       <a href="autoapi/orchestrator/notifier/index.html#module-orchestrator.notifier"><code class="xref">orchestrator.notifier</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/db/index.html#module-exam-manager.app.db"><code class="xref">exam-manager.app.db</code></a></td><td>
+       <a href="autoapi/orchestrator/repository/index.html#module-orchestrator.repository"><code class="xref">orchestrator.repository</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/db/mongodb/index.html#module-exam-manager.app.db.mongodb"><code class="xref">exam-manager.app.db.mongodb</code></a></td><td>
+       <a href="autoapi/orchestrator/resources/index.html#module-orchestrator.resources"><code class="xref">orchestrator.resources</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/db/postgres/index.html#module-exam-manager.app.db.postgres"><code class="xref">exam-manager.app.db.postgres</code></a></td><td>
+       <a href="autoapi/orchestrator/sensors/index.html#module-orchestrator.sensors"><code class="xref">orchestrator.sensors</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/main/index.html#module-exam-manager.app.main"><code class="xref">exam-manager.app.main</code></a></td><td>
+       <a href="autoapi/orchestrator/utils/index.html#module-orchestrator.utils"><code class="xref">orchestrator.utils</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/tools/index.html#module-exam-manager.app.tools"><code class="xref">exam-manager.app.tools</code></a></td><td>
+       <a href="autoapi/orchestrator/utils/dag_config/index.html#module-orchestrator.utils.dag_config"><code class="xref">orchestrator.utils.dag_config</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-2">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#module-exam-manager.app.tools.dicom_provider"><code class="xref">exam-manager.app.tools.dicom_provider</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-2">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/tools/helper/index.html#module-exam-manager.app.tools.helper"><code class="xref">exam-manager.app.tools.helper</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-2">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#module-exam-manager.app.tools.mrd_provider"><code class="xref">exam-manager.app.tools.mrd_provider</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-2">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#module-exam-manager.app.tools.mri_sequence_plot"><code class="xref">exam-manager.app.tools.mri_sequence_plot</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-w"><td></td><td>
-       <strong>w</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-3" style="display: none" alt="-" /></td>
-       <td>
-       <a href="autoapi/workflow-manager/index.html#module-workflow-manager"><code class="xref">workflow-manager</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-3">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/workflow-manager/app/index.html#module-workflow-manager.app"><code class="xref">workflow-manager.app</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-3">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api"><code class="xref">workflow-manager.app.api</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-3">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/workflow-manager/app/api/dagster_queries/index.html#module-workflow-manager.app.api.dagster_queries"><code class="xref">workflow-manager.app.api.dagster_queries</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-3">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#module-workflow-manager.app.api.manager_endpoints"><code class="xref">workflow-manager.app.api.manager_endpoints</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-3">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#module-workflow-manager.app.api.scanhub_requests"><code class="xref">workflow-manager.app.api.scanhub_requests</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-3">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="autoapi/workflow-manager/app/main/index.html#module-workflow-manager.app.main"><code class="xref">workflow-manager.app.main</code></a></td><td>
+       <a href="autoapi/orchestrator/utils/snr/index.html#module-orchestrator.utils.snr"><code class="xref">orchestrator.utils.snr</code></a></td><td>
        <em></em></td></tr>
    </table>
 
@@ -628,8 +633,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -640,7 +645,7 @@
 
   <p class="copyright">
     
-      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
       <br/>
     
   </p>

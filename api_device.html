@@ -27,45 +27,52 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8d6ca438" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api_device';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Exam Manager" href="api_exam.html" />
+    <link rel="next" title="Protocol Manager" href="api_exam.html" />
     <link rel="prev" title="UI Patient Manager" href="api_ui_patient_manager.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -91,7 +98,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -117,9 +124,11 @@
       
     
     
-    <img src="_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
-    <img src="_static/logo_brainlink.svg" class="logo__image only-dark pst-js-only" alt="ScanHub Documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
+  
+    <p class="title logo__title">ScanHub Documentation</p>
   
 </a></div>
     
@@ -181,11 +190,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -198,31 +214,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -311,11 +303,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -328,31 +327,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -362,16 +337,14 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="api_ui_patient_manager.html">UI Patient Manager</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Device Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_exam.html">Exam Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_workflow.html">Workflow Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_mri_acquisition.html">MRI Acquisition Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_mri_sequences.html">MRI Sequences Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_exam.html">Protocol Manager</a></li>
 </ul>
 </div>
 </nav></div>
@@ -446,75 +419,29 @@ This API allows you to perform essential operations such as reading the device h
 <span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/health/readiness</span></span><a class="headerlink" href="#get--api-v1-device-health-readiness" title="Link to this definition">#</a></dt>
 <dd><p><strong>Readiness</strong></p>
 <p>Readiness health endpoint.</p>
-<p>Inspects sqlalchemy engine and check if workflow table exists.</p>
-<section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Status docstring</p>
-</div></blockquote>
-</section>
-<section id="raises">
-<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>500: Workflow table not found</p>
-</dd>
-</dl>
+<p>Inspects SQLAlchemy engine and checks if the device table exists.</p>
 <dl class="field-list simple">
-<dt class="field-odd">status 200<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Successful Response</p>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/200">200 OK</a></span> – Successful Response</p></li>
+</ul>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="http get">
 <dt class="sig sig-object http" id="get--api-v1-device-">
 <span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/</span></span><a class="headerlink" href="#get--api-v1-device-" title="Link to this definition">#</a></dt>
 <dd><p><strong>Get Devices</strong></p>
-<p>Get all devices endpoint.</p>
-<section id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>Retrieve the list of registered devices.</p>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>List of device pydantic output models</p>
+<div><p>List[Device]: The list of registered devices.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">status 200<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Successful Response</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="http post">
-<dt class="sig sig-object http" id="post--api-v1-device-">
-<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/</span></span><a class="headerlink" href="#post--api-v1-device-" title="Link to this definition">#</a></dt>
-<dd><p><strong>Create Device</strong></p>
-<p>Create new device endpoint.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>payload</dt><dd><p>Device pydantic base model</p>
-</dd>
-</dl>
-</section>
-<section id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
-<blockquote>
-<div><p>Device pydantic output model</p>
-</div></blockquote>
-</section>
-<section id="id3">
-<h3>Raises<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Creation unsuccessful</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">status 201<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Successful Response</p>
-</dd>
-<dt class="field-even">status 422<span class="colon">:</span></dt>
-<dd class="field-even"><p>Validation Error</p>
 </dd>
 </dl>
 </section>
@@ -524,67 +451,20 @@ This API allows you to perform essential operations such as reading the device h
 <dt class="sig sig-object http" id="get--api-v1-device-device_id">
 <span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#get--api-v1-device-device_id" title="Link to this definition">#</a></dt>
 <dd><p><strong>Get Device</strong></p>
-<p>Get device endpoint.</p>
-<section id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>device_id</dt><dd><p>Id of requested device</p>
-</dd>
-</dl>
-</section>
-<section id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>Retrieve a specific device.</p>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Device pydantic output model</p>
+<div><p>device_id (str): The ID of the device.</p>
 </div></blockquote>
 </section>
-<section id="id6">
-<h3>Raises<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Not found</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">param integer device_id<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">status 200<span class="colon">:</span></dt>
-<dd class="field-even"><p>Successful Response</p>
-</dd>
-<dt class="field-odd">status 422<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Validation Error</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="http put">
-<dt class="sig sig-object http" id="put--api-v1-device-device_id">
-<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#put--api-v1-device-device_id" title="Link to this definition">#</a></dt>
-<dd><p><strong>Update Device</strong></p>
-<p>Update device endpoint.</p>
-<section id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>device_id</dt><dd><p>Id of device to be updated</p>
-</dd>
-<dt>payload</dt><dd><p>New device pydantic base model, contains new data</p>
-</dd>
-</dl>
-</section>
-<section id="id8">
-<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h3>Returns<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Updated device pydantic output model</p>
+<div><p>dict: The response containing the information about the device</p>
 </div></blockquote>
-</section>
-<section id="id9">
-<h3>Raises<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Not found</p>
-</dd>
-</dl>
 <dl class="field-list simple">
-<dt class="field-odd">param integer device_id<span class="colon">:</span></dt>
+<dt class="field-odd">param string device_id<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 <dt class="field-even">status 200<span class="colon">:</span></dt>
 <dd class="field-even"><p>Successful Response</p>
@@ -600,22 +480,20 @@ This API allows you to perform essential operations such as reading the device h
 <dt class="sig sig-object http" id="delete--api-v1-device-device_id">
 <span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/{device_id}</span></span><a class="headerlink" href="#delete--api-v1-device-device_id" title="Link to this definition">#</a></dt>
 <dd><p><strong>Delete Device</strong></p>
-<p>Delete device endpoint.</p>
-<section id="id10">
-<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>device_id</dt><dd><p>Id of device to be deleted</p>
-</dd>
-</dl>
+<p>Delete a device.</p>
+<section id="id2">
+<h3>Args<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>device_id (str): The ID of the device.</p>
+</div></blockquote>
 </section>
-<section id="id11">
-<h3>Raises<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>HTTPException</dt><dd><p>404: Not found</p>
-</dd>
-</dl>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>dict: The response indicating the success or failure of the deletion.</p>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">param integer device_id<span class="colon">:</span></dt>
+<dt class="field-odd">param string device_id<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 <dt class="field-even">status 204<span class="colon">:</span></dt>
 <dd class="field-even"><p>Successful Response</p>
@@ -625,6 +503,101 @@ This API allows you to perform essential operations such as reading the device h
 </dd>
 </dl>
 </section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-device-createdevice">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/createdevice</span></span><a class="headerlink" href="#post--api-v1-device-createdevice" title="Link to this definition">#</a></dt>
+<dd><p><strong>Create Device</strong></p>
+<p>Create device database entry.</p>
+<p>Only devices which are created by a user via this endpoint and have the device_id and device_token
+that result from this call configured correctly can later connect and register.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>request:</dt><dd><p>DeviceCreationRequest to create device in Scanhub.
+Further details of the device are later provided by the device itself.</p>
+</dd>
+</dl>
+</section>
+<section id="return">
+<h3>Return<a class="headerlink" href="#return" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>device_token:</dt><dd><p>the token of the device which the user should copy manually to the configuration file of the device.</p>
+</dd>
+<dt>device_id:</dt><dd><p>the id of the device, should be copied to the devices config file together with the device_token.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">status 201<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Successful Response</p>
+</dd>
+<dt class="field-even">status 422<span class="colon">:</span></dt>
+<dd class="field-even"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--api-v1-device-parameter-device_id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/parameter/{device_id}</span></span><a class="headerlink" href="#put--api-v1-device-parameter-device_id" title="Link to this definition">#</a></dt>
+<dd><p><strong>Update acquisition/device parameter</strong></p>
+<p>Update acquisition/device parameter.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>device_id</dt><dd><p>Id of the device to be updated</p>
+</dd>
+<dt>payload</dt><dd><p>Parameter dictionary</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Parameter dictionary</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>HTTPException</dt><dd><p>404: Not found</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param {‘uuid’, ‘string’} device_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">status 200<span class="colon">:</span></dt>
+<dd class="field-even"><p>Successful Response</p>
+</dd>
+<dt class="field-odd">status 422<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Validation Error</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--api-v1-device-trigger_acquisition-task_id">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/api/v1/device/trigger_acquisition/{task_id}</span></span><a class="headerlink" href="#post--api-v1-device-trigger_acquisition-task_id" title="Link to this definition">#</a></dt>
+<dd><p><strong>Trigger Acquisition</strong></p>
+<p>Trigger an MRI acquisition for the given task.</p>
+<p>Fetches the task from the exam manager, looks up the assigned sequence and device,
+sends the scan-start command via the device’s open WebSocket, and marks the task as STARTED.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> (<em>string</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/200">200 OK</a></span> – Successful Response</p></li>
+<li><p><span><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/422">422 Unprocessable Entity</a></span> – Validation Error</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -676,7 +649,7 @@ This API allows you to perform essential operations such as reading the device h
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Exam Manager</p>
+        <p class="prev-next-title">Protocol Manager</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -697,11 +670,11 @@ This API allows you to perform essential operations such as reading the device h
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#web-api">Web API</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-license">Open Source License</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#commercial-license">Commercial License</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choice-of-license">Choice of License</a></li>
@@ -712,13 +685,13 @@ This API allows you to perform essential operations such as reading the device h
   </nav></div>
 
   <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/api_device.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/api_device.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -733,8 +706,8 @@ This API allows you to perform essential operations such as reading the device h
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -745,7 +718,7 @@ This API allows you to perform essential operations such as reading the device h
 
   <p class="copyright">
     
-      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
       <br/>
     
   </p>

@@ -1,0 +1,67 @@
+orchestrator.io.base
+====================
+
+.. py:module:: orchestrator.io.base
+
+.. autoapi-nested-parse::
+
+   Base IO Manager for ScanHub resources.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   orchestrator.io.base.ScanHubIOManager
+
+
+Module Contents
+---------------
+
+.. py:class:: ScanHubIOManager
+
+   Bases: :py:obj:`dagster.ConfigurableIOManager`
+
+
+   Base ConfigurableIOManager for ScanHub — resolves the task directory from dag_config.
+
+
+   .. py:attribute:: dag_config
+      :type:  orchestrator.utils.dag_config.DAGConfiguration
+
+
+   .. py:method:: _get_path() -> upath.UPath
+
+
+   .. py:method:: handle_output(context: dagster.OutputContext, obj: Any) -> None
+
+
+   .. py:method:: load_input(context: dagster.InputContext) -> Any
+
+
+   .. py:method:: dump_to_path(context: dagster.OutputContext, obj: Any, path: upath.UPath) -> None
+      :abstractmethod:
+
+
+      Write obj to path.
+
+
+
+   .. py:method:: load_from_path(context: dagster.InputContext, path: upath.UPath) -> Any
+      :abstractmethod:
+
+
+      Load object from path.
+
+
+
+   .. py:method:: load_from_files(files: List[str]) -> Any
+      :abstractmethod:
+
+
+      Load object from an explicit file list.
+
+
+

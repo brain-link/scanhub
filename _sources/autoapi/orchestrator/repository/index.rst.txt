@@ -1,0 +1,52 @@
+orchestrator.repository
+=======================
+
+.. py:module:: orchestrator.repository
+
+.. autoapi-nested-parse::
+
+   Define dagster repository.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   orchestrator.repository.DATA_LAKE_DIR
+   orchestrator.repository.PROTOCOL_MANAGER_URI
+   orchestrator.repository.DEVICE_MANAGER_URI
+   orchestrator.repository.assets
+   orchestrator.repository.sensors
+   orchestrator.repository._dag_config
+   orchestrator.repository.ressources
+   orchestrator.repository.jobs
+   orchestrator.repository.defs
+
+
+Module Contents
+---------------
+
+.. py:data:: DATA_LAKE_DIR
+
+.. py:data:: PROTOCOL_MANAGER_URI
+   :value: 'http://protocol-manager:8000/api/v1/protocol'
+
+
+.. py:data:: DEVICE_MANAGER_URI
+   :value: 'http://device-manager:8000/api/v1/device'
+
+
+.. py:data:: assets
+
+.. py:data:: sensors
+
+.. py:data:: _dag_config
+
+.. py:data:: ressources
+
+.. py:data:: jobs
+
+.. py:data:: defs
+

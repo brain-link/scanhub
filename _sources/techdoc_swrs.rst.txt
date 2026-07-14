@@ -284,7 +284,7 @@ General Requirements
     :widths: 10, 60, 80, 30, 10
 
     "A4IM_FR_010", "The software shall enable the execution of MRI acquisition jobs, including the upload and execution of pulseq sequences with workflows.", "Conduct an MRI acquisition job using a pulseq sequence and verify workflow integration and execution.", "PRS_0010", "1.0"
-    "A4IM_FR_020", "The software shall offer planning tools for MRI examinations, integrating exam trees, workflows, and processing modality worklists.", "Plan an MRI examination using the software tools and verify the integration with exam trees and workflows.", "PRS_0020", "1.0"
+    "A4IM_FR_020", "The software shall offer planning tools for MRI examinations, integrating protocol trees, workflows, and processing modality worklists.", "Plan an MRI examination using the software tools and verify the integration with protocol trees and workflows.", "PRS_0020", "1.0"
     "A4IM_FR_030", "The software shall provide a DICOM viewer to view, compare, and annotate DICOM images of selected records.", "Load a DICOM image in the viewer, perform comparisons and annotations, and verify the functionality.", "PRS_0030", "1.0"
     "A4IM_FR_040", "The software must support user management, allowing assignment of different user roles and supporting a multi-tenancy cloud environment.", "Simulate different user roles to verify role-based access and check for multi-tenancy functionality.", "PRS_0040", "1.0"
     "A4IM_FR_050", "The software shall monitor and display the MRI device's status, including current execution progress, malfunctions, and device connection status.", "During an MRI scan, verify the software displays the current execution progress and detects any malfunctions.", "PRS_0050", "1.0"
@@ -457,7 +457,7 @@ Response: HTTPS_RESPONSE
 
         -> Request acquisition command/parameters (sequence manager)
 
-        -> create record (exam manager) 
+        -> create record (protocol manager) 
 
         -> get device (device manager)
 

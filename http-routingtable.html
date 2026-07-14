@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8d6ca438" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'http-routingtable';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -50,6 +51,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
 
     <script>
       DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
@@ -57,19 +64,19 @@
 
 
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -95,7 +102,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -121,9 +128,11 @@
       
     
     
-    <img src="_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
-    <img src="_static/logo_brainlink.svg" class="logo__image only-dark pst-js-only" alt="ScanHub Documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
+  
+    <p class="title logo__title">ScanHub Documentation</p>
   
 </a></div>
     
@@ -185,11 +194,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -202,31 +218,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -313,11 +305,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -330,31 +329,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -394,27 +369,10 @@
    <h1>HTTP Routing Table</h1>
 
    <div class="modindex-jumpbox">
-   <a href="#cap-/"><strong>/</strong></a> | 
-   <a href="#cap-/api"><strong>/api</strong></a> | 
-   <a href="#cap-/health"><strong>/health</strong></a> | 
-   <a href="#cap-/readiness"><strong>/readiness</strong></a> | 
-   <a href="#cap-/{patient_id}"><strong>/{patient_id}</strong></a>
+   <a href="#cap-/api"><strong>/api</strong></a>
    </div>
 
    <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-/"><td></td><td>
-       <strong>/</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_ui_patient_manager.html#get--"><code class="xref">GET /</code></a></td><td>
-       <em>Get Patient List</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_ui_patient_manager.html#post--"><code class="xref">POST /</code></a></td><td>
-       <em>Create Patient</em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-/api"><td></td><td>
        <strong>/api</strong></td><td></td></tr>
@@ -436,168 +394,198 @@
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#get--api-v1-exam-all-patient_id"><code class="xref">GET /api/v1/exam/all/{patient_id}</code></a></td><td>
-       <em>Exam Get All</em></td></tr>
+       <a href="api_ui_patient_manager.html#get--api-v1-patient-"><code class="xref">GET /api/v1/patient/</code></a></td><td>
+       <em>Get Patient List</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#get--api-v1-exam-health-readiness"><code class="xref">GET /api/v1/exam/health/readiness</code></a></td><td>
+       <a href="api_ui_patient_manager.html#get--api-v1-patient-health-readiness"><code class="xref">GET /api/v1/patient/health/readiness</code></a></td><td>
        <em>Readiness</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#get--api-v1-exam-job-all-procedure_id"><code class="xref">GET /api/v1/exam/job/all/{procedure_id}</code></a></td><td>
-       <em>Job Get All</em></td></tr>
+       <a href="api_ui_patient_manager.html#get--api-v1-patient-patient_id"><code class="xref">GET /api/v1/patient/{patient_id}</code></a></td><td>
+       <em>Get Patient</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#get--api-v1-exam-job-job_id"><code class="xref">GET /api/v1/exam/job/{job_id}</code></a></td><td>
-       <em>Job Get</em></td></tr>
+       <a href="api_exam.html#get--api-v1-protocol-all-patient_id"><code class="xref">GET /api/v1/protocol/all/{patient_id}</code></a></td><td>
+       <em>Get All Patient Protocols</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#get--api-v1-exam-procedure-all-exam_id"><code class="xref">GET /api/v1/exam/procedure/all/{exam_id}</code></a></td><td>
-       <em>Procedure Get All</em></td></tr>
+       <a href="api_exam.html#get--api-v1-protocol-dcm-protocol_id-task_id-result_id-filename"><code class="xref">GET /api/v1/protocol/dcm/{protocol_id}/{task_id}/{result_id}/{filename}</code></a></td><td>
+       <em>Get DICOM result</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#get--api-v1-exam-procedure-procedure_id"><code class="xref">GET /api/v1/exam/procedure/{procedure_id}</code></a></td><td>
-       <em>Procedure Get</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_exam.html#get--api-v1-exam-record-all-job_id"><code class="xref">GET /api/v1/exam/record/all/{job_id}</code></a></td><td>
-       <em>Record Get All</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_exam.html#get--api-v1-exam-record-record_id"><code class="xref">GET /api/v1/exam/record/{record_id}</code></a></td><td>
-       <em>Record Get</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_exam.html#get--api-v1-exam-exam_id"><code class="xref">GET /api/v1/exam/{exam_id}</code></a></td><td>
-       <em>Exam Get</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#get--api-v1-mri-sequences-"><code class="xref">GET /api/v1/mri/sequences/</code></a></td><td>
-       <em>Get Mri Sequences Endpoint</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#get--api-v1-mri-sequences-mri-sequence-file-mri_sequence_id"><code class="xref">GET /api/v1/mri/sequences/mri-sequence-file/{mri_sequence_id}</code></a></td><td>
-       <em>Get Mri Sequence File By Id Endpoint</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#get--api-v1-mri-sequences-mri-sequence-plot-seq_id"><code class="xref">GET /api/v1/mri/sequences/mri-sequence-plot/{seq_id}</code></a></td><td>
-       <em>Plot Mri Sequence</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#get--api-v1-mri-sequences-mri_sequence_id"><code class="xref">GET /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
-       <em>Get Mri Sequence By Id Endpoint</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_workflow.html#get--api-v1-workflow-"><code class="xref">GET /api/v1/workflow/</code></a></td><td>
-       <em>Get Workflow List</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_workflow.html#get--api-v1-workflow-health-readiness"><code class="xref">GET /api/v1/workflow/health/readiness</code></a></td><td>
+       <a href="api_exam.html#get--api-v1-protocol-health-readiness"><code class="xref">GET /api/v1/protocol/health/readiness</code></a></td><td>
        <em>Readiness</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_workflow.html#get--api-v1-workflow-workflow_id"><code class="xref">GET /api/v1/workflow/{workflow_id}</code></a></td><td>
-       <em>Get Workflow</em></td></tr>
+       <a href="api_exam.html#get--api-v1-protocol-mrd-protocol_id-task_id-result_id-data"><code class="xref">GET /api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/data</code></a></td><td>
+       <em>Get MRD (binary, interleaved float32 complex)</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_device.html#post--api-v1-device-"><code class="xref">POST /api/v1/device/</code></a></td><td>
+       <a href="api_exam.html#get--api-v1-protocol-mrd-protocol_id-task_id-result_id-download"><code class="xref">GET /api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/download</code></a></td><td>
+       <em>Download MRD file</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-mrd-protocol_id-task_id-result_id-meta"><code class="xref">GET /api/v1/protocol/mrd/{protocol_id}/{task_id}/{result_id}/meta</code></a></td><td>
+       <em>Get ISMRMRD metadata (indexed acquisitions)</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-result-all-task_id"><code class="xref">GET /api/v1/protocol/result/all/{task_id}</code></a></td><td>
+       <em>Get All Task Results</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-result-result_id"><code class="xref">GET /api/v1/protocol/result/{result_id}</code></a></td><td>
+       <em>Get Result</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-sequence-sequence_id"><code class="xref">GET /api/v1/protocol/sequence/{sequence_id}</code></a></td><td>
+       <em>Get Mri Sequence By Id</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-sequence-sequence_id-file"><code class="xref">GET /api/v1/protocol/sequence/{sequence_id}/file</code></a></td><td>
+       <em>Get Mri Sequence File By Id</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-sequence-sequence_id-header"><code class="xref">GET /api/v1/protocol/sequence/{sequence_id}/header</code></a></td><td>
+       <em>Get Mri Sequence Header File By Id</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-sequences-all"><code class="xref">GET /api/v1/protocol/sequences/all</code></a></td><td>
+       <em>Get All Mri Sequences</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-task-all-protocol_id"><code class="xref">GET /api/v1/protocol/task/all/{protocol_id}</code></a></td><td>
+       <em>Get All Protocol Tasks</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-task-templates-all"><code class="xref">GET /api/v1/protocol/task/templates/all</code></a></td><td>
+       <em>Get All Task Templates</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-task-task_id"><code class="xref">GET /api/v1/protocol/task/{task_id}</code></a></td><td>
+       <em>Get Task</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-templates-all"><code class="xref">GET /api/v1/protocol/templates/all</code></a></td><td>
+       <em>Get All Protocol Templates</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#get--api-v1-protocol-exam_id"><code class="xref">GET /api/v1/protocol/{exam_id}</code></a></td><td>
+       <em>Get Protocol</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_device.html#post--api-v1-device-createdevice"><code class="xref">POST /api/v1/device/createdevice</code></a></td><td>
        <em>Create Device</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#post--api-v1-exam-"><code class="xref">POST /api/v1/exam/</code></a></td><td>
-       <em>Exam Create</em></td></tr>
+       <a href="api_device.html#post--api-v1-device-trigger_acquisition-task_id"><code class="xref">POST /api/v1/device/trigger_acquisition/{task_id}</code></a></td><td>
+       <em>Trigger Acquisition</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#post--api-v1-exam-job"><code class="xref">POST /api/v1/exam/job</code></a></td><td>
-       <em>Job Create</em></td></tr>
+       <a href="api_ui_patient_manager.html#post--api-v1-patient-"><code class="xref">POST /api/v1/patient/</code></a></td><td>
+       <em>Create Patient</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#post--api-v1-exam-procedure"><code class="xref">POST /api/v1/exam/procedure</code></a></td><td>
-       <em>Procedure Create</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-"><code class="xref">POST /api/v1/protocol/</code></a></td><td>
+       <em>Create Protocol From Template</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#post--api-v1-exam-record"><code class="xref">POST /api/v1/exam/record</code></a></td><td>
-       <em>Record Create</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-new"><code class="xref">POST /api/v1/protocol/new</code></a></td><td>
+       <em>Create Protocol</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_mri_acquisition.html#post--api-v1-mri-acquisitioncontrol-forward-status"><code class="xref">POST /api/v1/mri/acquisitioncontrol/forward-status</code></a></td><td>
-       <em>Forward Status</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-result"><code class="xref">POST /api/v1/protocol/result</code></a></td><td>
+       <em>Create Blank Result</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_mri_acquisition.html#post--api-v1-mri-acquisitioncontrol-start-scan"><code class="xref">POST /api/v1/mri/acquisitioncontrol/start-scan</code></a></td><td>
-       <em>Start Scan</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-result-dicom-task_id"><code class="xref">POST /api/v1/protocol/result/dicom/{task_id}</code></a></td><td>
+       <em>Create Dicom Result</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_mri_sequences.html#post--api-v1-mri-sequences-"><code class="xref">POST /api/v1/mri/sequences/</code></a></td><td>
-       <em>Create Mri Sequence Endpoint</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-sequence"><code class="xref">POST /api/v1/protocol/sequence</code></a></td><td>
+       <em>Create Mri Sequence</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_mri_sequences.html#post--api-v1-mri-sequences-upload"><code class="xref">POST /api/v1/mri/sequences/upload</code></a></td><td>
-       <em>Upload Mri Sequence File</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-task"><code class="xref">POST /api/v1/protocol/task</code></a></td><td>
+       <em>Create Task From Template</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_workflow.html#post--api-v1-workflow-"><code class="xref">POST /api/v1/workflow/</code></a></td><td>
-       <em>Create Workflow</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-task-new"><code class="xref">POST /api/v1/protocol/task/new</code></a></td><td>
+       <em>Create Task</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_workflow.html#post--api-v1-workflow-upload-record_id-"><code class="xref">POST /api/v1/workflow/upload/{record_id}/</code></a></td><td>
-       <em>Upload Result</em></td></tr>
+       <a href="api_exam.html#post--api-v1-protocol-xnat-upload-protocol_id-task_id-result_id-filename"><code class="xref">POST /api/v1/protocol/xnat/upload/{protocol_id}/{task_id}/{result_id}/{filename}</code></a></td><td>
+       <em>Upload DICOM result to XNAT</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_device.html#put--api-v1-device-device_id"><code class="xref">PUT /api/v1/device/{device_id}</code></a></td><td>
-       <em>Update Device</em></td></tr>
+       <a href="api_device.html#put--api-v1-device-parameter-device_id"><code class="xref">PUT /api/v1/device/parameter/{device_id}</code></a></td><td>
+       <em>Update acquisition/device parameter</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#put--api-v1-exam-job-job_id"><code class="xref">PUT /api/v1/exam/job/{job_id}</code></a></td><td>
-       <em>Job Update</em></td></tr>
+       <a href="api_ui_patient_manager.html#put--api-v1-patient-patient_id"><code class="xref">PUT /api/v1/patient/{patient_id}</code></a></td><td>
+       <em>Update Patient</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#put--api-v1-exam-procedure-procedure_id"><code class="xref">PUT /api/v1/exam/procedure/{procedure_id}</code></a></td><td>
-       <em>Proceedure Update</em></td></tr>
+       <a href="api_exam.html#put--api-v1-protocol-result-result_id"><code class="xref">PUT /api/v1/protocol/result/{result_id}</code></a></td><td>
+       <em>Set Result</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#put--api-v1-exam-exam_id"><code class="xref">PUT /api/v1/exam/{exam_id}</code></a></td><td>
-       <em>Exam Update</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#put--api-v1-mri-sequences-mri_sequence_id"><code class="xref">PUT /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
+       <a href="api_exam.html#put--api-v1-protocol-sequence-sequence_id"><code class="xref">PUT /api/v1/protocol/sequence/{sequence_id}</code></a></td><td>
        <em>Update Mri Sequence Endpoint</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_workflow.html#put--api-v1-workflow-workflow_id-"><code class="xref">PUT /api/v1/workflow/{workflow_id}/</code></a></td><td>
-       <em>Update Workflow</em></td></tr>
+       <a href="api_exam.html#put--api-v1-protocol-task-reorder"><code class="xref">PUT /api/v1/protocol/task/reorder</code></a></td><td>
+       <em>Reorder Tasks</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#put--api-v1-protocol-task-task_id"><code class="xref">PUT /api/v1/protocol/task/{task_id}</code></a></td><td>
+       <em>Update Task</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#put--api-v1-protocol-task-task_id-status"><code class="xref">PUT /api/v1/protocol/task/{task_id}/status</code></a></td><td>
+       <em>Update Task Status</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="api_exam.html#put--api-v1-protocol-exam_id"><code class="xref">PUT /api/v1/protocol/{exam_id}</code></a></td><td>
+       <em>Update Protocol</em></td></tr>
      <tr>
        <td></td>
        <td>
@@ -606,67 +594,28 @@
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#delete--api-v1-exam-job-job_id"><code class="xref">DELETE /api/v1/exam/job/{job_id}</code></a></td><td>
-       <em>Job Delete</em></td></tr>
+       <a href="api_ui_patient_manager.html#delete--api-v1-patient-patient_id"><code class="xref">DELETE /api/v1/patient/{patient_id}</code></a></td><td>
+       <em>Delete Patient</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#delete--api-v1-exam-procedure-procedure_id"><code class="xref">DELETE /api/v1/exam/procedure/{procedure_id}</code></a></td><td>
-       <em>Procedure Delete</em></td></tr>
+       <a href="api_exam.html#delete--api-v1-protocol-result-result_id"><code class="xref">DELETE /api/v1/protocol/result/{result_id}</code></a></td><td>
+       <em>Delete Result</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_exam.html#delete--api-v1-exam-record-record_id"><code class="xref">DELETE /api/v1/exam/record/{record_id}</code></a></td><td>
-       <em>Record Delete</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_exam.html#delete--api-v1-exam-exam_id"><code class="xref">DELETE /api/v1/exam/{exam_id}</code></a></td><td>
-       <em>Exam Delete</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#delete--api-v1-mri-sequences-mri_sequence_id"><code class="xref">DELETE /api/v1/mri/sequences/{mri_sequence_id}</code></a></td><td>
+       <a href="api_exam.html#delete--api-v1-protocol-sequence-sequence_id"><code class="xref">DELETE /api/v1/protocol/sequence/{sequence_id}</code></a></td><td>
        <em>Delete Mri Sequence Endpoint</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_workflow.html#delete--api-v1-workflow-workflow_id"><code class="xref">DELETE /api/v1/workflow/{workflow_id}</code></a></td><td>
-       <em>Delete Workflow</em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-/health"><td></td><td>
-       <strong>/health</strong></td><td></td></tr>
+       <a href="api_exam.html#delete--api-v1-protocol-task-task_id"><code class="xref">DELETE /api/v1/protocol/task/{task_id}</code></a></td><td>
+       <em>Delete Task</em></td></tr>
      <tr>
        <td></td>
        <td>
-       <a href="api_mri_sequences.html#get--health"><code class="xref">GET /health</code></a></td><td>
-       <em>Health Check</em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-/readiness"><td></td><td>
-       <strong>/readiness</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_mri_sequences.html#get--readiness"><code class="xref">GET /readiness</code></a></td><td>
-       <em>Readiness Check</em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-/{patient_id}"><td></td><td>
-       <strong>/{patient_id}</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_ui_patient_manager.html#get--patient_id"><code class="xref">GET /{patient_id}</code></a></td><td>
-       <em>Get Patient</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_ui_patient_manager.html#put--patient_id"><code class="xref">PUT /{patient_id}</code></a></td><td>
-       <em>Update Patient</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api_ui_patient_manager.html#delete--patient_id"><code class="xref">DELETE /{patient_id}</code></a></td><td>
-       <em>Delete Patient</em></td></tr>
+       <a href="api_exam.html#delete--api-v1-protocol-exam_id"><code class="xref">DELETE /api/v1/protocol/{exam_id}</code></a></td><td>
+       <em>Protocol Delete</em></td></tr>
    </table>
 
 
@@ -697,8 +646,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -709,7 +658,7 @@
 
   <p class="copyright">
     
-      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
       <br/>
     
   </p>

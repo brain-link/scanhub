@@ -1,0 +1,98 @@
+orchestrator.notifier
+=====================
+
+.. py:module:: orchestrator.notifier
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   orchestrator.notifier._log
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   orchestrator.notifier.ProtocolManagerNotifier
+   orchestrator.notifier.DeviceManagerNotifier
+
+
+Module Contents
+---------------
+
+.. py:data:: _log
+
+.. py:class:: ProtocolManagerNotifier
+
+   Bases: :py:obj:`dagster.ConfigurableResource`
+
+
+   Notifies protocol manager about Dagster job outcomes.
+
+
+   .. py:attribute:: base_url
+      :type:  str
+
+
+   .. py:attribute:: timeout
+      :type:  float
+      :value: 5.0
+
+
+
+   .. py:method:: create_blank_result(task_id: str, access_token: str) -> str
+
+      Create an empty result placeholder and return its ID.
+
+
+
+   .. py:method:: set_result(result_id: str, result_type: str, directory: str, files: list[str], access_token: str) -> None
+
+      Populate a blank result entry with actual data.
+
+
+
+   .. py:method:: update_task_status(task_id: str, status: str, access_token: str) -> None
+
+      Update task status in the protocol manager.
+
+
+
+.. py:class:: DeviceManagerNotifier
+
+   Bases: :py:obj:`dagster.ConfigurableResource`
+
+
+   Notifies device manager.
+
+
+   .. py:attribute:: base_url
+      :type:  str
+
+
+   .. py:attribute:: timeout
+      :type:  float
+      :value: 5.0
+
+
+
+   .. py:method:: send_device_parameter_update(device_id: str, access_token: str, parameter: dict) -> None
+
+      Notify backend about device parameter update and send parameters.
+
+
+
+   .. py:method:: push_task_event(task_id: str, source: str, task_status: str, progress: int = 0, message: str = '') -> None
+
+      Push a real-time status event to all SSE subscribers watching a task.
+
+      source: identifies the emitting component, e.g. 'device' or 'pipeline'.
+      task_status: one of the known display statuses (INPROGRESS, FINISHED, FAILED, …).
+      Failures are non-fatal — if no browser is subscribed the call still succeeds.
+
+
+

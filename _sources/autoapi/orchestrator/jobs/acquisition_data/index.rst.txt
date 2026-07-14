@@ -1,0 +1,27 @@
+orchestrator.jobs.acquisition_data
+==================================
+
+.. py:module:: orchestrator.jobs.acquisition_data
+
+.. autoapi-nested-parse::
+
+   Definition of acquisition data operation.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   orchestrator.jobs.acquisition_data.acquisition_data_op
+
+
+Module Contents
+---------------
+
+.. py:function:: acquisition_data_op(context: dagster.OpExecutionContext, dag_config: orchestrator.utils.dag_config.DAGConfiguration, data_lake: orchestrator.resources.DataLakeResource) -> orchestrator.assets.acquisition_data.AcquisitionData
+
+   Load acquisition data (MRD + device parameters) from the flat task directory.
+
+

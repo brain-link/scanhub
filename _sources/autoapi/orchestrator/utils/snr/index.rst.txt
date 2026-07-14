@@ -1,0 +1,37 @@
+orchestrator.utils.snr
+======================
+
+.. py:module:: orchestrator.utils.snr
+
+.. autoapi-nested-parse::
+
+   Signal-to-noise ratio (SNR) calculation.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   orchestrator.utils.snr.signal_to_noise_ratio
+
+
+Module Contents
+---------------
+
+.. py:function:: signal_to_noise_ratio(data: numpy.ndarray) -> tuple[float, int]
+
+   Calculate the signal to noise ratio in dB.
+
+   Parameters
+   ----------
+   data
+       Centered 1D spectrum of the acquired signal
+
+   Returns
+   -------
+       Tuple containing snr and fwhm in points
+
+
+

@@ -13,7 +13,7 @@ It plays a crucial role in creating, updating, retrieving, and deleting workflow
 Web API
 -------
 
-.. openapi:: ./_openapi/workflow_openapi.json
+.. note:: The Workflow Manager has been removed. Its functionality has been integrated into the Protocol Manager.
 
 License
 -------

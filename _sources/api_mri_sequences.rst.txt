@@ -13,7 +13,7 @@ Leveraging MongoDB for storage, this API provides a comprehensive set of endpoin
 Web API
 -------
 
-.. openapi:: ./_openapi/mri/sequences_openapi.json
+.. note:: The MRI Sequences Manager has been consolidated into the Protocol Manager.
 
 License
 -------

@@ -1,0 +1,52 @@
+orchestrator.io.idata_io_manager
+================================
+
+.. py:module:: orchestrator.io.idata_io_manager
+
+.. autoapi-nested-parse::
+
+   Dagster IO Manager for mrpro IData object.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   orchestrator.io.idata_io_manager.IDataIOManager
+
+
+Module Contents
+---------------
+
+.. py:class:: IDataIOManager
+
+   Bases: :py:obj:`orchestrator.io.base.ScanHubIOManager`
+
+
+   IO manager for mrpro IData — writes DICOM files with Dagster run_id as filename prefix.
+
+
+   .. py:method:: dump_to_path(context: dagster.OutputContext, obj: mrpro.data.IData, path: upath.UPath) -> None
+
+      Reconstruct IData to DICOM files inside the task directory.
+
+      Files are saved as ``{run_id}_{index:04d}.dcm`` so that outputs from
+      different Dagster runs of the same pipeline can coexist in the flat
+      task directory and be traced back to a specific run.
+
+
+
+   .. py:method:: load_from_path(context: dagster.InputContext, path: upath.UPath) -> mrpro.data.IData
+
+      Load IData from the task directory.
+
+
+
+   .. py:method:: load_from_files(files: List[str]) -> mrpro.data.IData
+
+      Load IData from an explicit file list.
+
+
+

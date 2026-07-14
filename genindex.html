@@ -26,43 +26,50 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e2203eb" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8d6ca438" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="_static/favicon-32x32.png"/>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -88,7 +95,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -114,9 +121,11 @@
       
     
     
-    <img src="_static/logo_brainlink.svg" class="logo__image only-light" alt="ScanHub Documentation - Home"/>
-    <img src="_static/logo_brainlink.svg" class="logo__image only-dark pst-js-only" alt="ScanHub Documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
+  
+    <p class="title logo__title">ScanHub Documentation</p>
   
 </a></div>
     
@@ -178,11 +187,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -195,31 +211,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -306,11 +298,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -323,31 +322,7 @@
           
           
           
-          <a href="https://brain-link.de/" title="Brain-Link" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://brain-link.de/wp-content/uploads/2021/12/bg_blue.svg" class="icon-link-image" alt="Brain-Link"/></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://www.linkedin.com/company/brain-link/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">LinkedIn</span></a>
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -397,6 +372,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -415,43 +391,65 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.__mapper_args__">__mapper_args__ (exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.__mapper_args__">__mapper_args__ (app.db.postgres.AcquisitionTask attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.__mapper_args__">(exam-manager.app.db.postgres.DAGTask attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.__mapper_args__">(exam-manager.app.db.postgres.Task attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.__mapper_args__">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.__table_args__">__table_args__ (exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.__table_args__">__table_args__ (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.__table_args__">(exam-manager.app.db.postgres.Result attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.__table_args__">(app.db.postgres.Protocol attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.__table_args__">(exam-manager.app.db.postgres.Task attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.__table_args__">(app.db.postgres.Result attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.__table_args__">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.__table_args__">(app.db.postgres.Task attribute)</a>
+</li>
+        <li><a href="autoapi/app/db/index.html#app.db.UserSQL.__table_args__">(app.db.UserSQL attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.__tablename__">__tablename__ (app.api.db.Patient attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.__tablename__">(app.db.postgres.AcquisitionTask attribute)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.__tablename__">(app.db.postgres.Protocol attribute)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.__tablename__">(app.db.postgres.Result attribute)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.__tablename__">(app.db.postgres.Task attribute)</a>
+</li>
+        <li><a href="autoapi/app/db/index.html#app.db.UserSQL.__tablename__">(app.db.UserSQL attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.__tablename__">__tablename__ (device-manager.app.api.db.Device attribute)</a>
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.__tablename__">(exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._broadcast_task_status">_broadcast_task_status() (in module app.api.device_websocket)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.__tablename__">(exam-manager.app.db.postgres.DAGTask attribute)</a>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository._dag_config">_dag_config (in module orchestrator.repository)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.__tablename__">(exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/orchestrator/sensors/index.html#orchestrator.sensors._get_dag_config_from_run">_get_dag_config_from_run() (in module orchestrator.sensors)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.__tablename__">(exam-manager.app.db.postgres.Result attribute)</a>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager._get_path">_get_path() (orchestrator.io.base.ScanHubIOManager method)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.__tablename__">(exam-manager.app.db.postgres.Task attribute)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S">_HEARTBEAT_CHECK_INTERVAL_S (in module app.api.device_websocket)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.__tablename__">(exam-manager.app.db.postgres.Workflow attribute)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._HEARTBEAT_TIMEOUT_S">_HEARTBEAT_TIMEOUT_S (in module app.api.device_websocket)</a>
 </li>
-      </ul></li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket._pick_result_type">_pick_result_type() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier._log">_log (in module orchestrator.notifier)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._pick_result_type">_pick_result_type() (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api._resolve_dicom_path">_resolve_dicom_path() (in module app.api.result_api)</a>
+</li>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api._resolve_mrd_path">_resolve_mrd_path() (in module app.api.result_api)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._SSE_TERMINAL_STATUSES">_SSE_TERMINAL_STATUSES (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._stream_to_file">_stream_to_file() (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket._submit_reconstruction_job">_submit_reconstruction_job() (in module app.api.device_websocket)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -459,45 +457,245 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.acquisition_limits">acquisition_limits (exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.access_token">access_token (app.db.UserSQL attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.acquisition_parameter">acquisition_parameter (exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+      <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#orchestrator.assets.acquisition_data.acquisition_data_asset">acquisition_data_asset() (in module orchestrator.assets.acquisition_data)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask">AcquisitionTask (class in exam-manager.app.db.postgres)</a>
+      <li><a href="autoapi/orchestrator/jobs/acquisition_data/index.html#orchestrator.jobs.acquisition_data.acquisition_data_op">acquisition_data_op() (in module orchestrator.jobs.acquisition_data)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#exam-manager.app.dal.result_dal.add_blank_result_db">add_blank_result_db() (in module exam-manager.app.dal.result_dal)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.acquisition_limits">acquisition_limits (app.db.postgres.AcquisitionTask attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#exam-manager.app.dal.exam_dal.add_exam_data">add_exam_data() (in module exam-manager.app.dal.exam_dal)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.acquisition_parameter">acquisition_parameter (app.db.postgres.AcquisitionTask attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.add_task_data">add_task_data() (in module exam-manager.app.dal.task_dal)</a>
+      <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#orchestrator.assets.acquisition_data.AcquisitionData">AcquisitionData (class in orchestrator.assets.acquisition_data)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#exam-manager.app.dal.workflow_dal.add_workflow_data">add_workflow_data() (in module exam-manager.app.dal.workflow_dal)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask">AcquisitionTask (class in app.db.postgres)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.app">app (in module device-manager.app.main)</a>
+      <li><a href="autoapi/app/dal/result_dal/index.html#app.dal.result_dal.add_blank_result_db">add_blank_result_db() (in module app.dal.result_dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/result_dal/index.html#app.dal.result_dal.add_dicom_result_db">add_dicom_result_db() (in module app.dal.result_dal)</a>
+</li>
+      <li><a href="autoapi/app/api/dal/index.html#app.api.dal.add_patient">add_patient() (in module app.api.dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/protocol_dal/index.html#app.dal.protocol_dal.add_protocol_data">add_protocol_data() (in module app.dal.protocol_dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.add_task_data">add_task_data() (in module app.dal.task_dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/index.html#app.dal.add_user">add_user() (in module app.dal)</a>
+</li>
+      <li>
+    app
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.app">(in module exam-manager.app.main)</a>
-</li>
-        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.app">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/app/index.html#module-app">module</a>
 </li>
       </ul></li>
+      <li><a href="autoapi/app/main/index.html#app.main.app">app (in module app.main)</a>
+</li>
+      <li>
+    app.api
+
+      <ul>
+        <li><a href="autoapi/app/api/index.html#module-app.api">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.dal
+
+      <ul>
+        <li><a href="autoapi/app/api/dal/index.html#module-app.api.dal">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.db
+
+      <ul>
+        <li><a href="autoapi/app/api/db/index.html#module-app.api.db">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.device_endpoints
+
+      <ul>
+        <li><a href="autoapi/app/api/device_endpoints/index.html#module-app.api.device_endpoints">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.device_websocket
+
+      <ul>
+        <li><a href="autoapi/app/api/device_websocket/index.html#module-app.api.device_websocket">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.exam_requests
+
+      <ul>
+        <li><a href="autoapi/app/api/exam_requests/index.html#module-app.api.exam_requests">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.mri_sequence_api
+
+      <ul>
+        <li><a href="autoapi/app/api/mri_sequence_api/index.html#module-app.api.mri_sequence_api">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.protocol_api
+
+      <ul>
+        <li><a href="autoapi/app/api/protocol_api/index.html#module-app.api.protocol_api">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.result_api
+
+      <ul>
+        <li><a href="autoapi/app/api/result_api/index.html#module-app.api.result_api">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    app.api.routes
+
+      <ul>
+        <li><a href="autoapi/app/api/routes/index.html#module-app.api.routes">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.api.task_api
+
+      <ul>
+        <li><a href="autoapi/app/api/task_api/index.html#module-app.api.task_api">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.dal
+
+      <ul>
+        <li><a href="autoapi/app/dal/index.html#module-app.dal">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.dal.protocol_dal
+
+      <ul>
+        <li><a href="autoapi/app/dal/protocol_dal/index.html#module-app.dal.protocol_dal">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.dal.result_dal
+
+      <ul>
+        <li><a href="autoapi/app/dal/result_dal/index.html#module-app.dal.result_dal">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.dal.task_dal
+
+      <ul>
+        <li><a href="autoapi/app/dal/task_dal/index.html#module-app.dal.task_dal">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.db
+
+      <ul>
+        <li><a href="autoapi/app/db/index.html#module-app.db">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.db.mongodb
+
+      <ul>
+        <li><a href="autoapi/app/db/mongodb/index.html#module-app.db.mongodb">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.db.postgres
+
+      <ul>
+        <li><a href="autoapi/app/db/postgres/index.html#module-app.db.postgres">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.main
+
+      <ul>
+        <li><a href="autoapi/app/main/index.html#module-app.main">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.tools
+
+      <ul>
+        <li><a href="autoapi/app/tools/index.html#module-app.tools">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.tools.dicom_provider
+
+      <ul>
+        <li><a href="autoapi/app/tools/dicom_provider/index.html#module-app.tools.dicom_provider">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.tools.helper
+
+      <ul>
+        <li><a href="autoapi/app/tools/helper/index.html#module-app.tools.helper">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.tools.mrd_provider
+
+      <ul>
+        <li><a href="autoapi/app/tools/mrd_provider/index.html#module-app.tools.mrd_provider">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.tools.mri_sequence_plot
+
+      <ul>
+        <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#module-app.tools.mri_sequence_plot">module</a>
+</li>
+      </ul></li>
+      <li>
+    app.userlogin
+
+      <ul>
+        <li><a href="autoapi/app/userlogin/index.html#module-app.userlogin">module</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.assets">assets (in module orchestrator.repository)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Base">Base (class in exam-manager.app.db.postgres)</a>
+      <li><a href="autoapi/app/db/index.html#app.db.Base">Base (class in app.db)</a>
 
       <ul>
-        <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Base">(in module device-manager.app.api.db)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Base">(class in app.db.postgres)</a>
+</li>
+        <li><a href="autoapi/app/api/db/index.html#app.api.db.Base">(in module app.api.db)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#exam-manager.app.tools.mrd_provider.build_index_meta">build_index_meta() (in module exam-manager.app.tools.mrd_provider)</a>
+      <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.DeviceManagerNotifier.base_url">base_url (orchestrator.notifier.DeviceManagerNotifier attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.ProtocolManagerNotifier.base_url">(orchestrator.notifier.ProtocolManagerNotifier attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.birth_date">birth_date (app.api.db.Patient attribute)</a>
+</li>
+      <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.build_index_meta">build_index_meta() (in module app.tools.mrd_provider)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -505,422 +703,205 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.calibration">calibration (exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.calibration">calibration (app.db.postgres.AcquisitionTask attribute)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.callback_results_ready">callback_results_ready() (in module workflow-manager.app.api.manager_endpoints)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.change_password">change_password() (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.Database.client">client (exam-manager.app.db.mongodb.Database attribute)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.check_no_users">check_no_users() (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.close_mongo_connection">close_mongo_connection() (in module exam-manager.app.db.mongodb)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.Database.client">client (app.db.mongodb.Database attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.Database.collection">collection (exam-manager.app.db.mongodb.Database attribute)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.close_mongo_connection">close_mongo_connection() (in module app.db.mongodb)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.comment">comment (exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.Database.collection">collection (app.db.mongodb.Database attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.comment">comment (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.comment">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.comment">(app.db.postgres.Protocol attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.connect_to_mongo">connect_to_mongo() (in module exam-manager.app.db.mongodb)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.connect_to_mongo">connect_to_mongo() (in module app.db.mongodb)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.connection_with_valid_id_and_token">connection_with_valid_id_and_token() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.connection_with_valid_id_and_token">connection_with_valid_id_and_token() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.create_blank_result">create_blank_result() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.create_blank_result">create_blank_result() (in module app.api.exam_requests)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.create_blank_result">(in module exam-manager.app.api.result_api)</a>
+        <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.create_blank_result">(in module app.api.result_api)</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.create_blank_result">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.ProtocolManagerNotifier.create_blank_result">(orchestrator.notifier.ProtocolManagerNotifier method)</a>
 </li>
       </ul></li>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.create_device">create_device() (in module app.api.device_endpoints)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.create_device">create_device() (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.create_dicom_result">create_dicom_result() (in module app.api.result_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.create_exam">create_exam() (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.create_first_user">create_first_user() (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.create_exam_from_template">create_exam_from_template() (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.create_mri_sequence">create_mri_sequence() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.create_mri_sequence">create_mri_sequence() (in module exam-manager.app.api.mri_sequence_api)</a>
+      <li><a href="autoapi/app/api/routes/index.html#app.api.routes.create_patient">create_patient() (in module app.api.routes)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.create_task">create_task() (in module exam-manager.app.api.task_api)</a>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.create_protocol">create_protocol() (in module app.api.protocol_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.create_task_from_template">create_task_from_template() (in module exam-manager.app.api.task_api)</a>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.create_protocol_from_template">create_protocol_from_template() (in module app.api.protocol_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.create_workflow">create_workflow() (in module exam-manager.app.api.workflow_api)</a>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.create_task">create_task() (in module app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.create_workflow_from_template">create_workflow_from_template() (in module exam-manager.app.api.workflow_api)</a>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.create_task_from_template">create_task_from_template() (in module app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.creator">creator (exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.create_user">create_user() (in module app.userlogin)</a>
+</li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.create_user_internal">create_user_internal() (in module app.userlogin)</a>
+</li>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.CreateDicomResult">CreateDicomResult (class in app.api.result_api)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.creator">creator (app.db.postgres.Protocol attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.creator">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.creator">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.creator">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.custom_http_exception_handler">custom_http_exception_handler() (in module device-manager.app.main)</a>
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.custom_http_exception_handler">(in module exam-manager.app.main)</a>
+      <li><a href="autoapi/app/main/index.html#app.main.custom_http_exception_handler">custom_http_exception_handler() (in module app.main)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.dag_id">dag_id (exam-manager.app.db.postgres.DAGTask attribute)</a>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager.dag_config">dag_config (orchestrator.io.base.ScanHubIOManager attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.dag_type">dag_type (exam-manager.app.db.postgres.DAGTask attribute)</a>
+      <li><a href="autoapi/orchestrator/index.html#orchestrator.DAG_CONFIG_KEY">DAG_CONFIG_KEY (in module orchestrator)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/dagster_queries/index.html#workflow-manager.app.api.dagster_queries.DAGSTER_URL">DAGSTER_URL (in module workflow-manager.app.api.dagster_queries)</a>
+      <li><a href="autoapi/orchestrator/utils/dag_config/index.html#orchestrator.utils.dag_config.DAGConfiguration">DAGConfiguration (class in orchestrator.utils.dag_config)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask">DAGTask (class in exam-manager.app.db.postgres)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.DAGSTER_GRAPHQL_URL">DAGSTER_GRAPHQL_URL (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_create_device">dal_create_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_delete_device">dal_delete_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_get_all_devices">dal_get_all_devices() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_get_device">dal_get_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/dal/index.html#device-manager.app.api.dal.dal_update_device">dal_update_device() (in module device-manager.app.api.dal)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.DATA_LAKE_DIR">DATA_LAKE_DIR (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.DATA_LAKE_DIR">DATA_LAKE_DIR (in module app.api.device_websocket)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#exam-manager.app.tools.dicom_provider.DATA_LAKE_DIR">(in module exam-manager.app.tools.dicom_provider)</a>
+        <li><a href="autoapi/app/tools/dicom_provider/index.html#app.tools.dicom_provider.DATA_LAKE_DIR">(in module app.tools.dicom_provider)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#exam-manager.app.tools.mrd_provider.DATA_LAKE_DIR">(in module exam-manager.app.tools.mrd_provider)</a>
+        <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.DATA_LAKE_DIR">(in module app.tools.mrd_provider)</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.DATA_LAKE_DIR">(in module workflow-manager.app.api.manager_endpoints)</a>
+        <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.DATA_LAKE_DIR">(in module orchestrator.repository)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.Database">Database (class in exam-manager.app.db.mongodb)</a>
+      <li><a href="autoapi/orchestrator/index.html#orchestrator.DATA_LAKE_KEY">DATA_LAKE_KEY (in module orchestrator)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.datetime_created">datetime_created (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.Database">Database (class in app.db.mongodb)</a>
+</li>
+      <li><a href="autoapi/orchestrator/resources/index.html#orchestrator.resources.DataLakeResource">DataLakeResource (class in orchestrator.resources)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.datetime_created">datetime_created (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.datetime_created">(exam-manager.app.db.postgres.Exam attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.datetime_created">(app.db.postgres.Protocol attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.datetime_created">(exam-manager.app.db.postgres.Result attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.datetime_created">(app.db.postgres.Result attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.datetime_created">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.datetime_created">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.datetime_created">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.datetime_updated">datetime_updated (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.datetime_updated">datetime_updated (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.datetime_updated">(exam-manager.app.db.postgres.Exam attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.datetime_updated">(app.db.postgres.Protocol attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.datetime_updated">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.datetime_updated">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.datetime_updated">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.db">db (in module exam-manager.app.db.mongodb)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.db">db (in module app.db.mongodb)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.delete_blank_result">delete_blank_result() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.defs">defs (in module orchestrator.repository)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.delete_device">delete_device() (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.delete_blank_result">delete_blank_result() (in module app.api.exam_requests)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#exam-manager.app.dal.exam_dal.delete_exam_data">delete_exam_data() (in module exam-manager.app.dal.exam_dal)</a>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.delete_device">delete_device() (in module app.api.device_endpoints)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.delete_mri_sequence_endpoint">delete_mri_sequence_endpoint() (in module exam-manager.app.api.mri_sequence_api)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.delete_mri_sequence_endpoint">delete_mri_sequence_endpoint() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.delete_result">delete_result() (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/api/dal/index.html#app.api.dal.delete_patient">delete_patient() (in module app.api.dal)</a>
 
       <ul>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.delete_result">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/app/api/routes/index.html#app.api.routes.delete_patient">(in module app.api.routes)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#exam-manager.app.dal.result_dal.delete_result_db">delete_result_db() (in module exam-manager.app.dal.result_dal)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.delete_task">delete_task() (in module exam-manager.app.api.task_api)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.delete_task_data">delete_task_data() (in module exam-manager.app.dal.task_dal)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.delete_workflow">delete_workflow() (in module exam-manager.app.api.workflow_api)</a>
+      <li><a href="autoapi/app/dal/protocol_dal/index.html#app.dal.protocol_dal.delete_protocol_data">delete_protocol_data() (in module app.dal.protocol_dal)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#exam-manager.app.dal.workflow_dal.delete_workflow_data">delete_workflow_data() (in module exam-manager.app.dal.workflow_dal)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.delete_result">delete_result() (in module app.api.result_api)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.description">description (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/dal/result_dal/index.html#app.dal.result_dal.delete_result_db">delete_result_db() (in module app.dal.result_dal)</a>
+</li>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.delete_task">delete_task() (in module app.api.task_api)</a>
+</li>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.delete_task_data">delete_task_data() (in module app.dal.task_dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/index.html#app.dal.delete_user_data">delete_user_data() (in module app.dal)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.description">description (app.db.postgres.Protocol attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.description">(exam-manager.app.db.postgres.Exam attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.description">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.description">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.description">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.destination">destination (exam-manager.app.db.postgres.Task attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.destination">destination (app.db.postgres.Task attribute)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device">Device (class in device-manager.app.api.db)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Device">Device (in module app.db.postgres)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.device_id">device_id (app.db.postgres.AcquisitionTask attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Device">(in module exam-manager.app.db.postgres)</a>
+        <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#orchestrator.assets.acquisition_data.AcquisitionData.device_id">(orchestrator.assets.acquisition_data.AcquisitionData attribute)</a>
 </li>
       </ul></li>
-      <li>
-    device-manager
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.device_last_seen">device_last_seen (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.DEVICE_MANAGER_URI">DEVICE_MANAGER_URI (in module orchestrator.repository)</a>
+</li>
+      <li><a href="autoapi/orchestrator/index.html#orchestrator.DEVICE_NOTIFIER_KEY">DEVICE_NOTIFIER_KEY (in module orchestrator)</a>
+</li>
+      <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#orchestrator.assets.acquisition_data.AcquisitionData.device_parameter">device_parameter (orchestrator.assets.acquisition_data.AcquisitionData attribute)</a>
+</li>
+      <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.DeviceManagerNotifier">DeviceManagerNotifier (class in orchestrator.notifier)</a>
+</li>
+      <li><a href="autoapi/orchestrator/assets/dicom_input/index.html#orchestrator.assets.dicom_input.dicom_input">dicom_input (in module orchestrator.assets.dicom_input)</a>
+</li>
+      <li><a href="autoapi/orchestrator/index.html#orchestrator.DICOM_IO_KEY">DICOM_IO_KEY (in module orchestrator)</a>
+</li>
+      <li><a href="autoapi/orchestrator/io/dicom_io_manager/index.html#orchestrator.io.dicom_io_manager.DicomIOManager">DicomIOManager (class in orchestrator.io.dicom_io_manager)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.dict_id_websocket">dict_id_websocket (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.CreateDicomResult.directory">directory (app.api.result_api.CreateDicomResult attribute)</a>
 
       <ul>
-        <li><a href="autoapi/device-manager/index.html#module-device-manager">module</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.directory">(app.db.postgres.Result attribute)</a>
 </li>
       </ul></li>
-      <li>
-    device-manager.app
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.download_mrd">download_mrd() (in module app.api.result_api)</a>
+</li>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager.dump_to_path">dump_to_path() (orchestrator.io.base.ScanHubIOManager method)</a>
 
       <ul>
-        <li><a href="autoapi/device-manager/app/index.html#module-device-manager.app">module</a>
+        <li><a href="autoapi/orchestrator/io/dicom_io_manager/index.html#orchestrator.io.dicom_io_manager.DicomIOManager.dump_to_path">(orchestrator.io.dicom_io_manager.DicomIOManager method)</a>
+</li>
+        <li><a href="autoapi/orchestrator/io/idata_io_manager/index.html#orchestrator.io.idata_io_manager.IDataIOManager.dump_to_path">(orchestrator.io.idata_io_manager.IDataIOManager method)</a>
 </li>
       </ul></li>
-      <li>
-    device-manager.app.api
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/index.html#module-device-manager.app.api">module</a>
-</li>
-      </ul></li>
-      <li>
-    device-manager.app.api.dal
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/dal/index.html#module-device-manager.app.api.dal">module</a>
-</li>
-      </ul></li>
-      <li>
-    device-manager.app.api.db
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/db/index.html#module-device-manager.app.api.db">module</a>
-</li>
-      </ul></li>
-      <li>
-    device-manager.app.api.device_endpoints
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#module-device-manager.app.api.device_endpoints">module</a>
-</li>
-      </ul></li>
-      <li>
-    device-manager.app.api.device_websocket
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#module-device-manager.app.api.device_websocket">module</a>
-</li>
-      </ul></li>
-      <li>
-    device-manager.app.api.exam_requests
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#module-device-manager.app.api.exam_requests">module</a>
-</li>
-      </ul></li>
-      <li>
-    device-manager.app.main
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/main/index.html#module-device-manager.app.main">module</a>
-</li>
-      </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.device_id">device_id (exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.device_last_seen">device_last_seen (in module device-manager.app.api.device_websocket)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.DEVICE_MANAGER_URI">DEVICE_MANAGER_URI (in module workflow-manager.app.api.manager_endpoints)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.device_name">device_name (device-manager.app.api.db.Device attribute)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.dg_client">dg_client (in module workflow-manager.app.api.manager_endpoints)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.DICOM_BASE_URI">DICOM_BASE_URI (in module workflow-manager.app.api.manager_endpoints)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.dict_id_websocket">dict_id_websocket (in module device-manager.app.api.device_websocket)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.directory">directory (exam-manager.app.db.postgres.Result attribute)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.download_mrd">download_mrd() (in module exam-manager.app.api.result_api)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam">Exam (class in exam-manager.app.db.postgres)</a>
-</li>
-      <li>
-    exam-manager
-
-      <ul>
-        <li><a href="autoapi/exam-manager/index.html#module-exam-manager">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/index.html#module-exam-manager.app">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.api
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/api/index.html#module-exam-manager.app.api">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.api.exam_api
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#module-exam-manager.app.api.exam_api">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.api.mri_sequence_api
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#module-exam-manager.app.api.mri_sequence_api">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.api.result_api
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#module-exam-manager.app.api.result_api">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.api.task_api
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/api/task_api/index.html#module-exam-manager.app.api.task_api">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.api.workflow_api
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#module-exam-manager.app.api.workflow_api">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.dal
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/dal/index.html#module-exam-manager.app.dal">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.dal.exam_dal
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#module-exam-manager.app.dal.exam_dal">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.dal.result_dal
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#module-exam-manager.app.dal.result_dal">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.dal.task_dal
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#module-exam-manager.app.dal.task_dal">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    exam-manager.app.dal.workflow_dal
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#module-exam-manager.app.dal.workflow_dal">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.db
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/db/index.html#module-exam-manager.app.db">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.db.mongodb
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#module-exam-manager.app.db.mongodb">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.db.postgres
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#module-exam-manager.app.db.postgres">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.main
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/main/index.html#module-exam-manager.app.main">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.tools
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/tools/index.html#module-exam-manager.app.tools">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.tools.dicom_provider
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#module-exam-manager.app.tools.dicom_provider">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.tools.helper
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/tools/helper/index.html#module-exam-manager.app.tools.helper">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.tools.mrd_provider
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#module-exam-manager.app.tools.mrd_provider">module</a>
-</li>
-      </ul></li>
-      <li>
-    exam-manager.app.tools.mri_sequence_plot
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#module-exam-manager.app.tools.mri_sequence_plot">module</a>
-</li>
-      </ul></li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.exam_delete">exam_delete() (in module exam-manager.app.api.exam_api)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.exam_id">exam_id (exam-manager.app.db.postgres.Workflow attribute)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.EXAM_MANAGER_URI">EXAM_MANAGER_URI (in module workflow-manager.app.api.manager_endpoints)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.exam_router">exam_router (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.email">email (app.db.UserSQL attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -928,107 +909,131 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.files">files (exam-manager.app.db.postgres.Result attribute)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.CreateDicomResult.files">files (app.api.result_api.CreateDicomResult attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.files">(app.db.postgres.Result attribute)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.find_mrd_file">find_mrd_file() (in module app.tools.mrd_provider)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.first_name">first_name (app.api.db.Patient attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/app/db/index.html#app.db.UserSQL.first_name">(app.db.UserSQL attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#exam-manager.app.tools.mri_sequence_plot.generate_plotly_figure">generate_plotly_figure() (in module exam-manager.app.tools.mri_sequence_plot)</a>
+      <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#app.tools.mri_sequence_plot.generate_plotly_figure">generate_plotly_figure() (in module app.tools.mri_sequence_plot)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#exam-manager.app.dal.exam_dal.get_all_exam_data">get_all_exam_data() (in module exam-manager.app.dal.exam_dal)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.get_all_mri_sequences">get_all_mri_sequences() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#exam-manager.app.dal.exam_dal.get_all_exam_template_data">get_all_exam_template_data() (in module exam-manager.app.dal.exam_dal)</a>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.get_all_patient_protocols">get_all_patient_protocols() (in module app.api.protocol_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.get_all_exam_templates">get_all_exam_templates() (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/api/dal/index.html#app.api.dal.get_all_patients">get_all_patients() (in module app.api.dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.get_all_exam_workflows">get_all_exam_workflows() (in module exam-manager.app.api.workflow_api)</a>
+      <li><a href="autoapi/app/dal/protocol_dal/index.html#app.dal.protocol_dal.get_all_protocol_data">get_all_protocol_data() (in module app.dal.protocol_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.get_all_mri_sequences">get_all_mri_sequences() (in module exam-manager.app.api.mri_sequence_api)</a>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.get_all_protocol_tasks">get_all_protocol_tasks() (in module app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.get_all_patient_exams">get_all_patient_exams() (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/dal/protocol_dal/index.html#app.dal.protocol_dal.get_all_protocol_template_data">get_all_protocol_template_data() (in module app.dal.protocol_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#exam-manager.app.dal.result_dal.get_all_results_db">get_all_results_db() (in module exam-manager.app.dal.result_dal)</a>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.get_all_protocol_templates">get_all_protocol_templates() (in module app.api.protocol_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.get_all_task_data">get_all_task_data() (in module exam-manager.app.dal.task_dal)</a>
+      <li><a href="autoapi/app/dal/result_dal/index.html#app.dal.result_dal.get_all_results_db">get_all_results_db() (in module app.dal.result_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.get_all_task_results">get_all_task_results() (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.get_all_task_data">get_all_task_data() (in module app.dal.task_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.get_all_task_template_data">get_all_task_template_data() (in module exam-manager.app.dal.task_dal)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.get_all_task_results">get_all_task_results() (in module app.api.result_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.get_all_task_templates">get_all_task_templates() (in module exam-manager.app.api.task_api)</a>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.get_all_task_template_data">get_all_task_template_data() (in module app.dal.task_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#exam-manager.app.dal.workflow_dal.get_all_workflow_data">get_all_workflow_data() (in module exam-manager.app.dal.workflow_dal)</a>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.get_all_task_templates">get_all_task_templates() (in module app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.get_all_workflow_tasks">get_all_workflow_tasks() (in module exam-manager.app.api.task_api)</a>
+      <li><a href="autoapi/app/dal/index.html#app.dal.get_all_users">get_all_users() (in module app.dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.get_all_workflow_templates">get_all_workflow_templates() (in module exam-manager.app.api.workflow_api)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.get_current_user">get_current_user() (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#exam-manager.app.dal.workflow_dal.get_all_workflows_template_data">get_all_workflows_template_data() (in module exam-manager.app.dal.workflow_dal)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.get_current_user_admin">get_current_user_admin() (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.get_device">get_device() (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.get_device">get_device() (in module app.api.device_endpoints)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.get_devices">get_devices() (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/orchestrator/resources/index.html#orchestrator.resources.DataLakeResource.get_device_parameter">get_device_parameter() (orchestrator.resources.DataLakeResource method)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.get_dicom">get_dicom() (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.get_devices">get_devices() (in module app.api.device_endpoints)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.get_exam">get_exam() (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.get_dicom">get_dicom() (in module app.api.result_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#exam-manager.app.dal.exam_dal.get_exam_data">get_exam_data() (in module exam-manager.app.dal.exam_dal)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.get_meta">get_meta() (in module app.api.result_api)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.get_exam_id">get_exam_id() (in module workflow-manager.app.api.scanhub_requests)</a>
+      <li><a href="autoapi/app/db/mongodb/index.html#app.db.mongodb.get_mongo_database">get_mongo_database() (in module app.db.mongodb)</a>
+</li>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.get_mrd_binary">get_mrd_binary() (in module app.api.result_api)</a>
+</li>
+      <li><a href="autoapi/orchestrator/resources/index.html#orchestrator.resources.DataLakeResource.get_mrd_path">get_mrd_path() (orchestrator.resources.DataLakeResource method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/helper/index.html#exam-manager.app.tools.helper.get_exam_out_model">get_exam_out_model() (in module exam-manager.app.tools.helper)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.get_mri_sequence_by_id">get_mri_sequence_by_id() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.get_meta">get_meta() (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.get_mri_sequence_file_by_id">get_mri_sequence_file_by_id() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#exam-manager.app.db.mongodb.get_mongo_database">get_mongo_database() (in module exam-manager.app.db.mongodb)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.get_mri_sequence_header_file_by_id">get_mri_sequence_header_file_by_id() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.get_mrd_binary">get_mrd_binary() (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/tools/dicom_provider/index.html#app.tools.dicom_provider.get_p10_dicom_bytes">get_p10_dicom_bytes() (in module app.tools.dicom_provider)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.get_mri_sequence_by_id">get_mri_sequence_by_id() (in module exam-manager.app.api.mri_sequence_api)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.get_mri_sequence_file_by_id">get_mri_sequence_file_by_id() (in module exam-manager.app.api.mri_sequence_api)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.get_mri_sequence_header_file_by_id">get_mri_sequence_header_file_by_id() (in module exam-manager.app.api.mri_sequence_api)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#exam-manager.app.tools.dicom_provider.get_p10_dicom_bytes">get_p10_dicom_bytes() (in module exam-manager.app.tools.dicom_provider)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.get_result">get_result() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/api/dal/index.html#app.api.dal.get_patient">get_patient() (in module app.api.dal)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.get_result">(in module exam-manager.app.api.result_api)</a>
-</li>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.get_result">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/app/api/routes/index.html#app.api.routes.get_patient">(in module app.api.routes)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#exam-manager.app.dal.result_dal.get_result_db">get_result_db() (in module exam-manager.app.dal.result_dal)</a>
+      <li><a href="autoapi/app/api/routes/index.html#app.api.routes.get_patient_list">get_patient_list() (in module app.api.routes)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.get_sequence">get_sequence() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/api/routes/index.html#app.api.routes.get_patient_out">get_patient_out() (in module app.api.routes)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#exam-manager.app.tools.mri_sequence_plot.get_sequence_plot">get_sequence_plot() (in module exam-manager.app.tools.mri_sequence_plot)</a>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.get_protocol">get_protocol() (in module app.api.protocol_api)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.get_task">get_task() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/dal/protocol_dal/index.html#app.dal.protocol_dal.get_protocol_data">get_protocol_data() (in module app.dal.protocol_dal)</a>
+</li>
+      <li><a href="autoapi/app/tools/helper/index.html#app.tools.helper.get_protocol_out_model">get_protocol_out_model() (in module app.tools.helper)</a>
+</li>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.get_result">get_result() (in module app.api.exam_requests)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.get_task">(in module exam-manager.app.api.task_api)</a>
-</li>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.get_task">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.get_result">(in module app.api.result_api)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.get_task_data">get_task_data() (in module exam-manager.app.dal.task_dal)</a>
+      <li><a href="autoapi/app/dal/result_dal/index.html#app.dal.result_dal.get_result_db">get_result_db() (in module app.dal.result_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/helper/index.html#exam-manager.app.tools.helper.get_task_out">get_task_out() (in module exam-manager.app.tools.helper)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.get_sequence">get_sequence() (in module app.api.exam_requests)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.get_workflow">get_workflow() (in module exam-manager.app.api.workflow_api)</a>
+      <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#app.tools.mri_sequence_plot.get_sequence_plot">get_sequence_plot() (in module app.tools.mri_sequence_plot)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#exam-manager.app.dal.workflow_dal.get_workflow_data">get_workflow_data() (in module exam-manager.app.dal.workflow_dal)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.get_task">get_task() (in module app.api.exam_requests)</a>
+
+      <ul>
+        <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.get_task">(in module app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/helper/index.html#exam-manager.app.tools.helper.get_workflow_out_model">get_workflow_out_model() (in module exam-manager.app.tools.helper)</a>
+      </ul></li>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.get_task_data">get_task_data() (in module app.dal.task_dal)</a>
+</li>
+      <li><a href="autoapi/app/tools/helper/index.html#app.tools.helper.get_task_out">get_task_out() (in module app.tools.helper)</a>
+</li>
+      <li><a href="autoapi/app/dal/index.html#app.dal.get_user_data">get_user_data() (in module app.dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/index.html#app.dal.get_user_from_token">get_user_from_token() (in module app.dal)</a>
+</li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.get_user_list">get_user_list() (in module app.userlogin)</a>
+</li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.get_user_out">get_user_out() (in module app.userlogin)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1036,17 +1041,17 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.handle_acquisition_task_trigger">handle_acquisition_task_trigger() (in module workflow-manager.app.api.manager_endpoints)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.handle_file_transfer">handle_file_transfer() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.handle_dag_task_trigger">handle_dag_task_trigger() (in module workflow-manager.app.api.manager_endpoints)</a>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager.handle_output">handle_output() (orchestrator.io.base.ScanHubIOManager method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.handle_file_transfer">handle_file_transfer() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.handle_register">handle_register() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.handle_register">handle_register() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.handle_status_update">handle_status_update() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.handle_status_update">handle_status_update() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.height">height (app.api.db.Patient attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1054,170 +1059,228 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.id">id (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.id">id (app.db.postgres.AcquisitionTask attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.id">(exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.id">(app.db.postgres.Protocol attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.id">(exam-manager.app.db.postgres.DAGTask attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.id">(app.db.postgres.Result attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.id">(exam-manager.app.db.postgres.Exam attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.id">(exam-manager.app.db.postgres.Result attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.id">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.id">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.id">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
+      <li><a href="autoapi/orchestrator/index.html#orchestrator.IDATA_IO_KEY">IDATA_IO_KEY (in module orchestrator)</a>
+</li>
+      <li><a href="autoapi/orchestrator/io/idata_io_manager/index.html#orchestrator.io.idata_io_manager.IDataIOManager">IDataIOManager (class in orchestrator.io.idata_io_manager)</a>
+</li>
+      <li><a href="autoapi/orchestrator/assets/image_processing/index.html#orchestrator.assets.image_processing.image_smoothing">image_smoothing() (in module orchestrator.assets.image_processing)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.indication">indication (exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.indication">indication (app.db.postgres.Protocol attribute)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.init_db">init_db() (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.init_db">init_db() (in module app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.init_db">(in module exam-manager.app.db.postgres)</a>
+        <li><a href="autoapi/app/db/index.html#app.db.init_db">(in module app.db)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.init_db">(in module app.db.postgres)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.input_task_ids">input_task_ids (exam-manager.app.db.postgres.DAGTask attribute)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.is_template">is_template (exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.is_template">is_template (app.db.postgres.Protocol attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.is_template">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.is_template">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.is_template">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.issuer">issuer (app.api.db.Patient attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.jobs">jobs (in module orchestrator.repository)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.lifespan">lifespan() (in module device-manager.app.main)</a>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.last_activity_unixtime">last_activity_unixtime (app.db.UserSQL attribute)</a>
+</li>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.last_login_unixtime">last_login_unixtime (app.db.UserSQL attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.last_name">last_name (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.lifespan">(in module exam-manager.app.main)</a>
+        <li><a href="autoapi/app/db/index.html#app.db.UserSQL.last_name">(app.db.UserSQL attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.list_available_tasks">list_available_tasks() (in module workflow-manager.app.api.manager_endpoints)</a>
+      <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.load_acquisitions_slices">load_acquisitions_slices() (in module app.tools.mrd_provider)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/dagster_queries/index.html#workflow-manager.app.api.dagster_queries.list_dagster_jobs">list_dagster_jobs() (in module workflow-manager.app.api.dagster_queries)</a>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager.load_from_files">load_from_files() (orchestrator.io.base.ScanHubIOManager method)</a>
+
+      <ul>
+        <li><a href="autoapi/orchestrator/io/dicom_io_manager/index.html#orchestrator.io.dicom_io_manager.DicomIOManager.load_from_files">(orchestrator.io.dicom_io_manager.DicomIOManager method)</a>
 </li>
+        <li><a href="autoapi/orchestrator/io/idata_io_manager/index.html#orchestrator.io.idata_io_manager.IDataIOManager.load_from_files">(orchestrator.io.idata_io_manager.IDataIOManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager.load_from_path">load_from_path() (orchestrator.io.base.ScanHubIOManager method)</a>
+
+      <ul>
+        <li><a href="autoapi/orchestrator/io/dicom_io_manager/index.html#orchestrator.io.dicom_io_manager.DicomIOManager.load_from_path">(orchestrator.io.dicom_io_manager.DicomIOManager method)</a>
+</li>
+        <li><a href="autoapi/orchestrator/io/idata_io_manager/index.html#orchestrator.io.idata_io_manager.IDataIOManager.load_from_path">(orchestrator.io.idata_io_manager.IDataIOManager method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#exam-manager.app.tools.mrd_provider.load_acquisitions_slices">load_acquisitions_slices() (in module exam-manager.app.tools.mrd_provider)</a>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager.load_input">load_input() (orchestrator.io.base.ScanHubIOManager method)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#exam-manager.app.tools.mrd_provider.locate_mrd">locate_mrd() (in module exam-manager.app.tools.mrd_provider)</a>
+      <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.locate_mrd">locate_mrd() (in module app.tools.mrd_provider)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.LOG_CALL_DELIMITER">LOG_CALL_DELIMITER (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.LOG_CALL_DELIMITER">LOG_CALL_DELIMITER (in module app.api.device_endpoints)</a>
 
       <ul>
-        <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.LOG_CALL_DELIMITER">(in module device-manager.app.api.device_websocket)</a>
+        <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.LOG_CALL_DELIMITER">(in module app.api.device_websocket)</a>
+</li>
+        <li><a href="autoapi/app/userlogin/index.html#app.userlogin.LOG_CALL_DELIMITER">(in module app.userlogin)</a>
 </li>
       </ul></li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.login">login() (in module app.userlogin)</a>
+</li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.loginfromcookie">loginfromcookie() (in module app.userlogin)</a>
+</li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.logout">logout() (in module app.userlogin)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.manufacturer">manufacturer (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.MappedBase">MappedBase (in module app.db.postgres)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.MappedBase">MappedBase (in module exam-manager.app.db.postgres)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.MAX_INACTIVITY_TIME_SECONDS">MAX_INACTIVITY_TIME_SECONDS (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.meta">meta (exam-manager.app.db.postgres.Result attribute)</a>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.MAX_SESSION_LENGTH_SECONDS">MAX_SESSION_LENGTH_SECONDS (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.modality">modality (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.TaskEvent.message">message (app.api.device_websocket.TaskEvent attribute)</a>
 </li>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.CreateDicomResult.meta">meta (app.api.result_api.CreateDicomResult attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.meta">(app.db.postgres.Result attribute)</a>
+</li>
+      </ul></li>
       <li>
     module
 
       <ul>
-        <li><a href="autoapi/device-manager/index.html#module-device-manager">device-manager</a>
+        <li><a href="autoapi/app/index.html#module-app">app</a>
 </li>
-        <li><a href="autoapi/device-manager/app/index.html#module-device-manager.app">device-manager.app</a>
+        <li><a href="autoapi/app/api/index.html#module-app.api">app.api</a>
 </li>
-        <li><a href="autoapi/device-manager/app/api/index.html#module-device-manager.app.api">device-manager.app.api</a>
+        <li><a href="autoapi/app/api/dal/index.html#module-app.api.dal">app.api.dal</a>
 </li>
-        <li><a href="autoapi/device-manager/app/api/dal/index.html#module-device-manager.app.api.dal">device-manager.app.api.dal</a>
+        <li><a href="autoapi/app/api/db/index.html#module-app.api.db">app.api.db</a>
 </li>
-        <li><a href="autoapi/device-manager/app/api/db/index.html#module-device-manager.app.api.db">device-manager.app.api.db</a>
+        <li><a href="autoapi/app/api/device_endpoints/index.html#module-app.api.device_endpoints">app.api.device_endpoints</a>
 </li>
-        <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#module-device-manager.app.api.device_endpoints">device-manager.app.api.device_endpoints</a>
+        <li><a href="autoapi/app/api/device_websocket/index.html#module-app.api.device_websocket">app.api.device_websocket</a>
 </li>
-        <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#module-device-manager.app.api.device_websocket">device-manager.app.api.device_websocket</a>
+        <li><a href="autoapi/app/api/exam_requests/index.html#module-app.api.exam_requests">app.api.exam_requests</a>
 </li>
-        <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#module-device-manager.app.api.exam_requests">device-manager.app.api.exam_requests</a>
+        <li><a href="autoapi/app/api/mri_sequence_api/index.html#module-app.api.mri_sequence_api">app.api.mri_sequence_api</a>
 </li>
-        <li><a href="autoapi/device-manager/app/main/index.html#module-device-manager.app.main">device-manager.app.main</a>
+        <li><a href="autoapi/app/api/protocol_api/index.html#module-app.api.protocol_api">app.api.protocol_api</a>
 </li>
-        <li><a href="autoapi/exam-manager/index.html#module-exam-manager">exam-manager</a>
+        <li><a href="autoapi/app/api/result_api/index.html#module-app.api.result_api">app.api.result_api</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/index.html#module-exam-manager.app">exam-manager.app</a>
+        <li><a href="autoapi/app/api/routes/index.html#module-app.api.routes">app.api.routes</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/index.html#module-exam-manager.app.api">exam-manager.app.api</a>
+        <li><a href="autoapi/app/api/task_api/index.html#module-app.api.task_api">app.api.task_api</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#module-exam-manager.app.api.exam_api">exam-manager.app.api.exam_api</a>
+        <li><a href="autoapi/app/dal/index.html#module-app.dal">app.dal</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#module-exam-manager.app.api.mri_sequence_api">exam-manager.app.api.mri_sequence_api</a>
+        <li><a href="autoapi/app/dal/protocol_dal/index.html#module-app.dal.protocol_dal">app.dal.protocol_dal</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#module-exam-manager.app.api.result_api">exam-manager.app.api.result_api</a>
+        <li><a href="autoapi/app/dal/result_dal/index.html#module-app.dal.result_dal">app.dal.result_dal</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/task_api/index.html#module-exam-manager.app.api.task_api">exam-manager.app.api.task_api</a>
+        <li><a href="autoapi/app/dal/task_dal/index.html#module-app.dal.task_dal">app.dal.task_dal</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#module-exam-manager.app.api.workflow_api">exam-manager.app.api.workflow_api</a>
+        <li><a href="autoapi/app/db/index.html#module-app.db">app.db</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/dal/index.html#module-exam-manager.app.dal">exam-manager.app.dal</a>
+        <li><a href="autoapi/app/db/mongodb/index.html#module-app.db.mongodb">app.db.mongodb</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#module-exam-manager.app.dal.exam_dal">exam-manager.app.dal.exam_dal</a>
+        <li><a href="autoapi/app/db/postgres/index.html#module-app.db.postgres">app.db.postgres</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#module-exam-manager.app.dal.result_dal">exam-manager.app.dal.result_dal</a>
+        <li><a href="autoapi/app/main/index.html#module-app.main">app.main</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#module-exam-manager.app.dal.task_dal">exam-manager.app.dal.task_dal</a>
+        <li><a href="autoapi/app/tools/index.html#module-app.tools">app.tools</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#module-exam-manager.app.dal.workflow_dal">exam-manager.app.dal.workflow_dal</a>
+        <li><a href="autoapi/app/tools/dicom_provider/index.html#module-app.tools.dicom_provider">app.tools.dicom_provider</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/index.html#module-exam-manager.app.db">exam-manager.app.db</a>
+        <li><a href="autoapi/app/tools/helper/index.html#module-app.tools.helper">app.tools.helper</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/mongodb/index.html#module-exam-manager.app.db.mongodb">exam-manager.app.db.mongodb</a>
+        <li><a href="autoapi/app/tools/mrd_provider/index.html#module-app.tools.mrd_provider">app.tools.mrd_provider</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#module-exam-manager.app.db.postgres">exam-manager.app.db.postgres</a>
+        <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#module-app.tools.mri_sequence_plot">app.tools.mri_sequence_plot</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/main/index.html#module-exam-manager.app.main">exam-manager.app.main</a>
+        <li><a href="autoapi/app/userlogin/index.html#module-app.userlogin">app.userlogin</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/tools/index.html#module-exam-manager.app.tools">exam-manager.app.tools</a>
+        <li><a href="autoapi/orchestrator/index.html#module-orchestrator">orchestrator</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#module-exam-manager.app.tools.dicom_provider">exam-manager.app.tools.dicom_provider</a>
+        <li><a href="autoapi/orchestrator/assets/index.html#module-orchestrator.assets">orchestrator.assets</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/tools/helper/index.html#module-exam-manager.app.tools.helper">exam-manager.app.tools.helper</a>
+        <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#module-orchestrator.assets.acquisition_data">orchestrator.assets.acquisition_data</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#module-exam-manager.app.tools.mrd_provider">exam-manager.app.tools.mrd_provider</a>
+        <li><a href="autoapi/orchestrator/assets/dicom_input/index.html#module-orchestrator.assets.dicom_input">orchestrator.assets.dicom_input</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#module-exam-manager.app.tools.mri_sequence_plot">exam-manager.app.tools.mri_sequence_plot</a>
+        <li><a href="autoapi/orchestrator/assets/image_processing/index.html#module-orchestrator.assets.image_processing">orchestrator.assets.image_processing</a>
 </li>
-        <li><a href="autoapi/workflow-manager/index.html#module-workflow-manager">workflow-manager</a>
+        <li><a href="autoapi/orchestrator/assets/mrpro_direct_reconstruction/index.html#module-orchestrator.assets.mrpro_direct_reconstruction">orchestrator.assets.mrpro_direct_reconstruction</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/index.html#module-workflow-manager.app">workflow-manager.app</a>
+        <li><a href="autoapi/orchestrator/io/index.html#module-orchestrator.io">orchestrator.io</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api">workflow-manager.app.api</a>
+        <li><a href="autoapi/orchestrator/io/base/index.html#module-orchestrator.io.base">orchestrator.io.base</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/dagster_queries/index.html#module-workflow-manager.app.api.dagster_queries">workflow-manager.app.api.dagster_queries</a>
+        <li><a href="autoapi/orchestrator/io/dicom_io_manager/index.html#module-orchestrator.io.dicom_io_manager">orchestrator.io.dicom_io_manager</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#module-workflow-manager.app.api.manager_endpoints">workflow-manager.app.api.manager_endpoints</a>
+        <li><a href="autoapi/orchestrator/io/idata_io_manager/index.html#module-orchestrator.io.idata_io_manager">orchestrator.io.idata_io_manager</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#module-workflow-manager.app.api.scanhub_requests">workflow-manager.app.api.scanhub_requests</a>
+        <li><a href="autoapi/orchestrator/jobs/index.html#module-orchestrator.jobs">orchestrator.jobs</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/main/index.html#module-workflow-manager.app.main">workflow-manager.app.main</a>
+        <li><a href="autoapi/orchestrator/jobs/acquisition_data/index.html#module-orchestrator.jobs.acquisition_data">orchestrator.jobs.acquisition_data</a>
+</li>
+        <li><a href="autoapi/orchestrator/notifier/index.html#module-orchestrator.notifier">orchestrator.notifier</a>
+</li>
+        <li><a href="autoapi/orchestrator/repository/index.html#module-orchestrator.repository">orchestrator.repository</a>
+</li>
+        <li><a href="autoapi/orchestrator/resources/index.html#module-orchestrator.resources">orchestrator.resources</a>
+</li>
+        <li><a href="autoapi/orchestrator/sensors/index.html#module-orchestrator.sensors">orchestrator.sensors</a>
+</li>
+        <li><a href="autoapi/orchestrator/utils/index.html#module-orchestrator.utils">orchestrator.utils</a>
+</li>
+        <li><a href="autoapi/orchestrator/utils/dag_config/index.html#module-orchestrator.utils.dag_config">orchestrator.utils.dag_config</a>
+</li>
+        <li><a href="autoapi/orchestrator/utils/snr/index.html#module-orchestrator.utils.snr">orchestrator.utils.snr</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.monitor_devices">monitor_devices() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.monitor_devices">monitor_devices() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.mri_sequence_form">mri_sequence_form() (in module exam-manager.app.api.mri_sequence_api)</a>
+      <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#orchestrator.assets.acquisition_data.AcquisitionData.mrd_path">mrd_path (orchestrator.assets.acquisition_data.AcquisitionData attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.mri_sequence_form">mri_sequence_form() (in module app.api.mri_sequence_api)</a>
+</li>
+      <li><a href="autoapi/orchestrator/assets/mrpro_direct_reconstruction/index.html#orchestrator.assets.mrpro_direct_reconstruction.mrpro_direct_reconstruction">mrpro_direct_reconstruction() (in module orchestrator.assets.mrpro_direct_reconstruction)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1225,16 +1288,12 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.name">name (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.name">name (app.db.postgres.Protocol attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.name">(exam-manager.app.db.postgres.Exam attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.name">(app.db.postgres.Task attribute)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.name">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.name">(exam-manager.app.db.postgres.Workflow attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#exam-manager.app.tools.mri_sequence_plot.TraceData.name">(exam-manager.app.tools.mri_sequence_plot.TraceData attribute)</a>
+        <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#app.tools.mri_sequence_plot.TraceData.name">(app.tools.mri_sequence_plot.TraceData attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1243,130 +1302,293 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.oauth2_scheme">oauth2_scheme (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.oauth2_scheme">oauth2_scheme (in module app.api.device_endpoints)</a>
 
       <ul>
-        <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.oauth2_scheme">(in module device-manager.app.api.device_websocket)</a>
+        <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.oauth2_scheme">(in module app.api.device_websocket)</a>
 </li>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.oauth2_scheme">(in module exam-manager.app.api.result_api)</a>
+        <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.oauth2_scheme">(in module app.api.result_api)</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.oauth2_scheme">(in module workflow-manager.app.api.manager_endpoints)</a>
+      </ul></li>
+      <li><a href="autoapi/orchestrator/sensors/index.html#orchestrator.sensors.on_run_canceled">on_run_canceled() (in module orchestrator.sensors)</a>
+</li>
+      <li><a href="autoapi/orchestrator/sensors/index.html#orchestrator.sensors.on_run_failure">on_run_failure() (in module orchestrator.sensors)</a>
+</li>
+      <li><a href="autoapi/orchestrator/sensors/index.html#orchestrator.sensors.on_run_success">on_run_success() (in module orchestrator.sensors)</a>
+</li>
+      <li>
+    orchestrator
+
+      <ul>
+        <li><a href="autoapi/orchestrator/index.html#module-orchestrator">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.assets
+
+      <ul>
+        <li><a href="autoapi/orchestrator/assets/index.html#module-orchestrator.assets">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.assets.acquisition_data
+
+      <ul>
+        <li><a href="autoapi/orchestrator/assets/acquisition_data/index.html#module-orchestrator.assets.acquisition_data">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.assets.dicom_input
+
+      <ul>
+        <li><a href="autoapi/orchestrator/assets/dicom_input/index.html#module-orchestrator.assets.dicom_input">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.assets.image_processing
+
+      <ul>
+        <li><a href="autoapi/orchestrator/assets/image_processing/index.html#module-orchestrator.assets.image_processing">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.assets.mrpro_direct_reconstruction
+
+      <ul>
+        <li><a href="autoapi/orchestrator/assets/mrpro_direct_reconstruction/index.html#module-orchestrator.assets.mrpro_direct_reconstruction">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.io
+
+      <ul>
+        <li><a href="autoapi/orchestrator/io/index.html#module-orchestrator.io">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.io.base
+
+      <ul>
+        <li><a href="autoapi/orchestrator/io/base/index.html#module-orchestrator.io.base">module</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.origins">origins (in module device-manager.app.main)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.ORIGINS">ORIGINS (in module exam-manager.app.main)</a>
+      <li>
+    orchestrator.io.dicom_io_manager
 
       <ul>
-        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.ORIGINS">(in module workflow-manager.app.main)</a>
+        <li><a href="autoapi/orchestrator/io/dicom_io_manager/index.html#module-orchestrator.io.dicom_io_manager">module</a>
 </li>
       </ul></li>
+      <li>
+    orchestrator.io.idata_io_manager
+
+      <ul>
+        <li><a href="autoapi/orchestrator/io/idata_io_manager/index.html#module-orchestrator.io.idata_io_manager">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.jobs
+
+      <ul>
+        <li><a href="autoapi/orchestrator/jobs/index.html#module-orchestrator.jobs">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.jobs.acquisition_data
+
+      <ul>
+        <li><a href="autoapi/orchestrator/jobs/acquisition_data/index.html#module-orchestrator.jobs.acquisition_data">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.notifier
+
+      <ul>
+        <li><a href="autoapi/orchestrator/notifier/index.html#module-orchestrator.notifier">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.repository
+
+      <ul>
+        <li><a href="autoapi/orchestrator/repository/index.html#module-orchestrator.repository">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.resources
+
+      <ul>
+        <li><a href="autoapi/orchestrator/resources/index.html#module-orchestrator.resources">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.sensors
+
+      <ul>
+        <li><a href="autoapi/orchestrator/sensors/index.html#module-orchestrator.sensors">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.utils
+
+      <ul>
+        <li><a href="autoapi/orchestrator/utils/index.html#module-orchestrator.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.utils.dag_config
+
+      <ul>
+        <li><a href="autoapi/orchestrator/utils/dag_config/index.html#module-orchestrator.utils.dag_config">module</a>
+</li>
+      </ul></li>
+      <li>
+    orchestrator.utils.snr
+
+      <ul>
+        <li><a href="autoapi/orchestrator/utils/snr/index.html#module-orchestrator.utils.snr">module</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/app/main/index.html#app.main.ORIGINS">ORIGINS (in module app.main)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.parameter">parameter (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.parse_ids">parse_ids() (in module app.tools.mrd_provider)</a>
+</li>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.password_hash">password_hash (app.db.UserSQL attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient">Patient (class in app.api.db)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.patient_height_cm">patient_height_cm (app.db.postgres.Protocol attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.patient_id">patient_id (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.DAGTask.parameter">(exam-manager.app.db.postgres.DAGTask attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.patient_id">(app.db.postgres.Protocol attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#exam-manager.app.tools.mrd_provider.parse_ids">parse_ids() (in module exam-manager.app.tools.mrd_provider)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.patient_weight_kg">patient_weight_kg (app.db.postgres.Protocol attribute)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/dagster_queries/index.html#workflow-manager.app.api.dagster_queries.parse_job_id">parse_job_id() (in module workflow-manager.app.api.dagster_queries)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.position">position (app.db.postgres.Task attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.patient_height_cm">patient_height_cm (exam-manager.app.db.postgres.Exam attribute)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.patient_id">patient_id (exam-manager.app.db.postgres.Exam attribute)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.PATIENT_MANAGER_URI">PATIENT_MANAGER_URI (in module workflow-manager.app.api.manager_endpoints)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.patient_weight_kg">patient_weight_kg (exam-manager.app.db.postgres.Exam attribute)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.position">position (exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.postgres_db_name_filepath">postgres_db_name_filepath (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.postgres_db_name_filepath">postgres_db_name_filepath (in module app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.postgres_db_name_filepath">(in module exam-manager.app.db.postgres)</a>
+        <li><a href="autoapi/app/db/index.html#app.db.postgres_db_name_filepath">(in module app.db)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.postgres_db_name_filepath">(in module app.db.postgres)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.postgres_password_filepath">postgres_password_filepath (in module app.api.db)</a>
+
+      <ul>
+        <li><a href="autoapi/app/db/index.html#app.db.postgres_password_filepath">(in module app.db)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.postgres_password_filepath">(in module app.db.postgres)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.postgres_user">postgres_user (in module app.api.db)</a>
+
+      <ul>
+        <li><a href="autoapi/app/db/index.html#app.db.postgres_user">(in module app.db)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.postgres_user">(in module app.db.postgres)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.postgres_password_filepath">postgres_password_filepath (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.postgres_user_filepath">postgres_user_filepath (in module app.api.db)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.postgres_password_filepath">(in module exam-manager.app.db.postgres)</a>
+        <li><a href="autoapi/app/db/index.html#app.db.postgres_user_filepath">(in module app.db)</a>
+</li>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.postgres_user_filepath">(in module app.db.postgres)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.postgres_user">postgres_user (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.PREFIX_PATIENT_MANAGER">PREFIX_PATIENT_MANAGER (in module app.api.protocol_api)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.postgres_user">(in module exam-manager.app.db.postgres)</a>
+        <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.PREFIX_PATIENT_MANAGER">(in module app.api.result_api)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.postgres_user_filepath">postgres_user_filepath (in module device-manager.app.api.db)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.TaskEvent.progress">progress (app.api.device_websocket.TaskEvent attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.postgres_user_filepath">(in module exam-manager.app.db.postgres)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.progress">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.PREFIX_PATIENT_MANAGER">PREFIX_PATIENT_MANAGER (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol">Protocol (class in app.db.postgres)</a>
+</li>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.protocol_delete">protocol_delete() (in module app.api.protocol_api)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.protocol_id">protocol_id (app.db.postgres.Task attribute)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.PREFIX_PATIENT_MANAGER">(in module exam-manager.app.api.result_api)</a>
+        <li><a href="autoapi/orchestrator/utils/dag_config/index.html#orchestrator.utils.dag_config.DAGConfiguration.protocol_id">(orchestrator.utils.dag_config.DAGConfiguration attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.progress">progress (exam-manager.app.db.postgres.Task attribute)</a>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.PROTOCOL_MANAGER_URI">PROTOCOL_MANAGER_URI (in module orchestrator.repository)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#exam-manager.app.tools.dicom_provider.provide_p10_dicom">provide_p10_dicom() (in module exam-manager.app.tools.dicom_provider)</a>
+      <li><a href="autoapi/orchestrator/index.html#orchestrator.PROTOCOL_NOTIFIER_KEY">PROTOCOL_NOTIFIER_KEY (in module orchestrator)</a>
 </li>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.protocol_router">protocol_router (in module app.api.protocol_api)</a>
+</li>
+      <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.ProtocolManagerNotifier">ProtocolManagerNotifier (class in orchestrator.notifier)</a>
+</li>
+      <li><a href="autoapi/app/tools/dicom_provider/index.html#app.tools.dicom_provider.provide_p10_dicom">provide_p10_dicom() (in module app.tools.dicom_provider)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.push_task_event">push_task_event() (in module app.api.device_websocket)</a>
+
+      <ul>
+        <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.DeviceManagerNotifier.push_task_event">(orchestrator.notifier.DeviceManagerNotifier method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/mrd_provider/index.html#exam-manager.app.tools.mrd_provider.RANGE_RE">RANGE_RE (in module exam-manager.app.tools.mrd_provider)</a>
+      <li><a href="autoapi/app/tools/mrd_provider/index.html#app.tools.mrd_provider.RANGE_RE">RANGE_RE (in module app.tools.mrd_provider)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.readiness">readiness() (in module device-manager.app.main)</a>
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.readiness">(in module exam-manager.app.main)</a>
+      <li><a href="autoapi/app/main/index.html#app.main.readiness">readiness() (in module app.main)</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.readiness">(in module workflow-manager.app.main)</a>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.reorder_tasks">reorder_tasks() (in module app.api.task_api)</a>
 </li>
-      </ul></li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.reorder_tasks">reorder_tasks() (in module exam-manager.app.api.task_api)</a>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.reorder_tasks_data">reorder_tasks_data() (in module app.dal.task_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.reorder_tasks_data">reorder_tasks_data() (in module exam-manager.app.dal.task_dal)</a>
+      <li><a href="autoapi/app/tools/dicom_provider/index.html#app.tools.dicom_provider.resolve_dicom_path">resolve_dicom_path() (in module app.tools.dicom_provider)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/dicom_provider/index.html#exam-manager.app.tools.dicom_provider.resolve_dicom_path">resolve_dicom_path() (in module exam-manager.app.tools.dicom_provider)</a>
+      <li><a href="autoapi/app/tools/dicom_provider/index.html#app.tools.dicom_provider.resolve_dicom_path_from_db">resolve_dicom_path_from_db() (in module app.tools.dicom_provider)</a>
+</li>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.ressources">ressources (in module orchestrator.repository)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result">Result (class in app.db.postgres)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result">Result (class in exam-manager.app.db.postgres)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.result_router">result_router (in module app.api.result_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.result_router">result_router (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.RESULT_URI">RESULT_URI (in module app.api.exam_requests)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.RESULT_URI">RESULT_URI (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.results">results (app.db.postgres.Task attribute)</a>
+</li>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.role">role (app.db.UserSQL attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.router">router (in module app.api.device_endpoints)</a>
 
       <ul>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.RESULT_URI">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.router">(in module app.api.device_websocket)</a>
 </li>
-      </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.results">results (exam-manager.app.db.postgres.Task attribute)</a>
+        <li><a href="autoapi/app/api/routes/index.html#app.api.routes.router">(in module app.api.routes)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.router">router (in module device-manager.app.api.device_endpoints)</a>
-
-      <ul>
-        <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.router">(in module device-manager.app.api.device_websocket)</a>
-</li>
-        <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.router">(in module workflow-manager.app.api.manager_endpoints)</a>
+        <li><a href="autoapi/app/userlogin/index.html#app.userlogin.router">(in module app.userlogin)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1375,50 +1597,48 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.salt">salt (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.salt">salt (app.db.UserSQL attribute)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.send_json">send_json() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/orchestrator/io/base/index.html#orchestrator.io.base.ScanHubIOManager">ScanHubIOManager (class in orchestrator.io.base)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.seq_router">seq_router (in module exam-manager.app.api.mri_sequence_api)</a>
+      <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.DeviceManagerNotifier.send_device_parameter_update">send_device_parameter_update() (orchestrator.notifier.DeviceManagerNotifier method)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.AcquisitionTask.sequence_id">sequence_id (exam-manager.app.db.postgres.AcquisitionTask attribute)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.send_json">send_json() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.SEQUENCE_URI">SEQUENCE_URI (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/orchestrator/repository/index.html#orchestrator.repository.sensors">sensors (in module orchestrator.repository)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.serial_number">serial_number (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.seq_router">seq_router (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.set_result">set_result() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.AcquisitionTask.sequence_id">sequence_id (app.db.postgres.AcquisitionTask attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.SEQUENCE_URI">SEQUENCE_URI (in module app.api.exam_requests)</a>
+</li>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.set_result">set_result() (in module app.api.exam_requests)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.set_result">(in module exam-manager.app.api.result_api)</a>
+        <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.set_result">(in module app.api.result_api)</a>
 </li>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.set_result">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.ProtocolManagerNotifier.set_result">(orchestrator.notifier.ProtocolManagerNotifier method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.set_task">set_task() (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.set_task">set_task() (in module app.api.exam_requests)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.sex">sex (app.api.db.Patient attribute)</a>
+</li>
+      <li><a href="autoapi/orchestrator/utils/snr/index.html#orchestrator.utils.snr.signal_to_noise_ratio">signal_to_noise_ratio() (in module orchestrator.utils.snr)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.TaskEvent.source">source (app.api.device_websocket.TaskEvent attribute)</a>
+</li>
+      <li><a href="autoapi/app/main/index.html#app.main.startup">startup() (in module app.main)</a>
+</li>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.status">status (app.api.db.Patient attribute)</a>
 
       <ul>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.set_task">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.status">(app.db.postgres.Protocol attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.shutdown">shutdown() (in module workflow-manager.app.main)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.site">site (device-manager.app.api.db.Device attribute)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.start_scan_via_websocket">start_scan_via_websocket() (in module device-manager.app.api.device_websocket)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/main/index.html#workflow-manager.app.main.startup">startup() (in module workflow-manager.app.main)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.status">status (device-manager.app.api.db.Device attribute)</a>
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.status">(exam-manager.app.db.postgres.Exam attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.status">(exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.status">(exam-manager.app.db.postgres.Workflow attribute)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.status">(app.db.postgres.Task attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1427,35 +1647,49 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task">Task (class in exam-manager.app.db.postgres)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task">Task (class in app.db.postgres)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.task_id">task_id (exam-manager.app.db.postgres.Result attribute)</a>
+      <li><a href="autoapi/orchestrator/utils/dag_config/index.html#orchestrator.utils.dag_config.DAGConfiguration.task_dir">task_dir (orchestrator.utils.dag_config.DAGConfiguration attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.TaskReorder.task_ids">task_ids (exam-manager.app.api.task_api.TaskReorder attribute)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.task_router">task_router (in module exam-manager.app.api.task_api)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.task_type">task_type (exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-      <li><a href="autoapi/device-manager/app/api/exam_requests/index.html#device-manager.app.api.exam_requests.TASK_URI">TASK_URI (in module device-manager.app.api.exam_requests)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.task_id">task_id (app.db.postgres.Result attribute)</a>
 
       <ul>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.TASK_URI">(in module workflow-manager.app.api.scanhub_requests)</a>
+        <li><a href="autoapi/orchestrator/utils/dag_config/index.html#orchestrator.utils.dag_config.DAGConfiguration.task_id">(orchestrator.utils.dag_config.DAGConfiguration attribute)</a>
 </li>
       </ul></li>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.TaskReorder.task_ids">task_ids (app.api.task_api.TaskReorder attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.task_router">task_router (in module app.api.task_api)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.task_sse_queues">task_sse_queues (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.TaskEvent.task_status">task_status (app.api.device_websocket.TaskEvent attribute)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.task_stream">task_stream() (in module app.api.device_websocket)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.TaskReorder">TaskReorder (class in exam-manager.app.api.task_api)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Task.task_type">task_type (app.db.postgres.Task attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow.tasks">tasks (exam-manager.app.db.postgres.Workflow attribute)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.TASK_URI">TASK_URI (in module app.api.exam_requests)</a>
 </li>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.token_hash">token_hash (device-manager.app.api.db.Device attribute)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.TaskEvent">TaskEvent (class in app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#exam-manager.app.tools.mri_sequence_plot.TraceData">TraceData (class in exam-manager.app.tools.mri_sequence_plot)</a>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.TaskReorder">TaskReorder (class in app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.trigger_task">trigger_task() (in module workflow-manager.app.api.manager_endpoints)</a>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Protocol.tasks">tasks (app.db.postgres.Protocol attribute)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Result.type">type (exam-manager.app.db.postgres.Result attribute)</a>
+      <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.DeviceManagerNotifier.timeout">timeout (orchestrator.notifier.DeviceManagerNotifier attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.ProtocolManagerNotifier.timeout">(orchestrator.notifier.ProtocolManagerNotifier attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#app.tools.mri_sequence_plot.TraceData">TraceData (class in app.tools.mri_sequence_plot)</a>
+</li>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.trigger_acquisition">trigger_acquisition() (in module app.api.device_websocket)</a>
+</li>
+      <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Result.type">type (app.db.postgres.Result attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1463,33 +1697,57 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/db/index.html#device-manager.app.api.db.Device.update">update() (device-manager.app.api.db.Device method)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.update">update() (app.api.db.Patient method)</a>
 
       <ul>
-        <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Base.update">(exam-manager.app.db.postgres.Base method)</a>
+        <li><a href="autoapi/app/db/postgres/index.html#app.db.postgres.Base.update">(app.db.postgres.Base method)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/device-manager/app/api/device_endpoints/index.html#device-manager.app.api.device_endpoints.update_device_parameter">update_device_parameter() (in module device-manager.app.api.device_endpoints)</a>
+      <li><a href="autoapi/app/api/device_endpoints/index.html#app.api.device_endpoints.update_device_parameter">update_device_parameter() (in module app.api.device_endpoints)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/exam_api/index.html#exam-manager.app.api.exam_api.update_exam">update_exam() (in module exam-manager.app.api.exam_api)</a>
+      <li><a href="autoapi/app/api/mri_sequence_api/index.html#app.api.mri_sequence_api.update_mri_sequence_endpoint">update_mri_sequence_endpoint() (in module app.api.mri_sequence_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/exam_dal/index.html#exam-manager.app.dal.exam_dal.update_exam_data">update_exam_data() (in module exam-manager.app.dal.exam_dal)</a>
+      <li><a href="autoapi/app/api/dal/index.html#app.api.dal.update_patient">update_patient() (in module app.api.dal)</a>
+
+      <ul>
+        <li><a href="autoapi/app/api/routes/index.html#app.api.routes.update_patient">(in module app.api.routes)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/mri_sequence_api/index.html#exam-manager.app.api.mri_sequence_api.update_mri_sequence_endpoint">update_mri_sequence_endpoint() (in module exam-manager.app.api.mri_sequence_api)</a>
+      </ul></li>
+      <li><a href="autoapi/app/api/protocol_api/index.html#app.api.protocol_api.update_protocol">update_protocol() (in module app.api.protocol_api)</a>
+</li>
+      <li><a href="autoapi/app/dal/protocol_dal/index.html#app.dal.protocol_dal.update_protocol_data">update_protocol_data() (in module app.dal.protocol_dal)</a>
+</li>
+      <li><a href="autoapi/app/dal/result_dal/index.html#app.dal.result_dal.update_result_db">update_result_db() (in module app.dal.result_dal)</a>
+</li>
+      <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.update_task">update_task() (in module app.api.task_api)</a>
+</li>
+      <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.update_task_data">update_task_data() (in module app.dal.task_dal)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/dal/result_dal/index.html#exam-manager.app.dal.result_dal.update_result_db">update_result_db() (in module exam-manager.app.dal.result_dal)</a>
+      <li><a href="autoapi/app/api/exam_requests/index.html#app.api.exam_requests.update_task_status">update_task_status() (in module app.api.exam_requests)</a>
+
+      <ul>
+        <li><a href="autoapi/app/api/task_api/index.html#app.api.task_api.update_task_status">(in module app.api.task_api)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/task_api/index.html#exam-manager.app.api.task_api.update_task">update_task() (in module exam-manager.app.api.task_api)</a>
+        <li><a href="autoapi/app/dal/task_dal/index.html#app.dal.task_dal.update_task_status">(in module app.dal.task_dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/task_dal/index.html#exam-manager.app.dal.task_dal.update_task_data">update_task_data() (in module exam-manager.app.dal.task_dal)</a>
+        <li><a href="autoapi/orchestrator/notifier/index.html#orchestrator.notifier.ProtocolManagerNotifier.update_task_status">(orchestrator.notifier.ProtocolManagerNotifier method)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.update_workflow">update_workflow() (in module exam-manager.app.api.workflow_api)</a>
+      </ul></li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.update_user">update_user() (in module app.userlogin)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/dal/workflow_dal/index.html#exam-manager.app.dal.workflow_dal.update_workflow_data">update_workflow_data() (in module exam-manager.app.dal.workflow_dal)</a>
+      <li><a href="autoapi/app/dal/index.html#app.dal.update_user_data">update_user_data() (in module app.dal)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/api/result_api/index.html#exam-manager.app.api.result_api.upload_to_xnat">upload_to_xnat() (in module exam-manager.app.api.result_api)</a>
+      <li><a href="autoapi/app/api/result_api/index.html#app.api.result_api.upload_to_xnat">upload_to_xnat() (in module app.api.result_api)</a>
+</li>
+      <li><a href="autoapi/orchestrator/utils/dag_config/index.html#orchestrator.utils.dag_config.DAGConfiguration.user_access_token">user_access_token (orchestrator.utils.dag_config.DAGConfiguration attribute)</a>
+</li>
+      <li><a href="autoapi/app/userlogin/index.html#app.userlogin.user_delete">user_delete() (in module app.userlogin)</a>
+</li>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL.username">username (app.db.UserSQL attribute)</a>
+</li>
+      <li><a href="autoapi/app/db/index.html#app.db.UserSQL">UserSQL (class in app.db)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1497,82 +1755,19 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/main/index.html#device-manager.app.main.validation_exception_handler">validation_exception_handler() (in module device-manager.app.main)</a>
-
-      <ul>
-        <li><a href="autoapi/exam-manager/app/main/index.html#exam-manager.app.main.validation_exception_handler">(in module exam-manager.app.main)</a>
+      <li><a href="autoapi/app/main/index.html#app.main.validation_exception_handler">validation_exception_handler() (in module app.main)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/device-manager/app/api/device_websocket/index.html#device-manager.app.api.device_websocket.websocket_endpoint">websocket_endpoint() (in module device-manager.app.api.device_websocket)</a>
+      <li><a href="autoapi/app/api/device_websocket/index.html#app.api.device_websocket.websocket_endpoint">websocket_endpoint() (in module app.api.device_websocket)</a>
 </li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Workflow">Workflow (class in exam-manager.app.db.postgres)</a>
-</li>
-      <li>
-    workflow-manager
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/index.html#module-workflow-manager">module</a>
-</li>
-      </ul></li>
-      <li>
-    workflow-manager.app
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/index.html#module-workflow-manager.app">module</a>
-</li>
-      </ul></li>
-      <li>
-    workflow-manager.app.api
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/api/index.html#module-workflow-manager.app.api">module</a>
-</li>
-      </ul></li>
-      <li>
-    workflow-manager.app.api.dagster_queries
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/api/dagster_queries/index.html#module-workflow-manager.app.api.dagster_queries">module</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    workflow-manager.app.api.manager_endpoints
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#module-workflow-manager.app.api.manager_endpoints">module</a>
-</li>
-      </ul></li>
-      <li>
-    workflow-manager.app.api.scanhub_requests
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#module-workflow-manager.app.api.scanhub_requests">module</a>
-</li>
-      </ul></li>
-      <li>
-    workflow-manager.app.main
-
-      <ul>
-        <li><a href="autoapi/workflow-manager/app/main/index.html#module-workflow-manager.app.main">module</a>
-</li>
-      </ul></li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Task.workflow_id">workflow_id (exam-manager.app.db.postgres.Task attribute)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/manager_endpoints/index.html#workflow-manager.app.api.manager_endpoints.WORKFLOW_MANAGER_URI">WORKFLOW_MANAGER_URI (in module workflow-manager.app.api.manager_endpoints)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/api/workflow_api/index.html#exam-manager.app.api.workflow_api.workflow_router">workflow_router (in module exam-manager.app.api.workflow_api)</a>
-</li>
-      <li><a href="autoapi/workflow-manager/app/api/scanhub_requests/index.html#workflow-manager.app.api.scanhub_requests.WORKFLOW_URI">WORKFLOW_URI (in module workflow-manager.app.api.scanhub_requests)</a>
-</li>
-      <li><a href="autoapi/exam-manager/app/db/postgres/index.html#exam-manager.app.db.postgres.Exam.workflows">workflows (exam-manager.app.db.postgres.Exam attribute)</a>
+      <li><a href="autoapi/app/api/db/index.html#app.api.db.Patient.weight">weight (app.api.db.Patient attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1580,7 +1775,7 @@
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#exam-manager.app.tools.mri_sequence_plot.TraceData.x">x (exam-manager.app.tools.mri_sequence_plot.TraceData attribute)</a>
+      <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#app.tools.mri_sequence_plot.TraceData.x">x (app.tools.mri_sequence_plot.TraceData attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1588,7 +1783,7 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/exam-manager/app/tools/mri_sequence_plot/index.html#exam-manager.app.tools.mri_sequence_plot.TraceData.y">y (exam-manager.app.tools.mri_sequence_plot.TraceData attribute)</a>
+      <li><a href="autoapi/app/tools/mri_sequence_plot/index.html#app.tools.mri_sequence_plot.TraceData.y">y (app.tools.mri_sequence_plot.TraceData attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1622,8 +1817,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1634,7 +1829,7 @@
 
   <p class="copyright">
     
-      © Copyright 2023, BRAIN-LINK UG (haftungsbeschraenkt).
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
       <br/>
     
   </p>

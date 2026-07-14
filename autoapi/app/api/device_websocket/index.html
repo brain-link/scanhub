@@ -1,0 +1,832 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>app.api.device_websocket &#8212; ScanHub Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=8d6ca438" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/app/api/device_websocket/index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../../_static/favicon-32x32.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="../../../../_static/searchtools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script src="../../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">ScanHub Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../introduction.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../scanhub_api.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../scanhub_techdoc.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Code Documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../introduction.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../scanhub_api.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../scanhub_techdoc.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Code Documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dal/index.html">app.api.dal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../db/index.html">app.api.db</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../device_endpoints/index.html">app.api.device_endpoints</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">app.api.device_websocket</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exam_requests/index.html">app.api.exam_requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mri_sequence_api/index.html">app.api.mri_sequence_api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol_api/index.html">app.api.protocol_api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../result_api/index.html">app.api.result_api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../routes/index.html">app.api.routes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../task_api/index.html">app.api.task_api</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">app.api.device_websocket</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-app.api.device_websocket">
+<span id="app-api-device-websocket"></span><h1>app.api.device_websocket<a class="headerlink" href="#module-app.api.device_websocket" title="Link to this heading">#</a></h1>
+<p>Device websocket connection.</p>
+<p>This module defines the WebSocket endpoints for managing devices.
+It includes functionalities for:
+- Device registration and status updates via WebSocket.
+- Listening for commands from devices.</p>
+<p>Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.LOG_CALL_DELIMITER" title="app.api.device_websocket.LOG_CALL_DELIMITER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.DATA_LAKE_DIR" title="app.api.device_websocket.DATA_LAKE_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.DAGSTER_GRAPHQL_URL" title="app.api.device_websocket.DAGSTER_GRAPHQL_URL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DAGSTER_GRAPHQL_URL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.oauth2_scheme" title="app.api.device_websocket.oauth2_scheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.router" title="app.api.device_websocket.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.dict_id_websocket" title="app.api.device_websocket.dict_id_websocket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.device_last_seen" title="app.api.device_websocket.device_last_seen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">device_last_seen</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.task_sse_queues" title="app.api.device_websocket.task_sse_queues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">task_sse_queues</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket._SSE_TERMINAL_STATUSES" title="app.api.device_websocket._SSE_TERMINAL_STATUSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SSE_TERMINAL_STATUSES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket._HEARTBEAT_TIMEOUT_S" title="app.api.device_websocket._HEARTBEAT_TIMEOUT_S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_HEARTBEAT_TIMEOUT_S</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S" title="app.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_HEARTBEAT_CHECK_INTERVAL_S</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.TaskEvent" title="app.api.device_websocket.TaskEvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskEvent</span></code></a></p></td>
+<td><p>Payload for the push-event endpoint — callable by any internal service.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.send_json" title="app.api.device_websocket.send_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_json</span></code></a>(websocket, payload)</p></td>
+<td><p>Send json payload via websocket.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket._broadcast_task_status" title="app.api.device_websocket._broadcast_task_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_broadcast_task_status</span></code></a>(→ None)</p></td>
+<td><p>Push a status event to all SSE subscribers watching a task.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.push_task_event" title="app.api.device_websocket.push_task_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">push_task_event</span></code></a>(→ dict)</p></td>
+<td><p>Internal endpoint: any service pushes a status event to all SSE subscribers of a task.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.task_stream" title="app.api.device_websocket.task_stream"><code class="xref py py-obj docutils literal notranslate"><span class="pre">task_stream</span></code></a>(]) → starlette.responses.StreamingResponse)</p></td>
+<td><p>SSE endpoint — streams real-time task status updates to the browser.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.trigger_acquisition" title="app.api.device_websocket.trigger_acquisition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trigger_acquisition</span></code></a>(task_id, access_token)</p></td>
+<td><p>Trigger an MRI acquisition for the given task.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.connection_with_valid_id_and_token" title="app.api.device_websocket.connection_with_valid_id_and_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token</span></code></a>(→ uuid.UUID)</p></td>
+<td><p>Check if the given device_id and device_token belong to an existing device in the database.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.monitor_devices" title="app.api.device_websocket.monitor_devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">monitor_devices</span></code></a>()</p></td>
+<td><p>Monitor device online/offline status via the ping heartbeat.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.websocket_endpoint" title="app.api.device_websocket.websocket_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">websocket_endpoint</span></code></a>(websocket)</p></td>
+<td><p>Websocket endpoint for device communication.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.handle_register" title="app.api.device_websocket.handle_register"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_register</span></code></a>(→ None)</p></td>
+<td><p>Handle device registration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket.handle_status_update" title="app.api.device_websocket.handle_status_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_status_update</span></code></a>(→ None)</p></td>
+<td><p>Handle device status updates from the device SDK.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket._stream_to_file" title="app.api.device_websocket._stream_to_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_stream_to_file</span></code></a>(→ tuple[int, str])</p></td>
+<td><p>Stream bytes from a WebSocket into a temp file; returns (bytes_received, sha256_hex).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket._submit_reconstruction_job" title="app.api.device_websocket._submit_reconstruction_job"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_submit_reconstruction_job</span></code></a>(→ None)</p></td>
+<td><p>Submit the mrpro_reconstruction_job to Dagster after a file transfer completes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#app.api.device_websocket.handle_file_transfer" title="app.api.device_websocket.handle_file_transfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_file_transfer</span></code></a>(→ None)</p></td>
+<td><p>Handle file transfer from device to server.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#app.api.device_websocket._pick_result_type" title="app.api.device_websocket._pick_result_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_pick_result_type</span></code></a>(filename)</p></td>
+<td><p>Map extensions to enum.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.LOG_CALL_DELIMITER">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">LOG_CALL_DELIMITER</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'-------------------------------------------------------------------------------'</span></span><a class="headerlink" href="#app.api.device_websocket.LOG_CALL_DELIMITER" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.DATA_LAKE_DIR">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">DATA_LAKE_DIR</span></span><a class="headerlink" href="#app.api.device_websocket.DATA_LAKE_DIR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.DAGSTER_GRAPHQL_URL">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">DAGSTER_GRAPHQL_URL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://dagster-webserver:3000/dagster/graphql'</span></span><a class="headerlink" href="#app.api.device_websocket.DAGSTER_GRAPHQL_URL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.oauth2_scheme">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">oauth2_scheme</span></span><a class="headerlink" href="#app.api.device_websocket.oauth2_scheme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.router">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#app.api.device_websocket.router" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.dict_id_websocket">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">dict_id_websocket</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">fastapi.WebSocket</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#app.api.device_websocket.dict_id_websocket" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.device_last_seen">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">device_last_seen</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">uuid.UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#app.api.device_websocket.device_last_seen" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket.task_sse_queues">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">task_sse_queues</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">asyncio.Queue</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#app.api.device_websocket.task_sse_queues" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.send_json">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">send_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.api.device_websocket.send_json" title="Link to this definition">#</a></dt>
+<dd><p>Send json payload via websocket.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket._broadcast_task_status">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_broadcast_task_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#app.api.device_websocket._broadcast_task_status" title="Link to this definition">#</a></dt>
+<dd><p>Push a status event to all SSE subscribers watching a task.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket._SSE_TERMINAL_STATUSES">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_SSE_TERMINAL_STATUSES</span></span><a class="headerlink" href="#app.api.device_websocket._SSE_TERMINAL_STATUSES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.api.device_websocket.TaskEvent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">TaskEvent</span></span><a class="headerlink" href="#app.api.device_websocket.TaskEvent" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Payload for the push-event endpoint — callable by any internal service.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.api.device_websocket.TaskEvent.source">
+<span class="sig-name descname"><span class="pre">source</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#app.api.device_websocket.TaskEvent.source" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.api.device_websocket.TaskEvent.task_status">
+<span class="sig-name descname"><span class="pre">task_status</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#app.api.device_websocket.TaskEvent.task_status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.api.device_websocket.TaskEvent.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#app.api.device_websocket.TaskEvent.progress" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.api.device_websocket.TaskEvent.message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></span><a class="headerlink" href="#app.api.device_websocket.TaskEvent.message" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.push_task_event">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">push_task_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.api.device_websocket.TaskEvent" title="app.api.device_websocket.TaskEvent"><span class="pre">TaskEvent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#app.api.device_websocket.push_task_event" title="Link to this definition">#</a></dt>
+<dd><p>Internal endpoint: any service pushes a status event to all SSE subscribers of a task.</p>
+<p>Called by Dagster sensors on job success, failure, or cancellation.
+No authentication required — only reachable on the internal Docker network.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.task_stream">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">task_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Query</span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">starlette.responses.StreamingResponse</span></span></span><a class="headerlink" href="#app.api.device_websocket.task_stream" title="Link to this definition">#</a></dt>
+<dd><p>SSE endpoint — streams real-time task status updates to the browser.</p>
+<dl class="simple">
+<dt>The browser connects with EventSource and receives JSON events of the form:</dt><dd><p>{“task_status”: “INPROGRESS”, “progress”: 45}</p>
+</dd>
+</dl>
+<p>The stream closes automatically when the task reaches FINISHED or ERROR.
+A keepalive comment is sent every 25 s to prevent proxy timeouts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.trigger_acquisition">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">trigger_acquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#app.api.device_websocket.oauth2_scheme" title="app.api.device_websocket.oauth2_scheme"><span class="pre">oauth2_scheme</span></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.api.device_websocket.trigger_acquisition" title="Link to this definition">#</a></dt>
+<dd><p>Trigger an MRI acquisition for the given task.</p>
+<p>Fetches the task from the protocol manager, looks up the assigned sequence and device,
+sends the scan-start command via the device’s open WebSocket, and marks the task as STARTED.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.connection_with_valid_id_and_token">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">connection_with_valid_id_and_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uuid.UUID</span></span></span><a class="headerlink" href="#app.api.device_websocket.connection_with_valid_id_and_token" title="Link to this definition">#</a></dt>
+<dd><p>Check if the given device_id and device_token belong to an existing device in the database.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket._HEARTBEAT_TIMEOUT_S">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_HEARTBEAT_TIMEOUT_S</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></span><a class="headerlink" href="#app.api.device_websocket._HEARTBEAT_TIMEOUT_S" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="app.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_HEARTBEAT_CHECK_INTERVAL_S</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></span><a class="headerlink" href="#app.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.monitor_devices">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">monitor_devices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.api.device_websocket.monitor_devices" title="Link to this definition">#</a></dt>
+<dd><p>Monitor device online/offline status via the ping heartbeat.</p>
+<p>Catches every disconnection a clean WebSocketDisconnect can’t: crashed
+processes, killed processes (SIGKILL), dropped network links, etc. — any
+device that stops pinging is marked OFFLINE within roughly
+<cite>_HEARTBEAT_TIMEOUT_S + _HEARTBEAT_CHECK_INTERVAL_S</cite> seconds, independent of
+whether the client ever got a chance to shut down cleanly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.websocket_endpoint">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">websocket_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.api.device_websocket.websocket_endpoint" title="Link to this definition">#</a></dt>
+<dd><p>Websocket endpoint for device communication.</p>
+<section id="args">
+<h3>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>websocket (WebSocket): The WebSocket connection object.
+device_id (UUID): The device_id.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.handle_register">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">handle_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#app.api.device_websocket.handle_register" title="Link to this definition">#</a></dt>
+<dd><p>Handle device registration.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.handle_status_update">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">handle_status_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#app.api.device_websocket.handle_status_update" title="Link to this definition">#</a></dt>
+<dd><p>Handle device status updates from the device SDK.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket._stream_to_file">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_stream_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#app.api.device_websocket._stream_to_file" title="Link to this definition">#</a></dt>
+<dd><p>Stream bytes from a WebSocket into a temp file; returns (bytes_received, sha256_hex).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket._submit_reconstruction_job">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_submit_reconstruction_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#app.api.device_websocket._submit_reconstruction_job" title="Link to this definition">#</a></dt>
+<dd><p>Submit the mrpro_reconstruction_job to Dagster after a file transfer completes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket.handle_file_transfer">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">handle_file_transfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">websocket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">fastapi.WebSocket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#app.api.device_websocket.handle_file_transfer" title="Link to this definition">#</a></dt>
+<dd><p>Handle file transfer from device to server.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.api.device_websocket._pick_result_type">
+<span class="sig-prename descclassname"><span class="pre">app.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">_pick_result_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.api.device_websocket._pick_result_type" title="Link to this definition">#</a></dt>
+<dd><p>Map extensions to enum.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.LOG_CALL_DELIMITER"><code class="docutils literal notranslate"><span class="pre">LOG_CALL_DELIMITER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.DATA_LAKE_DIR"><code class="docutils literal notranslate"><span class="pre">DATA_LAKE_DIR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.DAGSTER_GRAPHQL_URL"><code class="docutils literal notranslate"><span class="pre">DAGSTER_GRAPHQL_URL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.oauth2_scheme"><code class="docutils literal notranslate"><span class="pre">oauth2_scheme</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.router"><code class="docutils literal notranslate"><span class="pre">router</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.dict_id_websocket"><code class="docutils literal notranslate"><span class="pre">dict_id_websocket</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.device_last_seen"><code class="docutils literal notranslate"><span class="pre">device_last_seen</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.task_sse_queues"><code class="docutils literal notranslate"><span class="pre">task_sse_queues</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.send_json"><code class="docutils literal notranslate"><span class="pre">send_json()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._broadcast_task_status"><code class="docutils literal notranslate"><span class="pre">_broadcast_task_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._SSE_TERMINAL_STATUSES"><code class="docutils literal notranslate"><span class="pre">_SSE_TERMINAL_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.TaskEvent"><code class="docutils literal notranslate"><span class="pre">TaskEvent</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.TaskEvent.source"><code class="docutils literal notranslate"><span class="pre">TaskEvent.source</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.TaskEvent.task_status"><code class="docutils literal notranslate"><span class="pre">TaskEvent.task_status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.TaskEvent.progress"><code class="docutils literal notranslate"><span class="pre">TaskEvent.progress</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.TaskEvent.message"><code class="docutils literal notranslate"><span class="pre">TaskEvent.message</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.push_task_event"><code class="docutils literal notranslate"><span class="pre">push_task_event()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.task_stream"><code class="docutils literal notranslate"><span class="pre">task_stream()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.trigger_acquisition"><code class="docutils literal notranslate"><span class="pre">trigger_acquisition()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.connection_with_valid_id_and_token"><code class="docutils literal notranslate"><span class="pre">connection_with_valid_id_and_token()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._HEARTBEAT_TIMEOUT_S"><code class="docutils literal notranslate"><span class="pre">_HEARTBEAT_TIMEOUT_S</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S"><code class="docutils literal notranslate"><span class="pre">_HEARTBEAT_CHECK_INTERVAL_S</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.monitor_devices"><code class="docutils literal notranslate"><span class="pre">monitor_devices()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.websocket_endpoint"><code class="docutils literal notranslate"><span class="pre">websocket_endpoint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.handle_register"><code class="docutils literal notranslate"><span class="pre">handle_register()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.handle_status_update"><code class="docutils literal notranslate"><span class="pre">handle_status_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._stream_to_file"><code class="docutils literal notranslate"><span class="pre">_stream_to_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._submit_reconstruction_job"><code class="docutils literal notranslate"><span class="pre">_submit_reconstruction_job()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket.handle_file_transfer"><code class="docutils literal notranslate"><span class="pre">handle_file_transfer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app.api.device_websocket._pick_result_type"><code class="docutils literal notranslate"><span class="pre">_pick_result_type()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../../_sources/autoapi/app/api/device_websocket/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

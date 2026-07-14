@@ -1,0 +1,37 @@
+app.tools.helper
+================
+
+.. py:module:: app.tools.helper
+
+.. autoapi-nested-parse::
+
+   Helper methods for protocol, require recursive model translation.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   app.tools.helper.get_protocol_out_model
+   app.tools.helper.get_task_out
+
+
+Module Contents
+---------------
+
+.. py:function:: get_protocol_out_model(data: app.db.postgres.Protocol) -> scanhub_libraries.models.ProtocolOut
+   :async:
+
+
+   Transform db model to pydantic model.
+
+
+.. py:function:: get_task_out(data: app.db.postgres.AcquisitionTask) -> scanhub_libraries.models.AcquisitionTaskOut
+   :async:
+
+
+   Transform db model to pydantic model.
+
+

@@ -13,7 +13,7 @@ Its straightforward design ensures that the initiation and monitoring of scans a
 Web API
 -------
 
-.. openapi:: ./_openapi/mri/acquisition_openapi.json
+.. note:: The MRI Acquisition Manager has been consolidated into the Protocol Manager.
 
 License
 -------

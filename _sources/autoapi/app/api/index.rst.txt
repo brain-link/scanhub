@@ -1,0 +1,29 @@
+app.api
+=======
+
+.. py:module:: app.api
+
+.. autoapi-nested-parse::
+
+   Init file.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/app/api/dal/index
+   /autoapi/app/api/db/index
+   /autoapi/app/api/device_endpoints/index
+   /autoapi/app/api/device_websocket/index
+   /autoapi/app/api/exam_requests/index
+   /autoapi/app/api/mri_sequence_api/index
+   /autoapi/app/api/protocol_api/index
+   /autoapi/app/api/result_api/index
+   /autoapi/app/api/routes/index
+   /autoapi/app/api/task_api/index
+
+

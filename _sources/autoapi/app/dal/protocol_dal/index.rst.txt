@@ -1,0 +1,69 @@
+app.dal.protocol_dal
+====================
+
+.. py:module:: app.dal.protocol_dal
+
+.. autoapi-nested-parse::
+
+   Data access layer (DAL) between fastapi endpoint and sql database.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   app.dal.protocol_dal.add_protocol_data
+   app.dal.protocol_dal.get_protocol_data
+   app.dal.protocol_dal.get_all_protocol_data
+   app.dal.protocol_dal.get_all_protocol_template_data
+   app.dal.protocol_dal.delete_protocol_data
+   app.dal.protocol_dal.update_protocol_data
+
+
+Module Contents
+---------------
+
+.. py:function:: add_protocol_data(payload: scanhub_libraries.models.BaseProtocol, creator: str) -> app.db.postgres.Protocol
+   :async:
+
+
+   Create new protocol.
+
+
+.. py:function:: get_protocol_data(protocol_id: uuid.UUID) -> app.db.postgres.Protocol | None
+   :async:
+
+
+   Get protocol by id.
+
+
+.. py:function:: get_all_protocol_data(patient_id: uuid.UUID) -> list[app.db.postgres.Protocol]
+   :async:
+
+
+   Get all protocols assigned to a certain patient.
+
+
+.. py:function:: get_all_protocol_template_data() -> list[app.db.postgres.Protocol]
+   :async:
+
+
+   Get all protocol templates.
+
+
+.. py:function:: delete_protocol_data(protocol_id: uuid.UUID) -> bool
+   :async:
+
+
+   Delete protocol by id. Also deletes associated tasks.
+
+
+.. py:function:: update_protocol_data(protocol_id: uuid.UUID, payload: scanhub_libraries.models.BaseProtocol) -> app.db.postgres.Protocol | None
+   :async:
+
+
+   Update existing protocol entry.
+
+

@@ -10,6 +10,3 @@ Web API documentation for services.
 
    api_device
    api_exam
-   api_workflow
-   api_mri_acquisition
-   api_mri_sequences
