@@ -408,7 +408,7 @@ class Client:
             raise FileNotFoundError(path)
 
         size = path.stat().st_size
-        ct = "application/x-ismrmrd+hdf5" if path.suffix == ".mrd" else "application/octet-stream"
+        ct = "application/x-ismrmrd+hdf5" if path.suffix in (".mrd", ".h5") else "application/octet-stream"
 
         sha = hashlib.sha256()
         with path.open("rb") as f:

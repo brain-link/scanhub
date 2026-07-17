@@ -7,8 +7,34 @@ import os
 import json
 import logging
 from pathlib import Path
+import datetime
 
 logging.basicConfig(level=logging.INFO)
+
+WSS_ENDPOINT = "wss://localhost:8443/api/v1/device/ws"
+EXAMPLE_DIR = Path(__file__).resolve().parent
+
+# Download an ISMRMRD file from zenodo if it not already exists
+if not (EXAMPLE_DIR / "LLR").exists():
+    import signal
+    import zenodo_get
+    import zipfile
+
+    # zenodo_get installs its own SIGINT handler on import, which hijacks Ctrl+C
+    # for the whole process even after the download above is done. Restore the
+    # default handler so Ctrl+C behaves normally for the rest of the script.
+    signal.signal(signal.SIGINT, signal.default_int_handler)
+
+    print("Downloading example data...")
+    zenodo_get.download(
+        record="19661402",
+        retry_attempts=5,
+        output_dir=EXAMPLE_DIR,
+        file_glob=("LLR.zip",),
+        access_token=os.environ.get("ZENODO_TOKEN"),
+    )
+    with zipfile.ZipFile(EXAMPLE_DIR / Path("LLR.zip"), "r") as zip_ref:
+        zip_ref.extractall(EXAMPLE_DIR)
 
 
 async def perform_scan(client, payload: AcquisitionPayload):
@@ -17,21 +43,8 @@ async def perform_scan(client, payload: AcquisitionPayload):
     # Print device parameters obtained
     print("Retrieved device parameters dict: ", payload.device_parameter)
 
-    directory = Path(__file__).resolve().parent
-
-    if CalibrationType.FREQUENCY in payload.calibration:
-        print("Performing frequency calibration...")
-        file_path = directory / "data_caliber.mrd"
-        await client.upload_file_result(
-            file_path=file_path,
-            name="frequency_calibration.mrd",
-            parameter=payload.device_parameter,
-            task_id=str(payload.id),
-            user_access_token=payload.access_token,
-        )
-
     # Simulate some workload
-    delay_per_step = 0.5
+    delay_per_step = 0.25
     for percentage in range(9):
         await asyncio.sleep(delay_per_step)
         await client.send_scanning_status(
@@ -40,19 +53,12 @@ async def perform_scan(client, payload: AcquisitionPayload):
             user_access_token=payload.access_token,
         )
 
-    # Upload MRD result
-    file_path = directory / "data_osii.mrd"
-    # file_path = directory / "data_caliber.mrd"
-    await client.upload_file_result(
-        file_path=file_path,
-        name="acquisition_data",
-        parameter=payload.device_parameter,
-        task_id=str(payload.id),
-        user_access_token=payload.access_token,
-    )
+    file_name = str(datetime.date.today()) + "_acquisition"
 
-    await client.send_scanning_status(
-        progress=100,
+    await client.upload_file_result(
+        file_path=EXAMPLE_DIR / "LLR/noise_corr_off/9003/IR_T1w_TSE_PF.h5",
+        name=file_name,
+        parameter=payload.device_parameter,
         task_id=str(payload.id),
         user_access_token=payload.access_token,
     )
@@ -64,7 +70,7 @@ async def error_handler(message):
     print(f"Server Error: {message}")
 
 
-async def main():    
+async def main():
     credentials_path = os.path.join(os.path.dirname(__file__), "device_credentials.json")
     try:
         with open(credentials_path, "r") as f:
@@ -79,6 +85,7 @@ async def main():
         manufacturer="BrainLink",
         modality="MRI",
         site="Berlin",
+        # The following dictonary can contain any parameter relevant for the acquisition process
         parameter={
             "larmor_frequency": 2.025e6,
         },
@@ -86,7 +93,7 @@ async def main():
 
     # Replace the parameters for each particular device!
     client = Client(
-        websocket_uri="wss://localhost:8443/api/v1/device/ws",
+        websocket_uri=WSS_ENDPOINT,
         device_id=credentials.get("device_id"),
         device_token=credentials.get("device_token"),
         ca_file="../../secrets/certificate.pem",

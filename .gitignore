@@ -154,3 +154,6 @@ yarn-debug.log*
 yarn-error.log*
 
 device_credentials.json
+
+*.zip
+*.h5

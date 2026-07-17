@@ -27,6 +27,10 @@ scanhub-libraries = { path = "../../services/base/shared_libs", develop = true }
 ruff = "^0.12.3"
 mypy = "^1.16.1"
 
+
+[tool.poetry.group.example.dependencies]
+zenodo-get = "^3.0.3"
+
 [tool.setuptools.package-data]
 "sdk" = ["py.typed"]
 
