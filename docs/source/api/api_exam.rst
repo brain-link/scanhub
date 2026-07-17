@@ -1,24 +1,24 @@
 .. Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
    SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-Device Manager
-==============
+Protocol Manager
+================
 
 Introduction
 ------------
 
-The Device Manager API provides a comprehensive interface to manage devices within the ScanHub system.
-This API allows you to perform essential operations such as reading the device health, retrieving, creating, updating, and deleting devices. Below are the key endpoints:
+The Protocol Manager API is designed to manage the complete lifecycle of protocols, procedures, jobs, and records within the healthcare system.
+This comprehensive API allows users to perform essential operations on these entities and offers the following key endpoints:
 
 Web API
 -------
 
-.. openapi:: ./_openapi/device_openapi.json
+.. openapi:: ./../_openapi/protocol_openapi.json
 
 License
 -------
 
-Device Manager, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
+Protocol Manager, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
 
 Open Source License
 ~~~~~~~~~~~~~~~~~~~

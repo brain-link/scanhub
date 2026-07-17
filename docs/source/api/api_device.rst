@@ -1,25 +1,24 @@
 .. Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
    SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-UI Patient Manager
-==================
+Device Manager
+==============
 
 Introduction
 ------------
 
-The Patient Manager API is a critical interface designed to manage patient information within ScanHub.
-It centralizes functionalities around the creation, retrieval, updating, and deletion of patient records, providing a streamlined approach to handle patient-related data.
-Here's a brief look at the main endpoints:
+The Device Manager API provides a comprehensive interface to manage devices within the ScanHub system.
+This API allows you to perform essential operations such as reading the device health, retrieving, creating, updating, and deleting devices. Below are the key endpoints:
 
 Web API
 -------
 
-.. openapi:: ./_openapi/patient_openapi.json
+.. openapi:: ./../_openapi/device_openapi.json
 
 License
 -------
 
-Patient Manager, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
+Device Manager, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
 
 Open Source License
 ~~~~~~~~~~~~~~~~~~~

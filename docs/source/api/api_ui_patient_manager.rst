@@ -1,24 +1,25 @@
 .. Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
    SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-MRI Sequences Manager
-=====================
+UI Patient Manager
+==================
 
 Introduction
 ------------
 
-The MRI Sequence Manager API is designed to handle the creation, retrieval, modification, and deletion of MRI sequences within a medical imaging environment.
-Leveraging MongoDB for storage, this API provides a comprehensive set of endpoints to manage various aspects of MRI sequences. Below is an overview of the key endpoints:
+The Patient Manager API is a critical interface designed to manage patient information within ScanHub.
+It centralizes functionalities around the creation, retrieval, updating, and deletion of patient records, providing a streamlined approach to handle patient-related data.
+Here's a brief look at the main endpoints:
 
 Web API
 -------
 
-.. note:: The MRI Sequences Manager has been consolidated into the Protocol Manager.
+.. openapi:: ./../_openapi/patient_openapi.json
 
 License
 -------
 
-MRI Sequence Manager, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
+Patient Manager, including all its source code and associated documentation (collectively, the "Software"), is dual-licensed under the GNU General Public License version 3 (GPLv3) and the ScanHub commercial license.
 
 Open Source License
 ~~~~~~~~~~~~~~~~~~~

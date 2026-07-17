@@ -21,7 +21,7 @@ Getting started
    :maxdepth: 1
    :caption: Web API Reference
 
-   scanhub_api
+   api/index
 
 .. toctree::
    :maxdepth: 1
