@@ -68,7 +68,7 @@ Device Manager
 ScanHub features a device manager, which simplifies the device selection process and streamlines the workflow for acquiring MRI data.
 
 Protocol Manager
-------------
+----------------
 In addition to the device manager, ScanHub also includes an protocol manager. This tool enables users to plan scans and view scan results through the ScanHub UI.
 
 Interoperability and Open Standards

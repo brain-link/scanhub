@@ -23,7 +23,7 @@ MRD_EXTENSIONS = (".mrd", ".h5")
 
 
 def locate_mrd(protocol_id: str, task_id: str, result_id: str) -> Path:
-    """Build a file path: /data_lake/{protocol_id}/{task_id}/{result_id}/*.mrd or *.h5"""
+    """Build a file path: ``/data_lake/{protocol_id}/{task_id}/{result_id}/*.mrd`` or ``*.h5``"""
     result_dir = DATA_LAKE_DIR / protocol_id / task_id / result_id
     for ext in MRD_EXTENSIONS:
         try:

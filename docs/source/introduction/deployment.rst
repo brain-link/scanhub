@@ -1,6 +1,6 @@
-=======
+===================
 Notes on Deployment
-=======
+===================
 
 Deployment was not testet yet! The following list gives an indication about some of the steps needed to deploy scanhub productively:
 

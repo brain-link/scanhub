@@ -51,7 +51,7 @@ TBD - Add Key Scenarios
 System Decomposition
 ====================
 
-.. figure:: _static/images/swad/ScanHub_Development_View.drawio.png
+.. figure:: /_static/images/swad/ScanHub_Development_View.drawio.png
   :width: 800
   :alt: ScanHub Development View
 
@@ -69,7 +69,7 @@ System Decomposition
 +---------------+---------------------+-----------------------------------------------------------+--------------+
 
 
-.. figure:: _static/images/swad/ScanHub_Component_Connected_Device.drawio.png
+.. figure:: /_static/images/swad/ScanHub_Component_Connected_Device.drawio.png
     :width: 800
     :alt: ScanHub Connected Device
 
@@ -77,7 +77,7 @@ System Decomposition
 
 
 
-.. figure:: _static/images/swad/ScanHub_Component_Workflow.drawio.png
+.. figure:: /_static/images/swad/ScanHub_Component_Workflow.drawio.png
     :width: 800
     :alt: ScanHub Workflow
 

@@ -10,15 +10,7 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, Asyn
 
 
 class Database:
-    """MongoDB database handle.
-
-    Attributes
-    ----------
-    client : AsyncIOMotorClient
-        The MongoDB client.
-    collection : AsyncIOMotorCollection
-        The MongoDB collection.
-    """
+    """MongoDB database handle."""
 
     # TODO: Can the client really take two different types?
     client: AsyncIOMotorClient | AsyncIOMotorDatabase | None = None

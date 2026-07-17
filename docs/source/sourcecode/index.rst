@@ -3,8 +3,8 @@
 
 .. _source-code:
 
-Source Code Documentation
-==========================
+Code Documentation
+==================
 
 The following pages are generated automatically from the docstrings in each service's Python source code, using `sphinx-autoapi <https://sphinx-autoapi.readthedocs.io/>`_.
 

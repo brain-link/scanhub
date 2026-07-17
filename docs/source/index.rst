@@ -31,7 +31,7 @@ Getting started
       Within the development of ScanHub, also the technical documentation for future MDR certification is addressed.
       The documentation is work in progress, yet it provides a good overview of the functional scope.
 
-      .. button-ref:: tech-docs
+      .. button-ref:: tech-doc
          :expand:
          :color: primary
          :click-parent:
@@ -55,7 +55,7 @@ Getting started
 
       This part contains all the auto-generated code documentation which is collected from all the different microservices.
 
-      .. button-ref:: code-reference
+      .. button-ref:: source-code
          :expand:
          :color: primary
          :click-parent:

@@ -56,6 +56,16 @@ extensions = [
 autoclass_content = "class"
 add_module_names = True
 autosectionlabel_prefix_document = True
+# Limit label generation to top-level page headings. Without this, every
+# repeated "Parameters"/"Returns" heading emitted per-endpoint by the
+# openapi:: directive collides with the others in the same document.
+autosectionlabel_maxdepth = 2
+
+suppress_warnings = [
+    # introduction/demo.rst includes a README.md fragment that intentionally
+    # starts at H3 (it's spliced under an existing RST title), not a real issue.
+    'myst.header',
+]
 
 
 # Add any paths that contain templates here, relative to this directory.
@@ -133,9 +143,9 @@ html_context = {
 }
 
 html_sidebars = {
+    "index": [],
     # "**": ["search-field", "sidebar-nav-bs"]
-    "**": ["sidebar-nav-bs"]
-    # "**": []    # remove primary (left) sidebar
+    "**": ["sidebar-nav-bs"],
 }
 
 html_theme_options = {

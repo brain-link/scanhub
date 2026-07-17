@@ -110,7 +110,7 @@ TBD: A comprehensive list of components and accessories marketed with the A4IM s
 
 
 Interoperability and Compatibility
-================================
+==================================
 
 The A4IM scanner is designed for interoperability with existing healthcare systems, ensuring seamless integration and data exchange.
 

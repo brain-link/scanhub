@@ -3,43 +3,6 @@ Software Requirement Specification (SWRS)
 
 !! This Section is Work in Progress. !!
 
-
-General
-=======
-Purpose
--------
-This document encompasses all relevant software requirements, both functional and non-functional, for the MRI acquisition software of the A4IM scanner system. At the software system level, it integrates inputs from various foundational documents to provide a comprehensive outline of the required software functionalities and attributes. Specifically, this SW Requirements Specification (SWRS) draws from the following sources:
-
-- Product Requirement Specification (PRS) for the A4IM scanner, detailing the expectations and needs from a product standpoint.
-- System Requirements Specification (SRS) for the A4IM scanner, outlining the system-level requirements that the software must meet to ensure compatibility and performance within the MRI system.
-- Risk Assessment Worksheet, identifying potential risks associated with the software and the necessary mitigations to ensure patient and operator safety.
-
-This SWRS aims to detail the complete software solution for the A4IM MRI system, ensuring that all aspects of software functionality, safety, and performance are thoroughly addressed.
-
-Scope
------
-The scope of this document is to define the functional and non-functional requirements for the MRI acquisition software for the A4IM scanner. This includes, but is not limited to, the following aspects:
-
-- Acquisition and processing of MRI data.
-- User interface and interaction mechanisms for medical professionals.
-- Integration with healthcare facility systems, including patient management and data storage solutions.
-- Compliance with healthcare regulations and standards for data protection, privacy, and security.
-- System performance, reliability, and maintenance requirements.
-- Safety measures and risk mitigation strategies relevant to software operation.
-
-By covering these areas, the SWRS aims to ensure that the software meets all necessary criteria for successful deployment and operation within medical and research settings.
-
-References
-----------
-Product Requirement Specification (PRS) for the A4IM Scanner, Document No. [To Be Added], Version [To Be Added].
-System Requirements Specification (SRS) for the A4IM Scanner, Document No. [To Be Added], Version [To Be Added].
-Risk Assessment Worksheet for the A4IM Scanner Software, Document No. [To Be Added], Version [To Be Added].
-Note: The document numbers and versions will be finalized and added to this section upon completion of the respective documents.
-
-This section sets the foundation for the development and evaluation of the MRI acquisition software, ensuring alignment with the overall objectives and requirements of the A4IM scanner system.
-
-Software Requirements (Software System)
-======================================
 Overview SW Description
 -----------------------
 This document pertains to the MRI acquisition software for the A4IM scanner, aimed at providing a comprehensive solution for the acquisition, processing, and management of MRI data. The software is designed to ensure high-quality imaging of the human head and extremities, with a focus on maximizing the efficiency and effectiveness of diagnostic processes within healthcare facilities.
@@ -54,219 +17,143 @@ To outline the main usage scenarios and inform the definition of system requirem
 
 System Startup and Initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Booting up the MRI system, initializing all software components, and conducting self-checks.
-- Procedure: Automated system checks for hardware and software integrity, loading of necessary drivers and applications, and verification of system readiness for operation.
-- Stakeholder: SH_010, SH_020, SH_030, SH_040
-
-User Authentication and Access Control
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Ensuring only authorized personnel can operate or access different levels of the system.
-- Procedure: Secure login processes, role-based access control, and user authentication protocols.
-- Stakeholder: SH_030
-
-Patient Data Input and Retrieval
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Entering new patient data or retrieving existing patient records before starting a scan.
-- Procedure: Integration with hospital information systems for seamless data exchange, ensuring data accuracy and privacy compliance.
-- Stakeholder: SH_010, SH_020
-
-Scan Parameter Selection and Customization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Selection and customization of MRI scan parameters based on the specific clinical requirements.
-- Procedure: User interfaces that allow for easy selection and adjustment of scan parameters, including sequence, FOV dimensions and offsets, information on the hardware setup (e.g. coil code, etc.)
-- Stakeholder: SH_010, SH_020
-
-Real-Time Scan Monitoring
-~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Monitoring the MRI scan in real-time and making necessary adjustments.
-- Procedure: Dynamic display of scanning progress
-- Stakeholder: SH_010, SH_020
-
-Image Reconstruction and Storage
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Reconstruction of the raw scan data to produce images and storing them appropriately.
-- Procedure: Automated image reconstruction algorithms, along with efficient data storage solutions both on-premises and in cloud environments.
-- Stakeholder: SH_010, SH_020, SH_030
-
-System Shutdown and Secure Data Handling
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Properly shutting down the system while ensuring all patient data is securely saved and protected.
-- Procedure: Step-by-step shutdown process that includes data backup, closing of all active sessions, and hardware cooling procedures.
-- Stakeholder: SH_010, SH_020, SH_030
-
-Routine Maintenance and Calibration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Regular system maintenance and calibration to ensure ongoing accuracy and efficiency.
-- Procedure: Scheduled maintenance tasks, automated calibration routines, and alerts for maintenance requirements.
-- Stakeholder: SH_010, SH_020, SH_040
-
-Error Detection and Alerting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Detecting system errors or malfunctions and alerting the appropriate personnel.
-- Procedure: Continuous system monitoring with automated error detection algorithms and alert notifications with detailed information to system administrators or technicians. Simplified alert with instructions in any other case.
-- Stakeholder: SH_010 – SH_040
-
-Software Updates and Upgrades
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Updating the system software to enhance functionality or address security issues.
-- Procedure: Secure and efficient software update processes, with minimal system downtime and comprehensive post-update checks.
-- Stakeholder: SH_020, SH_030, SH_040
-
-Emergency Protocols and System Recovery
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Handling system emergencies or failures, including emergency shutdown, data recovery and system restoration.
-- Procedure: Defined emergency protocols, rapid system recovery procedures, and data backup solutions for ensuring data integrity.
-- Stakeholder: SH_030, SH_040System Administrator (SH_050), Site Engineer (SH_060)
-
-Data Security and Compliance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Ensuring the system adheres to relevant data security and privacy regulations.
-- Procedure: Implementing strong encryption, audit trails, and compliance with standards like HIPAA and GDPR.
-- Stakeholder: SH_030
-
-Patient Safety Monitoring
-~~~~~~~~~~~~~~~~~~~~~~~~~
-- Scenario: Continuously monitoring patient safety parameter.
-- Procedure: Monitoring of SAR level and implementation of safety cutoffs or alerts.
-- Stakeholder: SH_010, SH_020
-
-Sequence Upload
-~~~~~~~~~~~~~~~
-- Scenario:Testing of sequences or new procedures under development.
-- Procedure:Enable import of custom sequences.
-- Stakeholder:SH_020
-
-Data Export
-~~~~~~~~~~~
-- Scenario:Development/evaluation of new/customized reconstruction methods or the comparison of reconstruction methods.
-- Procedure:Implementation of export functions on different stages, i.e. raw k-space data export, DICOM export, etc.
-- Stakeholder:SH_020
-
-Support
-~~~~~~~
-- Scenario:The system does not behave as expected or reports an error.
-- Procedure:System administrator reads our error message and notifies the manufacturer for support or troubleshooting to restore operability of the system. The manufacturer provides remote support and schedules an appointment with a field/service engineer as soon as possible.
-- Stakeholder:SH_030, SH_060, SH_040
-
-
-System Startup and Initialization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Booting up the MRI system, initializing all software components, and conducting self-checks.
 * Procedure: Automated system checks for hardware and software integrity, loading of necessary drivers and applications, and verification of system readiness for operation.
-* Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)
+* Stakeholder: System Administrator (SH_030), (Field/Service) Engineer (SH_040)
 
 User Authentication and Access Control
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Ensuring only authorized personnel can operate or access different levels of the system.
 * Procedure: Secure login processes, role-based access control, and user authentication protocols.
-* Stakeholder: System Administrator (SH_050)
+* Stakeholder: System Administrator (SH_030)
 
 Patient Data Input and Retrieval
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Entering new patient data or retrieving existing patient records before starting a scan.
 * Procedure: Integration with hospital information systems for seamless data exchange, ensuring data accuracy and privacy compliance.
-* Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020)
+* Stakeholder: Medical Professional (SH_010)
 
 Scan Parameter Selection and Customization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Selection and customization of MRI scan parameters based on the specific clinical requirements.
 * Procedure: User interfaces that allow for easy selection and adjustment of scan parameters, including sequence types, intensity, and duration.
-* Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020), Scientist (SH_040)
+* Stakeholder: Medical Professional (SH_010), Scientist (SH_020)
 
 Real-Time Scan Monitoring and Adjustment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Monitoring the MRI scan in real-time and making necessary adjustments.
 * Procedure: Dynamic display of scanning progress, with capabilities to adjust parameters on-the-fly for optimal image quality.
-* Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020)
+* Stakeholder: Medical Professional (SH_010)
 
 Image Processing and Storage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Processing the raw scan data to produce images and storing them appropriately.
 * Procedure: Automated image reconstruction algorithms, along with efficient data storage solutions both on-premises and in cloud environments.
-* Stakeholder: Radiologist (SH_020), Scientist (SH_040), System Administrator (SH_050)
+* Stakeholder: Medical Professional (SH_010), Scientist (SH_020), System Administrator (SH_030)
 
 System Shutdown and Secure Data Handling
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Properly shutting down the system while ensuring all patient data is securely saved and protected.
 * Procedure: Step-by-step shutdown process that includes data backup, closing of all active sessions, and hardware cooling procedures.
-* Stakeholder: System Administrator (SH_050)
+* Stakeholder: System Administrator (SH_030)
 
 Routine Maintenance and Calibration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Regular system maintenance and calibration to ensure ongoing accuracy and efficiency.
 * Procedure: Scheduled maintenance tasks, automated calibration routines, and alerts for maintenance requirements.
-* Stakeholder: Site Engineer (SH_060), MRI Technician/MTRA (SH_010)
+* Stakeholder: (Field/Service) Engineer (SH_040), Medical Professional (SH_010)
 
 Error Detection and Alerting
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Detecting system errors or malfunctions and alerting the appropriate personnel.
 * Procedure: Continuous system monitoring with automated error detection algorithms and alert notifications to system administrators or technicians.
-* Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)
+* Stakeholder: System Administrator (SH_030), (Field/Service) Engineer (SH_040)
 
 Software Updates and Upgrades
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Updating the system software to enhance functionality or address security issues.
 * Procedure: Secure and efficient software update processes, with minimal system downtime and comprehensive post-update checks.
-* Stakeholder: System Administrator (SH_050), Developer (SH_030)
+* Stakeholder: System Administrator (SH_030), Medical Device Manufacturer (SH_060)
 
 Emergency Protocols and System Recovery
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Scenario: Handling system emergencies or failures, including data recovery and system restoration.
+* Scenario: Handling system emergencies or failures, including emergency shutdown, data recovery and system restoration.
 * Procedure: Defined emergency protocols, rapid system recovery procedures, and data backup solutions for ensuring data integrity.
-* Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)
+* Stakeholder: System Administrator (SH_030), (Field/Service) Engineer (SH_040)
 
 Interoperability with Other Healthcare Systems
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Seamless interaction and data exchange with other healthcare systems like EHRs, PACS, and RIS.
 * Procedure: Implementing standard protocols and APIs for data exchange, ensuring compatibility with various healthcare IT infrastructures.
-* Stakeholder: System Administrator (SH_050), Radiologist (SH_020), Healthcare Facility (SH_100)
+* Stakeholder: System Administrator (SH_030), Medical Professional (SH_010), Healthcare Facility (SH_070)
 
 Remote System Diagnostics and Support
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Providing remote assistance and diagnostics for technical issues or user queries.
 * Procedure: Remote access capabilities for technical support staff, diagnostic tools for system analysis, and secure communication channels.
-* Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)
+* Stakeholder: System Administrator (SH_030), (Field/Service) Engineer (SH_040)
 
 Data Security and Compliance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Ensuring the system adheres to relevant data security and privacy regulations.
 * Procedure: Implementing strong encryption, audit trails, and compliance with standards like HIPAA and GDPR.
-* Stakeholder: System Administrator (SH_050), Regulatory Affairs Specialist (SH_070)
+* Stakeholder: System Administrator (SH_030), Medical Device Manufacturer (SH_060)
 
 Power Management and Efficiency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Efficient management of system power consumption and operational efficiency.
 * Procedure: Power-saving modes during periods of inactivity, efficient power usage during scans, and monitoring of overall system power consumption.
-* Stakeholder: System Administrator (SH_050), Site Engineer (SH_060)
+* Stakeholder: System Administrator (SH_030), (Field/Service) Engineer (SH_040)
 
 Customization and Configuration Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Customizing system settings and configurations to meet specific site or user requirements.
 * Procedure: Flexible configuration options with user-friendly interfaces, along with configuration profiles for different user roles or scanning requirements.
-* Stakeholder: System Administrator (SH_050), MRI Technician/MTRA (SH_010)
+* Stakeholder: System Administrator (SH_030), Medical Professional (SH_010)
 
 Patient Safety Monitoring
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Scenario: Continuously monitoring patient safety parameters during scans.
 * Procedure: Automated systems for tracking patient vitals, SAR levels, and implementing safety cutoffs or alerts.
-* Stakeholder: MRI Technician/MTRA (SH_010), Radiologist (SH_020)
+* Stakeholder: Medical Professional (SH_010)
+
+Sequence Upload
+~~~~~~~~~~~~~~~
+
+* Scenario: Testing of sequences or new procedures under development.
+* Procedure: Enable import of custom sequences.
+* Stakeholder: Scientist (SH_020)
+
+Data Export
+~~~~~~~~~~~
+
+* Scenario: Development/evaluation of new/customized reconstruction methods or the comparison of reconstruction methods.
+* Procedure: Implementation of export functions on different stages, i.e. raw k-space data export, DICOM export, etc.
+* Stakeholder: Scientist (SH_020)
+
+Support
+~~~~~~~
+
+* Scenario: The system does not behave as expected or reports an error.
+* Procedure: System administrator reads our error message and notifies the manufacturer for support or troubleshooting to restore operability of the system. The manufacturer provides remote support and schedules an appointment with a field/service engineer as soon as possible.
+* Stakeholder: System Administrator (SH_030), Medical Device Manufacturer (SH_060), (Field/Service) Engineer (SH_040)
 
 
 

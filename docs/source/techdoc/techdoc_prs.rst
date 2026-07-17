@@ -1,5 +1,5 @@
 Product Requirement Specification (PRS)
-######################################
+########################################
 
 !! This Section is Work in Progress. !!
 
@@ -45,81 +45,149 @@ User Needs
 General
 -------
 
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-|    ID    |                 Product Requirements (Stakeholder)                        |                                   Design Input                                    | Acceptance Criteria | Intended claim | Priority |
-+==========+===========================================================================+===================================================================================+=====================+================+==========+
-| PRS_0010 | Execution of an MRI acquisition/job/experiment                            | Upload pulseq sequence, execution MRI job with withflows                          |                     |                |          |
-|          | (Medical Professional, Scientist)                                         |                                                                                   |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0020 | Planning of an MRI examination                                            | Protocol-Tree, workflows, processing modality worklist                                |                     |                |          |
-|          | (Medical Professional, Scientist)                                         |                                                                                   |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0030 | DICOM viewer                                                              | View DICOM image of a selected record, compare DICOM images,                      |                     |                |          |
-|          | (Medical Professional, Scientist)                                         | annotate DICOM image.                                                             |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0040 | User management                                                           | Assign different user roles, support of multi-tendency cloud environment          |                     |                |          |
-|          | (System Administrator)                                                    |                                                                                   |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0050 | Monitor device status                                                     | Current execution progress, detectable device malfunctiuons,                      |                     |                |          |
-|          | (Medical Professional, Scientist)                                         | device connection                                                                 |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0060 | Monitor Patient safety                                                    | Specific absorption rate (SAR), temparatur, total scan time duration,             |                     |                |          |
-|          | (Medical Professional)                                                    | Optional: Video stream, patient communication system                              |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0070 | Integration of processing workflows                                       | Assambling of workflow steps to be executed on MRI raw data or images.            |                     |                |          |
-|          | (Scientist)                                                               | Includes system calibration, image reconstruction and analysis.                   |                     |                |          |
-|          |                                                                           |                                                                                   |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0080 | System calibration                                                        | Adjust larmorfrequency, adjust gradients, adjust system flip angle,               |                     |                |          |
-|          | (Medical Professional, Scientist, Site Engineer)                          | B0-field shimming                                                                 |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0090 | Clinical report                                                           | Structured form to create a clinical report which allows to fomulate a diagnosis, |                     |                |          |
-|          | (Medical Professional)                                                    | viewer for clinical reports                                                       |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
-| PRS_0100 | Device management                                                         | Organisation of different devices, device authentification, device selection,     |                     |                |          |
-|          | (System Administrator, Medical Professional, Medical Device Manufacturer) | device access management (who is trained on which device?)                        |                     |                |          |
-+----------+---------------------------------------------------------------------------+-----------------------------------------------------------------------------------+---------------------+----------------+----------+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 30 35 15 15 10
+
+   * - ID
+     - Product Requirements (Stakeholder)
+     - Design Input
+     - Acceptance Criteria
+     - Intended claim
+     - Priority
+   * - PRS_0010
+     - Execution of an MRI acquisition/job/experiment (Medical Professional, Scientist)
+     - Upload pulseq sequence, execution MRI job with withflows
+     -
+     -
+     -
+   * - PRS_0020
+     - Planning of an MRI examination (Medical Professional, Scientist)
+     - Protocol-Tree, workflows, processing modality worklist
+     -
+     -
+     -
+   * - PRS_0030
+     - DICOM viewer (Medical Professional, Scientist)
+     - View DICOM image of a selected record, compare DICOM images, annotate DICOM image.
+     -
+     -
+     -
+   * - PRS_0040
+     - User management (System Administrator)
+     - Assign different user roles, support of multi-tendency cloud environment
+     -
+     -
+     -
+   * - PRS_0050
+     - Monitor device status (Medical Professional, Scientist)
+     - Current execution progress, detectable device malfunctiuons, device connection
+     -
+     -
+     -
+   * - PRS_0060
+     - Monitor Patient safety (Medical Professional)
+     - Specific absorption rate (SAR), temparatur, total scan time duration, Optional: Video stream, patient communication system
+     -
+     -
+     -
+   * - PRS_0070
+     - Integration of processing workflows (Scientist)
+     - Assambling of workflow steps to be executed on MRI raw data or images. Includes system calibration, image reconstruction and analysis.
+     -
+     -
+     -
+   * - PRS_0080
+     - System calibration (Medical Professional, Scientist, Site Engineer)
+     - Adjust larmorfrequency, adjust gradients, adjust system flip angle, B0-field shimming
+     -
+     -
+     -
+   * - PRS_0090
+     - Clinical report (Medical Professional)
+     - Structured form to create a clinical report which allows to fomulate a diagnosis, viewer for clinical reports
+     -
+     -
+     -
+   * - PRS_0100
+     - Device management (System Administrator, Medical Professional, Medical Device Manufacturer)
+     - Organisation of different devices, device authentification, device selection, device access management (who is trained on which device?)
+     -
+     -
+     -
 
 
 Operational Needs
 -----------------
-+----------+---------------------------------------------+----------------------------------------------+---------------------+------------------------------------------+-------------+
-|    ID    |   Product Requirements (Stakeholder)        |                 Design Input                 | Acceptance Criteria |              Intended claim              |  Priority   |
-+==========+=============================================+==============================================+=====================+==========================================+=============+
-| PRS_0010 | Real-time Monitoring (Medical Professional) | - Continuously monitor and display MRI scan  | 99% uptime          | Ensure real-time monitoring for accurate | Must Have   |
-|          |                                             | data in real-time.                           |                     | diagnosis.                               |             |
-|          |                                             | - Provide real-time feedback on scan quality |                     |                                          |             |
-|          |                                             | and progress.                                |                     |                                          |             |
-|          |                                             | - Instant notification for scan completion.  |                     |                                          |             |
-+----------+---------------------------------------------+----------------------------------------------+---------------------+------------------------------------------+-------------+
-| PRS_0020 | Alerting (Medical Professional)             | Real-time alerts for scan anomalies or       | <5 minutes          | Rapid response to scan anomalies or      | Should Have |
-|          |                                             | issues.                                      |                     | issues.                                  |             |
-+----------+---------------------------------------------+----------------------------------------------+---------------------+------------------------------------------+-------------+
-| PRS_0030 | On-Prem Setup (System Administrator)        | Support for on-prem setups.                  | 100% Compatibility  | Provide flexibility in deployment        | Must Have   |
-|          |                                             |                                              |                     | options to cater to different            |             |
-|          |                                             |                                              |                     | organizational needs.                    |             |
-+----------+---------------------------------------------+----------------------------------------------+---------------------+------------------------------------------+-------------+
-| PRS_0040 | Cloud Setup (System Administrator)          | Support for cloud setups in environments     | 100% Compatibility  | Enable versatile deployment options      | Must Have   |
-|          |                                             | with no local compute workstations.          |                     | to accommodate varying infrastructure.   |             |
-+----------+---------------------------------------------+----------------------------------------------+---------------------+------------------------------------------+-------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 25 35 15 20 10
+
+   * - ID
+     - Product Requirements (Stakeholder)
+     - Design Input
+     - Acceptance Criteria
+     - Intended claim
+     - Priority
+   * - PRS_0010
+     - Real-time Monitoring (Medical Professional)
+     - * Continuously monitor and display MRI scan data in real-time.
+       * Provide real-time feedback on scan quality and progress.
+       * Instant notification for scan completion.
+     - 99% uptime
+     - Ensure real-time monitoring for accurate diagnosis.
+     - Must Have
+   * - PRS_0020
+     - Alerting (Medical Professional)
+     - Real-time alerts for scan anomalies or issues.
+     - <5 minutes
+     - Rapid response to scan anomalies or issues.
+     - Should Have
+   * - PRS_0030
+     - On-Prem Setup (System Administrator)
+     - Support for on-prem setups.
+     - 100% Compatibility
+     - Provide flexibility in deployment options to cater to different organizational needs.
+     - Must Have
+   * - PRS_0040
+     - Cloud Setup (System Administrator)
+     - Support for cloud setups in environments with no local compute workstations.
+     - 100% Compatibility
+     - Enable versatile deployment options to accommodate varying infrastructure.
+     - Must Have
 
 Regulatory Needs
 ----------------
-+----------+--------------------------------------+--------------------------------------------+---------------------+------------------------------------+--------------+
-|    ID    |        User Need (Stakeholder)       |                Design Input                | Acceptance Criteria |           Intended claim           |   Priority   |
-+==========+======================================+============================================+=====================+====================================+==============+
-| PRS_0110 | Compliance (Regulatory Affairs)      | - Compliance with HIPAA, GDPR, and FDA     | 100% Compliance     | Ensure compliance with industry    | Must Have    |
-|          |                                      | regulations.                               |                     | regulations for patient safety.    |              |
-|          |                                      | - Regular updates to adhere to evolving    |                     |                                    |              |
-|          |                                      | regulations.                               |                     |                                    |              |
-|          |                                      | - Detailed logging and audit trails.       |                     |                                    |              |
-+----------+--------------------------------------+--------------------------------------------+---------------------+------------------------------------+--------------+
-| PRS_0120 | Data Security (System Administrator) | Strong data encryption and role-based      | 100% Compliance     | Secure patient data and adhere to  | Nice to Have |
-|          |                                      | access control.                            |                     | compliance requirements.           |              |
-+----------+--------------------------------------+--------------------------------------------+---------------------+------------------------------------+--------------+
-| PRS_0130 | Compliance with ISO 14971:2019       | Implementation of Risk Mitigation Measures | 100% Compliance     | Minimize risks associated with the | Must Have    |
-|          | (Regulatory Affairs)                 | (RMM) in adherence to ISO 14971:2019.      |                     | system operation.                  |              |
-+----------+--------------------------------------+--------------------------------------------+---------------------+------------------------------------+--------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 25 35 15 20 10
+
+   * - ID
+     - User Need (Stakeholder)
+     - Design Input
+     - Acceptance Criteria
+     - Intended claim
+     - Priority
+   * - PRS_0110
+     - Compliance (Regulatory Affairs)
+     - * Compliance with HIPAA, GDPR, and FDA regulations.
+       * Regular updates to adhere to evolving regulations.
+       * Detailed logging and audit trails.
+     - 100% Compliance
+     - Ensure compliance with industry regulations for patient safety.
+     - Must Have
+   * - PRS_0120
+     - Data Security (System Administrator)
+     - Strong data encryption and role-based access control.
+     - 100% Compliance
+     - Secure patient data and adhere to compliance requirements.
+     - Nice to Have
+   * - PRS_0130
+     - Compliance with ISO 14971:2019 (Regulatory Affairs)
+     - Implementation of Risk Mitigation Measures (RMM) in adherence to ISO 14971:2019.
+     - 100% Compliance
+     - Minimize risks associated with the system operation.
+     - Must Have
 
 Reliability and Resilience Needs
 --------------------------------
@@ -132,17 +200,30 @@ Reliability and Resilience Needs
 
 Usability Needs
 ---------------
-+----------+--------------------------------------+---------------------------------------------+---------------------+-------------------------------------+--------------+
-|    ID    |      User Need (Stakeholder)         |                Design Input                 | Acceptance Criteria |           Intended claim            |   Priority   |
-+==========+======================================+=============================================+=====================+=====================================+==============+
-| PRS_0310 | User-Friendly (Medical Professional) | - Intuitive UI for scan setup and patient   | <30 minutes         | Streamline user interaction for     | Should Have  |
-|          |                                      | management.                                 | onboarding          | increased productivity.             |              |
-|          |                                      | - Comprehensive user manuals and guides.    |                     |                                     |              |
-|          |                                      | - Quick access to frequently used features. |                     |                                     |              |
-+----------+--------------------------------------+---------------------------------------------+---------------------+-------------------------------------+--------------+
-| PRS_0320 | Advanced Features (Scientist)        | Access to raw MRI data and experimental     | N/A                 | Facilitate sequence development and | Nice to Have |
-|          |                                      | sequence options.                           |                     | research.                           |              |
-+----------+--------------------------------------+---------------------------------------------+---------------------+-------------------------------------+--------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 25 35 15 20 10
+
+   * - ID
+     - User Need (Stakeholder)
+     - Design Input
+     - Acceptance Criteria
+     - Intended claim
+     - Priority
+   * - PRS_0310
+     - User-Friendly (Medical Professional)
+     - * Intuitive UI for scan setup and patient management.
+       * Comprehensive user manuals and guides.
+       * Quick access to frequently used features.
+     - <30 minutes onboarding
+     - Streamline user interaction for increased productivity.
+     - Should Have
+   * - PRS_0320
+     - Advanced Features (Scientist)
+     - Access to raw MRI data and experimental sequence options.
+     - N/A
+     - Facilitate sequence development and research.
+     - Nice to Have
 
 Interoperability Needs
 ----------------------
@@ -167,16 +248,24 @@ Interoperability Needs
 
 Maintainability Needs
 ---------------------
-+----------+------------------------------------+-----------------------------------------+---------------------+---------------------------------------+-------------+
-|    ID    |      User Need (Stakeholder)       |              Design Input               | Acceptance Criteria |            Intended claim             |  Priority   |
-+==========+====================================+=========================================+=====================+=======================================+=============+
-| PRS_0510 | Scalability (System Administrator) | - Scalable architecture to accommodate  | <10% degradation    | Ensure system performance as data and | Should Have |
-|          |                                    | increasing data and users.              | at 2x data          | users grow.                           |             |
-|          |                                    | - Modular design for easy updates and   |                     |                                       |             |
-|          |                                    | enhancements.                           |                     |                                       |             |
-|          |                                    | - Efficient data management and storage |                     |                                       |             |
-|          |                                    | solutions.                              |                     |                                       |             |
-+----------+------------------------------------+-----------------------------------------+---------------------+---------------------------------------+-------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 25 35 15 20 10
+
+   * - ID
+     - User Need (Stakeholder)
+     - Design Input
+     - Acceptance Criteria
+     - Intended claim
+     - Priority
+   * - PRS_0510
+     - Scalability (System Administrator)
+     - * Scalable architecture to accommodate increasing data and users.
+       * Modular design for easy updates and enhancements.
+       * Efficient data management and storage solutions.
+     - <10% degradation at 2x data
+     - Ensure system performance as data and users grow.
+     - Should Have
 
 System Interfaces to Third Party Solution Needs
 -----------------------------------------------
