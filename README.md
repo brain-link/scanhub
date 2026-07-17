@@ -51,84 +51,121 @@ The advent of cloud computing has enabled a new era of innovation, and ScanHub i
 6.	Security and compliance: ScanHub's cloud platform adheres to stringent data security protocols and compliance requirements, ensuring that sensitive patient data remains protected and confidential.
 
 
-## Installation + Start & Stop
+## Setting up the ScanHub Demo
 
-Scanhub is deployed using Docker and Docker Compose. Make sure they are installed. There are some optional helper scripts like development-launcher.sh in this repository. If you use them, note that there are different versions of Docker Compose that are either called with "docker-compose" or "docker compose" and the helper scripts use the second form. If you want to install tools for development of Scanhub on Linux (Ubuntu/Mint), you may use the install-tools.sh script.
+<!-- start demo-setup -->
 
-On the first installation of Scanhub, the Scanhub containers need to be built with Docker and Docker Compose. The containers also need to be built again after making certain changes during development, in particular after making changes to the base container, after installing libraries or when changing other structural aspects. When the containers are built, Scanhub can be started and stopped with Docker Compose.
+Scanhub is deployed using Docker and Docker Compose. Make sure they are installed. The following instructions will guide you through the process of an all-in-one deployment of scanhub, i.e. all the services and the device connector will run on the same device.
 
-### Building Scanhub:
+### 1. Building Scanhub:
 
-Make sure that there is an internet connection, then apply the following steps:
+The microservices within ScanHub are all build on the same base image, to ensure that critical dependencies match and identical data models are used.
 
-    cd services/base
-    docker build -t scanhub-base .
-    cd ../..
-    docker compose build --build-arg BASE_IMG=scanhub-base:latest
+Note, that the `.github/workflows/deploy-containers.yml` workflow deploys the latest scanhub-base image from the main branch to the github container registry (GHCR). Per default, this image is used when building scanhub with docker compose.
 
-The Scanhub containers are built using a base image. The above commands create this base image from the latest state of the code on the local computer. To alternatively use a base image from ghcr.io/brain-link/scanhub/scanhub-base:latest, you may run only:
-
-    docker compose build
+By the following steps, the scanhub-base image is build from the local code repository.
 
 
-### Starting Scanhub:
+```
+docker build -t scanhub-base services/base/
+```
 
-Run:
+To build scanhub with the base image which was just created, use the following command.
 
-    docker compose up --detach
+Note: You don't need to run `docker compose build` separately, if you want to use the default setup. `docker compose up --d` creates all the required images, if not already available.
 
-Open your browser and navigate to the default address "localhost". By default Scanhub uses a self-signed https certificate that will cause a security warning by the browser. You may ignore this warning for localhost during development. For production deployment see section "Deployment".
+```
+docker compose build --build-arg SCANHUB_BASE_IMAGE=scanhub-base:latest
+```
+Alternatively, you can use the [default image](ghcr.io/brain-link/scanhub/scanhub-base:latest) by running
+
+```
+docker compose build
+```
+
+Note: The repository contains an `.env` file which allows to modify the default image.
+
+### 2. Starting Scanhub
+
+To start all the containers, run the docker compose command.
+
+```
+docker compose up --d
+```
+
+To access the user interface, open your browser and navigate to [localhost](https://localhost:8443). By default Scanhub uses a self-signed https certificate that will cause a security warning by the browser. You may ignore this warning for localhost during development.
+If you run ScanHub for the first time, you are asked to create the first user, when visiting [localhost](https://localhost:8443).
 
 
-### Stopping Scanhub:
+### 3. Register the Demo Device
+
+Devices which are communicating with ScanHub need authenticate, which is done by a token-based approach. 
+1. Login in and navigate to the library
+2. Create a new device: Enter a device name and description
+3. After clicking 'Create', you can download a credentials file which belongs to the new device.
+4. Save the credentials file next to the example device in `scanhub/tools/examples`
+
+### 4. Install and Run the Demo Device
+
+The demo device is build on the ScanHub device sdk which needs to be installed as a dependency. You may want to install your dependencies in a virtual environment, e.g. by using conda.
+```
+conda create -n scanhub-device python=3.13
+```
+This creates a virtual environment named "scanhub-device" with python version 3.13). To active the virtual environment:
+```
+conda activate scanhub-device
+```
+Navigate to `scanhub/tools/device-sdk` and install the device-sdk package with the optional `example` dependencies.
+```
+pip install -e ".[example]"
+```
+Last but not least, go to `scanhub/tools/examples` and run
+```
+python example_usage.py
+```
+
+The following terminal output is expected:
+
+    Device ID: d5b8bacd-1f52-4aaf-a3af-c8ee4e5352ee
+    INFO:WebSockerHandler:WebSocket connection established.
+    INFO:DeviceStateMachine:[STATE] Transitioned to ONLINE
+    INFO:DeviceClient:Device registration sent.
+    Client started and waiting for commands from the server.
+    Server Feedback: Device ONLINE acknowledged.
+    Server Feedback: Device registered successfully
+
+### 5. Setup a Demo Protocol
+
+To perfom an acquisition with the demo device, first a protocol needs to be setup in ScanHub. In the user interface, navigate to *Library* and click on *Create Sequence* to upload the provided test sequence available in the example folder. After setting name, description and type, you need to upload `scanhub/tools/examples/test-sequence.seq` as the sequence and `scanhub/tools/examples/header_test-sequence.xml` as the ISMRMRD header file. 
+
+Once the sequence is uploaded, click on *Create Protocol* and fill in the form to create a demo protocol. Once the protocol is created, select it and click on *Create Task*. Thereby, a new acquisition task is created and assigned to the previously created protocol. Within the task creation form, you need to select the demo device created and the sequence created in the previous step. Calibration and field of view settings can be ignored for this demo.
+
+### 6. Trigger the Demo Device
+
+In the ScanHub UI, navigate to *Patients*, click on the "+" button and fill the form to create a new patient for the demo.
+Open the patient, by clicking the button on the left of the new patient created.
+
+Now, you should see the acquisition view for a patient within the ScanHub UI. Click the "+" button in the protocols section to create an instance from the protocol template we created in the previous step. 
+
+Before starting the demo acquisition, make sure the demo device is online. This is indicated by a green circle in the right section of the navigation bar. 
+
+Open the protocol, select the acquisition and click the play button to start the demo acquisition. You should see how the progress bar fills up. Once the acquisition is done, the ISMRMRD raw data file is uploaded and should appear in the drop down menu underneath the acquisition task. As soon as the raw data is uploaded, the workflow orchestration engine gets notified and automatically performs the image reconstruction using [MRpro](https://mrpro.rocks/). The reconstruction result is uploaded in DICOM format and can be selected from the file drop down menu underneath the task, as soon as it is available. 
+
+<!-- end demo-setup -->
+
+
+## Docker Controls
 
 Run:
 
     docker compose down
 
 
-### Starting Scanhub and tools for development
-
 During development you may start scanhub and the tools for development using the development-launcher.sh script.
 All scripts are located in the `tools/scripts/` folder.
 It has an option --full-rebuild. For details, have a look in the script.
 
     tools/scripts/development-launcher.sh --full-rebuild
-
-
-### Default Username and Password
-
-If there is no user in the database, the software will display a form in the web-interface to create the first user. The password needs to have at least 12 characters.
-
-
-### Deployment
-
-Please mind the section about the "State of development".
-
-Deployment was not testet yet! The following list gives an indication about some of the steps needed to deploy scanhub productively:
-
-- Get a server (either on-site or in a datacenter/cloud)
-- Get a domain name (e.g. scanhub.yourinstitution.com)
-- Create a new private key (e.g. with openSSL). Keep this key private! Make sure not to commit it to the repository during development!
-- Replace the default private key in secrets/privatekey.pem with your new private key
-- Get a server certificate for your domain name (likely from the place where you got your domain name)
-- Replace the default certificate in secrets/certificate.pem with your new certificate
-- Change the default usernames and default passwords in all the configuration files in the folder secrets/
-- In infrastructure/nginx_config.conf put your domain name as server_name in place of localhost (line 5 and line 21)
-- In infrastructure/nginx_config.conf put your domain name in place of localhost as redirect target from http to https (line 8)
-- In scanhub-ui/src/utils/Urls.tsx put your domain name in place of localhost
-- In services/device-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/protocol-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/mri/sequence-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/patient-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/user-login-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- Build the Scanhub Containers as described in section "Installation + Start & Stop"
-- Set up a service to automatically start Scanhub when booting the system
-- Consider setting up monitoring of the servers resources etc.
-- Consider limiting the number of connections, configure multiple workers/servers, load-balancing, etc.
-- Consider removing the --reload option in the uvicorn commands in docker-compose.yml (6 occurances)
-- Check for memory leaks when running the application over several days, consider automatic reboots
-- Maybe put some development effort in the commented code in scanhub-ui/Dockerfile with the production flag
 
 
 ## Documentation

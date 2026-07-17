@@ -563,7 +563,7 @@ def _pick_result_type(filename: str):
     ext = os.path.splitext(filename)[1].lower()
     if ext in [".dcm", ".dicom"]:
         return ResultType.DICOM
-    elif ext in [".mrd"]:
+    elif ext in [".mrd", ".h5"]:
         return ResultType.MRD
     elif ext in [".npy"]:
         return ResultType.NPY

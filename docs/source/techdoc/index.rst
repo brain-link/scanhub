@@ -10,6 +10,5 @@ Technical documentation of ScanHub.
 
    techdoc_dd
    techdoc_prs
-
    techdoc_swrs
    techdoc_swad

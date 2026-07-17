@@ -15,7 +15,7 @@ Getting started
    :maxdepth: 1
    :caption: About ScanHub
 
-   introduction
+   introduction/index
 
 .. toctree::
    :maxdepth: 1
@@ -27,7 +27,7 @@ Getting started
    :maxdepth: 1
    :caption: Technical Documentation
    
-   scanhub_techdoc
+   techdoc/index
    
 .. toctree::
    :maxdepth: 1

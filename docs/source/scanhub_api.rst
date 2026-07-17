@@ -7,6 +7,5 @@ Web API documentation for services.
    :maxdepth: 1
 
    api_ui_patient_manager
-
    api_device
    api_exam

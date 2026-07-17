@@ -25,8 +25,6 @@ sys.path.insert(0, basedir)
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'ScanHub'
-# copyright = '2023, BRAIN-LINK UG (haftungsbeschraenkt)'
-# author = 'BRAIN-LINK UG (haftungsbeschraenkt)'
 copyright = 'David Schote, Christoph Dinh and Johannes Behrens'
 author = 'David Schote, Christoph Dinh and Johannes Behrens'
 release = '0.0.1'   # import this from scanhub package
@@ -50,6 +48,7 @@ extensions = [
     'sphinxcontrib.openapi',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
+    'myst_parser',
 ]
 
 autoclass_content = "class"

@@ -21,7 +21,7 @@ class DataLakeResource(ConfigurableResource):
         Path
             Path to the acquisition ISMRMRD file.
         """
-        matches = list(Path(task_dir).glob("*.mrd"))
+        matches = [f for ext in ("*.mrd", "*.h5") for f in Path(task_dir).glob(ext)]
         if not matches:
             raise FileNotFoundError(f"No MRD file found in: {task_dir}")
         return matches[0]
