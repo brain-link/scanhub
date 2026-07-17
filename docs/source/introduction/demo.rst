@@ -1,3 +1,5 @@
+.. _demo-guide:
+
 ScanHub Demo Walkthrough
 ====
 
