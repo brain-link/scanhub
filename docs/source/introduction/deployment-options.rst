@@ -4,7 +4,7 @@
 Deployment Scenarios
 =====================
 
-The container architecture described in :doc:`architecture` does not change from
+The container architecture described in :doc:`ms-architecture` does not change from
 one installation to the next. What changes is *where* those containers run, and
 which of the arrows between them become network hops that leave a machine, a
 building or an organisation.

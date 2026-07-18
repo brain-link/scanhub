@@ -308,5 +308,5 @@ passed through the HTTP layer.
 
 .. seealso::
 
-   :doc:`deployment` — how this same set of containers is deployed on a single
+   :doc:`deployment-options` — how this same set of containers is deployed on a single
    scanner workstation, on a clinic server, or on a Kubernetes cluster.
