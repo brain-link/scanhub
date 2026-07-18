@@ -3,15 +3,6 @@ ScanHub
 =======
 
 
-.. toctree::
-   :maxdepth: 1
-
-   demo
-   deployment
-   license
-
-
-
 Synopsis
 ========
 
@@ -79,3 +70,16 @@ Simulation Devices with KomaMRI Integration
 --------------------------------------------
 ScanHub incorporates KomaMRI-powered simulation devices. These virtual devices enable users to test and validate sequences and reconstruction algorithms without requiring a physical MRI scanner.
 
+
+
+Content
+====
+
+.. toctree::
+   :maxdepth: 1
+
+   demo
+   ms-architecture
+   deployment-options
+   deployment-notes
+   license-info

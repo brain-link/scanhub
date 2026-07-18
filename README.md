@@ -77,7 +77,7 @@ Note: You don't need to run `docker compose build` separately, if you want to us
 ```
 docker compose build --build-arg SCANHUB_BASE_IMAGE=scanhub-base:latest
 ```
-Alternatively, you can use the [default image](ghcr.io/brain-link/scanhub/scanhub-base:latest) by running
+Alternatively, you can use the default image `ghcr.io/brain-link/scanhub/scanhub-base:latest` by running
 
 ```
 docker compose build

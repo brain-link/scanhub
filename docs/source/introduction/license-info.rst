@@ -26,3 +26,16 @@ Disclaimer
 ----------
 
 This is not a legal document. The exact terms of the GPLv3 and the commercial license are specified in their respective legal texts. This document is merely intended to provide a general overview of the dual licensing scheme.
+
+
+General Public License
+====
+
+.. include:: ../../../LICENSE.GPL3
+   :parser: myst_parser.sphinx_
+
+General Public License Except
+====
+
+.. include:: ../../../LICENSE.GPL3-EXCEPT
+   :parser: myst_parser.sphinx_

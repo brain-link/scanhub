@@ -51,6 +51,7 @@ extensions = [
     'sphinx.ext.autosummary',
     'myst_parser',
     'sphinx_design',
+    'sphinxcontrib.mermaid',
 ]
 
 autoclass_content = "class"
