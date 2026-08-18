@@ -67,6 +67,7 @@ Getting started
    :maxdepth: 1
 
    introduction/index
+   demo
    techdoc/index
    api/index
    sourcecode/index

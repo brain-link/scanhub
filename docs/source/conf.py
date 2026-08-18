@@ -10,17 +10,19 @@
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-import os
+# documentation root, resolve it to an absolute path, like shown here.
 import shutil
 import sys
+from pathlib import Path
 
-sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DOCS_SOURCE_DIR = Path(__file__).resolve().parent
+DOCS_DIR = DOCS_SOURCE_DIR.parent
+REPO_ROOT = DOCS_DIR.parent
+SERVICES_ROOT = REPO_ROOT / "services"
 
-basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
-sys.path.insert(0, basedir)
+sys.path.insert(0, str(DOCS_DIR))
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(SERVICES_ROOT))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -90,29 +92,28 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # To keep each service's docs distinct, stage a copy of each service's package
 # under a uniquely-named directory before AutoAPI scans it, and point AutoAPI
 # at that staging directory instead of services/ directly.
-_services_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'services'))
-_autoapi_stage_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '_autoapi_src'))
+_autoapi_stage_dir = DOCS_DIR / "_autoapi_src"
 
 _autoapi_sources = {
-    'device_manager': os.path.join(_services_root, 'device-manager', 'app'),
-    'protocol_manager': os.path.join(_services_root, 'protocol-manager', 'app'),
-    'orchestration_engine': os.path.join(_services_root, 'orchestration-engine', 'orchestrator'),
-    'user_login_manager': os.path.join(_services_root, 'user-login-manager', 'app'),
-    'patient_manager': os.path.join(_services_root, 'patient-manager', 'app'),
-    'shared_libraries': os.path.join(_services_root, 'base', 'shared_libs', 'src', 'scanhub_libraries'),
+    'device_manager': SERVICES_ROOT / 'device-manager' / 'app',
+    'protocol_manager': SERVICES_ROOT / 'protocol-manager' / 'app',
+    'orchestration_engine': SERVICES_ROOT / 'orchestration-engine' / 'orchestrator',
+    'user_login_manager': SERVICES_ROOT / 'user-login-manager' / 'app',
+    'patient_manager': SERVICES_ROOT / 'patient-manager' / 'app',
+    'shared_libraries': SERVICES_ROOT / 'base' / 'shared_libs' / 'src' / 'scanhub_libraries',
 }
 
-if os.path.isdir(_autoapi_stage_dir):
+if _autoapi_stage_dir.is_dir():
     shutil.rmtree(_autoapi_stage_dir)
-os.makedirs(_autoapi_stage_dir)
+_autoapi_stage_dir.mkdir(parents=True)
 for _alias, _source_path in _autoapi_sources.items():
     shutil.copytree(
         _source_path,
-        os.path.join(_autoapi_stage_dir, _alias),
+        _autoapi_stage_dir / _alias,
         ignore=shutil.ignore_patterns('__pycache__', '*.pyc'),
     )
 
-autoapi_dirs = [_autoapi_stage_dir]
+autoapi_dirs = [str(_autoapi_stage_dir)]
 
 autoapi_ignore = [
     '*/.mypy_cache/*', '*/.ruff_cache/*', '*/__pycache__/*',
@@ -145,6 +146,7 @@ html_context = {
 
 html_sidebars = {
     "index": [],
+    "demo": [],
     # "**": ["search-field", "sidebar-nav-bs"]
     "**": ["sidebar-nav-bs"],
 }

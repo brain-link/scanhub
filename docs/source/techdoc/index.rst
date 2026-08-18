@@ -1,48 +1,92 @@
 .. _tech-doc:
 
 Technical Documentation
-=======================
+========================
 
-!!This Section is Work in Progress.!!
+.. note::
+   This section is a work in progress. Content, requirement IDs, and diagrams
+   will keep evolving alongside the ScanHub / A4IM development.
 
 Purpose
 -------
-This document encompasses all relevant software requirements, both functional and non-functional, for the MRI acquisition software of the A4IM scanner system. At the software system level, it integrates inputs from various foundational documents to provide a comprehensive outline of the required software functionalities and attributes. Specifically, this SW Requirements Specification (SWRS) draws from the following sources:
+This chapter collects the technical and regulatory documentation for the ScanHub
+platform and the A4IM MRI scanner it powers. The documents follow a standard
+medical-device software documentation trail that translates stakeholder needs
+into product requirements, software requirements, and finally the software
+architecture that implements them.
 
-- Product Requirement Specification (PRS) for the A4IM scanner, detailing the expectations and needs from a product standpoint.
-- System Requirements Specification (SRS) for the A4IM scanner, outlining the system-level requirements that the software must meet to ensure compatibility and performance within the MRI system.
-- Risk Assessment Worksheet, identifying potential risks associated with the software and the necessary mitigations to ensure patient and operator safety.
+Document Overview
+------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 12 15 43 30
 
-This SWRS aims to detail the complete software solution for the A4IM MRI system, ensuring that all aspects of software functionality, safety, and performance are thoroughly addressed.
+   * - Document
+     - Abbreviation
+     - Purpose
+     - Primary Audience
+   * - :doc:`Product Requirement Specification <techdoc_prs>`
+     - PRS
+     - Captures stakeholder and user needs and turns them into prioritized
+       product-level requirements. Serves as the design input for the SWRS.
+     - Product management, regulatory affairs
+   * - :doc:`Software Requirements Specification <techdoc_swrs>`
+     - SWRS
+     - Derives concrete, verifiable functional and non-functional software
+       requirements from the PRS, together with representative usage
+       scenarios and device-communication data models.
+     - Software engineers, test engineers, quality assurance
+   * - :doc:`Software Architecture Design Description <techdoc_swad>`
+     - SWAD
+     - Describes how the software is structured — its components, layers,
+       and deployment context — to satisfy the requirements defined in the
+       SWRS.
+     - Developers, architects, integration and test teams
+
+Traceability
+------------
+Each need in the PRS is assigned a unique ``PRS_xxxx`` ID. Every functional
+requirement in the SWRS references the ``PRS_xxxx`` ID it originates from in
+its *Reference/Traceability* column, and each functional requirement carries
+its own ``A4IM_FR_xxx`` ID. This creates an auditable chain from a stakeholder
+need, through a product requirement, to a verifiable software requirement.
+The SWAD in turn maps requirements onto the software components responsible
+for implementing them.
 
 Scope
 -----
-The scope of this document is to define the functional and non-functional requirements for the MRI acquisition software for the A4IM scanner. This includes, but is not limited to, the following aspects:
+Together, the documents in this chapter define and describe:
 
 - Acquisition and processing of MRI data.
 - User interface and interaction mechanisms for medical professionals.
-- Integration with healthcare facility systems, including patient management and data storage solutions.
-- Compliance with healthcare regulations and standards for data protection, privacy, and security.
+- Integration with healthcare facility systems, including patient management
+  and data storage solutions.
+- Compliance with healthcare regulations and standards for data protection,
+  privacy, and security.
 - System performance, reliability, and maintenance requirements.
-- Safety measures and risk mitigation strategies relevant to software operation.
-
-By covering these areas, the SWRS aims to ensure that the software meets all necessary criteria for successful deployment and operation within medical and research settings.
+- Safety measures and risk mitigation strategies relevant to software
+  operation.
 
 References
 ----------
-Product Requirement Specification (PRS) for the A4IM Scanner, Document No. [To Be Added], Version [To Be Added].
-System Requirements Specification (SRS) for the A4IM Scanner, Document No. [To Be Added], Version [To Be Added].
-Risk Assessment Worksheet for the A4IM Scanner Software, Document No. [To Be Added], Version [To Be Added].
-Note: The document numbers and versions will be finalized and added to this section upon completion of the respective documents.
+- Product Requirement Specification (PRS) for the A4IM scanner, detailing the
+  expectations and needs from a product standpoint.
+- System Requirements Specification (SRS) for the A4IM scanner, outlining the
+  system-level requirements the software must meet to ensure compatibility
+  and performance within the MRI system.
+- Risk Assessment Worksheet, identifying potential risks associated with the
+  software and the necessary mitigations to ensure patient and operator
+  safety.
 
-This section sets the foundation for the development and evaluation of the MRI acquisition software, ensuring alignment with the overall objectives and requirements of the A4IM scanner system.
+.. note::
+   Document numbers and versions for the SRS and Risk Assessment Worksheet
+   will be added once those documents are finalized.
 
-Content:
-----
+Content
+-------
 .. toctree::
    :maxdepth: 1
 
-   techdoc_dd
    techdoc_prs
    techdoc_swrs
    techdoc_swad
