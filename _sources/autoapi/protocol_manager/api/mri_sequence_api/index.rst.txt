@@ -1,0 +1,171 @@
+protocol_manager.api.mri_sequence_api
+=====================================
+
+.. py:module:: protocol_manager.api.mri_sequence_api
+
+.. autoapi-nested-parse::
+
+   MRI sequence endpoints.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   protocol_manager.api.mri_sequence_api.seq_router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.api.mri_sequence_api.mri_sequence_form
+   protocol_manager.api.mri_sequence_api.get_mri_sequence_by_id
+   protocol_manager.api.mri_sequence_api.create_mri_sequence
+   protocol_manager.api.mri_sequence_api.get_all_mri_sequences
+   protocol_manager.api.mri_sequence_api.get_mri_sequence_file_by_id
+   protocol_manager.api.mri_sequence_api.get_mri_sequence_header_file_by_id
+   protocol_manager.api.mri_sequence_api.update_mri_sequence_endpoint
+   protocol_manager.api.mri_sequence_api.delete_mri_sequence_endpoint
+
+
+Module Contents
+---------------
+
+.. py:data:: seq_router
+
+.. py:function:: mri_sequence_form(name: str = Form(...), description: str = Form(''), sequence_type: str = Form(''), tags: list[str] = Form([])) -> scanhub_libraries.models.BaseMRISequence
+   :async:
+
+
+   Convert form data to BaseMRISequence model.
+
+   :param name: The name of the MRI sequence.
+   :type name: str
+   :param description: A description of the MRI sequence.
+   :type description: str | None
+   :param sequence_type: The type of the MRI sequence (e.g., "imaging", "calibration", etc.).
+   :type sequence_type: str | None
+   :param tags: A list of tags associated with the MRI sequence.
+   :type tags: list[str]
+
+
+.. py:function:: get_mri_sequence_by_id(sequence_id: str, database=Depends(get_mongo_database)) -> scanhub_libraries.models.MRISequenceOut
+   :async:
+
+
+   Retrieve an MRI sequence by its ID.
+
+   :param sequence_id: The ID of the MRI sequence to retrieve.
+   :type sequence_id: str
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :returns: The retrieved MRI sequence.
+   :rtype: MRISequence
+
+
+.. py:function:: create_mri_sequence(seq_file: fastapi.UploadFile = File(...), xml_file: fastapi.UploadFile = File(...), sequence_meta: scanhub_libraries.models.BaseMRISequence = Depends(mri_sequence_form), database=Depends(get_mongo_database))
+   :async:
+
+
+   Upload an MRI sequence file and store it with the provided metadata.
+
+   :param mri_sequence: The MRI sequence metadata.
+   :type mri_sequence: MRISequenceCreate
+   :param seq_file: The MRI sequence file to store.
+   :type seq_file: UploadFile
+   :param xml_file: The ISMRMRD header xml file to store.
+   :type xml_file: UploadFile
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :returns: The stored MRI sequence with the uploaded file.
+   :rtype: MRISequence
+
+
+.. py:function:: get_all_mri_sequences(database=Depends(get_mongo_database))
+   :async:
+
+
+   Retrieve a list of all MRI sequences from the database.
+
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :returns: The list of MRI sequences.
+   :rtype: List[MRISequence]
+
+
+.. py:function:: get_mri_sequence_file_by_id(sequence_id: str, background_tasks: fastapi.BackgroundTasks, name: str = 'sequence', database=Depends(get_mongo_database))
+   :async:
+
+
+   Retrieve an MRI sequence file by its ID.
+
+   :param sequence_id: The ID of the MRI sequence to retrieve.
+   :type sequence_id: str
+   :param background_tasks: The background tasks to run.
+   :type background_tasks: BackgroundTasks
+   :param name: The name of the file to download.
+   :type name: str
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :returns: The retrieved MRI sequence file.
+   :rtype: FileResponse
+
+
+.. py:function:: get_mri_sequence_header_file_by_id(sequence_id: str, background_tasks: fastapi.BackgroundTasks, name: str = 'header', database=Depends(get_mongo_database))
+   :async:
+
+
+   Retrieve an MRI sequence header (ISMRMRD header) file by its ID.
+
+   :param sequence_id: The ID of the MRI sequence to retrieve.
+   :type sequence_id: str
+   :param background_tasks: The background tasks to run.
+   :type background_tasks: BackgroundTasks
+   :param name: The name of the file to download.
+   :type name: str
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :returns: The retrieved MRI sequence file.
+   :rtype: FileResponse
+
+
+.. py:function:: update_mri_sequence_endpoint(sequence_id: str, sequence_meta: scanhub_libraries.models.BaseMRISequence, database=Depends(get_mongo_database))
+   :async:
+
+
+   Update an MRI sequence with new data.
+
+   :param sequence_id: The ID of the MRI sequence to update.
+   :type sequence_id: str
+   :param mri_sequence: The updated MRI sequence data.
+   :type mri_sequence: MRISequence
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :returns: The updated MRI sequence.
+   :rtype: MRISequence
+
+
+.. py:function:: delete_mri_sequence_endpoint(sequence_id: str, database=Depends(get_mongo_database)) -> None
+   :async:
+
+
+   Delete an MRI sequence by its ID.
+
+   :param sequence_id: The ID of the MRI sequence to delete.
+   :type sequence_id: str
+   :param database: The MongoDB database handle.
+   :type database: AsyncIOMotorDatabase
+
+   :rtype: None
+
+

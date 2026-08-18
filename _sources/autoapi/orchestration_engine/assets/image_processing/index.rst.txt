@@ -1,0 +1,34 @@
+orchestration_engine.assets.image_processing
+============================================
+
+.. py:module:: orchestration_engine.assets.image_processing
+
+.. autoapi-nested-parse::
+
+   AI based image segmentation.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   orchestration_engine.assets.image_processing.image_smoothing
+
+
+Module Contents
+---------------
+
+.. py:function:: image_smoothing(context, data: List[pydicom.Dataset]) -> List[pydicom.Dataset]
+
+   Perform image smoothing on the input DICOM data.
+
+   :param context: Execution context.
+   :param data: Input DICOM data loaded automatically by IO Manager.
+   :type data: List[pydicom.Dataset]
+
+   :returns: The segmented DICOM data.
+   :rtype: List[pydicom.Dataset]
+
+

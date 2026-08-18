@@ -1,0 +1,18 @@
+orchestration_engine.assets
+===========================
+
+.. py:module:: orchestration_engine.assets
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/orchestration_engine/assets/acquisition_data/index
+   /autoapi/orchestration_engine/assets/dicom_input/index
+   /autoapi/orchestration_engine/assets/image_processing/index
+   /autoapi/orchestration_engine/assets/mrpro_direct_reconstruction/index
+
+

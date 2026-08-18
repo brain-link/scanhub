@@ -1,0 +1,21 @@
+patient_manager
+===============
+
+.. py:module:: patient_manager
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/patient_manager/api/index
+   /autoapi/patient_manager/main/index
+
+

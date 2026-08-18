@@ -1,0 +1,32 @@
+shared_libraries.utils
+======================
+
+.. py:module:: shared_libraries.utils
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   shared_libraries.utils.ensure_uuid
+   shared_libraries.utils.calc_age_from_date
+
+
+Module Contents
+---------------
+
+.. py:function:: ensure_uuid(val: str | uuid.UUID | None) -> uuid.UUID | None
+
+   Ensure that the input is a UUID or None.
+
+
+.. py:function:: calc_age_from_date(birth_date: datetime.date) -> int
+
+   Calculate age in years from a given birth date.
+
+   :param birth_date: Date of birth
+
+   :rtype: Age in years as int
+
+

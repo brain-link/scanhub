@@ -1,0 +1,54 @@
+shared_libraries.security
+=========================
+
+.. py:module:: shared_libraries.security
+
+.. autoapi-nested-parse::
+
+   Security functions shared between the microservices.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   shared_libraries.security.USERLOGIN_HOST
+   shared_libraries.security.USERLOGIN_URI
+   shared_libraries.security.oauth2_scheme
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   shared_libraries.security.get_current_user
+   shared_libraries.security.compute_complex_password_hash
+
+
+Module Contents
+---------------
+
+.. py:data:: USERLOGIN_HOST
+   :value: 'user-login-manager:8000'
+
+
+.. py:data:: USERLOGIN_URI
+   :value: '/api/v1/userlogin/getcurrentuser'
+
+
+.. py:data:: oauth2_scheme
+
+.. py:function:: get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.User
+   :async:
+
+
+.. py:function:: compute_complex_password_hash(password: str, salt: str) -> str
+
+   Compute a complex password hash with salt.
+
+   It should take quite a bit of computation to guard against brute force attacks.
+
+

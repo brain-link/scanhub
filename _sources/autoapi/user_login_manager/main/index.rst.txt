@@ -1,0 +1,87 @@
+user_login_manager.main
+=======================
+
+.. py:module:: user_login_manager.main
+
+.. autoapi-nested-parse::
+
+   User login manager main file.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   user_login_manager.main.app
+   user_login_manager.main.origins
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   user_login_manager.main.custom_http_exception_handler
+   user_login_manager.main.validation_exception_handler
+   user_login_manager.main.startup
+   user_login_manager.main.shutdown
+   user_login_manager.main.readiness
+
+
+Module Contents
+---------------
+
+.. py:data:: app
+
+.. py:data:: origins
+   :value: ['http://localhost:8080', 'https://localhost:8443']
+
+
+.. py:function:: custom_http_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: validation_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for fastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: startup()
+   :async:
+
+
+   Statup protocol-tree microservice.
+
+   :raises HTTPException: 500: Device table does not exist
+   :raises HTTPException: 500: Workflow table does not exist
+
+
+.. py:function:: shutdown() -> None
+   :async:
+
+
+   Shutdown function.
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Readiness health endpoint.
+
+   :rtype: Status dictionary
+
+   :raises HTTPException: 500: User table does not exist
+
+

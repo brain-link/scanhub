@@ -1,0 +1,76 @@
+patient_manager.main
+====================
+
+.. py:module:: patient_manager.main
+
+.. autoapi-nested-parse::
+
+   Patient manager main file.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   patient_manager.main.app
+   patient_manager.main.ORIGINS
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   patient_manager.main.custom_http_exception_handler
+   patient_manager.main.validation_exception_handler
+   patient_manager.main.startup
+   patient_manager.main.readiness
+
+
+Module Contents
+---------------
+
+.. py:data:: app
+
+.. py:data:: ORIGINS
+   :value: ['http://localhost:8080', 'https://localhost:8443']
+
+
+.. py:function:: custom_http_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: validation_exception_handler(request, exc)
+   :async:
+
+
+   Add logging for fastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: startup() -> None
+   :async:
+
+
+   Initialize patient database.
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Readiness health endpoint.
+
+   :rtype: Status dictionary
+
+   :raises HTTPException: 500: Any of the protocol-tree tables does not exist
+
+

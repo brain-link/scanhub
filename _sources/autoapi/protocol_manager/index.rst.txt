@@ -1,0 +1,39 @@
+protocol_manager
+================
+
+.. py:module:: protocol_manager
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/protocol_manager/api/index
+   /autoapi/protocol_manager/dal/index
+   /autoapi/protocol_manager/db/index
+   /autoapi/protocol_manager/main/index
+   /autoapi/protocol_manager/tools/index
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   protocol_manager.LOG_CALL_DELIMITER
+
+
+Package Contents
+----------------
+
+.. py:data:: LOG_CALL_DELIMITER
+   :value: '-------------------------------------------------------------------------------'
+
+

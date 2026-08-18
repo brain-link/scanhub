@@ -1,0 +1,92 @@
+user_login_manager.dal
+======================
+
+.. py:module:: user_login_manager.dal
+
+.. autoapi-nested-parse::
+
+   Data acess layer (DAL) between fastapi endpoint and sql database for user data.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   user_login_manager.dal.get_user_data
+   user_login_manager.dal.update_user_data
+   user_login_manager.dal.get_user_from_token
+   user_login_manager.dal.get_all_users
+   user_login_manager.dal.add_user
+   user_login_manager.dal.delete_user_data
+
+
+Module Contents
+---------------
+
+.. py:function:: get_user_data(username: str) -> app.db.UserSQL | None
+   :async:
+
+
+   Get user by username.
+
+   :param username: Username as entered by the user. Primary key in db.
+
+   :rtype: Database orm model of User or none
+
+
+.. py:function:: update_user_data(username: str, data: dict) -> app.db.UserSQL | None
+   :async:
+
+
+   Update existing user entry.
+
+   :param username: Primary key of the entry in db to be updated.
+   :param data: Data to be written. Does not need to contain all columns.
+
+   :rtype: Database orm model of updated user
+
+
+.. py:function:: get_user_from_token(access_token: str) -> app.db.UserSQL | None
+   :async:
+
+
+   Get user from token.
+
+   :param token: Token. Unique in database.
+
+   :rtype: The user as read from database or None if the token is not found.
+
+
+.. py:function:: get_all_users() -> list[app.db.UserSQL]
+   :async:
+
+
+   Get a list of all existing users.
+
+   :rtype: List of database orm models
+
+
+.. py:function:: add_user(user: app.db.UserSQL)
+   :async:
+
+
+   Create a new user entry in database.
+
+   :param user: UserSQL ORM model.
+
+   :rtype: User database entry
+
+
+.. py:function:: delete_user_data(username: str) -> bool
+   :async:
+
+
+   Delete user by username.
+
+   :param username: Username of the user to be deleted
+
+   :rtype: Success of deletion
+
+

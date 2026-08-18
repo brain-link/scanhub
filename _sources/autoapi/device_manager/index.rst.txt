@@ -1,0 +1,21 @@
+device_manager
+==============
+
+.. py:module:: device_manager
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/device_manager/api/index
+   /autoapi/device_manager/main/index
+
+

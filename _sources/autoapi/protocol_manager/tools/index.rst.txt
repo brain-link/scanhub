@@ -1,0 +1,23 @@
+protocol_manager.tools
+======================
+
+.. py:module:: protocol_manager.tools
+
+.. autoapi-nested-parse::
+
+   Initialization file for the tools module of the protocol service.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/protocol_manager/tools/dicom_provider/index
+   /autoapi/protocol_manager/tools/helper/index
+   /autoapi/protocol_manager/tools/mrd_provider/index
+   /autoapi/protocol_manager/tools/mri_sequence_plot/index
+
+

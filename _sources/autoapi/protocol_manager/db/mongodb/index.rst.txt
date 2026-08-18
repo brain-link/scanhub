@@ -1,0 +1,78 @@
+protocol_manager.db.mongodb
+===========================
+
+.. py:module:: protocol_manager.db.mongodb
+
+.. autoapi-nested-parse::
+
+   MongoDB database handle.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   protocol_manager.db.mongodb.db
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   protocol_manager.db.mongodb.Database
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.db.mongodb.connect_to_mongo
+   protocol_manager.db.mongodb.close_mongo_connection
+   protocol_manager.db.mongodb.get_mongo_database
+
+
+Module Contents
+---------------
+
+.. py:class:: Database
+
+   MongoDB database handle.
+
+
+   .. py:attribute:: client
+      :type:  motor.motor_asyncio.AsyncIOMotorClient | motor.motor_asyncio.AsyncIOMotorDatabase | None
+      :value: None
+
+
+
+   .. py:attribute:: collection
+      :type:  motor.motor_asyncio.AsyncIOMotorCollection | None
+      :value: None
+
+
+
+.. py:data:: db
+
+.. py:function:: connect_to_mongo()
+   :async:
+
+
+   Connect to MongoDB using the configuration settings.
+
+
+.. py:function:: close_mongo_connection()
+   :async:
+
+
+   Close the connection to MongoDB.
+
+
+.. py:function:: get_mongo_database() -> Database
+
+   Dependency for getting a handle to the MongoDB database.
+
+

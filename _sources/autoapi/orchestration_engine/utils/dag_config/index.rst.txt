@@ -1,0 +1,54 @@
+orchestration_engine.utils.dag_config
+=====================================
+
+.. py:module:: orchestration_engine.utils.dag_config
+
+.. autoapi-nested-parse::
+
+   Define the resource used by Dagster jobs.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   orchestration_engine.utils.dag_config.DAGConfiguration
+
+
+Module Contents
+---------------
+
+.. py:class:: DAGConfiguration
+
+   Bases: :py:obj:`dagster.ConfigurableResource`
+
+
+   Run-scoped parameters accessible from assets and IO managers.
+
+
+   .. py:attribute:: task_dir
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: task_id
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: protocol_id
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: user_access_token
+      :type:  str
+      :value: ''
+
+
+

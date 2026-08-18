@@ -1,0 +1,79 @@
+patient_manager.api.dal
+=======================
+
+.. py:module:: patient_manager.api.dal
+
+.. autoapi-nested-parse::
+
+   Data Access Layer (DAL).
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   patient_manager.api.dal.add_patient
+   patient_manager.api.dal.get_patient
+   patient_manager.api.dal.get_all_patients
+   patient_manager.api.dal.delete_patient
+   patient_manager.api.dal.update_patient
+
+
+Module Contents
+---------------
+
+.. py:function:: add_patient(payload: scanhub_libraries.models.BasePatient) -> app.api.db.Patient
+   :async:
+
+
+   Create a new patient entry in database.
+
+   :param payload: Patient pydantic base model
+
+   :rtype: Patient database entry
+
+
+.. py:function:: get_patient(patient_id: uuid.UUID) -> app.api.db.Patient | None
+   :async:
+
+
+   Fetch a patient from database.
+
+   :param patient_id: Id of the requested patient
+
+   :rtype: Patient database entry
+
+
+.. py:function:: get_all_patients() -> list[app.api.db.Patient]
+   :async:
+
+
+   Get a list of all existing patients.
+
+   :rtype: List of database orm models
+
+
+.. py:function:: delete_patient(patient_id: uuid.UUID) -> bool
+   :async:
+
+
+   Delete patient entry from database.
+
+   :param patient_id: Id of the patient to be deleted
+
+   :rtype: Delete success
+
+
+.. py:function:: update_patient(patient_id: uuid.UUID, payload: scanhub_libraries.models.BasePatient) -> app.api.db.Patient | None
+   :async:
+
+
+   Update existing patient in database.
+
+   :param patient_id: Id of the patient to be updated
+
+   :rtype: Updated database entry
+
+

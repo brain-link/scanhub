@@ -1,0 +1,167 @@
+device_manager.api.exam_requests
+================================
+
+.. py:module:: device_manager.api.exam_requests
+
+.. autoapi-nested-parse::
+
+   Handler for protocol requests.
+
+   This module defines functions to interact with the protocol manager service,
+   including fetching tasks, sequences, and results. It provides a way to
+   create and update acquisition tasks and results, ensuring that the data
+   is properly formatted and authenticated.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device_manager.api.exam_requests.TASK_URI
+   device_manager.api.exam_requests.RESULT_URI
+   device_manager.api.exam_requests.SEQUENCE_URI
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device_manager.api.exam_requests.get_task
+   device_manager.api.exam_requests.set_task
+   device_manager.api.exam_requests.get_sequence
+   device_manager.api.exam_requests.create_blank_result
+   device_manager.api.exam_requests.delete_blank_result
+   device_manager.api.exam_requests.set_result
+   device_manager.api.exam_requests.update_task_status
+   device_manager.api.exam_requests.get_result
+
+
+Module Contents
+---------------
+
+.. py:data:: TASK_URI
+   :value: 'http://protocol-manager:8000/api/v1/protocol/task'
+
+
+.. py:data:: RESULT_URI
+   :value: 'http://protocol-manager:8000/api/v1/protocol/result'
+
+
+.. py:data:: SEQUENCE_URI
+   :value: 'http://protocol-manager:8000/api/v1/protocol/sequence'
+
+
+.. py:function:: get_task(task_id: str, user_access_token: str) -> scanhub_libraries.models.AcquisitionTaskOut
+
+   Fetch acquisition task by ID from the protocol manager service.
+
+   :param task_id (str):
+   :type task_id (str): The unique identifier of the task to retrieve.
+   :param user_access_token (str):
+   :type user_access_token (str): The user's access token for authentication.
+
+   :returns: **AcquisitionTaskOut | None**
+   :rtype: The acquisition task object if found and valid.
+
+   :raises HTTPException: If the task is not found (404) or is not an acquisition task (400).:
+
+
+.. py:function:: set_task(task_id: str, payload: scanhub_libraries.models.AcquisitionTaskOut, user_access_token: str) -> scanhub_libraries.models.AcquisitionTaskOut
+
+   Update an acquisition task on the task service with the provided payload.
+
+   :param task_id: The unique identifier of the task to update.
+   :type task_id: str
+   :param payload: The updated task data to send to the task service.
+   :type payload: AcquisitionTaskOut
+   :param user_access_token: The access token used for authorization with the task service.
+   :type user_access_token: str
+
+   :returns: The updated task object returned from the task service.
+   :rtype: AcquisitionTaskOut
+
+   :raises HTTPException: If the task update fails (e.g. non-200 response from the task service).
+
+
+.. py:function:: get_sequence(sequence_id: str, user_access_token: str) -> scanhub_libraries.models.MRISequenceOut
+
+   Fetch MRI sequence by ID from the protocol manager service.
+
+   :param sequence_id (str):
+   :type sequence_id (str): The unique identifier of the sequence to retrieve.
+   :param user_access_token (str):
+   :type user_access_token (str): The user's access token for authentication.
+
+   :returns: **dict**
+   :rtype: The MRI sequence object if found.
+
+   :raises HTTPException: If the sequence is not found (404).:
+
+
+.. py:function:: create_blank_result(task_id: str, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Create a blank result in the protocol manager service.
+
+   :returns: **ResultOut**
+   :rtype: The created blank result object.
+
+   :raises HTTPException: If the result creation fails (status code not 201).:
+
+
+.. py:function:: delete_blank_result(result_id: str, user_access_token: str) -> None
+
+   Delete a blank result in the protocol manager service.
+
+   :param result_id (str):
+   :type result_id (str): The unique identifier of the result to delete.
+   :param user_access_token (str):
+   :type user_access_token (str): The user's access token for authentication.
+
+   :rtype: None
+
+   :raises HTTPException: If the result deletion fails (status code not 204).:
+
+
+.. py:function:: set_result(result_id: str, payload: scanhub_libraries.models.SetResult, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Update a result in the protocol manager service.
+
+   :param result_id (str):
+   :type result_id (str): The unique identifier of the result to update.
+   :param payload (SetResult):
+   :type payload (SetResult): The data to update the result with.
+   :param user_access_token (str):
+   :type user_access_token (str): The user's access token for authentication.
+
+   :returns: **ResultOut**
+   :rtype: The updated result object.
+
+   :raises HTTPException: If the result update fails (status code not 200).:
+
+
+.. py:function:: update_task_status(task_id: str, status: str, user_access_token: str) -> scanhub_libraries.models.AcquisitionTaskOut
+
+   Update only the status field of a task.
+
+
+.. py:function:: get_result(result_id: str, user_access_token: str) -> scanhub_libraries.models.ResultOut
+
+   Fetch result by ID from the protocol manager service.
+
+   :param result_id (str):
+   :type result_id (str): The unique identifier of the result to retrieve.
+   :param user_access_token (str):
+   :type user_access_token (str): The user's access token for authentication.
+
+   :returns: **ResultOut | None**
+   :rtype: The result object if found and valid.
+
+   :raises HTTPException: If the result is not found (404).:
+
+

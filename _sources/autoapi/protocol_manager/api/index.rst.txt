@@ -1,0 +1,23 @@
+protocol_manager.api
+====================
+
+.. py:module:: protocol_manager.api
+
+.. autoapi-nested-parse::
+
+   Init file.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/protocol_manager/api/mri_sequence_api/index
+   /autoapi/protocol_manager/api/protocol_api/index
+   /autoapi/protocol_manager/api/result_api/index
+   /autoapi/protocol_manager/api/task_api/index
+
+

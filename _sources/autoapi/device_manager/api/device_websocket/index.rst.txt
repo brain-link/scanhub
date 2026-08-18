@@ -1,0 +1,247 @@
+device_manager.api.device_websocket
+===================================
+
+.. py:module:: device_manager.api.device_websocket
+
+.. autoapi-nested-parse::
+
+   Device websocket connection.
+
+   This module defines the WebSocket endpoints for managing devices.
+   It includes functionalities for:
+   - Device registration and status updates via WebSocket.
+   - Listening for commands from devices.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device_manager.api.device_websocket.LOG_CALL_DELIMITER
+   device_manager.api.device_websocket.DATA_LAKE_DIR
+   device_manager.api.device_websocket.DAGSTER_GRAPHQL_URL
+   device_manager.api.device_websocket.oauth2_scheme
+   device_manager.api.device_websocket.router
+   device_manager.api.device_websocket.dict_id_websocket
+   device_manager.api.device_websocket.device_last_seen
+   device_manager.api.device_websocket.task_sse_queues
+   device_manager.api.device_websocket._SSE_TERMINAL_STATUSES
+   device_manager.api.device_websocket._HEARTBEAT_TIMEOUT_S
+   device_manager.api.device_websocket._HEARTBEAT_CHECK_INTERVAL_S
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   device_manager.api.device_websocket.TaskEvent
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device_manager.api.device_websocket.send_json
+   device_manager.api.device_websocket._broadcast_task_status
+   device_manager.api.device_websocket.push_task_event
+   device_manager.api.device_websocket.task_stream
+   device_manager.api.device_websocket.trigger_acquisition
+   device_manager.api.device_websocket.connection_with_valid_id_and_token
+   device_manager.api.device_websocket.monitor_devices
+   device_manager.api.device_websocket.websocket_endpoint
+   device_manager.api.device_websocket.handle_register
+   device_manager.api.device_websocket.handle_status_update
+   device_manager.api.device_websocket._stream_to_file
+   device_manager.api.device_websocket._submit_reconstruction_job
+   device_manager.api.device_websocket.handle_file_transfer
+   device_manager.api.device_websocket._pick_result_type
+
+
+Module Contents
+---------------
+
+.. py:data:: LOG_CALL_DELIMITER
+   :value: '-------------------------------------------------------------------------------'
+
+
+.. py:data:: DATA_LAKE_DIR
+
+.. py:data:: DAGSTER_GRAPHQL_URL
+   :value: 'http://dagster-webserver:3000/dagster/graphql'
+
+
+.. py:data:: oauth2_scheme
+
+.. py:data:: router
+
+.. py:data:: dict_id_websocket
+   :type:  dict[uuid.UUID, fastapi.WebSocket]
+
+.. py:data:: device_last_seen
+   :type:  dict[uuid.UUID, float]
+
+.. py:data:: task_sse_queues
+   :type:  dict[str, list[asyncio.Queue]]
+
+.. py:function:: send_json(websocket, payload: dict)
+   :async:
+
+
+   Send json payload via websocket.
+
+
+.. py:function:: _broadcast_task_status(task_id: str, event: dict) -> None
+   :async:
+
+
+   Push a status event to all SSE subscribers watching a task.
+
+
+.. py:data:: _SSE_TERMINAL_STATUSES
+
+.. py:class:: TaskEvent
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Payload for the push-event endpoint — callable by any internal service.
+
+
+   .. py:attribute:: source
+      :type:  str
+
+
+   .. py:attribute:: task_status
+      :type:  str
+
+
+   .. py:attribute:: progress
+      :type:  int
+      :value: 0
+
+
+
+   .. py:attribute:: message
+      :type:  str
+      :value: ''
+
+
+
+.. py:function:: push_task_event(task_id: str, event: TaskEvent) -> dict
+   :async:
+
+
+   Internal endpoint: any service pushes a status event to all SSE subscribers of a task.
+
+   Called by Dagster sensors on job success, failure, or cancellation.
+   No authentication required — only reachable on the internal Docker network.
+
+
+.. py:function:: task_stream(task_id: str, token: Annotated[str, Query()]) -> starlette.responses.StreamingResponse
+   :async:
+
+
+   SSE endpoint — streams real-time task status updates to the browser.
+
+   The browser connects with EventSource and receives JSON events of the form:
+       {"task_status": "INPROGRESS", "progress": 45}
+
+   The stream closes automatically when the task reaches FINISHED or ERROR.
+   A keepalive comment is sent every 25 s to prevent proxy timeouts.
+
+
+.. py:function:: trigger_acquisition(task_id: uuid.UUID, access_token: Annotated[str, Depends(oauth2_scheme)])
+   :async:
+
+
+   Trigger an MRI acquisition for the given task.
+
+   Fetches the task from the protocol manager, looks up the assigned sequence and device,
+   sends the scan-start command via the device's open WebSocket, and marks the task as STARTED.
+
+
+.. py:function:: connection_with_valid_id_and_token(websocket: fastapi.WebSocket) -> uuid.UUID
+   :async:
+
+
+   Check if the given device_id and device_token belong to an existing device in the database.
+
+
+.. py:data:: _HEARTBEAT_TIMEOUT_S
+   :value: 15
+
+
+.. py:data:: _HEARTBEAT_CHECK_INTERVAL_S
+   :value: 5
+
+
+.. py:function:: monitor_devices()
+   :async:
+
+
+   Monitor device online/offline status via the ping heartbeat.
+
+   Catches every disconnection a clean WebSocketDisconnect can't: crashed
+   processes, killed processes (SIGKILL), dropped network links, etc. — any
+   device that stops pinging is marked OFFLINE within roughly
+   `_HEARTBEAT_TIMEOUT_S + _HEARTBEAT_CHECK_INTERVAL_S` seconds, independent of
+   whether the client ever got a chance to shut down cleanly.
+
+
+.. py:function:: websocket_endpoint(websocket: fastapi.WebSocket)
+   :async:
+
+
+   Websocket endpoint for device communication.
+
+   :param websocket (WebSocket):
+   :type websocket (WebSocket): The WebSocket connection object.
+   :param device_id (UUID):
+   :type device_id (UUID): The device_id.
+
+
+.. py:function:: handle_register(websocket: fastapi.WebSocket, message: dict, device_id: uuid.UUID) -> None
+   :async:
+
+
+   Handle device registration.
+
+
+.. py:function:: handle_status_update(websocket: fastapi.WebSocket, message: dict, device_id: uuid.UUID) -> None
+   :async:
+
+
+   Handle device status updates from the device SDK.
+
+
+.. py:function:: _stream_to_file(websocket: fastapi.WebSocket, tmp_path: pathlib.Path, size_bytes: int) -> tuple[int, str]
+   :async:
+
+
+   Stream bytes from a WebSocket into a temp file; returns (bytes_received, sha256_hex).
+
+
+.. py:function:: _submit_reconstruction_job(task_id: str, task_dir: str, protocol_id: str, user_access_token: str) -> None
+
+   Submit the mrpro_reconstruction_job to Dagster after a file transfer completes.
+
+
+.. py:function:: handle_file_transfer(websocket: fastapi.WebSocket, header: dict, device_id: uuid.UUID) -> None
+   :async:
+
+
+   Handle file transfer from device to server.
+
+
+.. py:function:: _pick_result_type(filename: str)
+
+   Map extensions to enum.
+
+

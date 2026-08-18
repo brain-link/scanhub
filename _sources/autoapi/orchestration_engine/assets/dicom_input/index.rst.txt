@@ -1,0 +1,19 @@
+orchestration_engine.assets.dicom_input
+=======================================
+
+.. py:module:: orchestration_engine.assets.dicom_input
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   orchestration_engine.assets.dicom_input.dicom_input
+
+
+Module Contents
+---------------
+
+.. py:data:: dicom_input
+

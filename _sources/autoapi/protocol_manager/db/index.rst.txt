@@ -1,0 +1,21 @@
+protocol_manager.db
+===================
+
+.. py:module:: protocol_manager.db
+
+.. autoapi-nested-parse::
+
+   Initfile of the database directory in the protocol manager.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/protocol_manager/db/mongodb/index
+   /autoapi/protocol_manager/db/postgres/index
+
+

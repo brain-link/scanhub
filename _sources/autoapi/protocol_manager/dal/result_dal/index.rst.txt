@@ -1,0 +1,90 @@
+protocol_manager.dal.result_dal
+===============================
+
+.. py:module:: protocol_manager.dal.result_dal
+
+.. autoapi-nested-parse::
+
+   Data acess layer (DAL) between fastapi endpoint and sql database.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.dal.result_dal.add_blank_result_db
+   protocol_manager.dal.result_dal.add_dicom_result_db
+   protocol_manager.dal.result_dal.get_result_db
+   protocol_manager.dal.result_dal.get_all_results_db
+   protocol_manager.dal.result_dal.update_result_db
+   protocol_manager.dal.result_dal.delete_result_db
+
+
+Module Contents
+---------------
+
+.. py:function:: add_blank_result_db(task_id: str | uuid.UUID) -> app.db.postgres.Result
+   :async:
+
+
+   Add new result to database.
+
+   :param payload: Result pydantic base model
+
+   :rtype: Database orm model of created result
+
+
+.. py:function:: add_dicom_result_db(task_id: uuid.UUID, directory: str, files: list[str], meta: dict | None = None) -> app.db.postgres.Result
+   :async:
+
+
+   Add a DICOM result record to the database (called by Dagster on_run_success sensor).
+
+
+.. py:function:: get_result_db(result_id: uuid.UUID) -> app.db.postgres.Result | None
+   :async:
+
+
+   Get result by id.
+
+   :param result_id: Id of the requested result
+
+   :rtype: Database orm model with data of requested result
+
+
+.. py:function:: get_all_results_db(task_id: uuid.UUID) -> list[app.db.postgres.Result]
+   :async:
+
+
+   Get a list of all results assigned to a certain task.
+
+   :param task_id: Id of the parent task entry, results are assigned to
+
+   :rtype: List of result data base orm models
+
+
+.. py:function:: update_result_db(result_id: uuid.UUID, payload: scanhub_libraries.models.SetResult) -> app.db.postgres.Result | None
+   :async:
+
+
+   Update existing result in database.
+
+   :param result_id: Id of the result to be updateed
+   :param payload: Result pydantic base model with data to be updated
+
+   :rtype: Resuld database orm model of updated result
+
+
+.. py:function:: delete_result_db(result_id: uuid.UUID) -> bool
+   :async:
+
+
+   Delete result by id.
+
+   :param result_id: Id of the result to be deleted
+
+   :rtype: Success of deletion
+
+

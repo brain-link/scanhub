@@ -1,0 +1,85 @@
+protocol_manager.dal.task_dal
+=============================
+
+.. py:module:: protocol_manager.dal.task_dal
+
+.. autoapi-nested-parse::
+
+   Data access layer (DAL) between fastapi endpoint and sql database.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.dal.task_dal.add_task_data
+   protocol_manager.dal.task_dal.get_task_data
+   protocol_manager.dal.task_dal.get_all_task_data
+   protocol_manager.dal.task_dal.get_all_task_template_data
+   protocol_manager.dal.task_dal.delete_task_data
+   protocol_manager.dal.task_dal.update_task_data
+   protocol_manager.dal.task_dal.update_task_status
+   protocol_manager.dal.task_dal.reorder_tasks_data
+
+
+Module Contents
+---------------
+
+.. py:function:: add_task_data(payload: scanhub_libraries.models.BaseAcquisitionTask, creator: str) -> app.db.postgres.AcquisitionTask
+   :async:
+
+
+   Add new acquisition task to database.
+
+
+.. py:function:: get_task_data(task_id: uuid.UUID) -> app.db.postgres.AcquisitionTask | None
+   :async:
+
+
+   Get acquisition task by id.
+
+
+.. py:function:: get_all_task_data(protocol_id: uuid.UUID) -> list[app.db.postgres.AcquisitionTask]
+   :async:
+
+
+   Get all acquisition tasks assigned to a protocol, ordered by position.
+
+
+.. py:function:: get_all_task_template_data() -> list[app.db.postgres.AcquisitionTask]
+   :async:
+
+
+   Get all acquisition task templates.
+
+
+.. py:function:: delete_task_data(task_id: uuid.UUID) -> bool
+   :async:
+
+
+   Delete acquisition task by id.
+
+
+.. py:function:: update_task_data(task_id: uuid.UUID, payload: scanhub_libraries.models.BaseAcquisitionTask) -> app.db.postgres.AcquisitionTask | None
+   :async:
+
+
+   Update existing acquisition task in database.
+
+
+.. py:function:: update_task_status(task_id: uuid.UUID, status: str) -> app.db.postgres.AcquisitionTask | None
+   :async:
+
+
+   Update only the status field of an acquisition task.
+
+
+.. py:function:: reorder_tasks_data(task_ids: list[uuid.UUID]) -> bool
+   :async:
+
+
+   Update the position of multiple tasks.
+
+

@@ -1,0 +1,1824 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Software Requirements Specification (SWRS) &#8212; ScanHub Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8d6ca438" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'techdoc/techdoc_swrs';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/favicon-32x32.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Software Architecture Design Description (SWAD)" href="techdoc_swad.html" />
+    <link rel="prev" title="Product Requirement Specification (PRS)" href="techdoc_prs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">ScanHub Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../introduction/index.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../demo.html">
+    Demo
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../sourcecode/index.html">
+    Code Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../introduction/index.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../demo.html">
+    Demo
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../sourcecode/index.html">
+    Code Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="techdoc_prs.html">Product Requirement Specification (PRS)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Software Requirements Specification (SWRS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc_swad.html">Software Architecture Design Description (SWAD)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Technical Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Software Requirements Specification (SWRS)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="software-requirements-specification-swrs">
+<h1>Software Requirements Specification (SWRS)<a class="headerlink" href="#software-requirements-specification-swrs" title="Link to this heading">#</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is a work in progress.</p>
+</div>
+<section id="purpose">
+<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">#</a></h2>
+<p>This document defines the functional and non-functional software requirements
+for the MRI acquisition software of the A4IM scanner system. It integrates
+inputs from the foundational documents listed under <em>References</em> to provide a
+complete outline of the required software functionalities and attributes, and
+forms the basis from which the
+<a class="reference internal" href="techdoc_swad.html"><span class="doc">Software Architecture Design Description</span></a> is derived.</p>
+</section>
+<section id="scope">
+<h2>Scope<a class="headerlink" href="#scope" title="Link to this heading">#</a></h2>
+<p>The scope of this document is to define the functional and non-functional
+requirements for the MRI acquisition software of the A4IM scanner. This
+includes, but is not limited to:</p>
+<ul class="simple">
+<li><p>Acquisition and processing of MRI data.</p></li>
+<li><p>User interface and interaction mechanisms for medical professionals.</p></li>
+<li><p>Integration with healthcare facility systems, including patient management
+and data storage solutions.</p></li>
+<li><p>Compliance with healthcare regulations and standards for data protection,
+privacy, and security.</p></li>
+<li><p>System performance, reliability, and maintenance requirements.</p></li>
+<li><p>Safety measures and risk mitigation strategies relevant to software
+operation.</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Product Requirement Specification (PRS) for the A4IM scanner, detailing the
+expectations and needs from a product standpoint. See
+<a class="reference internal" href="techdoc_prs.html"><span class="doc">Product Requirement Specification (PRS)</span></a>.</p></li>
+<li><p>System Requirements Specification (SRS) for the A4IM scanner, outlining the
+system-level requirements the software must meet to ensure compatibility
+and performance within the MRI system.</p></li>
+<li><p>Risk Assessment Worksheet, identifying potential risks associated with the
+software and the necessary mitigations to ensure patient and operator
+safety.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Document numbers and versions for the SRS and Risk Assessment Worksheet
+will be added once those documents are finalized.</p>
+</div>
+</section>
+<section id="software-overview">
+<h2>Software Overview<a class="headerlink" href="#software-overview" title="Link to this heading">#</a></h2>
+<p>This document pertains to the MRI acquisition software for the A4IM scanner,
+providing a comprehensive solution for the acquisition, processing, and
+management of MRI data. The software is designed to ensure high-quality
+imaging of the human head and extremities, maximizing the efficiency and
+effectiveness of diagnostic processes within healthcare facilities.</p>
+<p>The MRI acquisition software integrates with the A4IM scanner’s hardware
+components, including the permanent magnets, radiofrequency (RF) coils, and
+gradient coils, to facilitate the capture of detailed images. It also
+includes functionality for patient data management, real-time scan
+monitoring, image reconstruction, and storage, all within a user-friendly
+interface that supports healthcare professionals in their daily operations.</p>
+<p>For detailed information on the system’s intended use, components, and
+operational context, refer to the Device Description document.</p>
+</section>
+<section id="scenarios-and-use-cases">
+<h2>Scenarios and Use Cases<a class="headerlink" href="#scenarios-and-use-cases" title="Link to this heading">#</a></h2>
+<p>To outline the main usage scenarios and inform the definition of system
+requirements, this section lists the stakeholders of the MRI acquisition
+system as defined in the <a class="reference internal" href="techdoc_prs.html"><span class="doc">Product Requirement Specification (PRS)</span></a>. The following scenarios and use
+cases serve as the basis for the functional requirements defined further
+below. Each scenario is associated with the relevant stakeholders and
+provides a high-level description of the expected system behavior.</p>
+<section id="system-startup-and-initialization">
+<h3>System Startup and Initialization<a class="headerlink" href="#system-startup-and-initialization" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Booting up the MRI system, initializing all software components,
+and conducting self-checks.</p></li>
+<li><p>Procedure: Automated system checks for hardware and software integrity,
+loading of necessary drivers and applications, and verification of system
+readiness for operation.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), (Field/Service) Engineer
+(SH_040)</p></li>
+</ul>
+</section>
+<section id="user-authentication-and-access-control">
+<h3>User Authentication and Access Control<a class="headerlink" href="#user-authentication-and-access-control" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Ensuring only authorized personnel can operate or access
+different levels of the system.</p></li>
+<li><p>Procedure: Secure login processes, role-based access control, and user
+authentication protocols.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030)</p></li>
+</ul>
+</section>
+<section id="patient-data-input-and-retrieval">
+<h3>Patient Data Input and Retrieval<a class="headerlink" href="#patient-data-input-and-retrieval" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Entering new patient data or retrieving existing patient records
+before starting a scan.</p></li>
+<li><p>Procedure: Integration with hospital information systems for seamless data
+exchange, ensuring data accuracy and privacy compliance.</p></li>
+<li><p>Stakeholder: Medical Professional (SH_010)</p></li>
+</ul>
+</section>
+<section id="scan-parameter-selection-and-customization">
+<h3>Scan Parameter Selection and Customization<a class="headerlink" href="#scan-parameter-selection-and-customization" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Selection and customization of MRI scan parameters based on
+specific clinical requirements.</p></li>
+<li><p>Procedure: User interfaces that allow for easy selection and adjustment of
+scan parameters, including sequence type, intensity, and duration.</p></li>
+<li><p>Stakeholder: Medical Professional (SH_010), Scientist (SH_020)</p></li>
+</ul>
+</section>
+<section id="real-time-scan-monitoring-and-adjustment">
+<h3>Real-Time Scan Monitoring and Adjustment<a class="headerlink" href="#real-time-scan-monitoring-and-adjustment" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Monitoring the MRI scan in real time and making necessary
+adjustments.</p></li>
+<li><p>Procedure: Dynamic display of scanning progress, with the ability to adjust
+parameters on the fly for optimal image quality.</p></li>
+<li><p>Stakeholder: Medical Professional (SH_010)</p></li>
+</ul>
+</section>
+<section id="image-processing-and-storage">
+<h3>Image Processing and Storage<a class="headerlink" href="#image-processing-and-storage" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Processing the raw scan data to produce images and storing them
+appropriately.</p></li>
+<li><p>Procedure: Automated image reconstruction algorithms, along with efficient
+data storage solutions both on-premises and in cloud environments.</p></li>
+<li><p>Stakeholder: Medical Professional (SH_010), Scientist (SH_020), System
+Administrator (SH_030)</p></li>
+</ul>
+</section>
+<section id="system-shutdown-and-secure-data-handling">
+<h3>System Shutdown and Secure Data Handling<a class="headerlink" href="#system-shutdown-and-secure-data-handling" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Properly shutting down the system while ensuring all patient data
+is securely saved and protected.</p></li>
+<li><p>Procedure: A step-by-step shutdown process that includes data backup,
+closing of all active sessions, and hardware cooling procedures.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030)</p></li>
+</ul>
+</section>
+<section id="routine-maintenance-and-calibration">
+<h3>Routine Maintenance and Calibration<a class="headerlink" href="#routine-maintenance-and-calibration" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Regular system maintenance and calibration to ensure ongoing
+accuracy and efficiency.</p></li>
+<li><p>Procedure: Scheduled maintenance tasks, automated calibration routines, and
+alerts for maintenance requirements.</p></li>
+<li><p>Stakeholder: (Field/Service) Engineer (SH_040), Medical Professional
+(SH_010)</p></li>
+</ul>
+</section>
+<section id="error-detection-and-alerting">
+<h3>Error Detection and Alerting<a class="headerlink" href="#error-detection-and-alerting" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Detecting system errors or malfunctions and alerting the
+appropriate personnel.</p></li>
+<li><p>Procedure: Continuous system monitoring with automated error-detection
+algorithms and alert notifications to system administrators or
+technicians.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), (Field/Service) Engineer
+(SH_040)</p></li>
+</ul>
+</section>
+<section id="software-updates-and-upgrades">
+<h3>Software Updates and Upgrades<a class="headerlink" href="#software-updates-and-upgrades" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Updating the system software to enhance functionality or address
+security issues.</p></li>
+<li><p>Procedure: Secure and efficient software update processes, with minimal
+system downtime and comprehensive post-update checks.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), Medical Device Manufacturer
+(SH_060)</p></li>
+</ul>
+</section>
+<section id="emergency-protocols-and-system-recovery">
+<h3>Emergency Protocols and System Recovery<a class="headerlink" href="#emergency-protocols-and-system-recovery" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Handling system emergencies or failures, including emergency
+shutdown, data recovery, and system restoration.</p></li>
+<li><p>Procedure: Defined emergency protocols, rapid system recovery procedures,
+and data backup solutions for ensuring data integrity.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), (Field/Service) Engineer
+(SH_040)</p></li>
+</ul>
+</section>
+<section id="interoperability-with-other-healthcare-systems">
+<h3>Interoperability with Other Healthcare Systems<a class="headerlink" href="#interoperability-with-other-healthcare-systems" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Seamless interaction and data exchange with other healthcare
+systems such as EHRs, PACS, and RIS.</p></li>
+<li><p>Procedure: Implementing standard protocols and APIs for data exchange,
+ensuring compatibility with various healthcare IT infrastructures.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), Medical Professional (SH_010),
+Healthcare Facility (SH_070)</p></li>
+</ul>
+</section>
+<section id="remote-system-diagnostics-and-support">
+<h3>Remote System Diagnostics and Support<a class="headerlink" href="#remote-system-diagnostics-and-support" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Providing remote assistance and diagnostics for technical issues
+or user queries.</p></li>
+<li><p>Procedure: Remote access capabilities for technical support staff,
+diagnostic tools for system analysis, and secure communication channels.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), (Field/Service) Engineer
+(SH_040)</p></li>
+</ul>
+</section>
+<section id="data-security-and-compliance">
+<h3>Data Security and Compliance<a class="headerlink" href="#data-security-and-compliance" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Ensuring the system adheres to relevant data security and
+privacy regulations.</p></li>
+<li><p>Procedure: Implementing strong encryption, audit trails, and compliance
+with standards like HIPAA and GDPR.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), Medical Device Manufacturer
+(SH_060)</p></li>
+</ul>
+</section>
+<section id="power-management-and-efficiency">
+<h3>Power Management and Efficiency<a class="headerlink" href="#power-management-and-efficiency" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Efficient management of system power consumption and operational
+efficiency.</p></li>
+<li><p>Procedure: Power-saving modes during periods of inactivity, efficient power
+usage during scans, and monitoring of overall system power consumption.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), (Field/Service) Engineer
+(SH_040)</p></li>
+</ul>
+</section>
+<section id="customization-and-configuration-management">
+<h3>Customization and Configuration Management<a class="headerlink" href="#customization-and-configuration-management" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Customizing system settings and configurations to meet specific
+site or user requirements.</p></li>
+<li><p>Procedure: Flexible configuration options with user-friendly interfaces,
+along with configuration profiles for different user roles or scanning
+requirements.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), Medical Professional (SH_010)</p></li>
+</ul>
+</section>
+<section id="patient-safety-monitoring">
+<h3>Patient Safety Monitoring<a class="headerlink" href="#patient-safety-monitoring" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Continuously monitoring patient safety parameters during scans.</p></li>
+<li><p>Procedure: Automated systems for tracking patient vitals and SAR levels,
+and implementing safety cutoffs or alerts.</p></li>
+<li><p>Stakeholder: Medical Professional (SH_010)</p></li>
+</ul>
+</section>
+<section id="sequence-upload">
+<h3>Sequence Upload<a class="headerlink" href="#sequence-upload" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Testing of sequences or new procedures under development.</p></li>
+<li><p>Procedure: Enable import of custom sequences.</p></li>
+<li><p>Stakeholder: Scientist (SH_020)</p></li>
+</ul>
+</section>
+<section id="data-export">
+<h3>Data Export<a class="headerlink" href="#data-export" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: Development/evaluation of new or customized reconstruction
+methods, or comparison of reconstruction methods.</p></li>
+<li><p>Procedure: Implementation of export functions at different stages, e.g.
+raw k-space data export, DICOM export, etc.</p></li>
+<li><p>Stakeholder: Scientist (SH_020)</p></li>
+</ul>
+</section>
+<section id="support">
+<h3>Support<a class="headerlink" href="#support" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Scenario: The system does not behave as expected or reports an error.</p></li>
+<li><p>Procedure: The system administrator reads the error message and notifies
+the manufacturer for support or troubleshooting to restore operability of
+the system. The manufacturer provides remote support and schedules an
+appointment with a field/service engineer as soon as possible.</p></li>
+<li><p>Stakeholder: System Administrator (SH_030), Medical Device Manufacturer
+(SH_060), (Field/Service) Engineer (SH_040)</p></li>
+</ul>
+</section>
+</section>
+<section id="functional-requirements">
+<h2>Functional Requirements<a class="headerlink" href="#functional-requirements" title="Link to this heading">#</a></h2>
+<p>The functional requirements of the MRI acquisition software are derived from
+the scenarios and use cases outlined above. They define the specific
+capabilities and behaviors the software must exhibit to fulfill the needs of
+the stakeholders and ensure the successful operation of the MRI system. The
+functional requirements are organized into categories based on the primary
+functionalities they address, including acquisition, processing, user
+interaction, system management, and safety monitoring. The
+<em>Reference/Traceability</em> column links each requirement back to the product
+requirement it implements (see <a class="reference internal" href="techdoc_prs.html"><span class="doc">Product Requirement Specification (PRS)</span></a>).</p>
+<section id="general-requirements">
+<h3>General Requirements<a class="headerlink" href="#general-requirements" title="Link to this heading">#</a></h3>
+<p>Core, everyday functional capabilities of the acquisition software.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_010</p></td>
+<td><p>The software shall enable the execution of MRI acquisition jobs, including the upload and execution of Pulseq sequences with workflows.</p></td>
+<td><p>Conduct an MRI acquisition job using a Pulseq sequence and verify workflow integration and execution.</p></td>
+<td><p>PRS_0010</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_020</p></td>
+<td><p>The software shall offer planning tools for MRI examinations, integrating protocol trees, workflows, and processing modality worklists.</p></td>
+<td><p>Plan an MRI examination using the software tools and verify the integration with protocol trees and workflows.</p></td>
+<td><p>PRS_0020</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_030</p></td>
+<td><p>The software shall provide a DICOM viewer to view, compare, and annotate DICOM images of selected records.</p></td>
+<td><p>Load a DICOM image in the viewer, perform comparisons and annotations, and verify the functionality.</p></td>
+<td><p>PRS_0030</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_040</p></td>
+<td><p>The software must support user management, allowing assignment of different user roles and supporting a multi-tenancy cloud environment.</p></td>
+<td><p>Simulate different user roles to verify role-based access and check for multi-tenancy functionality.</p></td>
+<td><p>PRS_0040</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_050</p></td>
+<td><p>The software shall monitor and display the MRI device’s status, including current execution progress, malfunctions, and device connection status.</p></td>
+<td><p>During an MRI scan, verify the software displays the current execution progress and detects any malfunctions.</p></td>
+<td><p>PRS_0050</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_060</p></td>
+<td><p>The software must monitor patient safety parameters such as SAR, temperature, and total scan time duration, and optionally provide a video stream and patient communication system.</p></td>
+<td><p>Simulate an MRI scan and verify monitoring of all specified patient safety parameters.</p></td>
+<td><p>PRS_0060</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_070</p></td>
+<td><p>The software shall enable the integration of processing workflows for MRI raw data or images, including system calibration, image reconstruction, and analysis.</p></td>
+<td><p>Test a processing workflow on MRI raw data and verify the execution of system calibration, image reconstruction, and analysis.</p></td>
+<td><p>PRS_0070</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_080</p></td>
+<td><p>The software shall support system calibration activities such as adjustment of Larmor frequency, gradients, system flip angle, and B0-field shimming.</p></td>
+<td><p>Perform system calibration using the software and verify the adjustments.</p></td>
+<td><p>PRS_0080</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_090</p></td>
+<td><p>The software must provide a structured form for creating clinical reports, allowing medical professionals to formulate diagnoses.</p></td>
+<td><p>Create a clinical report using the software and verify the functionality supports diagnosis formulation.</p></td>
+<td><p>PRS_0090</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_100</p></td>
+<td><p>The software shall manage devices, including organization of different devices, authentication, device selection, and access management based on training.</p></td>
+<td><p>Verify the software can organize and manage access to multiple devices with device-specific training requirements.</p></td>
+<td><p>PRS_0100</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="operational-requirements">
+<h3>Operational Requirements<a class="headerlink" href="#operational-requirements" title="Link to this heading">#</a></h3>
+<p>Requirements covering the day-to-day operation and deployment flexibility of
+the platform once installed.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_110</p></td>
+<td><p>The software must continuously monitor and display MRI scan data in real-time, providing feedback on scan quality and progress with instant notification upon scan completion.</p></td>
+<td><p>Verify real-time monitoring during an MRI scan, including feedback on scan quality and instant notification at completion.</p></td>
+<td><p>PRS_0710</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_120</p></td>
+<td><p>The software shall provide real-time alerts for scan anomalies or issues, with a response time of less than 5 minutes.</p></td>
+<td><p>Simulate a scan anomaly and verify that the software provides an alert within 5 minutes.</p></td>
+<td><p>PRS_0720</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_130</p></td>
+<td><p>The software shall support on-prem setups with 100% compatibility.</p></td>
+<td><p>Set up the software in an on-prem environment and verify full functionality and compatibility.</p></td>
+<td><p>PRS_0730</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_140</p></td>
+<td><p>The software shall support cloud setups, accommodating environments without local compute workstations.</p></td>
+<td><p>Deploy the software in a cloud environment and verify functionality without local compute dependencies.</p></td>
+<td><p>PRS_0740</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="regulatory-needs">
+<h3>Regulatory Needs<a class="headerlink" href="#regulatory-needs" title="Link to this heading">#</a></h3>
+<p>Requirements ensuring compliance with applicable healthcare and
+medical-device regulations.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_210</p></td>
+<td><p>The software must comply with HIPAA, GDPR, FDA regulations, and undergo regular updates for ongoing compliance.</p></td>
+<td><p>Review documentation and change logs to verify compliance and regular updates for regulations.</p></td>
+<td><p>PRS_0110</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_220</p></td>
+<td><p>The software shall ensure strong data encryption and role-based access control for securing patient data.</p></td>
+<td><p>Test the encryption and access control features to verify compliance with security standards.</p></td>
+<td><p>PRS_0120</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_230</p></td>
+<td><p>The software shall implement Risk Mitigation Measures (RMM) in adherence to ISO 14971:2019.</p></td>
+<td><p>Evaluate the implementation of RMM and verify adherence to ISO 14971:2019.</p></td>
+<td><p>PRS_0130</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="reliability-and-resilience-needs">
+<h3>Reliability and Resilience Needs<a class="headerlink" href="#reliability-and-resilience-needs" title="Link to this heading">#</a></h3>
+<p>Requirements ensuring the system remains stable and available.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_910</p></td>
+<td><p>The software shall ensure system stability with minimum downtime, aiming for 99.99% uptime.</p></td>
+<td><p>Monitor the system over a defined period to verify that the uptime meets or exceeds 99.99%.</p></td>
+<td><p>PRS_0210</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="performance-requirements">
+<h2>Performance Requirements<a class="headerlink" href="#performance-requirements" title="Link to this heading">#</a></h2>
+<p>Requirements defining the timing behavior the software must meet under
+normal operating conditions, independent of any single functional feature.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_810</p></td>
+<td><p>The software shall initialize and be ready for use within 60 seconds of system startup, ensuring quick readiness for medical operations.</p></td>
+<td><p>Measure the time from system startup to when the software is fully operational and ready for use, verifying it does not exceed 60 seconds.</p></td>
+<td><p>Startup Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_820</p></td>
+<td><p>The software shall shut down properly within 30 seconds, ensuring data integrity and system safety.</p></td>
+<td><p>Verify the shutdown process from initiation to completion, ensuring it occurs within 30 seconds without data loss or system issues.</p></td>
+<td><p>Shutdown Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_830</p></td>
+<td><p>The software must respond to user inputs within 2 seconds under normal operating conditions, providing a responsive user experience.</p></td>
+<td><p>Conduct user interaction tests to verify response times for various commands under normal operating conditions.</p></td>
+<td><p>User Input Response</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_840</p></td>
+<td><p>The software shall provide real-time monitoring with a reaction time not exceeding 1 second, ensuring timely feedback during MRI scans.</p></td>
+<td><p>Test the real-time monitoring feature by simulating MRI scans and measuring the reaction time to changes in scan parameters.</p></td>
+<td><p>Real-Time Monitoring Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_850</p></td>
+<td><p>The software must recover from common errors or crashes and restore operation within 60 seconds, minimizing downtime during critical operations.</p></td>
+<td><p>Simulate common software errors or crashes and measure the time taken for the software to recover and become operational again.</p></td>
+<td><p>Error Recovery Performance</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="system-interfaces">
+<h2>System Interfaces<a class="headerlink" href="#system-interfaces" title="Link to this heading">#</a></h2>
+<p>Requirements governing how the software exchanges data with other clinical
+and research systems.</p>
+<section id="interoperability-needs">
+<h3>Interoperability Needs<a class="headerlink" href="#interoperability-needs" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_410</p></td>
+<td><p>The software shall ensure compatibility with various DICOM systems for seamless integration with existing healthcare systems.</p></td>
+<td><p>Test interoperability with multiple DICOM systems to validate compatibility and seamless integration.</p></td>
+<td><p>PRS_0410</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_420</p></td>
+<td><p>The software shall support data storage using the XNAT platform, ensuring compatibility with widely used medical imaging data storage formats.</p></td>
+<td><p>Demonstrate the software’s ability to store and retrieve data using the XNAT platform, verifying compatibility.</p></td>
+<td><p>PRS_0420</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_430</p></td>
+<td><p>The software shall support the NIfTI file format for facilitating diverse data representation and interoperability.</p></td>
+<td><p>Validate the software’s capability to process and manage NIfTI file format data through testing and user feedback.</p></td>
+<td><p>PRS_0430</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_440</p></td>
+<td><p>The software shall support the ISMRMRD file format, aiding in diverse data representation and interoperability for research purposes.</p></td>
+<td><p>Ensure the software can handle ISMRMRD file format data seamlessly, facilitating research and development activities.</p></td>
+<td><p>PRS_0440</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>A4IM_FR_450</p></td>
+<td><p>The software shall support the raw MR file format, enabling researchers to work with unprocessed MRI data.</p></td>
+<td><p>Confirm the software’s ability to import, export, and utilize raw MR file format data for advanced research applications.</p></td>
+<td><p>PRS_0450</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="external-interfaces">
+<h2>External Interfaces<a class="headerlink" href="#external-interfaces" title="Link to this heading">#</a></h2>
+<p>Requirements governing interfaces to devices and systems outside of
+ScanHub’s own software boundary, such as patient monitoring equipment.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_610</p></td>
+<td><p>The software shall ensure seamless interaction with patient monitoring systems to enable real-time data exchange, thereby ensuring patient safety.</p></td>
+<td><p>Demonstrate real-time data exchange with a patient monitoring system and verify seamless interaction without delays or errors.</p></td>
+<td><p>PRS_0610</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="warnings-messages-and-alerts">
+<h2>Warnings, Messages, and Alerts<a class="headerlink" href="#warnings-messages-and-alerts" title="Link to this heading">#</a></h2>
+<p>Requirements for how the software communicates critical information,
+warnings, and status messages to its users.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_710</p></td>
+<td><p>The software shall implement a system for warnings, messages, and alerts in compliance with IEC 60601-1-8, ensuring clear and effective communication of critical information to users.</p></td>
+<td><p>Conduct testing to ensure that all warnings, messages, and alerts comply with the specifications of IEC 60601-1-8, including the clarity of communication and the effectiveness of alerting users to critical issues.</p></td>
+<td><p>IEC 60601-1-8</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="usability">
+<h2>Usability<a class="headerlink" href="#usability" title="Link to this heading">#</a></h2>
+<p>Requirements ensuring the software is efficient and approachable for its
+intended users.</p>
+<section id="usability-requirements">
+<h3>Usability Requirements<a class="headerlink" href="#usability-requirements" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_310</p></td>
+<td><p>The software shall provide an intuitive UI for scan setup and patient management, including comprehensive user manuals and guides, with quick access to frequently used features.</p></td>
+<td><p>Conduct usability testing with medical professionals to ensure they can effectively use the system for scan setup and patient management within 30 minutes of initial training.</p></td>
+<td><p>PRS_0310</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>A4IM_FR_320</p></td>
+<td><p>The software shall provide access to raw MRI data and experimental sequence options for scientists.</p></td>
+<td><p>Verify through user feedback and testing that scientists can access and utilize raw MRI data and experimental sequences for their research.</p></td>
+<td><p>PRS_0320</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="maintenance-and-service">
+<h2>Maintenance and Service<a class="headerlink" href="#maintenance-and-service" title="Link to this heading">#</a></h2>
+<p>Requirements ensuring the software can be maintained, scaled, and updated
+over its operational lifetime.</p>
+<section id="maintainability-requirements">
+<h3>Maintainability Requirements<a class="headerlink" href="#maintainability-requirements" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.3%" />
+<col style="width: 31.6%" />
+<col style="width: 42.1%" />
+<col style="width: 15.8%" />
+<col style="width: 5.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Description of Requirement</p></th>
+<th class="head"><p>Verification Idea</p></th>
+<th class="head"><p>Reference/Traceability</p></th>
+<th class="head"><p>A4IM Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A4IM_FR_510</p></td>
+<td><p>The software shall have a scalable architecture to accommodate increasing data and users, featuring a modular design for easy updates and enhancements, and efficient data management and storage solutions.</p></td>
+<td><p>Test the system’s performance under doubled data and user load to ensure less than 10% degradation.</p></td>
+<td><p>PRS_0510</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="device-communication">
+<h2>Device Communication<a class="headerlink" href="#device-communication" title="Link to this heading">#</a></h2>
+<p>This section specifies the data exchanged between ScanHub Core and a
+connected acquisition device, complementing the functional requirements
+above with the concrete message formats used at the device boundary.
+Authentication and authorization aspects of this communication are
+intentionally left out for now and are addressed elsewhere.</p>
+<section id="acquisition-request">
+<h3>Acquisition Request<a class="headerlink" href="#acquisition-request" title="Link to this heading">#</a></h3>
+<p>The following information shall be communicated with an acquisition request
+to specify modality-specific instructions and commands.</p>
+<p>Request:</p>
+<ul class="simple">
+<li><p><strong>device-id:</strong> Double-checked so the request is communicated to the right
+device.</p></li>
+<li><p><strong>command:</strong> Start, stop, pause, …</p></li>
+<li><p><strong>parameters:</strong> Key-value pairs; can be simple values, instruction files,
+or a combination of both, subject to device limits.</p></li>
+<li><p><strong>record-id:</strong> ID assigned per initial request and traced from record
+creation through the last workflow step; gives access to the job-id (may
+be extended by an additional trace ID).</p></li>
+<li><p><strong>device-authentication-key:</strong> TBD</p></li>
+</ul>
+<p>Response: <code class="docutils literal notranslate"><span class="pre">HTTPS_RESPONSE</span></code></p>
+<p><strong>Communication Flow</strong></p>
+<pre  class="mermaid">
+        sequenceDiagram
+    participant UI
+    participant AC as Acquisition Control
+    participant SM as Sequence Manager
+    participant PM as Protocol Manager
+    participant DM as Device Manager
+    participant DEV as Device
+    participant WM as Workflow Manager
+
+    UI-&gt;&gt;AC: Request acquisition
+    AC-&gt;&gt;SM: Request acquisition command / parameters
+    AC-&gt;&gt;PM: Create record
+    AC-&gt;&gt;DM: Get device
+    AC-&gt;&gt;DEV: Send acquisition request
+    AC-&gt;&gt;WM: Trigger workflow
+    WM-&gt;&gt;WM: Execute workflows
+    </pre><p><strong>MR Domain Model</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This data model belongs conceptually to the device interface described in
+the <a class="reference internal" href="techdoc_swad.html"><span class="doc">SWAD</span></a> and may be moved there in a future
+revision.</p>
+</div>
+<p>The following example shows the JSON payload communicated from Acquisition
+Control to a device as part of an MRI acquisition request.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nx">device_id</span><span class="o">:</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span>
+<span class="linenos"> 2</span><span class="nx">command</span><span class="o">:</span><span class="w"> </span><span class="kr">enum</span><span class="p">,</span><span class="w"> </span><span class="c1">// start, stop, pause</span>
+<span class="linenos"> 3</span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="nx">context</span><span class="o">:</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span><span class="w"> </span><span class="c1">// content of a sequence file (can be pulseq)</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="nx">format</span><span class="o">:</span><span class="w"> </span><span class="kr">enum</span><span class="p">,</span><span class="w"> </span><span class="c1">// pulseq, ocra, ...</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="nx">acquisition_limits</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 7</span><span class="w">        </span><span class="c1">// parameters used to calculate SAR, double check for completeness</span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="nx">patient_height</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="nx">patient_weight</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">        </span><span class="nx">patient_gender</span><span class="o">:</span><span class="w"> </span><span class="kr">enum</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">        </span><span class="nx">patient_age</span><span class="o">:</span><span class="w"> </span><span class="kr">int</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">    </span><span class="p">},</span>
+<span class="linenos">13</span><span class="w">    </span><span class="nx">sequence_parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">14</span><span class="w">        </span><span class="c1">// User input for the MRI console to execute the sequence properly, for now only fov.</span>
+<span class="linenos">15</span><span class="w">        </span><span class="c1">// Note: the following section is specific to the format (here pulseq).</span>
+<span class="linenos">16</span><span class="w">        </span><span class="c1">// It may vary for different sequence formats and thus should be</span>
+<span class="linenos">17</span><span class="w">        </span><span class="c1">// implemented as a generic dictionary inside a pydantic MR domain model.</span>
+<span class="linenos">18</span><span class="w">        </span><span class="nx">fov</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">19</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">21</span><span class="w">            </span><span class="kr">float</span>
+<span class="linenos">22</span><span class="w">        </span><span class="p">],</span>
+<span class="linenos">23</span><span class="w">        </span><span class="nx">fov_offset</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">24</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">25</span><span class="w">            </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">26</span><span class="w">            </span><span class="kr">float</span>
+<span class="linenos">27</span><span class="w">        </span><span class="p">]</span>
+<span class="linenos">28</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">29</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="device-monitor">
+<h3>Device Monitor<a class="headerlink" href="#device-monitor" title="Link to this heading">#</a></h3>
+<p>Monitoring of device status is done through a direct connection between the
+device and the device manager, giving access to the current device status,
+e.g. connected, disconnected, or scanning.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The full set of possible device statuses is still to be defined. Once
+defined, device status will be implemented as an enum with clearly
+specified states.</p>
+</div>
+</section>
+<section id="device-configuration">
+<h3>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading">#</a></h3>
+<p>This set of parameters is specific to a single device. Read and/or write
+requests are performed through the device manager. Some parameters are fixed
+limits and cannot be modified by the device manager (<code class="docutils literal notranslate"><span class="pre">system_limits</span></code>).
+Another set of parameters may vary over time and may be set from a
+workflow/workflow-step result (<code class="docutils literal notranslate"><span class="pre">current_device_configuration</span></code>).</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nx">system_limits</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 2</span><span class="c1">// hard system limits (read only)</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="nx">max_gradients</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos"> 4</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="kr">float</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="p">],</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="nx">max_rf_duration</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nx">adc_deadtime</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">    </span><span class="nx">rf_dead_time</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">    </span><span class="c1">// ...</span>
+<span class="linenos">12</span><span class="p">},</span>
+<span class="linenos">13</span><span class="nx">current_device_configuration</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">14</span><span class="c1">// temporary system values (read and write)</span>
+<span class="linenos">15</span><span class="w">    </span><span class="nx">larmor_frequency</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">16</span><span class="w">    </span><span class="nx">flip_angle_calibration</span><span class="o">:</span><span class="w"> </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">17</span><span class="w">    </span><span class="nx">gradient_calibration</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">18</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">19</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">        </span><span class="kr">float</span>
+<span class="linenos">21</span><span class="w">    </span><span class="p">],</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nx">gradient_offset</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">23</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">24</span><span class="w">        </span><span class="kr">float</span><span class="p">,</span>
+<span class="linenos">25</span><span class="w">        </span><span class="kr">float</span>
+<span class="linenos">26</span><span class="w">    </span><span class="p">],</span>
+<span class="linenos">27</span><span class="w">    </span><span class="c1">// ...</span>
+<span class="linenos">28</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="techdoc_prs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Product Requirement Specification (PRS)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="techdoc_swad.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Software Architecture Design Description (SWAD)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#purpose">Purpose</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scope">Scope</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-overview">Software Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scenarios-and-use-cases">Scenarios and Use Cases</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-startup-and-initialization">System Startup and Initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-authentication-and-access-control">User Authentication and Access Control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#patient-data-input-and-retrieval">Patient Data Input and Retrieval</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scan-parameter-selection-and-customization">Scan Parameter Selection and Customization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#real-time-scan-monitoring-and-adjustment">Real-Time Scan Monitoring and Adjustment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#image-processing-and-storage">Image Processing and Storage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-shutdown-and-secure-data-handling">System Shutdown and Secure Data Handling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#routine-maintenance-and-calibration">Routine Maintenance and Calibration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-detection-and-alerting">Error Detection and Alerting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-updates-and-upgrades">Software Updates and Upgrades</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#emergency-protocols-and-system-recovery">Emergency Protocols and System Recovery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperability-with-other-healthcare-systems">Interoperability with Other Healthcare Systems</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-system-diagnostics-and-support">Remote System Diagnostics and Support</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-security-and-compliance">Data Security and Compliance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#power-management-and-efficiency">Power Management and Efficiency</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customization-and-configuration-management">Customization and Configuration Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#patient-safety-monitoring">Patient Safety Monitoring</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sequence-upload">Sequence Upload</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-export">Data Export</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#support">Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-requirements">Functional Requirements</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-requirements">General Requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operational-requirements">Operational Requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regulatory-needs">Regulatory Needs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reliability-and-resilience-needs">Reliability and Resilience Needs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-requirements">Performance Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-interfaces">System Interfaces</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperability-needs">Interoperability Needs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#external-interfaces">External Interfaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warnings-messages-and-alerts">Warnings, Messages, and Alerts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usability">Usability</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usability-requirements">Usability Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance-and-service">Maintenance and Service</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintainability-requirements">Maintainability Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-communication">Device Communication</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-request">Acquisition Request</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-monitor">Device Monitor</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-configuration">Device Configuration</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/techdoc/techdoc_swrs.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

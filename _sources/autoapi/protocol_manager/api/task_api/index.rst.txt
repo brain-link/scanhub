@@ -1,0 +1,123 @@
+protocol_manager.api.task_api
+=============================
+
+.. py:module:: protocol_manager.api.task_api
+
+.. autoapi-nested-parse::
+
+   Definition of task API endpoints.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   protocol_manager.api.task_api.task_router
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   protocol_manager.api.task_api.TaskReorder
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.api.task_api.create_task
+   protocol_manager.api.task_api.create_task_from_template
+   protocol_manager.api.task_api.get_task
+   protocol_manager.api.task_api.get_all_protocol_tasks
+   protocol_manager.api.task_api.get_all_task_templates
+   protocol_manager.api.task_api.delete_task
+   protocol_manager.api.task_api.reorder_tasks
+   protocol_manager.api.task_api.update_task
+   protocol_manager.api.task_api.update_task_status
+
+
+Module Contents
+---------------
+
+.. py:data:: task_router
+
+.. py:class:: TaskReorder
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Task reorder model.
+
+
+   .. py:attribute:: task_ids
+      :type:  list[uuid.UUID]
+
+
+.. py:function:: create_task(payload: scanhub_libraries.models.BaseAcquisitionTask, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut
+   :async:
+
+
+   Create a new acquisition task.
+
+
+.. py:function:: create_task_from_template(protocol_id: uuid.UUID, template_id: uuid.UUID, new_task_is_template: bool, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut
+   :async:
+
+
+   Create a new acquisition task from a template.
+
+
+.. py:function:: get_task(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut
+   :async:
+
+
+   Get an existing task.
+
+
+.. py:function:: get_all_protocol_tasks(protocol_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.AcquisitionTaskOut]
+   :async:
+
+
+   Get all tasks of a protocol.
+
+
+.. py:function:: get_all_task_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.AcquisitionTaskOut]
+   :async:
+
+
+   Get all task templates.
+
+
+.. py:function:: delete_task(task_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
+
+
+   Delete a task.
+
+
+.. py:function:: reorder_tasks(payload: TaskReorder, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
+
+
+   Reorder tasks by updating their position.
+
+
+.. py:function:: update_task(task_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseAcquisitionTask, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut
+   :async:
+
+
+   Update an existing task.
+
+
+.. py:function:: update_task_status(task_id: uuid.UUID | str, status: str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.AcquisitionTaskOut
+   :async:
+
+
+   Update only the status of a task (called by Dagster sensors).
+
+

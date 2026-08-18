@@ -1,0 +1,22 @@
+patient_manager.api
+===================
+
+.. py:module:: patient_manager.api
+
+.. autoapi-nested-parse::
+
+   Init file.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/patient_manager/api/dal/index
+   /autoapi/patient_manager/api/db/index
+   /autoapi/patient_manager/api/routes/index
+
+

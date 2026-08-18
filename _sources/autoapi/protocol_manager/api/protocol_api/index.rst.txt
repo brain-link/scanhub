@@ -1,0 +1,92 @@
+protocol_manager.api.protocol_api
+=================================
+
+.. py:module:: protocol_manager.api.protocol_api
+
+.. autoapi-nested-parse::
+
+   Definition of protocol API endpoints.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   protocol_manager.api.protocol_api.PREFIX_PATIENT_MANAGER
+   protocol_manager.api.protocol_api.protocol_router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.api.protocol_api.create_protocol
+   protocol_manager.api.protocol_api.create_protocol_from_template
+   protocol_manager.api.protocol_api.get_protocol
+   protocol_manager.api.protocol_api.get_all_patient_protocols
+   protocol_manager.api.protocol_api.get_all_protocol_templates
+   protocol_manager.api.protocol_api.protocol_delete
+   protocol_manager.api.protocol_api.update_protocol
+
+
+Module Contents
+---------------
+
+.. py:data:: PREFIX_PATIENT_MANAGER
+   :value: 'http://patient-manager:8100/api/v1/patient'
+
+
+.. py:data:: protocol_router
+
+.. py:function:: create_protocol(payload: scanhub_libraries.models.BaseProtocol, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ProtocolOut
+   :async:
+
+
+   Create a new protocol.
+
+
+.. py:function:: create_protocol_from_template(payload: scanhub_libraries.models.BaseProtocol, template_id: uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ProtocolOut
+   :async:
+
+
+   Create a new protocol from template.
+
+
+.. py:function:: get_protocol(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> scanhub_libraries.models.ProtocolOut
+   :async:
+
+
+   Get protocol endpoint.
+
+
+.. py:function:: get_all_patient_protocols(patient_id: uuid.UUID, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ProtocolOut]
+   :async:
+
+
+   Get all protocols of a certain patient.
+
+
+.. py:function:: get_all_protocol_templates(user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> list[scanhub_libraries.models.ProtocolOut]
+   :async:
+
+
+   Get all protocol templates.
+
+
+.. py:function:: protocol_delete(exam_id: uuid.UUID | str, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)]) -> None
+   :async:
+
+
+   Delete a protocol by id. Cascade deletes the associated tasks.
+
+
+.. py:function:: update_protocol(exam_id: uuid.UUID | str, payload: scanhub_libraries.models.BaseProtocol, user: Annotated[scanhub_libraries.models.User, Depends(get_current_user)], access_token: Annotated[str, Depends(oauth2_scheme)]) -> scanhub_libraries.models.ProtocolOut
+   :async:
+
+
+   Update an existing protocol.
+
+

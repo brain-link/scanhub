@@ -1,0 +1,985 @@
+shared_libraries.models
+=======================
+
+.. py:module:: shared_libraries.models
+
+.. autoapi-nested-parse::
+
+   Pydantic models of ScanHub.
+
+   Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   shared_libraries.models.XYZ
+   shared_libraries.models.Gender
+   shared_libraries.models.DeviceStatus
+   shared_libraries.models.CalibrationType
+   shared_libraries.models.ItemStatus
+   shared_libraries.models.TaskType
+   shared_libraries.models.ResultType
+   shared_libraries.models.UserRole
+   shared_libraries.models.DeviceCreationRequest
+   shared_libraries.models.DeviceDetails
+   shared_libraries.models.DeviceOut
+   shared_libraries.models.BaseMRISequence
+   shared_libraries.models.MRISequenceOut
+   shared_libraries.models.BaseResult
+   shared_libraries.models.SetResult
+   shared_libraries.models.ResultOut
+   shared_libraries.models.BaseTask
+   shared_libraries.models.TaskOut
+   shared_libraries.models.AcquisitionParameter
+   shared_libraries.models.BaseAcquisitionTask
+   shared_libraries.models.AcquisitionLimits
+   shared_libraries.models.AcquisitionTaskOut
+   shared_libraries.models.AcquisitionPayload
+   shared_libraries.models.BaseProtocol
+   shared_libraries.models.ProtocolOut
+   shared_libraries.models.User
+   shared_libraries.models.PasswordUpdateRequest
+   shared_libraries.models.BasePatient
+   shared_libraries.models.PatientOut
+   shared_libraries.models.MRDAcquisitionInfo
+   shared_libraries.models.MRDMetaResponse
+
+
+Module Contents
+---------------
+
+.. py:class:: XYZ
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Pydantic definition of coordinates.
+
+
+   .. py:attribute:: x
+      :type:  float
+
+
+   .. py:attribute:: y
+      :type:  float
+
+
+   .. py:attribute:: z
+      :type:  float
+
+
+.. py:class:: Gender
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of genders.
+
+
+   .. py:attribute:: MALE
+      :value: 'MALE'
+
+
+
+   .. py:attribute:: FEMALE
+      :value: 'FEMALE'
+
+
+
+   .. py:attribute:: OTHER
+      :value: 'OTHER'
+
+
+
+   .. py:attribute:: NOT_GIVEN
+      :value: 'NOT_GIVEN'
+
+
+
+.. py:class:: DeviceStatus
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of a commands.
+
+
+   .. py:attribute:: ONLINE
+      :value: 'ONLINE'
+
+
+
+   .. py:attribute:: OFFLINE
+      :value: 'OFFLINE'
+
+
+
+   .. py:attribute:: BUSY
+      :value: 'BUSY'
+
+
+
+   .. py:attribute:: ERROR
+      :value: 'ERROR'
+
+
+
+.. py:class:: CalibrationType
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Pydantic definition of calibration methods.
+
+
+   .. py:attribute:: FLIPANGLE
+      :value: 'flip-angle'
+
+
+
+   .. py:attribute:: FREQUENCY
+      :value: 'frequency'
+
+
+
+   .. py:attribute:: SHIMS
+      :value: 'shims'
+
+
+
+.. py:class:: ItemStatus
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Task status enum.
+
+
+   .. py:attribute:: NEW
+      :value: 'NEW'
+
+
+
+   .. py:attribute:: UPDATED
+      :value: 'UPDATED'
+
+
+
+   .. py:attribute:: STARTED
+      :value: 'STARTED'
+
+
+
+   .. py:attribute:: INPROGRESS
+      :value: 'INPROGRESS'
+
+
+
+   .. py:attribute:: ACQUIRED
+      :value: 'ACQUIRED'
+
+
+
+   .. py:attribute:: FINISHED
+      :value: 'FINISHED'
+
+
+
+   .. py:attribute:: ERROR
+      :value: 'ERROR'
+
+
+
+   .. py:attribute:: FAILED
+      :value: 'FAILED'
+
+
+
+   .. py:attribute:: CANCELLED
+      :value: 'CANCELLED'
+
+
+
+.. py:class:: TaskType
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Task type enum.
+
+
+   .. py:attribute:: ACQUISITION
+      :value: 'ACQUISITION'
+
+
+
+.. py:class:: ResultType
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Result type enum.
+
+
+   .. py:attribute:: DICOM
+      :value: 'DICOM'
+
+
+
+   .. py:attribute:: MRD
+      :value: 'MRD'
+
+
+
+   .. py:attribute:: NPY
+      :value: 'NUMPY'
+
+
+
+   .. py:attribute:: CALIBRATION
+      :value: 'CALIBRATION'
+
+
+
+   .. py:attribute:: NOT_SET
+      :value: 'NOT_SET'
+
+
+
+.. py:class:: UserRole
+
+   Bases: :py:obj:`enum.Enum`
+
+
+   User role enum.
+
+
+   .. py:attribute:: admin
+      :value: 'admin'
+
+
+
+   .. py:attribute:: medical
+      :value: 'medical'
+
+
+
+   .. py:attribute:: scientist
+      :value: 'scientist'
+
+
+
+   .. py:attribute:: engineer
+      :value: 'engineer'
+
+
+
+.. py:class:: DeviceCreationRequest
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Device registration request pydantic model.
+
+   (to be sent by user first adding the device to the platform).
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: description
+      :type:  str
+
+
+   .. py:attribute:: status
+      :type:  DeviceStatus | None
+      :value: None
+
+
+
+.. py:class:: DeviceDetails
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Device creation request pydantic model.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: device_name
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: serial_number
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: manufacturer
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: modality
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: status
+      :type:  DeviceStatus | None
+      :value: None
+
+
+
+   .. py:attribute:: site
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: parameter
+      :type:  dict | None
+      :value: None
+
+
+
+.. py:class:: DeviceOut
+
+   Bases: :py:obj:`DeviceCreationRequest`, :py:obj:`DeviceDetails`
+
+
+   Device pydantic output model.
+
+
+   .. py:attribute:: id
+      :type:  uuid.UUID
+
+
+   .. py:attribute:: datetime_created
+      :type:  datetime.datetime
+
+
+   .. py:attribute:: datetime_updated
+      :type:  datetime.datetime | None
+      :value: None
+
+
+
+.. py:class:: BaseMRISequence
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Base model for MRI sequence.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: description
+      :type:  str
+
+
+   .. py:attribute:: sequence_type
+      :type:  str
+
+
+   .. py:attribute:: tags
+      :type:  list[str]
+      :value: []
+
+
+
+.. py:class:: MRISequenceOut
+
+   Bases: :py:obj:`BaseMRISequence`
+
+
+   Output model for MRI sequence.
+
+
+   .. py:attribute:: id
+      :type:  str
+
+
+   .. py:attribute:: created_at
+      :type:  datetime.datetime
+
+
+   .. py:attribute:: updated_at
+      :type:  datetime.datetime | None
+      :value: None
+
+
+
+   .. py:attribute:: seq_file
+      :type:  Any
+
+
+   .. py:attribute:: seq_file_extension
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: xml_file
+      :type:  Any | None
+      :value: None
+
+
+
+   .. py:attribute:: xml_file_extension
+      :type:  str | None
+      :value: None
+
+
+
+.. py:class:: BaseResult
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Result model.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: task_id
+      :type:  uuid.UUID
+
+
+.. py:class:: SetResult
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Update result model.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: type
+      :type:  ResultType
+
+
+   .. py:attribute:: directory
+      :type:  str
+
+
+   .. py:attribute:: files
+      :type:  list[str]
+      :value: []
+
+
+
+   .. py:attribute:: meta
+      :type:  dict | None
+      :value: None
+
+
+
+.. py:class:: ResultOut
+
+   Bases: :py:obj:`BaseResult`, :py:obj:`SetResult`
+
+
+   Result output model.
+
+
+   .. py:attribute:: id
+      :type:  uuid.UUID
+
+
+   .. py:attribute:: datetime_created
+      :type:  datetime.datetime
+
+
+.. py:class:: BaseTask
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Task base model.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: protocol_id
+      :type:  uuid.UUID | None
+      :value: None
+
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: description
+      :type:  str
+
+
+   .. py:attribute:: task_type
+      :type:  TaskType
+
+
+   .. py:attribute:: destination
+      :type:  str
+
+
+   .. py:attribute:: status
+      :type:  ItemStatus
+
+
+   .. py:attribute:: progress
+      :type:  int
+
+
+   .. py:attribute:: is_template
+      :type:  bool
+
+
+   .. py:attribute:: position
+      :type:  int
+      :value: 0
+
+
+
+.. py:class:: TaskOut
+
+   Bases: :py:obj:`BaseTask`
+
+
+   Task output model.
+
+
+   .. py:attribute:: id
+      :type:  uuid.UUID
+
+
+   .. py:attribute:: creator
+      :type:  str
+
+
+   .. py:attribute:: datetime_created
+      :type:  datetime.datetime
+
+
+   .. py:attribute:: datetime_updated
+      :type:  datetime.datetime | None
+      :value: None
+
+
+
+   .. py:attribute:: results
+      :type:  list[ResultOut]
+
+
+.. py:class:: AcquisitionParameter
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Pydantic definition of acquisition parameters.
+
+
+   .. py:attribute:: fov_scaling
+      :type:  XYZ
+
+
+   .. py:attribute:: fov_offset
+      :type:  XYZ
+
+
+   .. py:attribute:: fov_rotation
+      :type:  XYZ
+
+
+.. py:class:: BaseAcquisitionTask
+
+   Bases: :py:obj:`BaseTask`
+
+
+   Represents a task for data acquisition in the system.
+
+
+   .. py:attribute:: task_type
+      :type:  Literal[TaskType]
+
+
+   .. py:attribute:: device_id
+      :type:  uuid.UUID | None
+      :value: None
+
+
+
+   .. py:attribute:: calibration
+      :type:  list[CalibrationType]
+      :value: []
+
+
+
+   .. py:attribute:: sequence_id
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: acquisition_parameter
+      :type:  AcquisitionParameter | None
+      :value: None
+
+
+
+.. py:class:: AcquisitionLimits
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Pydantic definition of AcquisitionLimits.
+
+
+   .. py:attribute:: patient_height
+      :type:  int
+
+
+   .. py:attribute:: patient_weight
+      :type:  int
+
+
+   .. py:attribute:: patient_gender
+      :type:  Gender
+
+
+   .. py:attribute:: patient_age
+      :type:  int
+
+
+.. py:class:: AcquisitionTaskOut
+
+   Bases: :py:obj:`TaskOut`, :py:obj:`BaseAcquisitionTask`
+
+
+   Acquisition Task output model.
+
+
+   .. py:attribute:: acquisition_limits
+      :type:  AcquisitionLimits | None
+      :value: None
+
+
+
+.. py:class:: AcquisitionPayload
+
+   Bases: :py:obj:`AcquisitionTaskOut`
+
+
+   Acquisition Task payload model.
+
+
+   .. py:attribute:: mrd_header
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: sequence
+      :type:  MRISequenceOut
+
+
+   .. py:attribute:: access_token
+      :type:  str
+
+
+   .. py:attribute:: device_parameter
+      :type:  dict
+
+
+.. py:class:: BaseProtocol
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Protocol base model.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: patient_id
+      :type:  uuid.UUID | None
+      :value: None
+
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: description
+      :type:  str
+
+
+   .. py:attribute:: indication
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: comment
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: status
+      :type:  ItemStatus
+
+
+   .. py:attribute:: is_template
+      :type:  bool
+
+
+.. py:class:: ProtocolOut
+
+   Bases: :py:obj:`BaseProtocol`
+
+
+   Protocol output model.
+
+
+   .. py:attribute:: id
+      :type:  uuid.UUID
+
+
+   .. py:attribute:: creator
+      :type:  str
+
+
+   .. py:attribute:: datetime_created
+      :type:  datetime.datetime
+
+
+   .. py:attribute:: datetime_updated
+      :type:  datetime.datetime | None
+      :value: None
+
+
+
+   .. py:attribute:: tasks
+      :type:  list[AcquisitionTaskOut]
+
+
+.. py:class:: User
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: username
+      :type:  str
+
+
+   .. py:attribute:: first_name
+      :type:  str
+
+
+   .. py:attribute:: last_name
+      :type:  str
+
+
+   .. py:attribute:: email
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: role
+      :type:  UserRole
+
+
+   .. py:attribute:: access_token
+      :type:  str
+
+
+   .. py:attribute:: token_type
+      :type:  str
+
+
+   .. py:attribute:: last_activity_unixtime
+      :type:  int | None
+      :value: None
+
+
+
+   .. py:attribute:: last_login_unixtime
+      :type:  int | None
+      :value: None
+
+
+
+.. py:class:: PasswordUpdateRequest
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   .. py:attribute:: password_of_requester
+      :type:  str
+
+
+   .. py:attribute:: username_to_change_password_for
+      :type:  str
+
+
+   .. py:attribute:: newpassword
+      :type:  str
+
+
+.. py:class:: BasePatient
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Patient pydantic base model.
+
+
+   .. py:attribute:: model_config
+
+
+   .. py:attribute:: first_name
+      :type:  str
+
+
+   .. py:attribute:: last_name
+      :type:  str
+
+
+   .. py:attribute:: birth_date
+      :type:  datetime.date
+
+
+   .. py:attribute:: sex
+      :type:  Gender
+
+
+   .. py:attribute:: height
+      :type:  float
+
+
+   .. py:attribute:: weight
+      :type:  float
+
+
+   .. py:attribute:: issuer
+      :type:  str
+
+
+   .. py:attribute:: status
+      :type:  ItemStatus
+
+
+   .. py:attribute:: comment
+      :type:  str | None
+      :value: None
+
+
+
+.. py:class:: PatientOut
+
+   Bases: :py:obj:`BasePatient`
+
+
+   Patient pydantic output model.
+
+
+   .. py:attribute:: patient_id
+      :type:  uuid.UUID
+
+
+   .. py:attribute:: datetime_created
+      :type:  datetime.datetime
+
+
+   .. py:attribute:: datetime_updated
+      :type:  datetime.datetime | None
+      :value: None
+
+
+
+.. py:class:: MRDAcquisitionInfo
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   ISMRM raw data / (ISMR)MRD acquisition info.
+
+
+   .. py:attribute:: acquisition_id
+      :type:  int
+
+
+   .. py:attribute:: num_samples
+      :type:  int
+
+
+   .. py:attribute:: num_coils
+      :type:  int
+
+
+   .. py:attribute:: dwell_time
+      :type:  float
+
+
+.. py:class:: MRDMetaResponse
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   ISMRM raw data / (ISMR)MRD meta data response.
+
+
+   .. py:attribute:: protocol_id
+      :type:  str
+
+
+   .. py:attribute:: task_id
+      :type:  str
+
+
+   .. py:attribute:: result_id
+      :type:  str
+
+
+   .. py:attribute:: dtype
+      :type:  str
+      :value: 'fc32'
+
+
+
+   .. py:attribute:: acquisitions
+      :type:  list[MRDAcquisitionInfo]
+      :value: []
+
+
+

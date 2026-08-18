@@ -1,0 +1,68 @@
+protocol_manager.main
+=====================
+
+.. py:module:: protocol_manager.main
+
+.. autoapi-nested-parse::
+
+   Protocol manager main file.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   protocol_manager.main.ORIGINS
+   protocol_manager.main.app
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   protocol_manager.main.lifespan
+   protocol_manager.main.custom_http_exception_handler
+   protocol_manager.main.validation_exception_handler
+   protocol_manager.main.readiness
+
+
+Module Contents
+---------------
+
+.. py:data:: ORIGINS
+   :value: ['http://localhost:8080', 'https://localhost:8443', 'https://localhost:3000']
+
+
+.. py:function:: lifespan(app: fastapi.FastAPI)
+   :async:
+
+
+   Define application lifespan.
+
+
+.. py:data:: app
+
+.. py:function:: custom_http_exception_handler(request, exc)
+   :async:
+
+
+   Get http exception handler.
+
+
+.. py:function:: validation_exception_handler(request, exc)
+   :async:
+
+
+   Get request validation exception handler.
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Get status / health endpoint.
+
+

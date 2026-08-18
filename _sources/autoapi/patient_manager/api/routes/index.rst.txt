@@ -1,0 +1,108 @@
+patient_manager.api.routes
+==========================
+
+.. py:module:: patient_manager.api.routes
+
+.. autoapi-nested-parse::
+
+   Definition of patient endpoints.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   patient_manager.api.routes.router
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   patient_manager.api.routes.get_patient_out
+   patient_manager.api.routes.create_patient
+   patient_manager.api.routes.get_patient
+   patient_manager.api.routes.get_patient_list
+   patient_manager.api.routes.delete_patient
+   patient_manager.api.routes.update_patient
+
+
+Module Contents
+---------------
+
+.. py:data:: router
+
+.. py:function:: get_patient_out(data: patient_manager.api.db.Patient) -> scanhub_libraries.models.PatientOut
+   :async:
+
+
+   Get pydantic output model from database ORM model.
+
+   :param data: Database ORM model
+
+   :rtype: Pydantic output model
+
+
+.. py:function:: create_patient(payload: scanhub_libraries.models.BasePatient) -> scanhub_libraries.models.PatientOut
+   :async:
+
+
+   Create new patient database entry.
+
+   :param payload: Patient pydantic base model
+
+   :rtype: Patient pydantic output model
+
+   :raises HTTPException: 404: Could not create patient
+
+
+.. py:function:: get_patient(patient_id: uuid.UUID) -> scanhub_libraries.models.PatientOut
+   :async:
+
+
+   Get a patient from database by id.
+
+   :param patient_id: Id of the requested patient
+
+   :rtype: Patient pydantic output model
+
+   :raises HTTPException: 404: Patient not found
+
+
+.. py:function:: get_patient_list() -> list[scanhub_libraries.models.PatientOut]
+   :async:
+
+
+   Get all patients endpoint.
+
+   :rtype: List of patient pydantic output models
+
+
+.. py:function:: delete_patient(patient_id: uuid.UUID) -> None
+   :async:
+
+
+   Delete patient from database.
+
+   :param patient_id: Id of patient to be deleted
+
+   :raises HTTPException: _description_
+
+
+.. py:function:: update_patient(patient_id: uuid.UUID, payload: scanhub_libraries.models.BasePatient)
+   :async:
+
+
+   Update existing patient endpoint.
+
+   :param patient_id: Id of the patient to be updated
+   :param payload: Patient data to be updated
+
+   :rtype: Updated patient pydantic output model
+
+   :raises HTTPException: 404: Patient not found
+
+

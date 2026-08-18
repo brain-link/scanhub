@@ -1,0 +1,24 @@
+device_manager.api
+==================
+
+.. py:module:: device_manager.api
+
+.. autoapi-nested-parse::
+
+   Init file.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/device_manager/api/dal/index
+   /autoapi/device_manager/api/db/index
+   /autoapi/device_manager/api/device_endpoints/index
+   /autoapi/device_manager/api/device_websocket/index
+   /autoapi/device_manager/api/exam_requests/index
+
+

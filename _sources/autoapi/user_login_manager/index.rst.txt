@@ -1,0 +1,23 @@
+user_login_manager
+==================
+
+.. py:module:: user_login_manager
+
+.. autoapi-nested-parse::
+
+   Init file, that enables sphinx to detect this package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/user_login_manager/dal/index
+   /autoapi/user_login_manager/db/index
+   /autoapi/user_login_manager/main/index
+   /autoapi/user_login_manager/userlogin/index
+
+

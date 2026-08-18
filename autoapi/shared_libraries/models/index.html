@@ -1,0 +1,1843 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>shared_libraries.models &#8212; ScanHub Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=8d6ca438" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/shared_libraries/models/index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../_static/favicon-32x32.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="shared_libraries.security" href="../security/index.html" />
+    <link rel="prev" title="shared_libraries" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.1" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">ScanHub Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../introduction/index.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../demo.html">
+    Demo
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../techdoc/index.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../sourcecode/index.html">
+    Code Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../introduction/index.html">
+    ScanHub
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../demo.html">
+    Demo
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../techdoc/index.html">
+    Technical Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    Web API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../sourcecode/index.html">
+    Code Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/brain-link/scanhub" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../sourcecode/device_manager.html">Device Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sourcecode/protocol_manager.html">Protocol Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sourcecode/orchestration_engine.html">Orchestration Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sourcecode/user_login_manager.html">User Login Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sourcecode/patient_manager.html">Patient Manager</a></li>
+<li class="toctree-l1 current active"><a class="reference internal" href="../../../sourcecode/shared_libraries.html">Shared Libraries</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../sourcecode/index.html" class="nav-link">Code Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../sourcecode/shared_libraries.html" class="nav-link">Shared Libraries</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">shared_libraries</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">shared_libraries.models</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-shared_libraries.models">
+<span id="shared-libraries-models"></span><h1>shared_libraries.models<a class="headerlink" href="#module-shared_libraries.models" title="Link to this heading">#</a></h1>
+<p>Pydantic models of ScanHub.</p>
+<p>Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
+SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.XYZ" title="shared_libraries.models.XYZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XYZ</span></code></a></p></td>
+<td><p>Pydantic definition of coordinates.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.Gender" title="shared_libraries.models.Gender"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gender</span></code></a></p></td>
+<td><p>Pydantic definition of genders.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.DeviceStatus" title="shared_libraries.models.DeviceStatus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceStatus</span></code></a></p></td>
+<td><p>Pydantic definition of a commands.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.CalibrationType" title="shared_libraries.models.CalibrationType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CalibrationType</span></code></a></p></td>
+<td><p>Pydantic definition of calibration methods.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.ItemStatus" title="shared_libraries.models.ItemStatus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ItemStatus</span></code></a></p></td>
+<td><p>Task status enum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.TaskType" title="shared_libraries.models.TaskType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskType</span></code></a></p></td>
+<td><p>Task type enum.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.ResultType" title="shared_libraries.models.ResultType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResultType</span></code></a></p></td>
+<td><p>Result type enum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.UserRole" title="shared_libraries.models.UserRole"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UserRole</span></code></a></p></td>
+<td><p>User role enum.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.DeviceCreationRequest" title="shared_libraries.models.DeviceCreationRequest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceCreationRequest</span></code></a></p></td>
+<td><p>Device registration request pydantic model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.DeviceDetails" title="shared_libraries.models.DeviceDetails"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceDetails</span></code></a></p></td>
+<td><p>Device creation request pydantic model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.DeviceOut" title="shared_libraries.models.DeviceOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceOut</span></code></a></p></td>
+<td><p>Device pydantic output model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.BaseMRISequence" title="shared_libraries.models.BaseMRISequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseMRISequence</span></code></a></p></td>
+<td><p>Base model for MRI sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.MRISequenceOut" title="shared_libraries.models.MRISequenceOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MRISequenceOut</span></code></a></p></td>
+<td><p>Output model for MRI sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.BaseResult" title="shared_libraries.models.BaseResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseResult</span></code></a></p></td>
+<td><p>Result model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.SetResult" title="shared_libraries.models.SetResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetResult</span></code></a></p></td>
+<td><p>Update result model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.ResultOut" title="shared_libraries.models.ResultOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResultOut</span></code></a></p></td>
+<td><p>Result output model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.BaseTask" title="shared_libraries.models.BaseTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p></td>
+<td><p>Task base model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.TaskOut" title="shared_libraries.models.TaskOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskOut</span></code></a></p></td>
+<td><p>Task output model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.AcquisitionParameter" title="shared_libraries.models.AcquisitionParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AcquisitionParameter</span></code></a></p></td>
+<td><p>Pydantic definition of acquisition parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.BaseAcquisitionTask" title="shared_libraries.models.BaseAcquisitionTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseAcquisitionTask</span></code></a></p></td>
+<td><p>Represents a task for data acquisition in the system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.AcquisitionLimits" title="shared_libraries.models.AcquisitionLimits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AcquisitionLimits</span></code></a></p></td>
+<td><p>Pydantic definition of AcquisitionLimits.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.AcquisitionTaskOut" title="shared_libraries.models.AcquisitionTaskOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AcquisitionTaskOut</span></code></a></p></td>
+<td><p>Acquisition Task output model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.AcquisitionPayload" title="shared_libraries.models.AcquisitionPayload"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AcquisitionPayload</span></code></a></p></td>
+<td><p>Acquisition Task payload model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.BaseProtocol" title="shared_libraries.models.BaseProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a></p></td>
+<td><p>Protocol base model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.ProtocolOut" title="shared_libraries.models.ProtocolOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProtocolOut</span></code></a></p></td>
+<td><p>Protocol output model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.User" title="shared_libraries.models.User"><code class="xref py py-obj docutils literal notranslate"><span class="pre">User</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.PasswordUpdateRequest" title="shared_libraries.models.PasswordUpdateRequest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PasswordUpdateRequest</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.BasePatient" title="shared_libraries.models.BasePatient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasePatient</span></code></a></p></td>
+<td><p>Patient pydantic base model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.PatientOut" title="shared_libraries.models.PatientOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PatientOut</span></code></a></p></td>
+<td><p>Patient pydantic output model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.models.MRDAcquisitionInfo" title="shared_libraries.models.MRDAcquisitionInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MRDAcquisitionInfo</span></code></a></p></td>
+<td><p>ISMRM raw data / (ISMR)MRD acquisition info.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.models.MRDMetaResponse" title="shared_libraries.models.MRDMetaResponse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MRDMetaResponse</span></code></a></p></td>
+<td><p>ISMRM raw data / (ISMR)MRD meta data response.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.XYZ">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">XYZ</span></span><a class="headerlink" href="#shared_libraries.models.XYZ" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Pydantic definition of coordinates.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.XYZ.x">
+<span class="sig-name descname"><span class="pre">x</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#shared_libraries.models.XYZ.x" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.XYZ.y">
+<span class="sig-name descname"><span class="pre">y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#shared_libraries.models.XYZ.y" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.XYZ.z">
+<span class="sig-name descname"><span class="pre">z</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#shared_libraries.models.XYZ.z" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.Gender">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">Gender</span></span><a class="headerlink" href="#shared_libraries.models.Gender" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of genders.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.Gender.MALE">
+<span class="sig-name descname"><span class="pre">MALE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MALE'</span></span><a class="headerlink" href="#shared_libraries.models.Gender.MALE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.Gender.FEMALE">
+<span class="sig-name descname"><span class="pre">FEMALE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FEMALE'</span></span><a class="headerlink" href="#shared_libraries.models.Gender.FEMALE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.Gender.OTHER">
+<span class="sig-name descname"><span class="pre">OTHER</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OTHER'</span></span><a class="headerlink" href="#shared_libraries.models.Gender.OTHER" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.Gender.NOT_GIVEN">
+<span class="sig-name descname"><span class="pre">NOT_GIVEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'NOT_GIVEN'</span></span><a class="headerlink" href="#shared_libraries.models.Gender.NOT_GIVEN" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceStatus">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">DeviceStatus</span></span><a class="headerlink" href="#shared_libraries.models.DeviceStatus" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of a commands.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceStatus.ONLINE">
+<span class="sig-name descname"><span class="pre">ONLINE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ONLINE'</span></span><a class="headerlink" href="#shared_libraries.models.DeviceStatus.ONLINE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceStatus.OFFLINE">
+<span class="sig-name descname"><span class="pre">OFFLINE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OFFLINE'</span></span><a class="headerlink" href="#shared_libraries.models.DeviceStatus.OFFLINE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceStatus.BUSY">
+<span class="sig-name descname"><span class="pre">BUSY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'BUSY'</span></span><a class="headerlink" href="#shared_libraries.models.DeviceStatus.BUSY" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceStatus.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ERROR'</span></span><a class="headerlink" href="#shared_libraries.models.DeviceStatus.ERROR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.CalibrationType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">CalibrationType</span></span><a class="headerlink" href="#shared_libraries.models.CalibrationType" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Pydantic definition of calibration methods.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.CalibrationType.FLIPANGLE">
+<span class="sig-name descname"><span class="pre">FLIPANGLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'flip-angle'</span></span><a class="headerlink" href="#shared_libraries.models.CalibrationType.FLIPANGLE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.CalibrationType.FREQUENCY">
+<span class="sig-name descname"><span class="pre">FREQUENCY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'frequency'</span></span><a class="headerlink" href="#shared_libraries.models.CalibrationType.FREQUENCY" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.CalibrationType.SHIMS">
+<span class="sig-name descname"><span class="pre">SHIMS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'shims'</span></span><a class="headerlink" href="#shared_libraries.models.CalibrationType.SHIMS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">ItemStatus</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Task status enum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.NEW">
+<span class="sig-name descname"><span class="pre">NEW</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'NEW'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.NEW" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.UPDATED">
+<span class="sig-name descname"><span class="pre">UPDATED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'UPDATED'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.UPDATED" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.STARTED">
+<span class="sig-name descname"><span class="pre">STARTED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'STARTED'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.STARTED" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.INPROGRESS">
+<span class="sig-name descname"><span class="pre">INPROGRESS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'INPROGRESS'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.INPROGRESS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.ACQUIRED">
+<span class="sig-name descname"><span class="pre">ACQUIRED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ACQUIRED'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.ACQUIRED" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.FINISHED">
+<span class="sig-name descname"><span class="pre">FINISHED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FINISHED'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.FINISHED" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ERROR'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.ERROR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.FAILED">
+<span class="sig-name descname"><span class="pre">FAILED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FAILED'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.FAILED" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ItemStatus.CANCELLED">
+<span class="sig-name descname"><span class="pre">CANCELLED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'CANCELLED'</span></span><a class="headerlink" href="#shared_libraries.models.ItemStatus.CANCELLED" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">TaskType</span></span><a class="headerlink" href="#shared_libraries.models.TaskType" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Task type enum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskType.ACQUISITION">
+<span class="sig-name descname"><span class="pre">ACQUISITION</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ACQUISITION'</span></span><a class="headerlink" href="#shared_libraries.models.TaskType.ACQUISITION" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">ResultType</span></span><a class="headerlink" href="#shared_libraries.models.ResultType" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Result type enum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultType.DICOM">
+<span class="sig-name descname"><span class="pre">DICOM</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DICOM'</span></span><a class="headerlink" href="#shared_libraries.models.ResultType.DICOM" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultType.MRD">
+<span class="sig-name descname"><span class="pre">MRD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MRD'</span></span><a class="headerlink" href="#shared_libraries.models.ResultType.MRD" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultType.NPY">
+<span class="sig-name descname"><span class="pre">NPY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'NUMPY'</span></span><a class="headerlink" href="#shared_libraries.models.ResultType.NPY" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultType.CALIBRATION">
+<span class="sig-name descname"><span class="pre">CALIBRATION</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'CALIBRATION'</span></span><a class="headerlink" href="#shared_libraries.models.ResultType.CALIBRATION" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultType.NOT_SET">
+<span class="sig-name descname"><span class="pre">NOT_SET</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'NOT_SET'</span></span><a class="headerlink" href="#shared_libraries.models.ResultType.NOT_SET" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.UserRole">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">UserRole</span></span><a class="headerlink" href="#shared_libraries.models.UserRole" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>User role enum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.UserRole.admin">
+<span class="sig-name descname"><span class="pre">admin</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'admin'</span></span><a class="headerlink" href="#shared_libraries.models.UserRole.admin" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.UserRole.medical">
+<span class="sig-name descname"><span class="pre">medical</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'medical'</span></span><a class="headerlink" href="#shared_libraries.models.UserRole.medical" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.UserRole.scientist">
+<span class="sig-name descname"><span class="pre">scientist</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'scientist'</span></span><a class="headerlink" href="#shared_libraries.models.UserRole.scientist" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.UserRole.engineer">
+<span class="sig-name descname"><span class="pre">engineer</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'engineer'</span></span><a class="headerlink" href="#shared_libraries.models.UserRole.engineer" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceCreationRequest">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">DeviceCreationRequest</span></span><a class="headerlink" href="#shared_libraries.models.DeviceCreationRequest" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Device registration request pydantic model.</p>
+<p>(to be sent by user first adding the device to the platform).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceCreationRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.DeviceCreationRequest.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceCreationRequest.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.DeviceCreationRequest.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceCreationRequest.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.DeviceCreationRequest.description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceCreationRequest.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.DeviceStatus" title="shared_libraries.models.DeviceStatus"><span class="pre">DeviceStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceCreationRequest.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">DeviceDetails</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Device creation request pydantic model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.device_name">
+<span class="sig-name descname"><span class="pre">device_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.device_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.serial_number">
+<span class="sig-name descname"><span class="pre">serial_number</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.serial_number" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.manufacturer">
+<span class="sig-name descname"><span class="pre">manufacturer</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.manufacturer" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.modality">
+<span class="sig-name descname"><span class="pre">modality</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.modality" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.DeviceStatus" title="shared_libraries.models.DeviceStatus"><span class="pre">DeviceStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.site">
+<span class="sig-name descname"><span class="pre">site</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.site" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceDetails.parameter">
+<span class="sig-name descname"><span class="pre">parameter</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceDetails.parameter" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">DeviceOut</span></span><a class="headerlink" href="#shared_libraries.models.DeviceOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.DeviceCreationRequest" title="shared_libraries.models.DeviceCreationRequest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceCreationRequest</span></code></a>, <a class="reference internal" href="#shared_libraries.models.DeviceDetails" title="shared_libraries.models.DeviceDetails"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceDetails</span></code></a></p>
+<p>Device pydantic output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceOut.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span><a class="headerlink" href="#shared_libraries.models.DeviceOut.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceOut.datetime_created">
+<span class="sig-name descname"><span class="pre">datetime_created</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></span><a class="headerlink" href="#shared_libraries.models.DeviceOut.datetime_created" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.DeviceOut.datetime_updated">
+<span class="sig-name descname"><span class="pre">datetime_updated</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.DeviceOut.datetime_updated" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseMRISequence">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">BaseMRISequence</span></span><a class="headerlink" href="#shared_libraries.models.BaseMRISequence" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Base model for MRI sequence.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseMRISequence.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.BaseMRISequence.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseMRISequence.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseMRISequence.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseMRISequence.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseMRISequence.description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseMRISequence.sequence_type">
+<span class="sig-name descname"><span class="pre">sequence_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseMRISequence.sequence_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseMRISequence.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></span><a class="headerlink" href="#shared_libraries.models.BaseMRISequence.tags" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">MRISequenceOut</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.BaseMRISequence" title="shared_libraries.models.BaseMRISequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseMRISequence</span></code></a></p>
+<p>Output model for MRI sequence.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.created_at" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.updated_at">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.updated_at" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.seq_file">
+<span class="sig-name descname"><span class="pre">seq_file</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.seq_file" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.seq_file_extension">
+<span class="sig-name descname"><span class="pre">seq_file_extension</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.seq_file_extension" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.xml_file">
+<span class="sig-name descname"><span class="pre">xml_file</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.xml_file" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRISequenceOut.xml_file_extension">
+<span class="sig-name descname"><span class="pre">xml_file_extension</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.MRISequenceOut.xml_file_extension" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">BaseResult</span></span><a class="headerlink" href="#shared_libraries.models.BaseResult" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Result model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseResult.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.BaseResult.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseResult.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span><a class="headerlink" href="#shared_libraries.models.BaseResult.task_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.SetResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">SetResult</span></span><a class="headerlink" href="#shared_libraries.models.SetResult" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Update result model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.SetResult.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.SetResult.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.SetResult.type">
+<span class="sig-name descname"><span class="pre">type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.ResultType" title="shared_libraries.models.ResultType"><span class="pre">ResultType</span></a></span><a class="headerlink" href="#shared_libraries.models.SetResult.type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.SetResult.directory">
+<span class="sig-name descname"><span class="pre">directory</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.SetResult.directory" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.SetResult.files">
+<span class="sig-name descname"><span class="pre">files</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></span><a class="headerlink" href="#shared_libraries.models.SetResult.files" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.SetResult.meta">
+<span class="sig-name descname"><span class="pre">meta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.SetResult.meta" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">ResultOut</span></span><a class="headerlink" href="#shared_libraries.models.ResultOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.BaseResult" title="shared_libraries.models.BaseResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseResult</span></code></a>, <a class="reference internal" href="#shared_libraries.models.SetResult" title="shared_libraries.models.SetResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetResult</span></code></a></p>
+<p>Result output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultOut.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span><a class="headerlink" href="#shared_libraries.models.ResultOut.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ResultOut.datetime_created">
+<span class="sig-name descname"><span class="pre">datetime_created</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></span><a class="headerlink" href="#shared_libraries.models.ResultOut.datetime_created" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">BaseTask</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Task base model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.protocol_id">
+<span class="sig-name descname"><span class="pre">protocol_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.protocol_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.task_type">
+<span class="sig-name descname"><span class="pre">task_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.TaskType" title="shared_libraries.models.TaskType"><span class="pre">TaskType</span></a></span><a class="headerlink" href="#shared_libraries.models.BaseTask.task_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.destination">
+<span class="sig-name descname"><span class="pre">destination</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.destination" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.ItemStatus" title="shared_libraries.models.ItemStatus"><span class="pre">ItemStatus</span></a></span><a class="headerlink" href="#shared_libraries.models.BaseTask.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.progress" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.is_template">
+<span class="sig-name descname"><span class="pre">is_template</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.is_template" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseTask.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#shared_libraries.models.BaseTask.position" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">TaskOut</span></span><a class="headerlink" href="#shared_libraries.models.TaskOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.BaseTask" title="shared_libraries.models.BaseTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Task output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskOut.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span><a class="headerlink" href="#shared_libraries.models.TaskOut.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskOut.creator">
+<span class="sig-name descname"><span class="pre">creator</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.TaskOut.creator" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskOut.datetime_created">
+<span class="sig-name descname"><span class="pre">datetime_created</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></span><a class="headerlink" href="#shared_libraries.models.TaskOut.datetime_created" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskOut.datetime_updated">
+<span class="sig-name descname"><span class="pre">datetime_updated</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.TaskOut.datetime_updated" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.TaskOut.results">
+<span class="sig-name descname"><span class="pre">results</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#shared_libraries.models.ResultOut" title="shared_libraries.models.ResultOut"><span class="pre">ResultOut</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#shared_libraries.models.TaskOut.results" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionParameter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">AcquisitionParameter</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionParameter" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Pydantic definition of acquisition parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionParameter.fov_scaling">
+<span class="sig-name descname"><span class="pre">fov_scaling</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.XYZ" title="shared_libraries.models.XYZ"><span class="pre">XYZ</span></a></span><a class="headerlink" href="#shared_libraries.models.AcquisitionParameter.fov_scaling" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionParameter.fov_offset">
+<span class="sig-name descname"><span class="pre">fov_offset</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.XYZ" title="shared_libraries.models.XYZ"><span class="pre">XYZ</span></a></span><a class="headerlink" href="#shared_libraries.models.AcquisitionParameter.fov_offset" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionParameter.fov_rotation">
+<span class="sig-name descname"><span class="pre">fov_rotation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.XYZ" title="shared_libraries.models.XYZ"><span class="pre">XYZ</span></a></span><a class="headerlink" href="#shared_libraries.models.AcquisitionParameter.fov_rotation" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseAcquisitionTask">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">BaseAcquisitionTask</span></span><a class="headerlink" href="#shared_libraries.models.BaseAcquisitionTask" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.BaseTask" title="shared_libraries.models.BaseTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Represents a task for data acquisition in the system.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseAcquisitionTask.task_type">
+<span class="sig-name descname"><span class="pre">task_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="pre">TaskType</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#shared_libraries.models.BaseAcquisitionTask.task_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseAcquisitionTask.device_id">
+<span class="sig-name descname"><span class="pre">device_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseAcquisitionTask.device_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseAcquisitionTask.calibration">
+<span class="sig-name descname"><span class="pre">calibration</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#shared_libraries.models.CalibrationType" title="shared_libraries.models.CalibrationType"><span class="pre">CalibrationType</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></span><a class="headerlink" href="#shared_libraries.models.BaseAcquisitionTask.calibration" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseAcquisitionTask.sequence_id">
+<span class="sig-name descname"><span class="pre">sequence_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseAcquisitionTask.sequence_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseAcquisitionTask.acquisition_parameter">
+<span class="sig-name descname"><span class="pre">acquisition_parameter</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.AcquisitionParameter" title="shared_libraries.models.AcquisitionParameter"><span class="pre">AcquisitionParameter</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseAcquisitionTask.acquisition_parameter" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionLimits">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">AcquisitionLimits</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionLimits" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Pydantic definition of AcquisitionLimits.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionLimits.patient_height">
+<span class="sig-name descname"><span class="pre">patient_height</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionLimits.patient_height" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionLimits.patient_weight">
+<span class="sig-name descname"><span class="pre">patient_weight</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionLimits.patient_weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionLimits.patient_gender">
+<span class="sig-name descname"><span class="pre">patient_gender</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.Gender" title="shared_libraries.models.Gender"><span class="pre">Gender</span></a></span><a class="headerlink" href="#shared_libraries.models.AcquisitionLimits.patient_gender" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionLimits.patient_age">
+<span class="sig-name descname"><span class="pre">patient_age</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionLimits.patient_age" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionTaskOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">AcquisitionTaskOut</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionTaskOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.TaskOut" title="shared_libraries.models.TaskOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskOut</span></code></a>, <a class="reference internal" href="#shared_libraries.models.BaseAcquisitionTask" title="shared_libraries.models.BaseAcquisitionTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseAcquisitionTask</span></code></a></p>
+<p>Acquisition Task output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionTaskOut.acquisition_limits">
+<span class="sig-name descname"><span class="pre">acquisition_limits</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.AcquisitionLimits" title="shared_libraries.models.AcquisitionLimits"><span class="pre">AcquisitionLimits</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionTaskOut.acquisition_limits" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionPayload">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">AcquisitionPayload</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionPayload" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.AcquisitionTaskOut" title="shared_libraries.models.AcquisitionTaskOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AcquisitionTaskOut</span></code></a></p>
+<p>Acquisition Task payload model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionPayload.mrd_header">
+<span class="sig-name descname"><span class="pre">mrd_header</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionPayload.mrd_header" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionPayload.sequence">
+<span class="sig-name descname"><span class="pre">sequence</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.MRISequenceOut" title="shared_libraries.models.MRISequenceOut"><span class="pre">MRISequenceOut</span></a></span><a class="headerlink" href="#shared_libraries.models.AcquisitionPayload.sequence" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionPayload.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionPayload.access_token" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.AcquisitionPayload.device_parameter">
+<span class="sig-name descname"><span class="pre">device_parameter</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#shared_libraries.models.AcquisitionPayload.device_parameter" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">BaseProtocol</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Protocol base model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.patient_id">
+<span class="sig-name descname"><span class="pre">patient_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.patient_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.indication">
+<span class="sig-name descname"><span class="pre">indication</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.indication" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.comment">
+<span class="sig-name descname"><span class="pre">comment</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.comment" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.ItemStatus" title="shared_libraries.models.ItemStatus"><span class="pre">ItemStatus</span></a></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BaseProtocol.is_template">
+<span class="sig-name descname"><span class="pre">is_template</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#shared_libraries.models.BaseProtocol.is_template" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.ProtocolOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">ProtocolOut</span></span><a class="headerlink" href="#shared_libraries.models.ProtocolOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.BaseProtocol" title="shared_libraries.models.BaseProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a></p>
+<p>Protocol output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ProtocolOut.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span><a class="headerlink" href="#shared_libraries.models.ProtocolOut.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ProtocolOut.creator">
+<span class="sig-name descname"><span class="pre">creator</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.ProtocolOut.creator" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ProtocolOut.datetime_created">
+<span class="sig-name descname"><span class="pre">datetime_created</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></span><a class="headerlink" href="#shared_libraries.models.ProtocolOut.datetime_created" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ProtocolOut.datetime_updated">
+<span class="sig-name descname"><span class="pre">datetime_updated</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.ProtocolOut.datetime_updated" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.ProtocolOut.tasks">
+<span class="sig-name descname"><span class="pre">tasks</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#shared_libraries.models.AcquisitionTaskOut" title="shared_libraries.models.AcquisitionTaskOut"><span class="pre">AcquisitionTaskOut</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#shared_libraries.models.ProtocolOut.tasks" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.User">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><a class="headerlink" href="#shared_libraries.models.User" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.username">
+<span class="sig-name descname"><span class="pre">username</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.User.username" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.first_name">
+<span class="sig-name descname"><span class="pre">first_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.User.first_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.last_name">
+<span class="sig-name descname"><span class="pre">last_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.User.last_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.email">
+<span class="sig-name descname"><span class="pre">email</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.User.email" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.role">
+<span class="sig-name descname"><span class="pre">role</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.UserRole" title="shared_libraries.models.UserRole"><span class="pre">UserRole</span></a></span><a class="headerlink" href="#shared_libraries.models.User.role" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.User.access_token" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.token_type">
+<span class="sig-name descname"><span class="pre">token_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.User.token_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.last_activity_unixtime">
+<span class="sig-name descname"><span class="pre">last_activity_unixtime</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.User.last_activity_unixtime" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.User.last_login_unixtime">
+<span class="sig-name descname"><span class="pre">last_login_unixtime</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.User.last_login_unixtime" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.PasswordUpdateRequest">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">PasswordUpdateRequest</span></span><a class="headerlink" href="#shared_libraries.models.PasswordUpdateRequest" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.PasswordUpdateRequest.password_of_requester">
+<span class="sig-name descname"><span class="pre">password_of_requester</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.PasswordUpdateRequest.password_of_requester" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.PasswordUpdateRequest.username_to_change_password_for">
+<span class="sig-name descname"><span class="pre">username_to_change_password_for</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.PasswordUpdateRequest.username_to_change_password_for" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.PasswordUpdateRequest.newpassword">
+<span class="sig-name descname"><span class="pre">newpassword</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.PasswordUpdateRequest.newpassword" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">BasePatient</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Patient pydantic base model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.model_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.first_name">
+<span class="sig-name descname"><span class="pre">first_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.first_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.last_name">
+<span class="sig-name descname"><span class="pre">last_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.last_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.birth_date">
+<span class="sig-name descname"><span class="pre">birth_date</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.date</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.birth_date" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.sex">
+<span class="sig-name descname"><span class="pre">sex</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.Gender" title="shared_libraries.models.Gender"><span class="pre">Gender</span></a></span><a class="headerlink" href="#shared_libraries.models.BasePatient.sex" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.height">
+<span class="sig-name descname"><span class="pre">height</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.height" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.issuer">
+<span class="sig-name descname"><span class="pre">issuer</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.issuer" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared_libraries.models.ItemStatus" title="shared_libraries.models.ItemStatus"><span class="pre">ItemStatus</span></a></span><a class="headerlink" href="#shared_libraries.models.BasePatient.status" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.BasePatient.comment">
+<span class="sig-name descname"><span class="pre">comment</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.BasePatient.comment" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.PatientOut">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">PatientOut</span></span><a class="headerlink" href="#shared_libraries.models.PatientOut" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#shared_libraries.models.BasePatient" title="shared_libraries.models.BasePatient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasePatient</span></code></a></p>
+<p>Patient pydantic output model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.PatientOut.patient_id">
+<span class="sig-name descname"><span class="pre">patient_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></span><a class="headerlink" href="#shared_libraries.models.PatientOut.patient_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.PatientOut.datetime_created">
+<span class="sig-name descname"><span class="pre">datetime_created</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></span><a class="headerlink" href="#shared_libraries.models.PatientOut.datetime_created" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.PatientOut.datetime_updated">
+<span class="sig-name descname"><span class="pre">datetime_updated</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#shared_libraries.models.PatientOut.datetime_updated" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDAcquisitionInfo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">MRDAcquisitionInfo</span></span><a class="headerlink" href="#shared_libraries.models.MRDAcquisitionInfo" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>ISMRM raw data / (ISMR)MRD acquisition info.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDAcquisitionInfo.acquisition_id">
+<span class="sig-name descname"><span class="pre">acquisition_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.MRDAcquisitionInfo.acquisition_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDAcquisitionInfo.num_samples">
+<span class="sig-name descname"><span class="pre">num_samples</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.MRDAcquisitionInfo.num_samples" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDAcquisitionInfo.num_coils">
+<span class="sig-name descname"><span class="pre">num_coils</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#shared_libraries.models.MRDAcquisitionInfo.num_coils" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDAcquisitionInfo.dwell_time">
+<span class="sig-name descname"><span class="pre">dwell_time</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#shared_libraries.models.MRDAcquisitionInfo.dwell_time" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDMetaResponse">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.models.</span></span><span class="sig-name descname"><span class="pre">MRDMetaResponse</span></span><a class="headerlink" href="#shared_libraries.models.MRDMetaResponse" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>ISMRM raw data / (ISMR)MRD meta data response.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDMetaResponse.protocol_id">
+<span class="sig-name descname"><span class="pre">protocol_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.MRDMetaResponse.protocol_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDMetaResponse.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.MRDMetaResponse.task_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDMetaResponse.result_id">
+<span class="sig-name descname"><span class="pre">result_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#shared_libraries.models.MRDMetaResponse.result_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDMetaResponse.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'fc32'</span></span><a class="headerlink" href="#shared_libraries.models.MRDMetaResponse.dtype" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared_libraries.models.MRDMetaResponse.acquisitions">
+<span class="sig-name descname"><span class="pre">acquisitions</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#shared_libraries.models.MRDAcquisitionInfo" title="shared_libraries.models.MRDAcquisitionInfo"><span class="pre">MRDAcquisitionInfo</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></span><a class="headerlink" href="#shared_libraries.models.MRDMetaResponse.acquisitions" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">shared_libraries</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../security/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">shared_libraries.security</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.XYZ"><code class="docutils literal notranslate"><span class="pre">XYZ</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.XYZ.x"><code class="docutils literal notranslate"><span class="pre">XYZ.x</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.XYZ.y"><code class="docutils literal notranslate"><span class="pre">XYZ.y</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.XYZ.z"><code class="docutils literal notranslate"><span class="pre">XYZ.z</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.Gender"><code class="docutils literal notranslate"><span class="pre">Gender</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.Gender.MALE"><code class="docutils literal notranslate"><span class="pre">Gender.MALE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.Gender.FEMALE"><code class="docutils literal notranslate"><span class="pre">Gender.FEMALE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.Gender.OTHER"><code class="docutils literal notranslate"><span class="pre">Gender.OTHER</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.Gender.NOT_GIVEN"><code class="docutils literal notranslate"><span class="pre">Gender.NOT_GIVEN</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceStatus"><code class="docutils literal notranslate"><span class="pre">DeviceStatus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceStatus.ONLINE"><code class="docutils literal notranslate"><span class="pre">DeviceStatus.ONLINE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceStatus.OFFLINE"><code class="docutils literal notranslate"><span class="pre">DeviceStatus.OFFLINE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceStatus.BUSY"><code class="docutils literal notranslate"><span class="pre">DeviceStatus.BUSY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceStatus.ERROR"><code class="docutils literal notranslate"><span class="pre">DeviceStatus.ERROR</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.CalibrationType"><code class="docutils literal notranslate"><span class="pre">CalibrationType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.CalibrationType.FLIPANGLE"><code class="docutils literal notranslate"><span class="pre">CalibrationType.FLIPANGLE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.CalibrationType.FREQUENCY"><code class="docutils literal notranslate"><span class="pre">CalibrationType.FREQUENCY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.CalibrationType.SHIMS"><code class="docutils literal notranslate"><span class="pre">CalibrationType.SHIMS</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus"><code class="docutils literal notranslate"><span class="pre">ItemStatus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.NEW"><code class="docutils literal notranslate"><span class="pre">ItemStatus.NEW</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.UPDATED"><code class="docutils literal notranslate"><span class="pre">ItemStatus.UPDATED</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.STARTED"><code class="docutils literal notranslate"><span class="pre">ItemStatus.STARTED</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.INPROGRESS"><code class="docutils literal notranslate"><span class="pre">ItemStatus.INPROGRESS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.ACQUIRED"><code class="docutils literal notranslate"><span class="pre">ItemStatus.ACQUIRED</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.FINISHED"><code class="docutils literal notranslate"><span class="pre">ItemStatus.FINISHED</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.ERROR"><code class="docutils literal notranslate"><span class="pre">ItemStatus.ERROR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.FAILED"><code class="docutils literal notranslate"><span class="pre">ItemStatus.FAILED</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ItemStatus.CANCELLED"><code class="docutils literal notranslate"><span class="pre">ItemStatus.CANCELLED</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskType"><code class="docutils literal notranslate"><span class="pre">TaskType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskType.ACQUISITION"><code class="docutils literal notranslate"><span class="pre">TaskType.ACQUISITION</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultType"><code class="docutils literal notranslate"><span class="pre">ResultType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultType.DICOM"><code class="docutils literal notranslate"><span class="pre">ResultType.DICOM</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultType.MRD"><code class="docutils literal notranslate"><span class="pre">ResultType.MRD</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultType.NPY"><code class="docutils literal notranslate"><span class="pre">ResultType.NPY</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultType.CALIBRATION"><code class="docutils literal notranslate"><span class="pre">ResultType.CALIBRATION</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultType.NOT_SET"><code class="docutils literal notranslate"><span class="pre">ResultType.NOT_SET</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.UserRole"><code class="docutils literal notranslate"><span class="pre">UserRole</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.UserRole.admin"><code class="docutils literal notranslate"><span class="pre">UserRole.admin</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.UserRole.medical"><code class="docutils literal notranslate"><span class="pre">UserRole.medical</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.UserRole.scientist"><code class="docutils literal notranslate"><span class="pre">UserRole.scientist</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.UserRole.engineer"><code class="docutils literal notranslate"><span class="pre">UserRole.engineer</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceCreationRequest"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceCreationRequest.model_config"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceCreationRequest.name"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceCreationRequest.description"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest.description</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceCreationRequest.status"><code class="docutils literal notranslate"><span class="pre">DeviceCreationRequest.status</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails"><code class="docutils literal notranslate"><span class="pre">DeviceDetails</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.model_config"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.device_name"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.device_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.serial_number"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.serial_number</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.manufacturer"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.manufacturer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.modality"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.modality</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.status"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.site"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.site</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceDetails.parameter"><code class="docutils literal notranslate"><span class="pre">DeviceDetails.parameter</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceOut"><code class="docutils literal notranslate"><span class="pre">DeviceOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceOut.id"><code class="docutils literal notranslate"><span class="pre">DeviceOut.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">DeviceOut.datetime_created</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.DeviceOut.datetime_updated"><code class="docutils literal notranslate"><span class="pre">DeviceOut.datetime_updated</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseMRISequence"><code class="docutils literal notranslate"><span class="pre">BaseMRISequence</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseMRISequence.model_config"><code class="docutils literal notranslate"><span class="pre">BaseMRISequence.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseMRISequence.name"><code class="docutils literal notranslate"><span class="pre">BaseMRISequence.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseMRISequence.description"><code class="docutils literal notranslate"><span class="pre">BaseMRISequence.description</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseMRISequence.sequence_type"><code class="docutils literal notranslate"><span class="pre">BaseMRISequence.sequence_type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseMRISequence.tags"><code class="docutils literal notranslate"><span class="pre">BaseMRISequence.tags</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.id"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.created_at"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.created_at</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.updated_at"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.updated_at</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.seq_file"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.seq_file</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.seq_file_extension"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.seq_file_extension</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.xml_file"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.xml_file</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRISequenceOut.xml_file_extension"><code class="docutils literal notranslate"><span class="pre">MRISequenceOut.xml_file_extension</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseResult"><code class="docutils literal notranslate"><span class="pre">BaseResult</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseResult.model_config"><code class="docutils literal notranslate"><span class="pre">BaseResult.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseResult.task_id"><code class="docutils literal notranslate"><span class="pre">BaseResult.task_id</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.SetResult"><code class="docutils literal notranslate"><span class="pre">SetResult</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.SetResult.model_config"><code class="docutils literal notranslate"><span class="pre">SetResult.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.SetResult.type"><code class="docutils literal notranslate"><span class="pre">SetResult.type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.SetResult.directory"><code class="docutils literal notranslate"><span class="pre">SetResult.directory</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.SetResult.files"><code class="docutils literal notranslate"><span class="pre">SetResult.files</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.SetResult.meta"><code class="docutils literal notranslate"><span class="pre">SetResult.meta</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultOut"><code class="docutils literal notranslate"><span class="pre">ResultOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultOut.id"><code class="docutils literal notranslate"><span class="pre">ResultOut.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ResultOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">ResultOut.datetime_created</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask"><code class="docutils literal notranslate"><span class="pre">BaseTask</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.model_config"><code class="docutils literal notranslate"><span class="pre">BaseTask.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.protocol_id"><code class="docutils literal notranslate"><span class="pre">BaseTask.protocol_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.name"><code class="docutils literal notranslate"><span class="pre">BaseTask.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.description"><code class="docutils literal notranslate"><span class="pre">BaseTask.description</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.task_type"><code class="docutils literal notranslate"><span class="pre">BaseTask.task_type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.destination"><code class="docutils literal notranslate"><span class="pre">BaseTask.destination</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.status"><code class="docutils literal notranslate"><span class="pre">BaseTask.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.progress"><code class="docutils literal notranslate"><span class="pre">BaseTask.progress</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.is_template"><code class="docutils literal notranslate"><span class="pre">BaseTask.is_template</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseTask.position"><code class="docutils literal notranslate"><span class="pre">BaseTask.position</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskOut"><code class="docutils literal notranslate"><span class="pre">TaskOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskOut.id"><code class="docutils literal notranslate"><span class="pre">TaskOut.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskOut.creator"><code class="docutils literal notranslate"><span class="pre">TaskOut.creator</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">TaskOut.datetime_created</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskOut.datetime_updated"><code class="docutils literal notranslate"><span class="pre">TaskOut.datetime_updated</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.TaskOut.results"><code class="docutils literal notranslate"><span class="pre">TaskOut.results</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionParameter"><code class="docutils literal notranslate"><span class="pre">AcquisitionParameter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionParameter.fov_scaling"><code class="docutils literal notranslate"><span class="pre">AcquisitionParameter.fov_scaling</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionParameter.fov_offset"><code class="docutils literal notranslate"><span class="pre">AcquisitionParameter.fov_offset</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionParameter.fov_rotation"><code class="docutils literal notranslate"><span class="pre">AcquisitionParameter.fov_rotation</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseAcquisitionTask"><code class="docutils literal notranslate"><span class="pre">BaseAcquisitionTask</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseAcquisitionTask.task_type"><code class="docutils literal notranslate"><span class="pre">BaseAcquisitionTask.task_type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseAcquisitionTask.device_id"><code class="docutils literal notranslate"><span class="pre">BaseAcquisitionTask.device_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseAcquisitionTask.calibration"><code class="docutils literal notranslate"><span class="pre">BaseAcquisitionTask.calibration</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseAcquisitionTask.sequence_id"><code class="docutils literal notranslate"><span class="pre">BaseAcquisitionTask.sequence_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseAcquisitionTask.acquisition_parameter"><code class="docutils literal notranslate"><span class="pre">BaseAcquisitionTask.acquisition_parameter</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionLimits"><code class="docutils literal notranslate"><span class="pre">AcquisitionLimits</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionLimits.patient_height"><code class="docutils literal notranslate"><span class="pre">AcquisitionLimits.patient_height</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionLimits.patient_weight"><code class="docutils literal notranslate"><span class="pre">AcquisitionLimits.patient_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionLimits.patient_gender"><code class="docutils literal notranslate"><span class="pre">AcquisitionLimits.patient_gender</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionLimits.patient_age"><code class="docutils literal notranslate"><span class="pre">AcquisitionLimits.patient_age</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionTaskOut"><code class="docutils literal notranslate"><span class="pre">AcquisitionTaskOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionTaskOut.acquisition_limits"><code class="docutils literal notranslate"><span class="pre">AcquisitionTaskOut.acquisition_limits</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionPayload"><code class="docutils literal notranslate"><span class="pre">AcquisitionPayload</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionPayload.mrd_header"><code class="docutils literal notranslate"><span class="pre">AcquisitionPayload.mrd_header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionPayload.sequence"><code class="docutils literal notranslate"><span class="pre">AcquisitionPayload.sequence</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionPayload.access_token"><code class="docutils literal notranslate"><span class="pre">AcquisitionPayload.access_token</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.AcquisitionPayload.device_parameter"><code class="docutils literal notranslate"><span class="pre">AcquisitionPayload.device_parameter</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol"><code class="docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.model_config"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.patient_id"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.patient_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.name"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.description"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.description</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.indication"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.indication</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.comment"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.comment</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.status"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BaseProtocol.is_template"><code class="docutils literal notranslate"><span class="pre">BaseProtocol.is_template</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ProtocolOut"><code class="docutils literal notranslate"><span class="pre">ProtocolOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ProtocolOut.id"><code class="docutils literal notranslate"><span class="pre">ProtocolOut.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ProtocolOut.creator"><code class="docutils literal notranslate"><span class="pre">ProtocolOut.creator</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ProtocolOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">ProtocolOut.datetime_created</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ProtocolOut.datetime_updated"><code class="docutils literal notranslate"><span class="pre">ProtocolOut.datetime_updated</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.ProtocolOut.tasks"><code class="docutils literal notranslate"><span class="pre">ProtocolOut.tasks</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.username"><code class="docutils literal notranslate"><span class="pre">User.username</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.first_name"><code class="docutils literal notranslate"><span class="pre">User.first_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.last_name"><code class="docutils literal notranslate"><span class="pre">User.last_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.access_token"><code class="docutils literal notranslate"><span class="pre">User.access_token</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.token_type"><code class="docutils literal notranslate"><span class="pre">User.token_type</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.last_activity_unixtime"><code class="docutils literal notranslate"><span class="pre">User.last_activity_unixtime</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.User.last_login_unixtime"><code class="docutils literal notranslate"><span class="pre">User.last_login_unixtime</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PasswordUpdateRequest"><code class="docutils literal notranslate"><span class="pre">PasswordUpdateRequest</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PasswordUpdateRequest.password_of_requester"><code class="docutils literal notranslate"><span class="pre">PasswordUpdateRequest.password_of_requester</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PasswordUpdateRequest.username_to_change_password_for"><code class="docutils literal notranslate"><span class="pre">PasswordUpdateRequest.username_to_change_password_for</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PasswordUpdateRequest.newpassword"><code class="docutils literal notranslate"><span class="pre">PasswordUpdateRequest.newpassword</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient"><code class="docutils literal notranslate"><span class="pre">BasePatient</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.model_config"><code class="docutils literal notranslate"><span class="pre">BasePatient.model_config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.first_name"><code class="docutils literal notranslate"><span class="pre">BasePatient.first_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.last_name"><code class="docutils literal notranslate"><span class="pre">BasePatient.last_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.birth_date"><code class="docutils literal notranslate"><span class="pre">BasePatient.birth_date</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.sex"><code class="docutils literal notranslate"><span class="pre">BasePatient.sex</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.height"><code class="docutils literal notranslate"><span class="pre">BasePatient.height</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.weight"><code class="docutils literal notranslate"><span class="pre">BasePatient.weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.issuer"><code class="docutils literal notranslate"><span class="pre">BasePatient.issuer</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.status"><code class="docutils literal notranslate"><span class="pre">BasePatient.status</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.BasePatient.comment"><code class="docutils literal notranslate"><span class="pre">BasePatient.comment</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PatientOut"><code class="docutils literal notranslate"><span class="pre">PatientOut</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PatientOut.patient_id"><code class="docutils literal notranslate"><span class="pre">PatientOut.patient_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PatientOut.datetime_created"><code class="docutils literal notranslate"><span class="pre">PatientOut.datetime_created</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.PatientOut.datetime_updated"><code class="docutils literal notranslate"><span class="pre">PatientOut.datetime_updated</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDAcquisitionInfo"><code class="docutils literal notranslate"><span class="pre">MRDAcquisitionInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDAcquisitionInfo.acquisition_id"><code class="docutils literal notranslate"><span class="pre">MRDAcquisitionInfo.acquisition_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDAcquisitionInfo.num_samples"><code class="docutils literal notranslate"><span class="pre">MRDAcquisitionInfo.num_samples</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDAcquisitionInfo.num_coils"><code class="docutils literal notranslate"><span class="pre">MRDAcquisitionInfo.num_coils</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDAcquisitionInfo.dwell_time"><code class="docutils literal notranslate"><span class="pre">MRDAcquisitionInfo.dwell_time</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDMetaResponse"><code class="docutils literal notranslate"><span class="pre">MRDMetaResponse</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDMetaResponse.protocol_id"><code class="docutils literal notranslate"><span class="pre">MRDMetaResponse.protocol_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDMetaResponse.task_id"><code class="docutils literal notranslate"><span class="pre">MRDMetaResponse.task_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDMetaResponse.result_id"><code class="docutils literal notranslate"><span class="pre">MRDMetaResponse.result_id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDMetaResponse.dtype"><code class="docutils literal notranslate"><span class="pre">MRDMetaResponse.dtype</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shared_libraries.models.MRDMetaResponse.acquisitions"><code class="docutils literal notranslate"><span class="pre">MRDMetaResponse.acquisitions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/autoapi/shared_libraries/models/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright David Schote, Christoph Dinh and Johannes Behrens.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+orchestration_engine.assets.acquisition_data
+============================================
+
+.. py:module:: orchestration_engine.assets.acquisition_data
+
+.. autoapi-nested-parse::
+
+   Definition of acquisition data asset.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   orchestration_engine.assets.acquisition_data.AcquisitionData
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   orchestration_engine.assets.acquisition_data.acquisition_data_asset
+
+
+Module Contents
+---------------
+
+.. py:class:: AcquisitionData
+
+   Acquisition data output of read acquisition data asset.
+
+
+   .. py:attribute:: mrd_path
+      :type:  pathlib.Path
+
+
+   .. py:attribute:: device_id
+      :type:  str
+
+
+   .. py:attribute:: device_parameter
+      :type:  dict
+
+
+.. py:function:: acquisition_data_asset(context: dagster.AssetExecutionContext, dag_config: orchestrator.utils.dag_config.DAGConfiguration, data_lake: orchestrator.resources.DataLakeResource) -> AcquisitionData
+
+   Load MRD file and device parameters from the flat task directory.
+
+

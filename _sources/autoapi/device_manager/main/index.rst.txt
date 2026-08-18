@@ -1,0 +1,74 @@
+device_manager.main
+===================
+
+.. py:module:: device_manager.main
+
+.. autoapi-nested-parse::
+
+   Main file for the device manager service.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   device_manager.main.app
+   device_manager.main.origins
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   device_manager.main.lifespan
+   device_manager.main.custom_http_exception_handler
+   device_manager.main.validation_exception_handler
+   device_manager.main.readiness
+
+
+Module Contents
+---------------
+
+.. py:function:: lifespan(app: fastapi.FastAPI)
+   :async:
+
+
+   Define fastapi app lifespan.
+
+
+.. py:data:: app
+
+.. py:data:: origins
+   :value: ['http://localhost:8080', 'https://localhost:8443']
+
+
+.. py:function:: custom_http_exception_handler(request: fastapi.Request, exc: starlette.exceptions.HTTPException) -> fastapi.Response
+   :async:
+
+
+   Add logging for http exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: validation_exception_handler(request: fastapi.Request, exc: fastapi.exceptions.RequestValidationError) -> fastapi.Response
+   :async:
+
+
+   Add logging for FastAPI's automatic input validation exceptions.
+
+   https://fastapi.tiangolo.com/tutorial/handling-errors/#reuse-fastapis-exception-handlers
+
+
+.. py:function:: readiness() -> dict
+   :async:
+
+
+   Readiness health endpoint.
+
+   Inspects SQLAlchemy engine and checks if the device table exists.
+
+
