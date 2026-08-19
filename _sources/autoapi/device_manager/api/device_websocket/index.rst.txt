@@ -138,7 +138,7 @@ Module Contents
    :async:
 
 
-   Internal endpoint: any service pushes a status event to all SSE subscribers of a task.
+   Push a status event to all SSE subscribers of a task; called internally by any service.
 
    Called by Dagster sensors on job success, failure, or cancellation.
    No authentication required — only reachable on the internal Docker network.

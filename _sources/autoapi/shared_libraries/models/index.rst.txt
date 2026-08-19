@@ -797,6 +797,9 @@ Module Contents
    Bases: :py:obj:`pydantic.BaseModel`
 
 
+   Authenticated user, as returned to callers after login.
+
+
    .. py:attribute:: username
       :type:  str
 
@@ -842,6 +845,9 @@ Module Contents
 .. py:class:: PasswordUpdateRequest
 
    Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Request payload to change a user's password.
 
 
    .. py:attribute:: password_of_requester

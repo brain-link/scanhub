@@ -145,15 +145,15 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../../introduction/index.html">
-    ScanHub
+  <a class="nav-link nav-internal" href="../../../../demo.html">
+    Demo
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../../demo.html">
-    Demo
+  <a class="nav-link nav-internal" href="../../../../introduction/index.html">
+    ScanHub
   </a>
 </li>
 
@@ -274,15 +274,15 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../../introduction/index.html">
-    ScanHub
+  <a class="nav-link nav-internal" href="../../../../demo.html">
+    Demo
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../../demo.html">
-    Demo
+  <a class="nav-link nav-internal" href="../../../../introduction/index.html">
+    ScanHub
   </a>
 </li>
 
@@ -505,7 +505,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <td><p>Push a status event to all SSE subscribers watching a task.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#device_manager.api.device_websocket.push_task_event" title="device_manager.api.device_websocket.push_task_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">push_task_event</span></code></a>(→ dict)</p></td>
-<td><p>Internal endpoint: any service pushes a status event to all SSE subscribers of a task.</p></td>
+<td><p>Push a status event to all SSE subscribers of a task; called internally by any service.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#device_manager.api.device_websocket.task_stream" title="device_manager.api.device_websocket.task_stream"><code class="xref py py-obj docutils literal notranslate"><span class="pre">task_stream</span></code></a>(]) → starlette.responses.StreamingResponse)</p></td>
 <td><p>SSE endpoint — streams real-time task status updates to the browser.</p></td>
@@ -633,7 +633,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="device_manager.api.device_websocket.push_task_event">
 <span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">device_manager.api.device_websocket.</span></span><span class="sig-name descname"><span class="pre">push_task_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#device_manager.api.device_websocket.TaskEvent" title="device_manager.api.device_websocket.TaskEvent"><span class="pre">TaskEvent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#device_manager.api.device_websocket.push_task_event" title="Link to this definition">#</a></dt>
-<dd><p>Internal endpoint: any service pushes a status event to all SSE subscribers of a task.</p>
+<dd><p>Push a status event to all SSE subscribers of a task; called internally by any service.</p>
 <p>Called by Dagster sensors on job success, failure, or cancellation.
 No authentication required — only reachable on the internal Docker network.</p>
 </dd></dl>

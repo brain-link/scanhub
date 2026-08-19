@@ -3,6 +3,11 @@ shared_libraries.utils
 
 .. py:module:: shared_libraries.utils
 
+.. autoapi-nested-parse::
+
+   Shared helper functions.
+
+
 
 Functions
 ---------

@@ -45,6 +45,9 @@ Module Contents
    :async:
 
 
+   Resolve the current user by validating the access token against user-login-manager.
+
+
 .. py:function:: compute_complex_password_hash(password: str, salt: str) -> str
 
    Compute a complex password hash with salt.

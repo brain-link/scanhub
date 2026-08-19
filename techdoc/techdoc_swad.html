@@ -501,15 +501,15 @@ window.runMermaid = runMermaid;</script>
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../introduction/index.html">
-    ScanHub
+  <a class="nav-link nav-internal" href="../demo.html">
+    Demo
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../demo.html">
-    Demo
+  <a class="nav-link nav-internal" href="../introduction/index.html">
+    ScanHub
   </a>
 </li>
 
@@ -630,15 +630,15 @@ window.runMermaid = runMermaid;</script>
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../introduction/index.html">
-    ScanHub
+  <a class="nav-link nav-internal" href="../demo.html">
+    Demo
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../demo.html">
-    Demo
+  <a class="nav-link nav-internal" href="../introduction/index.html">
+    ScanHub
   </a>
 </li>
 
@@ -779,11 +779,6 @@ window.runMermaid = runMermaid;</script>
                   
   <section id="software-architecture-design-description-swad">
 <h1>Software Architecture Design Description (SWAD)<a class="headerlink" href="#software-architecture-design-description-swad" title="Link to this heading">#</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This section is a work in progress. The diagrams below are placeholders
-pending conversion of the existing draw.io figures to Mermaid.</p>
-</div>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <section id="purpose">
@@ -816,119 +811,260 @@ architecture, serving as a comprehensive guide for the realization of the
 software components. For additional details and specifications, refer to the
 design input documentation [DI, SWRS].</p>
 </section>
-<section id="references">
-<h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>[DI] ScanHub Design Input</p></li>
-<li><p>[DD] ScanHub Device Description</p></li>
-<li><p>[SWRS] <a class="reference internal" href="techdoc_swrs.html"><span class="doc">ScanHub Software Requirements Specification</span></a></p></li>
-<li><p>[SWDD] ScanHub Software Design Description</p></li>
-</ul>
-</section>
 <section id="definitions-acronyms-and-abbreviations">
 <h3>Definitions, Acronyms, and Abbreviations<a class="headerlink" href="#definitions-acronyms-and-abbreviations" title="Link to this heading">#</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>No terms have been defined yet. This subsection will list project-specific
-terms, acronyms, and abbreviations used throughout the document.</p>
-</div>
-</section>
-<section id="tables">
-<h3>Tables<a class="headerlink" href="#tables" title="Link to this heading">#</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>No additional tables beyond those embedded in the sections below are
-currently defined.</p>
-</div>
+<ul class="simple">
+<li><p><strong>UI</strong> – User Interface; the ScanHub UI, a React/TypeScript single-page
+application.</p></li>
+<li><p><strong>API Gateway</strong> – Reverse proxy (nginx) that terminates TLS and is the
+single entry point routing requests from the UI to the backend services.</p></li>
+<li><p><strong>WS</strong> – WebSocket; bidirectional connection used between the Device
+Manager and a connected MRI device.</p></li>
+<li><p><strong>SSE</strong> – Server-Sent Events; one-way HTTP stream used to push live task
+status updates from the Device Manager to the UI.</p></li>
+<li><p><strong>JWT / OAuth2</strong> – Token format and authorization framework used for
+authenticating users and services; access tokens are issued by the
+User-Login Manager.</p></li>
+<li><p><strong>Dagster</strong> – Data-orchestration framework used by the Orchestration
+Engine to define and execute the reconstruction pipeline as a graph of
+assets and ops.</p></li>
+<li><p><strong>MRpro</strong> – Open-source MR image reconstruction library used by the
+Orchestration Engine to reconstruct images from raw acquisition data.</p></li>
+<li><p><strong>MRD / ISMRMRD</strong> – (ISMRM) Raw Data format used to store raw MRI
+acquisition data.</p></li>
+<li><p><strong>Pulseq (.seq)</strong> – Open MR sequence description format; MRI sequences
+are stored and versioned by the Protocol Manager.</p></li>
+<li><p><strong>DICOM</strong> – Digital Imaging and Communications in Medicine; format used
+for reconstructed images and results.</p></li>
+<li><p><strong>PACS / XNAT</strong> – External systems for long-term image archiving and
+research data management; ScanHub can export data to such systems.</p></li>
+<li><p><strong>Data Lake</strong> – Shared filesystem volume mounted by the Device Manager
+and the Orchestration Engine, used to exchange raw and reconstructed data
+files between services without routing large binaries through the
+database layer.</p></li>
+</ul>
 </section>
 <section id="figures">
 <h3>Figures<a class="headerlink" href="#figures" title="Link to this heading">#</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>All figures are embedded in the sections below; there is no separate
-figure index at this stage.</p>
-</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fig-mri-acquisition-workflow"><span class="std std-ref">Figure 1: MRI Acquisition Workflow (key scenario)</span></a></p></li>
+<li><p><a class="reference internal" href="#fig-system-overview"><span class="std std-ref">Figure 2: System Overview</span></a></p></li>
+<li><p><a class="reference internal" href="#fig-system-decomposition"><span class="std std-ref">Figure 3: System Decomposition (development view)</span></a></p></li>
+<li><p><a class="reference internal" href="#fig-connected-device-component"><span class="std std-ref">Figure 4: Connected Device Component</span></a></p></li>
+<li><p><a class="reference internal" href="#fig-workflow-orchestration-component"><span class="std std-ref">Figure 5: Workflow / Orchestration Component</span></a></p></li>
+</ul>
 </section>
 </section>
 <section id="system-context">
 <h2>System Context<a class="headerlink" href="#system-context" title="Link to this heading">#</a></h2>
 <section id="key-scenarios">
 <h3>Key Scenarios<a class="headerlink" href="#key-scenarios" title="Link to this heading">#</a></h3>
-<p>The following key scenarios focus on the basic functionality of the device
-from both the user’s and system’s perspectives. This includes user
-interactions, as well as essential system procedures like startup, shutdown,
-and service functionality. These scenarios are crucial for ensuring the
-software architecture supports seamless operation and maintenance of the MRI
-system. They complement the detailed, stakeholder-tagged scenarios already
+<p>The following key scenario focuses on the basic functionality of the system
+from both the user’s and system’s perspective. It illustrates how the
+software components introduced in <a class="reference internal" href="#system-decomposition">System Decomposition</a> collaborate at
+runtime and complements the detailed, stakeholder-tagged scenarios already
 defined in the <a class="reference internal" href="techdoc_swrs.html"><span class="doc">SWRS</span></a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Key scenarios specific to the architecture (e.g. startup sequence, failover
-behavior) are still to be added.</p>
-</div>
+<section id="mri-acquisition-workflow">
+<h4>MRI Acquisition Workflow<a class="headerlink" href="#mri-acquisition-workflow" title="Link to this heading">#</a></h4>
+<p>An operator selects a patient, defines a protocol with one or more
+acquisition tasks (device, sequence, and acquisition parameters), and starts
+the acquisition. The Device Manager relays the start command to the
+connected device over its open WebSocket connection, reports live progress
+back to the UI, and, once the raw data has been transferred, hands the data
+off to the Orchestration Engine for reconstruction. Completion, failure, or
+cancellation of the reconstruction pipeline is reported back through the
+Protocol Manager (persisted task/result state) and to the UI (live status).</p>
+<p id="fig-mri-acquisition-workflow"><strong>Figure 1 – MRI Acquisition Workflow</strong></p>
+<pre  class="mermaid">
+        sequenceDiagram
+    actor Operator
+    participant UI as ScanHub UI
+    participant PROT as Protocol Manager
+    participant DM as Device Manager
+    participant DEV as MRI Device
+    participant OE as Orchestration Engine
+
+    Operator-&gt;&gt;UI: Select patient, define protocol &amp; task
+    UI-&gt;&gt;PROT: Create protocol / task (device, sequence)
+    Operator-&gt;&gt;UI: Start acquisition
+    UI-&gt;&gt;DM: trigger_acquisition(task_id)
+    DM-&gt;&gt;PROT: Fetch task &amp; sequence
+    DM-&gt;&gt;DEV: WS start(sequence, parameters)
+    DEV--&gt;&gt;DM: WS status(BUSY, progress)
+    DM-&gt;&gt;PROT: Update task status
+    DM--&gt;&gt;UI: SSE task status
+    DEV--&gt;&gt;DM: WS raw data file (MRD)
+    DM-&gt;&gt;DM: Store file in data lake
+    DM-&gt;&gt;PROT: Create blank result
+    DM-&gt;&gt;OE: Submit reconstruction job
+    OE-&gt;&gt;OE: Reconstruct (MRpro), convert to DICOM, AI post-processing
+    OE-&gt;&gt;PROT: Register DICOM result, set task FINISHED
+    OE-&gt;&gt;DM: Push completion event
+    DM--&gt;&gt;UI: SSE task FINISHED
+    UI-&gt;&gt;PROT: Fetch DICOM result
+    UI--&gt;&gt;Operator: Display reconstructed image
+    </pre><p>If the device reports an error, or the reconstruction job fails or is
+cancelled, the same channels are used to propagate the corresponding
+<code class="docutils literal notranslate"><span class="pre">ERROR</span></code> / <code class="docutils literal notranslate"><span class="pre">FAILED</span></code> / <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> status to the task and to the UI
+instead of <code class="docutils literal notranslate"><span class="pre">FINISHED</span></code>.</p>
+</section>
 </section>
 </section>
 <section id="system-decomposition">
 <h2>System Decomposition<a class="headerlink" href="#system-decomposition" title="Link to this heading">#</a></h2>
-<p>The following development view shows how the ScanHub UI, the ScanHub Core
-domain (with its Acquisition, Study Management, Workflow, Persistence, and
-Governance layers), connected devices, and external systems (workflow
-runners, PACS, and other storage) relate to one another.</p>
+<p>ScanHub is a cloud-native platform built from independently deployable
+services: a browser-based UI, an API gateway, four FastAPI microservices
+covering authentication, patient management, protocol/task/result
+management and device connectivity, and a Dagster-based orchestration
+engine that performs image reconstruction. Services communicate over the
+internal Docker network via REST, WebSocket, SSE, and the Dagster GraphQL
+API; each stateful service owns its own database, and large binary data is
+exchanged through a shared data lake volume rather than through the
+databases.</p>
+<p id="fig-system-overview"><strong>Figure 2 – System Overview</strong></p>
 <pre  class="mermaid">
-        %% Placeholder for the &quot;ScanHub Development View&quot; diagram
-%% (previously ScanHub_Development_View.drawio.png).
-%% TODO: recreate the full development view here.
-flowchart TB
-    TODO[&quot;TODO: ScanHub Development View&quot;]
-    </pre><div class="pst-scrollable-table-container"><table class="table">
-<colgroup>
-<col style="width: 15.0%" />
-<col style="width: 20.0%" />
-<col style="width: 50.0%" />
-<col style="width: 15.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>ID</p></th>
-<th class="head"><p>Component</p></th>
-<th class="head"><p>Description</p></th>
-<th class="head"><p>Safety Class</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>SWAD_CMP_0001</p></td>
-<td><p>Device Manager</p></td>
-<td><p>Manages connected devices, before and during acquisition.</p></td>
-<td><p>A</p></td>
-</tr>
-<tr class="row-odd"><td><p>SWAD_CMP_0002</p></td>
-<td><p>Acquisition Control</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>SWAD_CMP_0003</p></td>
-<td><p>Workflow Engine</p></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
+        flowchart LR
+    operator([&quot;Operator&quot;])
+    device[[&quot;MRI Device / Simulator&quot;]]
+    archive[(&quot;PACS / XNAT&quot;)]
+
+    subgraph scanhub[&quot;ScanHub Platform&quot;]
+        direction LR
+        ui[&quot;ScanHub UI&quot;]
+    end
+
+    operator -- HTTPS --&gt; ui
+    device &lt;-- WebSocket --&gt; scanhub
+    scanhub -. optional export .-&gt; archive
+    </pre><p>The platform is reached by operators through a browser over HTTPS, and by
+MRI devices (real or simulated) through a persistent WebSocket connection.
+Reconstructed results can optionally be exported to an external archive
+such as PACS or XNAT.</p>
+<p id="fig-system-decomposition"><strong>Figure 3 – System Decomposition (development view)</strong></p>
+<pre  class="mermaid">
+        flowchart TB
+    ui[&quot;ScanHub UI&lt;br/&gt;(React / TypeScript)&quot;]
+    gw[&quot;API Gateway&lt;br/&gt;(nginx)&quot;]
+
+    ui --&gt; gw
+
+    subgraph core[&quot;Core Services&quot;]
+        direction TB
+        auth[&quot;User-Login Manager&lt;br/&gt;Governance: auth, users&quot;]
+        pat[&quot;Patient Manager&lt;br/&gt;Study Management: patients&quot;]
+        prot[&quot;Protocol Manager&lt;br/&gt;Workflow: protocols, tasks, results, sequences&quot;]
+        devm[&quot;Device Manager&lt;br/&gt;Acquisition: devices, WS gateway, SSE&quot;]
+    end
+
+    gw --&gt; auth
+    gw --&gt; pat
+    gw --&gt; prot
+    gw --&gt; devm
+
+    subgraph data[&quot;Persistence&quot;]
+        direction TB
+        sdb[(&quot;scanhub-database&lt;br/&gt;PostgreSQL&quot;)]
+        pdb[(&quot;patient-database&lt;br/&gt;PostgreSQL&quot;)]
+        seqdb[(&quot;sequence-database&lt;br/&gt;MongoDB&quot;)]
+        lake[(&quot;Data Lake&lt;br/&gt;shared volume&quot;)]
+    end
+
+    auth --&gt; sdb
+    devm --&gt; sdb
+    prot --&gt; sdb
+    prot --&gt; seqdb
+    pat --&gt; pdb
+    devm --&gt; lake
+
+    devm &lt;--&gt; device[[&quot;Connected MRI Device&quot;]]
+
+    devm --&gt; oe[&quot;Orchestration Engine&lt;br/&gt;(Dagster)&quot;]
+    oe --&gt; lake
+    oe --&gt; prot
+    oe --&gt; devm
+    </pre><p>The development view groups the backend into the conceptual layers used
+throughout this document, each realized by one microservice: <em>Governance</em>
+(User-Login Manager – OAuth2/JWT authentication and user management),
+<em>Study Management</em> (Patient Manager – patient records), <em>Workflow</em>
+(Protocol Manager – protocols, acquisition tasks, results, and MRI
+sequences), and <em>Acquisition</em> (Device Manager – device registry and the
+WebSocket/SSE gateway to connected devices). The <em>Persistence</em> layer is
+split by data shape: relational state in two PostgreSQL databases, sequence
+files in MongoDB, and large binary acquisition/reconstruction files in a
+shared data lake volume. The Orchestration Engine consumes the data lake and
+reports results and status back to the Workflow and Acquisition layers. All
+UI traffic passes through the nginx API Gateway, which also terminates TLS
+and proxies the Dagster web UI for pipeline observability.</p>
 <p>The two component diagrams below zoom into the <em>Acquisition</em> layer’s
 interaction with a connected device, and into the <em>Workflow</em> layer’s
-interaction with external workflow runners, respectively.</p>
+reconstruction pipeline, respectively.</p>
+<p id="fig-connected-device-component"><strong>Figure 4 – Connected Device Component</strong></p>
 <pre  class="mermaid">
-        %% Placeholder for the &quot;ScanHub Connected Device Component&quot; diagram
-%% (previously ScanHub_Component_Connected_Device.drawio.png).
-%% TODO: recreate the connected-device component diagram here.
-flowchart TB
-    TODO2[&quot;TODO: ScanHub Connected Device Component&quot;]
-    </pre><pre  class="mermaid">
-        %% Placeholder for the &quot;ScanHub Workflow Component&quot; diagram
-%% (previously ScanHub_Component_Workflow.drawio.png).
-%% TODO: recreate the workflow component diagram here.
-flowchart TB
-    TODO3[&quot;TODO: ScanHub Workflow Component&quot;]
-    </pre></section>
+        flowchart LR
+    device[[&quot;MRI Device / Simulator SDK&quot;]]
+    ui[&quot;ScanHub UI&quot;]
+    prot[&quot;Protocol Manager&quot;]
+    oe[&quot;Orchestration Engine&quot;]
+    lake[(&quot;Data Lake&quot;)]
+
+    subgraph devm[&quot;Device Manager&quot;]
+        direction TB
+        ws[&quot;WebSocket endpoint /ws&lt;br/&gt;register, ping, status, file-transfer&quot;]
+        mon[&quot;Heartbeat monitor&lt;br/&gt;marks device OFFLINE on timeout&quot;]
+        http[&quot;REST endpoints&lt;br/&gt;devices, trigger_acquisition&quot;]
+        sse[&quot;SSE endpoint /task-stream&quot;]
+    end
+
+    device &lt;--&gt; ws
+    ws --&gt; mon
+    ui --&gt; http
+    http -- start command --&gt; ws
+    http &lt;--&gt; prot
+    ws -- raw data file --&gt; lake
+    ws -- submit reconstruction job --&gt; oe
+    oe -- push-event --&gt; sse
+    sse -- task status --&gt; ui
+    </pre><p>A device authenticates on <code class="docutils literal notranslate"><span class="pre">/ws</span></code> with a device id/token pair, then sends
+periodic <code class="docutils literal notranslate"><span class="pre">ping</span></code> heartbeats; a missed-heartbeat timeout marks it
+<code class="docutils literal notranslate"><span class="pre">OFFLINE</span></code> even on an ungraceful disconnect. Acquisitions are started via a
+REST call from the UI, which the Device Manager forwards as a <code class="docutils literal notranslate"><span class="pre">start</span></code>
+command over the device’s WebSocket. Device status and progress updates are
+persisted to the Protocol Manager and re-broadcast to the UI over SSE. Once
+the raw data file has been streamed to the Device Manager, it is written to
+the data lake, a result record is created, and a Dagster reconstruction job
+is submitted; the <code class="docutils literal notranslate"><span class="pre">/task/{id}/push-event</span></code> endpoint lets the Orchestration
+Engine report pipeline completion back through the same SSE stream.</p>
+<p id="fig-workflow-orchestration-component"><strong>Figure 5 – Workflow / Orchestration Component</strong></p>
+<pre  class="mermaid">
+        flowchart LR
+    lake[(&quot;Data Lake&quot;)]
+    prot[&quot;Protocol Manager&quot;]
+    devm[&quot;Device Manager (SSE)&quot;]
+
+    subgraph oe[&quot;Orchestration Engine (Dagster)&quot;]
+        direction LR
+        acq[&quot;acquisition_data_asset&lt;br/&gt;load MRD + device parameters&quot;]
+        recon[&quot;mrpro_direct_reconstruction&lt;br/&gt;MRpro image reconstruction&quot;]
+        dcm[&quot;DICOM conversion&quot;]
+        smooth[&quot;image_smoothing&lt;br/&gt;AI post-processing&quot;]
+        sensors[&quot;Run-status sensors&lt;br/&gt;on success / failure / canceled&quot;]
+
+        acq --&gt; recon --&gt; dcm --&gt; smooth --&gt; sensors
+    end
+
+    lake --&gt; acq
+    sensors -- register result, set task status --&gt; prot
+    sensors -- push-event --&gt; devm
+    </pre><p>The Orchestration Engine runs the reconstruction pipeline as a Dagster job
+composed of assets: raw MRD and device parameters are loaded from the data
+lake, reconstructed into images with MRpro, converted to DICOM, and passed
+through an AI-based smoothing/post-processing step. Dagster run-status
+sensors observe the job’s outcome and, on success, register the resulting
+DICOM files as a result and mark the task <code class="docutils literal notranslate"><span class="pre">FINISHED</span></code>; on failure or
+cancellation they mark the task <code class="docutils literal notranslate"><span class="pre">FAILED</span></code> / <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> instead. In both
+cases the sensors also push a completion event to the Device Manager so the
+UI is updated in real time.</p>
+</section>
 </section>
 
 
@@ -981,14 +1117,15 @@ flowchart TB
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#purpose">Purpose</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scope">Scope</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definitions-acronyms-and-abbreviations">Definitions, Acronyms, and Abbreviations</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tables">Tables</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figures">Figures</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-context">System Context</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-scenarios">Key Scenarios</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-scenarios">Key Scenarios</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mri-acquisition-workflow">MRI Acquisition Workflow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-decomposition">System Decomposition</a></li>

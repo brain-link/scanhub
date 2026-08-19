@@ -44,7 +44,9 @@ Module Contents
 
 .. py:function:: locate_mrd(protocol_id: str, task_id: str, result_id: str) -> pathlib.Path
 
-   Build a file path: ``/data_lake/{protocol_id}/{task_id}/{result_id}/*.mrd`` or ``*.h5``
+   Build file path.
+
+   Path: ``/data_lake/{protocol_id}/{task_id}/{result_id}/*.mrd`` or ``*.h5``
 
 
 .. py:function:: find_mrd_file(directory: str, files: list[str]) -> pathlib.Path

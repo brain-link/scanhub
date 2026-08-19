@@ -3,6 +3,11 @@ shared_libraries
 
 .. py:module:: shared_libraries
 
+.. autoapi-nested-parse::
+
+   Shared pydantic models, security helpers, and utilities used across ScanHub services.
+
+
 
 Submodules
 ----------

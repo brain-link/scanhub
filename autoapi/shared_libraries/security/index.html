@@ -145,15 +145,15 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../introduction/index.html">
-    ScanHub
+  <a class="nav-link nav-internal" href="../../../demo.html">
+    Demo
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../demo.html">
-    Demo
+  <a class="nav-link nav-internal" href="../../../introduction/index.html">
+    ScanHub
   </a>
 </li>
 
@@ -274,15 +274,15 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../introduction/index.html">
-    ScanHub
+  <a class="nav-link nav-internal" href="../../../demo.html">
+    Demo
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../demo.html">
-    Demo
+  <a class="nav-link nav-internal" href="../../../introduction/index.html">
+    ScanHub
   </a>
 </li>
 
@@ -455,7 +455,7 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#shared_libraries.security.get_current_user" title="shared_libraries.security.get_current_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_current_user</span></code></a>(]) → scanhub_libraries.models.User)</p></td>
-<td><p></p></td>
+<td><p>Resolve the current user by validating the access token against user-login-manager.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#shared_libraries.security.compute_complex_password_hash" title="shared_libraries.security.compute_complex_password_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_complex_password_hash</span></code></a>(→ str)</p></td>
 <td><p>Compute a complex password hash with salt.</p></td>
@@ -484,7 +484,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="shared_libraries.security.get_current_user">
 <span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">shared_libraries.security.</span></span><span class="sig-name descname"><span class="pre">get_current_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Depends</span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#shared_libraries.security.oauth2_scheme" title="shared_libraries.security.oauth2_scheme"><span class="pre">oauth2_scheme</span></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">scanhub_libraries.models.User</span></span></span><a class="headerlink" href="#shared_libraries.security.get_current_user" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Resolve the current user by validating the access token against user-login-manager.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="shared_libraries.security.compute_complex_password_hash">
