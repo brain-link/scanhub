@@ -16,7 +16,7 @@ from scanhub_libraries.models import (
     TaskType,
 )
 from sqlalchemy import JSON, DateTime, ForeignKey, String, create_engine, func
-from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.mutable import MutableList

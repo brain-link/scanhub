@@ -17,16 +17,12 @@ jobs:
         with:
           sparse-checkout: services/base/shared_libs
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
-      - name: Install Poetry
-        run: pip install poetry
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Build
         working-directory: services/base/shared_libs
-        run: poetry build
+        run: uv build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -46,16 +42,12 @@ jobs:
             tools/device-sdk
             services/base/shared_libs
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
-      - name: Install Poetry
-        run: pip install poetry
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Build
         working-directory: tools/device-sdk
-        run: poetry build
+        run: uv build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

@@ -106,7 +106,7 @@ class TaskEvent(BaseModel):
 @router.post("/task/{task_id}/push-event", response_model={}, status_code=200,
              tags=["devices"], operation_id="push_task_event")
 async def push_task_event(task_id: str, event: TaskEvent) -> dict:
-    """Internal endpoint: any service pushes a status event to all SSE subscribers of a task.
+    """Push a status event to all SSE subscribers of a task; called internally by any service.
 
     Called by Dagster sensors on job success, failure, or cancellation.
     No authentication required — only reachable on the internal Docker network.

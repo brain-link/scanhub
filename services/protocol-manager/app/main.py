@@ -18,8 +18,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api.protocol_api import protocol_router
 from app.api.mri_sequence_api import seq_router
+from app.api.protocol_api import protocol_router
 from app.api.result_api import result_router
 from app.api.task_api import task_router
 from app.db.mongodb import close_mongo_connection, connect_to_mongo, db
@@ -91,7 +91,13 @@ async def validation_exception_handler(request, exc):
     print(f"{exc}")
     return await request_validation_exception_handler(request, exc)
 
-@app.get("/api/v1/protocol/health/readiness", response_model={}, status_code=200, tags=["health"], operation_id="health_readiness")
+@app.get(
+    "/api/v1/protocol/health/readiness",
+    response_model={},
+    status_code=200,
+    tags=["health"],
+    operation_id="health_readiness",
+)
 async def readiness() -> dict:
     """Get status / health endpoint."""
     print(LOG_CALL_DELIMITER)

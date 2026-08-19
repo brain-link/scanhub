@@ -5,7 +5,7 @@
 
 from uuid import UUID
 
-from scanhub_libraries.models import BaseAcquisitionTask
+from scanhub_libraries.models import BaseAcquisitionTask, ItemStatus
 from sqlalchemy import func
 from sqlalchemy.future import select
 
@@ -83,7 +83,7 @@ async def update_task_status(task_id: UUID, status: str) -> AcquisitionTask | No
     async with async_session() as session:
         result = await session.execute(select(AcquisitionTask).where(AcquisitionTask.id == task_id))
         if task := result.scalar_one_or_none():
-            task.status = status
+            task.status = ItemStatus(status)
             await session.commit()
             await session.refresh(task)
             return task

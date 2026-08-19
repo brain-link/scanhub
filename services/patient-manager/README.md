@@ -1,21 +1,18 @@
 # Development within Patient-Manager
 
 ```
-virtualenv .env --python=python3.8
-. .env/bin/activate
-pip install poetry
-poetry install
+uv sync
 ```
 
 Install packages for linting:
 ```
-poetry install --with lint
+uv sync --group lint
 ```
 Replace `lint` by `test` if you need to install test dependencies only.
 
 Install packages for linting and testing:
 ```
-poetry install --with lint --with test
+uv sync --group lint --group test
 ```
 
 # Running the server

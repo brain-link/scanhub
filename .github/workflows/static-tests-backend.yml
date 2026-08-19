@@ -11,7 +11,6 @@ jobs:
     continue-on-error: True
     strategy:
       matrix:
-        python-version: ["3.13"]
         target:
           - path: services/protocol-manager
           - path: services/device-manager
@@ -22,56 +21,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          cache-dependency-glob: "${{ matrix.target.path }}/uv.lock"
 
-      - name: Cache poetry install
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: poetry
-
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: false
-          virtualenvs-in-project: false
-
-      - name: Update pip
+      - name: Install dependencies
         working-directory: ${{ matrix.target.path }}
-        run: poetry run pip install --upgrade pip
-
-      - name: Cache poetry dependencies
-        uses: actions/cache@v3
-        id: cached-poetry-dependencies
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Check cached dependencies
-        working-directory: ${{ matrix.target.path }}
-        run: poetry install --no-interaction --with lint --no-root
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-
-      - name: Poetry install
-        working-directory: ${{ matrix.target.path }}
-        run: poetry install --no-interaction --with lint
-
-      - name: Install build tools
-        run: pip install --upgrade build
-
-      - name: Build shared-library
-        run: python3 -m build ./services/base/shared_libs/
-
-      - name: Install shared-library
-        run: pip install ./services/base/shared_libs/
+        # --all-extras pulls in the "shared" extra (scanhub-libraries) for the app services;
+        # it's a no-op for device-sdk, which declares no optional extras.
+        run: uv sync --locked --all-extras --group lint
 
       - name: Run ruff linter
         working-directory: ${{ matrix.target.path }}
-        run: poetry run ruff check
+        run: uv run ruff check
 
       - name: Run mypy type checker
         working-directory: ${{ matrix.target.path }}
-        run: poetry run mypy
+        run: uv run mypy

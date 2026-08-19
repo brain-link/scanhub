@@ -6,33 +6,26 @@ authors = [
     {name = "David Schote", email = "david.schote@brain-link.de"},
 ]
 readme = "README.md"
-#license = { file = "LICENSE" }
-
-[tool.poetry.dependencies]
-python = ">=3.13,<3.14"
-dagster-webserver = ">=1.11.7,<2.0.0"
-dagster-docker = ">=0.27.7,<0.28.0"
-pydicom = ">=3.0.1,<4.0.0"
-pydantic = ">=2.11.7,<3.0.0"
-numpy = ">=2.3.2,<3.0.0"
-requests = ">=2.32.5,<3.0.0"
-mrpro = ">=0.250812"
-scikit-image = "^0.26.0"
-
-[tool.poetry]
-license = "GPL-3.0-only with custom exception"
-# Ship all license files
-include = [
-    { path = "LICENSE", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
+license = { text = "GPL-3.0-only with custom exception" }
+license-files = ["LICENSE", "LICENSE.GPL3", "LICENSE.GPL3-EXCEPT"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "dagster-webserver>=1.11.7,<2.0.0",
+    "dagster-docker>=0.27.7,<0.28.0",
+    "pydicom>=3.0.1,<4.0.0",
+    "pydantic>=2.11.7,<3.0.0",
+    "numpy>=2.3.2,<3.0.0",
+    "requests>=2.32.5,<3.0.0",
+    "mrpro>=0.250812",
+    "scikit-image>=0.26.0",
 ]
-packages = [{ include = "orchestrator" }]
 
 [tool.dagster]
 module = "orchestrator.repository"
 
-
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["orchestrator"]

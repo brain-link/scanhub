@@ -13,8 +13,7 @@ from scanhub_libraries.security import get_current_user
 from scanhub_libraries.utils import ensure_uuid
 
 from app import LOG_CALL_DELIMITER
-from app.dal import protocol_dal
-from app.dal import task_dal
+from app.dal import protocol_dal, task_dal
 from app.tools.helper import get_task_out
 
 task_router = APIRouter(dependencies=[Depends(get_current_user)])
@@ -26,7 +25,9 @@ class TaskReorder(BaseModel):
     task_ids: list[UUID]
 
 
-@task_router.post("/task/new", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"], operation_id="create_task")
+@task_router.post(
+    "/task/new", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"], operation_id="create_task",
+)
 async def create_task(
     payload: BaseAcquisitionTask,
     user: Annotated[User, Depends(get_current_user)],
@@ -51,7 +52,13 @@ async def create_task(
     return await get_task_out(data=task)
 
 
-@task_router.post("/task", response_model=AcquisitionTaskOut, status_code=201, tags=["tasks"], operation_id="create_task_from_template")
+@task_router.post(
+    "/task",
+    response_model=AcquisitionTaskOut,
+    status_code=201,
+    tags=["tasks"],
+    operation_id="create_task_from_template",
+)
 async def create_task_from_template(
     protocol_id: UUID,
     template_id: UUID,
@@ -80,7 +87,9 @@ async def create_task_from_template(
     return await get_task_out(data=task)
 
 
-@task_router.get("/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="get_task")
+@task_router.get(
+    "/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="get_task"
+)
 async def get_task(
     task_id: UUID | str, user: Annotated[User, Depends(get_current_user)]
 ) -> AcquisitionTaskOut:
@@ -96,7 +105,13 @@ async def get_task(
     return await get_task_out(data=task)
 
 
-@task_router.get("/task/all/{protocol_id}", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"], operation_id="get_all_protocol_tasks")
+@task_router.get(
+    "/task/all/{protocol_id}",
+    response_model=list[AcquisitionTaskOut],
+    status_code=200,
+    tags=["tasks"],
+    operation_id="get_all_protocol_tasks",
+)
 async def get_all_protocol_tasks(
     protocol_id: UUID | str,
     user: Annotated[User, Depends(get_current_user)],
@@ -110,7 +125,13 @@ async def get_all_protocol_tasks(
     return [await get_task_out(data=task) for task in tasks]
 
 
-@task_router.get("/task/templates/all", response_model=list[AcquisitionTaskOut], status_code=200, tags=["tasks"], operation_id="get_all_task_templates")
+@task_router.get(
+    "/task/templates/all",
+    response_model=list[AcquisitionTaskOut],
+    status_code=200,
+    tags=["tasks"],
+    operation_id="get_all_task_templates",
+)
 async def get_all_task_templates(
     user: Annotated[User, Depends(get_current_user)],
 ) -> list[AcquisitionTaskOut]:
@@ -144,7 +165,13 @@ async def reorder_tasks(
         raise HTTPException(status_code=404, detail="Could not reorder tasks")
 
 
-@task_router.put("/task/{task_id}", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="update_task")
+@task_router.put(
+    "/task/{task_id}",
+    response_model=AcquisitionTaskOut,
+    status_code=200,
+    tags=["tasks"],
+    operation_id="update_task",
+)
 async def update_task(
     task_id: UUID | str,
     payload: BaseAcquisitionTask,
@@ -169,7 +196,13 @@ async def update_task(
     return await get_task_out(data=task_updated)
 
 
-@task_router.put("/task/{task_id}/status", response_model=AcquisitionTaskOut, status_code=200, tags=["tasks"], operation_id="update_task_status")
+@task_router.put(
+    "/task/{task_id}/status",
+    response_model=AcquisitionTaskOut,
+    status_code=200,
+    tags=["tasks"],
+    operation_id="update_task_status",
+)
 async def update_task_status(
     task_id: UUID | str,
     status: str,

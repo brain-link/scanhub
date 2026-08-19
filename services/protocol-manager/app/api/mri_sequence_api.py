@@ -57,7 +57,12 @@ async def mri_sequence_form(
     )
 
 
-@seq_router.get("/sequence/{sequence_id}", response_model=MRISequenceOut, tags=["mri sequences"], operation_id="get_mri_sequence")
+@seq_router.get(
+    "/sequence/{sequence_id}",
+    response_model=MRISequenceOut,
+    tags=["mri sequences"],
+    operation_id="get_mri_sequence",
+)
 async def get_mri_sequence_by_id(
     sequence_id: str,
     database=Depends(get_mongo_database),

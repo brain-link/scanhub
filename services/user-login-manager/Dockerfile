@@ -4,17 +4,22 @@ FROM $BASE_IMG
 # Set working directory inside container
 WORKDIR /app
 
-# Copy poetry files first to install dependencies
-COPY pyproject.toml poetry.lock ./
-
 # Install curl to perform healthcheck, assume yes to all prompts
 RUN apt-get -y update && apt-get -y install curl
 
-# Install poetry
-RUN pip install poetry
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install dependencies using poetry
-RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction
+# Sync into the base image's system site-packages, alongside the pre-installed shared library
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+
+# Copy uv files first to install dependencies
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies using uv. --frozen skips lock freshness validation, since that
+# would otherwise require resolving the "shared" extra (scanhub-libraries), whose path
+# source lives outside this build context; the base image already provides it.
+RUN uv sync --frozen --no-install-project
 
 # Copy the rest of the app
 COPY . .

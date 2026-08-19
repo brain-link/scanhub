@@ -7,32 +7,21 @@ authors = [
     {name = "Johannes Behrens", email = "johannes.behrens@brain-link.de"}
 ]
 readme = "README.md"
-
-[tool.poetry]
-packages = [{ include = "sdk", from = "src" }]
-license = "GPL-3.0-only with custom exception"
-include = [
-    { path = "LICENSE", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
+license = { text = "GPL-3.0-only with custom exception" }
+license-files = ["LICENSE", "LICENSE.GPL3", "LICENSE.GPL3-EXCEPT"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "numpy>=2.3.2",
+    "websockets>=15.0.1",
+    "scanhub-libraries",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.13,<3.14"
-numpy = "^2.3.2"
-websockets = "^15.0.1"
-scanhub-libraries = { path = "../../services/base/shared_libs", develop = true }
+[tool.uv.sources]
+scanhub-libraries = { path = "../../services/base/shared_libs", editable = true }
 
-[tool.poetry.group.lint.dependencies]
-ruff = "^0.12.3"
-mypy = "^1.16.1"
-
-
-[tool.poetry.group.example.dependencies]
-zenodo-get = "^3.0.3"
-
-[tool.setuptools.package-data]
-"sdk" = ["py.typed"]
+[dependency-groups]
+lint = ["ruff>=0.16.3", "mypy>=2.3.1"]
+example = ["zenodo-get>=3.0.3"]
 
 [tool.ruff]
 src = ["src"]
@@ -70,7 +59,9 @@ warn_no_return = true
 warn_unreachable = true
 ignore_missing_imports = true
 
-
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sdk"]

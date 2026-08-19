@@ -14,18 +14,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         procps curl git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Poetry
-RUN pip install poetry
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Sync into the base image's system site-packages, alongside the pre-installed shared library
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
 # 1. Install dependencies only (cached well)
-COPY pyproject.toml poetry.lock ./
-RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-install-project
 
 # 2. Copy source
 COPY . .
 
 # 3. Install just this project (fast)
-RUN poetry install --only-root --no-interaction
+RUN uv sync --locked
 
 # Dagster configuration
 RUN mkdir -p $DAGSTER_HOME

@@ -17,7 +17,7 @@ orchestration-engine
 │   ├── io/
 │   ├── hooks.py
 │   └── repository.py
-├── poetry.lock
+├── uv.lock
 └── pyproject.toml
 ```
 
@@ -36,7 +36,7 @@ orchestration-engine
 Install dependencies:
 
 ```bash
-poetry install
+uv sync
 ```
 
 Features:

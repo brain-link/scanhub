@@ -1,7 +1,6 @@
 FROM python:3.13-slim-trixie
 
-RUN pip install --upgrade pip
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 COPY shared_libs ./shared_libs
-RUN pip install --upgrade build
-RUN python3 -m build ./shared_libs
-RUN pip install ./shared_libs
+RUN uv pip install --system ./shared_libs

@@ -80,7 +80,7 @@ async def main():
         return
 
     device_details = DeviceDetails(
-        device_name="RandomDataSimulator",
+        device_name="SimpleSimulator",
         serial_number="v1.0",
         manufacturer="BrainLink",
         modality="MRI",
@@ -96,7 +96,7 @@ async def main():
         websocket_uri=WSS_ENDPOINT,
         device_id=credentials.get("device_id"),
         device_token=credentials.get("device_token"),
-        ca_file="../../secrets/certificate.pem",
+        ca_file="../secrets/certificate.pem",
         device_details=device_details,
     )
 

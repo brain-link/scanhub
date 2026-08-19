@@ -18,7 +18,7 @@ from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any, Optional
 
-from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, DeviceStatus, CalibrationType
+from scanhub_libraries.models import AcquisitionPayload, CalibrationType, DeviceDetails, DeviceStatus
 
 from sdk.device_state_machine import DeviceStateMachine, InvalidStateTransitionError
 from sdk.websocket_handler import WebSocketHandler
@@ -91,8 +91,12 @@ class Client:
         self._feedback_handler: Optional[Callable[[str], Awaitable[None]]] = None
         self._error_handler: Optional[Callable[[str], Awaitable[None]]] = None
         self._scan_callback: Optional[Callable[[AcquisitionPayload], Awaitable[None]]] = None
-        self._frequency_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]] = None
-        self._flip_angle_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]] = None
+        self._frequency_calibration_callback: Optional[
+            Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]
+        ] = None
+        self._flip_angle_calibration_callback: Optional[
+            Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]
+        ] = None
         self._shim_calibration_callback: Optional[Callable[[AcquisitionPayload], Awaitable[AcquisitionPayload]]] = None
 
         # Task management
@@ -378,7 +382,10 @@ class Client:
                         msg = f"Uploaded file {file_path} successfully."
                         log.info(msg)
                     except Exception as exc:
-                        log.warning("Upload failed (attempt %d/%d) for %s: %s", attempt, MAX_FILE_UPLOAD_ATTEMPTS, file_path, exc)
+                        log.warning(
+                            "Upload failed (attempt %d/%d) for %s: %s",
+                            attempt, MAX_FILE_UPLOAD_ATTEMPTS, file_path, exc,
+                        )
                         await asyncio.sleep(2**attempt)  # exponential backoff
 
                 if not success:
@@ -389,7 +396,9 @@ class Client:
                             context={"error_message": f"File upload failed after {attempt} attempts: {file_path}"},
                         )
                     except InvalidStateTransitionError:
-                        log.warning("Could not signal upload error: device not in a state that allows ERROR transition.")
+                        log.warning(
+                            "Could not signal upload error: device not in a state that allows ERROR transition."
+                        )
 
             except asyncio.CancelledError:
                 break

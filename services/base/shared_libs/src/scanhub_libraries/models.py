@@ -277,6 +277,8 @@ class ProtocolOut(BaseProtocol):
 # ----------------------------------------
 
 class User(BaseModel):
+    """Authenticated user, as returned to callers after login."""
+
     username: str
     first_name: str
     last_name: str
@@ -293,6 +295,8 @@ class User(BaseModel):
 
 
 class PasswordUpdateRequest(BaseModel):
+    """Request payload to change a user's password."""
+
     password_of_requester: str                 # the password of the user that sends the request
     username_to_change_password_for: str       # the username of the user whose password is set
     newpassword: str                           # the new password
