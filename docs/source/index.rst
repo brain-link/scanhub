@@ -66,8 +66,8 @@ Getting started
 .. toctree::
    :maxdepth: 1
 
-   introduction/index
    demo
+   introduction/index
    techdoc/index
    api/index
    sourcecode/index

@@ -1,6 +1,6 @@
 
 ScanHub
-=====
+=======
 
 
 Synopsis
@@ -73,12 +73,11 @@ ScanHub incorporates KomaMRI-powered simulation devices. These virtual devices e
 
 
 Content
-====
+=======
 
 .. toctree::
    :maxdepth: 1
 
-   demo
    ms-architecture
    deployment-options
    deployment-notes
