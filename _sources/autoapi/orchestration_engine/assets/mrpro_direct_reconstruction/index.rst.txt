@@ -28,8 +28,8 @@ Module Contents
    :param data: The acquisition data containing the MRD file path and associated metadata.
    :type data: AcquisitionData
 
-   :returns: The reconstructed image data.
-   :rtype: IData
+   :returns: **IData**
+   :rtype: The reconstructed image data.
 
    Workflow:
        1. Loads acquisition results using the DataLakeResource, providing the MRD path and metadata.

@@ -28,7 +28,7 @@ Module Contents
    :param data: Input DICOM data loaded automatically by IO Manager.
    :type data: List[pydicom.Dataset]
 
-   :returns: The segmented DICOM data.
-   :rtype: List[pydicom.Dataset]
+   :returns: **List[pydicom.Dataset]**
+   :rtype: The segmented DICOM data.
 
 

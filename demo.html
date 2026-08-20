@@ -411,7 +411,7 @@
 <p>The microservices within ScanHub are all build on the same base image, to ensure that critical dependencies match and identical data models are used.</p>
 <p>Note, that the <code class="docutils literal notranslate"><span class="pre">.github/workflows/deploy-containers.yml</span></code> workflow deploys the latest scanhub-base image from the main branch to the github container registry (GHCR). Per default, this image is used when building scanhub with docker compose.</p>
 <p>By the following steps, the scanhub-base image is build from the local code repository.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">scanhub</span><span class="o">-</span><span class="n">base</span> <span class="n">services</span><span class="o">/</span><span class="n">base</span><span class="o">/</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">scanhub</span><span class="o">-</span><span class="n">base</span> <span class="o">-</span><span class="n">f</span> <span class="n">services</span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">Dockerfile</span> <span class="o">.</span>
 </pre></div>
 </div>
 <p>To build scanhub with the base image which was just created, use the following command.</p>
