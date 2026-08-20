@@ -14,14 +14,19 @@ jobs:
         target:
           - path: services/protocol-manager
             mypy_args: app
+            mypy_config: ../../pyproject.toml
           - path: services/device-manager
             mypy_args: app
+            mypy_config: ../../pyproject.toml
           - path: services/user-login-manager
             mypy_args: app
+            mypy_config: ../../pyproject.toml
           - path: services/patient-manager
             mypy_args: app
+            mypy_config: ../../pyproject.toml
           - path: device-sdk
             mypy_args: --strict src
+            mypy_config: ../pyproject.toml
 
     steps:
       - uses: actions/checkout@v4
@@ -49,5 +54,7 @@ jobs:
       - name: Run mypy type checker
         working-directory: ${{ matrix.target.path }}
         # mypy has no config-inheritance mechanism, so point it at the shared
-        # [tool.mypy] block in the root pyproject.toml explicitly.
-        run: uv run mypy --config-file ../../pyproject.toml ${{ matrix.target.mypy_args }}
+        # [tool.mypy] block in the root pyproject.toml explicitly. The relative
+        # path differs by target depth (services/* vs. device-sdk), hence the
+        # per-target mypy_config.
+        run: uv run mypy --config-file ${{ matrix.target.mypy_config }} ${{ matrix.target.mypy_args }}
