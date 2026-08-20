@@ -12,10 +12,13 @@ from sdk.client import Client
 logging.basicConfig(level=logging.INFO)
 
 WSS_ENDPOINT = "wss://localhost:8443/api/v1/device/ws"
-EXAMPLE_DIR = Path(__file__).resolve().parent
+
+DATA_PATH = Path(__file__).resolve().parent / "data"
+DATASET = "OSIIONE_Reference_System_Data_v1"
+zip_file = (DATA_PATH / DATASET).with_suffix(".zip")
 
 # Download an ISMRMRD file from zenodo if it not already exists
-if not (EXAMPLE_DIR / "LLR").exists():
+if not (DATA_PATH / DATASET).exists():
     import signal
     import zipfile
 
@@ -28,14 +31,13 @@ if not (EXAMPLE_DIR / "LLR").exists():
 
     print("Downloading example data...")
     zenodo_get.download(
-        record="19661402",
+        record="21807140",
         retry_attempts=5,
-        output_dir=EXAMPLE_DIR,
-        file_glob=("LLR.zip",),
-        access_token=os.environ.get("ZENODO_TOKEN"),
+        output_dir=DATA_PATH,
+        file_glob=zip_file.name,
     )
-    with zipfile.ZipFile(EXAMPLE_DIR / Path("LLR.zip"), "r") as zip_ref:
-        zip_ref.extractall(EXAMPLE_DIR)
+    with zipfile.ZipFile(zip_file, "r") as zip_ref:
+        zip_ref.extractall(DATA_PATH)
 
 
 async def perform_scan(client, payload: AcquisitionPayload):
@@ -57,7 +59,7 @@ async def perform_scan(client, payload: AcquisitionPayload):
     file_name = str(datetime.date.today()) + "_acquisition"
 
     await client.upload_file_result(
-        file_path=EXAMPLE_DIR / "LLR/noise_corr_off/9003/IR_T1w_TSE_PF.h5",
+        file_path=DATA_PATH / DATASET / "2026-07-23-112655-tse_3d_PDw_100px_CaliberMRI" / "ismrmrd_data.h5",
         name=file_name,
         parameter=payload.device_parameter,
         task_id=str(payload.id),

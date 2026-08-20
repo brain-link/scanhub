@@ -18,4 +18,4 @@ fi
 set -x  # @echo on
 
 uv run ruff check $fixornot services/base/shared_libs/src services/device-manager/app services/protocol-manager/app services/patient-manager/app services/user-login-manager/app
-(cd tools/device-sdk && uv run ruff check $fixornot src)
+(cd device-sdk && uv run ruff check $fixornot src)

@@ -17,4 +17,4 @@ set -x  # @echo on
 (cd services/protocol-manager && uv run mypy --config-file ../../pyproject.toml app)
 (cd services/patient-manager && uv run mypy --config-file ../../pyproject.toml app)
 (cd services/user-login-manager && uv run mypy --config-file ../../pyproject.toml app)
-(cd tools/device-sdk && uv run mypy --config-file ../../pyproject.toml --strict src)
+(cd device-sdk && uv run mypy --config-file ../pyproject.toml --strict src)

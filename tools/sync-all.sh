@@ -4,7 +4,7 @@
 # Can be run from anywhere; always operates relative to the repo root.
 #
 # services/* are members of the root uv workspace (see /pyproject.toml) and share
-# its lockfile; tools/device-sdk is a standalone project with its own.
+# its lockfile; device-sdk is a standalone project with its own.
 
 cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
 
@@ -16,4 +16,4 @@ set -x  # @echo on
 (cd services/patient-manager && uv sync --all-groups)
 (cd services/user-login-manager && uv sync --all-groups)
 (cd services/orchestration-engine && uv sync --all-groups)
-(cd tools/device-sdk && uv sync --all-extras --all-groups)
+(cd device-sdk && uv sync --all-extras --all-groups)

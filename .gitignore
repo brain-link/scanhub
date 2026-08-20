@@ -158,3 +158,5 @@ device_credentials.json
 
 *.zip
 *.h5
+
+/device-sdk/example/data

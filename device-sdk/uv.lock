@@ -1021,7 +1021,7 @@ lint = [
 [package.metadata]
 requires-dist = [
     { name = "numpy", specifier = ">=2.3.2" },
-    { name = "scanhub-libraries", editable = "../../services/base/shared_libs" },
+    { name = "scanhub-libraries", editable = "../services/base/shared_libs" },
     { name = "websockets", specifier = ">=15.0.1" },
 ]
 
@@ -1035,7 +1035,7 @@ lint = [
 [[package]]
 name = "scanhub-libraries"
 version = "0.0.2"
-source = { editable = "../../services/base/shared_libs" }
+source = { editable = "../services/base/shared_libs" }
 dependencies = [
     { name = "dagster" },
     { name = "fastapi" },
