@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 
 from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
+
 from sdk.client import Client
 
 logging.basicConfig(level=logging.INFO)
@@ -67,19 +68,23 @@ async def perform_scan(client, payload: AcquisitionPayload):
     )
 
 async def feedback_handler(message):
+    """Define callback action for server feedback."""
     print(f"Server Feedback: {message}")
 
 async def error_handler(message):
+    """Define callback action for server error."""
     print(f"Server Error: {message}")
 
 
 async def main():
+    """Define the main function."""
     credentials_path = os.path.join(os.path.dirname(__file__), "device_credentials.json")
     try:
         with open(credentials_path, "r") as f:
             credentials = json.load(f)
     except FileNotFoundError:
-        print(f"Credentials file not found at {credentials_path}. Please create a device first and save credentials file.")
+        print(f"Credentials file not found at {credentials_path}.\
+            Please create a device first and save credentials file.")
         return
 
     device_details = DeviceDetails(
@@ -105,7 +110,7 @@ async def main():
 
     client.set_feedback_handler(feedback_handler)
     client.set_error_handler(error_handler)
-    client.set_scan_callback(lambda deviceTask: perform_scan(client, deviceTask))
+    client.set_scan_callback(lambda device_task: perform_scan(client, device_task))
 
 
     await client.start()
