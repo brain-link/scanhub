@@ -949,16 +949,16 @@ wheels = [
 
 [[package]]
 name = "ismrmrd"
-version = "1.15.0"
+version = "1.14.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "h5py" },
     { name = "numpy" },
     { name = "xsdata" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/df/78/0435eb89fdb349fefd4d81ac2879f49b0d097a6f1ea0bf9a3e02a0cf7a4f/ismrmrd-1.15.0.tar.gz", hash = "sha256:09e02bf522483fe655b68acc5c5a501d898b72f8d7006487a672576b59b5ca41", size = 36799, upload-time = "2026-05-14T19:25:23.754Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/71/74/f5fc2e17d37d39e9df7f46e349aa8f94a03e65e19e218bebefd60a870202/ismrmrd-1.14.2.tar.gz", hash = "sha256:e31b852d987b78785e51026fcc44ea259bd8c484bbba6ebea5a8a77787ba1016", size = 31755, upload-time = "2025-09-15T13:37:54.252Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/65/2059ceea05914afdbc161bcb8215487c7f4449c8e4f9055b436e294ffe99/ismrmrd-1.15.0-py3-none-any.whl", hash = "sha256:80938d503abbc55b11b01232c4d70805ed32e466983c0e927d0c848b14ff6eb9", size = 28092, upload-time = "2026-05-14T19:25:22.253Z" },
+    { url = "https://files.pythonhosted.org/packages/74/0b/3ecabb2d29d96a2825fa707c7470391b10d918a417abfa2ec8b2403af7a5/ismrmrd-1.14.2-py3-none-any.whl", hash = "sha256:966b090d53eff7b51db06e2df0577486f0b8bfdffc7e6d812c3604a87300b68e", size = 32387, upload-time = "2025-09-15T13:37:51.804Z" },
 ]
 
 [[package]]
@@ -2145,6 +2145,7 @@ dependencies = [
     { name = "dagster-docker" },
     { name = "dagster-webserver" },
     { name = "httpx" },
+    { name = "ismrmrd" },
     { name = "mrpro" },
     { name = "numpy" },
     { name = "pydantic" },
@@ -2158,6 +2159,7 @@ requires-dist = [
     { name = "dagster-docker", specifier = ">=0.27.7,<0.28.0" },
     { name = "dagster-webserver", specifier = ">=1.11.7,<2.0.0" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "ismrmrd", specifier = ">=1.14.2,<1.15.0" },
     { name = "mrpro", specifier = ">=0.250812" },
     { name = "numpy", specifier = ">=2.3.2,<3.0.0" },
     { name = "pydantic", specifier = ">=2.11.7,<3.0.0" },
