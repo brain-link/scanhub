@@ -1,6 +1,6 @@
 # Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
-# 
+#
 # Configuration file for the ScanHub's Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:

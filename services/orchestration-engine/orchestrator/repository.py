@@ -9,10 +9,10 @@ from dagster import AssetSelection, Definitions, define_asset_job, in_process_ex
 from orchestrator import (
     DAG_CONFIG_KEY,
     DATA_LAKE_KEY,
+    DEVICE_NOTIFIER_KEY,
     DICOM_IO_KEY,
     IDATA_IO_KEY,
     PROTOCOL_NOTIFIER_KEY,
-    DEVICE_NOTIFIER_KEY,
 )
 from orchestrator.assets.acquisition_data import acquisition_data_asset
 from orchestrator.assets.dicom_input import dicom_input

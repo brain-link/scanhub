@@ -2,7 +2,8 @@ x-dagster-common: &dagster_common
   image: scanhub-orchestration-engine:latest
   pull_policy: never # Don't pull the image, use the local build
   build:
-    context: ./services/orchestration-engine
+    context: .
+    dockerfile: services/orchestration-engine/Dockerfile
     args:
       BASE_IMG: ${SCANHUB_BASE_IMAGE}
   environment:
@@ -28,7 +29,8 @@ services:
   device-manager:
     container_name: device-manager
     build:
-      context: ./services/device-manager
+      context: .
+      dockerfile: services/device-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
@@ -54,7 +56,8 @@ services:
   protocol-manager:
     container_name: protocol-manager
     build:
-      context: ./services/protocol-manager
+      context: .
+      dockerfile: services/protocol-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
@@ -91,7 +94,8 @@ services:
   patient-manager:
     container_name: patient-manager
     build:
-      context: ./services/patient-manager
+      context: .
+      dockerfile: services/patient-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
@@ -115,7 +119,8 @@ services:
   user-login-manager:
     container_name: user-login-manager
     build:
-      context: ./services/user-login-manager
+      context: .
+      dockerfile: services/user-login-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:

@@ -3,10 +3,10 @@
 
 """Definition of acquisition data operation."""
 from dagster import OpExecutionContext, op
-from orchestrator.utils.dag_config import DAGConfiguration
-from orchestrator.resources import DataLakeResource
 
 from orchestrator.assets.acquisition_data import AcquisitionData
+from orchestrator.resources import DataLakeResource
+from orchestrator.utils.dag_config import DAGConfiguration
 
 
 @op

@@ -13,10 +13,15 @@ jobs:
       matrix:
         target:
           - path: services/protocol-manager
+            mypy_args: app
           - path: services/device-manager
+            mypy_args: app
           - path: services/user-login-manager
+            mypy_args: app
           - path: services/patient-manager
+            mypy_args: app
           - path: tools/device-sdk
+            mypy_args: --strict src
 
     steps:
       - uses: actions/checkout@v4
@@ -25,13 +30,17 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: "${{ matrix.target.path }}/uv.lock"
+          # services/* are members of the root uv workspace and share its lockfile;
+          # tools/device-sdk is a standalone project with its own.
+          cache-dependency-glob: |
+            uv.lock
+            ${{ matrix.target.path }}/uv.lock
 
       - name: Install dependencies
         working-directory: ${{ matrix.target.path }}
-        # --all-extras pulls in the "shared" extra (scanhub-libraries) for the app services;
-        # it's a no-op for device-sdk, which declares no optional extras.
-        run: uv sync --locked --all-extras --group lint
+        # Running from within a workspace member syncs just that member against the
+        # shared root lockfile, including scanhub-libraries (now a plain dependency).
+        run: uv sync --locked --group lint
 
       - name: Run ruff linter
         working-directory: ${{ matrix.target.path }}
@@ -39,4 +48,6 @@ jobs:
 
       - name: Run mypy type checker
         working-directory: ${{ matrix.target.path }}
-        run: uv run mypy
+        # mypy has no config-inheritance mechanism, so point it at the shared
+        # [tool.mypy] block in the root pyproject.toml explicitly.
+        run: uv run mypy --config-file ../../pyproject.toml ${{ matrix.target.mypy_args }}

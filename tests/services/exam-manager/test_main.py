@@ -1,10 +1,10 @@
 # Copyright (C) 2024.
 # SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 
-""" pytest tests for main.py """
+"""pytest tests for main.py"""
+
 
 import requests
-import json
 
 # PREFIX = "https://localhost"
 PREFIX = "https://localhost:8443"

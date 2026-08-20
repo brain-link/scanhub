@@ -1,7 +1,8 @@
 import os
+
+import numpy as np
 import pytest
 import requests
-import numpy as np
 
 # The base URL of the FastAPI server
 BASE_URL = "http://localhost:8000"

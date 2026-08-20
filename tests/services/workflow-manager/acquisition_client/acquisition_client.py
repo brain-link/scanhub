@@ -1,5 +1,6 @@
-import websocket
 import rel
+import websocket
+
 
 def on_message(ws, message):
     print(message)

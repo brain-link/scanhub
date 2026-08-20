@@ -1,0 +1,39 @@
+[tool.uv.workspace]
+members = [
+    "services/base/shared_libs",
+    "services/device-manager",
+    "services/patient-manager",
+    "services/protocol-manager",
+    "services/user-login-manager",
+    "services/orchestration-engine",
+]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+# Enable linters
+# E = pycodestyle (error)
+# W = pycodestyle (warning)
+# F = Pyflakes
+# S = flake8-bandit
+# I = isort
+# N = pep8-naming
+# D = pydocstyle
+select = ["E", "W", "F", "S", "I", "N", "D"]
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+ignore_missing_imports = true

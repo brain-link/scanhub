@@ -22,15 +22,21 @@ ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
 # 1. Install dependencies only (cached well)
 COPY pyproject.toml uv.lock ./
-RUN uv sync --locked --no-install-project
+COPY services/orchestration-engine/pyproject.toml ./services/orchestration-engine/pyproject.toml
+RUN uv sync --frozen --package scanhub-orchestration-engine --no-install-project --no-editable
 
 # 2. Copy source
-COPY . .
+COPY services/orchestration-engine ./services/orchestration-engine
 
 # 3. Install just this project (fast)
-RUN uv sync --locked
+# --no-editable: this is a built image, not a live dev checkout — the bind-mounted
+# volume at DAGSTER_HOME/app (see docker-compose.yml) is for editing app code, but an
+# editable install here would point back into ./services/orchestration-engine, which
+# that same bind mount overwrites at container start, breaking the import. Pick up code
+# edits by rebuilding the image, not by relying on hot-reload of the installed package.
+RUN uv sync --frozen --package scanhub-orchestration-engine --no-editable
 
 # Dagster configuration
 RUN mkdir -p $DAGSTER_HOME
-COPY dagster.yaml $DAGSTER_HOME/dagster.yaml
-COPY workspace.yaml $DAGSTER_HOME/workspace.yaml
+COPY services/orchestration-engine/dagster.yaml $DAGSTER_HOME/dagster.yaml
+COPY services/orchestration-engine/workspace.yaml $DAGSTER_HOME/workspace.yaml

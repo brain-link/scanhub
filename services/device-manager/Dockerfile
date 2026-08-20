@@ -13,16 +13,19 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 # Sync into the base image's system site-packages, alongside the pre-installed shared library
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
-# Copy uv files first to install dependencies
+# Copy the workspace root and the shared library (both needed to resolve this
+# member from the shared lockfile) plus this service's own pyproject.toml
 COPY pyproject.toml uv.lock ./
+COPY services/base/shared_libs ./services/base/shared_libs
+COPY services/device-manager/pyproject.toml ./services/device-manager/pyproject.toml
 
-# Install dependencies using uv. --frozen skips lock freshness validation, since that
-# would otherwise require resolving the "shared" extra (scanhub-libraries), whose path
-# source lives outside this build context; the base image already provides it.
-RUN uv sync --frozen --no-install-project
+# Install dependencies for this workspace member only. scanhub-libraries (and its
+# transitive deps, e.g. fastapi) are already installed in the base image at the exact
+# versions locked here, so this only adds what's specific to device-manager.
+RUN uv sync --frozen --package scanhub-device-manager --no-install-project --no-editable
 
 # Copy the rest of the app
-COPY . .
+COPY services/device-manager/app ./app
 
 # Set PYTHONPATH to include app/
 ENV PYTHONPATH=/

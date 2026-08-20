@@ -25,11 +25,7 @@ async def dal_create_device(request: DeviceCreationRequest, token_hash: str, sal
         payload {BaseDevice} -- Pydantic base model to create a new database entry
 
     """
-    new_device = Device(
-        **request.model_dump(),
-        token_hash=token_hash,
-        salt=salt,
-    )
+    new_device = Device(**{**request.model_dump(), "token_hash": token_hash, "salt": salt})
     async with async_session() as session:
         session.add(new_device)
         await session.commit()

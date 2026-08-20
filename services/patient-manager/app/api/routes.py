@@ -124,7 +124,13 @@ async def delete_patient(patient_id: UUID) -> None:
         raise HTTPException(status_code=404, detail="Patient not found")
 
 
-@router.put("/{patient_id}", response_model=PatientOut, status_code=200, tags=["patients"], operation_id="update_patient")
+@router.put(
+    "/{patient_id}",
+    response_model=PatientOut,
+    status_code=200,
+    tags=["patients"],
+    operation_id="update_patient",
+)
 async def update_patient(patient_id: UUID, payload: BasePatient):
     """Update existing patient endpoint.
 

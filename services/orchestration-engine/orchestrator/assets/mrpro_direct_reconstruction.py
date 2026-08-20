@@ -24,7 +24,8 @@ def mrpro_direct_reconstruction(context, data: AcquisitionData) -> IData:
         context: The execution context, typically used for logging and runtime information.
         data (AcquisitionData): The acquisition data containing the MRD file path and associated metadata.
 
-    Returns:
+    Returns
+    -------
         IData: The reconstructed image data.
 
     Workflow:

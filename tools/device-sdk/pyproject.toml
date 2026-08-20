@@ -24,40 +24,12 @@ lint = ["ruff>=0.16.3", "mypy>=2.3.1"]
 example = ["zenodo-get>=3.0.3"]
 
 [tool.ruff]
+extend = "../../pyproject.toml"
 src = ["src"]
-line-length = 120
-indent-width = 4
 target-version = "py313"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
-
-[tool.ruff.lint]
-# Enable linters
-# E = pycodestyle (error)
-# W = pycodestyle (warning)
-# F = Pyflakes
-# S = flake8-bandit
-# I = isort
-# N = pep8-naming
-# D = pydocstyle
-select = ["E", "W", "F", "S", "I", "N", "D"]
-
-[tool.ruff.lint.flake8-type-checking]
-strict = true
-
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
-
-[tool.mypy]
-files = ["src"]
-python_version = "3.13"
-strict = true
-warn_return_any = false
-check_untyped_defs = true
-warn_no_return = true
-warn_unreachable = true
-ignore_missing_imports = true
 
 [build-system]
 requires = ["hatchling"]

@@ -1,13 +1,13 @@
 """Example usage of the Device SDK for a simulated scanning process."""
 import asyncio
-
-from sdk.client import Client
-from scanhub_libraries.models import AcquisitionPayload, DeviceDetails, CalibrationType
-import os
+import datetime
 import json
 import logging
+import os
 from pathlib import Path
-import datetime
+
+from scanhub_libraries.models import AcquisitionPayload, DeviceDetails
+from sdk.client import Client
 
 logging.basicConfig(level=logging.INFO)
 
@@ -17,8 +17,9 @@ EXAMPLE_DIR = Path(__file__).resolve().parent
 # Download an ISMRMRD file from zenodo if it not already exists
 if not (EXAMPLE_DIR / "LLR").exists():
     import signal
-    import zenodo_get
     import zipfile
+
+    import zenodo_get
 
     # zenodo_get installs its own SIGINT handler on import, which hijacks Ctrl+C
     # for the whole process even after the download above is done. Restore the

@@ -13,13 +13,8 @@ dependencies = [
     "asyncpg>=0.30.0",
     "psycopg2-binary>=2.9.6",
     "async-sqlalchemy>=1.0.0",
+    "scanhub-libraries",
 ]
-
-[project.optional-dependencies]
-# Provided by the scanhub-base Docker image already; kept as an extra (rather than a plain
-# dependency) so a container build never needs to see ../base/shared_libs, which lives outside
-# this service's build context. Enable locally with `uv sync --extra shared`.
-shared = ["scanhub-libraries"]
 
 [dependency-groups]
 test = ["coverage", "codecov", "pytest"]
@@ -30,31 +25,9 @@ lint = ["ruff>=0.16.3", "mypy>=2.3.1"]
 package = false
 
 [tool.uv.sources]
-scanhub-libraries = { path = "../base/shared_libs", editable = true }
+scanhub-libraries = { workspace = true }
 
 [tool.ruff]
+extend = "../../pyproject.toml"
 src = ["app"]
-line-length = 120
-indent-width = 4
 target-version = "py310"
-
-[tool.ruff.lint]
-# Enable linters
-# W = pycodestyle, F = Pyflakes, S = flake8-bandit, I = isort, N = pep8-naming, D = pydocstyle
-select = ["W", "F", "S", "I", "N", "D"]
-
-[tool.ruff.lint.flake8-type-checking]
-strict = true
-
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
-
-[tool.mypy]
-files = ["app"]
-python_version = "3.13"
-plugins = ["sqlalchemy.ext.mypy.plugin"]
-warn_return_any = false
-check_untyped_defs = true
-warn_no_return = true
-warn_unreachable = true
-ignore_missing_imports = true

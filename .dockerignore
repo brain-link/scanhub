@@ -1,0 +1,17 @@
+.git
+.github
+.mypy_cache
+.ruff_cache
+.vscode
+data_lake
+docs
+example
+scanhub-ui/node_modules
+scanhub-ui/build
+tests
+tools
+
+**/.venv
+**/.mypy_cache
+**/.ruff_cache
+**/__pycache__

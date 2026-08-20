@@ -67,7 +67,7 @@ By the following steps, the scanhub-base image is build from the local code repo
 
 
 ```
-docker build -t scanhub-base services/base/
+docker build -t scanhub-base -f services/base/Dockerfile .
 ```
 
 To build scanhub with the base image which was just created, use the following command.

@@ -18,6 +18,7 @@ dependencies = [
     "requests>=2.32.5,<3.0.0",
     "mrpro>=0.250812",
     "scikit-image>=0.26.0",
+    "httpx>=0.28.1",
 ]
 
 [tool.dagster]

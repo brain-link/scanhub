@@ -11,6 +11,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the stack
         run: |
-          docker build -t scanhub-base ./services/base && 
+          docker build -t scanhub-base -f services/base/Dockerfile . &&
           docker compose build --build-arg BASE_IMG=scanhub-base:latest &&
           docker compose up -d

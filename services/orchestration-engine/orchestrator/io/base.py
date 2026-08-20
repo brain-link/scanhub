@@ -3,8 +3,9 @@ from abc import abstractmethod
 from typing import Any, List
 
 from dagster import ConfigurableIOManager, InputContext, OutputContext
-from orchestrator.utils.dag_config import DAGConfiguration
 from upath import UPath
+
+from orchestrator.utils.dag_config import DAGConfiguration
 
 
 class ScanHubIOManager(ConfigurableIOManager):
