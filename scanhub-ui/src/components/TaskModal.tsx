@@ -10,7 +10,6 @@ import Input from '@mui/joy/Input'
 import Modal from '@mui/joy/Modal'
 import ModalClose from '@mui/joy/ModalClose'
 import ModalDialog from '@mui/joy/ModalDialog'
-import Tooltip from '@mui/joy/Tooltip'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
 import Stack from '@mui/joy/Stack'
@@ -25,7 +24,6 @@ import AddIcon from '@mui/icons-material/Add';
 import React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import TaskInfo from './TaskInfo';
 import { deviceApi, sequenceApi, taskApi } from '../api'
 import {
   MRISequenceOut,
