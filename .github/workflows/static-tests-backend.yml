@@ -20,7 +20,7 @@ jobs:
             mypy_args: app
           - path: services/patient-manager
             mypy_args: app
-          - path: tools/device-sdk
+          - path: device-sdk
             mypy_args: --strict src
 
     steps:
@@ -31,7 +31,7 @@ jobs:
         with:
           enable-cache: true
           # services/* are members of the root uv workspace and share its lockfile;
-          # tools/device-sdk is a standalone project with its own.
+          # device-sdk is a standalone project with its own.
           cache-dependency-glob: |
             uv.lock
             ${{ matrix.target.path }}/uv.lock
