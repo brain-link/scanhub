@@ -3,6 +3,8 @@
 
 """Patient manager main file."""
 
+import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import (
     http_exception_handler,
@@ -26,8 +28,6 @@ app = FastAPI(
 #   Wildcard ["*"] excludes eeverything that involves credentials
 #   Better specify explicitly the allowed origins
 #   See: https://fastapi.tiangolo.com/tutorial/cors/
-import os
-
 ORIGINS = [
     # "http://localhost",       # frontend via nginx-proxy with default port
     # "https://localhost",      # frontend via nginx-proxy with default port
@@ -76,7 +76,13 @@ async def startup() -> None:
     init_db()
 
 
-@app.get("/api/v1/patient/health/readiness", response_model={}, status_code=200, tags=["health"])
+@app.get(
+    "/api/v1/patient/health/readiness",
+    response_model={},
+    status_code=200,
+    tags=["health"],
+    operation_id="health_readiness",
+)
 async def readiness() -> dict:
     """Readiness health endpoint.
 
@@ -87,7 +93,7 @@ async def readiness() -> dict:
     Raises
     ------
     HTTPException
-        500: Any of the exam-tree tables does not exist
+        500: Any of the protocol-tree tables does not exist
     """
     ins = inspect(engine)
     existing_tables = ins.get_table_names()

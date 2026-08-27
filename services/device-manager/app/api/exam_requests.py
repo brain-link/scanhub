@@ -1,7 +1,7 @@
 """
-Handler for exam requests.
+Handler for protocol requests.
 
-This module defines functions to interact with the exam manager service,
+This module defines functions to interact with the protocol manager service,
 including fetching tasks, sequences, and results. It provides a way to
 create and update acquisition tasks and results, ensuring that the data
 is properly formatted and authenticated.
@@ -9,21 +9,19 @@ is properly formatted and authenticated.
 Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 """
-import json
-
 import requests
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from scanhub_libraries.models import AcquisitionTaskOut, MRISequenceOut, ResultOut, SetResult
 
-TASK_URI = "http://exam-manager:8000/api/v1/exam/task"
-RESULT_URI = "http://exam-manager:8000/api/v1/exam/result"
-SEQUENCE_URI = "http://exam-manager:8000/api/v1/exam/sequence"
+TASK_URI = "http://protocol-manager:8000/api/v1/protocol/task"
+RESULT_URI = "http://protocol-manager:8000/api/v1/protocol/result"
+SEQUENCE_URI = "http://protocol-manager:8000/api/v1/protocol/sequence"
 
 
 def get_task(task_id: str, user_access_token: str) -> AcquisitionTaskOut:
     """
-    Fetch acquisition task by ID from the exam manager service.
+    Fetch acquisition task by ID from the protocol manager service.
 
     Args
     ----
@@ -73,7 +71,7 @@ def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token: str) 
     """
     update_task_response = requests.put(
         f"{TASK_URI}/{task_id}",
-        data=json.dumps(payload, default=jsonable_encoder),
+        json=jsonable_encoder(payload),
         headers={"Authorization": "Bearer " + user_access_token},
         timeout=3
     )
@@ -84,7 +82,7 @@ def set_task(task_id: str, payload: AcquisitionTaskOut, user_access_token: str) 
 
 def get_sequence(sequence_id: str, user_access_token: str) -> MRISequenceOut:
     """
-    Fetch MRI sequence by ID from the exam manager service.
+    Fetch MRI sequence by ID from the protocol manager service.
 
     Args
     ----
@@ -108,7 +106,7 @@ def get_sequence(sequence_id: str, user_access_token: str) -> MRISequenceOut:
 
 def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
     """
-    Create a blank result in the exam manager service.
+    Create a blank result in the protocol manager service.
 
     Returns
     -------
@@ -129,7 +127,7 @@ def create_blank_result(task_id: str, user_access_token: str) -> ResultOut:
 
 def delete_blank_result(result_id: str, user_access_token: str) -> None:
     """
-    Delete a blank result in the exam manager service.
+    Delete a blank result in the protocol manager service.
 
     Args
     ----
@@ -154,7 +152,7 @@ def delete_blank_result(result_id: str, user_access_token: str) -> None:
 
 def set_result(result_id: str, payload: SetResult, user_access_token: str) -> ResultOut:
     """
-    Update a result in the exam manager service.
+    Update a result in the protocol manager service.
 
     Args
     ----
@@ -173,7 +171,7 @@ def set_result(result_id: str, payload: SetResult, user_access_token: str) -> Re
     headers = {"Authorization": "Bearer " + user_access_token}
     update_result_response = requests.put(
         f"{RESULT_URI}/{result_id}",
-        data=json.dumps(payload, default=jsonable_encoder),
+        json=jsonable_encoder(payload),
         headers=headers,
         timeout=3
     )
@@ -182,9 +180,23 @@ def set_result(result_id: str, payload: SetResult, user_access_token: str) -> Re
     return ResultOut(**update_result_response.json())
 
 
+def update_task_status(task_id: str, status: str, user_access_token: str) -> AcquisitionTaskOut:
+    """Update only the status field of a task."""
+    headers = {"Authorization": "Bearer " + user_access_token}
+    response = requests.put(
+        f"{TASK_URI}/{task_id}/status",
+        params={"status": status},
+        headers=headers,
+        timeout=3,
+    )
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail=f"Error updating task status: {response.text}")
+    return AcquisitionTaskOut(**response.json())
+
+
 def get_result(result_id: str, user_access_token: str) -> ResultOut:
     """
-    Fetch result by ID from the exam manager service.
+    Fetch result by ID from the protocol manager service.
 
     Args
     ----

@@ -70,6 +70,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/_autoapi_src/
 
 # PyBuilder
 target/
@@ -154,3 +155,8 @@ yarn-debug.log*
 yarn-error.log*
 
 device_credentials.json
+
+*.zip
+*.h5
+
+/device-sdk/example/data

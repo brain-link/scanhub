@@ -9,212 +9,156 @@ import Add from '@mui/icons-material/Add'
 import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
 import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { examApi, taskApi } from '../api'
-import { ExamOut, WorkflowOut } from '../openapi/generated-client/exam'
-import ExamModal from '../components/ExamModal'
-import ExamItem, { ExamMenu } from '../components/ExamItem'
-import WorkflowItem, { WorkflowMenu } from '../components/WorkflowItem'
-import Typography from '@mui/joy/Typography'
+import { protocolApi, taskApi } from '../api'
+import { ProtocolOut } from '../openapi/generated-client/protocol'
+import ProtocolModal from '../components/ProtocolModal'
+import ProtocolItem from '../components/ProtocolItem'
 import TaskItem from '../components/TaskItem'
 import { ITEM_UNSELECTED } from '../interfaces/components.interface'
-import WorkflowModal from '../components/WorkflowModal'
 import TaskModal from '../components/TaskModal'
 
 
 export default function TemplatesView() {
-  const [examModalOpen, setExamModalOpen] = React.useState(false)
-  const [workflowModalOpen, setWorkflowModalOpen] = React.useState(false)
+  const [protocolModalOpen, setProtocolModalOpen] = React.useState(false)
   const [taskModalOpen, setTaskModalOpen] = React.useState(false)
+  const [expandedProtocolIds, setExpandedProtocolIds] = React.useState<Set<string>>(new Set())
+  const [taskParentId, setTaskParentId] = React.useState<string | undefined>(undefined)
+  const [draggingTaskIndex, setDraggingTaskIndex] = React.useState<{ protocolId: string; index: number } | undefined>(undefined)
 
-  const [selectedExam, setSelectedExam] = React.useState<undefined | number>(undefined)
-  const [selectedWorkflow, setSelectedWorkflow] = React.useState<undefined | number>(undefined)
-  const [draggingTaskIndex, setDraggingTaskIndex] = React.useState<number | undefined>(undefined)
+  const handleDragStart = (protocolId: string, index: number) => setDraggingTaskIndex({ protocolId, index })
+  const handleDragOver = (e: React.DragEvent) => e.preventDefault()
 
-  const handleDragStart = (index: number) => {
-    setDraggingTaskIndex(index)
+  const toggleProtocol = (id: string) => {
+    setTaskParentId(id)
+    setExpandedProtocolIds(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
   }
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-  }
-
-  const handleDrop = async (index: number) => {
+  const handleDrop = async (protocolId: string, dropIndex: number) => {
     if (
       draggingTaskIndex === undefined ||
-      draggingTaskIndex === index ||
-      selectedExam === undefined ||
-      selectedWorkflow === undefined ||
-      !exams
+      draggingTaskIndex.protocolId !== protocolId ||
+      draggingTaskIndex.index === dropIndex ||
+      !protocols
     )
       return
 
-    const tasks = [...exams[selectedExam].workflows[selectedWorkflow].tasks]
-    const [draggedTask] = tasks.splice(draggingTaskIndex, 1)
-    tasks.splice(index, 0, draggedTask)
+    const protocol = protocols.find(p => p.id === protocolId)
+    if (!protocol) return
 
-    const taskIds = tasks.map((t) => t.id)
-    await taskApi.reorderTasksApiV1ExamTaskReorderPut({ task_ids: taskIds })
-    refetchExams()
+    const tasks = [...protocol.tasks]
+    const [draggedTask] = tasks.splice(draggingTaskIndex.index, 1)
+    tasks.splice(dropIndex, 0, draggedTask)
+
+    await taskApi.reorderTasks({ task_ids: tasks.map(t => t.id) })
+    refetchProtocols()
     setDraggingTaskIndex(undefined)
   }
 
-  // Reset selectedWorkflow and selectedTask when selectedExam changes to undefined
-  React.useEffect(() => {
-    if (!selectedExam) {
-      setSelectedWorkflow(undefined)
-    }
-  }, [selectedExam])
-
-
-  const { data: exams, refetch: refetchExams } = useQuery<ExamOut[]>({
-    queryKey: ['allExamTemplates'],
-    queryFn: async () => {
-      return await examApi
-        .getAllExamTemplatesApiV1ExamTemplatesAllGet()
-        .then((result) => {
-          return result.data
-        })
-    },
+  const { data: protocols, refetch: refetchProtocols } = useQuery<ProtocolOut[]>({
+    queryKey: ['allProtocolTemplates'],
+    queryFn: async () => protocolApi.getAllProtocolTemplates().then(r => r.data),
   })
 
   return (
-    <Stack direction="row" alignItems="flex-start" width='100vw'>
+    <Stack direction='column' sx={{ height: '100%', overflow: 'hidden' }}>
 
-      <Stack direction='column' alignContent='center' flex={1} spacing={2} sx={{ p: 2 }}>
-        {/* <Button startDecorator={<Add />} onClick={() => setExamModalOpen(true)}>
-          Create Exam Template
-        </Button> */}
-        <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 1, alignItems: 'center' }}>
-          <Typography level='title-md'>Exam Templates</Typography>
+      {/* Header with action buttons */}
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0 }}
+      >
+        <Typography level='title-md'>Protocol Templates</Typography>
+        <Stack direction='row' gap={1}>
           <Button
+            size='sm'
             variant='outlined'
             startDecorator={<Add sx={{ fontSize: 'var(--IconFontSize)' }} />}
-            onClick={() => setExamModalOpen(true)}>
-            Create Exam
-          </Button>
-        </Stack>
-
-        <ExamModal
-          isOpen={examModalOpen}
-          setOpen={setExamModalOpen}
-          onSubmit={() => refetchExams()}
-          modalType='create'
-          createTemplate={true}
-          parentId={undefined}
-        />
-        {
-          exams?.map((exam, index) => (
-            <Stack direction="row" key={`exam-${exam.id}`} gap={1}>
-              <ExamItem
-                item={exam}
-                onClick={() => { selectedExam === index ? setSelectedExam(undefined) : setSelectedExam(index) }}
-                selection={selectedExam === index ? {
-                  type: 'exam',
-                  name: exams[index].name,
-                  itemId: exams[index].id,
-                  status: exams[index].status
-                } : ITEM_UNSELECTED}
-              />
-              <ExamMenu item={exam} refetchParentData={refetchExams} />
-            </Stack>
-          ))
-        }
-      </Stack>
-
-      <Stack direction='column' alignContent='center' flex={1} spacing={2} sx={{ p: 2 }}>
-        {/* <Button startDecorator={<Add />} onClick={() => setWorkflowModalOpen(true)} disabled={selectedExam === undefined}>
-          Create Workflow Template
-        </Button> */}
-        <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 1, alignItems: 'center' }}>
-          <Typography level='title-md'>Workflow Templates</Typography>
-          <Button
-            variant='outlined'
-            startDecorator={<Add sx={{ fontSize: 'var(--IconFontSize)' }} />}
-            onClick={() => setWorkflowModalOpen(true)}
-            disabled={selectedExam === undefined}
+            onClick={() => setProtocolModalOpen(true)}
           >
-            Create Workflow
+            Create Protocol
           </Button>
-        </Stack>
-
-        <WorkflowModal
-          isOpen={workflowModalOpen}
-          setOpen={setWorkflowModalOpen}
-          onSubmit={() => refetchExams()}
-          modalType='create'
-          createTemplate={true}
-          parentId={exams && selectedExam !== undefined ? exams[selectedExam].id : undefined}
-        />
-        {
-          exams && selectedExam !== undefined && exams[selectedExam]?.workflows?.map((workflow: WorkflowOut, index: number) => (
-            <Stack direction="row" key={`workflow-${workflow.id}`}>
-              <WorkflowItem
-                item={workflow}
-                onClick={() => { selectedWorkflow === index ? setSelectedWorkflow(undefined) : setSelectedWorkflow(index) }}
-                selection={selectedWorkflow === index ? {
-                  type: 'workflow',
-                  name: exams[selectedExam].workflows[index].name,
-                  itemId: exams[selectedExam].workflows[index].id,
-                  status: exams[selectedExam].workflows[index].status
-                } : ITEM_UNSELECTED}
-              />
-              <WorkflowMenu item={workflow} refetchParentData={refetchExams} />
-            </Stack>
-          ))
-        }
-      </Stack>
-
-      <Stack direction='column' alignContent='center' flex={1} spacing={2} sx={{ p: 2 }}>
-        {/* <Button startDecorator={<Add />} onClick={() => setTaskModalOpen(true)} disabled={selectedWorkflow === undefined}>
-          Create Task Template
-        </Button> */}
-        <Stack direction='row' sx={{ justifyContent: 'space-between', mb: 1, alignItems: 'center' }}>
-          <Typography level='title-md'>Task Templates</Typography>
           <Button
+            size='sm'
             variant='outlined'
             startDecorator={<Add sx={{ fontSize: 'var(--IconFontSize)' }} />}
             onClick={() => setTaskModalOpen(true)}
-            disabled={selectedWorkflow === undefined}
+            disabled={expandedProtocolIds.size === 0}
           >
             Create Task
           </Button>
         </Stack>
-
-        <TaskModal
-          isOpen={taskModalOpen}
-          setOpen={setTaskModalOpen}
-          onSubmit={() => refetchExams()}
-          modalType='create'
-          createTemplate={true}
-          parentId={exams && selectedExam !== undefined && selectedWorkflow !== undefined ? exams[selectedExam].workflows[selectedWorkflow].id : undefined}
-        />
-        {
-          exams && selectedExam !== undefined && selectedWorkflow !== undefined && exams[selectedExam].workflows[selectedWorkflow]?.tasks?.map((task, index) => (
-            <Box
-              key={`task-${task.id}`}
-              draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragOver={handleDragOver}
-              onDrop={() => handleDrop(index)}
-              sx={{
-                cursor: 'grab',
-                '&:active': { cursor: 'grabbing' },
-                opacity: draggingTaskIndex === index ? 0.5 : 1,
-              }}
-            >
-              <TaskItem
-                item={task}
-                refetchParentData={refetchExams}
-                onClick={() => { }}
-                selection={ITEM_UNSELECTED}
-              />
-            </Box>
-          ))
-        }
       </Stack>
+
+      {/* Protocol list with inline task expansion */}
+      <Stack direction='column' spacing={0.5} sx={{ p: 2, overflow: 'auto', flex: 1 }}>
+        {protocols?.map((protocol) => (
+          <React.Fragment key={`protocol-${protocol.id}`}>
+            <ProtocolItem
+              item={protocol}
+              onClick={() => toggleProtocol(protocol.id)}
+              selection={
+                taskParentId === protocol.id ? {
+                  type: 'protocol',
+                  name: protocol.name,
+                  itemId: protocol.id,
+                  status: protocol.status,
+                } : ITEM_UNSELECTED
+              }
+              refetchParentData={refetchProtocols}
+            />
+
+            {expandedProtocolIds.has(protocol.id) && protocol.tasks?.map((task, taskIndex) => (
+              <Box
+                key={`task-${task.id}`}
+                draggable
+                onDragStart={() => handleDragStart(protocol.id, taskIndex)}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(protocol.id, taskIndex)}
+                sx={{
+                  ml: 3,
+                  cursor: 'grab',
+                  '&:active': { cursor: 'grabbing' },
+                  opacity: draggingTaskIndex?.protocolId === protocol.id && draggingTaskIndex.index === taskIndex ? 0.5 : 1,
+                }}
+              >
+                <TaskItem
+                  item={task}
+                  refetchParentData={refetchProtocols}
+                  onClick={() => {}}
+                  selection={ITEM_UNSELECTED}
+                />
+              </Box>
+            ))}
+          </React.Fragment>
+        ))}
+      </Stack>
+
+      <ProtocolModal
+        isOpen={protocolModalOpen}
+        setOpen={setProtocolModalOpen}
+        onSubmit={refetchProtocols}
+        modalType='create'
+        createTemplate={true}
+        parentId={undefined}
+      />
+      <TaskModal
+        isOpen={taskModalOpen}
+        setOpen={setTaskModalOpen}
+        onSubmit={refetchProtocols}
+        modalType='create'
+        createTemplate={true}
+        parentId={taskParentId}
+      />
 
     </Stack>
   )

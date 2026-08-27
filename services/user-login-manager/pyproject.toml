@@ -8,76 +8,30 @@ authors = [
     {name = "Ben Wilhelm", email = "ben.wilhelm@uniklinik-freiburg.de"}
 ]
 readme = "README.md"
-
-[tool.poetry]
-packages = [{include = "app"}]
-license = "GPL-3.0-only with custom exception"
-# Ship all license files
-include = [
-    { path = "LICENSE", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
+license = { text = "GPL-3.0-only with custom exception" }
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "asyncpg>=0.30.0",
+    "uvicorn>=0.22.0",
+    "psycopg2-binary>=2.9.6",
+    "python-multipart>=0.0.6",
+    "async-sqlalchemy>=1.0.0",
+    "typing-extensions>=4.14.1",
+    "scanhub-libraries",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.13,<3.14"
-asyncpg = "^0.30.0"
-uvicorn = "^0.22.0"
-psycopg2-binary = "^2.9.6"
-python-multipart = "^0.0.6"
-async-sqlalchemy = "^1.0.0"
-typing-extensions = "^4.14.1"
+[dependency-groups]
+test = ["coverage", "codecov", "pytest"]
+docs = ["sphinx", "sphinx_rtd_theme"]
+lint = ["ruff>=0.16.3", "mypy>=2.3.1"]
 
-[tool.poetry.group.test.dependencies]
-coverage = "*"
-codecov = "*"
-pytest = "*"
+[tool.uv]
+package = false
 
-[tool.poetry.group.docs.dependencies]
-sphinx = "*"
-sphinx_rtd_theme = "*"
-
-
-[tool.poetry.group.lint.dependencies]
-ruff = "^0.12.3"
-mypy = "^1.16.1"
-
-[tool.setuptools.package-data]
-"app" = ["py.typed"]
+[tool.uv.sources]
+scanhub-libraries = { workspace = true }
 
 [tool.ruff]
+extend = "../../pyproject.toml"
 src = ["app"]
-line-length = 120
-indent-width = 4
 target-version = "py310"
-
-[tool.ruff.lint]
-# Enable linters
-# E = pycodestyle (error)
-# W = pycodestyle (warning)
-# F = Pyflakes
-# S = flake8-bandit
-# I = isort
-# N = pep8-naming
-# D = pydocstyle
-select = ["E", "W", "F", "S", "I", "N", "D"]
-
-[tool.ruff.lint.flake8-type-checking]
-strict = true
-
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
-
-[tool.mypy]
-files = ["app"]
-python_version = "3.13"
-warn_return_any = false
-check_untyped_defs = true
-warn_no_return = true
-warn_unreachable = true
-ignore_missing_imports = true
-
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"

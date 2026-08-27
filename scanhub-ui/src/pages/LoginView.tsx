@@ -11,7 +11,7 @@ import Input from '@mui/joy/Input'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import React, { useState } from 'react'
-import logo from '../media/logo.png'
+import logo from '/logo.png'
 
 import { loginApi, userApi } from '../api'
 import UserCreateModal from '../components/UserCreateModal'
@@ -37,7 +37,7 @@ function Login(props: { onLogin: (user: User) => void }) {
 
   function checknousers() {
     userApi
-      .checkNoUsersApiV1UserloginChecknousersGet()
+      .checkNoUsers()
       .then((result) => {
         setNoUsersInDB(result.data)
       })
@@ -47,7 +47,7 @@ function Login(props: { onLogin: (user: User) => void }) {
     console.log('Try autologin with cookie.')
     setLoginRequestInProgress(true)
     loginApi
-      .loginfromcookieApiV1UserloginLoginfromcookiePost()
+      .loginFromCookie()
       .then((result) => {
         setLoginRequestInProgress(false)
         props.onLogin(result.data)
@@ -97,7 +97,7 @@ function Login(props: { onLogin: (user: User) => void }) {
             // On the server this hash could be hashed again, just like if it were the password.
             // Disadvantage is, that the swagger-UI would not work, because it strictly follows OAuth2 which requires the non-hashed password.
             loginApi
-              .loginApiV1UserloginLoginPost(username, password, 'password')
+              .login(username, password, 'password')
               .then((result) => {
                 setLoginRequestInProgress(false)
                 props.onLogin(result.data)

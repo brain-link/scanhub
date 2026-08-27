@@ -1,36 +1,33 @@
 <p align="center">
-    <img src="scanhub-ui/src/media/logo.png" width="100" alt="ScanHub">
-    <h1 align="center">ScanHub</h3>
+    <img src="scanhub-ui/public/logo.png" width="100" alt="ScanHub">
+    <h1 align="center">ScanHub</h1>
 </p>
 
 <p align="center">
-<a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build"/>
-</a>
-<a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests-backend.yml" target="_blank">
-    <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests-backend.yml/badge.svg" alt="Static Tests Backend"/>
-</a>
-
-<a href="https://scanhub.brain-link.de/" target="_blank">
-    <img src="https://img.shields.io/badge/Documentation-online-brightgreen" alt="Documentation"/>
-</a>
+    <a href="https://github.com/brain-link/scanhub/actions/workflows/build.yml" target="_blank">
+        <img src="https://github.com/brain-link/scanhub/actions/workflows/build.yml/badge.svg" alt="Build"/>
+    </a>
+    <a href="https://github.com/brain-link/scanhub/actions/workflows/static-tests-backend.yml" target="_blank">
+        <img src="https://github.com/brain-link/scanhub/actions/workflows/static-tests-backend.yml/badge.svg" alt="Static Tests Backend"/>
+    </a>
+    <a href="https://scanhub.brain-link.de/" target="_blank">
+        <img src="https://img.shields.io/badge/Documentation-online-brightgreen" alt="Documentation"/>
+    </a>
 </p>
 
 
 
 # About
 
-ScanHub is intended to be a multi modal acquisition software, which allows individualizable, modular and cloud-based processing of functional and anatomical medical images. 
+ScanHub is intended to be a multimodal acquisition software, which allows individualizable, modular and cloud-based processing of functional and anatomical medical images. 
 It seamlessly merges the acquisition with the processing of complex data on a single platform.
-ScanHub is open-source and freely availably to anyone :earth_africa:.
+ScanHub is open-source and freely available to anyone :earth_africa:.
 
-The greatest novalty of ScanHub is the cross-manufacturer and multi-modality aspect, allowing accessible cloud-based data processing in one framework :rocket:
+The greatest novelty of ScanHub is the cross-manufacturer and multi-modality aspect, allowing accessible cloud-based data processing in one framework :rocket:.
 
-Currently we are focussing on the development of an acquisition solution for the open-source MRI [OSI2One](https://www.opensourceimaging.org/2023/01/09/first-open-source-mri-scanner-presented-the-osii-one/).
+Currently we are focusing on the development of an acquisition solution for the open-source MRI [OSI2One](https://www.opensourceimaging.org/2023/01/09/first-open-source-mri-scanner-presented-the-osii-one/).
 
 ScanHub is designed as a client-server application. It consists of several services that form the backbone of the acquisition platform and a web-based frontend called scanhub-ui. (The [scanhub-ui](https://github.com/brain-link/scanhub-ui) repository was incorporated into the subfolder scanhub-ui of this repository to facilitate the joint development).
-
-We welcome anyone who would like to join our mission, just [get in touch](mailto:info@brain-link.de) :email:.
 
 
 ## Demo :clapper:
@@ -51,85 +48,103 @@ The advent of cloud computing has enabled a new era of innovation, and ScanHub i
 6.	Security and compliance: ScanHub's cloud platform adheres to stringent data security protocols and compliance requirements, ensuring that sensitive patient data remains protected and confidential.
 
 
-## Installation + Start & Stop
+## Setting up the Demo
 
-Scanhub is deployed using Docker and Docker Compose. Make sure they are installed. There are some optional helper scripts like development-launcher.sh in this repository. If you use them, note that there are different versions of Docker Compose that are either called with "docker-compose" or "docker compose" and the helper scripts use the second form. If you want to install tools for development of Scanhub on Linux (Ubuntu/Mint), you may use the install-tools.sh script.
+<!-- start demo-setup -->
 
-On the first installation of Scanhub, the Scanhub containers need to be built with Docker and Docker Compose. The containers also need to be built again after making certain changes during development, in particular after making changes to the base container, after installing libraries or when changing other structural aspects. When the containers are built, Scanhub can be started and stopped with Docker Compose.
+ScanHub is deployed using Docker and Docker Compose. Make sure they are installed. The following instructions will guide you through the process of an all-in-one deployment of ScanHub, i.e. all the services and the device connector will run on the same device.
 
-### Building Scanhub:
+### 1. Building ScanHub
 
-Make sure that there is an internet connection, then apply the following steps:
+The microservices within ScanHub are all built on the same base image, to ensure that critical dependencies match and identical data models are used.
 
-    cd services/base
-    docker build -t scanhub-base .
-    cd ../..
-    docker compose build --build-arg BASE_IMG=scanhub-base:latest
+Note that the `.github/workflows/deploy-containers.yml` workflow deploys the latest scanhub-base image from the main branch to the GitHub Container Registry (GHCR). By default, this image is used when building ScanHub with Docker Compose.
 
-The Scanhub containers are built using a base image. The above commands create this base image from the latest state of the code on the local computer. To alternatively use a base image from ghcr.io/brain-link/scanhub/scanhub-base:latest, you may run only:
+The following steps build the scanhub-base image from the local code repository instead.
 
-    docker compose build
+```
+docker build -t scanhub-base -f services/base/Dockerfile .
+```
 
+To build ScanHub with the base image which was just created, use the following command.
 
-### Starting Scanhub:
+Note: You don't need to run `docker compose build` separately if you want to use the default setup — `docker compose up -d` creates all the required images if they are not already available.
 
-Run:
+```
+docker compose build --build-arg SCANHUB_BASE_IMAGE=scanhub-base:latest
+```
+Alternatively, you can use the default image `ghcr.io/brain-link/scanhub/scanhub-base:latest` by running
 
-    docker compose up --detach
+```
+docker compose build
+```
 
-Open your browser and navigate to the default address "localhost". By default Scanhub uses a self-signed https certificate that will cause a security warning by the browser. You may ignore this warning for localhost during development. For production deployment see section "Deployment".
+Note: The repository contains an `.env` file which allows you to change the default image.
 
+### 2. Starting ScanHub
 
-### Stopping Scanhub:
+To start all the containers, run the docker compose command.
 
-Run:
+```
+docker compose up -d
+```
 
-    docker compose down
-
-
-### Starting Scanhub and tools for development
-
-During development you may start scanhub and the tools for development using the development-launcher.sh script.
-All scripts are located in the `tools/scripts/` folder.
-It has an option --full-rebuild. For details, have a look in the script.
-
-    tools/scripts/development-launcher.sh --full-rebuild
-
-
-### Default Username and Password
-
-If there is no user in the database, the software will display a form in the web-interface to create the first user. The password needs to have at least 12 characters.
+To access the user interface, open your browser and navigate to [localhost](https://localhost:8443). By default, ScanHub uses a self-signed HTTPS certificate, which will cause the browser to show a security warning. You may ignore this warning for localhost during development.
+If you run ScanHub for the first time, you are asked to create the first user when visiting [localhost](https://localhost:8443).
 
 
-### Deployment
+### 3. Register the Demo Device
 
-Please mind the section about the "State of development".
+Devices communicating with ScanHub need to authenticate, which is done using a token-based approach.
+1. Log in and navigate to the library.
+2. Create a new device: enter a device name and description.
+3. After clicking 'Create', you can download a credentials file for the new device.
+4. Save the credentials file as `device_credentials.json` next to the example device in `device-sdk/example`.
 
-Deployment was not testet yet! The following list gives an indication about some of the steps needed to deploy scanhub productively:
+### 4. Install and Run the Demo Device
 
-- Get a server (either on-site or in a datacenter/cloud)
-- Get a domain name (e.g. scanhub.yourinstitution.com)
-- Create a new private key (e.g. with openSSL). Keep this key private! Make sure not to commit it to the repository during development!
-- Replace the default private key in secrets/privatekey.pem with your new private key
-- Get a server certificate for your domain name (likely from the place where you got your domain name)
-- Replace the default certificate in secrets/certificate.pem with your new certificate
-- Change the default usernames and default passwords in all the configuration files in the folder secrets/
-- In infrastructure/nginx_config.conf put your domain name as server_name in place of localhost (line 5 and line 21)
-- In infrastructure/nginx_config.conf put your domain name in place of localhost as redirect target from http to https (line 8)
-- In scanhub-ui/src/utils/Urls.tsx put your domain name in place of localhost
-- In services/device-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/exam-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/mri/sequence-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/patient-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/user-login-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- In services/workflow-manager/app/main.py in the list of allowed origins, replace localhost with your domain name
-- Build the Scanhub Containers as described in section "Installation + Start & Stop"
-- Set up a service to automatically start Scanhub when booting the system
-- Consider setting up monitoring of the servers resources etc.
-- Consider limiting the number of connections, configure multiple workers/servers, load-balancing, etc.
-- Consider removing the --reload option in the uvicorn commands in docker-compose.yml (6 occurances)
-- Check for memory leaks when running the application over several days, consider automatic reboots
-- Maybe put some development effort in the commented code in scanhub-ui/Dockerfile with the production flag
+The demo device is built on the ScanHub device SDK, located in `device-sdk`. Dependencies are managed with [uv](https://docs.astral.sh/uv/), which creates and manages the virtual environment for you, so no separate environment setup is required.
+
+Navigate to `device-sdk` and install the device-sdk package together with its `example` dependency group.
+```
+cd device-sdk
+uv sync --group example
+```
+Last but not least, run the example script.
+```
+uv run example/example_usage.py
+```
+
+The following terminal output is expected:
+
+    Device ID: d5b8bacd-1f52-4aaf-a3af-c8ee4e5352ee
+    INFO:WebSockerHandler:WebSocket connection established.
+    INFO:DeviceStateMachine:[STATE] Transitioned to ONLINE
+    INFO:DeviceClient:Device registration sent.
+    Client started and waiting for commands from the server.
+    Server Feedback: Device ONLINE acknowledged.
+    Server Feedback: Device registered successfully
+
+### 5. Setup a Demo Protocol
+
+To perform an acquisition with the demo device, first a protocol needs to be set up in ScanHub. In the user interface, navigate to *Library* and click on *Create Sequence* to upload the provided test sequence available in the example folder. After setting name, description and type, you need to upload `device-sdk/example/test-sequence.seq` as the sequence and `device-sdk/example/header_test-sequence.xml` as the ISMRMRD header file. 
+
+Once the sequence is uploaded, click on *Create Protocol* and fill in the form to create a demo protocol. Once the protocol is created, select it and click on *Create Task*. Thereby, a new acquisition task is created and assigned to the previously created protocol. Within the task creation form, you need to select the demo device created and the sequence created in the previous step. Calibration and field of view settings can be ignored for this demo.
+
+### 6. Trigger the Demo Device
+
+In the ScanHub UI, navigate to *Patients*, click on the "+" button and fill the form to create a new patient for the demo.
+Open the patient by clicking the button to the left of the newly created patient.
+
+Now, you should see the acquisition view for a patient within the ScanHub UI. Click the "+" button in the protocols section to create an instance from the protocol template we created in the previous step. 
+
+Before starting the demo acquisition, make sure the demo device is online. This is indicated by a green circle in the right section of the navigation bar. 
+
+Open the protocol, select the acquisition and click the play button to start the demo acquisition. You should see how the progress bar fills up. Once the acquisition is done, the ISMRMRD raw data file is uploaded and should appear in the drop down menu underneath the acquisition task. As soon as the raw data is uploaded, the workflow orchestration engine gets notified and automatically performs the image reconstruction using [MRpro](https://mrpro.rocks/). The reconstruction result is uploaded in DICOM format and can be selected from the file drop down menu underneath the task, as soon as it is available. 
+
+> Found a bug or ran into an issue? We'd love to hear about it! Please [open an issue](https://github.com/brain-link/scanhub/issues/new) and we'll take a look.
+
+<!-- end demo-setup -->
 
 
 ## Documentation
@@ -137,25 +152,7 @@ Deployment was not testet yet! The following list gives an indication about some
 See our dedicated [Documentation](https://scanhub.brain-link.de/) web page to get insights into the structure of ScanHub, microservice APIs and more.
 
 
-## State of development
+### State of development
 
-This software is not yet ready for clinical use!
-
-
-## Contributor Guide
-
-We appreciate every contribution to ScanHub, if you would like to contribute to the project, please contact us.
-Based on a stable main-branch, we are implementing features based on issues.
-
-Feel free to open a new issues for any feature that you are missing in the current main branch.
-Each issue should have a detailed description including a description of the problem, bug or feature and a potential solution approach.
-We appreciate it if the issue is updated with the actual solution approach during development.
-This documentation step might be helpful when working on similar or related issues.
-
-When you start working on an issue, please create a new branch according to the following naming convention.
-
-    Branch name: <ID>-short-name
-
-The `<ID>` refers to the ID of the related issue and `short-name` is a short expression for the title of the issue.
-Please link the branch to the issue, as soon as you start working on it.
-
+This software is not yet ready for clinical use, it is work in progress.
+However, the integration with a research MRI device was successful, and the scanner could be operated remotely.

@@ -10,7 +10,7 @@ import Box from '@mui/joy/Box'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-import { AcquisitionTaskOut, DAGTaskOut, TaskType, CalibrationType } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, CalibrationType } from '../openapi/generated-client/protocol'
 
 
 function capitalize(str: string){
@@ -20,7 +20,7 @@ function capitalize(str: string){
 }
 
 
-function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
+function TaskInfo({ data: task }: { data: AcquisitionTaskOut }) {
 
   const datetime_created = new Date(task.datetime_created)
   const datetime_updated = task.datetime_updated ? new Date(String(task.datetime_updated)) : undefined
@@ -69,12 +69,11 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
 
         <Typography fontSize='sm'>Type</Typography>
         <Typography level='body-sm' textColor='text.primary'>
-            {capitalize(task.task_type)}
-          {task.task_type === TaskType.Dag && 'dag_type' in task && task.dag_type ? `, ${capitalize(task.dag_type)}` : ''}
+          {capitalize(task.task_type)}
         </Typography>
 
         {
-          task.task_type === TaskType.Acquisition && 'device_id' in task &&
+          'device_id' in task &&
           <>
             <Typography fontSize='sm'>Device ID</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -84,7 +83,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Acquisition && 'sequence_id' in task &&
+          'sequence_id' in task &&
           <>
             <Typography fontSize='sm'>Sequence ID</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -94,7 +93,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Acquisition && 'calibration' in task && task.calibration &&
+          'calibration' in task && task.calibration &&
           <>
             <Typography fontSize='sm'>Calibration</Typography>
             <Typography level='body-sm' textColor='text.primary'>
@@ -104,7 +103,7 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
         }
 
         {
-          task.task_type === TaskType.Acquisition && 'acquisition_parameter' in task && task.acquisition_parameter &&
+          'acquisition_parameter' in task && task.acquisition_parameter &&
           <>
             <Typography fontSize='sm'>Acquisition parameter</Typography>
             <Stack direction='column'>
@@ -117,42 +116,6 @@ function TaskInfo({ data: task }: { data: AcquisitionTaskOut | DAGTaskOut }) {
               <Typography level='body-sm' textColor='text.primary'>
                 FoV rotation: x={task.acquisition_parameter.fov_rotation?.x}, y={task.acquisition_parameter.fov_rotation?.y}, z={task.acquisition_parameter.fov_rotation?.z}
               </Typography>
-            </Stack>
-          </>
-        }
-
-        {
-          task.task_type === TaskType.Dag && 'dag_id' in task &&
-          <>
-            <Typography fontSize='sm'>DAG ID</Typography>
-            <Typography level='body-sm' textColor='text.primary'>
-              {task.dag_id}
-            </Typography>
-          </>
-        }
-
-        {
-          task.task_type === TaskType.Dag && 'input_task_ids' in task &&
-          <>
-            <Typography fontSize='sm'>Input</Typography>
-            <Typography level='body-sm' textColor='text.primary'>
-              {task.input_task_ids ? task.input_task_ids : '-'}
-            </Typography>
-          </>
-        }
-
-        {
-          task.task_type === TaskType.Dag && 'parameter' in task &&
-          <>
-            <Typography fontSize='sm'>Parameter</Typography>
-            <Stack direction='column'>
-              {
-                task.parameter && Object.entries(task.parameter).map((arg, index) => (
-                  <Typography key={index} level='body-sm' textColor='text.primary'>
-                    {arg[0]}: {arg[1]}
-                  </Typography>
-                ))
-              }
             </Stack>
           </>
         }

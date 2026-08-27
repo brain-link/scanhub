@@ -33,7 +33,7 @@ function DeviceForm(props: ModalProps) {
   const mutation = useMutation({
     // Return the Blob so we can enable the download button after success
     mutationFn: async () => {
-      const response = await deviceApi.createDeviceApiV1DeviceCreatedevicePost(device, {
+      const response = await deviceApi.createDevice(device, {
         responseType: 'blob'
       })
       // Some clients already give you a Blob in response.data when responseType='blob'

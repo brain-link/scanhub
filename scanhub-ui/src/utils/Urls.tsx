@@ -9,8 +9,7 @@ const origin = typeof window !== 'undefined' ? window.location.origin : 'https:/
 
 const baseUrls = {
   patientService: origin,
-  examService: origin,
-  workflowManagerService: origin,
+  protocolService: origin,
   userloginService: origin,
   deviceService: origin,
   nginxUrl: origin

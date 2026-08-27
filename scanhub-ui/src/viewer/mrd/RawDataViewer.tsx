@@ -3,21 +3,28 @@ import ReactECharts from 'echarts-for-react';
 
 import { useData } from './hooks/useData';
 import { useMeta } from './hooks/useMeta';
-// import { useFileIds } from './hooks/useFileIds';
-import { useResults } from './hooks/useResults';
 import { ColorPalette, ComplexMode } from './types';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
-import Controls from './Controls';
-import { plotColorPalettes } from './utils/colormaps';
+import { plotColorPalettes, plotColorPaletteOptions } from './utils/colormaps';
 import { WorkerMessage } from './utils/interfaces';
 import Container from '@mui/joy/Container';
 import AlertItem from '../../components/AlertItem';
 import { Alerts } from '../../interfaces/components.interface';
-import { ItemSelection } from '../../interfaces/components.interface'
+import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
+import Checkbox from '@mui/joy/Checkbox';
+import IconButton from '@mui/joy/IconButton';
+import Input from '@mui/joy/Input';
+import Option from '@mui/joy/Option';
+import Select from '@mui/joy/Select';
+import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
+import Switch from '@mui/joy/Switch';
+import Typography from '@mui/joy/Typography';
+import { Popper } from '@mui/base/Popper';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import TuneIcon from '@mui/icons-material/Tune';
 import { type EChartsOption } from 'echarts';
-
 
 import { init, use as echartsUse } from 'echarts/core';
 import { LineChart } from 'echarts/charts';
@@ -36,7 +43,7 @@ import type {
   DataZoomComponentOption,
 } from 'echarts';
 import { CanvasRenderer } from 'echarts/renderers';
-import { MRDAcquisitionInfo } from '../../openapi/generated-client/exam';
+import { MRDAcquisitionInfo } from '../../openapi/generated-client/protocol';
 import { ParsedAcq } from './utils/packet';
 echartsUse([
   LineChart,
@@ -48,10 +55,17 @@ echartsUse([
   CanvasRenderer,
 ]);
 const echartsCore = { init, use: echartsUse };
-import { dataApi } from '../../api';
 
 
-export default function RawDataViewer({ item }: { item: ItemSelection }) {
+interface RawDataViewerProps {
+  selectedResultId: string;
+  protocolId: string;
+  taskId: string;
+  onDownload?: () => void;
+  taskName?: string;
+}
+
+export default function RawDataViewer({ selectedResultId, protocolId, taskId, onDownload, taskName }: RawDataViewerProps) {
   const [overlay, setOverlay] = useState(true);
   const [wantTime, setWantTime] = useState(true);
   const [wantFreq, setWantFreq] = useState(false);
@@ -60,39 +74,33 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
   const [coil, setCoil] = useState(0);
   const [acqRange, setAcqRange] = useState<[number, number]>([0, 0]);
   const [currentAcq, setCurrentAcq] = useState(0);
-  const [selectedResultId, setSelectedResultId] = useState<string | undefined>(undefined);
+
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsAnchorRef = useRef<HTMLButtonElement>(null);
+  const settingsPanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!settingsOpen) return;
+    const handleMouseDown = (e: MouseEvent) => {
+      if (
+        !settingsAnchorRef.current?.contains(e.target as Node) &&
+        !settingsPanelRef.current?.contains(e.target as Node)
+      ) {
+        setSettingsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleMouseDown);
+    return () => document.removeEventListener('mousedown', handleMouseDown);
+  }, [settingsOpen]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Data layer hooks
-  const {
-    workflowId,
-    taskId: resolvedTaskId,
-    results,
-    isLoading: idsLoading,
-    isError: idsError,
-  } = useResults(item);
+  const idsReady = !!protocolId && !!taskId && !!selectedResultId;
 
-  // Automatically select newest result when available or updated
-  useEffect(() => {
-    if (!results || results.length === 0) return;
+  const metaQuery = useMeta(idsReady, protocolId, taskId, selectedResultId);
 
-    const latest = results[0];
-    setSelectedResultId(latest.id);
-    // const currentStillExists = results.some((r) => r.id === selectedResultId);
+  const maxIdx = Math.max(0, (metaQuery.data?.acquisitions?.length ?? 0) - 1);
 
-    // if (!selectedResultId || !currentStillExists) {
-    //   setSelectedResultId(latest.id);
-    // }
-  }, [results]);
-
-  // Readiness condition
-  const idsReady = !!workflowId && !!resolvedTaskId && !!selectedResultId && !idsError;
-
-  // Meta query — called every render, gated by `enabled`
-  const metaQuery = useMeta(idsReady, workflowId, resolvedTaskId, selectedResultId ?? '');
-
-  // Initialize range when meta changes
   useEffect(() => {
     if (!metaQuery.data) return;
     const n = metaQuery.data.acquisitions?.length ?? 1;
@@ -101,7 +109,6 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
     setCoil(0);
   }, [metaQuery.data]);
 
-  // ids expression (safe when meta not ready)
   const idsExpr = useMemo(() => {
     const meta = metaQuery.data;
     if (!meta) return '';
@@ -113,26 +120,22 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
     return String(currentAcq);
   }, [metaQuery.data, overlay, acqRange, currentAcq]);
 
-  // Binary acquisitions query
   const acqQuery = useData(
     idsReady && !!idsExpr,
-    workflowId,
-    resolvedTaskId,
-    selectedResultId ?? '',
+    protocolId,
+    taskId,
+    selectedResultId,
     idsExpr,
     0,
     1
   );
 
-
-  // Worker lifecycle (always mounted)
   const workerRef = useRef<Worker | null>(null);
   useEffect(() => {
     workerRef.current = new Worker(new URL('./workers/signalWorker.ts', import.meta.url), { type: 'module' });
     return () => workerRef.current?.terminate();
   }, []);
 
-  // Chart option state 
   const [option, setOption] = useState<EChartsOption>({});
 
   useEffect(() => {
@@ -141,7 +144,6 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
     const worker = workerRef.current;
     if (!meta || !batch || !worker) return;
 
-    // dwell_time (sec) -> sampleRateHz per acquisition
     const dwellById = new Map<number, number>();
     meta.acquisitions?.forEach((a: MRDAcquisitionInfo) => dwellById.set(a.acquisition_id, a.dwell_time));
 
@@ -173,16 +175,11 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
 
       const yLabel = (domain: 'time' | 'freq') => {
         switch (mode) {
-          case 'abs':
-            return domain === 'time' ? 'Magnitude s(t)' : 'Magnitude S(f)';
-          case 'phase':
-            return 'Phase / rad';
-          case 'real':
-            return domain === 'time' ? 'Real s(t)' : 'Real S(f)';
-          case 'imag':
-            return domain === 'time' ? 'Imaginary s(t)' : 'Imaginary S(f)';
-          default:
-            return '';
+          case 'abs': return domain === 'time' ? 'Magnitude s(t)' : 'Magnitude S(f)';
+          case 'phase': return 'Phase / rad';
+          case 'real': return domain === 'time' ? 'Real s(t)' : 'Real S(f)';
+          case 'imag': return domain === 'time' ? 'Imaginary s(t)' : 'Imaginary S(f)';
+          default: return '';
         }
       };
 
@@ -193,49 +190,29 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
         heightPct: number,
         gridIdx: number
       ) => {
-
-        grid.push({
-          top: `${topPct}%`,
-          height: `${heightPct}%`,
-          left: 60,
-          right: 20
-        });
-
+        grid.push({ top: `${topPct}%`, height: `${heightPct}%`, left: 60, right: 20 });
         xAxis.push({
-          type: 'value',
-          gridIndex: gridIdx,
+          type: 'value', gridIndex: gridIdx,
           name: title === 'Time' ? 'Time / ms' : 'Frequency / Hz',
           nameLocation: 'middle',
         });
-
         yAxis.push({
-          type: 'value',
-          gridIndex: gridIdx,
+          type: 'value', gridIndex: gridIdx,
           name: yLabel(title === 'Time' ? 'time' : 'freq'),
           nameLocation: 'middle',
         });
-
         traces.forEach((t) => {
           const len = t.x.length;
           const pts = new Array(len);
           for (let i = 0; i < len; i++) pts[i] = [t.x[i], t.y[i]];
           series.push({
-            type: 'line',
-            name: t.label,
-            xAxisIndex: gridIdx,
-            yAxisIndex: gridIdx,
-            showSymbol: false,
-            sampling: 'lttb',
-            lineStyle: { width: 1.5 },
-            data: pts,
+            type: 'line', name: t.label,
+            xAxisIndex: gridIdx, yAxisIndex: gridIdx,
+            showSymbol: false, sampling: 'lttb',
+            lineStyle: { width: 1.5 }, data: pts,
           });
         });
-
-        dataZoom.push({
-          type: 'inside',
-          xAxisIndex: gridIdx,
-          filterMode: 'none',   // independent zoom
-        });
+        dataZoom.push({ type: 'inside', xAxisIndex: gridIdx, filterMode: 'none' });
       };
 
       if (wantTime && wantFreq) {
@@ -256,35 +233,19 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
           formatter: (params: CallbackDataParams | CallbackDataParams[]) => {
             const list = Array.isArray(params) ? params : [params];
             if (list.length === 0) return '';
-            // First line: x value
-            let res = '';
-            // Cut off at 10 series, each line is marker + series name + value (like default)
-            res += list.slice(0, 10).map((p) => {
-              // p.data can be unknown, so cast to [number, number] if that’s your shape
+            let res = list.slice(0, 10).map((p) => {
               const point = p.data as [number, number];
               return `${p.marker}${p.seriesName}: ${point[1].toFixed(5)}`;
             }).join('<br/>');
-            // Optional: indicate more values
             if (list.length > 10) { res += '<br/>...'; }
             return res;
           },
         },
-        // legend: { show: legendShow },
-        grid,
-        xAxis,
-        yAxis,
-        dataZoom,
-        series,
+        grid, xAxis, yAxis, dataZoom, series,
         toolbox: {
           show: true,
           feature: {
-            dataZoom: {
-              // yAxisIndex: 'none',   // zoom only in x
-              title: {
-                zoom: 'Zoom',
-                back: 'Reset Zoom'
-              }
-            },
+            dataZoom: { title: { zoom: 'Zoom', back: 'Reset Zoom' } },
             restore: { title: 'Restore' },
             saveAsImage: { title: 'Download' },
           },
@@ -295,111 +256,158 @@ export default function RawDataViewer({ item }: { item: ItemSelection }) {
     };
 
     worker.addEventListener('message', onMsg);
-    worker.postMessage({
-      items,
-      wantTime,
-      wantFreq,
-      mode,
-    });
-  }, [
-    metaQuery.data,
-    acqQuery.data,
-    coil,
-    wantTime,
-    wantFreq,
-    mode,
-    colorPalette,
-  ]);
+    worker.postMessage({ items, wantTime, wantFreq, mode });
+  }, [metaQuery.data, acqQuery.data, coil, wantTime, wantFreq, mode, colorPalette]);
 
-  // Handle MRD download
-  async function handleDownload() {
-    if (!workflowId || !resolvedTaskId || !selectedResultId) return;
-
-    try {
-      const response = await dataApi.downloadMRD(workflowId, resolvedTaskId, selectedResultId, { responseType: 'blob' });
-
-      // Extract filename from content-disposition if possible, or use a default
-      const contentDisposition = response.headers['content-disposition'];
-      let filename = 'data.mrd';
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="(.+)"/);
-        if (match) filename = match[1];
-      }
-
-      // Create link from blob
-      const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-
-      // Cleanup
-      link.parentNode?.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (e) {
-      console.error('Failed to download MRD', e);
-    }
-  }
-
-  // Render (no early returns)
-  const showEmpty = (idsError || !results || results.length === 0) && !idsLoading;
+  const showEmpty = !idsReady || (metaQuery.isError && !metaQuery.isLoading);
 
   return (
-
     <Stack sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', p: 1, gap: 1, overflow: 'hidden' }}>
-      <Controls
-        metaCount={metaQuery.data?.acquisitions?.length ?? 0}
-        results={results}
-        selectedResultId={selectedResultId ?? ''}
-        setSelectedResultId={setSelectedResultId}
-        overlay={overlay}
-        setOverlay={setOverlay}
-        wantTime={wantTime}
-        setWantTime={setWantTime}
-        wantFreq={wantFreq}
-        setWantFreq={setWantFreq}
-        mode={mode}
-        setMode={setMode}
-        colorPalette={colorPalette}
-        setColorPalette={setColorPalette}
-        coil={coil}
-        setCoil={setCoil}
-        acqRange={acqRange}
-        setAcqRange={setAcqRange}
-        currentAcq={currentAcq}
-        setCurrentAcq={setCurrentAcq}
-        onDownload={handleDownload}
-      />
+
+      {/* Toolbar */}
+      <Stack direction='row' alignItems='center' gap={0.5}>
+        <Typography level='title-sm' sx={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {taskName ? `${taskName} Raw Data` : 'Raw Data'}
+        </Typography>
+
+        {/* Settings */}
+        <IconButton
+          ref={settingsAnchorRef}
+          size='sm'
+          variant='plain'
+          color='neutral'
+          title='Plot settings'
+          onClick={() => setSettingsOpen(v => !v)}
+        >
+          <TuneIcon fontSize='small' />
+        </IconButton>
+
+        <Popper open={settingsOpen} anchorEl={settingsAnchorRef.current} placement='bottom-end' style={{ zIndex: 1300 }}>
+          <Sheet
+            ref={settingsPanelRef}
+            variant='outlined'
+            sx={{ p: 2, mt: 0.5, borderRadius: 'sm', boxShadow: 'md', display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 220 }}
+          >
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Domain</Typography>
+              <Stack direction='row' gap={2}>
+                <Checkbox label='Time' size='sm' checked={wantTime} onChange={e => setWantTime(e.target.checked)} />
+                <Checkbox label='Frequency' size='sm' checked={wantFreq} onChange={e => setWantFreq(e.target.checked)} />
+              </Stack>
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Mode</Typography>
+              <Select size='sm' value={mode} defaultValue='abs' onChange={(_, v) => setMode(v as ComplexMode)} required
+                slotProps={{ listbox: { disablePortal: true } }}
+              >
+                <Option value='abs'>Magnitude</Option>
+                <Option value='phase'>Phase</Option>
+                <Option value='real'>Real</Option>
+                <Option value='imag'>Imag</Option>
+              </Select>
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Color Palette</Typography>
+              <Select
+                size='sm'
+                value={colorPalette.id}
+                defaultValue={plotColorPalettes.default.id}
+                onChange={(_, v) => setColorPalette(plotColorPalettes[v ?? plotColorPalettes.default.id])}
+                required
+                slotProps={{ listbox: { disablePortal: true } }}
+              >
+                {plotColorPaletteOptions.map(p => <Option key={p.id} value={p.id}>{p.name}</Option>)}
+              </Select>
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Coil</Typography>
+              <Input
+                size='sm'
+                type='number'
+                value={coil}
+                slotProps={{ input: { min: 0, max: 999, step: 1 } }}
+                onChange={e => setCoil(Math.max(0, Number(e.target.value)))}
+              />
+            </Box>
+
+            <Box>
+              <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Plot Mode</Typography>
+              <Stack direction='row' alignItems='center' gap={1}>
+                <Typography level='body-xs'>Single</Typography>
+                <Switch size='sm' checked={overlay} onChange={e => setOverlay(e.target.checked)} />
+                <Typography level='body-xs'>Overlay</Typography>
+              </Stack>
+            </Box>
+
+            {overlay ? (
+              <Box>
+                <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Range</Typography>
+                <Stack direction='row' gap={1}>
+                  <Input
+                    size='sm'
+                    type='number'
+                    value={acqRange[0]}
+                    slotProps={{ input: { min: 0, max: maxIdx, step: 1 } }}
+                    onChange={e => setAcqRange([Math.max(0, Number(e.target.value)), acqRange[1]])}
+                  />
+                  <Input
+                    size='sm'
+                    type='number'
+                    value={acqRange[1]}
+                    slotProps={{ input: { min: 0, max: maxIdx, step: 1 } }}
+                    onChange={e => setAcqRange([acqRange[0], Math.min(maxIdx, Number(e.target.value))])}
+                  />
+                </Stack>
+              </Box>
+            ) : (
+              <Box>
+                <Typography level='body-xs' fontWeight='lg' sx={{ mb: 0.5 }}>Readout</Typography>
+                <Input
+                  size='sm'
+                  type='number'
+                  value={currentAcq}
+                  slotProps={{ input: { min: 0, max: maxIdx, step: 1 } }}
+                  onChange={e => setCurrentAcq(Math.max(0, Math.min(maxIdx, Number(e.target.value))))}
+                />
+              </Box>
+            )}
+          </Sheet>
+        </Popper>
+
+        {/* Download */}
+        {onDownload && (
+          <IconButton size='sm' variant='outlined' color='neutral' title='Download MRD' onClick={onDownload}>
+            <FileDownloadIcon sx={{ fontSize: 'var(--IconFontSize)' }} />
+          </IconButton>
+        )}
+      </Stack>
+
       <Card variant="outlined" color="neutral" sx={{ p: 0.5, flex: 1, minHeight: 0 }}>
-        {
-          showEmpty ? (
-            <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
-              <AlertItem
-                title="Please select a reconstruction or processing task with a result to show a DICOM image."
-                type={Alerts.Info}
-              />
-            </Container>
-          ) : (
-            <div
-              ref={containerRef}
-              style={{
-                height: '100%',
-                minHeight: 200,   // avoid 0 height on first paint
-                minWidth: 300,
-              }}
-            >
-              <ReactECharts
-                echarts={echartsCore}
-                option={option}
-                notMerge
-                lazyUpdate
-                style={{ width: '100%', height: '100%' }}
-                opts={{ renderer: 'canvas' }}
-              />
-            </div>
-          )
-        }
+        {showEmpty ? (
+          <Container maxWidth={false} sx={{ width: '50%', mt: 5, justifyContent: 'center' }}>
+            <AlertItem
+              title="No MRD data available for the selected result."
+              type={Alerts.Info}
+            />
+          </Container>
+        ) : (
+          <div
+            ref={containerRef}
+            style={{ height: '100%', minHeight: 200, minWidth: 300 }}
+          >
+            <ReactECharts
+              echarts={echartsCore}
+              option={option}
+              notMerge
+              lazyUpdate
+              style={{ width: '100%', height: '100%' }}
+              opts={{ renderer: 'canvas' }}
+            />
+          </div>
+        )}
       </Card>
     </Stack>
   );

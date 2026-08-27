@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api';
-import { ItemStatus, ResultOut } from '../../../openapi/generated-client/exam';
+import { ItemStatus, ResultOut } from '../../../openapi/generated-client/protocol';
 import { ItemSelection } from '../../../interfaces/components.interface';
 
 /**
@@ -46,7 +46,7 @@ export function useTaskResults(item: ItemSelection) {
             }
 
             // Fetch task details from API
-            const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
+            const { data } = await taskApi.getTask(item.itemId!);
 
             // We expect results
             const resultsRaw = normalizeToArray<ResultOut>(data?.results);

@@ -1,36 +1,32 @@
 [project]
 name = "scanhub-libraries"
 version = "0.0.2"
-
-[tool.poetry]
-packages = [
-    { include = "scanhub_libraries", from = "src" }
+license = { text = "GPL-3.0-only with custom exception" }
+license-files = ["LICENSE", "LICENSE.GPL3", "LICENSE.GPL3-EXCEPT"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "pydantic>=2.11.7,<3.0.0",
+    "sqlalchemy>=2.0.43,<3.0.0",
+    "dagster>=1.11.6,<2.0.0",
+    "fastapi>=0.116.1,<0.117.0",
+    "passlib[argon2]>=1.7.4,<2.0.0",
+    "pydantic-settings>=2.10.1,<3.0.0",
 ]
-license = "GPL-3.0-only with custom exception"
-# Ship all license files
-include = [
-    { path = "LICENSE", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3", format = ["sdist", "wheel"] },
-    { path = "LICENSE.GPL3-EXCEPT", format = ["sdist", "wheel"] }
-]
-
-[tool.poetry.dependencies]
-python = ">=3.13,<3.14"
-pydantic = ">=2.11.7,<3.0.0"
-sqlalchemy = ">=2.0.43,<3.0.0"
-dagster = ">=1.11.6,<2.0.0"
-fastapi = ">=0.116.1,<0.117.0"
-passlib = { version = ">=1.7.4,<2.0.0", extras = ["argon2"] }
-pydantic-settings = ">=2.10.1,<3.0.0"
 
 [project.urls]
 Homepage = "https://github.com/brain-link/scanhub"
 
+[dependency-groups]
+lint = ["ruff>=0.16.3", "mypy>=2.3.1"]
 
-[tool.setuptools.package-data]
-"scanhub_libraries" = ["py.typed"]
-
+[tool.ruff]
+extend = "../../../pyproject.toml"
+src = ["src"]
+target-version = "py313"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/scanhub_libraries"]

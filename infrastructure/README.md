@@ -47,19 +47,15 @@ When running the UI seperately (i.e. not using docker), this needs to be replace
 
 Routes API requests to the appropriate backend microservices:
 
-#### Workflow Manager
-- `/api/v1/workflowmanager` → `workflow-manager:8000/api/v1/workflowmanager`
-- `/api/v1/workflowmanager/login` → `user-login-manager:8000/api/v1/userlogin/login`
-
 #### Device Manager
 - `/api/v1/device` → `device-manager:8000/api/v1/device`
 - `/api/v1/device/login` → `user-login-manager:8000/api/v1/userlogin/login`
 - `/api/v1/device/ws` → `device-manager:8000/api/v1/device/ws`
 (Special handling for WebSocket upgrade headers.)
 
-#### Exam Manager
-- `/api/v1/exam` → `exam-manager:8000/api/v1/exam`
-- `/api/v1/exam/login` → `user-login-manager:8000/api/v1/userlogin/login`
+#### Protocol Manager
+- `/api/v1/protocol` → `protocol-manager:8000/api/v1/protocol`
+- `/api/v1/protocol/login` → `user-login-manager:8000/api/v1/userlogin/login`
 
 #### User Login Manager
 - `/api/v1/userlogin` → `user-login-manager:8000/api/v1/userlogin`
@@ -92,8 +88,8 @@ These directives enable proper WebSocket proxying.
 | `/api/v1/device`                  | `device-manager:8000/api/v1/device`        | Device API             |
 | `/api/v1/device/login`            | `user-login-manager:8000/api/v1/userlogin/login` | Auth for device   |
 | `/api/v1/device/ws`               | `device-manager:8000/api/v1/device/ws`     | Device WebSocket       |
-| `/api/v1/exam`                    | `exam-manager:8000/api/v1/exam`            | Exam API               |
-| `/api/v1/exam/login`              | `user-login-manager:8000/api/v1/userlogin/login` | Auth for exam     |
+| `/api/v1/protocol`                    | `protocol-manager:8000/api/v1/protocol`            | Protocol API               |
+| `/api/v1/protocol/login`              | `user-login-manager:8000/api/v1/userlogin/login` | Auth for protocol     |
 | `/api/v1/userlogin`               | `user-login-manager:8000/api/v1/userlogin` | User login API         |
 | `/api/v1/patient`                 | `patient-manager:8100/api/v1/patient`      | Patient API            |
 | `/api/v1/patient/login`           | `user-login-manager:8000/api/v1/userlogin/login` | Auth for patient  |

@@ -11,27 +11,66 @@ Developed in response to the challenges in traditional MRI infrastructure, such 
 Getting started
 ---------------
 
+
+.. grid:: 2
+   :gutter: 3
+
+   .. grid-item-card:: Demo Guide
+
+      If you are interested in trying ScanHub, these are the instructions to guide you through setting up scanhub.
+
+      .. button-ref:: demo-guide
+         :expand:
+         :color: primary
+         :click-parent:
+
+         Go to demo guide
+
+   .. grid-item-card:: Technical Documentation
+
+      Within the development of ScanHub, also the technical documentation for future MDR certification is addressed.
+      The documentation is work in progress, yet it provides a good overview of the functional scope.
+
+      .. button-ref:: tech-doc
+         :expand:
+         :color: primary
+         :click-parent:
+
+         Go to tech docs
+
+   .. grid-item-card:: Web API
+
+      ScanHub is a cloud-native, microservice-based acquisition platform. 
+      All the microservices have a REST api to communicate with each other.
+      A description and documentation of these endpoints, which can also be accessed via OpenAPI docs, can be found here.
+
+      .. button-ref:: web-api
+         :expand:
+         :color: primary
+         :click-parent:
+
+         Go to web api
+
+   .. grid-item-card:: Code Reference
+
+      This part contains all the auto-generated code documentation which is collected from all the different microservices.
+
+      .. button-ref:: source-code
+         :expand:
+         :color: primary
+         :click-parent:
+
+         Go to code documentation
+
+
 .. toctree::
    :maxdepth: 1
-   :caption: About ScanHub
 
-   introduction
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Web API Reference
-
-   scanhub_api
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Technical Documentation
-   
-   scanhub_techdoc
-   
-.. toctree::
-   :maxdepth: 1
-   :caption: Source Code Documentation
+   demo
+   introduction/index
+   techdoc/index
+   api/index
+   sourcecode/index
 
 
 Indices and tables

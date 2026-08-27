@@ -1,9 +1,8 @@
 // Copyright (C) 2023, BRAIN-LINK UG (haftungsbeschränkt). All Rights Reserved.
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-ScanHub-Commercial
 // Component interfaces: Pass data and functions between components
-import {  ReactNode } from 'react'
-
-import {  ItemStatus } from '../openapi/generated-client/exam'
+import type { ReactElement } from 'react'
+import { ItemStatus } from '../openapi/generated-client/protocol'
 
 
 // export interface SequenceViewerProps {
@@ -29,11 +28,12 @@ export interface RefetchableItemInterface<T> {
 }
 
 export interface ItemSelection {
-  type: 'exam' | 'workflow' | 'DAG' | 'ACQUISITION' | undefined, 
+  type: 'protocol' | 'ACQUISITION' | undefined,
   name: string | undefined,
   itemId: string | undefined,
   status: ItemStatus,
-  progress?: number
+  progress?: number,
+  deviceId?: string
 }
 
 export const ITEM_UNSELECTED = { type: undefined, name: undefined, itemId: undefined, status: ItemStatus.New, progress: 0 }
@@ -42,6 +42,8 @@ export interface SelectableItemInterface<T> {
   item: T
   selection: ItemSelection
   onClick: () => void
+  icon?: ReactElement
+  hoverIcon?: ReactElement
 }
 
 export interface ModalProps {
@@ -72,9 +74,3 @@ export interface ModalPropsCreateFirstUser extends ModalProps {
   modalType: 'createFirstUser'
 }
 
-export interface AccordionWithMenuInterface {
-  accordionSummary?: ReactNode    // the summary that is always shown
-  children?: ReactNode            // the details to expand
-  accordionMenu?: ReactNode       // the element/menu that is displayed next to the summary
-  toolTipContent?: ReactNode
-}

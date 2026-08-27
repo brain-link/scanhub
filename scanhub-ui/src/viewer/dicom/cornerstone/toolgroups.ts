@@ -37,12 +37,12 @@ import HeightSharpIcon from '@mui/icons-material/HeightSharp';
 import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
 import CropSquareSharpIcon from '@mui/icons-material/CropSquareSharp';
 import JoinInnerSharpIcon from '@mui/icons-material/JoinInnerSharp';
-import ScreenRotationSharpIcon from '@mui/icons-material/ScreenRotationSharp';
 import RadioButtonUncheckedSharpIcon from '@mui/icons-material/RadioButtonUncheckedSharp';
 import ModeStandbySharpIcon from '@mui/icons-material/ModeStandbySharp';
 import PolylineSharpIcon from '@mui/icons-material/PolylineSharp';
 import SwapHorizSharpIcon from '@mui/icons-material/SwapHorizSharp';
 import ClearSharpIcon from '@mui/icons-material/ClearSharp';
+import RotateRightIcon from '@mui/icons-material/RotateRight';
 import type { SvgIconProps } from '@mui/material/SvgIcon'
 
 import { ViewDefinition } from './viewLayouts';
@@ -68,27 +68,27 @@ type CornerstoneToolClass = { toolName: string; new (...args: any[]): any }
 
 type ToolDefinition = {
   Tool: CornerstoneToolClass;
-  Icon: ComponentType<SvgIconProps> 
+  Icon: ComponentType<SvgIconProps>
   label?: string;
+  /** Measurement tools are grouped into a dropdown in the toolbar instead of getting their own button. */
+  category?: 'measurement';
 };
 
 export const tools: ToolDefinition[] = [
   { Tool: PanTool, Icon: ControlCameraSharpIcon, label: 'Pan' },
-  { Tool: PlanarRotateTool, Icon: ScreenRotationSharpIcon, label: 'Rotate' },
+  { Tool: PlanarRotateTool, Icon: RotateRightIcon, label: 'Rotate' },
   { Tool: ZoomTool, Icon: ZoomInSharpIcon, label: 'Zoom' },
   { Tool: WindowLevelTool, Icon: ContrastSharpIcon, label: 'W/L' },
   { Tool: StackScrollTool, Icon: ReorderSharpIcon, label: 'Slices' },
-  { Tool: HeightTool, Icon: HeightSharpIcon, label: 'Measure height' },
-  { Tool: LengthTool, Icon: OpenInFullSharpIcon, label: 'Measure length' },
-  { Tool: RectangleROITool, Icon: CropSquareSharpIcon, label: 'Rectangle ROI' },
-  { Tool: EllipticalROITool, Icon: RadioButtonUncheckedSharpIcon, label: 'Ellipticle ROI' },
-  { Tool: CircleROIStartEndThresholdTool, Icon: JoinInnerSharpIcon, label: 'Circle ROI start-end threshold' },
-  { Tool: LivewireContourTool, Icon: PolylineSharpIcon, label: 'Livewire' },
-  { Tool: ProbeTool, Icon: ModeStandbySharpIcon, label: 'Probe' },
-  { Tool: BidirectionalTool, Icon: SwapHorizSharpIcon, label: 'Bidirectional' },
+  { Tool: HeightTool, Icon: HeightSharpIcon, label: 'Measure height', category: 'measurement' },
+  { Tool: LengthTool, Icon: OpenInFullSharpIcon, label: 'Measure length', category: 'measurement' },
+  { Tool: RectangleROITool, Icon: CropSquareSharpIcon, label: 'Rectangle ROI', category: 'measurement' },
+  { Tool: EllipticalROITool, Icon: RadioButtonUncheckedSharpIcon, label: 'Ellipticle ROI', category: 'measurement' },
+  { Tool: CircleROIStartEndThresholdTool, Icon: JoinInnerSharpIcon, label: 'Circle ROI start-end threshold', category: 'measurement' },
+  { Tool: LivewireContourTool, Icon: PolylineSharpIcon, label: 'Livewire', category: 'measurement' },
+  { Tool: ProbeTool, Icon: ModeStandbySharpIcon, label: 'Probe', category: 'measurement' },
+  { Tool: BidirectionalTool, Icon: SwapHorizSharpIcon, label: 'Bidirectional', category: 'measurement' },
   { Tool: EraserTool, Icon: ClearSharpIcon, label: 'Erase' },
-
-  
 ];
 
 // --- Tool registration
@@ -231,6 +231,32 @@ export async function attachToolGroupsForLayout(
     toolGroup.setToolDisabled(ReferenceLinesTool.toolName);
   }
 
+}
+
+
+/**
+ * Attaches the 2D tool group to a flat set of viewport ids (e.g. slice-grid
+ * tiles). Crosshairs / reference lines stay disabled — the tiles are
+ * independent single-frame stacks, not orthogonal views of a shared volume.
+ */
+export function attachToolGroupToViewports(viewportIds: string[], renderingEngineId: string) {
+  const toolGroup = getToolGroup();
+  const toolGroup3D = get3DToolGroup();
+  if (!toolGroup || !toolGroup3D) return;
+
+  toolGroup.removeViewports(renderingEngineId);
+  toolGroup3D.removeViewports(renderingEngineId);
+
+  const wlSync = getWindowLevelSync();
+  wlSync.getSourceViewports().forEach((vp) => wlSync.removeSource(vp));
+  wlSync.getTargetViewports().forEach((vp) => wlSync.removeTarget(vp));
+
+  for (const id of viewportIds) {
+    toolGroup.addViewport(id, renderingEngineId);
+  }
+
+  toolGroup.setToolDisabled(CrosshairsTool.toolName);
+  toolGroup.setToolDisabled(ReferenceLinesTool.toolName);
 }
 
 

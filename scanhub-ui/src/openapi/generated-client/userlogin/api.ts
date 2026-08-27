@@ -234,7 +234,7 @@ export const HealthApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1UserloginHealthReadinessGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        healthReadiness: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/health/readiness`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -274,10 +274,10 @@ export const HealthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async readinessApiV1UserloginHealthReadinessGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.readinessApiV1UserloginHealthReadinessGet(options);
+        async healthReadiness(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.healthReadiness(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['HealthApi.readinessApiV1UserloginHealthReadinessGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['HealthApi.healthReadiness']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -296,8 +296,8 @@ export const HealthApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        readinessApiV1UserloginHealthReadinessGet(options?: any): AxiosPromise<any> {
-            return localVarFp.readinessApiV1UserloginHealthReadinessGet(options).then((request) => request(axios, basePath));
+        healthReadiness(options?: any): AxiosPromise<any> {
+            return localVarFp.healthReadiness(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -316,8 +316,8 @@ export class HealthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof HealthApi
      */
-    public readinessApiV1UserloginHealthReadinessGet(options?: RawAxiosRequestConfig) {
-        return HealthApiFp(this.configuration).readinessApiV1UserloginHealthReadinessGet(options).then((request) => request(this.axios, this.basePath));
+    public healthReadiness(options?: RawAxiosRequestConfig) {
+        return HealthApiFp(this.configuration).healthReadiness(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -341,11 +341,11 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginApiV1UserloginLoginPost: async (username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        login: async (username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
-            assertParamExists('loginApiV1UserloginLoginPost', 'username', username)
+            assertParamExists('login', 'username', username)
             // verify required parameter 'password' is not null or undefined
-            assertParamExists('loginApiV1UserloginLoginPost', 'password', password)
+            assertParamExists('login', 'password', password)
             const localVarPath = `/api/v1/userlogin/login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -404,7 +404,7 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginfromcookieApiV1UserloginLoginfromcookiePost: async (accessToken?: AccessToken, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        loginFromCookie: async (accessToken?: AccessToken, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/loginfromcookie`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -434,7 +434,7 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutApiV1UserloginLogoutPost: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        logout: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -484,10 +484,10 @@ export const LoginApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginApiV1UserloginLoginPost(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options);
+        async login(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.login(username, password, grantType, scope, clientId, clientSecret, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LoginApi.loginApiV1UserloginLoginPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['LoginApi.login']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -497,10 +497,10 @@ export const LoginApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: AccessToken, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options);
+        async loginFromCookie(accessToken?: AccessToken, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginFromCookie(accessToken, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LoginApi.loginfromcookieApiV1UserloginLoginfromcookiePost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['LoginApi.loginFromCookie']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -509,10 +509,10 @@ export const LoginApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async logoutApiV1UserloginLogoutPost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.logoutApiV1UserloginLogoutPost(options);
+        async logout(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logout(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LoginApi.logoutApiV1UserloginLogoutPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['LoginApi.logout']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -537,8 +537,8 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginApiV1UserloginLoginPost(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: any): AxiosPromise<User> {
-            return localVarFp.loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
+        login(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: any): AxiosPromise<User> {
+            return localVarFp.login(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
         },
         /**
          * Login endpoint for login with cookie.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP cookie.  Returns -------     User pydantic model, the user data in case of a successful login.  Raises ------ HTTPException     401: Unauthorized if the username or password is wrong.
@@ -547,8 +547,8 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: AccessToken, options?: any): AxiosPromise<User> {
-            return localVarFp.loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options).then((request) => request(axios, basePath));
+        loginFromCookie(accessToken?: AccessToken, options?: any): AxiosPromise<User> {
+            return localVarFp.loginFromCookie(accessToken, options).then((request) => request(axios, basePath));
         },
         /**
          * Logout endpoint.
@@ -556,8 +556,8 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutApiV1UserloginLogoutPost(options?: any): AxiosPromise<any> {
-            return localVarFp.logoutApiV1UserloginLogoutPost(options).then((request) => request(axios, basePath));
+        logout(options?: any): AxiosPromise<any> {
+            return localVarFp.logout(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -582,8 +582,8 @@ export class LoginApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public loginApiV1UserloginLoginPost(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: RawAxiosRequestConfig) {
-        return LoginApiFp(this.configuration).loginApiV1UserloginLoginPost(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
+    public login(username: string, password: string, grantType?: GrantType, scope?: string, clientId?: ClientId, clientSecret?: ClientSecret, options?: RawAxiosRequestConfig) {
+        return LoginApiFp(this.configuration).login(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -594,8 +594,8 @@ export class LoginApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken?: AccessToken, options?: RawAxiosRequestConfig) {
-        return LoginApiFp(this.configuration).loginfromcookieApiV1UserloginLoginfromcookiePost(accessToken, options).then((request) => request(this.axios, this.basePath));
+    public loginFromCookie(accessToken?: AccessToken, options?: RawAxiosRequestConfig) {
+        return LoginApiFp(this.configuration).loginFromCookie(accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -605,8 +605,8 @@ export class LoginApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof LoginApi
      */
-    public logoutApiV1UserloginLogoutPost(options?: RawAxiosRequestConfig) {
-        return LoginApiFp(this.configuration).logoutApiV1UserloginLogoutPost(options).then((request) => request(this.axios, this.basePath));
+    public logout(options?: RawAxiosRequestConfig) {
+        return LoginApiFp(this.configuration).logout(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -625,9 +625,9 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changePasswordApiV1UserloginChangepasswordPut: async (passwordUpdateRequest: PasswordUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        changePassword: async (passwordUpdateRequest: PasswordUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'passwordUpdateRequest' is not null or undefined
-            assertParamExists('changePasswordApiV1UserloginChangepasswordPut', 'passwordUpdateRequest', passwordUpdateRequest)
+            assertParamExists('changePassword', 'passwordUpdateRequest', passwordUpdateRequest)
             const localVarPath = `/api/v1/userlogin/changepassword`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -664,7 +664,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkNoUsersApiV1UserloginChecknousersGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        checkNoUsers: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/checknousers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -695,9 +695,9 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createFirstUserApiV1UserloginCreatefirstuserPost: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createFirstUser: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'user' is not null or undefined
-            assertParamExists('createFirstUserApiV1UserloginCreatefirstuserPost', 'user', user)
+            assertParamExists('createFirstUser', 'user', user)
             const localVarPath = `/api/v1/userlogin/createfirstuser`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -731,9 +731,9 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserApiV1UserloginCreateuserPost: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createUser: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'user' is not null or undefined
-            assertParamExists('createUserApiV1UserloginCreateuserPost', 'user', user)
+            assertParamExists('createUser', 'user', user)
             const localVarPath = `/api/v1/userlogin/createuser`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -765,12 +765,53 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * Delete an existing user (requires admin priviledges).  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
+         * @summary User Delete
+         * @param {string} usernameToDelete 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUser: async (usernameToDelete: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'usernameToDelete' is not null or undefined
+            assertParamExists('deleteUser', 'usernameToDelete', usernameToDelete)
+            const localVarPath = `/api/v1/userlogin/deleteuser`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+            if (usernameToDelete !== undefined) {
+                localVarQueryParameter['username_to_delete'] = usernameToDelete;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
          * @summary Get Current User
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentUserApiV1UserloginGetcurrentuserGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCurrentUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/getcurrentuser`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -804,7 +845,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserListApiV1UserloginGetallusersGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getUserList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/userlogin/getallusers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -839,9 +880,9 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserApiV1UserloginUpdateuserPut: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateUser: async (user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'user' is not null or undefined
-            assertParamExists('updateUserApiV1UserloginUpdateuserPut', 'user', user)
+            assertParamExists('updateUser', 'user', user)
             const localVarPath = `/api/v1/userlogin/updateuser`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -872,47 +913,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * Delete an existing user (requires admin priviledges).  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
-         * @summary User Delete
-         * @param {string} usernameToDelete 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userDeleteApiV1UserloginDeleteuserDelete: async (usernameToDelete: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'usernameToDelete' is not null or undefined
-            assertParamExists('userDeleteApiV1UserloginDeleteuserDelete', 'usernameToDelete', usernameToDelete)
-            const localVarPath = `/api/v1/userlogin/deleteuser`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication OAuth2PasswordBearer required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
-
-            if (usernameToDelete !== undefined) {
-                localVarQueryParameter['username_to_delete'] = usernameToDelete;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -930,10 +930,10 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options);
+        async changePassword(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.changePassword(passwordUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.changePasswordApiV1UserloginChangepasswordPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.changePassword']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -942,10 +942,10 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async checkNoUsersApiV1UserloginChecknousersGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.checkNoUsersApiV1UserloginChecknousersGet(options);
+        async checkNoUsers(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkNoUsers(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.checkNoUsersApiV1UserloginChecknousersGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.checkNoUsers']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -955,10 +955,10 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createFirstUserApiV1UserloginCreatefirstuserPost(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createFirstUserApiV1UserloginCreatefirstuserPost(user, options);
+        async createFirstUser(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createFirstUser(user, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.createFirstUserApiV1UserloginCreatefirstuserPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.createFirstUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -968,47 +968,10 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserApiV1UserloginCreateuserPost(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createUserApiV1UserloginCreateuserPost(user, options);
+        async createUser(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(user, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.createUserApiV1UserloginCreateuserPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
-         * @summary Get Current User
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getCurrentUserApiV1UserloginGetcurrentuserGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUserApiV1UserloginGetcurrentuserGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.getCurrentUserApiV1UserloginGetcurrentuserGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Get all users endpoint (only admins).  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
-         * @summary Get User List
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getUserListApiV1UserloginGetallusersGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserListApiV1UserloginGetallusersGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.getUserListApiV1UserloginGetallusersGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Update the first_name, last_name, email and role of an existing user.  Parameters ---------- updated_user     The attribute username identifies the user to modify.     The attributes first_name, last_name, email and role are set for this user.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
-         * @summary Update User
-         * @param {User} user 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateUserApiV1UserloginUpdateuserPut(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserApiV1UserloginUpdateuserPut(user, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.updateUserApiV1UserloginUpdateuserPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.createUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1018,10 +981,47 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userDeleteApiV1UserloginDeleteuserDelete(usernameToDelete: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userDeleteApiV1UserloginDeleteuserDelete(usernameToDelete, options);
+        async deleteUser(usernameToDelete: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(usernameToDelete, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.userDeleteApiV1UserloginDeleteuserDelete']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.deleteUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
+         * @summary Get Current User
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCurrentUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.getCurrentUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get all users endpoint (only admins).  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+         * @summary Get User List
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.getUserList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update the first_name, last_name, email and role of an existing user.  Parameters ---------- updated_user     The attribute username identifies the user to modify.     The attributes first_name, last_name, email and role are set for this user.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+         * @summary Update User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUser(user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(user, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.updateUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1041,8 +1041,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: any): AxiosPromise<any> {
-            return localVarFp.changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options).then((request) => request(axios, basePath));
+        changePassword(passwordUpdateRequest: PasswordUpdateRequest, options?: any): AxiosPromise<any> {
+            return localVarFp.changePassword(passwordUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Check if there are no users in the database.  Returns -------     True, if there are no users in the database.
@@ -1050,8 +1050,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkNoUsersApiV1UserloginChecknousersGet(options?: any): AxiosPromise<boolean> {
-            return localVarFp.checkNoUsersApiV1UserloginChecknousersGet(options).then((request) => request(axios, basePath));
+        checkNoUsers(options?: any): AxiosPromise<boolean> {
+            return localVarFp.checkNoUsers(options).then((request) => request(axios, basePath));
         },
         /**
          * Create first user.  Parameters ---------- first_user     pydantic base model of the first user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.     The role should be admin.
@@ -1060,8 +1060,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createFirstUserApiV1UserloginCreatefirstuserPost(user: User, options?: any): AxiosPromise<any> {
-            return localVarFp.createFirstUserApiV1UserloginCreatefirstuserPost(user, options).then((request) => request(axios, basePath));
+        createFirstUser(user: User, options?: any): AxiosPromise<any> {
+            return localVarFp.createFirstUser(user, options).then((request) => request(axios, basePath));
         },
         /**
          * Create user database entry (only admins).  Parameters ---------- new_user     pydantic base model of new user, token_type should be \"password\" and     access_token should contain the password of the new user.     The password of the new user should at least be 12 characters long.
@@ -1070,36 +1070,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserApiV1UserloginCreateuserPost(user: User, options?: any): AxiosPromise<any> {
-            return localVarFp.createUserApiV1UserloginCreateuserPost(user, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
-         * @summary Get Current User
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getCurrentUserApiV1UserloginGetcurrentuserGet(options?: any): AxiosPromise<User> {
-            return localVarFp.getCurrentUserApiV1UserloginGetcurrentuserGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Get all users endpoint (only admins).  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
-         * @summary Get User List
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getUserListApiV1UserloginGetallusersGet(options?: any): AxiosPromise<Array<User>> {
-            return localVarFp.getUserListApiV1UserloginGetallusersGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Update the first_name, last_name, email and role of an existing user.  Parameters ---------- updated_user     The attribute username identifies the user to modify.     The attributes first_name, last_name, email and role are set for this user.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
-         * @summary Update User
-         * @param {User} user 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateUserApiV1UserloginUpdateuserPut(user: User, options?: any): AxiosPromise<any> {
-            return localVarFp.updateUserApiV1UserloginUpdateuserPut(user, options).then((request) => request(axios, basePath));
+        createUser(user: User, options?: any): AxiosPromise<any> {
+            return localVarFp.createUser(user, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete an existing user (requires admin priviledges).  Parameters ---------- username_to_delete     Name of the user to delete.  Raises ------ HTTPException     404: Not found
@@ -1108,8 +1080,36 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userDeleteApiV1UserloginDeleteuserDelete(usernameToDelete: string, options?: any): AxiosPromise<void> {
-            return localVarFp.userDeleteApiV1UserloginDeleteuserDelete(usernameToDelete, options).then((request) => request(axios, basePath));
+        deleteUser(usernameToDelete: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteUser(usernameToDelete, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
+         * @summary Get Current User
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentUser(options?: any): AxiosPromise<User> {
+            return localVarFp.getCurrentUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all users endpoint (only admins).  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+         * @summary Get User List
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserList(options?: any): AxiosPromise<Array<User>> {
+            return localVarFp.getUserList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update the first_name, last_name, email and role of an existing user.  Parameters ---------- updated_user     The attribute username identifies the user to modify.     The attributes first_name, last_name, email and role are set for this user.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+         * @summary Update User
+         * @param {User} user 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUser(user: User, options?: any): AxiosPromise<any> {
+            return localVarFp.updateUser(user, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1129,8 +1129,8 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).changePasswordApiV1UserloginChangepasswordPut(passwordUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+    public changePassword(passwordUpdateRequest: PasswordUpdateRequest, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).changePassword(passwordUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1140,8 +1140,8 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public checkNoUsersApiV1UserloginChecknousersGet(options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).checkNoUsersApiV1UserloginChecknousersGet(options).then((request) => request(this.axios, this.basePath));
+    public checkNoUsers(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).checkNoUsers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1152,8 +1152,8 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public createFirstUserApiV1UserloginCreatefirstuserPost(user: User, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).createFirstUserApiV1UserloginCreatefirstuserPost(user, options).then((request) => request(this.axios, this.basePath));
+    public createFirstUser(user: User, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).createFirstUser(user, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1164,42 +1164,8 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public createUserApiV1UserloginCreateuserPost(user: User, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).createUserApiV1UserloginCreateuserPost(user, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
-     * @summary Get Current User
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApi
-     */
-    public getCurrentUserApiV1UserloginGetcurrentuserGet(options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).getCurrentUserApiV1UserloginGetcurrentuserGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Get all users endpoint (only admins).  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
-     * @summary Get User List
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApi
-     */
-    public getUserListApiV1UserloginGetallusersGet(options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).getUserListApiV1UserloginGetallusersGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Update the first_name, last_name, email and role of an existing user.  Parameters ---------- updated_user     The attribute username identifies the user to modify.     The attributes first_name, last_name, email and role are set for this user.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
-     * @summary Update User
-     * @param {User} user 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApi
-     */
-    public updateUserApiV1UserloginUpdateuserPut(user: User, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).updateUserApiV1UserloginUpdateuserPut(user, options).then((request) => request(this.axios, this.basePath));
+    public createUser(user: User, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).createUser(user, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1210,8 +1176,42 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public userDeleteApiV1UserloginDeleteuserDelete(usernameToDelete: string, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).userDeleteApiV1UserloginDeleteuserDelete(usernameToDelete, options).then((request) => request(this.axios, this.basePath));
+    public deleteUser(usernameToDelete: string, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).deleteUser(usernameToDelete, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.  Parameters ---------- access_token     User token as previously obtained trough a call to /login     Submit via HTTP header \"Authorization: Bearer <access_token>\"  Returns -------     User pydantic model, the user data of the current user.  Raises ------ HTTPException     401: Unauthorized if the token is invalid or outdated.
+     * @summary Get Current User
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public getCurrentUser(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).getCurrentUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all users endpoint (only admins).  Returns -------     List of all users. The access_token and token_type properties are set to \"\" for all of them.
+     * @summary Get User List
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public getUserList(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).getUserList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update the first_name, last_name, email and role of an existing user.  Parameters ---------- updated_user     The attribute username identifies the user to modify.     The attributes first_name, last_name, email and role are set for this user.  Returns -------     None  Raises ------ HTTPException     404: Not found if user not found.
+     * @summary Update User
+     * @param {User} user 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public updateUser(user: User, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).updateUser(user, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

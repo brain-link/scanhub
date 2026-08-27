@@ -1,0 +1,45 @@
+[project]
+name = "scanhub-protocol-manager"
+version = "0.0.1"
+description = "The protocol manager is responsible for managing the protocol tree."
+authors = [
+    {name = "David Schote", email = "david.schote@brain-link.de"},
+    {name = "Christoph Dinh", email = "christoph.dinh@brain-link.de"}
+]
+readme = "README.md"
+license = { text = "GPL-3.0-only with custom exception" }
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "asyncpg>=0.30.0",
+    "uvicorn>=0.49.0",
+    "psycopg2-binary>=2.9.10",
+    "python-multipart>=0.0.20",
+    "async-sqlalchemy>=1.0.0",
+    "types-requests>=2.32.0.20241016",
+    "motor>=3.7.1",
+    "motor-types>=1.0.0b4",
+    "pydicom>=3.0.1",
+    "ismrmrd>=1.14.1",
+    "httpx>=0.28.1",
+    "fastapi",
+    "scanhub-libraries",
+]
+
+[dependency-groups]
+test = ["coverage", "codecov", "pytest"]
+docs = ["sphinx", "sphinx_rtd_theme"]
+lint = ["ruff>=0.16.3", "mypy>=2.3.1"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+scanhub-libraries = { workspace = true }
+
+[tool.ruff]
+extend = "../../pyproject.toml"
+src = ["app"]
+target-version = "py310"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]

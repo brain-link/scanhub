@@ -20,7 +20,7 @@ import Typography from '@mui/joy/Typography'
 import NotificationContext from '../NotificationContext'
 import { sequenceApi } from '../api'
 import { ModalProps } from '../interfaces/components.interface'
-import { BaseMRISequence } from '../openapi/generated-client/exam/api'
+import { BaseMRISequence } from '../openapi/generated-client/protocol/api'
 
 
 
@@ -43,7 +43,7 @@ function SequenceUploadForm(props: ModalProps) {
         showNotification({message: 'No sequence file selected', type: 'warning'})
         return
       }
-      await sequenceApi.createMriSequenceApiV1ExamSequencePost(
+      await sequenceApi.createMriSequence(
         seqFile,
         xmlFile ?? new File([], 'null'), 
         sequence.name,

@@ -34,7 +34,7 @@ function PasswordForm(props: ModalPropsModify<string>) {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      await userApi.changePasswordApiV1UserloginChangepasswordPut(
+      await userApi.changePassword(
         {
           password_of_requester: passwordOfRequester,   // eslint-disable-line camelcase
           username_to_change_password_for: props.item,  // eslint-disable-line camelcase

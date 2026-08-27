@@ -1,5 +1,7 @@
-from uuid import UUID
+"""Shared helper functions."""
+
 from datetime import date
+from uuid import UUID
 
 
 def ensure_uuid(val: str | UUID | None) -> UUID | None:

@@ -52,7 +52,7 @@ function PatientForm(props: ModalProps) {
   const mutation = useMutation({
     mutationFn: async () => {
       await patientApi
-        .createPatientApiV1PatientPost(patient)
+        .createPatient(patient)
         .then((response) => {
           props.onSubmit()
           showNotification({message: 'Created patient ' + response.data.first_name + ' ' + response.data.last_name, type: 'success'})

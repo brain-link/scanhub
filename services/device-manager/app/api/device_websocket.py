@@ -14,24 +14,30 @@ import hashlib
 import json
 import os
 import time
+from collections import defaultdict
+from collections.abc import AsyncGenerator
+from contextlib import suppress
 from pathlib import Path
 from secrets import compare_digest, token_hex
-from typing import Annotated, Dict, Optional
+from typing import Annotated
 from uuid import UUID
 
+from dagster_graphql import DagsterGraphQLClient
 from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
+    Query,
     WebSocket,
     WebSocketDisconnect,
     WebSocketException,
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
+from gql.transport.requests import RequestsHTTPTransport
+from pydantic import BaseModel
 from scanhub_libraries.models import (
     AcquisitionPayload,
-    AcquisitionTaskOut,
     DeviceDetails,
     DeviceStatus,
     ItemStatus,
@@ -40,25 +46,30 @@ from scanhub_libraries.models import (
 )
 from scanhub_libraries.security import compute_complex_password_hash
 from sqlalchemy import exc
+from starlette.responses import StreamingResponse
 
 import app.api.exam_requests as exam_requests
 from app.api.dal import dal_get_device, dal_update_device
 
 LOG_CALL_DELIMITER = "-------------------------------------------------------------------------------"
 DATA_LAKE_DIR = os.getenv("DATA_LAKE_DIRECTORY")
+DAGSTER_GRAPHQL_URL = "http://dagster-webserver:3000/dagster/graphql"
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 router = APIRouter()
 
 # Maintain active WebSocket connections and a mapping of device IDs to WebSockets
-dict_id_websocket: Dict[UUID, WebSocket] = {}
+dict_id_websocket: dict[UUID, WebSocket] = {}
 
 # Maintain device parameters from acquisition start
 # dict_id_parameters: dict[UUID, dict] = {}
 
 # Maintain latest device activity (pong)
-device_last_seen: Dict[UUID, float] = {}
+device_last_seen: dict[UUID, float] = {}
+
+# SSE subscriber queues per task_id
+task_sse_queues: dict[str, list[asyncio.Queue]] = defaultdict(list)
 
 
 async def send_json(websocket, payload: dict):
@@ -73,57 +84,122 @@ async def send_json(websocket, payload: dict):
         print(f"RuntimeError while sending WS message: {exc}")
 
 
-@router.post("/start_scan_via_websocket", response_model={}, status_code=200, tags=["devices"])
-async def start_scan_via_websocket(
-    task: AcquisitionTaskOut,
-    access_token: Annotated[str, Depends(oauth2_scheme)]
-):
-    """Start a scan via a websocket that was already opened by the device.
+async def _broadcast_task_status(task_id: str, event: dict) -> None:
+    """Push a status event to all SSE subscribers watching a task."""
+    for queue in list(task_sse_queues.get(task_id, [])):
+        await queue.put(event)
 
-    Parameters
-    ----------
-    device_task
-        Details of the scan and the device to scan on.
 
+# Terminal task_status values that cause the SSE stream to close automatically.
+_SSE_TERMINAL_STATUSES = frozenset({"ERROR", "FAILED", "CANCELLED", "SUCCEEDED"})
+
+
+class TaskEvent(BaseModel):
+    """Payload for the push-event endpoint — callable by any internal service."""
+
+    source: str          # "device" | "pipeline" | "system"
+    task_status: str     # e.g. INPROGRESS, FINISHED, FAILED, TRANSFERRING …
+    progress: int = 0
+    message: str = ""
+
+
+@router.post("/task/{task_id}/push-event", response_model={}, status_code=200,
+             tags=["devices"], operation_id="push_task_event")
+async def push_task_event(task_id: str, event: TaskEvent) -> dict:
+    """Push a status event to all SSE subscribers of a task; called internally by any service.
+
+    Called by Dagster sensors on job success, failure, or cancellation.
+    No authentication required — only reachable on the internal Docker network.
     """
-    # Get sequence and device
+    await _broadcast_task_status(task_id, event.model_dump())
+    return {}
+
+
+@router.get("/task-stream/{task_id}", tags=["devices"], operation_id="task_stream")
+async def task_stream(task_id: str, token: Annotated[str, Query()]) -> StreamingResponse:
+    """SSE endpoint — streams real-time task status updates to the browser.
+
+    The browser connects with EventSource and receives JSON events of the form:
+        {"task_status": "INPROGRESS", "progress": 45}
+
+    The stream closes automatically when the task reaches FINISHED or ERROR.
+    A keepalive comment is sent every 25 s to prevent proxy timeouts.
+    """
+    if not token:
+        raise HTTPException(status_code=401, detail="Missing token.")
+
+    queue: asyncio.Queue = asyncio.Queue()
+    task_sse_queues[task_id].append(queue)
+
+    async def generator() -> AsyncGenerator[str, None]:
+        try:
+            while True:
+                try:
+                    event = await asyncio.wait_for(queue.get(), timeout=25)
+                except asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+                    continue
+                yield f"data: {json.dumps(event)}\n\n"
+                if event.get("task_status") in _SSE_TERMINAL_STATUSES:
+                    break
+        finally:
+            with suppress(ValueError):
+                task_sse_queues[task_id].remove(queue)
+
+    return StreamingResponse(
+        generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
+@router.post(
+    "/trigger_acquisition/{task_id}",
+    response_model={},
+    status_code=200,
+    tags=["devices"],
+    operation_id="trigger_acquisition",
+)
+async def trigger_acquisition(
+    task_id: UUID,
+    access_token: Annotated[str, Depends(oauth2_scheme)],
+):
+    """Trigger an MRI acquisition for the given task.
+
+    Fetches the task from the protocol manager, looks up the assigned sequence and device,
+    sends the scan-start command via the device's open WebSocket, and marks the task as STARTED.
+    """
+    task = exam_requests.get_task(str(task_id), access_token)
+
     if task.sequence_id is None:
-        raise HTTPException(status_code=404, detail="Missing sequence ID")
+        raise HTTPException(status_code=400, detail="Missing sequence ID on task.")
     if task.device_id is None:
-        raise HTTPException(status_code=404, detail="Missing device ID")
+        raise HTTPException(status_code=400, detail="Missing device ID on task.")
+
+    if task.device_id not in dict_id_websocket:
+        raise HTTPException(status_code=503, detail="Device offline.")
 
     sequence = exam_requests.get_sequence(task.sequence_id, access_token)
 
-    # Use parameter state to prevent triggering a device twice
-    # if task.device_id in dict_id_parameters:
-    #     raise HTTPException(status_code=404, detail="Device is busy")
-
-
     if not (device := await dal_get_device(task.device_id)):
-        raise HTTPException(status_code=404, detail="Device not found")
+        raise HTTPException(status_code=404, detail="Device not found.")
     device_details = DeviceDetails(**device.__dict__)
-
-
-    # dict_id_parameters[task.device_id] = device_details.parameter if device_details.parameter is not None else {}
-
 
     payload = AcquisitionPayload(
         **task.model_dump(),
         sequence=sequence,
-        mrd_header="header_xml_placeholder",  # Placeholder, should be filled with actual MRD header
+        mrd_header="header_xml_placeholder",
         access_token=access_token,
-        device_parameter=device_details.parameter if device_details.parameter is not None else {},
+        device_parameter=device_details.parameter or {},
     )
 
-    if task.device_id in dict_id_websocket:
-        websocket = dict_id_websocket[task.device_id]
-        await websocket.send_text(
-            json.dumps(
-                {"command": "start", "data": payload},
-                default=jsonable_encoder,
-            ))
-        return
-    raise HTTPException(status_code=503, detail="Device offline.")
+    websocket = dict_id_websocket[task.device_id]
+    await websocket.send_text(
+        json.dumps({"command": "start", "data": payload}, default=jsonable_encoder)
+    )
+
+    exam_requests.update_task_status(str(task_id), "STARTED", access_token)
+    return {}
 
 
 async def connection_with_valid_id_and_token(websocket: WebSocket) -> UUID:
@@ -164,15 +240,35 @@ async def connection_with_valid_id_and_token(websocket: WebSocket) -> UUID:
 # TODO improve overall logic and resilience
 
 
+# Client pings every 5s (see Client._heartbeat). Timeout allows for a couple of
+# missed pings (network jitter) before declaring a device dead; the check
+# interval bounds the worst-case detection delay to roughly TIMEOUT + CHECK.
+_HEARTBEAT_TIMEOUT_S = 15
+_HEARTBEAT_CHECK_INTERVAL_S = 5
+
+
 # Coroutine to monitor device status depending on ping-pong
 async def monitor_devices():
-    """Monitor device online/offline status."""
+    """Monitor device online/offline status via the ping heartbeat.
+
+    Catches every disconnection a clean WebSocketDisconnect can't: crashed
+    processes, killed processes (SIGKILL), dropped network links, etc. — any
+    device that stops pinging is marked OFFLINE within roughly
+    `_HEARTBEAT_TIMEOUT_S + _HEARTBEAT_CHECK_INTERVAL_S` seconds, independent of
+    whether the client ever got a chance to shut down cleanly.
+    """
     while True:
         now = time.time()
-        for dev, last_seen in device_last_seen.items():
-            if now - last_seen > 60:  # 1 minute timeout
-                await dal_update_device(dev, {"status": DeviceStatus.OFFLINE})
-        await asyncio.sleep(30)
+        # Snapshot before mutating device_last_seen below.
+        stale = [
+            dev for dev, last_seen in device_last_seen.items()
+            if now - last_seen > _HEARTBEAT_TIMEOUT_S
+        ]
+        for dev in stale:
+            await dal_update_device(dev, {"status": DeviceStatus.OFFLINE})
+            # Drop it — nothing left to monitor until the device pings again.
+            device_last_seen.pop(dev, None)
+        await asyncio.sleep(_HEARTBEAT_CHECK_INTERVAL_S)
 
 
 @router.websocket("/ws")
@@ -220,6 +316,7 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         print("WebSocketDisconnect")
         dict_id_websocket.pop(device_id, None)
+        device_last_seen.pop(device_id, None)
         # dict_id_parameters.pop(device_id, None)
         print("Device disconnected:", device_id)
         # Set the status of the disconnected device to "disconnected"
@@ -320,13 +417,17 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         progress = int(data.get("progress", task.progress or 0))
         task.progress = max(0, min(progress, 100))
         if task.progress >= 100:
-            task.status = ItemStatus.FINISHED
+            task.status = ItemStatus.ACQUIRED
         else:
             task.status = ItemStatus.INPROGRESS
 
-    # Persist and send feedback
+    # Persist and broadcast to SSE subscribers
     try:
         updated_task = exam_requests.set_task(str(task_id), task, str(user_access_token))
+        await _broadcast_task_status(str(task_id), {
+            "task_status": updated_task.status,
+            "progress": updated_task.progress or 0,
+        })
         await send_json(websocket, {
             "command": "feedback",
             "message": f"Device {status.value} update processed (progress={updated_task.progress}%)."
@@ -338,36 +439,8 @@ async def handle_status_update(websocket: WebSocket, message: dict, device_id: U
         })
 
 
-async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UUID) -> None:
-    """Handle file transfer from device to server."""
-    print("Handle file transfer...")
-    # Preflight check for DATA_LAKE_DIR
-    if DATA_LAKE_DIR is None:
-        raise OSError("Missing `DATA_LAKE_DIRECTORY` environment variable.")
-    if not os.path.exists(DATA_LAKE_DIR):
-        raise IsADirectoryError("`DATA_LAKE_DIRECTORY` does not exist.")
-
-    task_id: str = str(header["task_id"])
-    user_access_token: str = str(header["user_access_token"])
-    filename: Path = Path(header.get("filename", "upload.bin"))
-    size_bytes: int = int(header["size_bytes"])
-    # content_type: str = header.get("content_type")
-    header_sha256: Optional[str] = header.get("sha256")
-    device_parameter: dict | None = header.get("device_parameter")
-
-    # Locate task & result directory
-    task = exam_requests.get_task(task_id, user_access_token)
-
-    # Create blank result entry
-    blank_result = exam_requests.create_blank_result(task_id, user_access_token)
-
-    # Create the result directory
-    result_directory = Path(DATA_LAKE_DIR) / str(task.workflow_id) / str(task_id) / str(blank_result.id)
-    result_directory.mkdir(exist_ok=True, parents=True)
-    file_path = result_directory / filename
-    tmp_path = file_path.with_suffix(file_path.suffix + ".part")
-
-    # Receive bytes -> stream to disk
+async def _stream_to_file(websocket: WebSocket, tmp_path: Path, size_bytes: int) -> tuple[int, str]:
+    """Stream bytes from a WebSocket into a temp file; returns (bytes_received, sha256_hex)."""
     hasher = hashlib.sha256()
     bytes_received = 0
     with open(tmp_path, "wb") as fout:
@@ -377,64 +450,110 @@ async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UU
                 raise WebSocketDisconnect(code=1001)
             if event["type"] != "websocket.receive":
                 continue
-
             chunk = event.get("bytes")
-            if chunk is None:  # ignore stray text frames
+            if chunk is None:
                 continue
-
             fout.write(chunk)
             hasher.update(chunk)
             bytes_received += len(chunk)
+    return bytes_received, hasher.hexdigest()
 
-    # Check if we received the expected number of bytes
+
+def _submit_reconstruction_job(task_id: str, task_dir: str, protocol_id: str, user_access_token: str) -> None:
+    """Submit the mrpro_reconstruction_job to Dagster after a file transfer completes."""
+    try:
+        _transport = RequestsHTTPTransport(
+            url=DAGSTER_GRAPHQL_URL, use_json=True, timeout=30,
+        )
+        client = DagsterGraphQLClient(hostname="dagster-webserver", port_number=3000, transport=_transport)
+        run_config = {
+            "resources": {
+                "dag_config": {
+                    "config": {
+                        "task_dir": task_dir,
+                        "task_id": task_id,
+                        "protocol_id": protocol_id,
+                        "user_access_token": user_access_token,
+                    },
+                },
+            },
+        }
+        client.submit_job_execution("mrpro_reconstruction_job", run_config=run_config)
+    except Exception as exc:  # noqa: BLE001
+        print(f"Warning: Failed to submit Dagster reconstruction job: {exc}")  # noqa: T201
+
+
+async def handle_file_transfer(websocket: WebSocket, header: dict, device_id: UUID) -> None:
+    """Handle file transfer from device to server."""
+    if DATA_LAKE_DIR is None:
+        msg = "Missing `DATA_LAKE_DIRECTORY` environment variable."
+        raise OSError(msg)
+    if not Path(DATA_LAKE_DIR).exists():
+        msg = "`DATA_LAKE_DIRECTORY` does not exist."
+        raise IsADirectoryError(msg)
+
+    task_id: str = str(header["task_id"])
+    user_access_token: str = str(header["user_access_token"])
+    filename: Path = Path(header.get("filename", "upload.bin"))
+    size_bytes: int = int(header["size_bytes"])
+    header_sha256: str | None = header.get("sha256")
+    device_parameter: dict | None = header.get("device_parameter")
+
+    task = exam_requests.get_task(task_id, user_access_token)
+    task_dir = Path(DATA_LAKE_DIR) / str(task.protocol_id) / str(task_id)
+    task_dir.mkdir(exist_ok=True, parents=True)
+    file_path = task_dir / filename
+    tmp_path = file_path.with_suffix(file_path.suffix + ".part")
+
+    await _broadcast_task_status(task_id, {"task_status": "TRANSFERRING", "progress": 0})
+    bytes_received, hexdigest = await _stream_to_file(websocket, tmp_path, size_bytes)
+
     if bytes_received != size_bytes:
-        if tmp_path.exists():
-            tmp_path.unlink()
+        tmp_path.unlink(missing_ok=True)
         await send_json(websocket, {
             "command": "feedback",
             "message": f"Incomplete file received ({bytes_received}/{size_bytes} bytes).",
         })
         return
 
-    # Checksum verification
-    if header_sha256 and hasher.hexdigest() != header_sha256:
-        if tmp_path.exists():
-            tmp_path.unlink()
+    if header_sha256 and hexdigest != header_sha256:
+        tmp_path.unlink(missing_ok=True)
         await send_json(websocket, {
             "command": "feedback",
             "message": "Checksum mismatch for uploaded file.",
         })
         return
 
-    # os.replace(tmp_path, file_path)  # atomic finalize
     tmp_path.replace(file_path)
     result_files = [file_path.name]
 
-    print("DEVICE PARAMETER: ", device_parameter)
-
-    # Write device parameters if exist
     if device_parameter:
-        parameter_path = result_directory / "device_parameter.json"
-        data = {
-            "device_id": str(device_id),
-            "parameter": device_parameter,
-        }
+        parameter_path = task_dir / "device_parameter.json"
         with parameter_path.open("w") as fh:
-            json.dump(data, fh, indent=4)
+            json.dump({"device_id": str(device_id), "parameter": device_parameter}, fh, indent=4)
         result_files.append(parameter_path.name)
+        if not await dal_update_device(device_id, {"parameter": device_parameter}):
+            print("Error updating device parameter, device_id:", device_id)
 
-    # Set result
-    set_result = SetResult(
+    blank_result = exam_requests.create_blank_result(task_id, user_access_token)
+    set_result_payload = SetResult(
         type=_pick_result_type(file_path.name),
-        directory=str(result_directory),
-        files=result_files
+        directory=str(task_dir),
+        files=result_files,
     )
-    print("Result to set: ", set_result.model_dump_json())
-    result = exam_requests.set_result(str(blank_result.id), set_result, user_access_token)
+    result = exam_requests.set_result(str(blank_result.id), set_result_payload, user_access_token)
 
+    _submit_reconstruction_job(
+        task_id=task_id,
+        task_dir=str(task_dir),
+        protocol_id=str(task.protocol_id),
+        user_access_token=user_access_token,
+    )
+
+    await _broadcast_task_status(task_id, {"task_status": "RECONSTRUCTING", "progress": 0})
     await send_json(websocket, {
         "command": "feedback",
-        "message": f"File {result.id} saved to datalake: {file_path}",
+        "message": f"File saved and reconstruction triggered: {file_path}",
         "result_id": str(result.id),
     })
 
@@ -444,7 +563,7 @@ def _pick_result_type(filename: str):
     ext = os.path.splitext(filename)[1].lower()
     if ext in [".dcm", ".dicom"]:
         return ResultType.DICOM
-    elif ext in [".mrd"]:
+    elif ext in [".mrd", ".h5"]:
         return ResultType.MRD
     elif ext in [".npy"]:
         return ResultType.NPY

@@ -11,29 +11,89 @@ import IconButton from '@mui/joy/IconButton'
 import LinearProgress from '@mui/joy/LinearProgress'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import axios from 'axios'
 import React from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { workflowManagerApi } from '../api'
-import { ItemStatus } from '../openapi/generated-client/exam'
+import { deviceApi } from '../api'
+import { DeviceStatus } from '../openapi/generated-client/device/api'
+import { ItemStatus } from '../openapi/generated-client/protocol'
 import { ItemSelection } from '../interfaces/components.interface'
+import LoginContext from '../LoginContext'
 import NotificationContext from '../NotificationContext'
+import baseUrls from '../utils/Urls'
 
 
-function AcquisitionControl({ itemSelection, openConfirmModal }: { 
+const STATUS_LABEL: Record<string, string> = {
+  // device states
+  NEW: 'Ready',
+  UPDATED: 'Ready',
+  STARTED: 'Starting...',
+  INPROGRESS: 'Scanning...',
+  ACQUIRED: 'Scan acquired',
+  FINISHED: 'Scan complete',
+  ERROR: 'Device error',
+  TRANSFERRING: 'Transferring data...',
+  // pipeline states
+  RECONSTRUCTING: 'Reconstructing...',
+  SUCCEEDED: 'Reconstruction complete',
+  FAILED: 'Reconstruction failed',
+  CANCELLED: 'Cancelled',
+}
+
+const FAILURE_STATUSES = new Set(['ERROR', 'FAILED', 'CANCELLED'])
+const ALWAYS_INDETERMINATE_STATUSES = new Set(['STARTED', 'TRANSFERRING', 'RECONSTRUCTING'])
+
+function AcquisitionControl({ itemSelection, openConfirmModal }: {
   itemSelection: ItemSelection, openConfirmModal: (onConfirmed: () => void) => void
 }){
   const [, showNotification] = React.useContext(NotificationContext)
+  const [user] = React.useContext(LoginContext)
   const hasTriggeredRef = React.useRef(false)
+  const [liveProgress, setLiveProgress] = React.useState<number | undefined>(undefined)
+  const [liveStatusLabel, setLiveStatusLabel] = React.useState<string | undefined>(undefined)
+  const [rawTaskStatus, setRawTaskStatus] = React.useState<string | undefined>(undefined)
+
+  React.useEffect(() => {
+    if (!itemSelection.itemId || itemSelection.type !== 'ACQUISITION' || !user?.access_token) {
+      setLiveProgress(undefined)
+      setLiveStatusLabel(undefined)
+      setRawTaskStatus(undefined)
+      return
+    }
+
+    const url = `${baseUrls.deviceService}/api/v1/device/task-stream/${itemSelection.itemId}?token=${user.access_token}`
+    const es = new EventSource(url)
+
+    es.onmessage = (event: MessageEvent<string>) => {
+      const data: { task_status: string; progress: number } = JSON.parse(event.data)
+      setRawTaskStatus(data.task_status)
+      setLiveProgress(data.progress)
+      setLiveStatusLabel(STATUS_LABEL[data.task_status] ?? data.task_status)
+      if (FAILURE_STATUSES.has(data.task_status) || data.task_status === 'SUCCEEDED') {
+        es.close()
+      }
+    }
+
+    return () => es.close()
+  }, [itemSelection.itemId, itemSelection.type, user?.access_token])
+
+  const { data: device } = useQuery({
+    queryKey: ['device', itemSelection.deviceId],
+    queryFn: async () => (await deviceApi.getDevice(itemSelection.deviceId!)).data,
+    enabled: !!itemSelection.deviceId,
+    refetchInterval: 5000,
+  })
+  const isDeviceOffline = device?.status === DeviceStatus.Offline
 
   const processTaskMutation = useMutation({
-    mutationKey: ['workflowManagerProcessTask'],
+    mutationKey: ['triggerAcquisition'],
     mutationFn: async () => {
       if (hasTriggeredRef.current) return
       hasTriggeredRef.current = true
       try {
-        await workflowManagerApi.triggerTaskApiV1WorkflowmanagerTriggerTaskTaskIdPost(
-          (itemSelection.itemId as string)
+        await axios.post(
+          `${baseUrls.deviceService}/api/v1/device/trigger_acquisition/${itemSelection.itemId}`
         )
         showNotification({message: 'Started task', type: 'success'})
       } catch {
@@ -46,22 +106,22 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
 
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-      <IconButton 
-        size='sm' 
-        variant='plain' 
+      <IconButton
+        size='sm'
+        variant='plain'
         color={'neutral'}
-        disabled={processTaskMutation.isPending || !(itemSelection.type == 'DAG' || itemSelection.type == 'ACQUISITION')}
+        disabled={processTaskMutation.isPending || itemSelection.type !== 'ACQUISITION' || isDeviceOffline}
         onClick={() => {
           openConfirmModal(() => {
-            // By now, only tasks can be executed
             if (itemSelection.itemId == undefined) {
               showNotification({message: 'No item selected!', type: 'warning'})
-            } else if (itemSelection.type == 'DAG' || itemSelection.type == 'ACQUISITION') {
+            } else if (isDeviceOffline) {
+              showNotification({message: 'Assigned device is offline.', type: 'warning'})
+            } else if (itemSelection.type == 'ACQUISITION') {
               if (!processTaskMutation.isPending){
                 processTaskMutation.mutate()
               }
             } else {
-              // TODO: Trigger acquisition start with selected exam (= workflow list) or single workflow
               showNotification({message: 'Acquisition trigger not implemented for this item type!', type: 'warning'})
             }
           })
@@ -72,20 +132,41 @@ function AcquisitionControl({ itemSelection, openConfirmModal }: {
 
       <Stack direction='column' sx={{ flex: 1 }}>
         <Typography level='title-sm'>
-          {itemSelection.type ? 
+          {itemSelection.type ?
             'Execute ' + itemSelection.type + ' "' + itemSelection.name + '"'
-          : 
+          :
             'Select item to start...'}
         </Typography>
-        <Typography level='body-xs'>{'ID: ' + itemSelection.itemId}</Typography>
-        <LinearProgress 
-          determinate={itemSelection.progress !== undefined && itemSelection.progress > 0}
-          value={itemSelection.progress !== undefined && itemSelection.progress > 0 ? itemSelection.progress : (
-              itemSelection.status === ItemStatus.Inprogress ? 25 : 0
-            )
-          }
-          sx={{marginTop: 1}}
-        />
+        {(() => {
+          const progressValue = liveProgress ?? itemSelection.progress ?? 0
+          const label = liveStatusLabel ?? STATUS_LABEL[itemSelection.status]
+          const showPct = progressValue > 0 && progressValue < 100
+          const isFailure = rawTaskStatus
+            ? FAILURE_STATUSES.has(rawTaskStatus)
+            : itemSelection.status === ItemStatus.Error
+          const currentStatus = rawTaskStatus ?? itemSelection.status
+          const isIndeterminate =
+            ALWAYS_INDETERMINATE_STATUSES.has(currentStatus)
+            || (currentStatus === ItemStatus.Inprogress && progressValue === 0)
+          return (
+            <>
+              <LinearProgress
+                determinate={!isIndeterminate}
+                value={isIndeterminate ? undefined : progressValue}
+                color={isFailure ? 'danger' : 'primary'}
+                sx={{ marginTop: 1 }}
+              />
+              {label && (
+                <Typography
+                  level='body-xs'
+                  sx={{ marginTop: 0.5, color: isFailure ? 'danger.500' : 'neutral.500' }}
+                >
+                  {label}{showPct ? ` — ${progressValue}%` : ''}
+                </Typography>
+              )}
+            </>
+          )
+        })()}
       </Stack>
     </Box>
   )

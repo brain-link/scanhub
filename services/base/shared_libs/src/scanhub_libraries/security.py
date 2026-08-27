@@ -21,6 +21,7 @@ USERLOGIN_URI = "/api/v1/userlogin/getcurrentuser"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+    """Resolve the current user by validating the access token against user-login-manager."""
     conn = http.client.HTTPConnection(USERLOGIN_HOST, timeout=5)
     try:
         conn.request("GET", USERLOGIN_URI, headers={"Authorization": f"Bearer {access_token}"})

@@ -57,19 +57,18 @@ class ItemStatus(str, Enum):
     NEW = "NEW"
     UPDATED = "UPDATED"
     STARTED = "STARTED"
-    FINISHED = "FINISHED"
-    ERROR = "ERROR"
     INPROGRESS = "INPROGRESS"
+    ACQUIRED = "ACQUIRED"      # scan complete, reconstruction pending
+    FINISHED = "FINISHED"      # scan + reconstruction both complete
+    ERROR = "ERROR"            # device-side error during acquisition
+    FAILED = "FAILED"          # pipeline failure during reconstruction
+    CANCELLED = "CANCELLED"    # Dagster job cancelled
 
 
 class TaskType(str, Enum):
     """Task type enum."""
 
     ACQUISITION = "ACQUISITION"
-    DAG = "DAG"
-    # DAG_TASK has one of the following subtypes
-    RECONSTRUCTION = "RECONSTRUCTION"
-    PROCESSING = "PROCESSING"
 
 
 class ResultType(str, Enum):
@@ -130,7 +129,7 @@ class DeviceOut(DeviceCreationRequest, DeviceDetails):
 
 
 # ----------------------------------------
-# Exam management
+# Protocol management
 # ----------------------------------------
 
 class BaseMRISequence(BaseModel):
@@ -186,7 +185,7 @@ class BaseTask(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    workflow_id: UUID | None = None
+    protocol_id: UUID | None = None
     name: str
     description: str
     task_type: TaskType
@@ -249,55 +248,8 @@ class AcquisitionPayload(AcquisitionTaskOut):
     device_parameter: dict
 
 
-class BaseDAGTask(BaseTask):
-    """Workflow task model."""
-
-    task_type: Literal[TaskType.DAG]
-    dag_type: Literal[TaskType.RECONSTRUCTION, TaskType.PROCESSING]
-    dag_id: str
-    input_task_ids: list[UUID] = []
-    parameter: dict | None = None
-
-
-class DAGTaskOut(TaskOut, BaseDAGTask):
-    """Workflow Task output model."""
-
-
-class DagsterJobConfiguration(BaseModel):
-    """Configuration for a Dagster job."""
-
-    model_config = ConfigDict(extra="ignore")
-
-    callback_url: str | None = None
-    input_path: str
-    output_path: str
-
-
-class BaseWorkflow(BaseModel):
-    """Workflow base model."""
-
-    model_config = ConfigDict(extra="ignore")
-
-    exam_id: UUID | None = None
-    name: str
-    description: str
-    comment: str | None = None
-    status: ItemStatus
-    is_template: bool
-
-
-class WorkflowOut(BaseWorkflow):
-    """Workflow output model."""
-
-    id: UUID
-    creator: str
-    datetime_created: datetime
-    datetime_updated: datetime | None = None
-    tasks: list[AcquisitionTaskOut | DAGTaskOut]
-
-
-class BaseExam(BaseModel):
-    """Exam base model."""
+class BaseProtocol(BaseModel):
+    """Protocol base model."""
 
     model_config = ConfigDict(extra="ignore")
 
@@ -310,14 +262,14 @@ class BaseExam(BaseModel):
     is_template: bool
 
 
-class ExamOut(BaseExam):
-    """Exam output model."""
+class ProtocolOut(BaseProtocol):
+    """Protocol output model."""
 
     id: UUID
     creator: str
     datetime_created: datetime
     datetime_updated: datetime | None = None
-    workflows: list[WorkflowOut]
+    tasks: list[AcquisitionTaskOut]
 
 
 # ----------------------------------------
@@ -325,6 +277,8 @@ class ExamOut(BaseExam):
 # ----------------------------------------
 
 class User(BaseModel):
+    """Authenticated user, as returned to callers after login."""
+
     username: str
     first_name: str
     last_name: str
@@ -341,6 +295,8 @@ class User(BaseModel):
 
 
 class PasswordUpdateRequest(BaseModel):
+    """Request payload to change a user's password."""
+
     password_of_requester: str                 # the password of the user that sends the request
     username_to_change_password_for: str       # the username of the user whose password is set
     newpassword: str                           # the new password
@@ -391,7 +347,7 @@ class MRDAcquisitionInfo(BaseModel):
 class MRDMetaResponse(BaseModel):
     """ISMRM raw data / (ISMR)MRD meta data response."""
 
-    workflow_id: str
+    protocol_id: str
     task_id: str
     result_id: str
     dtype: str = "fc32" # float32 complex, interleaved (Re,Im)

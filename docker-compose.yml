@@ -2,7 +2,8 @@ x-dagster-common: &dagster_common
   image: scanhub-orchestration-engine:latest
   pull_policy: never # Don't pull the image, use the local build
   build:
-    context: ./services/orchestration-engine
+    context: .
+    dockerfile: services/orchestration-engine/Dockerfile
     args:
       BASE_IMG: ${SCANHUB_BASE_IMAGE}
   environment:
@@ -24,37 +25,12 @@ x-dagster-common: &dagster_common
 
 services:
   # SERVICES
-  # Workflow manager, device manager and exam manager create data tables in postgres DB
-  workflow-manager:
-    container_name: workflow-manager
-    build:
-      context: ./services/workflow-manager
-      args:
-        - BASE_IMG=${SCANHUB_BASE_IMAGE}
-    volumes:
-      - ./services/workflow-manager/app/:/app/
-      - ${DATA_LAKE_DIR}:/data
-    environment:
-      DATA_LAKE_DIRECTORY: /data
-      SCANHUB_ALLOWED_ORIGINS: ${SCANHUB_ALLOWED_ORIGINS}
-    healthcheck:
-      # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: [ "CMD", "curl", "http://workflow-manager:8000/api/v1/workflowmanager/health/readiness" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      scanhub-database:
-        condition: service_healthy
-      dagster-webserver:
-        condition: service_healthy
-      dagster-daemon:
-        condition: service_healthy
-
+  # Device manager and protocol manager create data tables in postgres DB
   device-manager:
     container_name: device-manager
     build:
-      context: ./services/device-manager
+      context: .
+      dockerfile: services/device-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
@@ -77,14 +53,15 @@ services:
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
 
-  exam-manager:
-    container_name: exam-manager
+  protocol-manager:
+    container_name: protocol-manager
     build:
-      context: ./services/exam-manager
+      context: .
+      dockerfile: services/protocol-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
-      - ./services/exam-manager/app/:/app/
+      - ./services/protocol-manager/app/:/app/
       - ${DATA_LAKE_DIR}:/data
     environment:
       SCANHUB_ALLOWED_ORIGINS: ${SCANHUB_ALLOWED_ORIGINS}
@@ -96,7 +73,7 @@ services:
       - 'host.docker.internal:host-gateway'
     healthcheck:
       # TODO: host.docker.internal is only working with docker desktop, must be replaced in product
-      test: [ "CMD", "curl", "http://exam-manager:8000/api/v1/exam/health/readiness" ]
+      test: [ "CMD", "curl", "http://protocol-manager:8000/api/v1/protocol/health/readiness" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -104,8 +81,6 @@ services:
       scanhub-database:
         condition: service_healthy
       device-manager:
-        condition: service_healthy
-      workflow-manager:
         condition: service_healthy
     secrets:
       # ScanHub postgres database
@@ -119,7 +94,8 @@ services:
   patient-manager:
     container_name: patient-manager
     build:
-      context: ./services/patient-manager
+      context: .
+      dockerfile: services/patient-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
@@ -143,7 +119,8 @@ services:
   user-login-manager:
     container_name: user-login-manager
     build:
-      context: ./services/user-login-manager
+      context: .
+      dockerfile: services/user-login-manager/Dockerfile
       args:
         - BASE_IMG=${SCANHUB_BASE_IMAGE}
     volumes:
@@ -164,23 +141,7 @@ services:
       - scanhub_database_postgres_password
       - scanhub_database_postgres_db_name
 
-  # Add the Gadgetron service
-  # gadgetron:
-  #   container_name: gadgetron
-  #   image: ghcr.io/gadgetron/gadgetron/gadgetron_ubuntu_rt_nocuda:latest
-  #   ports:
-  #     - 9002:9002
-  #   volumes:
-  #     - data_lake:/data
-  #   environment:
-  #     - GADGETRON_HOME=/usr/local/gadgetron
-  #     - GADGETRON_PORT=9002
-  #   restart: always
-  #   depends_on:
-  #     - init-data-lake
-  #     - scanhub-database
-
-  # Scanhub Postgres Database: Contains exams, procedures, records, jobs, devices and workflows 
+  # Scanhub Postgres Database: Contains protocols, tasks, devices
   scanhub-database:
     container_name: db-scanhub
     image: postgres:15.2-bullseye
@@ -194,7 +155,7 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/scanhub_database_postgres_password
       POSTGRES_DB_FILE: /run/secrets/scanhub_database_postgres_db_name
     healthcheck:
-      # Workflow, device and exam microservices depend on healthy postgres database
+      # device and protocol microservices depend on healthy postgres database
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s
       timeout: 5s
@@ -269,9 +230,7 @@ services:
     depends_on:
       device-manager:
         condition: service_healthy
-      workflow-manager:
-        condition: service_healthy
-      exam-manager:
+      protocol-manager:
         condition: service_healthy
       patient-manager:
         condition: service_healthy
@@ -289,21 +248,21 @@ services:
       - privatekey
 
   # FRONTEND/SCANHUB-UI
-  # scanhub-ui:
-  #   container_name: scanhub-ui
-  #   build:
-  #     context: ./scanhub-ui
-  #     dockerfile: ./Dockerfile
-  #     args:
-  #       NODE_ENV: "production" # or "development"
-  #   volumes:
-  #     - ./scanhub-ui/src:/app/src
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:3000/"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 10
-  #     start_period: 30s
+  scanhub-ui:
+    container_name: scanhub-ui
+    build:
+      context: ./scanhub-ui
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: "production" # or "development"
+    volumes:
+      - ./scanhub-ui/src:/app/src
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   # DAGSTER
   dagster-webserver:

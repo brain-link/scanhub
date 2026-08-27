@@ -1,22 +1,22 @@
 // useFileIds.ts
 import { useQuery } from '@tanstack/react-query';
 import { taskApi } from '../../../api'; // your pre-configured OpenAPI client instance
-import { TaskType } from '../../../openapi/generated-client/exam';
+import { TaskType } from '../../../openapi/generated-client/protocol';
 import { ItemSelection } from '../../../interfaces/components.interface'
-import { ItemStatus } from '../../../openapi/generated-client/exam'
+import { ItemStatus } from '../../../openapi/generated-client/protocol'
 
 function normalizeToArray<T>(v: T | T[] | undefined | null): T[] {
   return Array.isArray(v) ? v : v != null ? [v] : [];
 }
 
 export type FileIds = {
-  workflowId: string;
+  protocolId: string;
   taskId: string;
   resultId: string;
 };
 
 /**
- * Resolves workflowId, taskId, and resultId for a given taskId.
+ * Resolves protocolId, taskId, and resultId for a given taskId.
  * - Accepts any task that HAS results (doesn't force a specific TaskType).
  * - If multiple results exist, returns the newest by datetime_created (falls back to created_at / created).
  * - Throws a typed error when IDs are unavailable, so consumers can show a proper fallback.
@@ -36,7 +36,7 @@ export function useFileIds(item: ItemSelection) {
       if (item.status != ItemStatus.Finished) throw new Error('Task not finished yet')
       if (item.type != 'ACQUISITION') throw new Error('Task is not an acquisition task')
 
-      const { data } = await taskApi.getTaskApiV1ExamTaskTaskIdGet(item.itemId!);
+      const { data } = await taskApi.getTask(item.itemId!);
 
       // Only DAG tasks with results
       const isAcquisition = data?.task_type === TaskType.Acquisition;
@@ -52,10 +52,10 @@ export function useFileIds(item: ItemSelection) {
 
       const resultId = latest?.id ?? '';
       if (!resultId) throw new Error('Result is missing id.');
-      const workflowId = data?.workflow_id ?? '';
-      if (!workflowId) throw new Error('No workflow ID.');
+      const protocolId = data?.protocol_id ?? '';
+      if (!protocolId) throw new Error('No protocol ID.');
 
-      return {workflowId: String(workflowId), taskId: String(data.id), resultId: String(resultId)}
+      return {protocolId: String(protocolId), taskId: String(data.id), resultId: String(resultId)}
     },
   });
 

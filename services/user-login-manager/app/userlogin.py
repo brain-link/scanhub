@@ -22,7 +22,7 @@ LOG_CALL_DELIMITER = "----------------------------------------------------------
 router = APIRouter()
 
 
-@router.get("/getcurrentuser", status_code=200, tags=["user"])
+@router.get("/getcurrentuser", status_code=200, tags=["user"], operation_id="get_current_user")
 async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> User:
     """
     Get current user from access_token. May be called as an endpoint or used in FastAPI with Depends.
@@ -107,7 +107,7 @@ async def get_current_user_admin(current_user: Annotated[User, Depends(get_curre
     )
 
 
-@router.post("/loginfromcookie", tags=["login"])
+@router.post("/loginfromcookie", tags=["login"], operation_id="login_from_cookie")
 async def loginfromcookie(response: Response, access_token: Annotated[Optional[str], Cookie()] = None) -> User:
     """Login endpoint for login with cookie.
 
@@ -152,7 +152,7 @@ async def loginfromcookie(response: Response, access_token: Annotated[Optional[s
     )
 
 
-@router.post("/login", tags=["login"])
+@router.post("/login", tags=["login"], operation_id="login")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], response: Response) -> User:
     """Login endpoint.
 
@@ -235,7 +235,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], resp
     )
 
 
-@router.post("/logout", tags=["login"])
+@router.post("/logout", tags=["login"], operation_id="logout")
 async def logout(user: Annotated[User, Depends(get_current_user)], response: Response) -> None:
     """Logout endpoint."""
     print(LOG_CALL_DELIMITER)
@@ -262,7 +262,7 @@ async def get_user_out(user_db: UserSQL) -> User:
         )
 
 
-@router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"])
+@router.get('/getallusers', response_model=list[User], status_code=200, tags=["user"], operation_id="get_user_list")
 async def get_user_list(current_user: Annotated[User, Depends(get_current_user_admin)]) -> list[User]:
     """
     Get all users endpoint (only admins).
@@ -286,7 +286,7 @@ async def get_user_list(current_user: Annotated[User, Depends(get_current_user_a
     return [await get_user_out(user) for user in users]
 
 
-@router.get('/checknousers', status_code=200, tags=["user"])
+@router.get('/checknousers', status_code=200, tags=["user"], operation_id="check_no_users")
 async def check_no_users() -> bool:
     """
     Check if there are no users in the database.
@@ -369,7 +369,7 @@ async def create_user_internal(new_user: User):
     await dal.add_user(new_user_db)
 
 
-@router.post("/createuser", status_code=201, tags=["user"])
+@router.post("/createuser", status_code=201, tags=["user"], operation_id="create_user")
 async def create_user(current_user: Annotated[User, Depends(get_current_user_admin)], new_user: User):
     """
     Create user database entry (only admins).
@@ -390,7 +390,7 @@ async def create_user(current_user: Annotated[User, Depends(get_current_user_adm
     await create_user_internal(new_user)
 
 
-@router.post("/createfirstuser", status_code=201, tags=["user"])
+@router.post("/createfirstuser", status_code=201, tags=["user"], operation_id="create_first_user")
 async def create_first_user(first_user: User):
     """
     Create first user.
@@ -415,7 +415,7 @@ async def create_first_user(first_user: User):
     await create_user_internal(new_user=first_user)
 
 
-@router.delete("/deleteuser", response_model={}, status_code=204, tags=["user"])
+@router.delete("/deleteuser", response_model={}, status_code=204, tags=["user"], operation_id="delete_user")
 async def user_delete(current_user: Annotated[User, Depends(get_current_user_admin)], username_to_delete: str) -> None:
     """
     Delete an existing user (requires admin priviledges).
@@ -457,7 +457,7 @@ async def user_delete(current_user: Annotated[User, Depends(get_current_user_adm
         raise HTTPException(status_code=404, detail="User not found")
 
 
-@router.put("/updateuser", response_model={}, status_code=200, tags=["user"])
+@router.put("/updateuser", response_model={}, status_code=200, tags=["user"], operation_id="update_user")
 async def update_user(current_user: Annotated[User, Depends(get_current_user_admin)], updated_user: User) -> None:
     """
     Update the first_name, last_name, email and role of an existing user.
@@ -532,7 +532,7 @@ async def update_user(current_user: Annotated[User, Depends(get_current_user_adm
     )
 
 
-@router.put("/changepassword", response_model={}, status_code=200, tags=["user"])
+@router.put("/changepassword", response_model={}, status_code=200, tags=["user"], operation_id="change_password")
 async def change_password(current_user: Annotated[User, Depends(get_current_user)],
                           password_update_request: PasswordUpdateRequest,
                           response: Response) -> None:

@@ -84,7 +84,7 @@ function UserForm(props: ModalProps | ModalPropsCreateFirstUser) {
     mutationKey: ['users'],
     mutationFn: async () => {
       await userApi
-        .createUserApiV1UserloginCreateuserPost(user)
+        .createUser(user)
         .then(() => {
           props.onSubmit()
           showNotification({message: 'Created user ' + user.username, type: 'success'})
@@ -108,7 +108,7 @@ function UserForm(props: ModalProps | ModalPropsCreateFirstUser) {
       mutationKey: ['users'],
       mutationFn: async () => {
         await userApi
-          .createFirstUserApiV1UserloginCreatefirstuserPost(user)
+          .createFirstUser(user)
           .then(() => {
             props.onSubmit()
             console.log('Created user.')

@@ -10,73 +10,72 @@ import { useMutation } from '@tanstack/react-query'
 import Typography from '@mui/joy/Typography'
 import Tooltip from '@mui/joy/Tooltip'
 import Box from '@mui/joy/Box'
-import Stack from '@mui/joy/Stack';
+
 import Dropdown from '@mui/joy/Dropdown'
 import Menu from '@mui/joy/Menu'
 import MenuButton from '@mui/joy/MenuButton'
 import IconButton from '@mui/joy/IconButton'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CircularProgress from '@mui/joy/CircularProgress';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import Select from '@mui/joy/Select'
+import Option from '@mui/joy/Option'
+
 import MenuItem from '@mui/joy/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Button from '@mui/joy/Button'
 
-import { AcquisitionTaskOut, DAGTaskOut, ItemStatus, TaskType } from '../openapi/generated-client/exam'
+import { AcquisitionTaskOut, ResultOut } from '../openapi/generated-client/protocol'
 import TaskInfo from './TaskInfo'
 import { taskApi } from '../api'
 import TaskModal from './TaskModal'
 import { RefetchableItemInterface, SelectableItemInterface } from '../interfaces/components.interface'
 import DagsterUIModal from './DagsterUIModal'
-import { extractRunId, getLatestResult } from '../utils/ExamTree'
+import { extractRunId, getLatestResult } from '../utils/ProtocolTree'
 
+
+interface TaskItemExtraProps {
+  results?: ResultOut[];
+  selectedResultId?: string;
+  onResultSelect?: (id: string) => void;
+}
 
 export default function TaskItem(
   {
-    item: task, 
-    refetchParentData, 
-    selection, 
-    onClick
-  }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut> & SelectableItemInterface<AcquisitionTaskOut | DAGTaskOut>
+    item: task,
+    refetchParentData,
+    selection,
+    onClick,
+    icon = <></>,
+    results,
+    selectedResultId,
+    onResultSelect,
+  }: RefetchableItemInterface<AcquisitionTaskOut> & SelectableItemInterface<AcquisitionTaskOut> & TaskItemExtraProps
 ) {
+  const isSelected = selection.type === 'ACQUISITION' && selection.itemId === task.id
+  const showResultSelect = isSelected && !!results && results.length > 0
+
   return (
-    <Stack direction='row' width='100%' alignItems='center' sx={{paddingLeft: 2}}>
+    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr auto', pl: 2 }}>
       <Tooltip
         placement='right'
         variant='outlined'
         arrow
         title={<TaskInfo data={task} />}
         modifiers={[
-          { name: 'offset', options: { offset: [0, 64] } }, // skidding=8 (down), distance=20 (further right)
+          { name: 'offset', options: { offset: [0, 64] } },
         ]}
       >
-        <Button 
-          sx={{
-            p: 0.5,
-            flexGrow: 1,
-            justifyContent: 'flex-start',
-            gap: 0.5,
-          }}
-          variant={((selection.type == 'DAG' || selection.type == 'ACQUISITION') && selection.itemId == task.id) ? 'outlined' : 'plain'}
+        <Button
+          sx={{ p: 0.5, minWidth: 0, justifyContent: 'flex-start', gap: 0.5 }}
+          variant={isSelected ? 'outlined' : 'plain'}
           onClick={onClick}
         >
-          {
-            task.status === ItemStatus.Finished ? <CheckCircleIcon fontSize='small' /> : (
-              task.status === ItemStatus.Inprogress ? <CircularProgress variant='plain' size="sm" /> : (
-                task.status === ItemStatus.Error ? <HighlightOffIcon fontSize='small' /> : <RadioButtonUncheckedIcon fontSize='small' />
-              )
-            )
-          }
-          <Box sx={{ marginLeft: 0.5, p: 0.5,  display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }} >
+          {icon}
+          <Box sx={{ marginLeft: 0.5, p: 0.5, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <Typography level='body-xs' textColor='text.tertiary'>
               {task.task_type}
             </Typography>
-            
-            <Typography level='title-sm' textAlign='left' sx={{overflowWrap: 'anywhere'}}>
+            <Typography level='title-sm' textAlign='left' sx={{ overflowWrap: 'anywhere' }}>
               {task.name}
             </Typography>
-            
             <Typography level='body-xs' textColor='text.tertiary' textAlign='left'>
               {`Created: ${new Date(task.datetime_created).toDateString()}`}
             </Typography>
@@ -84,14 +83,32 @@ export default function TaskItem(
         </Button>
       </Tooltip>
 
-      <TaskMenu item={task} refetchParentData={refetchParentData} />
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <TaskMenu item={task} refetchParentData={refetchParentData} />
+      </Box>
 
-    </Stack>
+      {showResultSelect && (
+        <Select
+          size='sm'
+          value={selectedResultId ?? null}
+          onChange={(_, v) => v && onResultSelect?.(v)}
+          sx={{ mt: 0.75, mb: 0.75, minWidth: 0 }}
+          slotProps={{ listbox: { placement: 'bottom-start' } }}
+        >
+          {results!.map(result => {
+            const dt = new Date(result.datetime_created)
+            const label = (result.files?.[0] ? result.files[0] + ' | ' : '') +
+              dt.toLocaleDateString() + ', ' + dt.toLocaleTimeString()
+            return <Option key={result.id} value={result.id}>{label}</Option>
+          })}
+        </Select>
+      )}
+    </Box>
   )
 }
 
 
-function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut | DAGTaskOut>) {
+function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<AcquisitionTaskOut>) {
 
   const [taskModalOpen, setTaskModalOpen] = React.useState<boolean>(false);
   const [dagsterOpen, setDagsterOpen] = React.useState<boolean>(false);
@@ -102,7 +119,7 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
 
   const deleteTask = useMutation({
     mutationFn: async () => {
-      await taskApi.deleteTaskApiV1ExamTaskTaskIdDelete(task.id)
+      await taskApi.deleteTask(task.id)
       .then(() => {
         refetchParentData()
       })
@@ -123,8 +140,8 @@ function TaskMenu({ item: task, refetchParentData }: RefetchableItemInterface<Ac
             Delete
           </MenuItem>
           {
-            task.task_type === TaskType.Dag &&
-            <MenuItem key='open-dagster' onClick={() => { setDagsterOpen(true) }} disabled={!runId}>
+            runId &&
+            <MenuItem key='open-dagster' onClick={() => { setDagsterOpen(true) }}>
               Open DagsterUI
             </MenuItem>
           }

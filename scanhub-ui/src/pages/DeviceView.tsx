@@ -51,7 +51,7 @@ export default function DeviceView() {
     queryKey: ['devices'],
     queryFn: async () => {
       return await deviceApi
-        .getDevicesApiV1DeviceGet()
+        .getDevices()
         .then((result) => {
           return result.data
         })
@@ -60,7 +60,7 @@ export default function DeviceView() {
 
   const delteMutation = useMutation<unknown, unknown, string>({
     mutationFn: async (deviceId) => {
-      await deviceApi.deleteDeviceApiV1DeviceDeviceIdDelete(deviceId)
+      await deviceApi.deleteDevice(deviceId)
         .then(() => {
           showNotification({ message: 'Deleted device.', type: 'success' })
           refetch()
@@ -79,7 +79,7 @@ export default function DeviceView() {
 
   const deviceParameterMutation = useMutation<unknown, unknown, { deviceId: string; parameter: object }>({
     mutationFn: async ({ deviceId, parameter }) => {
-      await deviceApi.updateDeviceParameterApiV1DeviceParameterDeviceIdPut(deviceId, parameter)
+      await deviceApi.updateDeviceParameter(deviceId, parameter)
         .then(() => { refetch() })
         .catch((err) => {
           let errorMessage = null

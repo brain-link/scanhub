@@ -17,8 +17,7 @@ import { ClickAwayListener } from '@mui/base';
 import { useManagerHealthCheck } from '../hooks/useManagerHealthCheck'
 import {
   patientManagerHealthApi,
-  examManagerHealthApi,
-  workflowManagerHealthApi,
+  protocolManagerHealthApi,
   userLoginManagerHealthApi,
   deviceManagerHealthApi
 } from '../api'
@@ -27,32 +26,26 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 
 
-// Device all health checks
 const healthChecks = [
   {
     name: 'Patient Manager',
     key: 'patientManagerHealthCheck',
-    queryFn: () => patientManagerHealthApi.readinessApiV1PatientHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
+    queryFn: () => patientManagerHealthApi.healthReadiness({ timeout: 1000 }).then(r => r.data),
   },
   {
-    name: 'Exam Manager',
-    key: 'examManagerHealthCheck',
-    queryFn: () => examManagerHealthApi.readinessApiV1ExamHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
-  },
-  {
-    name: 'Workflow Manager',
-    key: 'workflowManagerHealthCheck',
-    queryFn: () => workflowManagerHealthApi.readinessApiV1WorkflowmanagerHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
+    name: 'Protocol Manager',
+    key: 'protocolManagerHealthCheck',
+    queryFn: () => protocolManagerHealthApi.healthReadiness({ timeout: 1000 }).then(r => r.data),
   },
   {
     name: 'User Login Manager',
     key: 'userLoginManagerHealthCheck',
-    queryFn: () => userLoginManagerHealthApi.readinessApiV1UserloginHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
+    queryFn: () => userLoginManagerHealthApi.healthReadiness({ timeout: 1000 }).then(r => r.data),
   },
   {
     name: 'Device Manager',
     key: 'deviceManagerHealth',
-    queryFn: () => deviceManagerHealthApi.readinessApiV1DeviceHealthReadinessGet({ timeout: 1000 }).then(r => r.data),
+    queryFn: () => deviceManagerHealthApi.healthReadiness({ timeout: 1000 }).then(r => r.data),
   }
 ]
 

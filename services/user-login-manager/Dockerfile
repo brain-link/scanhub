@@ -4,20 +4,28 @@ FROM $BASE_IMG
 # Set working directory inside container
 WORKDIR /app
 
-# Copy poetry files first to install dependencies
-COPY pyproject.toml poetry.lock ./
-
 # Install curl to perform healthcheck, assume yes to all prompts
 RUN apt-get -y update && apt-get -y install curl
 
-# Install poetry
-RUN pip install poetry
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install dependencies using poetry
-RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction
+# Sync into the base image's system site-packages, alongside the pre-installed shared library
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+
+# Copy the workspace root and the shared library (both needed to resolve this
+# member from the shared lockfile) plus this service's own pyproject.toml
+COPY pyproject.toml uv.lock ./
+COPY services/base/shared_libs ./services/base/shared_libs
+COPY services/user-login-manager/pyproject.toml ./services/user-login-manager/pyproject.toml
+
+# Install dependencies for this workspace member only. scanhub-libraries (and its
+# transitive deps, e.g. fastapi) are already installed in the base image at the exact
+# versions locked here, so this only adds what's specific to user-login-manager.
+RUN uv sync --frozen --package scanhub-user-manager --no-install-project --no-editable
 
 # Copy the rest of the app
-COPY . .
+COPY services/user-login-manager/app ./app
 
 # Set PYTHONPATH to include app/
 ENV PYTHONPATH=/
